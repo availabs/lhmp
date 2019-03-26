@@ -95,7 +95,7 @@ const mapStateToProps = state => {
 
 export default {
 	icon: 'os-icon-map',
-	path: '/',
+	path: '/oldmap',
 	exact: true,
 	mainNav: true,
   menuSettings: {

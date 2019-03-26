@@ -1,0 +1,3 @@
+[submodule "src/components/AvlMap"]
+	path = src/components/AvlMap
+	url = https://github.com/availabs/AvlMap.git
