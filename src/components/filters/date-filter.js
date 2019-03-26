@@ -20,22 +20,17 @@
 
 import React from 'react';
 import ItemSelector from '../common/item-selector/item-selector';
-import {PanelLabel, SidePanelSection} from '../common/styled-components';
+import {PanelLabel, SidePanelSection, Input} from '../common/styled-components';
 
 const SingleSelectFilter = ({filter, setFilter}) => (
   <SidePanelSection >
     <PanelLabel>{filter.name}</PanelLabel>
-    <ItemSelector
-      selectedItems={filter.value}
-      placeholder="Select a Value"
-      options={filter.domain}
-      multiSelect={false}
-      searchable={false}
-      displayOption={d => d.name ? d.name : String(d)}
-      getOptionValue={d => d.value ? d.value : d}
-      onChange={setFilter}
-      inputTheme="secondary"
+    <Input 
+      type='date' 
+      value={filter.value} 
+      onChange={(e) => setFilter(e.target.value)}
     />
+             
   </SidePanelSection>
 )
 

@@ -24,11 +24,17 @@ import {PanelLabel} from '../common/styled-components';
 
 const MultiSelectFilter = ({filter, setFilter}) => (
   <div>
-    <PanelLabel htmlFor={`filter-${filter.id}`}>Values in</PanelLabel>
+    <PanelLabel htmlFor={`filter-${filter.id}`}>{filter.name}</PanelLabel>
     <ItemSelector
-      options={filter.domain}
       selectedItems={filter.value}
+      placeholder="Select a Value"
+      options={filter.domain}
+      multiSelect={true}
+      searchable={ true }
+      displayOption={d => d.name ? d.name : String(d)}
+      getOptionValue={d => d.value ? d.value : d}
       onChange={setFilter}
+      inputTheme="secondary"
     />
   </div>
 );

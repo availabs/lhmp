@@ -1,26 +1,17 @@
 import React, { Component } from 'react';
-
 import AvlMap from 'components/AvlMap';
-
 
 class Home extends Component {
   render () {
    return (
-     <div>
-     
+     <div style={{width: '100vw', height: '100vh'}}>
       <AvlMap />
-
-
-
-
-
      </div>
     )
   }
 }
 
 export default {
-	icon: 'os-icon-home',
 	path: '/',
 	exact: true,
 	mainNav: true,
