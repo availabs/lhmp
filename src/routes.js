@@ -4,7 +4,7 @@
 
 // import PublicPlan from './pages/PublicPlan'
 import MapView from './pages/MapView'
-import Test from './pages/Test'
+import RiskMap from './pages/riskmap'
 
 
 // -- Util Routes
@@ -13,7 +13,7 @@ import Test from './pages/Test'
 import NoMatch from './pages/404.js'
 
 const routes = [
-  Test,
+  RiskMap,
   MapView,
   NoMatch
 ]
