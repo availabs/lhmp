@@ -25,7 +25,7 @@ import ParcelLayerModal from "./modals/ParcelLayerModal"
 import ParcelOverview from "./infoboxes/ParcelOverview"
 
 export const MEASURES = [
-    { value: "full_marke", name: "Full Market Value" },
+    { value: "full_market_val", name: "Full Market Value" },
     { value: "prop_class", name: "Property Type" },
     { value: "owner_type", name: "Owner Type" }
 ]
@@ -69,7 +69,7 @@ const QUANTILE_RANGE = COLOR_RANGES[5].reduce((a, c) => c.name === "Spectral" ? 
 const NON_ORDINAL_LEGEND = {
   type: "quantile",
   types: ["quantile", "quantize"],
-  format: getMeasureFormat.bind(null, "full_marke"),
+  format: getMeasureFormat.bind(null, "full_market_val"),
   vertical: false,
   range: QUANTILE_RANGE
 }
@@ -104,7 +104,7 @@ class ParcelLayer extends MapLayer {
               }
               return +aCounty - +bCounty;
             })
-            console.log('municipal data', parcelLayer.filters.area.domain)
+            console.log('municipal data', parcelLayer.filters.area)
           })
       })
       .then(() => store.dispatch(update(falcorGraph.getCache())))
@@ -115,6 +115,7 @@ class ParcelLayer extends MapLayer {
       .then(length => falcorGraph.get(["parcel", "byGeoid", "3600101000", "byIndex", { from: 0, to: length }, "id"]))
       .then(() => this.component.updateFilter('Parcel Layer', 'area', ['3600101000']))
   }
+
   onFilterFetch(filterName, oldValue, newValue) {
     if (filterName === "measure") {
       this.onMeasureChange(oldValue, newValue);
@@ -123,21 +124,22 @@ class ParcelLayer extends MapLayer {
     if (!geoids.length) {
       return Promise.resolve({ parcelids: [] });
     }
+    console.log('getting geoids', geoids)
     return falcorGraph.get(["parcel", "byGeoid", geoids, "length"])
       .then(res => {
         let max = -Infinity;
-        geoids.forEach(geoid => {
+        return geoids.map(geoid => {
           const length = res.json.parcel.byGeoid[geoid].length;
-          max = Math.max(length, max);
+          return ["parcel", "byGeoid", geoid, "byIndex", { from: 0, to: length }, "id"]
         })
-        return max;
       })
-      .then(length => {
-        return falcorGraph.get(["parcel", "byGeoid", geoids, "byIndex", { from: 0, to: length }, "id"])
+      .then(requests => {
+        return falcorGraph.get(...requests)
           .then(res => {
             const parcelids = [];
             geoids.forEach(geoid => {
               const graph = res.json.parcel.byGeoid[geoid].byIndex;
+              let length = res.json.parcel.byGeoid[geoid].length
               for (let i = 0; i < length; ++i) {
                 if (graph[i]) {
                   parcelids.push(graph[i].id)
@@ -153,11 +155,12 @@ class ParcelLayer extends MapLayer {
         for (let i = 0; i < parcelids.length; i += num) {
           requests.push(parcelids.slice(i, i + num))
         }
+        console.time('make requests')
         return requests.reduce((a, c) => a.then(() => falcorGraph.get(["parcel", "byId", c, MEASURES.map(m => m.value)])), Promise.resolve())
           .then(() => {
             const measure = parcelLayer.filters.measure.value;
             let colors = {};
-            if (measure === "full_marke") {
+            if (measure === "full_market_val") { 
               colors = this.processNonOrdinal(parcelids);
             }
             else {
@@ -171,6 +174,7 @@ class ParcelLayer extends MapLayer {
     return this.onFilterFetch();
   }
   receiveData(map, { colors, parcelids }) {
+    console.timeEnd('make requests')
     if (!parcelids.length) {
       map.setFilter('nys_1811_parcels', ["!in", "OBJECTID", "none"])
       map.setPaintProperty('nys_1811_parcels', 'fill-color', 'rgba(0,0,196,0.1)');
@@ -185,7 +189,7 @@ class ParcelLayer extends MapLayer {
   onMeasureChange(oldValue, newValue) {
     if (oldValue !== newValue) {
       switch (newValue) {
-        case "full_marke":
+        case "full_market_val":
           this.legend = {
             ...this.legend,
             ...NON_ORDINAL_LEGEND
@@ -339,7 +343,7 @@ const parcelLayer = new ParcelLayer("Parcel Layer", {
       name: "Measure",
       type: "dropdown",
       domain: MEASURES,
-      value: "full_marke"
+      value: "full_market_val"
     }
   },
   legend: {
@@ -357,7 +361,7 @@ const parcelLayer = new ParcelLayer("Parcel Layer", {
         const graph = falcorGraph.getCache().parcel.byId;
         return [
             "PARCEL DATA",
-            [getMeasureLabel("full_marke"), getMeasureFormat("full_marke", graph[id]["full_marke"])],
+            [getMeasureLabel("full_market_val"), getMeasureFormat("full_market_val", graph[id]["full_market_val"])],
             [getMeasureLabel("prop_class"), getMeasureFormat("prop_class", graph[id]["prop_class"])],
             [getMeasureLabel("owner_type"), getMeasureFormat("owner_type", graph[id]["owner_type"])]
         ]

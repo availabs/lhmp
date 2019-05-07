@@ -64,7 +64,7 @@ const StyledDropdownSelect = styled.div`
 
 const DropdownSelectValue = styled.span`
   color: ${props =>
-    props.placeholder
+    !props.hasValue
       ? props.theme.selectColorPlaceHolder
       : props.theme.selectColor};
   overflow: hidden;
@@ -281,7 +281,7 @@ class ItemSelector extends Component {
             />
           ) : (
             <StyledDropdownSelect {...dropdownSelectProps}>
-              <DropdownSelectValue placeholder={!hasValue}>
+              <DropdownSelectValue hasValue={hasValue}>
                 {hasValue ? (
                   <this.props.DropDownLineItemRenderComponent
                     displayOption={displayOption}

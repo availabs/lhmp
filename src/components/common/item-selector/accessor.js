@@ -28,6 +28,8 @@ const Accessor = {
       return this.generateAccessor(prop);
     } else if (typeof prop === 'function') {
       return prop;
+    } else if (typeof prop === 'object'){
+      return prop.name
     }
     return this.IDENTITY_FN;
   },
@@ -37,6 +39,8 @@ const Accessor = {
       return object[option];
     } else if (typeof option === 'function') {
       return option(object);
+    } else if (typeof prop === 'object'){
+      return option.name
     }
     return object;
   }
