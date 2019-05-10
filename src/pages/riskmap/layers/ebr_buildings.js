@@ -8,8 +8,20 @@ import {
 import store from "store"
 import { falcorGraph } from "store/falcorGraph"
 import { update } from "utils/redux-falcor/components/duck"
+import { fnum } from "utils/sheldusUtils"
+import {
+    scaleQuantile,
+    scaleOrdinal,
+    scaleQuantize
+} from "d3-scale"
+
+import COLOR_RANGES from "constants/color-ranges"
 
 import MapLayer from "components/AvlMap/MapLayer"
+
+const QUANTILE_RANGE = COLOR_RANGES[5]
+  .reduce((a, c) => c.name === "Spectral" ? c.colors : a)
+
 
 class EBRLayer extends MapLayer {
 
@@ -54,32 +66,56 @@ class EBRLayer extends MapLayer {
 
   onFilterFetch(filterName, oldValue, newValue) {
     console.log('onFilterFetch', filterName, oldValue, newValue)
-    if(filterName !== 'area') {
-      return Promise.resolve([])
-    }
-    const geoids = newValue
-    return falcorGraph.get(["parcel", "byGeoid", geoids, "length"])
+    // if(filterName !== 'area') {
+    //   return Promise.resolve([])
+    // }
+    const geoids = this.filters.area.value
+    return falcorGraph.get(["building", "byGeoid", geoids, "length"])
       .then(res => {
-        let max = -Infinity;
-        return geoids.map(geoid => {
-          const length = res.json.parcel.byGeoid[geoid].length;
-          return ["parcel", "byGeoid", geoid, "byIndex", { from: 0, to: length }, "id"]
+        console.log('length data', res)
+        let requests =  geoids.map(geoid => {
+          const length = res.json.building.byGeoid[geoid].length;
+          return ["building", "byGeoid", geoid, "byIndex", { from: 0, to: length-1}, "id"]
         })
+        requests.push(["building", "byGeoid", geoids, "length"])
+        return requests
       })
       .then(requests => {
         return falcorGraph.get(...requests)
           .then(res => {
-            const parcelids = [];
+            const buildingids = [];
             console.log('got data', res)
-            // geoids.forEach(geoid => {
-            //   const graph = res.json.parcel.byGeoid[geoid].byIndex;
-            //   for (let i = 0; i < length; ++i) {
-            //     if (graph[i]) {
-            //       parcelids.push(graph[i].id)
-            //     }
-            //   }
-            // })
-            return parcelids;
+            geoids.forEach(geoid => {
+              const length = res.json.building.byGeoid[geoid].length;
+              const graph = res.json.building.byGeoid[geoid].byIndex;
+              //console.log('building ids', geoid, graph)
+              Object.values(graph).forEach(building => {
+                if(building.id){
+                  buildingids.push(building.id)
+                }
+              })
+            })
+            return buildingids;
+          })
+      })
+      .then(buildingids => {
+        const requests = [],
+          num = 500;
+        for (let i = 0; i < buildingids.length; i += num) {
+          requests.push(buildingids.slice(i, i + num))
+        }
+        console.time('make requests')
+        return requests.reduce((a, c) => a.then(() => falcorGraph.get(["building", "byId", c, ["replacement_value","name", "type", "critical", "flood_zone"]])), Promise.resolve())
+          .then((res) => {
+            console.timeEnd('make requests')
+            let graph = falcorGraph.getCache().building.byId
+            const measure = this.filters.measure.value;
+            console.log('why?',res.json.building.byId, measure)
+            let data = Object.keys(graph).reduce((out, curr) => {
+              out[curr] = graph[curr][measure]
+              return out 
+            },{})
+            return  data;
           })
       })
     
@@ -93,7 +129,25 @@ class EBRLayer extends MapLayer {
 
 
   receiveData(map, data) {
-    console.log('receiveData', data)
+    console.log('receiveData',data)
+    let colors = {}
+    let domain = []
+   
+    console.log(this.filters.measure.domain, this.filters.measure.value)
+    let measureInfo = this.filters.measure.domain.filter(d => d.value === this.filters.measure.value)[0]
+    if(measureInfo.type === 'ordinal') {
+      colors = processOrdinal(data, measureInfo.value)
+    } else {
+      let cd = processNonOrdinal(data, this.legend.type, this.legend.range )
+      colors = cd.colors
+      domain = cd.domain
+      this.legend.domain = domain;
+    }
+
+    this.legend.active = true;
+    map.setFilter('ebr', ["in", "id", ...Object.keys(data).map(d => +d)])
+    map.setPaintProperty('ebr', 'fill-color', ["get", ["to-string", ["get", "id"]], ["literal", colors]]);
+    
   }
 
 }
@@ -120,7 +174,15 @@ const EBR = new EBRLayer("Enhanced Buildings Risks", {
         }
 
     }
-  ], 
+  ],
+  legend: {
+    type: "quantile",
+    types: ["quantile", "quantize"],
+    vertical: false,
+    range: QUANTILE_RANGE,
+    active: false,
+    domain: [],
+  },
   filters: {
     area: {
       name: 'Area',
@@ -131,8 +193,13 @@ const EBR = new EBRLayer("Enhanced Buildings Risks", {
     measure: {
       name: "Measure",
       type: "dropdown",
-      domain: [],
-      value: "full_market_val"
+      domain: [
+        {name: "Replacement Value", value: 'replacement_value', type: 'numeric'},
+         {name: "Flood Zone", value: 'flood_zone', type: 'ordinal'},
+        {name: "Critical Facilities (FCode)", value: 'critical', type: 'ordinal'}
+      ],
+      value: "replacement_value"
+      
     }
   },
    popover: {
@@ -142,16 +209,122 @@ const EBR = new EBRLayer("Enhanced Buildings Risks", {
       // console.log (feature.properties)
 
       try {
-        
+        const graph = falcorGraph.getCache().building.byId;
+        // console.log('graph over',id, graph[id].replacement_value)
+        // console.log('graph over',id, graph[id].name)
+        // console.log('graph over',id, graph[id].type)
+        // console.log('graph over',id, graph[id].critical)
+        // console.log('graph over',id, graph[id].flood_zone)
+
+
         return [
-            ["Building ID", id]
+            ["Building ID", id],
+            ["Replacement Cost", fnum(+graph[id].replacement_value)],
+            ["Name", (graph[id].name)],
+            ["Type", (graph[id].type) ],
+            ["Critical Facilities (FCode)", (graph[id].critical) ],
+            ["Flood Zone", (graph[id].flood_zone) ]
+
+     
         ]
       }
       catch (e) {
-        return []
+        // console.log(e)
+        return ['no data']
       }
     }
   }
 })
 
 export default EBR;
+
+function processNonOrdinal(data, type='quantile', range=QUANTILE_RANGE) {
+   let colors = {}
+   let domain = Object.values(data).map(d => +d);
+
+    let min = Math.min(...domain)
+    let max =  Math.max(...domain)
+
+    let scale;
+    let newDomain = []
+    console.log(data, domain, min, max)
+
+    switch (type) {
+      case "quantile":
+        scale = scaleQuantile()
+          .domain(domain)
+          .range(range);
+        newDomain= domain;
+        break;
+      case "quantize":
+        scale = scaleQuantize()
+          .domain([min, max])
+          .range(range);
+        newDomain = [min, max];
+        break;
+    }
+
+    for (const pid in data) {
+      colors[pid] = scale(data[pid])
+    }
+    return {colors, domain: newDomain}
+  }
+
+  function processOrdinal (data) {
+    return Object.keys(data).reduce((out, building_id) => {
+      
+        out[building_id] = data[building_id] ? 'red' : 'black';
+      
+      return out;
+    },{})
+  }  
+
+   /* function processCritical (data) {
+    return Object.keys(data).reduce((out, building_id) => {
+      out[building_id] = data[building_id].critical ? 'red' : 'black';
+      return out;
+    },{})
+  }  
+*/
+
+
+  // function processOrdinal(data, type='quantile', range=QUANTILE_RANGE) {
+  //   const measure = this.filters.measure.value,
+  //     graph = falcorGraph.getCache().parcel.byId,
+
+  //     values = {},
+  //     colors = {},
+
+  //     domainMap = {},
+
+  //     scale = scaleOrdinal();
+
+  //   parcelids.forEach(pid => {
+  //     let value = graph[pid][measure];
+  //     if (value) {
+  //       if (measure === "prop_class") {
+  //         value = +(graph[pid][measure].toString()[0]) * 100;
+  //       }
+  //       values[pid] = value;
+  //       domainMap[value] = true;
+  //     }
+  //   })
+
+  //   const domain = Object.keys(domainMap);
+
+  //   let range = this.legend.range;
+  //   if (range.length !== domain.length) {
+  //     range = COLOR_RANGES[domain.length].reduce((a, c) => c.type === "qualitative" ? c.colors : a);
+  //   }
+
+  //   scale.domain(domain)
+  //     .range(range);
+
+  //   this.legend.domain = domain;
+  //   this.legend.range = range;
+
+  //   for (const pid in values) {
+  //     colors[pid] = scale(values[pid])
+  //   }
+  //   return colors
+  // }
