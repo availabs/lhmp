@@ -167,7 +167,7 @@ export const panelActiveBg = '#3A4552';
 export const panelActiveBgLT = '#6A7485';
 export const panelHeaderIcon = '#6A7485';
 export const panelHeaderIconActive = '#A0A7B4';
-export const panelHeaderHeight = 48;
+export const panelHeaderHeight = 26;
 export const panelBoxShadow = '0 6px 12px 0 rgba(0,0,0,0.16)';
 export const panelBorderRadius = '2px';
 export const panelBackgroundLT = '#f8f8f9';
@@ -520,7 +520,7 @@ const dropdownScrollBar = css`
 
 const dropdownListAnchor = css`
   color: ${props => props.theme.selectColor};
-  padding-left: 3px;
+  padding-left: 3
 `;
 
 const dropdownListItem = css`

@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import React from 'react';
-import ItemSelector from '../common/item-selector/item-selector';
+// import ItemSelector from '../common/item-selector/item-selector';
 import {PanelLabel, SidePanelSection, Input} from '../common/styled-components';
 
 const SingleSelectFilter = ({filter, setFilter}) => (

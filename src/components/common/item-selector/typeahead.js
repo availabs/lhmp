@@ -205,8 +205,8 @@ export default class Typeahead extends Component {
     // const searchOptions = this._generateSearchFunction();
     // return searchOptions(value, options);
     
-// THIS IS A BIT OF A HACK TO GET SEARCH WORKING
-    return options.reduce((a, c) => c.name.toString().toLowerCase().includes(value.toLowerCase()) ? a.concat(c) : a, [])
+    const selector = this.props.displayOption;
+    return options.reduce((a, c) => selector(c).toString().toLowerCase().includes(value.toLowerCase()) ? a.concat(c) : a, [])
   }
 
   focus() {

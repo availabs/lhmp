@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 /* eslint-disable no-use-before-define */
-const KeyEvent = KeyEvent || {};
+const KeyEvent = {} //KeyEvent || {};
 /* eslint-enable no-use-before-define */
 
 KeyEvent.DOM_VK_UP = KeyEvent.DOM_VK_UP || 38;

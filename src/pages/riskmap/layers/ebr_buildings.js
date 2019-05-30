@@ -88,7 +88,7 @@ class EBRLayer extends MapLayer {
             geoids.forEach(geoid => {
               const length = res.json.building.byGeoid[geoid].length;
               const graph = res.json.building.byGeoid[geoid].byIndex;
-              //console.log('building ids', geoid, graph)
+              console.log('building ids', geoid, graph, res.json.building.byGeoid)
               Object.values(graph).forEach(building => {
                 if(building.id){
                   buildingids.push(building.id)

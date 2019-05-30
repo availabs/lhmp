@@ -31,7 +31,7 @@ const MultiSelectFilter = ({filter, setFilter}) => (
       options={filter.domain}
       multiSelect={true}
       searchable={ true }
-      displayOption={d => d.name ? d.name : String(d)}
+      displayOption={ d => d.name ? d.name : filter.domain.reduce((a, c) => c.value === d ? c.name : a, d) }
       getOptionValue={d => d.value ? d.value : d}
       onChange={setFilter}
       inputTheme="secondary"
