@@ -4,9 +4,6 @@ import { reducer as graph } from 'utils/redux-falcor';
 
 import user from './modules/user'
 
-import map from 'pages/MapView/store/MapStore'
-
-
 import messages from "./modules/messages"
 
 import createHistory from 'history/createBrowserHistory'
@@ -34,7 +31,6 @@ const store = createStore(
     user,
     messages,
     graph,
-    map,
     router: routerReducer
   }),
   applyMiddleware(...middleware)
