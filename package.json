@@ -41,7 +41,6 @@
     "topojson": "^3.0.2",
     "viewport-mercator-project": "^5.2.0"
   },
-  "homepage": "https://tigtest.nymtc.org/avail-map",
   "scripts": {
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",

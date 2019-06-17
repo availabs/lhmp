@@ -36,7 +36,7 @@ export const login = (user) => {
     if (user && user.token) {
       return dispatch(TODO_AuthServerVerifiesToken(user));
     }
-
+    console.log('what is the host?',HOST)
     return fetch(`${HOST}login/auth`, {
       method: 'POST',
       headers: {

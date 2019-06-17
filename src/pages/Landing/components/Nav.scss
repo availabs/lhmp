@@ -1,0 +1,72 @@
+.route--active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#layer0 {
+	fill: #fff
+}
+
+.navbar {
+	box-shadow: none!important;
+}
+
+.custom-nav {
+	color: white;
+	font: "Avenir Next W01", "Proxima Nova W01", "Rubik", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+}
+
+.navbar-inverse .navbar-nav .nav-link {
+  color: rgba(255,255,255,1);
+}
+
+.navbar-inverse .navbar-nav .nav-link:hover {
+  color: rgba(255,255,255,.7);
+}
+
+.navbar-nav .active  {
+	border-bottom: 2px solid white;
+}
+
+.util-nav .active  {
+	border-bottom: 2px solid #333;
+}
+
+
+.custom-nav .nav-item a {
+	color: white!important;
+	font-size: 14px!important;//1.1em;
+	font-family: "Avenir Next W01", "Proxima Nova W01", "Rubik", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.custom-nav .nav-item{
+
+}
+
+.login {
+	border: 1px solid white!important;
+}
+
+
+.cb {
+	font-family: "Avenir Next W01", "Proxima Nova W01", "Rubik", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	color: #fefefe;
+	font-size: 2.1em!important;
+	font-weight: 500;
+}
+
+.cb:hover {
+	color: #fefefe;
+}
+
+ .nav-link {
+	color: #333;
+	font-size: 15px;
+}
+
+@media (min-width: 768px) {
+	.navbar-toggleable-sm .navbar-nav .nav-link {
+	  padding-right: 1rem;
+	  padding-left: 1rem;
+	}
+}

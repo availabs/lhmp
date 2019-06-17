@@ -1,0 +1,83 @@
+.homeView {
+	font-family: 'Fira Sans', sans-serif;
+	//margin-top: 30px;
+}
+
+.template-selection {
+	padding: 5px 10px;
+	font-size: 15px;
+	color: #3887be;
+}
+.template-selection:hover {
+	color: #6eaad4;
+}
+.hover-highlight:hover {
+	background-color: #fff;
+	border-radius: 3px;
+}
+
+#homeview-template-modal div.input-group span.fa {
+	width: 10%;
+}
+#homeview-template-modal ul.list-group {
+	height: 250px;
+	overflow-y: auto;
+	width: 100%;
+}
+#homeview-template-modal ul.list-group li.list-group-item:hover {
+	background-color: #d9edf7;
+	cursor: pointer;
+}
+#homeview-template-modal ul.list-group li.list-group-item.active:hover {
+	background-color: #0275d8;
+	cursor: auto;
+}
+
+#homeNav h6.active{
+	text-decoration: underline;
+	font-weight: bold;
+	cursor:text;
+}
+
+#homeNav h6{
+	cursor:pointer;
+}
+
+.quickReport{
+	height:150px;
+}
+
+.quickReportContainer{
+	height:150px;
+	overflow:hidden;
+}
+
+.quickReport .description{
+	height: 90px;
+}
+
+.quickReport .header{
+	padding-top:10px;
+	overflow:hidden;
+	transition-property: opacity;
+  transition-duration: .33s;
+  transition-timing-function: ease-in-out;	
+}
+
+.quickReport .header:hover{
+	opacity:.7;
+}
+
+.nav-link{
+	color: #333;
+  font-size: 15px;
+}
+
+.util-nav .active {
+  border-bottom: 1px solid #333;
+}
+
+#notifications p{
+	font-size: 14px;
+	margin-bottom: 10px;
+}

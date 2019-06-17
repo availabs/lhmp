@@ -30,7 +30,7 @@ export const sendSystemMessage = (message, options={}) =>
 			message,
 			options: getMessageOptions({ ...DEFAULT_MESSAGE_OPTIONS, ...options })
 		}),
-		Promise.resolve())
+			Promise.resolve())
 
 export const dismissSystemMessage = id =>
 	dispatch =>
@@ -38,7 +38,7 @@ export const dismissSystemMessage = id =>
 			type: DISMISS_SYSTEM_MESSAGE,
 			id
 		}),
-		Promise.resolve())
+			Promise.resolve())
 
 export default (state=[], action) => {
 	switch (action.type) {

@@ -20,7 +20,8 @@ class MainMenu extends Component {
           ? 'active selected'
           : ''
         // console.log('isActive', isActive)
-        if (!menu.subMenus) {   
+        if (!menu.subMenus) {
+        console.log('menu',menu.subMenus)
         return (
           <li
             key={'menuItem_' + index}

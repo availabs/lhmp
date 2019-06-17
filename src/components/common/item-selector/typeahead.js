@@ -454,7 +454,7 @@ export default class Typeahead extends Component {
     return (value, options) =>
       fuzzy
         .filter(value, options, {extract: mapper})
-        .map(res => options[res.index]);
+        .map(res => options[res.HomePage]);
   }
 
   _hasHint() {

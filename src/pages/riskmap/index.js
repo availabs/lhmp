@@ -21,18 +21,17 @@ class Home extends Component {
 }
 
 export default {
-	path: '/',
+	path: '/scenario',
 	exact: true,
 	mainNav: true,
-  menuSettings: {
-    image: 'none',
-    display: 'none',
-    scheme: 'color-scheme-dark', 
-    position: 'menu-position-left',
-    layout: 'menu-layout-mini',
-    style: 'color-style-default'  
-  },
-  name: 'Home',
-	auth: false,
+    menuSettings: {
+        image: 'none',
+        scheme: 'color-scheme-dark',
+        position: 'menu-position-left',
+        layout: 'menu-layout-compact',
+        style: 'color-style-default'
+    },
+  name: 'Scenario Map',
+	auth: true,
 	component: Home
 }
