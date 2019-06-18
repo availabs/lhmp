@@ -206,7 +206,7 @@ export default {
         layout: 'menu-layout-compact',
         style: 'color-style-default'
     },
-    name: 'Actions Worksheet',
+    name: 'Create Actions Worksheet',
     auth: true,
     component: HomeView
 };
