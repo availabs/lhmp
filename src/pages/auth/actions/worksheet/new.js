@@ -195,8 +195,8 @@ class HomeView extends React.Component {
 }
 
 export default {
-    icon: 'os-icon-home',
-    path: '/test',
+    icon: 'os-icon',
+    path: '/actions/worksheet/new',
     exact: true,
     mainNav: true,
     menuSettings: {
@@ -206,7 +206,7 @@ export default {
         layout: 'menu-layout-compact',
         style: 'color-style-default'
     },
-    name: 'Home',
+    name: 'Actions Worksheet',
     auth: true,
     component: HomeView
 };
