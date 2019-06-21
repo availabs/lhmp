@@ -1,10 +1,14 @@
-import React from 'react'
+import React from 'react';
 import Wizard from 'components/light-admin/wizard'
+import { falcorGraph } from "store/falcorGraph"
+import {sendSystemMessage} from 'store/modules/messages';
+import {connect} from "react-redux";
 
 class HomeView extends React.Component {
 
     constructor (props) {
         super(props)
+
         this.state = {
             project_name: '',
             project_number: '',
@@ -35,9 +39,30 @@ class HomeView extends React.Component {
             progress_report: '',
             updated_evaluation: ''
         }
+
+
         this.handleChange = this.handleChange.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
+    componentDidMount(){
+        let edit_state = [];
+        console.log('in component did mount')
+        if(this.props.match.params.worksheetId) {
+            falcorGraph.get(['actions','worksheet','byId',[this.props.match.params.worksheetId],Object.keys(this.state)])
+                .then(response =>{
+                    Object.keys(this.state).forEach((key,i)=>{
+                        let tmp_state = {};
+                        tmp_state[key] = response.json.actions.worksheet.byId[this.props.match.params.worksheetId][key];
+                        this.setState(
+                            tmp_state
+                        )
+                    });
+
+                })
+        }
+
+    }
     handleChange(e) {
         console.log(e.target.id,e.target.value,this.state)
         this.setState({ ...this.state, [e.target.id]: e.target.value });
@@ -46,6 +71,54 @@ class HomeView extends React.Component {
     changeRadio = (id) => {
         console.log(id,this.state)
         this.setState({critical_facility: id});
+    }
+
+    onSubmit(event){
+        event.preventDefault();
+        let args = []
+        if(!this.props.match.params.worksheetId){
+            Object.values(this.state).forEach(function(step_content){
+                args.push(step_content)
+            })
+            return falcorGraph.call(['actions', 'worksheet', 'insert'], args, [], [])
+                .then(response => {
+
+                    this.props.sendSystemMessage(`Action worksheet was successfully created.`, {type: "success"});
+                })
+        }else {
+
+            let attributes = Object.keys(this.state)
+            let updated_data ={}
+            let data = {}
+            Object.values(this.state).forEach(function(step_content){
+                args.push(step_content)
+            })
+            Object.keys(this.state).forEach((d, i) => {
+                if (this.state[d] !== '') {
+                    console.log(data[d], d)
+                    updated_data[d] = this.state[d]
+                }
+            })
+            return falcorGraph.set({
+                paths: [
+                    ['actions', 'worksheet', 'byId', [this.props.match.params.worksheetId], attributes]
+                ],
+                jsonGraph: {
+                    actions: {
+                        worksheet: {
+                            byId: {
+                                [this.props.match.params.worksheetId]: updated_data
+                            }
+                        }
+                    }
+                }
+            })
+                .then(response => {
+
+                    this.props.sendSystemMessage(`Action worksheet was successfully edited.`, {type: "success"});
+                })
+        }
+
     }
 
     render () {
@@ -84,8 +157,8 @@ class HomeView extends React.Component {
                     <textarea id='solution_description' onChange={this.handleChange} className="form-control" placeholder="Description of the Solution" rows="4" spellCheck="false" value={this.state.solution_description}/></div>
                 </div>
                 <div className="form-check"><label htmlFor> Is this project related to a Critical Facility?</label>{''} {''} {''} {''}
-                    <input id='critical_facility' onChange={this.changeRadio.bind(this, 1)} type="radio" checked={this.state.critical_facility === 1}/>Yes {''} {''}
-                    <input id='critical_facility' onChange={this.changeRadio.bind(this, 0)} type="radio" checked={this.state.critical_facility === 0}/>No
+                    <input id='critical_facility' onChange={this.changeRadio.bind(this, 'yes')} type="radio" checked={this.state.critical_facility === 'yes'}/>Yes {''} {''}
+                    <input id='critical_facility' onChange={this.changeRadio.bind(this, 'no')} type="radio" checked={this.state.critical_facility === 'no'}/>No
                     <label htmlFor style={{fontSize: '11px',fontStyle: 'italic'}}>(If yes, this project must intend to protect the Critical Facility to the 500-year flood event or the actual worst damage scenario, whichever is greater.)</label>
                     <div className="form-group"><label htmlFor>Level of Protection </label>
                         <input id='protection_level' onChange={this.handleChange} className="form-control" placeholder="Level of Protection" type="text" value={this.state.protection_level}/>
@@ -188,17 +261,33 @@ class HomeView extends React.Component {
 
         return (
             <div className='container'>
-                <Wizard steps={wizardSteps}/>
+                <Wizard steps={wizardSteps} submit={this.onSubmit}/>
             </div>
         )
     }
 }
 
-export default {
+const mapDispatchToProps = {
+    sendSystemMessage
+};
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: !!state.user.authed,
+        attempts: state.user.attempts // so componentWillReceiveProps will get called.
+    };
+};
+
+export default [
+    {
     icon: 'os-icon',
     path: '/actions/worksheet/new',
     exact: true,
     mainNav: true,
+    breadcrumbs: [
+        { name: 'Actions', path: '/actions/worksheet/' },
+        { name: 'New Worksheet', path: '/actions/worksheet/new' }
+    ],
     menuSettings: {
         image: 'none',
         scheme: 'color-scheme-dark',
@@ -208,6 +297,27 @@ export default {
     },
     name: 'Create Actions Worksheet',
     auth: true,
-    component: HomeView
-};
+    component: connect(mapStateToProps,mapDispatchToProps)(HomeView)
+    },
+    {
+        path: '/actions/worksheet/edit/:worksheetId',
+        name: 'Edit Actions',
+        mainNav: false,
+        auth: true,
+        exact: true,
+        breadcrumbs: [
+            { name: 'Actions', path: '/actions/worksheet/new/' },
+            { param: 'worksheetId', path: '/actions/worksheet/new/edit' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(HomeView)
+    }
+
+]
 
