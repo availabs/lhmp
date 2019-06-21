@@ -151,6 +151,7 @@ let initialState = {
   authLevel: 0,
   authed: false,
   attempts: 0
+  activePlan: 1
 };
 
 // ------------------------------------
