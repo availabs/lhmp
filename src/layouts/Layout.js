@@ -5,21 +5,33 @@ import { Route, Redirect } from "react-router-dom";
 import Menu from 'components/light-admin/menu'
 import BreadcrumbBar from 'components/light-admin/breadcrumb-bar'
 import ContentContainer from 'components/light-admin/containers/ContentContainer'
+import LoadingPage from "components/loading/loadingPage"
 
 const DefaultLayout = ({component: Component, ...rest}) => {
+  
   if ( rest.isAuthenticating ) { 
     return (
       <Route {...rest} render={matchProps => (
         <div className="all-wrapper solid-bg-all">
           <div className="layout-w">
-            <Menu {...rest} />
             <ContentContainer>
-              ... Authenticating ...
+              <LoadingPage />
             </ContentContainer>
           </div>
         </div>
       )} />
     )
+  }
+
+  console.log('rest', rest)
+  let contentStyle = {width: '100%'}
+  if (rest.menuSettings.position === 'menu-position-side') {
+    contentStyle.marginLeft = 260
+    if(rest.menuSettings.layout === 'menu-layout-compact') {
+      contentStyle.marginLeft = 160
+    } else if(rest.menuSettings.layout === 'menu-layout-mini') {
+      contentStyle.marginLeft = 60
+    }
   } 
   
   return checkAuth(rest) ?
@@ -32,18 +44,21 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     />
   ) : (
     <Route {...rest} render={matchProps => (
-      <div className="layout-w" style={{minHeight: '100vh'}}>
-        { rest.menuSettings.display === 'none' ? '' : <Menu {...rest} /> }
-        <BreadcrumbBar layout={rest.breadcrumbs} match={rest.computedMatch}/>
-        <ContentContainer>
-          <Component {...matchProps} {...rest}/>
-        </ContentContainer>
+      <div className="layout-w" style={{ minHeight: '100vh' }}>
+        <Menu {...rest} />
+        <div style={contentStyle}>
+          <BreadcrumbBar layout={rest.breadcrumbs} match={rest.computedMatch}/>
+          <ContentContainer>
+            <Component {...matchProps} {...rest}/>
+          </ContentContainer>
+        </div>
       </div>  
     )} />
   )
 }
 
 function checkAuth (props) {
+  console.log('checkAuth', props.auth, props.authed, props.auth && !props.authed,  props)
   return (props.auth && !props.authed)
 }
 
