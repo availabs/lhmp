@@ -1,0 +1,215 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { reduxFalcor } from 'utils/redux-falcor'
+
+import Element from 'components/light-admin/containers/Element'
+import {falcorGraph} from "store/falcorGraph";
+import { Link } from "react-router-dom"
+import {sendSystemMessage} from 'store/modules/messages';
+
+
+const ATTRIBUTES = [
+    'id',
+    'project_name',
+    'project_number',
+    'hazard_of_concern',
+    'problem_description',
+    'solution_description',
+    'critical_facility',
+    'protection_level',
+    'useful_life',
+    'estimated_cost',
+    'estimated_benefits',
+    'priority',
+    'estimated_implementation_time',
+    'organization_responsible',
+    'desired_implementation_time',
+    'funding_source',
+    'planning_mechanism',
+    'alternative_action_1',
+    'alternative_estimated_cost_1',
+    'alternative_evaluation_1',
+    'alternative_action_2',
+    'alternative_estimated_cost_2',
+    'alternative_evaluation_2',
+    'alternative_action_3',
+    'alternative_estimated_cost_3',
+    'alternative_evaluation_3',
+    'date_of_report',
+    'progress_report',
+    'updated_evaluation'
+]
+
+class ActionsIndex extends React.Component {
+
+    constructor(props){
+        super(props)
+
+        this.state={
+            action_data: [],
+        }
+
+        this.deleteWorksheet = this.deleteWorksheet.bind(this)
+    }
+    componentDidMount(e) {
+        this.fetchFalcorDeps();
+    }
+
+    componentWillMount(){
+
+        this.fetchFalcorDeps().then(response =>{
+            this.setState({
+                action_data : response
+            })
+        })
+
+    }
+
+    fetchFalcorDeps() {
+        let action_data =[];
+        return falcorGraph.get(['actions','worksheet','length'])
+            .then(response => response.json.actions.worksheet.length)
+            .then(length => falcorGraph.get(
+                ['actions', 'worksheet','byIndex', { from: 0, to: length -1 }, 'id']
+                )
+                    .then(response => {
+                        const ids = [];
+                        for (let i = 0; i < length; ++i) {
+                            const graph = response.json.actions.worksheet.byIndex[i]
+                            if (graph) {
+                                ids.push(graph.id);
+                            }
+                        }
+                        return ids;
+                    })
+            )
+            .then(ids =>
+                falcorGraph.get(['actions','worksheet','byId', ids, ATTRIBUTES])
+                    .then(response => {
+                        //ids.forEach(id =>{
+                            Object.keys(response.json.actions.worksheet.byId).filter(d => d!== '$__path').forEach(function(action,i){
+                                action_data.push({
+                                    'id' : action,
+                                    'data': Object.values(response.json.actions.worksheet.byId[action])
+                                })
+                            })
+                        return action_data
+                    })
+            )
+
+    }
+
+    deleteWorksheet(e){
+        e.persist()
+        let worksheetId = e.target.id
+        this.props.sendSystemMessage(
+            `Are you sure you with to delete this Worksheet with id "${ worksheetId }"?`,
+        {
+            onConfirm: () => falcorGraph.call(['actions','worksheet','remove'],[worksheetId.toString()],[],[]).then(() => this.fetchFalcorDeps().then(response => {
+                this.setState({
+                    action_data:response
+                })
+            })),
+            id: `delete-content-${ worksheetId }`,
+            type: "danger",
+            duration: 0
+        }
+        )
+
+    }
+
+    
+    render() {
+        let table_data = [];
+        let attributes = ATTRIBUTES.slice(0,4)
+        this.state.action_data.map(function (each_row) {
+            table_data.push(each_row.data.slice(1,5))
+        })
+
+        return (
+            <div>
+            <Element>
+                <h6 className="element-header">Actions Worksheet</h6>
+                <div className="element-box">
+                    <div className="table-responsive" >
+                        <table className="table table lightBorder">
+                            <thead>
+                            <tr>
+                                {attributes.map(function(action,index){
+                                    return (
+                                        <th>{action}</th>
+                                    )
+                                })
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {table_data.map((data) =>{
+                                return (
+                                    <tr>
+                                        {data.map((d) => {
+                                            return (
+                                                <td>{d}</td>
+                                            )
+                                        })
+                                        }
+                                        <div className="col-lg-12">
+                                            <div className="float-left">
+                                                <Link className="btn btn-lg btn-outline-primary"
+                                                      to={ `/actions/worksheet/edit/${data[0]}` } >
+                                                    Edit
+                                                </Link>
+                                                <Link className="btn btn-lg btn-outline-primary"
+                                                      to={ `/actions/worksheet/view/${data[0]}` }>
+                                                    View
+                                                </Link>
+                                                <button id= {data[0]} className="btn btn-lg btn-outline-danger"
+                                                        onClick={this.deleteWorksheet}>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                )
+                            })
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </Element>
+            </div>
+
+        )
+    }
+}
+
+const mapStateToProps = state => ({
+    isAuthenticated: !!state.user.authed,
+    attempts: state.user.attempts // so componentWillReceiveProps will get called.
+});
+
+const mapDispatchToProps = {
+    sendSystemMessage
+};
+
+export default [
+    {
+        path: '/actions/',
+        exact: true,
+        name: 'List Actions Worksheet',
+        auth: true,
+        mainNav: true,
+        breadcrumbs: [
+            { name: 'Actions Worksheet', path: '/actions/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(ActionsIndex)
+    }
+]
