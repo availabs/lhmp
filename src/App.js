@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Switch } from 'react-router-dom';
-
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { login } from './store/modules/user';
 // comp
 import Layout from './layouts/Layout'
@@ -50,6 +49,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div className="all-wrapper solid-bg-all">
+          <BrowserRouter>
           <Switch>
           {
           	Routes.map((route,i) => {
@@ -70,6 +70,7 @@ class App extends Component {
   	    	  }) 
           }
           </Switch>
+          </BrowserRouter>
           <Messages />
         </div>
       </ThemeProvider>
