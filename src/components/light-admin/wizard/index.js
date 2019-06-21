@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { createMatchSelector } from 'react-router-redux';
-import { falcorGraph } from "store/falcorGraph"
+
 //import LandingNav from './components/LandingNav'
 
 //import { signup } from 'store/modules/user';
@@ -90,36 +90,12 @@ class Signup extends Component {
       }
       return null
   }
-  onSubmit(event){
-      event.preventDefault();
-      let args = []
-      this.props.steps.map(step =>{
-          Object.values(step.content._self.state).forEach(function(step_content){
-                  args.push(step_content)
-
-          })
-      })
-      args = args.filter (function (value, index, array) {
-        return array.indexOf (value) === index;
-      });
-      console.log('args',args)
-      return falcorGraph.call(['actions', 'worksheet','insert'], args, [], [])
-          .then(response => {
-              console.log('response',response)
-              this.props.sendSystemMessage(`Action worksheet was successfully created.`, { type: "success" });
-          })
-
-
-
-
-  }
-
 
 
   render () {
     return (
       <div className="element-box">
-                <form onSubmit={this.onSubmit.bind(this)}>
+                <form onSubmit={this.props.submit}>
                     <div className="steps-w">
                         <div className="step-triggers">
                             {
@@ -143,7 +119,6 @@ class Signup extends Component {
                     </div>
                 </form>
             </div>
-
     )
   }
 }
@@ -160,3 +135,48 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup)
+
+/*
+this.props.steps.map(step => {
+              if (step.content._self.props.match.params.id.slice(1) !== null && step.content._self.props.match.params.id.slice(1) !== undefined) {
+                  id = step.content._self.props.match.params.id.slice(1)
+                  data = step.content._self.state
+                  attributes = Object.keys(step.content._self.state)
+                  Object.values(step.content._self.state).forEach(function (step_content) {
+                      args.push(step_content)
+                  })
+                  args = args.filter(function (value, index, array) {
+                      return array.indexOf(value) === index;
+                  });
+                  Object.keys(data).forEach(function (d, i) {
+                      if (data[d] !== '') {
+                          console.log(data[d], d)
+                          updated_data[d] = data[d]
+                      }
+                  })
+                  return falcorGraph.set({
+                      paths: [
+                          ['actions', 'worksheet', 'byId', [id], attributes]
+                      ],
+                      jsonGraph: {
+                          actions: {
+                              worksheet: {
+                                  byId: {
+                                      [id]: updated_data
+                                  }
+                              }
+                          }
+                      }
+                  })
+                      .then(response => {
+                          console.log('response', response)
+                          this.props.sendSystemMessage(`Action worksheet was successfully edited.`, {type: "success"});
+                      })
+              }
+
+              //}
+              else {
+
+              }
+          })
+ */
