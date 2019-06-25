@@ -2,16 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 
-// import RouteComparisonStore from 'react/stores/RouteComparisonStore'
-// import RouteComparisonActions from 'react/actions/RouteComparisonActions'
-
-// import RouteDataStore from 'react/stores/RouteDataStore'
-
-// import NotificationsStore from 'react/stores/NotificationsStore'
-// import NotificationsActions from 'react/actions/NotificationsActions'
-
-// import UserActions from 'react/actions/UserActions'
-// import { HomeViewTemplateModal } from './ReportLauncher'
 import Element from 'components/light-admin/containers/Element'
 
 import HomeNav from './components/HomeNav'
@@ -35,17 +25,10 @@ class HomeView extends React.Component {
     // this.selectHomeViewTemplate = this.selectHomeViewTemplate.bind(this)
   }
   render () {
-    var title, subheader, content
-
-      title = 'Home'
-      subheader = 'Dashboard'
-
-
-
     return (
       <div className='container'>
         <Element>
-        <h4  className="element-header">Mitigation Planner Home</h4>
+        <h4  className="element-header">Assets</h4>
         </Element>
       </div>
     )
@@ -54,7 +37,7 @@ class HomeView extends React.Component {
 
 export default {
   icon: 'os-icon-home',
-  path: '/',
+  path: '/assets',
   exact: true,
   mainNav: true,
   menuSettings: {
