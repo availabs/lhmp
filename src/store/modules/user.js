@@ -34,6 +34,7 @@ export function logout() {
 
 const setUserToken = user => {
   if (localStorage) {
+    localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('userToken', user.token);
   }
 };
@@ -150,8 +151,8 @@ let initialState = {
   groups: [],
   authLevel: 0,
   authed: false,
-  attempts: 0
-  activePlan: 1
+  attempts: 0,
+  activePlan: null
 };
 
 // ------------------------------------

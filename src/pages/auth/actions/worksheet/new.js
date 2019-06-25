@@ -3,6 +3,8 @@ import Wizard from 'components/light-admin/wizard'
 import { falcorGraph } from "store/falcorGraph"
 import {sendSystemMessage} from 'store/modules/messages';
 import {connect} from "react-redux";
+import Element from 'components/light-admin/containers/Element'
+
 
 class HomeView extends React.Component {
 
@@ -124,7 +126,9 @@ class HomeView extends React.Component {
     render () {
         const wizardSteps = [
             {
-                title: "Step 1",
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 1</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Project Name</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor> Project Name</label>
@@ -137,7 +141,12 @@ class HomeView extends React.Component {
                 </div>)
             },
             {
-                title: "Step 2",
+                title:(
+                    <span>
+                        <span style={{fontSize:'0.7em'}}>Step 2</span>
+                        <br /><span style={{fontSize:'0.9em'}}>Hazard of Concern</span>
+                    </span>
+                ),
                 content: (<div className="form-group">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor> Hazard for concern</label>
@@ -150,7 +159,12 @@ class HomeView extends React.Component {
                 </div>)
             },
             {
-                title: "Step 3",
+                title:(
+                    <span>
+                        <span style={{fontSize:'0.7em'}}>Step 3</span>
+                        <br /><span style={{fontSize:'0.9em'}}>Describe Solution</span>
+                    </span>
+                ),
                 content: (<div className="form-group">
                 <div className="col-sm-12">
                     <div className="form-group"><label htmlFor>Description of the Solution</label>
@@ -176,7 +190,12 @@ class HomeView extends React.Component {
             </div>)
             },
             {
-                title: "Step 4",
+                title:(
+                    <span>
+                        <span style={{fontSize:'0.7em'}}>Step 4</span>
+                        <br /><span style={{fontSize:'0.9em'}}>Prioritization</span>
+                    </span>
+                ),
                 content: (<div className="form-group">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Prioritization </label>
@@ -201,7 +220,12 @@ class HomeView extends React.Component {
                 </div>)
             },
             {
-                title: "Step 5",
+               title:(
+                    <span>
+                        <span style={{fontSize:'0.7em'}}>Step 5</span>
+                        <br /><span style={{fontSize:'0.9em'}}>Alternatives</span>
+                    </span>
+                ),
                 content: (<div className="form-group">
                     <div className="col-sm-12">
                         <div className="form-group">
@@ -240,7 +264,12 @@ class HomeView extends React.Component {
                 </div>)
             },
             {
-                title: "Step 6",
+                title:(
+                    <span>
+                        <span style={{fontSize:'0.7em'}}>Step 6</span>
+                        <br /><span style={{fontSize:'0.9em'}}>Project Status</span>
+                    </span>
+                ),
                 content: (<div className="form-group">
                     <div className="col-sm-12">
                         <div className="form-group">
@@ -261,7 +290,10 @@ class HomeView extends React.Component {
 
         return (
             <div className='container'>
+                <Element>
+                <h6 className="element-header">New Action Worksheet</h6>
                 <Wizard steps={wizardSteps} submit={this.onSubmit}/>
+                </Element>
             </div>
         )
     }
@@ -283,14 +315,14 @@ export default [
     icon: 'os-icon',
     path: '/actions/worksheet/new',
     exact: true,
-    mainNav: true,
+    mainNav: false,
     breadcrumbs: [
-        { name: 'Actions', path: '/actions/worksheet/' },
+        { name: 'Actions', path: '/actions/' },
         { name: 'New Worksheet', path: '/actions/worksheet/new' }
     ],
     menuSettings: {
         image: 'none',
-        scheme: 'color-scheme-dark',
+        scheme: 'color-scheme-light',
         position: 'menu-position-left',
         layout: 'menu-layout-compact',
         style: 'color-style-default'

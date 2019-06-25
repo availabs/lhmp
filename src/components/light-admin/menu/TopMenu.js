@@ -8,7 +8,7 @@ class Logo extends Component {
         <div className="logo-w">
           <Link className="logo" to="/">
 
-            <div className="logo-label">NPMRDS</div>
+            <div className="logo-label">Mitigation Planner</div>
           </Link>
         </div>
     )
