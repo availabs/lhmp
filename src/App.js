@@ -23,13 +23,22 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // console.log('update',prevProps, this.props.user.attempts)
+    console.log('update',prevProps, this.props.user.attempts)
     if (this.state.isAuthenticating && this.props.user.attempts ) {
       this.setState({ isAuthenticating: false });
     }
   }
 
+  componentWillMount(prevProps) {
+    console.log('update',prevProps, this.props.user.attempts)
+    if (this.state.isAuthenticating && this.props.user.attempts ) {
+      this.setState({ isAuthenticating: false });
+    }
+  }
+
+
   render() {
+    console.log('render',this.props.user)
     return (
       <ThemeProvider theme={theme}>
         <div className="all-wrapper solid-bg-all">

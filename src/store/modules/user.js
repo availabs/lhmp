@@ -34,7 +34,7 @@ export function logout() {
 
 const setUserToken = user => {
   if (localStorage) {
-    localStorage.setItem('user', JSON.stringify(user))
+    // localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('userToken', user.token);
   }
 };
@@ -169,6 +169,7 @@ const ACTION_HANDLERS = {
     removeUserToken();
     const newState = initialState;
     ++newState.attempts;
+    console.log('auth failter')
     return newState;
   },
   [USER_LOGOUT]: (state = initialState, action) => {

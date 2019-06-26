@@ -15,7 +15,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
         <div className="all-wrapper solid-bg-all">
           <div className="layout-w">
             <ContentContainer>
-              <LoadingPage />
+              <LoadingPage message={'Loading Plans...'}/>
             </ContentContainer>
           </div>
         </div>

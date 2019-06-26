@@ -1,5 +1,5 @@
 {
-  "name": "Mitigation Planner",
+  "name": "mitigation_planner",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "history": "^4.7.2",
     "keymirror": "^0.1.1",
     "lodash.get": "^4.4.2",
+    "lodash.pick": "^4.4.0",
     "lodash.throttle": "^4.1.1",
     "mapbox-gl": "^0.49.0",
     "moment": "^2.24.0",
@@ -47,6 +48,7 @@
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "build-css": "node-sass-chokidar src/ -o src/",
+    "deploy": "aws s3 sync build/ s3://lhmp-prod && aws cloudfront create-invalidation --distribution-id ERYT3LJPUWTEV --paths \"/index.html\"",
     "watch-css": "npm run build-css && node-sass-chokidar src/ --include-path ./node_modules src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
