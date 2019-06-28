@@ -46,6 +46,7 @@ export function logout() {
 
 const setUserToken = user => {
   if (localStorage) {
+    // localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('userToken', user.token);
   }
 };
@@ -199,8 +200,8 @@ let initialState = {
   groups: [],
   authLevel: 0,
   authed: false,
-  activeProject: null,
-  attempts: 0
+  attempts: 0,
+  activePlan: null
 };
 
 // ------------------------------------
@@ -217,6 +218,7 @@ const ACTION_HANDLERS = {
     removeUserToken();
     const newState = initialState;
     ++newState.attempts;
+    console.log('auth failter')
     return newState;
   },
   [USER_LOGOUT]: (state = initialState, action) => {

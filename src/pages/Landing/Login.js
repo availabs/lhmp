@@ -70,7 +70,7 @@ class Login extends Component {
         <div style={{
           height:'100vh',
           overflow: 'hidden',
-          backgroundImage: 'linear-gradient(to bottom right,rgb(110, 176, 194) 0px, rgb(63, 174, 205) 39%, rgb(52, 149, 176) 100%)'}}
+          backgroundImage: 'linear-gradient(142deg, rgba(255,255,255,1) 0%, rgba(238,240,245,1) 85%, rgba(4,123,248,.2) 100%)'}}
         >
 
           <div style={{height: '100%',
@@ -84,7 +84,9 @@ class Login extends Component {
               maxWidth: '650px'
             }}>
 
-              <h4 className="auth-header" style={{paddingTop: 20}}>LHMP Login</h4>
+              <h4 className="auth-header" style={{paddingTop: 20}}>Hazard Mitigation Planner
+              <br/><span style={{fontSize: '0.8em', fontWeight: 100, color:'#047bf8'}}>Login</span></h4>
+
               <form onSubmit={this.handleSubmit}>
                 <div className="form-group">
                   <label htmlFor=''>Username</label>

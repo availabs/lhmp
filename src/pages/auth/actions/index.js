@@ -127,9 +127,29 @@ class ActionsIndex extends React.Component {
         })
 
         return (
-            <div>
+            <div className='container'>
             <Element>
-                <h6 className="element-header">Actions Worksheet</h6>
+                <h6 className="element-header">Actions
+                    <span style={{float:'right'}}>
+                        <Link 
+                            className="btn btn-sm btn-primary"
+                            to={ `/actions/worksheet/new` } >
+                                Create Action Worksheet
+                        </Link>
+                        <button 
+                            disabled
+                            className="btn btn-sm btn-disabled"
+                            >
+                                Create Action Planner
+                        </button>
+                        <button 
+                            disabled
+                            className="btn btn-sm btn-disabled"
+                            >
+                                Create HMGP Action
+                        </button>
+                    </span>
+                </h6>
                 <div className="element-box">
                     <div className="table-responsive" >
                         <table className="table table lightBorder">
@@ -153,22 +173,24 @@ class ActionsIndex extends React.Component {
                                             )
                                         })
                                         }
-                                        <div className="col-lg-12">
-                                            <div className="float-left">
-                                                <Link className="btn btn-lg btn-outline-primary"
+                                        <td>
+                                                <Link className="btn btn-sm btn-outline-primary"
                                                       to={ `/actions/worksheet/edit/${data[0]}` } >
                                                     Edit
                                                 </Link>
-                                                <Link className="btn btn-lg btn-outline-primary"
+                                        </td>
+                                        <td>
+                                                <Link className="btn btn-sm btn-outline-primary"
                                                       to={ `/actions/worksheet/view/${data[0]}` }>
                                                     View
                                                 </Link>
-                                                <button id= {data[0]} className="btn btn-lg btn-outline-danger"
+                                        </td>
+                                        <td>
+                                                <button id= {data[0]} className="btn btn-sm btn-outline-danger"
                                                         onClick={this.deleteWorksheet}>
                                                     Delete
                                                 </button>
-                                            </div>
-                                        </div>
+                                        </td>
                                     </tr>
                                 )
                             })
@@ -197,15 +219,16 @@ export default [
     {
         path: '/actions/',
         exact: true,
-        name: 'List Actions Worksheet',
+        name: 'Actions',
         auth: true,
         mainNav: true,
+        icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            { name: 'Actions Worksheet', path: '/actions/' }
+            { name: 'Actions', path: '/actions/' }
         ],
         menuSettings: {
             image: 'none',
-            scheme: 'color-scheme-dark',
+            scheme: 'color-scheme-light',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
             style: 'color-style-default'

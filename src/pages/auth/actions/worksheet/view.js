@@ -146,7 +146,7 @@ export default [
         ],
         menuSettings: {
             image: 'none',
-            scheme: 'color-scheme-dark',
+            scheme: 'color-scheme-light',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
             style: 'color-style-default'

@@ -5,7 +5,7 @@ import Landing from './pages/Landing'
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
-import ActionsIndex from 'pages/auth/actions/worksheet/actions'
+import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import Plans from 'pages/auth/plans/view'
@@ -21,12 +21,12 @@ const routes = [
   Landing,
   Home,
   Login,
+  // ...ActionWorksheet,
+  // ...ActionsIndex,
+  // ...ActionsView,
+  // ...Plans,
+  // ...PlanPage,
   RiskMap,
-  ...ActionWorksheet,
-  ...ActionsIndex,
-  ...ActionsView,
-  ...Plans,
-  ...PlanPage,
   Logout,
   NoMatch
 
