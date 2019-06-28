@@ -1,12 +1,14 @@
 import { sendSystemMessage } from './messages';
 
 import { AUTH_HOST, AUTH_PROJECT_NAME } from 'config';
+import {falcorGraph} from "../falcorGraph";
 // ------------------------------------
 // Constants
 // ------------------------------------
 const USER_LOGIN = 'USER::USER_LOGIN';
 const USER_LOGOUT = 'USER::USER_LOGOUT';
 const AUTH_FAILURE = 'USER::AUTH_FAILURE';
+const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
 // ------------------------------------
@@ -17,6 +19,16 @@ function receiveAuthResponse(user) {
     type: USER_LOGIN,
     user
   };
+}
+
+function setActiveProject(user, planId=''){
+  console.log('planId',planId)
+  //console.log('user in setActiveProject',user)
+  return {
+    type: SET_ACTIVE_PROJECT,
+    user,
+    planId: planId
+  }
 }
 
 // function TODO_AuthServerVerifiesToken(user) {
@@ -47,7 +59,39 @@ const removeUserToken = () => {
   if (localStorage) {
     localStorage.removeItem('userToken');
   }
+  //setActiveProject=-p
 };
+
+export const activateProject = ({user,planId}) => dispatch =>
+  falcorGraph.get(['plans', 'county', 'authGroups', '{Fulton_County_HMP}', [3]]) //what if there are multiple plan id`s
+      .then(response => {
+        Object.values(response.json.plans.county.authGroups).forEach((res) => {
+          planId = res['Fulton_County_HMP'].planId
+        })
+        if (localStorage) {
+          console.log('in if')
+          localStorage.setItem('planId', planId)
+          dispatch(setActiveProject(planId.toString()))
+        }
+      })
+
+
+    // falcor.get
+    //['plan', 'authgroups', user.groups, 'planId']
+      // -- should return like this
+      // {
+    //   'AVAIL': {planId: []}
+    //   'Hamilton County': {planId: [3]}
+    // }
+
+    //reduce to flat array of planids
+    // [3,5,6]
+
+    //if localstorage planID
+    // is set and is in legal plans
+    // set planId to local storge
+    //dispatch(setActiveProject(planId))
+
 
 export const login = ({ email, password }) => dispatch =>
   fetch(`${AUTH_HOST}/login`, {
@@ -64,9 +108,13 @@ export const login = ({ email, password }) => dispatch =>
         dispatch({ type: AUTH_FAILURE });
         dispatch(sendSystemMessage(res.error));
       } else {
+        console.log('res',res)
+        dispatch(setActiveProject(res.user))
         dispatch(receiveAuthResponse(res.user));
       }
     });
+
+
 
 export const auth = () => dispatch => {
   const token = getUserToken();
@@ -139,7 +187,8 @@ export const resetPassword = ({ email }) => dispatch => {
 
 export const actions = {
   login,
-  logout
+  logout,
+  activateProject
 };
 
 // -------------------------------------
@@ -150,6 +199,7 @@ let initialState = {
   groups: [],
   authLevel: 0,
   authed: false,
+  activeProject: null,
   attempts: 0
 };
 
@@ -172,7 +222,18 @@ const ACTION_HANDLERS = {
   [USER_LOGOUT]: (state = initialState, action) => {
     removeUserToken();
     return initialState;
+  },
+
+  [SET_ACTIVE_PROJECT]: (state =initialState, action) => {
+    console.log('action',action)
+    console.log('state',state)
+    // if action.planID && user.groups includes that project
+    let newState = Object.assign({}, state)
+    // state.activeProject = action.projectId
+    // otherwise, active project = user.groups[0]
+    return newState
   }
+
 };
 
 export default function userReducer(state = initialState, action) {

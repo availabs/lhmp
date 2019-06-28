@@ -17,7 +17,6 @@ class Logo extends Component {
 
 class AvatarUser extends Component {
   render () {
-    console.log('what is my user object', this.props.user)
     return (
         <div className="logged-user-w avatar-inline">
           <div className="logged-user-i">

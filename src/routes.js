@@ -8,6 +8,8 @@ import Home from 'pages/auth/Home';
 import ActionsIndex from 'pages/auth/actions/worksheet/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
+import Plans from 'pages/auth/plans/view'
+import PlanPage from 'pages/auth/plans/planPage'
 
 // -- Util Routes
 import Login from './pages/Landing/Login'
@@ -23,6 +25,8 @@ const routes = [
   ...ActionWorksheet,
   ...ActionsIndex,
   ...ActionsView,
+  ...Plans,
+  ...PlanPage,
   Logout,
   NoMatch
 

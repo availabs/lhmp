@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
+import {falcorGraph} from "store/falcorGraph";
 
 import LandingNav from './components/LandingNav'
 
@@ -40,6 +41,21 @@ class Login extends Component {
       this.setState({ isLoading: false });
     }
   }
+
+  /*
+  componentWillMount(){
+    if(this.props.user.authLevel <10){
+      this.fetchFalcorDeps()
+    }
+  }
+
+  fetchFalcorDeps(){
+    return falcorGraph.get(['plans','county','byId',['3'],'fips'])
+        .then(response =>{
+          console.log('response',response)
+        })
+  }
+   */
 
   render () {
     const { from } = this.props.location.state || { from: { pathname: "/" } };

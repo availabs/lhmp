@@ -25,16 +25,15 @@ class App extends Component {
     if (typeof Storage !== 'undefined' && localStorage.getItem('user')) {
       try {
         const user = JSON.parse(localStorage.getItem('user'));
-        //console.log('===== App sent auth user request =====');
         this.setState({ isAuthenticating: true });
         this.props.login(user);
       } catch (err) {
-       // console.log('there is an load auth error',err)
         this.setState({ isAuthenticating: false });
         localStorage.removeItem('user');
         console.error(err);
       }
     } else {
+      console.log('in app else, no token')
       this.setState({ isAuthenticating: false });
     }
   }
