@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Switch } from 'react-router-dom';
+import { BrowserRouter,Switch } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 import theme from 'components/common/themes/dark';
@@ -22,6 +22,7 @@ class App extends Component {
     };
   }
 
+
   componentDidUpdate(prevProps) {
     console.log('update',prevProps, this.props.user.attempts)
     if (this.state.isAuthenticating && this.props.user.attempts ) {
@@ -42,6 +43,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div className="all-wrapper solid-bg-all">
+          <BrowserRouter>
             <Switch>
               {Routes.map((route, i) => {
                 return (
@@ -60,6 +62,7 @@ class App extends Component {
                 );
               })}
             </Switch>
+          </BrowserRouter>
           <Messages />
         </div>
       </ThemeProvider>

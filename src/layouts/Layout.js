@@ -23,7 +23,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     )
   }
 
-  console.log('rest', rest)
+  //console.log('rest', rest)
   let contentStyle = {width: '100%'}
   if (rest.menuSettings.position === 'menu-position-side') {
     contentStyle.marginLeft = 260
@@ -58,7 +58,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
 }
 
 function checkAuth (props) {
-  console.log('checkAuth', props.auth, props.authed, props.auth && !props.authed,  props)
+  //console.log('checkAuth', props.auth, props.authed)
   return (props.auth && !props.authed)
 }
 
