@@ -6,25 +6,25 @@ import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
+import {setActivePlan} from 'store/modules/user'
 
+import get from 'lodash.get'
 
 const ATTRIBUTES = [
 
+    "county",
     "id",
     "fips",
-    "plan_consultant",
     "plan_expiration",
     "plan_grant",
-    "plan_url",
     "plan_status",
-    "groups"
+
 ]
 
 class Plans extends React.Component {
 
     constructor(props){
         super(props)
-
         this.state={
             plans_list: [],
             id:''
@@ -35,38 +35,34 @@ class Plans extends React.Component {
         this.fetchFalcorDeps();
     }
 
-    componentWillMount(){
 
-        this.fetchFalcorDeps().then(response =>{
-            this.setState({
-                plans_list : response
-            })
-        })
-
+    onPlanClick = async event =>{
+        event.preventDefault()
+        let planId = event.target.getAttribute('value')
+        //console.log('planId click', planId,)
+        this.props.setActivePlan(planId)
+        this.props.history.push('/')
     }
 
     fetchFalcorDeps() {
         let plan_data =[];
         return falcorGraph.get(['plans','county','length'])
-            .then(response => response.json.plans.county.length)
-            .then(length => falcorGraph.get(
-                ['plans', 'county','byIndex', { from: 0, to: length -1 }, 'id']
-                )
+            .then(length => falcorGraph.get(['plans', 'county','byIndex', {from: 0, to: length.json.plans.county.length-1 }, 'id'])
                     .then(response => {
                         const ids = [];
-                        for (let i = 0; i < length; ++i) {
+                        for (let i = 0; i < length.json.plans.county.length; ++i) {
                             const graph = response.json.plans.county.byIndex[i]
                             if (graph) {
                                 ids.push(graph.id);
                             }
                         }
+
                         return ids;
                     })
             )
             .then(ids =>
                 falcorGraph.get(['plans','county','byId', ids, ATTRIBUTES])
                     .then(response => {
-                        //ids.forEach(id =>{
                         Object.keys(response.json.plans.county.byId).filter(d => d!== '$__path').forEach(function(plan,i){
                             plan_data.push({
                                 'id' : plan,
@@ -79,14 +75,8 @@ class Plans extends React.Component {
 
     }
 
-
     render() {
-
-        let table_data = [];
         let attributes = ATTRIBUTES
-        this.state.plans_list.map(function (each_row) {
-            table_data.push(each_row.data.slice(1))
-        });
         return (
             <div>
                 <Element>
@@ -106,22 +96,30 @@ class Plans extends React.Component {
                                 </thead>
                                 <tbody>
                                  {
-                                     table_data.map((data) =>{
+                                     Object.values(this.props.plansList)
+                                         .filter(plan => this.props.authedPlans.includes(plan.id.value))
+                                         .map((plan,i) =>{
                                      return(
-
                                      <tr>
                                          {
-                                             data.map((d)=>{
-                                                 return(<td>{d}</td>)
+                                             <td>
+                                             <Link className=""
+                                                value={plan.id.value}
+                                                onClick={this.onPlanClick}>
+                                             {plan.county.value}
+                                         </Link>
+                                             </td>
+                                                 }
+                                         {
+
+                                             ATTRIBUTES.map((attr,i) => {
+                                                 if ( i > 0){
+                                                     return (<td>{plan[attr].value}</td>)
+                                                 }
+
                                              })
                                          }
-                                     <Link className="btn btn-lg btn-outline-primary"
-                                           to={ `/plans/county/${data[0]}` }>
-                                         View
-                                     </Link>
                                      </tr>
-
-
                                      )
                                 })
                                 }
@@ -137,11 +135,14 @@ class Plans extends React.Component {
 
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
-    attempts: state.user.attempts // so componentWillReceiveProps will get called.
+    authedPlans: state.user.authedPlans,
+    attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+    plansList: get(state.graph, 'plans.county.byId',{})
 });
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage,
+    setActivePlan
 };
 
 export default [
@@ -164,3 +165,5 @@ export default [
         component: connect(mapStateToProps,mapDispatchToProps)(Plans)
     }
 ]
+
+//
