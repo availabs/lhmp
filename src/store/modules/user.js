@@ -8,7 +8,8 @@ import {falcorGraph} from "../falcorGraph";
 const USER_LOGIN = 'USER::USER_LOGIN';
 const USER_LOGOUT = 'USER::USER_LOGOUT';
 const AUTH_FAILURE = 'USER::AUTH_FAILURE';
-const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
+//const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
+const SET_PLANS_AUTH = 'USER::SET_PLANS_AUTH'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
 // ------------------------------------
@@ -21,13 +22,22 @@ function receiveAuthResponse(user) {
   };
 }
 
-function setActiveProject(user, planId=''){
-  console.log('planId',planId)
+/*
+function setActiveProject(planId){
+  //console.log('planId',planId)
   //console.log('user in setActiveProject',user)
   return {
     type: SET_ACTIVE_PROJECT,
-    user,
-    planId: planId
+    planId
+  }
+}
+ */
+
+function setPlanAuth(planId,authedPlans,){
+  return {
+    type: SET_PLANS_AUTH,
+    planId,
+    authedPlans
   }
 }
 
@@ -63,35 +73,35 @@ const removeUserToken = () => {
   //setActiveProject=-p
 };
 
-export const activateProject = ({user,planId}) => dispatch =>
-  falcorGraph.get(['plans', 'county', 'authGroups', '{Fulton_County_HMP}', [3]]) //what if there are multiple plan id`s
-      .then(response => {
-        Object.values(response.json.plans.county.authGroups).forEach((res) => {
-          planId = res['Fulton_County_HMP'].planId
+
+export const authProjects = (user) => {
+  return (dispatch) => {
+    let groups = user.groups
+    console.log('groups',groups)
+    falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
+        .then(response => {
+          let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
+              .reduce((output, group) => {
+                output.push(group.plans)
+                return output
+              }, [])
+          // make plan ids unique by magic
+          let AuthedPlans = [...new Set(allPlans[1])];
+          if (localStorage) {
+            let planId = localStorage.getItem('planId') ?
+                localStorage.getItem('planId') :
+                AuthedPlans[0]
+            dispatch(setPlanAuth(planId,AuthedPlans))
+          }
         })
-        if (localStorage) {
-          console.log('in if')
-          localStorage.setItem('planId', planId)
-          dispatch(setActiveProject(planId.toString()))
-        }
-      })
+  }
+}
 
-
-    // falcor.get
-    //['plan', 'authgroups', user.groups, 'planId']
-      // -- should return like this
-      // {
-    //   'AVAIL': {planId: []}
-    //   'Hamilton County': {planId: [3]}
-    // }
-
-    //reduce to flat array of planids
-    // [3,5,6]
-
-    //if localstorage planID
-    // is set and is in legal plans
-    // set planId to local storge
-    //dispatch(setActiveProject(planId))
+export const setActivePlan = (user) =>{
+  return (dispatch) =>{
+    dispatch(setPlanAuth(user))
+  }
+}
 
 
 export const login = ({ email, password }) => dispatch =>
@@ -109,8 +119,7 @@ export const login = ({ email, password }) => dispatch =>
         dispatch({ type: AUTH_FAILURE });
         dispatch(sendSystemMessage(res.error));
       } else {
-        console.log('res',res)
-        dispatch(setActiveProject(res.user))
+        dispatch(authProjects(res.user))
         dispatch(receiveAuthResponse(res.user));
       }
     });
@@ -119,7 +128,7 @@ export const login = ({ email, password }) => dispatch =>
 
 export const auth = () => dispatch => {
   const token = getUserToken();
-  console.log('auth attempt', token, `${AUTH_HOST}/auth`)
+  //console.log('auth attempt', token, `${AUTH_HOST}/auth`)
   if (token) {
     return fetch(`${AUTH_HOST}/auth`, {
       method: 'POST',
@@ -131,19 +140,18 @@ export const auth = () => dispatch => {
     })
       .then(res => res.json())
       .then(res => {
-        console.log('auth happened')
+        //console.log('auth happened')
         if (res.error) {
           dispatch({ type: AUTH_FAILURE });
           dispatch(sendSystemMessage(res.error));
         } else {
-          // console.log('receiveAuthResponse', res.user)
-         
+          dispatch(authProjects(res.user));
           dispatch(receiveAuthResponse(res.user));
         }
       });
   } else {
     // return Promise.resolve();
-    console.log('no auth')
+    //console.log('no auth')
     return dispatch({ type: AUTH_FAILURE });
   }
 };
@@ -189,7 +197,7 @@ export const resetPassword = ({ email }) => dispatch => {
 export const actions = {
   login,
   logout,
-  activateProject
+  setActivePlan
 };
 
 // -------------------------------------
@@ -201,7 +209,8 @@ let initialState = {
   authLevel: 0,
   authed: false,
   attempts: 0,
-  activePlan: null
+  activePlan: null,
+  authedPlans: []
 };
 
 // ------------------------------------
@@ -218,7 +227,6 @@ const ACTION_HANDLERS = {
     removeUserToken();
     const newState = initialState;
     ++newState.attempts;
-    console.log('auth failter')
     return newState;
   },
   [USER_LOGOUT]: (state = initialState, action) => {
@@ -226,13 +234,15 @@ const ACTION_HANDLERS = {
     return initialState;
   },
 
-  [SET_ACTIVE_PROJECT]: (state =initialState, action) => {
-    console.log('action',action)
-    console.log('state',state)
-    // if action.planID && user.groups includes that project
-    let newState = Object.assign({}, state)
-    // state.activeProject = action.projectId
-    // otherwise, active project = user.groups[0]
+  [SET_PLANS_AUTH]: (state =initialState, action) => {
+    const newState = Object.assign({}, state)
+    if(action.authedPlans) {
+      newState.authedPlans = action.authedPlans
+    }
+    if(Object.values(newState.authedPlans).includes(action.planId)) {
+      newState.activePlan = action.planId
+      localStorage.setItem('planId', newState.activePlan)
+    }
     return newState
   }
 

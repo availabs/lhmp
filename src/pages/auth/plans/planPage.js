@@ -6,7 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
-import {activateProject} from 'store/modules/user'
+
 
 
 const ATTRIBUTES = [
@@ -59,12 +59,10 @@ class PlanPage extends React.Component {
 
     }
 
-    // onPlanClick (planId) {
-    //     this.props.act
-    // }
+
 
     render() {
-        console.log('props',this.props.activateProject)
+
         let table_data = [];
         let attributes = ATTRIBUTES.slice(1)
         this.state.plan_data.map(function (each_row) {
@@ -89,10 +87,9 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-const mapDispatchToProps =  ({
-    sendSystemMessage,
-    activateProject
-});
+const mapDispatchToProps =  {
+    //sendSystemMessage,
+};
 
 export default [
     {
@@ -103,7 +100,7 @@ export default [
         mainNav: false,
         breadcrumbs: [
             { name: 'Plans', path: '/plans/county/' },
-            { param: 'countyPlanId', path: '/plans/county/' }
+            { param: 'countyPlanId', path: '/plans/county/planPage' }
         ],
         menuSettings: {
             image: 'none',
