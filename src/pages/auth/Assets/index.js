@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 import Element from 'components/light-admin/containers/Element'
 
-import HomeNav from './components/HomeNav'
 // import QuickReports from './QuickReports'
 // import HomeActivity from './HomeActivity'
 // import Guide from './Guide'
@@ -35,7 +34,7 @@ class HomeView extends React.Component {
   }
 }
 
-export default {
+export default [{
   icon: 'os-icon-home',
   path: '/assets',
   exact: true,
@@ -50,5 +49,5 @@ export default {
   name: 'Home',
   auth: true,
   component: HomeView
-};
+}];
 
