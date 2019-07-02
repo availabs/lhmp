@@ -9,8 +9,7 @@ import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import Plans from 'pages/auth/plans/view'
-import PlanPage from 'pages/auth/plans/planPage'
-
+import PlanIndex from 'components/plan/'
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Logout from './pages/Logout'
@@ -25,7 +24,7 @@ const routes = [
    ...ActionsIndex,
    ...ActionsView,
    ...Plans,
-   ...PlanPage,
+  PlanIndex,
   RiskMap,
   Logout,
   NoMatch
