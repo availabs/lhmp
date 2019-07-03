@@ -46,7 +46,7 @@ export default [{
     layout: 'menu-layout-compact',
     style: 'color-style-default'
   },
-  name: 'Home',
+  name: 'Assets',
   auth: true,
   component: HomeView
 }];

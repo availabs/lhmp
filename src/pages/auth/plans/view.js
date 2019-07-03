@@ -78,7 +78,7 @@ class Plans extends React.Component {
     render() {
         let attributes = ATTRIBUTES
         return (
-            <div>
+            <div className='container'>
                 <Element>
                     <h6 className="element-header">County Plans</h6>
                     <div className="element-box">
@@ -103,11 +103,12 @@ class Plans extends React.Component {
                                      <tr>
                                          {
                                              <td>
-                                             <Link className=""
+                                             <a className=""
+                                                href='#'
                                                 value={plan.id.value}
                                                 onClick={this.onPlanClick}>
                                              {plan.county.value}
-                                         </Link>
+                                         </a>
                                              </td>
                                                  }
                                          {

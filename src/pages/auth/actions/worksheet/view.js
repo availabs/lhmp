@@ -90,7 +90,7 @@ class ActionsIndex extends React.Component {
         });
 
         return (
-            <div>
+            <div className='container'>
                 <Element>
                     <h6 className="element-header">Actions Worksheet</h6>
                     <div className="element-box">
