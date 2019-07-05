@@ -4,8 +4,13 @@ import { falcorGraph } from "store/falcorGraph"
 import {sendSystemMessage} from 'store/modules/messages';
 import {connect} from "react-redux";
 import Element from 'components/light-admin/containers/Element'
+import get from "lodash.get";
 
-
+const counties = ["36101","36003","36091","36075","36111","36097","36089","36031","36103","36041","36027","36077",
+    "36109","36001","36011","36039","36043","36113","36045","36019","36059","36053","36115","36119","36049","36069",
+    "36023","36085","36029","36079","36057","36105","36073","36065","36009","36123","36107","36055","36095","36007",
+    "36083","36099","36081","36037","36117","36063","36047","36015","36121","36061","36021","36013","36033","36017",
+    "36067","36035","36087","36051","36025","36071","36093","36005"]
 class HomeView extends React.Component {
 
     constructor (props) {
@@ -14,6 +19,8 @@ class HomeView extends React.Component {
         this.state = {
             project_name: '',
             project_number: '',
+            county:'',
+            cousub:'',
             hazard_of_concern: '',
             problem_description: '',
             solution_description: '',
@@ -39,17 +46,17 @@ class HomeView extends React.Component {
             alternative_evaluation_3: '',
             date_of_report: '',
             progress_report: '',
-            updated_evaluation: ''
+            updated_evaluation: '',
         }
 
 
         this.handleChange = this.handleChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        //this.listCousubDropdown = this.listCousubDropdown.bind(this)
     }
 
     componentDidMount(){
         let edit_state = [];
-        console.log('in component did mount')
         if(this.props.match.params.worksheetId) {
             falcorGraph.get(['actions','worksheet','byId',[this.props.match.params.worksheetId],Object.keys(this.state)])
                 .then(response =>{
@@ -64,9 +71,22 @@ class HomeView extends React.Component {
                 })
         }
 
+
+    }
+
+
+    listCousubDropdown(event){
+        //console.log('check',event.target.value)
+        let county = event.target.value
+        return falcorGraph.get(['geo',[county],'cousubs'])
+            .then(response => {
+                 return response
+            });
+
+
     }
     handleChange(e) {
-        console.log(e.target.id,e.target.value,this.state)
+        console.log('---',e.target.id,e.target.value,this.state)
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     };
 
@@ -84,7 +104,6 @@ class HomeView extends React.Component {
             })
             return falcorGraph.call(['actions', 'worksheet', 'insert'], args, [], [])
                 .then(response => {
-
                     this.props.sendSystemMessage(`Action worksheet was successfully created.`, {type: "success"});
                 })
         }else {
@@ -124,6 +143,15 @@ class HomeView extends React.Component {
     }
 
     render () {
+        let cousubsArray = []
+        if(this.props.cousubs !== undefined && this.state.county !== undefined) {
+            Object.values(this.props.cousubs).forEach(item => {
+                item.cousubs.value.forEach(cousub => {
+                    cousubsArray.push(cousub)
+                    }
+                )
+            })
+        }
         const wizardSteps = [
             {
                 title: (<span>
@@ -138,6 +166,40 @@ class HomeView extends React.Component {
                         <div className="form-group"><label htmlFor>Project Number</label>
                         <input id='project_number' onChange={this.handleChange} className="form-control" placeholder="Project Number" type="text" value={this.state.project_number}/></div>
                     </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>County</label>
+                            <select className="form-control justify-content-sm-end" id='county' onChange={this.handleChange} value={this.state.county} onClick={this.listCousubDropdown.bind(this)}>
+                                {
+                                    counties.map((county,i) =>{
+                                    return(<option  className="form-control" key={i} value={county}>{county}</option>)
+                                })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-sm-12">
+                        {cousubsArray.length ?
+                            (
+                                <div className="form-group"><label htmlFor>Municipality</label>
+                                    <select className="form-control justify-content-sm-end" id='cousub' onChange={this.handleChange} value={this.state.cousub}>
+                                        {
+                                            cousubsArray.map((cousub,i) =>{
+                                                if(cousub.slice(0,5) === this.state.county){
+                                                    return(<option className="form-control" key={i} value={cousub}>{cousub}</option>)
+                                                }
+
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            ) :(
+                                <div>
+
+                                </div>
+                            )
+                        }
+                    </div>
+
                 </div>)
             },
             {
@@ -306,7 +368,8 @@ const mapDispatchToProps = {
 const mapStateToProps = state => {
     return {
         isAuthenticated: !!state.user.authed,
-        attempts: state.user.attempts // so componentWillReceiveProps will get called.
+        attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+        cousubs: get(state.graph,'geo')
     };
 };
 

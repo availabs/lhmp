@@ -37,7 +37,9 @@ const ATTRIBUTES = [
     'alternative_evaluation_3',
     'date_of_report',
     'progress_report',
-    'updated_evaluation'
+    'updated_evaluation',
+    'county',
+    'cousub'
 ]
 
 class ActionsIndex extends React.Component {
