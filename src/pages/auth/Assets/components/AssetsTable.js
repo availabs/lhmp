@@ -11,6 +11,7 @@ const ATTRIBUTES =[
     'type',
     'parcel_id'
 ]
+let cousubs = []
 class AssetsTable extends React.Component{
     constructor(props){
         super(props)
@@ -28,26 +29,13 @@ class AssetsTable extends React.Component{
 
     fetchFalcorDeps(){
         this.props.falcor.get(['geo',this.props.geoid,'cousubs'])
-            .then(res => {
-                return res
-            })
-            /*
-            .then(res => {
-                this.props.falcor.get(['geo',res.json.geo[this.props.geoid].cousubs,['name']]).then(response =>{
-                    console.log('response',response)
-                    return response
-                })
-                })
-             */
-        this.props.falcor.get(['geo',cousubs,['name']]).then(response => {
-            console.log('response',response)
-            return response
-        });
-
+            .then(res => res.json.geo[this.props.geoid].cousubs)
+            .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]).then(response =>{
+                return response
+            }));
         this.props.falcor.get(['geo',this.props.geoid,['name']]).then(response => {
             return response
         });
-
 
         //length.json.building.byGeoid[this.props.geoid].length-1
         return this.props.falcor.get(['building','byGeoid',[this.state.geoid],'length'])
@@ -83,11 +71,17 @@ class AssetsTable extends React.Component{
        let buildingData = [];
        let buildingIds = this.ids;
        let countyName = '';
-       Object.values(this.props.cousubs).forEach((item)=>
+       let cousubsName = [];
+       Object.keys(this.props.cousubs).forEach((item)=>
        {
-           console.log('item',item)
-           countyName = item.name;
-           item.cousubs.value.forEach(cousub => arrayCOsubs.push(cousub))
+           if(this.props.geoid.includes(parseInt(item))){
+
+               countyName = this.props.cousubs[item].name;
+               this.props.cousubs[item].cousubs.value.forEach(cousub => arrayCOsubs.push(cousub))
+           }
+           else{
+               cousubsName.push(this.props.cousubs[item].name)
+           }
        });
        if( this.props.buildingData !== undefined && buildingIds !== undefined){
            Object.values(this.props.buildingData).forEach((building,i) =>{
@@ -97,8 +91,6 @@ class AssetsTable extends React.Component{
 
            })
        }
-
-       //console.log('countyName',countyName)
         return (
             <div>
                 <Element>
@@ -114,7 +106,7 @@ class AssetsTable extends React.Component{
                                                     <option key={1} value={this.props.geoid}>{countyName}</option>
                                                     {arrayCOsubs.map((ac,ac_i) => {
                                                         return (
-                                                            <option key={ac_i+2} value={ac}>{ac}</option>
+                                                            <option key={ac_i+2} value={ac}>{cousubsName[ac_i]}</option>
                                                         )
                                                         })}
                                                 </select>
