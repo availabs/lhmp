@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
+import {falcorGraph} from "../../../../store/falcorGraph";
 
 const ATTRIBUTES =[
     'id',
@@ -13,42 +14,91 @@ const ATTRIBUTES =[
 class AssetsTable extends React.Component{
     constructor(props){
         super(props)
+        this.state ={
+            geoid:'',
+
+        }
+        this.handleChange = this.handleChange.bind(this)
     }
 
-
+    handleChange(e) {
+        console.log('---',e.target.id,e.target.value)
+        this.setState({...this.state,[e.target.id]: e.target.value});
+    };
 
     fetchFalcorDeps(){
-
         this.props.falcor.get(['geo',this.props.geoid,'cousubs'])
             .then(res => {
-                return res.json.geo[this.props.geoid].cousubs
+                return res
             })
+            /*
+            .then(res => {
+                this.props.falcor.get(['geo',res.json.geo[this.props.geoid].cousubs,['name']]).then(response =>{
+                    console.log('response',response)
+                    return response
+                })
+                })
+             */
+        this.props.falcor.get(['geo',cousubs,['name']]).then(response => {
+            console.log('response',response)
+            return response
+        });
+
+        this.props.falcor.get(['geo',this.props.geoid,['name']]).then(response => {
+            return response
+        });
+
+
         //length.json.building.byGeoid[this.props.geoid].length-1
-        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'length'])
-            .then(length => this.props.falcor.get(['building','byGeoid',this.props.geoid,'byIndex',{from:0,to:10},'id']))
+        return this.props.falcor.get(['building','byGeoid',[this.state.geoid],'length'])
+            .then(length => this.props.falcor.get(['building','byGeoid',[this.state.geoid],'byIndex',{from:0,to:50},'id']))
             .then(response => {
-                const ids =[];
-                Object.values(response.json.building.byGeoid[this.props.geoid].byIndex).forEach((item)=>{
+                const ids = [];
+                Object.values(response.json.building.byGeoid[this.state.geoid].byIndex).forEach((item)=>{
                     if (item['$__path'] !== undefined){
-                        ids.push(item['$__path'][4])
+                        ids.push(item.id)
                     }
                 })
-
+                this.ids = ids
                 return ids
             })
-            .then(ids =>{
-                this.props.falcor.get(['building','byId',ids,ATTRIBUTES])
-                    .then(response => console.log('response',response))
+            .then(ids => {
+                this.props.falcor.get(['building', 'byId', ids, ATTRIBUTES])
+                    .then(response => {
+                        return response
+                    })
             })
 
+    }
 
-
+    componentDidUpdate(oldProps){
+        if(oldProps.geoid !== this.state.geoid){
+            this.fetchFalcorDeps()
+        }
     }
 
     render(){
-           let arrayCOsubs = [];
-           Object.values(this.props.cousubs).forEach((item)=>
-           {item.cousubs.value.forEach(cousub => arrayCOsubs.push(cousub))});
+
+       let arrayCOsubs = [];
+       let buildingData = [];
+       let buildingIds = this.ids;
+       let countyName = '';
+       Object.values(this.props.cousubs).forEach((item)=>
+       {
+           console.log('item',item)
+           countyName = item.name;
+           item.cousubs.value.forEach(cousub => arrayCOsubs.push(cousub))
+       });
+       if( this.props.buildingData !== undefined && buildingIds !== undefined){
+           Object.values(this.props.buildingData).forEach((building,i) =>{
+                   if(buildingIds.includes(building.id)){
+                       buildingData.push(Object.values(building))
+                   }
+
+           })
+       }
+
+       //console.log('countyName',countyName)
         return (
             <div>
                 <Element>
@@ -60,14 +110,42 @@ class AssetsTable extends React.Component{
                                         <div className='element-actions'>
                                             <form className='form-inline justify-content-sm-end'>
                                             <h4 className="element-header">Assets For</h4>
-                                                <select className="form-control justify-content-sm-end" >
-                                                    <option key={1} value='county'>{this.props.geoid}</option>
+                                                <select className="form-control justify-content-sm-end" id='geoid' onChange={this.handleChange} value={this.state.geoid}>
+                                                    <option key={1} value={this.props.geoid}>{countyName}</option>
                                                     {arrayCOsubs.map((ac,ac_i) => {
                                                         return (
                                                             <option key={ac_i+2} value={ac}>{ac}</option>
                                                         )
                                                         })}
                                                 </select>
+                                                <div className="element-box">
+                                                    <div className="table-responsive">
+                                                        <table className="table table lightBorder">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>NAME</th>
+                                                                <th>TYPE</th>
+                                                                <th>PARCEL_ID</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {
+                                                                buildingData.map((building) =>{
+                                                                    return(
+                                                                        <tr>
+                                                                            <td>{building[0]}</td>
+                                                                            <td>{building[1]}</td>
+                                                                            <td>{building[2]}</td>
+                                                                            <td>{building[3]}</td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -84,7 +162,9 @@ class AssetsTable extends React.Component{
 const mapStateToProps = (state,ownProps) => {
     return {
         geoid : ownProps.geoid,
-        cousubs: get(state.graph, 'geo',{})
+        cousubs: get(state.graph, 'geo',{}),
+        buildingData : get(state.graph,'building.byId',{})
+
     }
 };
 
@@ -94,9 +174,3 @@ const mapDispatchToProps =  {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsTable))
 
-/*
-<form className="form-inline">
-
-
-                    </form>
- */

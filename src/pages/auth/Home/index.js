@@ -19,7 +19,7 @@ class HomeView extends React.Component {
     var title ='Home';
     var subheader = 'Dashboard';
      */
-    console.log('authProjects props',this.props);
+    //console.log('authProjects props',this.props);
     return(
       <div className='container'>
         <Element>

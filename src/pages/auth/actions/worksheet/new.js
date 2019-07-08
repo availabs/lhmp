@@ -52,14 +52,14 @@ class HomeView extends React.Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        //this.listCousubDropdown = this.listCousubDropdown.bind(this)
     }
 
+
     componentDidMount(){
-        let edit_state = [];
         if(this.props.match.params.worksheetId) {
             falcorGraph.get(['actions','worksheet','byId',[this.props.match.params.worksheetId],Object.keys(this.state)])
                 .then(response =>{
+                    console.log('response',response)
                     Object.keys(this.state).forEach((key,i)=>{
                         let tmp_state = {};
                         tmp_state[key] = response.json.actions.worksheet.byId[this.props.match.params.worksheetId][key];
@@ -71,8 +71,13 @@ class HomeView extends React.Component {
                 })
         }
 
-
     }
+
+    fetchFalcorDeps(){
+
+        return falcorGraph.get(['geo',counties,['name']]).then(response => console.log('response',response))
+    }
+
 
 
     listCousubDropdown(event){
@@ -144,7 +149,9 @@ class HomeView extends React.Component {
 
     render () {
         let cousubsArray = []
+        console.log('props',this.props.countyNames)
         if(this.props.cousubs !== undefined && this.state.county !== undefined) {
+
             Object.values(this.props.cousubs).forEach(item => {
                 item.cousubs.value.forEach(cousub => {
                     cousubsArray.push(cousub)
@@ -369,7 +376,8 @@ const mapStateToProps = state => {
     return {
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-        cousubs: get(state.graph,'geo')
+        cousubs: get(state.graph,'geo'),
+
     };
 };
 

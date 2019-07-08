@@ -21,6 +21,7 @@ class AssetsIndex extends React.Component {
       geoid: 36001
     }
 
+
   }
   render () {
     return (
