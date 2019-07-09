@@ -77,7 +77,6 @@ const removeUserToken = () => {
 export const authProjects = (user) => {
   return (dispatch) => {
     let groups = user.groups
-    console.log('groups',groups)
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
           let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
