@@ -46,16 +46,6 @@ class AssetsTable extends React.Component{
 
     }
 
-    /*
-    componentDidUpdate(oldProps){
-
-        if(oldProps.geoid !== this.props.geoid){
-            this.fetchFalcorDeps()
-        }
-
-
-    }
-     */
 
 
     render(){
