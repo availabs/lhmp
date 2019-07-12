@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 
 import Element from 'components/light-admin/containers/Element'
-
+import AssetsTable from 'pages/auth/Assets/components/AssetsTable'
 // import QuickReports from './QuickReports'
 // import HomeActivity from './HomeActivity'
 // import Guide from './Guide'
@@ -12,22 +12,22 @@ import Element from 'components/light-admin/containers/Element'
 
 
 
-class HomeView extends React.Component {
+class AssetsIndex extends React.Component {
 
   constructor (props) {
     super(props)
     this.state = {
-      page: 'dashboard'
+      page: 'dashboard',
+      geoid: 36001
     }
-    // this.onChange = this.onChange.bind(this)
-    // this.changePage = this.changePage.bind(this)
-    // this.selectHomeViewTemplate = this.selectHomeViewTemplate.bind(this)
+
+
   }
   render () {
     return (
       <div className='container'>
         <Element>
-        <h4  className="element-header">Assets</h4>
+          <AssetsTable geoid={[this.state.geoid]} />
         </Element>
       </div>
     )
@@ -35,10 +35,14 @@ class HomeView extends React.Component {
 }
 
 export default [{
-  icon: 'os-icon-home',
+  icon: 'os-icon-pencil-2',
   path: '/assets',
   exact: true,
   mainNav: true,
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Assets', path: '/assets/' }
+  ],
   menuSettings: {
     image: 'none',
     scheme: 'color-scheme-light',
@@ -48,6 +52,6 @@ export default [{
   },
   name: 'Assets',
   auth: true,
-  component: HomeView
+  component: AssetsIndex
 }];
 

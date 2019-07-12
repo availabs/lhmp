@@ -69,7 +69,6 @@ class ActionsIndex extends React.Component {
         let action_data =[];
         return falcorGraph.get(['actions','worksheet','byId', [this.props.match.params.worksheetId], ATTRIBUTES])
             .then(response => {
-                console.log('response',response)
                 Object.keys(response.json.actions.worksheet.byId).filter(d => d!== '$__path').forEach(function(action,i){
                     action_data.push({
                         'id' : action,
