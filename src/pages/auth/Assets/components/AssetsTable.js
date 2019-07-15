@@ -38,6 +38,7 @@ class AssetsTable extends React.Component{
                 .then(ids => {
                     this.props.falcor.get(['building', 'byId', ids, ATTRIBUTES])
                         .then(response => {
+
                             return response
                         })
                 })
@@ -46,10 +47,7 @@ class AssetsTable extends React.Component{
 
     }
 
-
-
     render(){
-
        let arrayCOsubs = [];
        let buildingData = [];
        let buildingIds = this.ids;
