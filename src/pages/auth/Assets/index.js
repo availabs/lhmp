@@ -8,6 +8,8 @@ import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
+import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
+import BuildingTypeTable from 'pages/auth/Assets/components/BuildingTypeTable'
 
 const HeaderSelect = styled.select`
 {
@@ -24,6 +26,54 @@ const HeaderSelect = styled.select`
     font-size: 1em;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }`
+let countyValue = [];
+const buildingOwnerType = [
+  {
+    'id':'1',
+    'value':'Federal'
+  },
+  {
+    'id':'2',
+    'value':'State'
+  },
+  {
+    'id':'3',
+    'value':'County'
+  },
+  {
+    'id':'4',
+    'value':'City'
+  },
+  {
+    'id':'5',
+    'value':'Town'
+  },
+  {
+    'id':'6',
+    'value':'Village'
+  },
+  {
+    'id':'7',
+    'value':'Mixed Government'
+  },
+  {
+    'id':'8',
+    'value':'Private'
+  },
+  {
+    'id':'9',
+    'value':'Public School District or BOCES'
+  },
+  {
+    'id':'10',
+    'value':'Road Right of Way'
+  },
+  {
+    'id':'-999',
+    'value':'Unknown'
+  }
+]
+
 
 class AssetsIndex extends React.Component {
 
@@ -32,9 +82,11 @@ class AssetsIndex extends React.Component {
     this.state = {
       page: '',
       geoid: null,
+      ownerType : null
     }
     this.handleChange = this.handleChange.bind(this)
     this.renderMenu = this.renderMenu.bind(this)
+    this.renderOwnerTypeMenu = this.renderOwnerTypeMenu(this)
   }
 
   handleChange(e) {
@@ -67,14 +119,12 @@ class AssetsIndex extends React.Component {
     let arrayCosubs = [];
     let countyName = '';
     let cousubsName = [];
-    let countyValue = [];
-
     if(this.props.data !== undefined){
       Object.keys(this.props.data).forEach((item)=>
       {
         if(item.length === 5){
           countyName = this.props.data[item].name;
-          countyValue.push(item);
+          countyValue.indexOf(item) === -1 ? countyValue.push(item) : console.log("This item already exists");
           this.props.data[item].cousubs.value.forEach(cousub => arrayCosubs.push(cousub))
         }
         else{
@@ -86,7 +136,6 @@ class AssetsIndex extends React.Component {
 
     return (
         <HeaderSelect
-
                 id='geoid' onChange={this.handleChange}
                 value={this.state.geoid}>
           {countyValue.map((county,i) =>{
@@ -97,7 +146,7 @@ class AssetsIndex extends React.Component {
 
           {arrayCosubs.map((ac,ac_i) => {
             return (
-                <option key={ac_i+1} value={ac}>{cousubsName[ac_i]}</option>
+                <option key={ac_i+2} value={ac}>{cousubsName[ac_i]}</option>
             )
           })}
         </HeaderSelect>
@@ -105,31 +154,81 @@ class AssetsIndex extends React.Component {
 
   }
 
+  renderOwnerTypeMenu(){
+    return(
+        <select id='owner' onChange={this.handleChange} value={this.state.ownerType}>
+        {
+          buildingOwnerType.map((owner) =>{
+              return(
+                  <option key={owner.id} value={owner.value}>{owner.value}</option>
+              )
+          })
+        }
+        </select>
+    )
+
+  }
+
   render () {
     return (
       <div className='container'>
-        <Element>
-          <div className='content-i'>
-            <div className='content-box'>
-              <h4 className="element-header">Assets For {this.renderMenu()}</h4>
-                      <div className="row">
-                        <div className="col-md-8">
-                        {this.state.geoid}
-                        {this.state.geoid
-                            ? <AssetsTable geoid={[this.state.geoid]}/>
-                            : ''
-                        }
+            <Element>
+              <div className='content-i'>
+                <div className='content-box'>
+                  <h4 className="element-header">Assets For {this.renderMenu()}</h4>
+                  <div className="os-tabs-w mx-4">
+                    <div className="os-tabs-controls">
+                      <ul className="nav nav-tabs upper">
+                        <li className="nav-item">
+                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">ALL</a>
+                        </li>
+                        <li className="nav-item">
+                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">Critical Infrastructure</a>
+                        </li>
+                        <li className="nav-item">
+                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">Municipal</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-xxxl-8">
+                      <div className='element-wrapper'>
+                        <div className='element-box'>
+                      {this.state.geoid}
+                          {this.state.geoid //filters={[this.props.filter]}
+                              ? <AssetsTable geoid={[this.state.geoid]}/>
+                              : ''
+                          }
                         </div>
                       </div>
+                    </div>
+                    <div className='col-sm-6 d-xxl-16'>
+                      <div className='element-wrapper'>
+                        <div className='element-box'>
+                          {/* <AssetsPieChart geoid={countyValue} count={true}/>*/}
+                        <h4>Buildings By Owner Type</h4>
+                        {this.renderOwnerTypeMenu}
+                          {this.state.geoid ?
+                            <AssetsPieChart geoid={[this.state.geoid]} replacement_value={true}/>
+                            :''
+                          }
+                          {this.state.geoid ?
+                            <BuildingTypeTable geoid={[this.state.geoid]} buildingType={true}/>
+                            : ''
+                          }
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-        </Element>
+            </Element>
       </div>
+
     )
   }
 }
-
-//send the county to assets table so that the data is displayed in the table initially
 
 
 const mapStateToProps = state => ({
@@ -146,7 +245,7 @@ const mapDispatchToProps = ({
 
 export default [{
   icon: 'os-icon-pencil-2',
-  path: '/assets',
+  path: '/assets/',
   exact: true,
   mainNav: true,
   menuSettings: {
