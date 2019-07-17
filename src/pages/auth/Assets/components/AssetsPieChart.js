@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
-import Element from 'components/light-admin/containers/Element'
-import {falcorGraph} from "../../../../store/falcorGraph";
 import {ResponsivePie} from '@nivo/pie'
 
 const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999];
@@ -38,7 +36,6 @@ class AssetsPieChart extends React.Component{
                                 'value': parseFloat(this.props.data[geoid].owner[ownerType].sum.replacement_value.value),
                                 'color':colors[j]
                             })
-
                         })
 
                     }
