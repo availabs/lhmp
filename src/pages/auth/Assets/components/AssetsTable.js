@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
+import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
 
@@ -36,9 +37,8 @@ class AssetsTable extends React.Component{
                     return ids
                 })
                 .then(ids => {
-                    this.props.falcor.get(['building', 'byId', ids, ATTRIBUTES])
+                    this.props.falcor.get(['building', 'byId', ids,ATTRIBUTES])
                         .then(response => {
-
                             return response
                         })
                 })
@@ -48,26 +48,12 @@ class AssetsTable extends React.Component{
     }
 
     render(){
-       let arrayCOsubs = [];
        let buildingData = [];
        let buildingIds = this.ids;
-       let countyName = '';
-       let cousubsName = [];
-       Object.keys(this.props.cousubs).forEach((item)=>
-       {
-           if(this.props.geoid.includes(parseInt(item))){
-
-               countyName = this.props.cousubs[item].name;
-               this.props.cousubs[item].cousubs.value.forEach(cousub => arrayCOsubs.push(cousub))
-           }
-           else{
-               cousubsName.push(this.props.cousubs[item].name)
-           }
-       });
        if( this.props.buildingData !== undefined && buildingIds !== undefined){
            Object.values(this.props.buildingData).forEach((building,i) =>{
                    if(buildingIds.includes(building.id)){
-                       buildingData.push(Object.values(building))
+                       buildingData.push(Object.values(pick(building,...ATTRIBUTES)))
                    }
            })
        }
