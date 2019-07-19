@@ -10,7 +10,9 @@ import get from "lodash.get";
 import styled from 'styled-components'
 import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
 import BuildingTypeTable from 'pages/auth/Assets/components/BuildingTypeTable'
-
+import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
+import MultiSelectFilter from 'components/filters/multi-select-filter.js'
+import BuildingByLandUsePieChart from 'pages/auth/Assets/components/BuildingByLandUsePieChart'
 const HeaderSelect = styled.select`
 {
     display: inline-block;
@@ -72,8 +74,7 @@ const buildingOwnerType = [
     'id':'-999',
     'value':'Unknown'
   }
-]
-
+];
 
 class AssetsIndex extends React.Component {
 
@@ -82,11 +83,13 @@ class AssetsIndex extends React.Component {
     this.state = {
       page: '',
       geoid: null,
-      ownerType : null
+      ownerType : null,
+      buildingByLandUse : null
     }
-    this.handleChange = this.handleChange.bind(this)
-    this.renderMenu = this.renderMenu.bind(this)
-    this.renderOwnerTypeMenu = this.renderOwnerTypeMenu(this)
+    this.handleChange = this.handleChange.bind(this);
+    this.renderMenu = this.renderMenu.bind(this);
+    this.renderOwnerTypeMenu = this.renderOwnerTypeMenu(this);
+    this.renderLandUseMenu = this.renderLandUseMenu(this)
   }
 
   handleChange(e) {
@@ -157,6 +160,7 @@ class AssetsIndex extends React.Component {
   renderOwnerTypeMenu(){
     return(
         <select id='owner' onChange={this.handleChange} value={this.state.ownerType}>
+        <option default>--Select Owner Type--</option>
         {
           buildingOwnerType.map((owner) =>{
               return(
@@ -168,6 +172,28 @@ class AssetsIndex extends React.Component {
     )
 
   }
+
+  renderLandUseMenu(){
+      //BuildingByLandUseConfig.map((item) =>{
+        return (
+            <MultiSelectFilter
+                filter = {BuildingByLandUseConfig.map((item) => item.name)}
+                setFilter = 'contains'/>
+        )
+      //})
+    }
+      /*
+      <select id ='buildingByLandUse' onChange={this.handleChange} value={this.state.buildingByLandUse}>
+            <option default>--Select  Building by Land Use--</option>
+            {
+              BuildingByLandUseConfig.map((item,i) => {
+                return (
+                    <option key ={i} value={item.code}>{item.name}</option>
+                )
+              })
+            }
+          </select>
+      */
 
   render () {
     return (
@@ -219,6 +245,18 @@ class AssetsIndex extends React.Component {
                           }
                       </div>
                       </div>
+                      <div className='element-wrapper'>
+                        <div className='element-box'>
+                          {/* <AssetsPieChart geoid={countyValue} count={true}/>*/}
+                          <h4>Buildings By Land Use</h4>
+                          {this.renderLandUseMenu}
+                          {
+                            this.state.geoid ?
+                            <BuildingByLandUsePieChart geoid={[this.state.geoid]}/>
+                            : ''
+                          }
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -260,5 +298,3 @@ export default [{
   component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsIndex))
 }];
 
-//{this.state.geoid}
-//
