@@ -7,7 +7,7 @@ import {falcorGraph} from "../../../../store/falcorGraph";
 
 const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999];
 const buildingOwnersType = ['Federal','State','County','City','Town','Village','Mixed Government','Private','Public School District or BOCES','Road right of way','Unknown']
-class BuildingTypeTable extends React.Component{
+class BuildingByOwnerTypeTable extends React.Component{
     constructor(props){
         super(props)
         this.buildingTable = this.buildingTable.bind(this)
@@ -121,7 +121,7 @@ const mapDispatchToProps =  {
     //sendSystemMessage,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(BuildingTypeTable))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(BuildingByOwnerTypeTable))
 
 /*
 {

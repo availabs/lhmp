@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingTypeTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByOwnerTypeTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,10 +35,19 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="28" column="45" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="838">
-              <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+            <state relative-caret-position="442">
+              <caret line="76" column="17" lean-forward="true" selection-start-line="76" selection-start-column="17" selection-end-line="76" selection-end-column="17" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -48,25 +56,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/index.js">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="180" column="40" lean-forward="true" selection-start-line="180" selection-start-column="40" selection-end-line="180" selection-end-column="40" />
+            <state relative-caret-position="208">
+              <caret line="13" column="63" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
               <folding>
-                <element signature="e#0#25#0" expanded="true" />
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/components/filters/multi-select-filter.js">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="24" column="51" selection-start-line="24" selection-start-column="51" selection-end-line="24" selection-end-column="51" />
+            <state relative-caret-position="-1196">
+              <caret line="204" column="13" selection-start-line="204" selection-start-column="13" selection-end-line="204" selection-end-column="13" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#1122#1148#0" expanded="true" />
+                <element signature="e#0#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -84,8 +91,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>log</find>
-      <find>logout</find>
       <find>a</find>
       <find>avail-map</find>
       <find>availmap</find>
@@ -108,12 +113,22 @@
       <find>from</find>
       <find>niv</find>
       <find>tool</find>
+      <find>multi</find>
+      <find>handleMultiSelectFilterChange</find>
+      <find>renderOwnerTypeMenu</find>
+      <find>mu</find>
+      <find>code</find>
+      <find>BuildingByLandUseFilter</find>
+      <find>JSON</find>
+      <find>id</find>
     </findStrings>
     <replaceStrings>
       <replace />
       <replace>this.props</replace>
       <replace>this.state</replace>
       <replace>edit_state</replace>
+      <replace>value</replace>
+      <replace>id</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/pages/Landing</dir>
@@ -126,8 +141,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/store/config.js" />
-        <option value="$PROJECT_DIR$/src/pages/Landing/components/LandingNav.js" />
         <option value="$PROJECT_DIR$/src/pages/Landing/components/Nav.scss" />
         <option value="$PROJECT_DIR$/src/pages/Login.js" />
         <option value="$PROJECT_DIR$/src/pages/Login.css" />
@@ -171,11 +184,14 @@
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsLayerPieChart.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/buildingByLandUseConfig.js" />
         <option value="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" />
-        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" />
-        <option value="$PROJECT_DIR$/src/pages/auth/Assets/index.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/sample.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByOwnerTypeTable.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/index.js" />
       </list>
     </option>
   </component>
@@ -331,7 +347,7 @@
       <workItem from="1561662995088" duration="50794000" />
       <workItem from="1562090578145" duration="26072000" />
       <workItem from="1562334268283" duration="170535000" />
-      <workItem from="1563395959411" duration="14974000" />
+      <workItem from="1563395959411" duration="51979000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -543,11 +559,25 @@
       <option name="project" value="LOCAL" />
       <updated>1563548923913</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="updates">
+      <created>1563553056249</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1563553056249</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Building By owner Type Pie chart and Building By Land Use PieChart">
+      <created>1563553094097</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1563553094097</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="459666000" />
+    <option name="totallyTimeSpent" value="496671000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -562,7 +592,7 @@
     <frame x="77" y="32" width="1843" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.2120873" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.3301623" />
       <window_info id="Structure" order="1" sideWeight="0.5005562" side_tool="true" weight="0.25293788" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -596,38 +626,38 @@
       <window_info anchor="right" id="Module Dependencies" order="10" weight="0.3296027" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.3223279" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.3304272" />
       <window_info id="Structure" order="1" sideWeight="0.5005562" side_tool="true" weight="0.25293788" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="TypeScript" order="0" />
-      <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" weight="0.32925472" />
-      <window_info anchor="bottom" id="Run" order="3" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.32925472" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49972022" weight="0.04226919" />
-      <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5002798" side_tool="true" weight="0.32925472" />
-      <window_info anchor="bottom" id="Messages" order="13" />
-      <window_info anchor="right" id="Module Dependencies" order="0" weight="0.3296027" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Maven" order="6" />
-      <window_info anchor="right" id="Capture Analysis" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-      <window_info anchor="right" id="SciView" order="9" weight="0.3296027" />
-      <window_info anchor="right" id="Database" order="10" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32925472" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32925472" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49972022" weight="0.04226919" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5002798" side_tool="true" weight="0.32925472" />
+      <window_info anchor="bottom" id="Messages" order="12" />
+      <window_info anchor="bottom" id="TypeScript" order="13" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info anchor="right" id="Maven" order="5" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="SciView" order="8" weight="0.3296027" />
+      <window_info anchor="right" id="Database" order="9" />
+      <window_info anchor="right" id="Module Dependencies" order="10" weight="0.3296027" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -649,7 +679,8 @@
     <MESSAGE value="Building By Owner Type Table" />
     <MESSAGE value="Building By Owner Type Pie Chart and Table" />
     <MESSAGE value="updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="updates" />
+    <MESSAGE value="Building By owner Type Pie chart and Building By Land Use PieChart" />
+    <option name="LAST_COMMIT_MESSAGE" value="Building By owner Type Pie chart and Building By Land Use PieChart" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -663,19 +694,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/components/light-admin/containers/Element.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/light-admin/containers/ElementBox.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles/_elements.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="80" column="22" lean-forward="true" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/light-admin/wizard/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="764">
@@ -990,10 +1008,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingTypeTable.js">
+    <entry file="file://$PROJECT_DIR$/src/components/common/item-selector/item-selector.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="830">
-          <caret line="71" column="37" selection-start-line="71" selection-start-column="37" selection-end-line="71" selection-end-column="37" />
+        <state relative-caret-position="288">
+          <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/filters/multi-select-filter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="604">
+          <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#1122#1148#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/sample.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="82" column="33" selection-start-line="75" selection-start-column="32" selection-end-line="82" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1000">
+          <caret line="81" column="77" lean-forward="true" selection-start-line="81" selection-start-column="28" selection-end-line="81" selection-end-column="77" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByOwnerTypeTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1062">
+          <caret line="22" column="20" lean-forward="true" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#4712#4907#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="76" column="17" lean-forward="true" selection-start-line="76" selection-start-column="17" selection-end-line="76" selection-end-column="17" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -1002,35 +1076,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16740">
-          <caret line="930" column="3" selection-start-line="930" selection-start-column="3" selection-end-line="930" selection-end-column="3" />
+        <state relative-caret-position="504">
+          <caret line="28" column="45" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js">
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="676">
-          <caret line="122" column="88" selection-start-line="122" selection-end-line="122" selection-end-column="88" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="35" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="838">
-          <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+        <state relative-caret-position="208">
+          <caret line="13" column="63" selection-start-line="13" selection-start-column="63" selection-end-line="13" selection-end-column="63" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -1039,21 +1093,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="180" column="40" lean-forward="true" selection-start-line="180" selection-start-column="40" selection-end-line="180" selection-end-column="40" />
+        <state relative-caret-position="-1196">
+          <caret line="204" column="13" selection-start-line="204" selection-start-column="13" selection-end-line="204" selection-end-column="13" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/filters/multi-select-filter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="24" column="51" selection-start-line="24" selection-start-column="51" selection-end-line="24" selection-end-column="51" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#1122#1148#0" expanded="true" />
           </folding>
         </state>
       </provider>
