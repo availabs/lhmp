@@ -101,7 +101,6 @@ class AssetsIndex extends React.Component {
   }
 
   handleChange(e) {
-    console.log('e',e)
     console.log('---',e.target.id,e.target.value)
     this.setState({...this.state,[e.target.id]: e.target.value});
   };
@@ -280,6 +279,7 @@ class AssetsIndex extends React.Component {
 
 
 const mapStateToProps = state => ({
+
   isAuthenticated: !!state.user.authed,
   activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
   data: get(state.graph,'geo')

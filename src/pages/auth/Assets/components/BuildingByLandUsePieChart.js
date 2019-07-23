@@ -29,7 +29,7 @@ class BuildingByLandUsePieChart extends React.Component{
     }
 
     buildingByLandUsePieChart () {
-        if (this.props.data !== undefined && this.props.data[this.props.geoid]['propType'] !== undefined) {
+        if (this.props.data !== undefined && this.props.data[this.props.geoid]!== undefined && this.props.data[this.props.geoid]['propType'] !== undefined) {
             let buildingPieChartData = {
                 "name":'',
                 "color":'',
