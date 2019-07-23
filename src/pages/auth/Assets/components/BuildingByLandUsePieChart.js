@@ -72,8 +72,6 @@ class BuildingByLandUsePieChart extends React.Component{
                 if(!(propType % 100 === 0) && !(propType % 10 === 0)){
                     buildingPieChartData.children.map(a =>{
                         a.children.map( b => {
-                            //console.log('-',b.name);
-                            //console.log('propType',propType.slice(0,2))
                             if(b.name === propType.slice(0,2)+'0'){
                                 b.children.push({
                                     "name":propType,
@@ -89,7 +87,6 @@ class BuildingByLandUsePieChart extends React.Component{
                 }
 
             });
-            console.log('data',buildingPieChartData)
             const style = {
                 height: 200,
             };
