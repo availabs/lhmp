@@ -46,14 +46,24 @@ class BuildingByLandUsePieChart extends React.Component{
                         "children" : []
                     })
                 }
-                if(propType % 10=== 0 &&!(propType % 100 === 0)){
+                if(propType % 10=== 0 &&!(propType % 100 === 0) || propType === '105'){
                     buildingPieChartData.children.map(f => {
                         if (f.name === propType.split('')[0] + '00'){
-                            f.children.push({
-                                "name": propType,
-                                "color": "hsl(116, 70%, 50%)",
-                                "children": []
-                            })
+                            if(propType === '105'){
+                                f.children.push({
+                                    "name": propType,
+                                    "color":"hsl(116, 70%, 50%)",
+                                    "loc": buildingPropTypeData[propType].sum.replacement_value.value || 0
+                                })
+                            }
+                            else{
+                                f.children.push({
+                                    "name": propType,
+                                    "color": "hsl(116, 70%, 50%)",
+                                    "children": []
+                                })
+                            }
+
                         }else {
                             return f
                         }
@@ -62,7 +72,9 @@ class BuildingByLandUsePieChart extends React.Component{
                 if(!(propType % 100 === 0) && !(propType % 10 === 0)){
                     buildingPieChartData.children.map(a =>{
                         a.children.map( b => {
-                            if(b.name === propType.slice(1) + '0'){
+                            //console.log('-',b.name);
+                            //console.log('propType',propType.slice(0,2))
+                            if(b.name === propType.slice(0,2)+'0'){
                                 b.children.push({
                                     "name":propType,
                                     "color":"hsl(116, 70%, 50%)",
@@ -77,6 +89,7 @@ class BuildingByLandUsePieChart extends React.Component{
                 }
 
             });
+            console.log('data',buildingPieChartData)
             const style = {
                 height: 200,
             };
