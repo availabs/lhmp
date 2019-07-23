@@ -87,7 +87,7 @@ class AssetsIndex extends React.Component {
       ownerType: null,
       buildingByLandUse: null,
       filter: {
-        domain: BuildingByLandUseConfig,
+        domain: BuildingByLandUseConfig.filter((config) => parseInt(config.value) % 100 === 0 ? config : ''),
         value: []
       }
 
@@ -125,7 +125,6 @@ class AssetsIndex extends React.Component {
                     geoid : fips
                   })
                   return res
-
                 })
           })
     }

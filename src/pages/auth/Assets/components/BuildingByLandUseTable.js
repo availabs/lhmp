@@ -5,6 +5,7 @@ import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
+var _ = require('lodash/core');
 
 
 class BuildingByLandUseTable extends React.Component{
@@ -28,14 +29,32 @@ class BuildingByLandUseTable extends React.Component{
 
     buildingByLandUseTable(){
         let buildingLandUseData = {};
-        if(this.props.data !== undefined && this.props.geoid !== undefined){
+        let buildingLandUseNames = [];
+        if(this.props.data !== undefined && this.props.geoid !== undefined && this.props.data[this.props.geoid] && this.props.data[this.props.geoid].propType !== undefined){
             if(this.props.filters.length === 0){
-                Object.values(this.props.data).forEach(item =>{
-                    buildingLandUseData = item['propType']
-                })
+                let data = this.props.data[this.props.geoid].propType
+                let categories = [];
+                let count_sum = 0;
+                let replacement_value_sum = 0;
+                Object.keys(data).forEach(item =>{
+                    if(parseInt(item) % 100 === 0) {
+                        categories.push(item)
+                    }
+                    categories.map((category,i)=>{
+                        if(category.slice(0,1) === item.slice(0,1)){
+                            count_sum += parseFloat(data[item].sum.count.value) || 0
+                            replacement_value_sum += parseFloat(data[item].sum.replacement_value.value) || 0
+                            buildingLandUseData[category] = {
+                                "sum":{"count":{"value":count_sum},"replacement_value":{"value":replacement_value_sum}}
+                            }
+                        }
+
+                    })
+
+                });
             }
             else{
-                let data = this.props.data[this.props.geoid].propType
+                let data = this.props.data[this.props.geoid].propType;
                 this.props.filters.forEach(propFilter =>{
                     if(parseInt(propFilter) % 100 === 0) {
                         Object.keys(data).forEach((item, i) => {
@@ -45,23 +64,17 @@ class BuildingByLandUseTable extends React.Component{
 
                         })
                     }
-                    if(parseInt(propFilter) % 10 === 0 && !(parseInt(propFilter) % 100 === 0)){
-                        Object.keys(data).forEach((item, i) => {
-                            if(propFilter === item.slice(0,2)+'0'){
-                                buildingLandUseData[item] = data[item]
-                            }
 
-                        })
-                    }
-                    if(!(parseInt(propFilter) % 100 === 0) && !(parseInt(propFilter) % 10 ===0)){
-                        Object.keys(data).forEach((item, i) => {
-                            if(propFilter === item){
-                                buildingLandUseData[item] = data[item]
-                            }
-                        })
+                });
+
+            }
+            BuildingByLandUseConfig.map((config)=>{
+                Object.keys(buildingLandUseData).forEach((data)=>{
+                    if(data === config.value){
+                        buildingLandUseNames.push(config.name)
                     }
                 })
-            }
+            })
             return (
                 <div>
                     <Element>
@@ -77,10 +90,10 @@ class BuildingByLandUseTable extends React.Component{
                                 <tbody>
                                 {
                                     buildingLandUseData !== undefined ?
-                                        Object.keys(buildingLandUseData).map(item =>{
+                                        Object.keys(buildingLandUseData).map((item,i) =>{
                                             return (
                                                 <tr>
-                                                    <td>{item}</td>
+                                                    <td>{buildingLandUseNames[i]}</td>
                                                     <td>{buildingLandUseData[item].sum.count.value || 0}</td>
                                                     <td>${buildingLandUseData[item].sum.replacement_value.value || 0}</td>
                                                 </tr>
@@ -127,6 +140,21 @@ const mapDispatchToProps =  {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(BuildingByLandUseTable))
 
-/*
 
- */
+/*
+                    if(parseInt(propFilter) % 10 === 0 && !(parseInt(propFilter) % 100 === 0)){
+                        Object.keys(data).forEach((item, i) => {
+                            if(propFilter === item.slice(0,2)+'0'){
+                                buildingLandUseData[item] = data[item]
+                            }
+
+                        })
+                    }
+                    if(!(parseInt(propFilter) % 100 === 0) && !(parseInt(propFilter) % 10 ===0)){
+                        Object.keys(data).forEach((item, i) => {
+                            if(propFilter === item){
+                                buildingLandUseData[item] = data[item]
+                            }
+                        })
+                    }
+                     */
