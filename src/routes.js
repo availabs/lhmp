@@ -12,7 +12,7 @@ import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import Plans from 'pages/auth/plans/view'
 import PlanPage from 'pages/auth/plans/planPage'
 import PlanIndex from 'components/plan/'
-import Assests from 'pages/auth/Assets/'
+import AssetsTable from 'pages/auth/Assets/components/AssetsTable'
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Logout from './pages/Logout'
@@ -29,6 +29,7 @@ const routes = [
   ...ActionsView,
   ...Plans,
   ...PlanPage,
+
 
   PlanIndex,
 
