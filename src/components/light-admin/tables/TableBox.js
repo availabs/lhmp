@@ -29,7 +29,8 @@ class TableBox extends React.Component {
   }
   setPage(page) {
       this.setState({
-          page
+          page,
+          loading : true
       });
       let start = this.props.pageSize * page ;
       let end= Math.min(this.props.length,this.props.pageSize * page +this.props.pageSize + 1);
@@ -98,6 +99,7 @@ toggleFilterColumn(column, value) {
   }
 
   render() {
+      const {loading} =  this.state;
       if(this.props.filterData || this.props.tableData.length) {
               const data = this.props.tableData,
                   paginate = data.length > this.props.pageSize ? ( // data.length
@@ -120,9 +122,8 @@ toggleFilterColumn(column, value) {
           }
           const filterColumns = this.props.filterColumns.map(column =>
               ({ column, values: this.getFilterValues(column) }));
-
           const tableLink = this.props.tableLink ? <a href={ this.props.tableLink }>{ this.props.tableLinkLabel }</a> : null;
-          const loading = this.state.page > 0  ? <div>Loading...</div> : null;
+          const loading = this.state.loading ? <div>Loading...</div> : <div></div>;
               return (
                   <ElementBox title={this.props.title} desc={this.props.desc || tableLink}>
                       { !this.props.showControls ? null :
@@ -160,8 +161,8 @@ toggleFilterColumn(column, value) {
                                      onPageChange = {this.props.onPage.bind(this)}
                           />
                       </div>
-                      { paginate }
-                      { loading }
+                      { paginate}
+                      {loading}
                   </ElementBox>
               )
           }
