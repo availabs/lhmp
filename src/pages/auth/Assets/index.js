@@ -89,7 +89,8 @@ class AssetsIndex extends React.Component {
       filter: {
         domain: BuildingByLandUseConfig.filter((config) => parseInt(config.value) % 100 === 0 ? config : ''),
         value: []
-      }
+      },
+      height: '2565px'
 
     }
 
@@ -225,8 +226,8 @@ class AssetsIndex extends React.Component {
                   <div className="row">
                     <div className="col-md-6 col-xxxl-8">
                       <div className='element-wrapper'>
-                        <div className='element-box'>
-                      {this.state.geoid}
+                        <div className='element-box' style={{height:'2700px'}}>
+                          <span><h4>{this.state.geoid} : Assets Table</h4></span>
                           {this.state.geoid //filters={[this.props.filter]}
                               ? <AssetsTable geoid={[this.state.geoid]}/>
                               : ''

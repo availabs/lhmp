@@ -5,12 +5,11 @@ const PageItem = ({ index, page, set }) =>
     onClick={ set.bind(null, index) }>
     <a className="page-link">{ index + 1 }</a>
   </li>
-
 export default ({ length, size, page, set, prev, next }) => {
   const maxPages = Math.ceil(length / size),
     pageItems = [];
-  let min = Math.max(0, Math.min(Math.max(0, page - 5), maxPages - 10)),
-    max = Math.min(maxPages, Math.max(Math.min(page + 5, maxPages), 10));
+  let min = Math.max(0, Math.min(Math.max(0, page - 2), maxPages - 3)),
+    max = Math.min(maxPages, Math.max(Math.min(page + 2, maxPages), 2));
   for (let i = min; i < max; ++i) {
     pageItems.push(<PageItem key={ i } index={ i } page={ page } set={ set }/>);
   }
@@ -25,7 +24,7 @@ export default ({ length, size, page, set, prev, next }) => {
             onClick={ prev }>
             <a className="page-link">Previous</a>
           </li>
-          { pageItems }
+          { pageItems}
           <li className={ "page-item" + (page === (maxPages - 1) ? " disabled" : "") }
             onClick={ next }>
             <a className="page-link">Next</a>
@@ -35,3 +34,5 @@ export default ({ length, size, page, set, prev, next }) => {
     </div>
   )
 }
+
+

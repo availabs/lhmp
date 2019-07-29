@@ -5,6 +5,7 @@ import get from "lodash.get";
 import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
+import TableBox from 'components/light-admin/tables/TableBox'
 
 const ATTRIBUTES =[
     'id',
@@ -12,103 +13,131 @@ const ATTRIBUTES =[
     'type',
     'parcel_id'
 ]
-class AssetsTable extends React.Component{
-    constructor(props){
-        super(props)
-        this.state ={
-            geoid :''
-        }
+let data_length = 0;
+class AssetsTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            geoid: '',
+            data: [],
+            loading: false,
+            columns : ATTRIBUTES
+        };
+
+        this.onPageChange = this.onPageChange.bind(this)
 
     }
 
-    componentDidUpdate(oldProps){
-        if(this.props.geoid !== oldProps.geoid){
-            let geoid = this.props.geoid.map((geoid) => geoid)
-            return this.props.falcor.get(['building','byGeoid',this.props.geoid,'length'])
-                .then(length => this.props.falcor.get(['building','byGeoid',this.props.geoid,'byIndex',{from:0,to:50},'id']))
-                .then(response => {
-                    const ids = [];
-                    Object.values(response.json.building.byGeoid[geoid].byIndex).forEach((item)=>{
-                        if (item['$__path'] !== undefined){
-                            ids.push(item.id)
-                        }
+    fetchFalcorDeps() {
+        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'length'])
+            .then(response => {
+                data_length = response.json.building.byGeoid[this.props.geoid].length
+            })
+
+    }
+
+    componentDidMount(){
+        this.setState({
+          loading : true
+        });
+        let geoid = this.props.geoid.map((geoid) => geoid);
+        let d = [];
+        return this.props.falcor.get(['building', 'byGeoid', ...this.props.geoid, 'byIndex', {from:0, to:50}, 'id'])
+            .then(response => {
+                const ids = [];
+                for (let i = 0; i < 50; ++i) {
+                    const graph = response.json.building.byGeoid[geoid].byIndex[i]
+                    if (graph) {
+                        ids.push(graph.id)
+                    }
+                }
+                return ids
+            })
+            .then(ids => {
+                this.props.falcor.get(['building', 'byId', ids, ATTRIBUTES])
+                    .then(response => {
+                        Object.values(response.json.building.byId).forEach((item)=>{
+                            d.push(pick(item,...ATTRIBUTES))
+                        });
+                        this.setState({data: d, loading: false});
+                    });
+            })
+
+    }
+
+
+    onPageChange(from, to) {
+        this.setState({
+            loading : true
+        })
+        let geoid = this.props.geoid.map((geoid) => geoid);
+        let d = [];
+        return this.props.falcor.get(['building', 'byGeoid', ...this.props.geoid, 'byIndex', {from: from, to: to}, 'id'])
+            .then(response => {
+                const ids = [];
+                for (let i = 0; i < to; ++i) {
+                    const graph = response.json.building.byGeoid[geoid].byIndex[i]
+                    if (graph) {
+                        ids.push(graph.id)
+                    }
+                }
+                return ids
+            })
+             .then(ids => {
+                this.props.falcor.get(['building', 'byId', ids, ATTRIBUTES])
+                    .then(response => {
+                        Object.values(response.json.building.byId).forEach((item)=>{
+                            d.push(pick(item,...ATTRIBUTES))
+                        });
+                        this.setState({data: d, loading: false});
                     })
-                    this.ids = ids
-                    return ids
-                })
-                .then(ids => {
-                    this.props.falcor.get(['building', 'byId', ids,ATTRIBUTES])
-                        .then(response => {
-                            return response
-                        })
-                })
-        }
-
+            })
 
     }
-
     render(){
-       let buildingData = [];
-       let buildingIds = this.ids;
-       if( this.props.buildingData !== undefined && buildingIds !== undefined){
-           Object.values(this.props.buildingData).forEach((building,i) =>{
-                   if(buildingIds.includes(building.id)){
-                       buildingData.push(Object.values(pick(building,...ATTRIBUTES)))
-                   }
-           })
-       }
         return (
             <div>
             <Element>
-                <div className="table-responsive">
-                    <table className="table table lightBorder">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>NAME</th>
-                            <th>TYPE</th>
-                            <th>PARCEL_ID</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            buildingData.map((building) =>{
-                                return(
-                                    <tr>
-                                        <td>{building[0]}</td>
-                                        <td>{building[1]}</td>
-                                        <td>{building[2]}</td>
-                                        <td>{building[3]}</td>
-                                    </tr>
-                                )
-                            })
-                        }
-                        </tbody>
-                    </table>
-                </div>
+                    <div id="dataTable1_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4" >
+                        <div className="row">
+                            <TableBox
+                                page={0}
+                                size={this.props.size}
+                                length={[data_length]}
+                                loading={this.state.loading}
+                                onPage={this.onPageChange.bind(this)}
+                                filterData = {true}
+                                tableData = {this.state.data}
+                                columns = {this.state.columns}
+                            />
+                        </div>
+                    </div>
             </Element>
             </div>
         )
     }
 
-    static defaultProps ={
-        geoid : [36001]
+    static defaultProps = {
+        geoid: [36001],
+        length: data_length,
+        size: 50,
+        filterData: false
     }
+
 }
 
 const mapStateToProps = (state,ownProps) => {
-    //console.log('state',state)
-    return {
-        geoid : ownProps.geoid,
-        cousubs: get(state.graph, 'geo',{}),
-        buildingData : get(state.graph,'building.byId',{})
-
-    }
+return {
+geoid : ownProps.geoid,
+cousubs: get(state.graph, 'geo',{}),
+buildingData : get(state.graph,'building.byId',{})
+}
 };
 
 const mapDispatchToProps =  {
-    //sendSystemMessage,
+//sendSystemMessage,
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsTable))
+
+
 
