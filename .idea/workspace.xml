@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/mapping/escmap/MapBoxMap.react.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/mitigate-ny/HazardMapSimple.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" afterDir="false" />
@@ -22,9 +23,11 @@
       <change afterPath="$PROJECT_DIR$/src/store/modules/geo.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/store/modules/geoInitialState.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/Pagination.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/Pagination.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,11 +70,12 @@
     <auto-save>true</auto-save>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="32" />
-    <option name="width" value="1920" />
-    <option name="height" value="1048" />
+    <option name="x" value="183" />
+    <option name="y" value="141" />
+    <option name="width" value="1280" />
+    <option name="height" value="724" />
   </component>
-  <component name="ProjectId" id="1OkCzxadFpSkLq9nJwTtZY12lsP" />
+  <component name="ProjectId" id="1OT7ZdGHxaYJXK0BkybPHVrzi2s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -91,7 +95,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
@@ -136,9 +140,12 @@
       <workItem from="1561662995088" duration="50794000" />
       <workItem from="1562090578145" duration="26072000" />
       <workItem from="1562334268283" duration="170535000" />
-      <workItem from="1563395959411" duration="73842000" />
-      <workItem from="1564153548706" duration="1274000" />
-      <workItem from="1564512475722" duration="5346000" />
+      <workItem from="1563395959411" duration="81957000" />
+      <workItem from="1563989796602" duration="47292000" />
+      <workItem from="1564159909550" duration="5000" />
+      <workItem from="1564159927429" duration="161000" />
+      <workItem from="1564160106080" duration="10148000" />
+      <workItem from="1564261312467" duration="47115000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -392,7 +399,21 @@
       <option name="project" value="LOCAL" />
       <updated>1563907625825</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary=" Building By Land Use Table updates">
+      <created>1563915118516</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1563915118516</updated>
+    </task>
+    <task id="LOCAL-00038" summary="updates">
+      <created>1563994897677</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1563994897677</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -412,7 +433,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -433,12 +456,13 @@
     <MESSAGE value="AssetPieChart for Replacement Value" />
     <MESSAGE value="Building By Owner Type Table" />
     <MESSAGE value="Building By Owner Type Pie Chart and Table" />
-    <MESSAGE value="updates" />
     <MESSAGE value="Building By owner Type Pie chart and Building By Land Use PieChart" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
+    <MESSAGE value=" Building By Land Use Table updates" />
+    <MESSAGE value="updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
