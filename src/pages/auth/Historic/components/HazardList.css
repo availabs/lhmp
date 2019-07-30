@@ -1,0 +1,25 @@
+.hazard-list-item {
+    /*border: solid 2px #eee;*/
+    /*// padding: 4px 10px;
+*/
+}
+/*.hazard-list-item:hover {
+	border: solid 2px #ccc;
+	background-color: #eee;
+	cursor: pointer;
+}*/
+.hazard-list-item.active {
+    /*background-color: rgba(0, 200, 0, 0.5);
+    border: solid 2px rgb(0, 200, 0);
+*/	cursor: not-allowed;
+}
+
+a.hazard-link,
+a.hazard-link:visited {
+    text-decoration: none;
+    color: #3E4B5B;
+}
+a.hazard-link:hover {
+    text-decoration: none;
+    color: #047bf8;
+}
