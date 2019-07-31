@@ -1,6 +1,6 @@
 import React,{PureComponent} from 'react'
 import ElementBox from '../containers/ElementBox'
-import DataTable from './DataTable'
+import DataTable from './DataTableNew'
 import Pagination from './Pagination'
 import { reduxFalcor } from 'utils/redux-falcor'
 import {connect} from "react-redux";
@@ -118,8 +118,8 @@ toggleFilterColumn(column, value) {
               size = this.props.pageSize;
           let tableData = data.slice();
           if (!this.props.tableScroll) {
-              //tableData = data.slice(0,size);
-              tableData = tableData.slice(page * size, page * size + size);
+              tableData = data.slice(0,size);
+              //tableData = tableData.slice(page * size, page * size + size);
           }
           const filterColumns = this.props.filterColumns.map(column =>
               ({ column, values: this.getFilterValues(column) }));
