@@ -29,12 +29,9 @@ class AssetsTable extends React.Component {
     }
 
     fetchFalcorDeps() {
-        let geoid = this.props.geoid.map((geoid) => geoid);
-        console.log('geoid',this.props.geoid)
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,'length'])
             .then(response => {
-                console.log('response',response)
-                data_length = response.json.building.byGeoid[geoid].length
+                data_length = response.json.building.byGeoid[this.props.geoid].length
             })
 
     }

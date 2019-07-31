@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByHazardRiskPieChart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByHazardRiskTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/Pagination.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/Pagination.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
     </list>
@@ -62,7 +61,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../community_indicators" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mitigate-ny" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -126,7 +125,7 @@
       <workItem from="1564159909550" duration="5000" />
       <workItem from="1564159927429" duration="161000" />
       <workItem from="1564160106080" duration="10148000" />
-      <workItem from="1564261312467" duration="47115000" />
+      <workItem from="1564261312467" duration="68047000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -394,7 +393,28 @@
       <option name="project" value="LOCAL" />
       <updated>1563994897677</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Pagination for Asset Table">
+      <created>1564423559277</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1564423559278</updated>
+    </task>
+    <task id="LOCAL-00040" summary="updates">
+      <created>1564424908921</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1564424908921</updated>
+    </task>
+    <task id="LOCAL-00041" summary="updates">
+      <created>1564426985477</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1564426985477</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -442,6 +462,7 @@
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
     <MESSAGE value=" Building By Land Use Table updates" />
+    <MESSAGE value="Pagination for Asset Table" />
     <MESSAGE value="updates" />
     <option name="LAST_COMMIT_MESSAGE" value="updates" />
   </component>

@@ -14,6 +14,8 @@ import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLand
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import BuildingByLandUsePieChart from 'pages/auth/Assets/components/BuildingByLandUsePieChart'
 import BuildingByLandUseTable from 'pages/auth/Assets/components/BuildingByLandUseTable'
+import BuildingByHazardRiskPieChart from "./components/BuildingByHazardRiskPieChart";
+import BuildingByHazardRiskTable from "./components/BuildingByHazardRiskTable";
 const HeaderSelect = styled.select`
 {
     display: inline-block;
@@ -228,7 +230,7 @@ class AssetsIndex extends React.Component {
                       <div className='element-wrapper'>
                         <div className='element-box' style={{height:'2700px'}}>
                           <span><h4>{this.state.geoid} : Assets Table</h4></span>
-                          {this.state.geoid //filters={[this.props.filter]}
+                          {this.state.geoid
                               ? <AssetsTable geoid={[this.state.geoid]}/>
                               : ''
                           }
@@ -264,6 +266,23 @@ class AssetsIndex extends React.Component {
                             <BuildingByLandUseTable geoid={[this.state.geoid]} filters={this.state.filter.value}/>
                             : ''
                           }
+                        </div>
+                      </div>
+                      <div className='element-wrapper'>
+                        <div className='element-box'>
+                          <h4>Buildings By Hazard Risk</h4>
+                          {
+                            this.state.geoid ?
+                                <BuildingByHazardRiskPieChart geoid={[this.state.geoid]} replacement_value={true}/>
+                                : ''
+                          }
+
+                          {
+                            this.state.geoid ?
+                                <BuildingByHazardRiskTable geoid={[this.state.geoid]}/>
+                                : ''
+                          }
+
                         </div>
                       </div>
                     </div>
