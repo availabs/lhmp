@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
 
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBox'
+import TableBox from 'components/light-admin/tables/TableBoxDefault'
 
 import {
     fnum
@@ -48,6 +48,7 @@ class CousubTotalLossTable extends React.Component {
             d["total damage"] = fnum(d["total damage"]);
         })
         data.sort((a, b) => b.sort - a.sort)
+        console.log('data',data)
         return { data, columns }
     }
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBox'
+import TableBox from 'components/light-admin/tables/TableBoxDefault'
 
 import {
     getHazardName,

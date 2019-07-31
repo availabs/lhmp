@@ -30,8 +30,7 @@ const routes = [
    ...Plans,
    ...PlanPage,
    ...Assets,
-    ...Historic,
-  //AssetsTable,
+        ...Historic,
   PlanIndex,
   RiskMap,
   Logout,
@@ -41,3 +40,6 @@ const routes = [
 
 
 export default routes
+
+
+//AssetsTable,

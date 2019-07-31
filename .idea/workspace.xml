@@ -2,32 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/mapping/escmap/MapBoxMap.react.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/mitigate-ny/HazardMapSimple.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardEventsLegend.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardEventsLegend.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardEventsMap.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardEventsMapController.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardList.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardListHeroStats.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardListNew.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/SideInfoProjectBox.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/yearsOfSevereWeatherData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/data-adapters/geoApi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/modules/geo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store/modules/geoInitialState.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/Pagination.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/Pagination.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/sheldusUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/sheldusUtils.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +64,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../community_indicators" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/pages/auth" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -99,14 +82,14 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
+      <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
+      <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
@@ -471,6 +454,12 @@
           <url>file://$PROJECT_DIR$/src/components/light-admin/wizard/index.js</url>
           <line>8</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js</url>
+          <line>66</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

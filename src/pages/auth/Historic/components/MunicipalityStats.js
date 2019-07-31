@@ -9,9 +9,12 @@ class MunicipalityStats extends React.Component {
     fetchFalcorDeps({ geoid }=this.props) {
 // `geo[{keys:geoids}][{keys:years}]['${ CENSUS_API_VARIABLE_NAMES.join(`', '`)}']`
         return this.props.falcor.get(
-            ['geo', geoid, 2016, 'population'],
+            ['geo', geoid, [2016], ['population']],
             ['geo', geoid, 'cousubs']
-        )
+        ).then(d => {
+            console.log('res',d);
+            return d
+        })
     }
 
     processData({ geoid }=this.props) {
