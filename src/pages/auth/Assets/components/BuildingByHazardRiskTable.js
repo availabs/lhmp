@@ -42,10 +42,8 @@ class BuildingByHazardRiskTable extends React.Component{
         let buildingByHazardRiskTableData = [];
         let total_count = 0;
         let total_replacement_value = 0;
-        console.log('thi.props',this.props.data)
         if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.data[this.props.geoid]['hazardRisk']!==undefined){
             let graph = this.props.data[geoid].hazardRisk[this.state.hazardRisk].zones
-            console.log('graph',graph)
             if(graph){
                 Object.keys(graph).forEach((item,i)=>{
                     buildingByHazardRiskTableData.push({
