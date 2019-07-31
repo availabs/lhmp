@@ -18,8 +18,7 @@ class AssetsContent extends React.Component{
             <div className='container'>
                 <Element>
                     <form>
-                        <h4  className="element-header">Mitigation Planner Home</h4>
-                        <h4>The Asset ID is{this.props.match.params.assetId}</h4>
+                        <h4>Asset ID : {this.props.match.params.assetId}</h4>
                     </form>
                 </Element>
             </div>
@@ -46,7 +45,7 @@ export default [
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Assets', path: '' },
+            { name: 'Assets', path: '/assets/' },
             { param: 'assetId', path: '' }
         ],
         menuSettings: {
