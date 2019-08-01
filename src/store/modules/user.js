@@ -224,13 +224,13 @@ const ACTION_HANDLERS = {
   },
   [AUTH_FAILURE]: (state = initialState, action) => {
     removeUserToken();
-    const newState = initialState;
+    const newState = {...initialState};
     ++newState.attempts;
     return newState;
   },
   [USER_LOGOUT]: (state = initialState, action) => {
     removeUserToken();
-    return initialState;
+    return {...initialState};
   },
 
   [SET_PLANS_AUTH]: (state =initialState, action) => {

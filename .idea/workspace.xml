@@ -3,14 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableBox.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/sheldusUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/sheldusUtils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/SideInfoProjectBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/SideInfoProjectBox.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,19 +47,13 @@
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="183" />
-    <option name="y" value="141" />
-    <option name="width" value="1280" />
-    <option name="height" value="724" />
-  </component>
   <component name="ProjectId" id="1OT7ZdGHxaYJXK0BkybPHVrzi2s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/pages/auth" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mitigate-api" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
