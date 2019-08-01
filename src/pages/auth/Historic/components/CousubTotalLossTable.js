@@ -32,7 +32,7 @@ class CousubTotalLossTable extends React.Component {
         geoids.forEach(geoid => {
             const name = this.props.geoGraph[geoid].name;
             if (!(geoid in data)) {
-                data[geoid] = { name, "total damage": 0, fatalities: 0 };
+                data[geoid] = { name, "total damage": 0, fatalities: 0, geoid:geoid };
             }
             const graph = this.props[dataType][geoid];
             for (const hazard in graph) {
@@ -54,9 +54,15 @@ class CousubTotalLossTable extends React.Component {
 
     render() {
         try {
+            let pData = this.processData();
+            console.log('pdata', pData)
+            let linksToPass = {};
+            linksToPass['name'] = pData.data;
             return (
-                <TableBox { ...this.processData() }
-                          pageSize={ 8 }/>
+                <TableBox { ...pData }
+                          pageSize={ pData.data.length }
+                          links = {linksToPass}
+                />
             )
         }
         catch (e) {

@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/SideInfoProjectBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/SideInfoProjectBox.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -385,7 +387,14 @@
       <option name="project" value="LOCAL" />
       <updated>1563994897677</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="updates">
+      <created>1564670096166</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1564670096166</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
