@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,19 +34,67 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1016">
-              <caret line="2" column="29" lean-forward="true" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="47" />
+            <state relative-caret-position="830">
+              <caret line="95" column="5" lean-forward="true" selection-start-line="95" selection-start-column="5" selection-end-line="95" selection-end-column="5" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="756">
+              <caret line="42" column="55" selection-start-line="42" selection-start-column="55" selection-end-line="42" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="666">
+              <caret line="88" column="15" selection-start-line="88" selection-start-column="15" selection-end-line="88" selection-end-column="15" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1260">
-              <caret line="173" column="8" lean-forward="true" selection-start-line="173" selection-start-column="8" selection-end-line="173" selection-end-column="8" />
+            <state relative-caret-position="280">
+              <caret line="53" column="19" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="19" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByOwnerTypeTable.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="558">
+              <caret line="52" column="36" lean-forward="true" selection-start-line="46" selection-start-column="28" selection-end-line="52" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-638">
+              <caret line="89" column="102" lean-forward="true" selection-start-line="89" selection-start-column="102" selection-end-line="89" selection-end-column="102" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,9 +112,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>log</find>
-      <find>logout</find>
-      <find>a</find>
       <find>avail-map</find>
       <find>availmap</find>
       <find>Route</find>
@@ -84,12 +130,27 @@
       <find>data</find>
       <find>consol</find>
       <find>falcorg</find>
+      <find>from</find>
+      <find>niv</find>
+      <find>tool</find>
+      <find>multi</find>
+      <find>handleMultiSelectFilterChange</find>
+      <find>renderOwnerTypeMenu</find>
+      <find>mu</find>
+      <find>code</find>
+      <find>BuildingByLandUseFilter</find>
+      <find>JSON</find>
+      <find>id</find>
+      <find>resvalueence</find>
     </findStrings>
     <replaceStrings>
       <replace />
       <replace>this.props</replace>
       <replace>this.state</replace>
       <replace>edit_state</replace>
+      <replace>value</replace>
+      <replace>id</replace>
+      <replace>Residential</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/pages/Landing</dir>
@@ -102,8 +163,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/store/config.js" />
-        <option value="$PROJECT_DIR$/src/pages/Landing/components/LandingNav.js" />
         <option value="$PROJECT_DIR$/src/pages/Landing/components/Nav.scss" />
         <option value="$PROJECT_DIR$/src/pages/Login.js" />
         <option value="$PROJECT_DIR$/src/pages/Login.css" />
@@ -114,7 +173,6 @@
         <option value="$PROJECT_DIR$/src/pages/HomePage.js" />
         <option value="$PROJECT_DIR$/src/pages/Logout.js" />
         <option value="$PROJECT_DIR$/src/pages/riskmap/index.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/src/store/index.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Projects/ActionWorksheet/new.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/actions/ActionWorksheet/new.js" />
@@ -136,15 +194,26 @@
         <option value="$PROJECT_DIR$/src/pages/auth/plans/planHeader.js" />
         <option value="$PROJECT_DIR$/src/components/plan/index.js" />
         <option value="$PROJECT_DIR$/src/components/plan/planHeader.js" />
-        <option value="$PROJECT_DIR$/src/routes.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/assetsPage.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetTable.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/Home/index.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/actions/worksheet/view.js" />
-        <option value="$PROJECT_DIR$/src/pages/auth/Assets/index.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/actions/index.js" />
-        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" />
         <option value="$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js" />
+        <option value="$PROJECT_DIR$/src/routes.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingTypeTable.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsLayerPieChart.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/buildingByLandUseConfig.js" />
+        <option value="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/sample.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByOwnerTypeTable.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/index.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js" />
+        <option value="$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js" />
       </list>
     </option>
   </component>
@@ -166,6 +235,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -197,23 +267,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="pages" type="462c0819:PsiDirectoryNode" />
               <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="actions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lhmp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lhmp" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="actions" type="462c0819:PsiDirectoryNode" />
-              <item name="worksheet" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lhmp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lhmp" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
               <item name="Assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -225,19 +278,10 @@
               <item name="Assets" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="lhmp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lhmp" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="plans" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -245,28 +289,32 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CWGCS_Website" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../community_indicators" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
-      <recent name="$PROJECT_DIR$/src/pages" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
@@ -299,7 +347,8 @@
       <workItem from="1561475039799" duration="35686000" />
       <workItem from="1561662995088" duration="50794000" />
       <workItem from="1562090578145" duration="26072000" />
-      <workItem from="1562334268283" duration="59638000" />
+      <workItem from="1562334268283" duration="170535000" />
+      <workItem from="1563395959411" duration="73842000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -448,11 +497,116 @@
       <option name="project" value="LOCAL" />
       <updated>1562618264486</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="County and Municipality names added for Action worksheets">
+      <created>1562694006207</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1562694006207</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Updates in AssetTable and AssetIndex">
+      <created>1562782684574</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1562782684574</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Updates in AssetTable and AssetIndex">
+      <created>1562783283188</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1562783283188</updated>
+    </task>
+    <task id="LOCAL-00025" summary="AssetPieChart for Replacement Value">
+      <created>1563209549526</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1563209549526</updated>
+    </task>
+    <task id="LOCAL-00026" summary="updates">
+      <created>1563209569706</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1563209569706</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Building By Owner Type Table">
+      <created>1563290364858</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1563290364858</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Building By Owner Type Pie Chart and Table">
+      <created>1563290396727</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1563290396727</updated>
+    </task>
+    <task id="LOCAL-00029" summary="updates">
+      <created>1563376115866</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1563376115866</updated>
+    </task>
+    <task id="LOCAL-00030" summary="updates">
+      <created>1563548923913</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1563548923913</updated>
+    </task>
+    <task id="LOCAL-00031" summary="updates">
+      <created>1563553056249</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1563553056249</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Building By owner Type Pie chart and Building By Land Use PieChart">
+      <created>1563553094097</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1563553094097</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Building By Land Use Type Pie chart and Building By Land Use Table">
+      <created>1563828620513</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1563828620513</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Building By Land Use Type Pie chart and Building By Land Use Table working">
+      <created>1563901481083</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1563901481083</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Building By Land Use Type Pie chart and Building By Land Use Table updates">
+      <created>1563906665741</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1563906665741</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Building By Land Use Type Pie chart and Building By Land Use Table updates">
+      <created>1563907625825</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1563907625825</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="333795000" />
+    <option name="totallyTimeSpent" value="518534000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -465,9 +619,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="77" y="32" width="1843" height="1048" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.3223279" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.3301623" />
       <window_info id="Structure" order="1" sideWeight="0.5005562" side_tool="true" weight="0.25293788" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -487,6 +640,7 @@
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5002798" side_tool="true" weight="0.32925472" />
       <window_info anchor="bottom" id="Messages" order="12" />
+      <window_info anchor="bottom" id="TypeScript" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -495,11 +649,12 @@
       <window_info anchor="right" id="Maven" order="5" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="SciView" order="8" />
+      <window_info anchor="right" id="SciView" order="8" weight="0.3296027" />
       <window_info anchor="right" id="Database" order="9" />
+      <window_info anchor="right" id="Module Dependencies" order="10" weight="0.3296027" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.31337437" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49944383" visible="true" weight="0.3304272" />
       <window_info id="Structure" order="1" sideWeight="0.5005562" side_tool="true" weight="0.25293788" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -507,18 +662,19 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32925472" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32925472" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49972022" visible="true" weight="0.04226919" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49972022" weight="0.04226919" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5002798" side_tool="true" weight="0.32925472" />
       <window_info anchor="bottom" id="Messages" order="12" />
+      <window_info anchor="bottom" id="TypeScript" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -527,8 +683,9 @@
       <window_info anchor="right" id="Maven" order="5" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="SciView" order="8" />
+      <window_info anchor="right" id="SciView" order="8" weight="0.3296027" />
       <window_info anchor="right" id="Database" order="9" />
+      <window_info anchor="right" id="Module Dependencies" order="10" weight="0.3296027" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -541,11 +698,20 @@
     <MESSAGE value="create a new worksheet" />
     <MESSAGE value="view a worksheet by id" />
     <MESSAGE value="added routes for Action worksheet" />
-    <MESSAGE value="updates" />
     <MESSAGE value="added county and municipality in action worksheets" />
     <MESSAGE value="asset table working" />
     <MESSAGE value="asset table displays county names and municipality names" />
-    <option name="LAST_COMMIT_MESSAGE" value="asset table displays county names and municipality names" />
+    <MESSAGE value="County and Municipality names added for Action worksheets" />
+    <MESSAGE value="Updates in AssetTable and AssetIndex" />
+    <MESSAGE value="AssetPieChart for Replacement Value" />
+    <MESSAGE value="Building By Owner Type Table" />
+    <MESSAGE value="Building By Owner Type Pie Chart and Table" />
+    <MESSAGE value="updates" />
+    <MESSAGE value="Building By owner Type Pie chart and Building By Land Use PieChart" />
+    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table" />
+    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
+    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -559,88 +725,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/block.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="248" column="16" selection-start-line="248" selection-start-column="16" selection-end-line="248" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/riskmap/layers/ebr_buildings.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="774">
-          <caret line="43" column="2" selection-start-line="43" selection-start-column="2" selection-end-line="43" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/Home/components/HomeNav.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/Landing/ResetPassword.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/Landing/SignUp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-810">
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-486">
-          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/light-admin/menu/MobileMenu.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles/main.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1538" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles/_responsive.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles/mb.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-98">
-          <caret line="6590" column="16" selection-start-line="6590" selection-start-column="16" selection-end-line="6590" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/light-admin/containers/Element.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/light-admin/containers/ElementBox.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles/_elements.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="80" column="22" lean-forward="true" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/light-admin/wizard/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="764">
@@ -820,40 +904,10 @@
     <entry file="file://$PROJECT_DIR$/src/pages/Landing/Login.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/store/modules/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1890">
-          <caret line="129" column="10" selection-start-line="129" selection-start-column="4" selection-end-line="129" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/store/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/Home/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="26" selection-end-column="18" />
-          <folding>
-            <element signature="e#108#145#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -867,10 +921,153 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Home/homeview.scss">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Home/components/HomeNav.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Home/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="35" selection-start-line="35" selection-end-line="44" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/plans/planPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="488">
+          <caret line="96" column="20" lean-forward="true" selection-start-line="96" selection-start-column="20" selection-end-line="96" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/store/modules/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="604">
+          <caret line="243" column="5" lean-forward="true" selection-start-line="243" selection-start-column="5" selection-end-line="243" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/auth/actions/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="-1826">
           <caret line="105" selection-start-line="105" selection-end-line="105" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/riskmap/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/request.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3294">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/webpack/lib/webpack.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="75" column="3" selection-start-line="75" selection-start-column="3" selection-end-line="75" selection-end-column="3" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/node/globals.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="232" column="12" selection-start-line="232" selection-start-column="12" selection-end-line="232" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
+          <folding>
+            <element signature="e#108#145#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="22" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/plans/view.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="722">
+          <caret line="118" selection-start-line="118" selection-end-line="118" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="191" column="74" lean-forward="true" selection-start-line="191" selection-start-column="32" selection-end-line="191" selection-end-column="74" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/common/item-selector/item-selector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/filters/multi-select-filter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="604">
+          <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#1122#1148#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/sample.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsPieChart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1424">
+          <caret line="81" column="77" lean-forward="true" selection-start-line="81" selection-start-column="28" selection-end-line="81" selection-end-column="77" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -879,45 +1076,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="33" column="3" selection-start-line="33" selection-start-column="3" selection-end-line="33" selection-end-column="3" />
+        <state relative-caret-position="-638">
+          <caret line="89" column="102" lean-forward="true" selection-start-line="89" selection-start-column="102" selection-end-line="89" selection-end-column="102" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/plans/view.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-854">
-          <caret line="81" column="1" selection-start-line="81" selection-start-column="1" selection-end-line="81" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/plans/planPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8">
-          <caret line="74" column="27" lean-forward="true" selection-start-line="74" selection-start-column="27" selection-end-line="74" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsTable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1016">
-          <caret line="2" column="29" lean-forward="true" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="47" />
+        <state relative-caret-position="830">
+          <caret line="95" column="5" lean-forward="true" selection-start-line="95" selection-start-column="5" selection-end-line="95" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js">
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByOwnerTypeTable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
-          <caret line="173" column="8" lean-forward="true" selection-start-line="173" selection-start-column="8" selection-end-line="173" selection-end-column="8" />
+        <state relative-caret-position="558">
+          <caret line="52" column="36" lean-forward="true" selection-start-line="46" selection-start-column="28" selection-end-line="52" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUsePieChart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="666">
+          <caret line="88" column="15" selection-start-line="88" selection-start-column="15" selection-end-line="88" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseConfig.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="42" column="55" selection-start-line="42" selection-start-column="55" selection-end-line="42" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/auth/Assets/components/BuildingByLandUseTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="53" column="19" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="19" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
