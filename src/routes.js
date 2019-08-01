@@ -13,7 +13,7 @@ import PlanPage from 'pages/auth/plans/planPage'
 import PlanIndex from 'components/plan/'
 import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
-import AssetsTable from 'pages/auth/Assets/components/AssetsTable'
+import AssetsContent from "./pages/auth/Assets/components/AssetsContent";
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Logout from './pages/Logout'
@@ -30,7 +30,8 @@ const routes = [
    ...Plans,
    ...PlanPage,
    ...Assets,
-        ...Historic,
+   ...AssetsContent,
+   ...Historic,
   PlanIndex,
   RiskMap,
   Logout,

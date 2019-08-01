@@ -6,6 +6,7 @@ import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
 import TableBox from 'components/light-admin/tables/TableBox'
+import {Link} from "react-router-dom";
 
 const ATTRIBUTES =[
     'id',
@@ -24,17 +25,14 @@ class AssetsTable extends React.Component {
             columns : ATTRIBUTES
         };
 
-        this.onPageChange = this.onPageChange.bind(this)
+        this.onPageChange = this.onPageChange.bind(this);
 
     }
 
     fetchFalcorDeps() {
-        let geoid = this.props.geoid.map((geoid) => geoid);
-        console.log('geoid',this.props.geoid)
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,'length'])
             .then(response => {
-                console.log('response',response)
-                data_length = response.json.building.byGeoid[geoid].length
+                data_length = response.json.building.byGeoid[this.props.geoid].length
             })
 
     }
@@ -67,7 +65,6 @@ class AssetsTable extends React.Component {
             })
 
     }
-
 
     onPageChange(from, to) {
         this.setState({
