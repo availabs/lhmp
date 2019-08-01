@@ -32,7 +32,7 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
                         }
                         <td>
                             <Link className="btn btn-sm btn-outline-primary"
-                                  to={ `${row.id}` }>
+                                  to={ `assets/${row.id}` }>
                                 View
                             </Link>
                         </td>
