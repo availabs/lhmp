@@ -1,0 +1,115 @@
+{
+  "36": {
+    "counties": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "cousubs": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "tracts": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "zips": {
+      "type": "FeatureCollection",
+      "features": []
+    }
+  },
+  "72": {
+    "counties": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "cousubs": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "tracts": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "zips": {
+      "type": "FeatureCollection",
+      "features": []
+    }
+  },
+  "mesh": {
+    "36": {
+      "counties": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "cousubs": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "tracts": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "zips": {
+        "type": "FeatureCollection",
+        "features": []
+      }
+    },
+    "72": {
+      "counties": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "cousubs": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "tracts": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "zips": {
+        "type": "FeatureCollection",
+        "features": []
+      }
+    }
+  },
+  "merge": {
+    "36": {
+      "counties": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "cousubs": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "tracts": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "zips": {
+        "type": "FeatureCollection",
+        "features": []
+      }
+    },
+    "72": {
+      "counties": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "cousubs": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "tracts": {
+        "type": "FeatureCollection",
+        "features": []
+      },
+      "zips": {
+        "type": "FeatureCollection",
+        "features": []
+      }
+    }
+  }
+
+}
