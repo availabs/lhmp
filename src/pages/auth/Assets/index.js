@@ -312,7 +312,7 @@ const mapDispatchToProps = ({
 
 export default [{
   icon: 'os-icon-pencil-2',
-  path: '/assets/',
+  path: '/assets',
   exact: true,
   mainNav: true,
   menuSettings: {
