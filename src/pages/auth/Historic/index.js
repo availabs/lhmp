@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
-
+import Element from 'components/light-admin/containers/Element'
 import CountyHeroStats from "./components/CountyHeroStats"
 import GeographyScoreBarChart from "./components/GeographyScoreBarChart"
 import MunicipalityStats from "./components/MunicipalityStats"
@@ -27,11 +27,11 @@ class Historic extends React.Component {
     constructor(props) {
         super(props);
 
-        const { params } = createMatchSelector({ path: '/historic/:geoid' })(props) || {},
-            { geoid } = params;
+        /*const { params } = createMatchSelector({ path: '/historic/:geoid' })(props) || {},
+            { geoid } = params;*/
 
         this.state = {
-            geoid,
+            geoid: this.props.geoid,
             geoLevel: 'counties',
             dataType: 'severeWeather',
             colorScale: getColorScale([1, 2])
@@ -70,79 +70,95 @@ class Historic extends React.Component {
 
     render() {
         return (
-            <div className='property-single'>
+            <div className='container'>
+                <Element>
+                    <div className='content-i'>
+                        <div className="content-box">
+                            <h4 className="element-header">{ this.getGeoidName() }</h4>
+                            <div className="row">
+                                <div className="col-sm-8 col-xxxl-6">
+                                    <div className="element-wrapper">
+                                        <div className="element-box">
 
-                <div className='property-info-w'>
-                    <div className="property-info-main" style={ { maxWidth: '60%' } }>
+                                            <div className="element-box-content">
+                                                <Content content_id={ `${ this.state.geoid }-about` }
+                                                         top={ -20 } right={ 0 }/>
+                                            </div>
 
-                        <h1>{ this.getGeoidName() }</h1>
+                                            <div className="el-chart-w">
+                                                <GeographyScoreBarChart
+                                                    showYlabel={ false }
+                                                    showXlabel={ false }
+                                                    lossType={ 'total_damage' }
+                                                    { ...this.state }/>
+                                            </div>
 
-                        <div className="property-section">
-                            <Content content_id={ `${ this.state.geoid }-about` }
-                                     top={ -20 } right={ 0 }/>
-                        </div>
+                                            <div className="table-responsive">
+                                                <CousubTotalLossTable
+                                                    { ...this.state }/>
+                                            </div>
 
-                        <div className="property-section">
-                            <GeographyScoreBarChart
-                                showYlabel={ false }
-                                showXlabel={ false }
-                                lossType={ 'total_damage' }
-                                { ...this.state }/>
-                        </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div className="property-section">
-                            <CousubTotalLossTable
-                                { ...this.state }/>
-                        </div>
+                                <div className='col-sm-4 d-xxxl-none'>
+                                    <div className='element-wrapper'>
+                                            <div className='element-box'>
+                                                <div className='row'>
+                                                    <MunicipalityStats { ...this.state }/>
+                                                </div>
+                                            </div>
 
-                    </div>
+                                            <div className='element-box'>
+                                                <div className='row'>
+                                                    <CountyHeroStats { ...this.state }/>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div className='property-info-side' style={ { maxWidth: 398 } }>
-                        <div className='side-section-content' style={ { paddingTop: 60 } }>
-
-                            <div className='projects-list row'>
-                                <MunicipalityStats { ...this.state }/>
+                            </div>
+                            <div className='row'>
+                                <div className='col-sm-12 col-xxxl-9'>
+                                    <div className='element-wrapper'>
+                                        <div className='element-box'>
+                                            <div className=''>
+                                                <HazardList { ...this.state }
+                                                            standardScale={ false }
+                                                            threeD={ false }/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className='projects-list row'>
-                                <CountyHeroStats { ...this.state }/>
+                            <div className='row'>
+                                <div className= 'col-12'>
+                                    <HMGPTable { ...this.state }/>
+                                </div>
                             </div>
-
                         </div>
                     </div>
-
-                </div>
-
-                <div className="property-info-w">
-                    <div className="property-info-main" style={ { paddingLeft: 0, paddingRight: 0 } }>
-                        <HazardList { ...this.state }
-                                    standardScale={ false }
-                                    threeD={ false }/>
-                    </div>
-                </div>
-
-                <div className='row'>
-                    <div className= 'col-12'>
-                        <HMGPTable { ...this.state }/>
-                    </div>
-                </div>
-
+                </Element>
             </div>
         )
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state,ownProps) => {
+    console.log('ownProps', ownProps)
     return {
         geoGraph: state.graph.geo,
-        router: state.router
+        router: state.router,
+        geoid: ownProps.computedMatch.params.geoid ? ownProps.computedMatch.params.geoid : '36001'
     };
 };
 
 const mapDispatchToProps = {};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/historic/:geoid',
+    path: '/historic/',
     exact: true,
     name: 'Historic',
     auth: true,
@@ -150,7 +166,32 @@ export default [{
     breadcrumbs: [
         { param: 'geoid', path: '/historic/' }
     ],
-    menuSettings: { image: 'none', scheme: 'color-scheme-light' },
+    menuSettings: {
+        image: 'none',
+        scheme: 'color-scheme-light',
+        position: 'menu-position-left',
+        layout: 'menu-layout-compact',
+        style: 'color-style-default'
+    },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Historic))
-}];
+},
+    {
+        icon: 'os-icon-pencil-2',
+        path: '/historic/:geoid',
+        exact: true,
+        name: 'Historic',
+        auth: true,
+        mainNav: false,
+        breadcrumbs: [
+            { param: 'geoid', path: '/historic/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Historic))
+    }];
 
