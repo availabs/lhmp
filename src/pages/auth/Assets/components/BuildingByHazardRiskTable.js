@@ -18,11 +18,13 @@ class BuildingByHazardRiskTable extends React.Component{
 
     componentDidUpdate(newProps){
         if(this.props !== newProps){
-            return this.props.falcor.get(['building','hazard','meta'])
+            return this.props.falcor.get(['building','hazard','meta','risk_zones'])
                 .then(response => {
+                    //console.log('res',response.json.building.hazard.meta)
                     const graph = response.json.building.hazard.meta;
                     if(graph){
-                        let zones = graph[this.state.hazardRisk].zones;
+                        console.log('graph',graph.risk_zones)
+                        let zones = graph.risk_zones[this.state.hazardRisk].zones;
                         return zones
                     }
                 })
