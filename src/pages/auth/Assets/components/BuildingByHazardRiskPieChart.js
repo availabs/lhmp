@@ -25,8 +25,8 @@ class BuildingByHazardRiskPieChart extends React.Component{
             .then(zones =>{
                 // should be this.props.geoid but hardcoded for the sake of creating the piechart
                 this.props.falcor.get(['building','byGeoid',this.props.geoid,'hazardRisk',[this.state.hazardRisk],'zones',zones,'sum',['count','replacement_value']])
-                    .then(data =>{
-                        return data
+                    .then(response =>{
+                        return response
                     })
             })
     }
