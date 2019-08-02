@@ -125,26 +125,18 @@ class AssetsTable extends React.Component {
 
 }
 
-<<<<<<< HEAD
-const mapStateToProps = (state) => {
-    return {
-        cousubs: get(state.graph, 'geo',{}),
-        buildingData : get(state.graph,'building.byId',{})
-
-    }
-=======
 const mapStateToProps = (state,ownProps) => {
-return {
-geoid : ownProps.geoid,
-cousubs: get(state.graph, 'geo',{}),
-buildingData : get(state.graph,'building.byId',{})
-}
->>>>>>> 89647ee2135c2edef76805c97391189f1a6466cb
+    return {
+    geoid : ownProps.geoid,
+    cousubs: get(state.graph, 'geo',{}),
+    buildingData : get(state.graph,'building.byId',{})
+    }
 };
 
 const mapDispatchToProps =  {
 //sendSystemMessage,
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsTable))
 
 
