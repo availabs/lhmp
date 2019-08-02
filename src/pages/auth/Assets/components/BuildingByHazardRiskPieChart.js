@@ -14,11 +14,11 @@ class BuildingByHazardRiskPieChart extends React.Component{
     }
 
     fetchFalcorDeps(){
-        return this.props.falcor.get(['building','hazard','meta'])
+        return this.props.falcor.get(['building','hazard','meta','risk_zones'])
             .then(response => {
                 const graph = response.json.building.hazard.meta;
                 if(graph){
-                    let zones = graph[this.state.hazardRisk].zones;
+                    let zones = graph.risk_zones[this.state.hazardRisk].zones;
                     return zones
                 }
             })
