@@ -5,12 +5,14 @@ import Landing from './pages/Landing'
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
+import Assets from 'pages/auth/Assets'
 import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import Plans from 'pages/auth/plans/view'
 import PlanPage from 'pages/auth/plans/planPage'
 import PlanIndex from 'components/plan/'
+
 import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import AssetsContent from "./pages/auth/Assets/components/AssetsContent";
@@ -24,6 +26,7 @@ const routes = [
   Landing,
   Home,
   Login,
+
    ...ActionWorksheet,
    ...ActionsIndex,
    ...ActionsView,
@@ -32,7 +35,9 @@ const routes = [
    ...Assets,
    ...AssetsContent,
    ...Historic,
+
   PlanIndex,
+
   RiskMap,
   Logout,
   NoMatch

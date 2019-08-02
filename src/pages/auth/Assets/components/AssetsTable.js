@@ -4,7 +4,6 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
-import {falcorGraph} from "../../../../store/falcorGraph";
 import TableBox from 'components/light-admin/tables/TableBox'
 import {Link} from "react-router-dom";
 
@@ -126,12 +125,21 @@ class AssetsTable extends React.Component {
 
 }
 
+<<<<<<< HEAD
+const mapStateToProps = (state) => {
+    return {
+        cousubs: get(state.graph, 'geo',{}),
+        buildingData : get(state.graph,'building.byId',{})
+
+    }
+=======
 const mapStateToProps = (state,ownProps) => {
 return {
 geoid : ownProps.geoid,
 cousubs: get(state.graph, 'geo',{}),
 buildingData : get(state.graph,'building.byId',{})
 }
+>>>>>>> 89647ee2135c2edef76805c97391189f1a6466cb
 };
 
 const mapDispatchToProps =  {
