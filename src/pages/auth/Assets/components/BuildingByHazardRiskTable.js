@@ -43,6 +43,7 @@ class BuildingByHazardRiskTable extends React.Component{
         let total_count = 0;
         let total_replacement_value = 0;
         if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.data[this.props.geoid]['hazardRisk']!==undefined){
+
             let graph = this.props.data[geoid].hazardRisk[this.state.hazardRisk].zones
             if(graph){
                 Object.keys(graph).forEach((item,i)=>{
@@ -58,6 +59,7 @@ class BuildingByHazardRiskTable extends React.Component{
                     total_replacement_value += parseFloat(data.replacement_value)
                 })
             }
+            //console.log('table',buildingByHazardRiskTableData)
 
             return(
                 <div>
@@ -111,6 +113,10 @@ class BuildingByHazardRiskTable extends React.Component{
             {this.buildingByHazardRiskTable()}
         </div>
         )
+    }
+
+    static defaultProps = {
+
     }
 }
 
