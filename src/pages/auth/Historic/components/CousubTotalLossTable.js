@@ -3,14 +3,31 @@ import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
 
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBoxDefault'
+import TableBox from 'components/light-admin/tables/TableBoxHistoric'
 
 import {
     fnum
 } from 'utils/sheldusUtils'
 
 class CousubTotalLossTable extends React.Component {
-    fetchFalcorDeps({ dataType, geoid }=this.props) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            geoid: this.props.geoid,
+            dataType: this.props.dataType
+        }
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.geoid !== this.props.geoid){
+            this.setState({geoid: this.props.geoid})
+            this.fetchFalcorDeps(this.props.dataType, this.props.geoid)
+        }
+    }
+
+    fetchFalcorDeps( dataType, geoid ) {
+        if(!geoid)geoid = this.props.geoid;
+        if(!dataType)dataType = this.props.dataType;
+        console.log('FFD_CTLosTable', dataType, geoid)
         return this.props.falcor.get(
             ['riskIndex', 'hazards'],
             ['geo', geoid, 'cousubs']
@@ -26,6 +43,7 @@ class CousubTotalLossTable extends React.Component {
     }
 
     processData({ dataType, geoid }=this.props) {
+        console.log('PD_CTLosTable', dataType, geoid)
         let geoids = this.props.geoGraph[geoid].cousubs.value,
             data = {},
             columns = ["name", "total damage", "fatalities"];

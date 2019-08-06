@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsEdit.js" afterDir="false" />
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="updates">
+      <change afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTableHistoric.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/FemaDisasterDeclarationsTable.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardEventsTable.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardScoreTable.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/yearsOfFemaDisasterDeclarationsData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTableNew.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTableNew.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsContent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/cms/Content.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/cms/Content.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/TableBoxDefault.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableBoxHistoric.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsEdit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsEdit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HMGPTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/MunicipalityStats.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -78,11 +88,11 @@
       <recent name="$PROJECT_DIR$/src/pages" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
-      <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -399,48 +409,34 @@
       <updated>1564670096166</updated>
     </task>
     <task id="LOCAL-00040" summary="updates">
-      <created>1564771844464</created>
+      <created>1565104866629</created>
       <option name="number" value="00040" />
       <option name="presentableId" value="LOCAL-00040" />
       <option name="project" value="LOCAL" />
-      <updated>1564771844464</updated>
+      <updated>1565104866629</updated>
     </task>
     <task id="LOCAL-00041" summary="updates">
-      <created>1564771872278</created>
+      <created>1565104926337</created>
       <option name="number" value="00041" />
       <option name="presentableId" value="LOCAL-00041" />
       <option name="project" value="LOCAL" />
-      <updated>1564771872278</updated>
+      <updated>1565104926337</updated>
     </task>
     <task id="LOCAL-00042" summary="updates">
-      <created>1564775072013</created>
+      <created>1565105000006</created>
       <option name="number" value="00042" />
       <option name="presentableId" value="LOCAL-00042" />
       <option name="project" value="LOCAL" />
-      <updated>1564775072013</updated>
+      <updated>1565105000006</updated>
     </task>
-    <task id="LOCAL-00043" summary="updates">
-      <created>1564775086104</created>
+    <task id="LOCAL-00043" summary="change of wizard info">
+      <created>1565113717073</created>
       <option name="number" value="00043" />
       <option name="presentableId" value="LOCAL-00043" />
       <option name="project" value="LOCAL" />
-      <updated>1564775086104</updated>
+      <updated>1565113717073</updated>
     </task>
-    <task id="LOCAL-00044" summary="updates">
-      <created>1564775103767</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1564775103767</updated>
-    </task>
-    <task id="LOCAL-00045" summary="updates">
-      <created>1564775118059</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1564775118059</updated>
-    </task>
-    <option name="localTasksCounter" value="46" />
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -489,7 +485,8 @@
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
     <MESSAGE value=" Building By Land Use Table updates" />
     <MESSAGE value="updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="updates" />
+    <MESSAGE value="change of wizard info" />
+    <option name="LAST_COMMIT_MESSAGE" value="change of wizard info" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

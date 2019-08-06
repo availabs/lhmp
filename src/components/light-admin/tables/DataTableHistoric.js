@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
   if (!tableData || tableData.length === 0) {
     return ('No Data Sent to table. Loading ...')
@@ -23,7 +22,7 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
                   return (
                     (col in links) ?
                     <td key={ ii }>
-                      <Link to={ links[col](row) }>{ row[col] }</Link>
+                      <Link to={ `/historic/${row['geoid']}` }>{ row[col] }</Link>
                     </td>
                     : <td key={ ii }>{ row[col] }</td>
                   )

@@ -4,6 +4,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Wizard from 'components/light-admin/wizard'
 import Element from 'components/light-admin/containers/Element'
+import {sendSystemMessage} from 'store/modules/messages';
 
 
 class AssetsEdit extends React.Component{
@@ -67,14 +68,15 @@ class AssetsEdit extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.propClassDropDown = this.propClassDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
-        this.floodZoneDropDown = this.floodZoneDropDown.bind(this);
-        this.ownerTypeDropDown = this.ownerTypeDropDown.bind(this);
+        //this.floodZoneDropDown = this.floodZoneDropDown.bind(this);
+        //this.ownerTypeDropDown = this.ownerTypeDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
-        this.sewerTypeDropDown = this.sewerTypeDropDown.bind(this);
-        this.waterSupplyDropDown = this.waterSupplyDropDown.bind(this);
-        this.utilitiesDropDown = this.utilitiesDropDown.bind(this);
-        this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
-        this.heatTypeDropDown = this.heatTypeDropDown.bind(this)
+        //this.sewerTypeDropDown = this.sewerTypeDropDown.bind(this);
+        //this.waterSupplyDropDown = this.waterSupplyDropDown.bind(this);
+        //this.utilitiesDropDown = this.utilitiesDropDown.bind(this);
+       // this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
+        this.heatTypeDropDown = this.heatTypeDropDown.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     handleChange(e) {
@@ -99,7 +101,7 @@ class AssetsEdit extends React.Component{
                 })
             })
             return(
-                <select className="form-control justify-content-sm-end" id='prop_type' onChange={this.handleChange} value={this.state.prop_class}>
+                <select className="form-control justify-content-sm-end" id='prop_class' onChange={this.handleChange} value={this.state.prop_class}>
                     <option default>--Select Prop Class--</option>
                     <option className="form-control" key={0} value="None">No Prop Class Selected</option>
                     {
@@ -128,45 +130,6 @@ class AssetsEdit extends React.Component{
         )
     }
 
-    //TODO : yet to be entered in database
-    floodZoneDropDown(){
-        let floodZoneDropDownData = [];
-        return(
-            <select className="form-control justify-content-sm-end" id='flood_zone' onChange={this.handleChange} value={this.state.flood_zone}>
-                <option default>--Select Flood Zone--</option>
-                <option className="form-control" key={0} value="None">No Flood Zone Selected</option>
-                {
-                    floodZoneDropDownData.map((data,i) =>{
-                        return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                    })
-                }
-            </select>
-        )
-    }
-    
-    ownerTypeDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['owner_type'] !== undefined){
-            const graph = this.props.parcelMetaData['owner_type'];
-            let ownerTypeDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
-                    ownerTypeDropDownData.push(i)
-                })
-            })
-            return(
-                <select className="form-control justify-content-sm-end" id='owner_type' onChange={this.handleChange} value={this.state.owner_type}>
-                    <option default>--Select Owner Type--</option>
-                    <option className="form-control" key={0} value="None">No Owner Type Selected</option>
-                    {
-                        ownerTypeDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                        })
-                    }
-                </select>
-            )
-        }
-    }
-
     buildingStyleDropDown(){
         if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['bldg_style']){
             const graph = this.props.parcelMetaData['bldg_style'];
@@ -189,76 +152,6 @@ class AssetsEdit extends React.Component{
             )
         }
     }
-
-    sewerTypeDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['sewer_type']){
-            const graph = this.props.parcelMetaData['sewer_type'];
-            let sewerTypeDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
-                    sewerTypeDropDownData.push(i)
-                })
-            })
-            return(
-                <select className="form-control justify-content-sm-end" id='sewer_type' onChange={this.handleChange} value={this.state.sewer_type}>
-                    <option default>--Select Sewer Type--</option>
-                    <option className="form-control" key={0} value="None">No Sewer Type Selected</option>
-                    {
-                        sewerTypeDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                        })
-                    }
-                </select>
-            )
-        }
-    }
-
-    waterSupplyDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['water_supply']){
-            const graph = this.props.parcelMetaData['water_supply'];
-            let waterSupplyDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
-                    waterSupplyDropDownData.push(i)
-                })
-            })
-            return(
-                <select className="form-control justify-content-sm-end" id='water_supply' onChange={this.handleChange} value={this.state.water_supply}>
-                    <option default>--Select Water Supply--</option>
-                    <option className="form-control" key={0} value="None">No Water Supply Selected</option>
-                    {
-                        waterSupplyDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                        })
-                    }
-                </select>
-            )
-        }
-    }
-
-    utilitiesDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['utilities']){
-            const graph = this.props.parcelMetaData['utilities'];
-            let utilitiesDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
-                    utilitiesDropDownData.push(i)
-                })
-            })
-            return(
-                <select className="form-control justify-content-sm-end" id='utilities' onChange={this.handleChange} value={this.state.utilities}>
-                    <option default>--Select Utilities--</option>
-                    <option className="form-control" key={0} value="None">No Utilities Selected</option>
-                    {
-                        utilitiesDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                        })
-                    }
-                </select>
-            )
-        }
-    }
-    
     heatTypeDropDown(){
         if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['heat_type']){
             const graph = this.props.parcelMetaData['heat_type'];
@@ -281,28 +174,34 @@ class AssetsEdit extends React.Component{
             )
         }
     }
-    
-    fuelTypeDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['fuel_type']){
-            const graph = this.props.parcelMetaData['fuel_type'];
-            let fuelTypeDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
-                    fuelTypeDropDownData.push(i)
-                })
+
+    onSubmit(event){
+        if(this.props.match.params.assetId){
+            let attributes = Object.keys(this.state)
+            let updated_data ={};
+            Object.keys(this.state).forEach((d, i) => {
+                if (this.state[d] !== '') {
+                    console.log(this.state[d], d)
+                    updated_data[d] = this.state[d]
+                }
             })
-            return(
-                <select className="form-control justify-content-sm-end" id='fuel_type' onChange={this.handleChange} value={this.state.fuel_type}>
-                    <option default>--Select Fuel Type--</option>
-                    <option className="form-control" key={0} value="None">No Fuel Type Selected</option>
-                    {
-                        fuelTypeDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                        })
+            return this.props.falcor.set({
+                paths: [
+                    ['building','byId', [this.props.match.params.assetId], attributes]
+                ],
+                jsonGraph: {
+                    building: {
+                        byId: {
+                            [this.props.match.params.assetId]: updated_data
+                        }
                     }
-                </select>
-            )
+                }
+            })
+            .then(response => {
+                this.props.sendSystemMessage(`Action worksheet was successfully edited.`, {type: "success"});
+            })
         }
+
     }
 
     render(){
@@ -342,7 +241,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of Employees</label>
-                            <input id='num_employees' onChange={this.handleChange} className="form-control" placeholder="Number of employees" type="text" value={this.state.flood_velocity}/></div>
+                            <input id='num_employees' onChange={this.handleChange} className="form-control" placeholder="Number of employees" type="text" value={this.state.num_employees}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of occupants</label>
@@ -523,7 +422,7 @@ const mapStateToProps = (state,ownProps) => {
 };
 
 const mapDispatchToProps =  {
-//sendSystemMessage,
+sendSystemMessage,
 };
 
 export default [{
@@ -546,3 +445,136 @@ export default [{
     component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsEdit))
 }
 ]
+
+/*
+sewerTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['sewer_type']){
+            const graph = this.props.parcelMetaData['sewer_type'];
+            let sewerTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    sewerTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='sewer_type' onChange={this.handleChange} value={this.state.sewer_type}>
+                    <option default>--Select Sewer Type--</option>
+                    <option className="form-control" key={0} value="None">No Sewer Type Selected</option>
+                    {
+                        sewerTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    waterSupplyDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['water_supply']){
+            const graph = this.props.parcelMetaData['water_supply'];
+            let waterSupplyDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    waterSupplyDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='water_supply' onChange={this.handleChange} value={this.state.water_supply}>
+                    <option default>--Select Water Supply--</option>
+                    <option className="form-control" key={0} value="None">No Water Supply Selected</option>
+                    {
+                        waterSupplyDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    utilitiesDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['utilities']){
+            const graph = this.props.parcelMetaData['utilities'];
+            let utilitiesDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    utilitiesDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='utilities' onChange={this.handleChange} value={this.state.utilities}>
+                    <option default>--Select Utilities--</option>
+                    <option className="form-control" key={0} value="None">No Utilities Selected</option>
+                    {
+                        utilitiesDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    fuelTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['fuel_type']){
+            const graph = this.props.parcelMetaData['fuel_type'];
+            let fuelTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    fuelTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='fuel_type' onChange={this.handleChange} value={this.state.fuel_type}>
+                    <option default>--Select Fuel Type--</option>
+                    <option className="form-control" key={0} value="None">No Fuel Type Selected</option>
+                    {
+                        fuelTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    //TODO : yet to be entered in database
+    floodZoneDropDown(){
+        let floodZoneDropDownData = [];
+        return(
+            <select className="form-control justify-content-sm-end" id='flood_zone' onChange={this.handleChange} value={this.state.flood_zone}>
+                <option default>--Select Flood Zone--</option>
+                <option className="form-control" key={0} value="None">No Flood Zone Selected</option>
+                {
+                    floodZoneDropDownData.map((data,i) =>{
+                        return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                    })
+                }
+            </select>
+        )
+    }
+
+    ownerTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['owner_type'] !== undefined){
+            const graph = this.props.parcelMetaData['owner_type'];
+            let ownerTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    ownerTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='owner_type' onChange={this.handleChange} value={this.state.owner_type}>
+                    <option default>--Select Owner Type--</option>
+                    <option className="form-control" key={0} value="None">No Owner Type Selected</option>
+                    {
+                        ownerTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+ */
