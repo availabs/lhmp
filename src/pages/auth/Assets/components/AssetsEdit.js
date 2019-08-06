@@ -13,30 +13,56 @@ class AssetsEdit extends React.Component{
         this.state = {
             prop_class : '',
             replacement_value : '',
+            critical_infrastructure : '',
+            num_residents : '',
+            num_employees: '',
+            num_occupants : '',
+            num_vehicle_inhabitants : '',
             num_units : '',
             basement : '',
-            num_stories : '',
             building_type : '',
             roof_type: '',
-            flood_zone: '',
+            height : '',
+            num_stories : '',
+            structure_type: '',
+            bldg_style: '',
+            address: '',
+            sqft_living : '',
+            nbr_kitchens : '',
+            nbr_full_baths: '',
+            nbr_bedrooms: '',
+            first_floor_elevation: '',
+            heat_type: '',
+            naics_code: '',
+            census_industry_code : '',
+            contents_replacement_value : '',
+            inventory_replacement_value: '',
+            establishment_revenue : '',
+            business_hours: '',
+            seismic_zone : '',
+            flood_plain:'',
             flood_depth: '',
+            flood_duration : '',
             flood_velocity: '',
+            high_wind_speed: '',
+            soil_type: '',
+            storage_hazardous_materials: '',
+            topography_slope: ''
+            /*
+            flood_zone: '',
+
+
             flood_base_elevation: '',
             land_av: '',
             total_av: '',
             full_market_val: '',
             owner_type: '',
-            address: '',
-            bldg_style: '',
-            sqft_living : '',
-            nbr_kitchens : '',
-            nbr_full_baths: '',
-            nbr_bedrooms: '',
             sewer_type: '',
             water_supply: '',
             utilities: '',
             fuel_type: '',
-            heat_type: ''
+             */
+
         };
         this.handleChange = this.handleChange.bind(this);
         this.propClassDropDown = this.propClassDropDown.bind(this);
@@ -284,7 +310,7 @@ class AssetsEdit extends React.Component{
             {
                 title: (<span>
                     <span style={{fontSize:'0.7em'}}>Step 1</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Building By Characteristics</span></span>),
+                    <br /><span style={{fontSize:'0.9em'}}>Basic Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Prop Type</label>
@@ -295,75 +321,8 @@ class AssetsEdit extends React.Component{
                             <input id='replacement_value' onChange={this.handleChange} className="form-control" placeholder="Replacement value" type="text" value={this.state.replacement_value}/></div>
                     </div>
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Number of Units</label>
-                            <input id='num_units' onChange={this.handleChange} className="form-control" placeholder="Number of units" type="text" value={this.state.num_units}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Basement</label>
-                            <input id='basement' onChange={this.handleChange} className="form-control" placeholder="Basement" type="text" value={this.state.basement}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Number of Stories</label>
-                            <input id='num_stories' onChange={this.handleChange} className="form-control" placeholder="Number of stories" type="text" value={this.state.num_stories}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Building Type</label>
-                            {this.buildingTypeDropDown()}</div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Roof Type</label>
-                            <input id='roof_type' onChange={this.handleChange} className="form-control" placeholder="Roof Type" type="text" value={this.state.roof_type}/></div>
-                    </div>
-
-                </div>)
-            },
-            {
-                title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 2</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Building By Risks</span></span>),
-                content: (<div className="row">
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Flood Zone</label>
-                            {this.floodZoneDropDown()}</div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Flood depth</label>
-                            <input id='flood_depth' onChange={this.handleChange} className="form-control" placeholder="Flood depth" type="text" value={this.state.flood_depth}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Flood velocity</label>
-                            <input id='flood_velocity' onChange={this.handleChange} className="form-control" placeholder="Flood velocity" type="text" value={this.state.flood_velocity}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Flood base elevation</label>
-                            <input id='flood_base_elevation' onChange={this.handleChange} className="form-control" placeholder="Flood base elevation" type="text" value={this.state.flood_base_elevation}/></div>
-                    </div>
-                </div>)
-            },
-            {
-                title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 3</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Parcels By General Info</span></span>),
-                content: (<div className="row">
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Prop Type</label>
-                            {this.propClassDropDown()}</div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Land assessed value</label>
-                            <input id='land_av' onChange={this.handleChange} className="form-control" placeholder="Land assessed value" type="text" value={this.state.land_av}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Total assessed value</label>
-                            <input id='total_av' onChange={this.handleChange} className="form-control" placeholder="Total assessed value" type="text" value={this.state.total_av}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Full market value</label>
-                            <input id='full_market_val' onChange={this.handleChange} className="form-control" placeholder="Full market value" type="text" value={this.state.full_market_val}/></div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Owner type</label>
-                            {this.ownerTypeDropDown()}</div>
+                        <div className="form-group"><label htmlFor>Critical Infrastructure</label>
+                            <input id='critical_infrastructure' onChange={this.handleChange} className="form-control" placeholder="Critical Infrastructure" type="text" value={this.state.critical_infrastructure}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Address</label>
@@ -374,9 +333,60 @@ class AssetsEdit extends React.Component{
             },
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 3</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Parcels By Structural Info</span></span>),
+                    <span style={{fontSize:'0.7em'}}>Step 2</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Occupancy Info</span></span>),
                 content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of residents</label>
+                            <input id='num_residents' onChange={this.handleChange} className="form-control" placeholder="Number of residents" type="text" value={this.state.num_residents}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of Employees</label>
+                            <input id='num_employees' onChange={this.handleChange} className="form-control" placeholder="Number of employees" type="text" value={this.state.flood_velocity}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of occupants</label>
+                            <input id='num_occupants' onChange={this.handleChange} className="form-control" placeholder="Number of occupants" type="text" value={this.state.num_occupants}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of vehicles owned by inhabitants</label>
+                            <input id='num_vehicle_inhabitants' onChange={this.handleChange} className="form-control" placeholder="Number of vehicles owned by inhabitants" type="text" value={this.state.num_vehicle_inhabitants}/></div>
+                    </div>
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 3</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Structural Info</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of units</label>
+                            <input id='num_units' onChange={this.handleChange} className="form-control" placeholder="Number of units" type="text" value={this.state.num_units}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Basement</label>
+                            <input id='basement' onChange={this.handleChange} className="form-control" placeholder="Basement" type="text" value={this.state.basement}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Building Type</label>
+                            {this.buildingTypeDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Roof type</label>
+                            <input id='roof_type' onChange={this.handleChange} className="form-control" placeholder="Roof type" type="text" value={this.state.roof_type}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Height</label>
+                            <input id='height' onChange={this.handleChange} className="form-control" placeholder="Height" type="text" value={this.state.height}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of Stories</label>
+                            <input id='num_stories' onChange={this.handleChange} className="form-control" placeholder="Number of stories" type="text" value={this.state.num_stories}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Structure type</label>
+                            <input id='structure_type' onChange={this.handleChange} className="form-control" placeholder="Structure type" type="text" value={this.state.structure_type}/></div>
+                    </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Building style</label>
                             {this.buildingStyleDropDown()}</div>
@@ -390,39 +400,105 @@ class AssetsEdit extends React.Component{
                             <input id='nbr_kitchens' onChange={this.handleChange} className="form-control" placeholder="Number of kitchens" type="text" value={this.state.nbr_kitchens}/></div>
                     </div>
                     <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of bedrooms</label>
+                            <input id='nbr_bedrooms' onChange={this.handleChange} className="form-control" placeholder="Number of bedrooms" type="text" value={this.state.nbr_bedrooms}/></div>
+                    </div>
+                    <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of full bathrooms</label>
                             <input id='nbr_full_baths' onChange={this.handleChange} className="form-control" placeholder="Number of full bathrooms" type="text" value={this.state.nbr_full_baths}/></div>
                     </div>
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Number of bedrooms</label>
-                            <input id='nbr_bedrooms' onChange={this.handleChange} className="form-control" placeholder="Number of bedrooms" type="text" value={this.state.nbr_bedrooms}/></div>
+                        <div className="form-group"><label htmlFor>First floor elevation</label>
+                            <input id='first_floor_elevation' onChange={this.handleChange} className="form-control" placeholder="First floor elevation" type="text" value={this.state.first_floor_elevation}/></div>
                     </div>
                 </div>)
             },
             {
                 title: (<span>
                     <span style={{fontSize:'0.7em'}}>Step 4</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Parcels By Services Info</span></span>),
+                    <br /><span style={{fontSize:'0.9em'}}>Services Info</span></span>),
                 content: (<div className="row">
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Sewer Type</label>
-                            {this.sewerTypeDropDown()}</div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Water Supply</label>
-                            {this.waterSupplyDropDown()}</div>
-                    </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Utilities</label>
-                            {this.utilitiesDropDown()}</div>
-                    </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Heat Type</label>
                             {this.heatTypeDropDown()}</div>
                     </div>
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 5</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Commercial Info</span></span>),
+                content: (<div className="row">
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Fuel Type</label>
-                            {this.fuelTypeDropDown()}</div>
+                        <div className="form-group"><label htmlFor>NAICS code</label>
+                            <input id='naics_code' onChange={this.handleChange} className="form-control" placeholder="NAICS code" type="text" value={this.state.naics_code}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Census industry code</label>
+                            <input id='census_industry_code' onChange={this.handleChange} className="form-control" placeholder="Census industry code" type="text" value={this.state.census_industry_code}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Replacement value</label>
+                            <input id='replacement_value' onChange={this.handleChange} className="form-control" placeholder="Replacement value" type="text" value={this.state.replacement_value}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Contents replacement value</label>
+                            <input id='contents_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Contents replacement value" type="text" value={this.state.contents_replacement_value}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Inventory replacement value</label>
+                            <input id='inventory_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Inventory replacement value" type="text" value={this.state.contents_replacement_value}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Establishment revenue</label>
+                            <input id='establishment_revenue' onChange={this.handleChange} className="form-control" placeholder="Establishment revenue" type="text" value={this.state.establishment_revenue}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Business hours</label>
+                            <input id='business_hours' onChange={this.handleChange} className="form-control" placeholder="Business hours" type="text" value={this.state.business_hours}/></div>
+                    </div>
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 6</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Risk Info</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Seismic zone</label>
+                            <input id='seismic_zone' onChange={this.handleChange} className="form-control" placeholder="seismic_zone" type="text" value={this.state.seismic_zone}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood plain</label>
+                            <input id='flood_plain' onChange={this.handleChange} className="form-control" placeholder="Flood plain" type="text" value={this.state.flood_plain}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood depth</label>
+                            <input id='flood_depth' onChange={this.handleChange} className="form-control" placeholder="Flood depth" type="text" value={this.state.flood_depth}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood duration</label>
+                            <input id='flood_duration' onChange={this.handleChange} className="form-control" placeholder="Flood duration" type="text" value={this.state.flood_duration}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood water velocity</label>
+                            <input id='flood_velocity' onChange={this.handleChange} className="form-control" placeholder="Flood water velocity" type="text" value={this.state.flood_velocity}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>High wind speed</label>
+                            <input id='high_wind_speed' onChange={this.handleChange} className="form-control" placeholder="High wind speed" type="text" value={this.state.high_wind_speed}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Soil type</label>
+                            <input id='soil_type' onChange={this.handleChange} className="form-control" placeholder="Soil type" type="text" value={this.state.soil_type}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Storage of hazardous materials</label>
+                            <input id='storage_hazardous_materials' onChange={this.handleChange} className="form-control" placeholder="Storage of hazardous materials" type="text" value={this.state.storage_hazardous_materials}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Topography : slope</label>
+                            <input id='topography_slope' onChange={this.handleChange} className="form-control" placeholder="Topography : slope" type="text" value={this.state.topography_slope}/></div>
                     </div>
                 </div>)
             },
