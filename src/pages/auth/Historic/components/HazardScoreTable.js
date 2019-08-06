@@ -40,7 +40,6 @@ class HazardScoreTable extends Component {
     }
 
     modifyResponse (geoid, dataType, allhaz) {
-        console.log('input data', allhaz)
         const cols = ['num_events',
             'total_damage',
             'annualized_damage',
@@ -51,7 +50,6 @@ class HazardScoreTable extends Component {
             'daily_severe_event_prob'
         ]
         if (Object.keys(allhaz).length > 0){
-            console.log('allHaz', allhaz);
             let flipData = {};
                     Object.keys(allhaz[geoid])
                         .filter( f => f !== '$__path' && f !== '0')
@@ -69,7 +67,6 @@ class HazardScoreTable extends Component {
                                 })
                             }
                         });
-            console.log('flipDAta',flipData)
             return flipData;
         }else{
             return null;
@@ -92,11 +89,9 @@ class HazardScoreTable extends Component {
 
         try {
             let updatedResponse = this.modifyResponse(geoid, dataType, this.props[dataType]);
-            console.log('this.props.geograph', this.props[dataType])
             tableData = hazard
                 .map((h,i) => {
                     const data = updatedResponse[h];
-                    console.log('hazData loop', data)
                     return {
                         "hazard": h,
                         "damage": fnum(data.total_damage),
@@ -109,9 +104,6 @@ class HazardScoreTable extends Component {
                     }
                 })
                 .sort((a, b) => b.sort - a.sort)
-            console.log('tableData', tableData)
-            //pageSize = tableData['county'].length;
-            console.log('pagesize', pageSize)
         }
         catch (e) {
 // console.log(e);

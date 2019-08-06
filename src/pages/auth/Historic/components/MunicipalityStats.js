@@ -19,7 +19,6 @@ class MunicipalityStats extends React.Component {
     }
 
     fetchFalcorDeps(geoid = this.state.geoid) {
-        console.log('MunicipalityStats',geoid)
         return this.props.falcor.get(
             ['geo', geoid, [2016], ['population']],
             ['geo', geoid, 'cousubs']
@@ -29,9 +28,7 @@ class MunicipalityStats extends React.Component {
         })
     }
     processData() {
-        console.log('procesData', this.state)
         let data = [];
-        console.log('got pop data', this.props.geoGraph)
         try {
                 data = [
                 {
@@ -54,7 +51,6 @@ class MunicipalityStats extends React.Component {
 
     render() {
         const rows = this.processData();
-        console.log('Data', rows)
         return (
             <SideInfoProjectBox rows={ rows }
                                 title="Municipality Stats"/>

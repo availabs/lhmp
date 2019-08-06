@@ -2,6 +2,7 @@ import { sendSystemMessage } from './messages';
 
 import { AUTH_HOST, AUTH_PROJECT_NAME } from 'config';
 import {falcorGraph} from "../falcorGraph";
+import geo from "./geo";
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -10,6 +11,7 @@ const USER_LOGOUT = 'USER::USER_LOGOUT';
 const AUTH_FAILURE = 'USER::AUTH_FAILURE';
 //const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
 const SET_PLANS_AUTH = 'USER::SET_PLANS_AUTH'
+const SET_PLANS_GEOID = 'USER::SET_PLANS_GEOID'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
 // ------------------------------------
@@ -38,6 +40,13 @@ function setPlanAuth(planId,authedPlans,){
     type: SET_PLANS_AUTH,
     planId,
     authedPlans
+  }
+}
+
+function setPlanGeoid(geoid){
+  return {
+    type: SET_PLANS_GEOID,
+    geoid
   }
 }
 
@@ -96,12 +105,35 @@ export const authProjects = (user) => {
   }
 }
 
+export const authGeoid = (user) => {
+  return (dispatch) => {
+    let groups = user.groups
+    if (localStorage && localStorage.getItem('planId')) {
+      let planId = localStorage.getItem('planId');
+      falcorGraph.get(
+          ['plans','county','byId',planId, ['fips']])
+          .then(geo_response => {
+            let geoid = localStorage.getItem('geoId') ?
+                localStorage.getItem('geoId') :
+                geo_response.json.plans.county.byId[planId]['fips'];
+            dispatch(setPlanGeoid(geoid))
+          })
+    }
+
+  }
+}
+
 export const setActivePlan = (user) =>{
   return (dispatch) =>{
     dispatch(setPlanAuth(user))
   }
 }
 
+export const setActiveGeoid = (user) =>{
+  return (dispatch) =>{
+    dispatch(setPlanGeoid(user))
+  }
+}
 
 export const login = ({ email, password }) => dispatch =>
   fetch(`${AUTH_HOST}/login`, {
@@ -119,6 +151,7 @@ export const login = ({ email, password }) => dispatch =>
         dispatch(sendSystemMessage(res.error));
       } else {
         dispatch(authProjects(res.user))
+        dispatch(authGeoid(res.user))
         dispatch(receiveAuthResponse(res.user));
       }
     });
@@ -145,6 +178,7 @@ export const auth = () => dispatch => {
           dispatch(sendSystemMessage(res.error));
         } else {
           dispatch(authProjects(res.user));
+          dispatch(authGeoid(res.user));
           dispatch(receiveAuthResponse(res.user));
         }
       });
@@ -196,7 +230,8 @@ export const resetPassword = ({ email }) => dispatch => {
 export const actions = {
   login,
   logout,
-  setActivePlan
+  setActivePlan,
+  setActiveGeoid
 };
 
 // -------------------------------------
@@ -209,7 +244,8 @@ let initialState = {
   authed: false,
   attempts: 0,
   activePlan: null,
-  authedPlans: []
+  authedPlans: [],
+  activeGeoid: null
 };
 
 // ------------------------------------
@@ -241,6 +277,15 @@ const ACTION_HANDLERS = {
     if(Object.values(newState.authedPlans).includes(action.planId)) {
       newState.activePlan = action.planId
       localStorage.setItem('planId', newState.activePlan)
+    }
+    return newState
+  },
+
+  [SET_PLANS_GEOID]: (state =initialState, action) => {
+    const newState = Object.assign({}, state)
+    if(action.geoid) {
+      newState.activeGeoid = action.geoid
+      localStorage.setItem('geoId', newState.activeGeoid)
     }
     return newState
   }

@@ -30,7 +30,6 @@ class HazardEventsTable extends React.Component {
                     [this.props.dataType, 'events', this.props.geoid, hazardids, 'top', 'property_damage']
                 )
                     .then(response => {
-                        console.log("RESPONSE:",response)
                         let event_ids = [];
                         hazardids.forEach(hazardid => {
                             const ids = response.json[this.props.dataType].events[this.props.geoid][hazardid].top.property_damage;
@@ -66,16 +65,10 @@ class HazardEventsTable extends React.Component {
 
     processData() {
         const { hazard, dataType, geoid, year } = this.props,
-
             hazardids = hazard ? hazard : this.props.riskIndex.hazards.value,
-
-
-
             graphEventsByGeoid = this.props[dataType].events[geoid],
             graphEventsById = this.props[dataType].events.byId,
-
             data = [];
-
         let event_ids = [];
 
         hazardids.forEach(hazardid => {
@@ -106,7 +99,6 @@ class HazardEventsTable extends React.Component {
 
     render() {
         try {
-            console.log('HazardEventsTable', this.processData())
             return (
                 <TableBox { ...this.processData() }
                           filterKey="narrative"

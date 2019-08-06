@@ -27,7 +27,6 @@ class CousubTotalLossTable extends React.Component {
     fetchFalcorDeps( dataType, geoid ) {
         if(!geoid)geoid = this.props.geoid;
         if(!dataType)dataType = this.props.dataType;
-        console.log('FFD_CTLosTable', dataType, geoid)
         return this.props.falcor.get(
             ['riskIndex', 'hazards'],
             ['geo', geoid, 'cousubs']
@@ -43,7 +42,6 @@ class CousubTotalLossTable extends React.Component {
     }
 
     processData({ dataType, geoid }=this.props) {
-        console.log('PD_CTLosTable', dataType, geoid)
         let geoids = this.props.geoGraph[geoid].cousubs.value,
             data = {},
             columns = ["name", "total damage", "fatalities"];
@@ -66,14 +64,12 @@ class CousubTotalLossTable extends React.Component {
             d["total damage"] = fnum(d["total damage"]);
         })
         data.sort((a, b) => b.sort - a.sort)
-        console.log('data',data)
         return { data, columns }
     }
 
     render() {
         try {
             let pData = this.processData();
-            console.log('pdata', pData)
             let linksToPass = {};
             linksToPass['name'] = pData.data;
             return (
