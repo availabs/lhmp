@@ -36,6 +36,12 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
                                 View
                             </Link>
                         </td>
+                        <td>
+                            <Link className="btn btn-sm btn-outline-primary"
+                                  to={ `assets/edit/${row.id}` }>
+                                Edit
+                            </Link>
+                        </td>
 
                     </tr>
                 ))

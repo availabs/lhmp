@@ -1,0 +1,472 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { reduxFalcor } from 'utils/redux-falcor'
+import get from "lodash.get";
+import Wizard from 'components/light-admin/wizard'
+import Element from 'components/light-admin/containers/Element'
+
+
+class AssetsEdit extends React.Component{
+    constructor(props){
+        super(props)
+
+        this.state = {
+            prop_class : '',
+            replacement_value : '',
+            num_units : '',
+            basement : '',
+            num_stories : '',
+            building_type : '',
+            roof_type: '',
+            flood_zone: '',
+            flood_depth: '',
+            flood_velocity: '',
+            flood_base_elevation: '',
+            land_av: '',
+            total_av: '',
+            full_market_val: '',
+            owner_type: '',
+            address: '',
+            bldg_style: '',
+            sqft_living : '',
+            nbr_kitchens : '',
+            nbr_full_baths: '',
+            nbr_bedrooms: '',
+            sewer_type: '',
+            water_supply: '',
+            utilities: '',
+            fuel_type: '',
+            heat_type: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.propClassDropDown = this.propClassDropDown.bind(this);
+        this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
+        this.floodZoneDropDown = this.floodZoneDropDown.bind(this);
+        this.ownerTypeDropDown = this.ownerTypeDropDown.bind(this);
+        this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
+        this.sewerTypeDropDown = this.sewerTypeDropDown.bind(this);
+        this.waterSupplyDropDown = this.waterSupplyDropDown.bind(this);
+        this.utilitiesDropDown = this.utilitiesDropDown.bind(this);
+        this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
+        this.heatTypeDropDown = this.heatTypeDropDown.bind(this)
+    }
+
+    handleChange(e) {
+        console.log('---',e.target.id,e.target.value,this.state);
+        this.setState({ ...this.state, [e.target.id]: e.target.value });
+    }
+
+    fetchFalcorDeps(){
+        return this.props.falcor.get(['parcel','meta',['prop_class','owner_type','bldg_style','sewer_type','water_supply','utilities','heat_type','fuel_type']])
+            .then(response =>{
+                return response
+            })
+    }
+
+    propClassDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined){
+            const graph = this.props.parcelMetaData['prop_class'];
+            let propClassDropDownData = [];
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    propClassDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='prop_type' onChange={this.handleChange} value={this.state.prop_class}>
+                    <option default>--Select Prop Class--</option>
+                    <option className="form-control" key={0} value="None">No Prop Class Selected</option>
+                    {
+                        propClassDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    //TODO : - yet to be entered in DB
+    buildingTypeDropDown(){
+        let buildingTypeDropDownData = [];
+        return(
+            <select className="form-control justify-content-sm-end" id='building_type' onChange={this.handleChange} value={this.state.building_type}>
+                <option default>--Select Building Type--</option>
+                <option className="form-control" key={0} value="None">No Building Type Selected</option>
+                {
+                    buildingTypeDropDownData.map((data,i) =>{
+                        return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                    })
+                }
+            </select>
+        )
+    }
+
+    //TODO : yet to be entered in database
+    floodZoneDropDown(){
+        let floodZoneDropDownData = [];
+        return(
+            <select className="form-control justify-content-sm-end" id='flood_zone' onChange={this.handleChange} value={this.state.flood_zone}>
+                <option default>--Select Flood Zone--</option>
+                <option className="form-control" key={0} value="None">No Flood Zone Selected</option>
+                {
+                    floodZoneDropDownData.map((data,i) =>{
+                        return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                    })
+                }
+            </select>
+        )
+    }
+    
+    ownerTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['owner_type'] !== undefined){
+            const graph = this.props.parcelMetaData['owner_type'];
+            let ownerTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    ownerTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='owner_type' onChange={this.handleChange} value={this.state.owner_type}>
+                    <option default>--Select Owner Type--</option>
+                    <option className="form-control" key={0} value="None">No Owner Type Selected</option>
+                    {
+                        ownerTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    buildingStyleDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['bldg_style']){
+            const graph = this.props.parcelMetaData['bldg_style'];
+            let buildingStyleDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    buildingStyleDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='bldg_style' onChange={this.handleChange} value={this.state.bldg_style}>
+                    <option default>--Select Building Style--</option>
+                    <option className="form-control" key={0} value="None">No Building Style Selected</option>
+                    {
+                        buildingStyleDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    sewerTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['sewer_type']){
+            const graph = this.props.parcelMetaData['sewer_type'];
+            let sewerTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    sewerTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='sewer_type' onChange={this.handleChange} value={this.state.sewer_type}>
+                    <option default>--Select Sewer Type--</option>
+                    <option className="form-control" key={0} value="None">No Sewer Type Selected</option>
+                    {
+                        sewerTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    waterSupplyDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['water_supply']){
+            const graph = this.props.parcelMetaData['water_supply'];
+            let waterSupplyDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    waterSupplyDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='water_supply' onChange={this.handleChange} value={this.state.water_supply}>
+                    <option default>--Select Water Supply--</option>
+                    <option className="form-control" key={0} value="None">No Water Supply Selected</option>
+                    {
+                        waterSupplyDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    utilitiesDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['utilities']){
+            const graph = this.props.parcelMetaData['utilities'];
+            let utilitiesDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    utilitiesDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='utilities' onChange={this.handleChange} value={this.state.utilities}>
+                    <option default>--Select Utilities--</option>
+                    <option className="form-control" key={0} value="None">No Utilities Selected</option>
+                    {
+                        utilitiesDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+    
+    heatTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['heat_type']){
+            const graph = this.props.parcelMetaData['heat_type'];
+            let heatTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    heatTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='heat_type' onChange={this.handleChange} value={this.state.heat_type}>
+                    <option default>--Select Heat Type--</option>
+                    <option className="form-control" key={0} value="None">No Heat Type Selected</option>
+                    {
+                        heatTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+    
+    fuelTypeDropDown(){
+        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['fuel_type']){
+            const graph = this.props.parcelMetaData['fuel_type'];
+            let fuelTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
+                item.forEach(i =>{
+                    fuelTypeDropDownData.push(i)
+                })
+            })
+            return(
+                <select className="form-control justify-content-sm-end" id='fuel_type' onChange={this.handleChange} value={this.state.fuel_type}>
+                    <option default>--Select Fuel Type--</option>
+                    <option className="form-control" key={0} value="None">No Fuel Type Selected</option>
+                    {
+                        fuelTypeDropDownData.map((data,i) =>{
+                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    render(){
+        const wizardSteps = [
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 1</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Building By Characteristics</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Prop Type</label>
+                            {this.propClassDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Replacement value</label>
+                            <input id='replacement_value' onChange={this.handleChange} className="form-control" placeholder="Replacement value" type="text" value={this.state.replacement_value}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of Units</label>
+                            <input id='num_units' onChange={this.handleChange} className="form-control" placeholder="Number of units" type="text" value={this.state.num_units}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Basement</label>
+                            <input id='basement' onChange={this.handleChange} className="form-control" placeholder="Basement" type="text" value={this.state.basement}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of Stories</label>
+                            <input id='num_stories' onChange={this.handleChange} className="form-control" placeholder="Number of stories" type="text" value={this.state.num_stories}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Building Type</label>
+                            {this.buildingTypeDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Roof Type</label>
+                            <input id='roof_type' onChange={this.handleChange} className="form-control" placeholder="Roof Type" type="text" value={this.state.roof_type}/></div>
+                    </div>
+
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 2</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Building By Risks</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood Zone</label>
+                            {this.floodZoneDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood depth</label>
+                            <input id='flood_depth' onChange={this.handleChange} className="form-control" placeholder="Flood depth" type="text" value={this.state.flood_depth}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood velocity</label>
+                            <input id='flood_velocity' onChange={this.handleChange} className="form-control" placeholder="Flood velocity" type="text" value={this.state.flood_velocity}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Flood base elevation</label>
+                            <input id='flood_base_elevation' onChange={this.handleChange} className="form-control" placeholder="Flood base elevation" type="text" value={this.state.flood_base_elevation}/></div>
+                    </div>
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 3</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Parcels By General Info</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Prop Type</label>
+                            {this.propClassDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Land assessed value</label>
+                            <input id='land_av' onChange={this.handleChange} className="form-control" placeholder="Land assessed value" type="text" value={this.state.land_av}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Total assessed value</label>
+                            <input id='total_av' onChange={this.handleChange} className="form-control" placeholder="Total assessed value" type="text" value={this.state.total_av}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Full market value</label>
+                            <input id='full_market_val' onChange={this.handleChange} className="form-control" placeholder="Full market value" type="text" value={this.state.full_market_val}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Owner type</label>
+                            {this.ownerTypeDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Address</label>
+                            <input id='address' onChange={this.handleChange} className="form-control" placeholder="Address" type="text" value={this.state.address}/></div>
+                    </div>
+
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 3</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Parcels By Structural Info</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Building style</label>
+                            {this.buildingStyleDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Square foot living</label>
+                            <input id='sqft_living' onChange={this.handleChange} className="form-control" placeholder="Square foot living" type="text" value={this.state.sqft_living}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of kitchens</label>
+                            <input id='nbr_kitchens' onChange={this.handleChange} className="form-control" placeholder="Number of kitchens" type="text" value={this.state.nbr_kitchens}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of full bathrooms</label>
+                            <input id='nbr_full_baths' onChange={this.handleChange} className="form-control" placeholder="Number of full bathrooms" type="text" value={this.state.nbr_full_baths}/></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Number of bedrooms</label>
+                            <input id='nbr_bedrooms' onChange={this.handleChange} className="form-control" placeholder="Number of bedrooms" type="text" value={this.state.nbr_bedrooms}/></div>
+                    </div>
+                </div>)
+            },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 4</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Parcels By Services Info</span></span>),
+                content: (<div className="row">
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Sewer Type</label>
+                            {this.sewerTypeDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Water Supply</label>
+                            {this.waterSupplyDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Utilities</label>
+                            {this.utilitiesDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Heat Type</label>
+                            {this.heatTypeDropDown()}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Fuel Type</label>
+                            {this.fuelTypeDropDown()}</div>
+                    </div>
+                </div>)
+            },
+
+        ]
+        return (
+            <div className='container'>
+                <Element>
+                    <h6 className="element-header">Edit Assets</h6>
+                    <Wizard steps={wizardSteps} submit={this.onSubmit}/>
+                </Element>
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = (state,ownProps) => {
+    return {
+        geoid : ownProps.geoid,
+        parcelMetaData : get(state.graph,'parcel.meta',{})
+    }
+};
+
+const mapDispatchToProps =  {
+//sendSystemMessage,
+};
+
+export default [{
+    path: '/assets/edit/:assetId',
+        name: 'Edit Actions',
+    mainNav: false,
+    auth: true,
+    exact: true,
+    breadcrumbs: [
+    { name: 'Assets', path: '/assets/' },
+    { param: 'assetId', path: '/assets/edit/' }
+],
+    menuSettings: {
+    image: 'none',
+        scheme: 'color-scheme-light',
+        position: 'menu-position-left',
+        layout: 'menu-layout-compact',
+        style: 'color-style-default'
+},
+    component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsEdit))
+}
+]

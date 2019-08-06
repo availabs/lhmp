@@ -227,7 +227,7 @@ class AssetsIndex extends React.Component {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-6">
+                    <div className="col-7">
                       <div className='element-wrapper'>
                         <div className='element-box' style={{height:'2800px'}}>
                           <span><h4>{this.state.geoid} : Assets Table</h4></span>
