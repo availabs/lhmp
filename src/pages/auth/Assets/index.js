@@ -114,7 +114,25 @@ class AssetsIndex extends React.Component {
     this.setState({filter:newFilter})
   }
 
-  componentDidUpdate(prevProps,oldState){
+  componentDidMount(prevProps,oldState){
+    if(this.props.activePlan && !this.state.geoid){
+      return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
+        .then(response => {
+          return response.json.plans.county.byId[this.props.activePlan].fips
+        }).then(fips => {
+            return this.props.falcor.get(['geo',[fips],'cousubs'],['geo',[fips],['name']])
+                .then(response => response.json.geo[fips].cousubs)
+                .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]))
+                .then(res => {
+                  this.setState({
+                    geoid : fips
+                  })
+                  return res
+                })
+          })
+    }
+
+  }  componentDidUpdate(prevProps,oldState){
     if(this.props.activePlan && !this.state.geoid){
       return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
         .then(response => {
