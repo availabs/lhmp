@@ -14,15 +14,6 @@ const FORMAT = format("$,.0f");
 
 class CountyHeroStats extends React.Component {
     fetchFalcorDeps({ dataType, geoid }=this.props) {
-        const cols = ['num_events',
-            'total_damage',
-            'annualized_damage',
-            'annualized_num_events',
-            'num_severe_events',
-            'annualized_num_severe_events',
-            'daily_event_prob',
-            'daily_severe_event_prob'
-        ]
         return this.props.falcor.get(
             ['riskIndex', 'hazards']
         )
@@ -30,7 +21,7 @@ class CountyHeroStats extends React.Component {
             .then(hazards =>
                 this.props.falcor.get(
                     ['riskIndex', 'meta', hazards, 'name'],
-                    [dataType, geoid, hazards, 'allTime', cols]
+                    [dataType, geoid, hazards, 'allTime', 'annualized_damage']
                 )
             )
     }

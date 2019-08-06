@@ -48,7 +48,7 @@ class CMS_BodyViewer extends React.Component {
                   		options={ { html: true } }/>
 				</div>
 			:
-				null
+				<div>{ `There was an error: ${ error }` }</div>
 		)
 	}
 }

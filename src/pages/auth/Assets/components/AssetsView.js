@@ -4,6 +4,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
+import {Link} from "react-router-dom";
 const CHARACTERISTICS = [
     'prop_class',
     'replacement_value',
@@ -51,7 +52,7 @@ const SERVICES = [
     'fuel_type_desc'
 ];
 
-class AssetsContent extends React.Component{
+class AssetsView extends React.Component{
     constructor(props){
         super(props)
         this.state = {
@@ -357,7 +358,15 @@ class AssetsContent extends React.Component{
             <div className='container'>
                 <Element>
                     <form>
-                        <h6 className="element-header">{this.state.address}</h6>
+                        <h6 className="element-header">{this.state.address}
+                        <span style={{float:'right'}}>
+                        <Link
+                            className="btn btn-sm btn-primary"
+                            to={ `/assets/edit/${this.props.match.params.assetId}` } >
+                                Edit Asset
+                        </Link>
+                        </span>
+                        </h6>
                     </form>
                     <div className="row">
                         <div className="col-md-6 col-xxxl-16">
@@ -416,6 +425,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsContent))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsView))
     }
 ]
