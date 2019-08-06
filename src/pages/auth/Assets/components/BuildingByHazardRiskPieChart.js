@@ -14,11 +14,11 @@ class BuildingByHazardRiskPieChart extends React.Component{
     }
 
     fetchFalcorDeps(){
-        return this.props.falcor.get(['building','hazard','meta'])
+        return this.props.falcor.get(['building','hazard','meta','risk_zones'])
             .then(response => {
                 const graph = response.json.building.hazard.meta;
                 if(graph){
-                    let zones = graph[this.state.hazardRisk].zones;
+                    let zones = graph.risk_zones[this.state.hazardRisk].zones;
                     return zones
                 }
             })
@@ -37,8 +37,8 @@ class BuildingByHazardRiskPieChart extends React.Component{
             '#F7C9B9', '#F4F3AF', '#C2ECF3', '#F4AD4D', '#2AF70E', '#D8AFE7', '#88DE73', '#718CD1', '#EA6A7D'];
         let geoid = this.props.geoid.map((geoid) => geoid);
         //let geoid = this.props.geoid;
-        if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.data[this.props.geoid]['hazardRisk']!==undefined && this.props.replacement_value ){
-            let graph = this.props.data[this.props.geoid]['hazardRisk']
+        if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.data[this.props.geoid]['hazardRisk']!==undefined){
+            console.log('this.props',this.props.data);
             let buildingHazardRiskPieChartData = {
                 "name":'HazardRisk',
                 "color":"hsl(116, 70%, 50%)",
@@ -50,6 +50,7 @@ class BuildingByHazardRiskPieChart extends React.Component{
                     }
                 ]
             };
+            let graph = this.props.data[this.props.geoid]['hazardRisk']
             Object.keys(graph).forEach((risk) =>{
                 let zoneNames = Object.keys(graph[risk].zones)
                 zoneNames.forEach((zone,i) =>{
@@ -92,7 +93,6 @@ class BuildingByHazardRiskPieChart extends React.Component{
 
     }
 
-
     render(){
         return(
             <div>
@@ -106,6 +106,7 @@ class BuildingByHazardRiskPieChart extends React.Component{
         count : false,
         replacement_value: false
     }
+
 }
 
 const mapStateToProps = (state,ownProps) => {

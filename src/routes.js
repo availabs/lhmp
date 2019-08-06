@@ -11,6 +11,7 @@ import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import Plans from 'pages/auth/plans/view'
 import PlanPage from 'pages/auth/plans/planPage'
 import PlanIndex from 'components/plan/'
+
 import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import Roles from 'pages/auth/Roles/'
@@ -25,6 +26,7 @@ const routes = [
   Landing,
   Home,
   Login,
+
    ...ActionWorksheet,
    ...ActionsIndex,
    ...ActionsView,

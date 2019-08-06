@@ -206,6 +206,7 @@ class AssetsIndex extends React.Component {
   render () {
     return (
       <div className='container'>
+
             <Element>
               <div className='content-i'>
                 <div className='content-box'>
@@ -226,7 +227,7 @@ class AssetsIndex extends React.Component {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-md-6 col-xxxl-8">
+                    <div className="col-6">
                       <div className='element-wrapper'>
                         <div className='element-box' style={{height:'2800px'}}>
                           <span><h4>{this.state.geoid} : Assets Table</h4></span>
@@ -315,6 +316,10 @@ export default [{
   path: '/assets',
   exact: true,
   mainNav: true,
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Assets', path: '/assets/' }
+  ],
   menuSettings: {
     image: 'none',
     scheme: 'color-scheme-light',
