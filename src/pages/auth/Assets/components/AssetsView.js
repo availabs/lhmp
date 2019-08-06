@@ -92,10 +92,19 @@ class AssetsView extends React.Component{
             if(graph){
                 Object.keys(graph).forEach((item)=>{
                     if(CHARACTERISTICS.includes(item)){
-                        tableData.push({
-                            "characteristic" : item,
-                            "value": graph[item] || 'Not available'
-                        })
+                        if(graph[item] === true){
+                            tableData.push({
+                                "characteristic" : item,
+                                "value": graph[item].toString()
+                            })
+                        }
+                        else{
+                            tableData.push({
+                                "characteristic" : item,
+                                "value": graph[item] || 'Not available'
+                            })
+                        }
+
                     }
 
                 })
