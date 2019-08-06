@@ -16,17 +16,18 @@ import {
 
 class FemaDisasterDeclarationsTable extends React.Component {
 
-    fetchFalcorDeps() {
-        const { hazard, geoid } = this.props;
-        console.log('FemaDisaster geoid', geoid)
+    fetchFalcorDeps(hazard, geoid) {
+        if (!hazard) hazard = this.props.hazard;
+        if (!geoid) geoid = this.props.geoid;
+
         return this.props.falcor.get(
             ['riskIndex', 'hazards']
         )
             .then(response => response.json.riskIndex.hazards)
             .then(hazards => {
-                console.log('hazards, haz', hazard)
+                console.log('hazards, haz 1', hazard)
                 hazards = hazard ? hazard : hazards;
-                console.log('hazards, haz', hazards)
+                console.log('hazards, haz 2', hazards)
 
 // `femaDisaster[{keys:geoids}][{keys:hazardids}][{integers:years}].length`
                 return this.props.falcor.get(
@@ -71,7 +72,12 @@ class FemaDisasterDeclarationsTable extends React.Component {
                     })
             })
     }
-
+    componentDidUpdate(prevProps) {
+        if (prevProps.geoid !== this.props.geoid){
+            this.setState({geoid: this.props.geoid})
+            this.fetchFalcorDeps(this.props.hazards, this.props.geoid)
+        }
+    }
     getHazardName(hazard) {
         try {
             return this.props.riskIndexGraph.meta[hazard].name;
@@ -118,7 +124,6 @@ class FemaDisasterDeclarationsTable extends React.Component {
 
     render() {
         try {
-            console.log('FEmaDisaster', this.processData())
             return (
                 <TableBox { ...this.processData() }
                           columnTypes={ this.props.columnTypes }

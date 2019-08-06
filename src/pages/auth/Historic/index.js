@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
+import {authGeoid} from "../../../store/modules/user";
 import CountyHeroStats from "./components/CountyHeroStats"
 import GeographyScoreBarChart from "./components/GeographyScoreBarChart"
 import MunicipalityStats from "./components/MunicipalityStats"
@@ -38,50 +39,45 @@ class Historic extends React.Component {
             geoLevel: this.setGeoLevel(this.props.geoid.length),
             dataType: 'severeWeather',
             colorScale: getColorScale([1, 2]),
-            hazards: 'riverine'
+            hazards: ['riverine']
         }
     }
 
     fetchFalcorDeps(geoid, geoLevel, dataType ) {
-        let planId = localStorage.getItem('planId')
-        /*return this.props.falcor.get(
-            ['plans','county','byId',planId, ['fips']]
-        ).then(geo_response => {
-
-        })*/
-        //let geoid = geo_response.json.plans.county.byId.planId['fips'];
-        if(!geoid)geoid = this.props.geoid;
-        if(!geoLevel)geoLevel = this.state.geoLevel;
-        if(!dataType)dataType = this.state.dataType;
-        return this.props.falcor.get(
-            ['geo', geoid, 'name'],
-            ['geo', geoid, 'cousubs'],
-            ['riskIndex', 'hazards'],
-        )
-            .then(response => {
-                console.log('response_1',response)
-                const geoids = response.json.geo[geoid]['cousubs'],
-                    hazards = response.json.riskIndex.hazards,
-                    requests = [];
-                this.setState({ colorScale: getColorScale(hazards) });
-                this.setState({ hazards: hazards });
-                return this.props.falcor.get(
-                    ['riskIndex', 'meta', hazards, ['id', 'name']],
-                    ['geo', geoids, ['name']],
-                    ['riskIndex', 'meta', hazards, ['id', 'name']],
-                    [dataType, geoid, hazards, { from:EARLIEST_YEAR, to: LATEST_YEAR }, ['property_damage', 'total_damage']],
-                )
-            })
-
+            if(!geoid)geoid = this.props.geoid;
+            if(!geoLevel)geoLevel = this.state.geoLevel;
+            if(!dataType)dataType = this.state.dataType;
+            return this.props.falcor.get(
+                ['geo', geoid, 'name'],
+                ['geo', geoid, 'cousubs'],
+                ['riskIndex', 'hazards'],
+            )
+                .then(response => {
+                    console.log('response_1',response)
+                    const geoids = response.json.geo[geoid]['cousubs'],
+                        hazards = response.json.riskIndex.hazards,
+                        requests = [];
+                    this.setState({ colorScale: getColorScale(hazards) });
+                    this.setState({ hazards: hazards });
+                    return this.props.falcor.get(
+                        ['riskIndex', 'meta', hazards, ['id', 'name']],
+                        ['geo', geoids, ['name']],
+                        ['riskIndex', 'meta', hazards, ['id', 'name']],
+                        [dataType, geoid, hazards, { from:EARLIEST_YEAR, to: LATEST_YEAR }, ['property_damage', 'total_damage']],
+                    )
+                })
     }
 
     componentDidUpdate(prevProps) {
+        console.log('/historic updating data', this.props)
+
         if (prevProps.geoid !== this.props.geoid){
             this.setState(
                 {
                     geoid: this.props.geoid,
                     geoLevel: this.setGeoLevel(this.props.geoid.length)
                 });
+            console.log('/historic: updating data')
             this.fetchFalcorDeps(this.props.geoLevel, this.props.dataType, this.props.geoid)
         }
     }
@@ -231,15 +227,21 @@ class Historic extends React.Component {
 }
 
 const mapStateToProps = (state,ownProps) => {
-    console.log('ownProps', ownProps)
+    console.log('ownProps', state)
     return {
         geoGraph: state.graph.geo,
         router: state.router,
-        geoid: ownProps.computedMatch.params.geoid ? ownProps.computedMatch.params.geoid : '36001'
-    };
+        geoid: ownProps.computedMatch.params.geoid ?
+                ownProps.computedMatch.params.geoid
+                : state.user.activeGeoid ?
+                    state.user.activeGeoid :
+                    localStorage.getItem('geoId')
+};
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    authGeoid
+};
 export default [{
     icon: 'os-icon-pencil-2',
     path: '/historic/',
