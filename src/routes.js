@@ -17,7 +17,6 @@ import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import Roles from 'pages/auth/Roles/'
-import AssetsContent from "./pages/auth/Assets/components/AssetsContent";
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Logout from './pages/Logout'
