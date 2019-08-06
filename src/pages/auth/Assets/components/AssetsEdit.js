@@ -106,7 +106,7 @@ class AssetsEdit extends React.Component{
                     <option className="form-control" key={0} value="None">No Prop Class Selected</option>
                     {
                         propClassDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                            return(<option className="form-control" key={i+1} value={parseInt(data.value)}>{data.name}</option>)
                         })
                     }
                 </select>
@@ -176,6 +176,8 @@ class AssetsEdit extends React.Component{
     }
 
     onSubmit(event){
+        event.preventDefault();
+        let args = []
         if(this.props.match.params.assetId){
             let attributes = Object.keys(this.state)
             let updated_data ={};
@@ -198,7 +200,7 @@ class AssetsEdit extends React.Component{
                 }
             })
             .then(response => {
-                this.props.sendSystemMessage(`Action worksheet was successfully edited.`, {type: "success"});
+                this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
             })
         }
 
@@ -346,7 +348,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Inventory replacement value</label>
-                            <input id='inventory_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Inventory replacement value" type="text" value={this.state.contents_replacement_value}/></div>
+                            <input id='inventory_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Inventory replacement value" type="text" value={this.state.inventory_replacement_value}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Establishment revenue</label>
