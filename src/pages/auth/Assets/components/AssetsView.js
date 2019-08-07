@@ -5,52 +5,59 @@ import get from "lodash.get";
 import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
 import {Link} from "react-router-dom";
-const CHARACTERISTICS = [
+const BASIC_INFO = [
     'prop_class',
     'replacement_value',
-    'num_units',
-    'basement',
-    'num_stories',
-    'building_type',
-    'roof_type'
-];
-const RISKS = [
-    'flood_zone',
-    'flood_depth',
-    'flood_velocity',
-    'flood_base_elevation'
-];
-const GENERAL_INFO = [
-    'parcel_addr',
-    'muni_name',
-    'loc_zip',
-    'prop_class',
-    'land_av',
-    'total_av',
-    'full_market_val',
-    'owner_type',
+    'critical_infrastructure',
     'address'
 ];
-const STRUCTURAL = [
+const OCCUPANCY_INFO = [
+    'num_residents',
+    'num_employees',
+    'num_occupants',
+    'num_vehicles_inhabitants'
+];
+const STRUCTURAL_INFO = [
+    'num_units',
+    'basement',
+    'building_type',
+    'roof_type',
+    'height',
+    'num_stories',
+    'structure_type',
     'bldg_style',
-    'bldg_style_desc',
     'sqft_living',
     'nbr_kitchens',
     'nbr_full_baths',
-    'nbr_bedrooms'
+    'nbr_bedrooms',
+    'first_floor_elevation'
+
 ];
-const SERVICES = [
-    'sewer_type',
-    'sewer_desc',
-    'water_supply',
-    'water_desc',
-    'utilities',
-    'utilities_desc',
-    'heat_type',
-    'heat_type_desc',
-    'fuel_type',
-    'fuel_type_desc'
+const SERVICES_INFO = [
+    'heat_type'
 ];
+
+const COMMERCIAL_INFO = [
+    'naics_code',
+    'census_industry_code',
+    'replacement_value',
+    'contents_replacement_value',
+    'inventory_replacement_value',
+    'establishment_revenue',
+    'business_hours'
+
+];
+const RISK_INFO = [
+    'seismic_zone',
+    'flood_plain',
+    'flood_depth',
+    'flood_duration',
+    'flood_velocity',
+    'high_wind_speed',
+    'soil_type',
+    'storage_hazardous_materials',
+    'topography'
+]
 
 class AssetsView extends React.Component{
     constructor(props){
@@ -58,11 +65,12 @@ class AssetsView extends React.Component{
         this.state = {
             address : ''
         }
-        this.buildingTableCharacteristics = this.buildingTableCharacteristics.bind(this);
-        this.buildingTableRisks = this.buildingTableRisks.bind(this);
-        this.parcelTableGeneralInfo = this.parcelTableGeneralInfo.bind(this);
-        this.parcelTableStructuralInfo = this.parcelTableStructuralInfo.bind(this);
-        this.parcelTableServicesInfo = this.parcelTableServicesInfo.bind(this);
+        this.basicInfo = this.basicInfo.bind(this);
+        this.occupancyInfo = this.occupancyInfo.bind(this);
+        this.structuralInfo = this.structuralInfo.bind(this);
+        this.servicesInfo = this.servicesInfo.bind(this);
+        this.commercialInfo = this.commercialInfo.bind(this);
+        this.riskInfo = this.riskInfo.bind(this);
     }
 
     componentWillMount(){
@@ -72,26 +80,27 @@ class AssetsView extends React.Component{
     fetchFalcorDeps(){
         if(this.props.match.params.assetId !== null)
         return this.props.falcor.get(
-            ['building','byId',[this.props.match.params.assetId],CHARACTERISTICS],
-            ['building','byId',[this.props.match.params.assetId],RISKS],
-            ['parcel','byId',[this.props.match.params.assetId],GENERAL_INFO],
-            ['parcel','byId',[this.props.match.params.assetId],STRUCTURAL],
-            ['parcel','byId',[this.props.match.params.assetId],SERVICES]
+            ['building','byId',[this.props.match.params.assetId],BASIC_INFO],
+            ['building','byId',[this.props.match.params.assetId],OCCUPANCY_INFO],
+            ['building','byId',[this.props.match.params.assetId],STRUCTURAL_INFO],
+            ['building','byId',[this.props.match.params.assetId],SERVICES_INFO],
+            ['building','byId',[this.props.match.params.assetId],COMMERCIAL_INFO],
+            ['building','byId',[this.props.match.params.assetId],RISK_INFO]
         )
             .then(response =>{
                 this.setState({
-                    address : response.json.parcel.byId[this.props.match.params.assetId].address.toUpperCase()
+                    address : response.json.building.byId[this.props.match.params.assetId].address.toUpperCase()
                 });
                 return response
             })
     }
-    buildingTableCharacteristics(){
+    basicInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
             let graph = this.props.buildingData[this.props.match.params.assetId];
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if(CHARACTERISTICS.includes(item)){
+                    if(BASIC_INFO.includes(item)){
                         if(graph[item] === true){
                             tableData.push({
                                 "characteristic" : item,
@@ -112,7 +121,7 @@ class AssetsView extends React.Component{
             return(
                 <div>
                     <Element>
-                        <h6>Buildings By Characteristics</h6>
+                        <h4>Basic Info</h4>
                         <div className="table-responsive">
                             <table className="table table lightBorder">
                                 <thead>
@@ -154,13 +163,13 @@ class AssetsView extends React.Component{
         }
 
     }
-    buildingTableRisks(){
+    occupancyInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
             let graph = this.props.buildingData[this.props.match.params.assetId];
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if(RISKS.includes(item)){
+                    if(OCCUPANCY_INFO.includes(item)){
                         tableData.push({
                             "risk":item,
                             "value":graph[item] || 'Not available'
@@ -171,7 +180,7 @@ class AssetsView extends React.Component{
             return(
                 <div>
                     <Element>
-                        <h6>Buildings By Risks</h6>
+                        <h4>Occupancy Info</h4>
                         <div className="table-responsive">
                             <table className="table table lightBorder">
                                 <thead>
@@ -203,13 +212,13 @@ class AssetsView extends React.Component{
         }
     }
 
-    parcelTableGeneralInfo(){
-        if(this.props.parcelData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.parcelData[this.props.match.params.assetId];
+    structuralInfo(){
+        if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
+            let graph = this.props.buildingData[this.props.match.params.assetId];
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if (item !== 'parcel_addr' && item !== 'muni_name' && item !== 'loc_zip' && GENERAL_INFO.includes(item)){
+                    if (item !== 'parcel_addr' && item !== 'muni_name' && item !== 'loc_zip' && STRUCTURAL_INFO.includes(item)){
                         this.address =  item['address'];
                         tableData.push({
                             "attribute":item,
@@ -222,7 +231,7 @@ class AssetsView extends React.Component{
             return(
                 <div>
                     <Element>
-                        <h6>Parcels By General Info</h6>
+                        <h4>Structural Info</h4>
                         <div className="table-responsive">
                             <table className="table table lightBorder">
                                 <thead>
@@ -264,13 +273,13 @@ class AssetsView extends React.Component{
         }
     }
 
-    parcelTableStructuralInfo(){
-        if(this.props.parcelData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.parcelData[this.props.match.params.assetId];
+    servicesInfo(){
+        if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
+            let graph = this.props.buildingData[this.props.match.params.assetId];
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if (STRUCTURAL.includes(item))
+                    if (SERVICES_INFO.includes(item))
                         tableData.push({
                             "attribute":item,
                             "value" : graph[item] || 'Not available'
@@ -281,7 +290,7 @@ class AssetsView extends React.Component{
             return(
                 <div>
                     <Element>
-                        <h6>Parcels By Structural Info</h6>
+                        <h4>Services Info</h4>
                         <div className="table-responsive">
                             <table className="table table lightBorder">
                                 <thead>
@@ -313,13 +322,13 @@ class AssetsView extends React.Component{
         }
     }
 
-    parcelTableServicesInfo(){
-        if(this.props.parcelData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.parcelData[this.props.match.params.assetId];
+    commercialInfo(){
+        if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
+            let graph = this.props.buildingData[this.props.match.params.assetId];
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if (SERVICES.includes(item))
+                    if (COMMERCIAL_INFO.includes(item))
                         tableData.push({
                             "attribute":item,
                             "value" : graph[item] || 'Not available'
@@ -330,7 +339,7 @@ class AssetsView extends React.Component{
             return(
                 <div>
                     <Element>
-                        <h6>Parcels By Services Info</h6>
+                        <h4>Commercial Info</h4>
                         <div className="table-responsive">
                             <table className="table table lightBorder">
                                 <thead>
@@ -342,13 +351,25 @@ class AssetsView extends React.Component{
                                 <tbody>
                                 {
                                     tableData.map((data)=>{
-                                        return(
-                                            <tr>
-                                                <td>{data.attribute}</td>
-                                                <td>{data.value}</td>
-                                            </tr>
-                                        )
-                                    })
+                                        if(data.attribute === 'replacement_value' || data.attribute === 'inventory_replacement_value' || data.attribute === 'contents_replacement_value' || data.attribute === 'establishment_revenue'){
+                                            return(
+                                                <tr>
+                                                    <td>{data.attribute}</td>
+                                                    <td>${data.value}</td>
+                                                </tr>
+                                            )
+                                        }
+                                        else{
+                                            return(
+                                                <tr>
+                                                    <td>{data.attribute}</td>
+                                                    <td>{data.value}</td>
+                                                </tr>
+                                            )
+                                        }
+
+                                })
+
                                 }
                                 </tbody>
                             </table>
@@ -359,6 +380,60 @@ class AssetsView extends React.Component{
                 </div>
             )
         }
+
+
+    }
+
+    riskInfo(){
+        if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
+            let graph = this.props.buildingData[this.props.match.params.assetId];
+            let tableData = [];
+            if(graph){
+                Object.keys(graph).forEach((item)=>{
+                    if (RISK_INFO.includes(item))
+                        tableData.push({
+                            "attribute":item,
+                            "value" : graph[item] || 'Not available'
+                        })
+                });
+            }
+
+            return(
+                <div>
+                    <Element>
+                        <h4>Risk Info</h4>
+                        <div className="table-responsive">
+                            <table className="table table lightBorder">
+                                <thead>
+                                <tr>
+                                    <th>ATTRIBUTE</th>
+                                    <th>VALUE</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    tableData.map((data)=>{
+
+                                        return(
+                                            <tr>
+                                                <td>{data.attribute}</td>
+                                                <td>{data.value}</td>
+                                            </tr>
+                                        )
+
+                                    })
+
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                        </div>
+                    </Element>
+                </div>
+            )
+        }
+
 
     }
 
@@ -381,19 +456,18 @@ class AssetsView extends React.Component{
                         <div className="col-md-6 col-xxxl-16">
                             <div className='element-wrapper'>
                                 <div className='element-box'>
-                                    <span><h4>Buildings Data</h4></span>
-                                    {this.buildingTableCharacteristics()}
-                                    {this.buildingTableRisks()}
+                                    {this.basicInfo()}
+                                    {this.occupancyInfo()}
+                                    {this.structuralInfo()}
                                 </div>
                             </div>
                         </div>
                         <div className='col-sm-6 d-xxl-16'>
                             <div className='element-wrapper'>
                                 <div className='element-box'>
-                                    <span><h4>Parcels Data</h4></span>
-                                    {this.parcelTableGeneralInfo()}
-                                    {this.parcelTableStructuralInfo()}
-                                    {this.parcelTableServicesInfo()}
+                                    {this.servicesInfo()}
+                                    {this.commercialInfo()}
+                                    {this.riskInfo()}
                                 </div>
                             </div>
                         </div>
