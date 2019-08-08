@@ -15,7 +15,7 @@ class AssetsEdit extends React.Component{
         this.state = {
             prop_class : '',
             replacement_value : '',
-            critical_infrastructure : '',
+            critical : '',
             num_residents : '',
             num_employees: '',
             num_occupants : '',
@@ -241,7 +241,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Critical Infrastructure</label>
-                            <input id='critical_infrastructure' onChange={this.handleChange} className="form-control" placeholder="Critical Infrastructure" type="text" value={this.state.critical_infrastructure}/></div>
+                            <input id='critical' onChange={this.handleChange} className="form-control" placeholder="Critical Infrastructure" type="text" value={this.state.critical}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Address</label>
