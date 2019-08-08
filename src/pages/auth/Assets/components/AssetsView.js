@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 const BASIC_INFO = [
     'prop_class',
     'replacement_value',
-    'critical_infrastructure',
+    'critical',
     'address'
 ];
 const OCCUPANCY_INFO = [
