@@ -5,6 +5,7 @@ import get from "lodash.get";
 import Wizard from 'components/light-admin/wizard'
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
+import {Link} from "react-router-dom";
 
 
 class AssetsEdit extends React.Component{
@@ -14,11 +15,11 @@ class AssetsEdit extends React.Component{
         this.state = {
             prop_class : '',
             replacement_value : '',
-            critical_infrastructure : '',
+            critical : '',
             num_residents : '',
             num_employees: '',
             num_occupants : '',
-            num_vehicle_inhabitants : '',
+            num_vehicles_inhabitants : '',
             num_units : '',
             basement : '',
             building_type : '',
@@ -48,7 +49,7 @@ class AssetsEdit extends React.Component{
             high_wind_speed: '',
             soil_type: '',
             storage_hazardous_materials: '',
-            topography_slope: ''
+            topography: ''
             /*
             flood_zone: '',
 
@@ -91,6 +92,25 @@ class AssetsEdit extends React.Component{
             })
     }
 
+    componentDidMount(){
+        if(this.props.match.params.assetId) {
+            this.props.falcor.get(['building','byId',[this.props.match.params.assetId],Object.keys(this.state)])
+                .then(response =>{
+                    console.log('response',response)
+                    Object.keys(this.state).forEach((key,i)=>{
+                        let tmp_state = {};
+                        tmp_state[key] = response.json.building.byId[this.props.match.params.assetId][key] || '' ;
+                        this.setState(
+                            tmp_state
+                        );
+
+                    });
+
+                })
+        }
+
+    }
+
     propClassDropDown(){
         if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined){
             const graph = this.props.parcelMetaData['prop_class'];
@@ -106,7 +126,7 @@ class AssetsEdit extends React.Component{
                     <option className="form-control" key={0} value="None">No Prop Class Selected</option>
                     {
                         propClassDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                            return(<option className="form-control" key={i+1} value={parseInt(data.value)}>{data.name}</option>)
                         })
                     }
                 </select>
@@ -176,14 +196,14 @@ class AssetsEdit extends React.Component{
     }
 
     onSubmit(event){
+        event.preventDefault();
+        let args = [];
         if(this.props.match.params.assetId){
             let attributes = Object.keys(this.state)
             let updated_data ={};
             Object.keys(this.state).forEach((d, i) => {
-                if (this.state[d] !== '') {
-                    console.log(this.state[d], d)
-                    updated_data[d] = this.state[d]
-                }
+                console.log(this.state[d], d)
+                updated_data[d] = this.state[d]
             })
             return this.props.falcor.set({
                 paths: [
@@ -198,7 +218,7 @@ class AssetsEdit extends React.Component{
                 }
             })
             .then(response => {
-                this.props.sendSystemMessage(`Action worksheet was successfully edited.`, {type: "success"});
+                this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
             })
         }
 
@@ -221,7 +241,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Critical Infrastructure</label>
-                            <input id='critical_infrastructure' onChange={this.handleChange} className="form-control" placeholder="Critical Infrastructure" type="text" value={this.state.critical_infrastructure}/></div>
+                            <input id='critical' onChange={this.handleChange} className="form-control" placeholder="Critical Infrastructure" type="text" value={this.state.critical}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Address</label>
@@ -249,7 +269,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of vehicles owned by inhabitants</label>
-                            <input id='num_vehicle_inhabitants' onChange={this.handleChange} className="form-control" placeholder="Number of vehicles owned by inhabitants" type="text" value={this.state.num_vehicle_inhabitants}/></div>
+                            <input id='num_vehicles_inhabitants' onChange={this.handleChange} className="form-control" placeholder="Number of vehicles owned by inhabitants" type="text" value={this.state.num_vehicles_inhabitants}/></div>
                     </div>
                 </div>)
             },
@@ -346,7 +366,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Inventory replacement value</label>
-                            <input id='inventory_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Inventory replacement value" type="text" value={this.state.contents_replacement_value}/></div>
+                            <input id='inventory_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Inventory replacement value" type="text" value={this.state.inventory_replacement_value}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Establishment revenue</label>
@@ -397,7 +417,7 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Topography : slope</label>
-                            <input id='topography_slope' onChange={this.handleChange} className="form-control" placeholder="Topography : slope" type="text" value={this.state.topography_slope}/></div>
+                            <input id='topography' onChange={this.handleChange} className="form-control" placeholder="Topography : slope" type="text" value={this.state.topography}/></div>
                     </div>
                 </div>)
             },
@@ -406,7 +426,15 @@ class AssetsEdit extends React.Component{
         return (
             <div className='container'>
                 <Element>
-                    <h6 className="element-header">Edit Assets</h6>
+                    <h6 className="element-header">Edit Assets
+                        <span style={{float:'right'}}>
+                        <Link
+                            className="btn btn-sm btn-primary"
+                            to={ `/assets/${this.props.match.params.assetId}` } >
+                                View Asset
+                        </Link>
+                        </span>
+                    </h6>
                     <Wizard steps={wizardSteps} submit={this.onSubmit}/>
                 </Element>
             </div>
