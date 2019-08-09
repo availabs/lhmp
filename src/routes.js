@@ -16,9 +16,10 @@ import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
-import Roles from 'pages/auth/Roles/'
+import RolesIndex from 'pages/auth/Roles/'
 // -- Util Routes
 import Login from './pages/Landing/Login'
+import Signup from './pages/Landing/SignUp'
 import Logout from './pages/Logout'
 import NoMatch from './pages/404.js'
 
@@ -27,6 +28,7 @@ const routes = [
   Landing,
   Home,
   Login,
+  Signup,
 
    ...ActionWorksheet,
    ...ActionsIndex,
@@ -37,7 +39,7 @@ const routes = [
    ...AssetsView,
    ...AssetsEdit,
    ...Historic,
-   ...Roles,
+   ...RolesIndex,
   PlanIndex,
   RiskMap,
   Logout,

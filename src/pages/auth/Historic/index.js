@@ -53,7 +53,6 @@ class Historic extends React.Component {
                 ['riskIndex', 'hazards'],
             )
                 .then(response => {
-                    console.log('response_1',response)
                     const geoids = response.json.geo[geoid]['cousubs'],
                         hazards = response.json.riskIndex.hazards,
                         requests = [];
@@ -69,15 +68,12 @@ class Historic extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log('/historic updating data', this.props)
-
         if (prevProps.geoid !== this.props.geoid){
             this.setState(
                 {
                     geoid: this.props.geoid,
                     geoLevel: this.setGeoLevel(this.props.geoid.length)
                 });
-            console.log('/historic: updating data')
             this.fetchFalcorDeps(this.props.geoLevel, this.props.dataType, this.props.geoid)
         }
     }
@@ -99,7 +95,6 @@ class Historic extends React.Component {
     }
 
     render() {
-        console.log('this.props.activeplan', localStorage.getItem('planId'))
         return (
             <div className='container'>
                 <Element>
@@ -227,7 +222,6 @@ class Historic extends React.Component {
 }
 
 const mapStateToProps = (state,ownProps) => {
-    console.log('ownProps', state)
     return {
         geoGraph: state.graph.geo,
         router: state.router,

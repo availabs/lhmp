@@ -1,135 +1,455 @@
-import React, { Component } from 'react';
-import { Redirect, Link } from 'react-router-dom'
-import { connect } from 'react-redux';
+import React from 'react';
+import {Link, Redirect} from 'react-router-dom'
+import {connect} from 'react-redux';
+import Wizard from 'components/light-admin/wizard'
+import {reduxFalcor} from 'utils/redux-falcor'
 
-import LandingNav from './components/LandingNav'
-
-import { signup } from 'store/modules/user';
+import {signup} from 'store/modules/user';
 
 
 import './Login.css'
 
-class Signup extends Component {
-  state = {
-      isLoading: false,
-      email: '',
-      email_verify: '',
-      redirectToReferrer: false
-  }
-  
-  validateForm() {
-    return this.state.email.length > 0 && this.state.email === this.state.email_verify;
-  }
+const COLS = [
+    "contact_name",
+    "contact_email",
+    "contact_phone",
+    "contact_address",
+    "contact_title_role",
+    "contact_department",
+    "contact_agency",
+    "contact_municipality",
+    "contact_county",
+    "associated_plan"
+];
 
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  };
+class Signup extends React.Component {
+    constructor(props) {
+        super(props);
 
-  handleSubmit = async event => {
-    event.preventDefault();
-    this.setState({ isLoading: true });
-    this.props.signup(this.state.email);
-  };
+        this.state = {
+            isLoading: false,
+            contact_email: '',
+            email_verify: '',
+            contact_county: '',
+            contact_municipality: '',
+            contact_agency: '',
+            contact_department: '',
+            contact_role: '',
+            contact_name: '',
+            contact_phone: '',
+            contact_address: '',
+            countyList: [],
+            cousubList: [],
+            roleList: [],
+            nextButtonActiveStep1: false,
+            nextButtonActiveStep2: false,
+            nextButtonActiveStep3: false,
+            redirectToReferrer: false
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.listCousubDropdown = this.listCousubDropdown.bind(this)
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isAuthenticated) {
-      this.setState({ redirectToReferrer: true });
-    } else {
-      this.setState({ isLoading: false });
+        //this.onSubmit = this.onSubmit.bind(this)
     }
-  }
 
-  render () {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { redirectToReferrer } = this.state;
-
-    if (redirectToReferrer) {
-      return <Redirect to={from} />;
+    validateForm() {
+        return this.state.contact_email.length > 0 && this.state.contact_email === this.state.email_verify;
     }
 
-    return (
-      
-      <div style={{
-        height:'100vh', 
-        overflow: 'hidden',
-        backgroundImage: 'linear-gradient(to bottom right,rgb(110, 176, 194) 0px, rgb(63, 174, 205) 39%, rgb(52, 149, 176) 100%)'}}
-      >
-        <LandingNav />
-        <div style={{height: '100%',  
-          display: 'flex', 
-          flexDirection:'column', 
-          justifyContent:'center',
-          alignItems: 'flex-start' }}> 
-        	<div className="auth-box-w" style={{
-            width: '33%',
-            minWidth: '350px',
-            maxWidth: '650px'
-          }}>
-         
-          <h4 className="auth-header" style={{paddingTop: 20}}>NPMRDS Sign Up</h4>
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor=''>Email</label>
-              <input
-                id="email"
-                autoFocus
-                type="email"
-                
-                value={this.state.email}
-                onChange={this.handleChange}
-                className="login-form-control"
-                placeholder="Enter your email"
-              />
-              <div className="pre-icon os-icon os-icon-user-male-circle" />
+    fetchFalcorDeps() {
+        return this.props.falcor.get(
+            ['geo', 36, 'counties']
+        )
+            .then(countyList => {
+                this.props.falcor.get(
+                    ['geo', countyList.json.geo[36].counties, ['name']]
+                )
+                    .then(countyNames => {
+                        let geoList =
+                            Object.keys(countyNames.json.geo)
+                                .filter(f => f !== '$__path')
+                                .map(geoid => {
+                                    let tmpObj = {};
+                                    tmpObj['id'] = geoid;
+                                    tmpObj['name'] = countyNames.json.geo[geoid].name;
+                                    return tmpObj;
+                                });
+                        this.setState({'countyList': geoList});
+                        return countyNames.json.geo
+                    })
+                    .then(d => {
+                        return this.props.falcor.get(
+                            ['rolesmeta', 'roles', ['field']]
+                        )
+                            .then(d => {
+                                let roleList = [];
+                                Object.keys(d.json.rolesmeta.roles)
+                                    .filter(f => f !== '$__path')
+                                    .map(roleKey => {
+                                            let roles = d.json.rolesmeta.roles[roleKey];
+                                            roleList = roles.map(role => {
+                                                let tmpObj = {};
+                                                tmpObj['id'] = role.value;
+                                                tmpObj['name'] = role.name;
+                                                return tmpObj;
+                                            })
+                                        }
+                                    );
+                                this.setState({'roleList': roleList});
+                                return d;
+                            })
+                    })
+
+            })
+    }
+
+    handleChange = event => {
+        let error_class_name = 'form-group has-error has-danger';
+        let normal_class_name = 'form-group';
+
+        // if required field is blank
+        if (event.target.required && event.target.value.length === 0
+            && !document.getElementById(event.target.id + 'RequiredFeild')
+        ) {
+            event.target.parentElement.className = error_class_name;
+            let div = document.createElement('div');
+            div.id = event.target.id + 'RequiredFeild';
+            div.innerText = 'Required field.';
+            event.target.nextSibling.appendChild(div)
+        }
+
+        // if required field is filled up
+        if (event.target.required && event.target.value.length !== 0 && event.target.parentElement.className === error_class_name
+            && document.getElementById(event.target.id + 'RequiredFeild')) {
+            event.target.parentElement.className = normal_class_name;
+            event.target.nextSibling.removeChild(document.getElementById(event.target.id + 'RequiredFeild'))
+        }
+
+        // if emails do not match
+        if (event.target.id === 'email_verify') {
+            if (event.target.value !== document.getElementById('contact_email').value
+                && !document.getElementById(event.target.id + 'PasswordsMatch')) {
+                let div = document.createElement('div');
+                div.id = event.target.id + 'PasswordsMatch';
+                div.innerText = 'Passwords do not match!';
+                event.target.nextSibling.appendChild(div)
+            } else if (event.target.value === document.getElementById('contact_email').value
+                && document.getElementById(event.target.id + 'PasswordsMatch')) {
+                event.target.nextSibling.removeChild(document.getElementById(event.target.id + 'PasswordsMatch'))
+            }
+        }
+
+        // if county then municipality
+        if (event.target.id === 'contact_county') {
+            if (event.target.value.length !== 0) {
+                document.getElementById('contact_municipality').parentNode.style.display = 'block'
+            } else {
+                document.getElementById('contact_municipality').parentNode.style.display = 'none'
+            }
+        }
+        //step 1 continue validation
+        if (document.getElementById('contact_email') &&
+            document.getElementById('contact_email').value.length > 0 &&
+            document.getElementById('email_verify') &&
+            document.getElementById('email_verify').value.length > 0) {
+            this.setState({'nextButtonActiveStep1': true})
+        } else {
+            this.setState({'nextButtonActiveStep1': false})
+        }
+
+        //step 2 continue validation
+        if (document.getElementById('contact_county') &&
+            document.getElementById('contact_county').value.length > 0 &&
+            document.getElementById('contact_role') &&
+            document.getElementById('contact_role').value.length > 0) {
+            this.setState({'nextButtonActiveStep2': true})
+        } else {
+            this.setState({'nextButtonActiveStep2': false})
+        }
+
+        //step 3 continue validation
+        if (document.getElementById('contact_name') &&
+            document.getElementById('contact_name').value.length > 0) {
+            this.setState({'nextButtonActiveStep3': true})
+        } else {
+            this.setState({'nextButtonActiveStep3': false})
+        }
+
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    };
+
+    listCousubDropdown(event) {
+        let county = event.target.value;
+        if (county !== 'None') {
+            return this.props.falcor.get(['geo', [county], 'cousubs'])
+                .then(response => response.json.geo[county].cousubs)
+                .then(cousubs => this.props.falcor.get(['geo', cousubs, ['name']]))
+                .then(cousubs => {
+                    let geoList =
+                        Object.keys(cousubs.json.geo)
+                            .filter(f => f !== '$__path')
+                            .map(geoid => {
+                                let tmpObj = {};
+                                tmpObj['id'] = geoid;
+                                tmpObj['name'] = cousubs.json.geo[geoid].name;
+                                return tmpObj;
+                            });
+                    this.setState({'cousubList': geoList});
+                    return cousubs.json.geo
+                })
+        } else {
+            return null
+        }
+
+
+    }
+
+    handleSubmit = async event => {
+        event.preventDefault();
+        this.setState({isLoading: true});
+        //this.props.signup(this.state.contact_email);
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.isAuthenticated) {
+            this.setState({redirectToReferrer: true});
+        } else {
+            this.setState({isLoading: false});
+        }
+    }
+
+    renderWizard() {
+        const wizardSteps = [
+            {
+                title: (
+                    <span>
+                    <span style={{fontSize: '0.7em'}}>Step 1</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Email</span>
+            </span>
+                ),
+                content: (
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="form-group">
+                                <label for={'contact_email'}> Email</label>
+                                <input
+                                    className="form-control"
+                                    autoFocus
+                                    id='contact_email'
+                                    required
+                                    data-error="Your email address is invalid"
+                                    type="email"
+                                    onChange={this.handleChange}
+                                    //onfocusin={this.handleChange}
+                                    placeholder="Email"
+                                    value={this.state.contact_email}
+                                />
+                                <div className="help-block form-text with-errors form-control-feedback"></div>
+                            </div>
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="form-group">
+                                <label for={'email_verify'}> Confirm Email</label>
+                                <input
+                                    className="form-control"
+                                    id='email_verify'
+                                    required="required"
+                                    data-error="Your email address is invalid"
+                                    type="email"
+                                    onChange={this.handleChange}
+                                    placeholder="Confirm Email"
+                                    value={this.state.email_verify}/>
+                                <div className="help-block form-text with-errors form-control-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                ),
+                nextButtonActive: this.state.nextButtonActiveStep1
+            },
+            {
+                title: (
+                    <span>
+                    <span style={{fontSize: '0.7em'}}>Step 2</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Role Details</span>
+            </span>
+                ),
+                content: (
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="form-group"><label for={'contact_county'}> County</label>
+                                <select
+                                    className="form-control"
+                                    id='contact_county'
+                                    required="required"
+                                    data-error="Please select county"
+                                    onChange={this.handleChange}
+                                    onClick={this.listCousubDropdown}
+                                    placeholder="County"
+                                    value={this.state.contact_county}>
+                                    <option default value={''}>--Select County--</option>
+                                    {this.state.countyList.map((county, county_i) => {
+                                        return (<option className="form-control" key={county_i + 1}
+                                                        value={county.id}> {county.name} </option>)
+                                    })}
+                                </select>
+                                <div className="help-block form-text with-errors form-control-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div className="col-sm-12">
+                            <div className="form-group"
+                                 style={{display: "none"}}
+                            ><label htmlFor={'contact_municipality'}> Municipality <small>(optional)</small></label>
+                                <select
+                                    id='contact_municipality'
+                                    onChange={this.handleChange}
+                                    className="form-control"
+                                    placeholder="Municipality"
+                                    value={this.state.contact_municipality}>
+                                    <option default value={''}>--Select Municipality--</option>
+                                    {this.state.cousubList.map((cousub, cousub_i) => {
+                                        return (<option className="form-control" key={cousub_i + 1}
+                                                        value={cousub.id}> {cousub.name} </option>)
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="col-sm-12">
+                            <div className="form-group"><label for={'contact_agency'}> Agency <small>(optional)</small></label>
+                                <input id='contact_agency' onChange={this.handleChange} className="form-control"
+                                       placeholder="Agency" type="text" value={this.state.contact_agency}/></div>
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="form-group"><label
+                                for={'contact_department'}> Department <small>(optional)</small></label>
+                                <input id='contact_department' onChange={this.handleChange} className="form-control"
+                                       placeholder="Department" type="text" value={this.state.contact_department}/>
+                            </div>
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="form-group"><label for={'contact_role'}> Role</label>
+                                <select
+                                    id='contact_role'
+                                    required="required"
+                                    onChange={this.handleChange}
+                                    className="form-control"
+                                    placeholder="Role"
+                                    value={this.state.contact_role}>
+                                    <option default value={''}>--Select Role--</option>
+                                    {this.state.roleList.map((role, role_i) => {
+                                        return (<option className="form-control" key={role_i + 1}
+                                                        value={role.id}> {role.name} </option>)
+                                    })}
+                                </select>
+                                <div className="help-block form-text with-errors form-control-feedback"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                ),
+                nextButtonActive: this.state.nextButtonActiveStep2
+            },
+            {
+                title: (
+                    <span>
+                    <span style={{fontSize: '0.7em'}}>Step 3</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Personal Details</span>
+            </span>
+                ),
+                content: (
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="form-group"><label for={'contact_name'}> Name</label>
+                                <input id='contact_name' required="required" onChange={this.handleChange}
+                                       className="form-control" placeholder="Name" type="text"
+                                       value={this.state.contact_name}/></div>
+                            <div className="help-block form-text with-errors form-control-feedback"></div>
+
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="form-group"><label
+                                for={'contact_phone'}> Phone <small>(optional)</small></label>
+                                <input id='contact_phone' onChange={this.handleChange} className="form-control"
+                                       placeholder="Phone" type="text" value={this.state.contact_phone}/></div>
+                        </div>
+                        <div className="col-sm-12">
+                            <div className="form-group"><label
+                                for={'contact_address'}> Address <small>(optional)</small></label>
+                                <input id='contact_address' onChange={this.handleChange} className="form-control"
+                                       placeholder="Address" type="text" value={this.state.contact_address}/></div>
+                        </div>
+                    </div>
+                ),
+                nextButtonActive: this.state.nextButtonActiveStep3
+            }
+        ];
+
+        return (
+            <Wizard steps={wizardSteps} submit={this.onSubmit}/>
+        )
+    }
+
+    render() {
+        const {from} = this.props.location.state || {from: {pathname: "/"}};
+        const {redirectToReferrer} = this.state;
+
+        if (redirectToReferrer) {
+            return <Redirect to={from}/>;
+        }
+
+        return (
+
+            <div style={{
+                height: '100vh',
+                overflow: 'scroll',
+                backgroundImage: 'linear-gradient(142deg, rgba(255,255,255,1) 0%, rgba(238,240,245,1) 85%, rgba(4,123,248,.2) 100%)'
+            }}
+            >
+
+                <div style={{
+                    height: '100%',
+                    display: 'block',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start'
+                }}>
+                    <div className="auth-box-w" style={{
+                        width: '100%',
+                        minWidth: '350px',
+                        maxWidth: '650px'
+                    }}>
+
+                        <h4 className="auth-header" style={{paddingTop: 20}}>Hazard Mitigation Planner
+                            <br/><span style={{fontSize: '0.8em', fontWeight: 100, color: '#047bf8'}}>Signup</span></h4>
+                        {this.renderWizard()}
+                        <div style={{padding: 15, float: 'right'}}>
+                            <Link to={'/login'}>Login?</Link>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="form-group">
-              <label htmlFor=''>Verify Email</label>
-              <input
-                value={this.state.email_verify}
-                onChange={this.handleChange}
-                id="email_verify"
-                type="email"
-                className="login-form-control"
-                placeholder="Enter your password"
-              />
-              <div className="pre-icon os-icon os-icon-email-2-at2" />
-            </div>
-            <div className="buttons-w">
-              <button className="btn btn-primary btn-lg btn-block" disabled={!this.validateForm()}>Sign Up</button>
-              {
-                this.state.isLoading ? 
-                (<div> Loading </div>) : ''
-              }
-            </div>
-          </form>
-          <div style={{padding: 15, float: 'right'}}>
-            <Link to={'/login'}>Login?</Link>
-          </div>
-          </div>
-        </div>
-      </div>
-     
-    )
-  }
+
+        )
+    }
 }
 
-const mapDispatchToProps = { signup };
+const mapDispatchToProps = {signup};
 
 const mapStateToProps = state => {
-  return {
-    isAuthenticated: !!state.user.authed,
-    attempts: state.user.attempts // so componentWillReceiveProps will get called.
-  };
+    return {
+        isAuthenticated: !!state.user.authed,
+        attempts: state.user.attempts // so componentWillReceiveProps will get called.
+    };
 };
- 
-export default
-{
-  path: '/signup',
-  mainNav: false,
-  component: connect(mapStateToProps, mapDispatchToProps)(Signup),
-  menuSettings: {hide: true}
+
+export default {
+    path: '/signup',
+    mainNav: false,
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Signup)),
+    menuSettings: {hide: true}
 }
 
   

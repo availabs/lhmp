@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/wizard/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/wizard/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -65,6 +69,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
@@ -116,6 +121,13 @@
       <workItem from="1564159927429" duration="161000" />
       <workItem from="1564160106080" duration="10148000" />
       <workItem from="1564261312467" duration="47115000" />
+    </task>
+    <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
+      <created>1560804284998</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1560804284998</updated>
     </task>
     <task id="LOCAL-00002" summary="changed the route of create actions worksheet">
       <created>1560867904809</created>
@@ -404,63 +416,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565104607088</updated>
     </task>
-    <task id="LOCAL-00043" summary="added from npmrds as AvlStuff was giving an error">
-      <created>1565118580281</created>
+    <task id="LOCAL-00043" summary="default geo from auth plan">
+      <created>1565117208349</created>
       <option name="number" value="00043" />
       <option name="presentableId" value="LOCAL-00043" />
       <option name="project" value="LOCAL" />
-      <updated>1565118580281</updated>
+      <updated>1565117208349</updated>
     </task>
-    <task id="LOCAL-00044" summary="Edits asset in ebr">
-      <created>1565120419196</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1565120419196</updated>
-    </task>
-    <task id="LOCAL-00045" summary="updates">
-      <created>1565120443714</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1565120443714</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Asset edit working">
-      <created>1565210407802</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1565210407802</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Asset view changed">
-      <created>1565210425632</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1565210425632</updated>
-    </task>
-    <task id="LOCAL-00048" summary="updates">
-      <created>1565210440889</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1565210440889</updated>
-    </task>
-    <task id="LOCAL-00049" summary="updates">
-      <created>1565276961938</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1565276961938</updated>
-    </task>
-    <task id="LOCAL-00050" summary="updates">
-      <created>1565276971041</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1565276971042</updated>
-    </task>
-    <option name="localTasksCounter" value="51" />
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -489,6 +452,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap" />
     <MESSAGE value="changed the route of create actions worksheet" />
     <MESSAGE value="list all the actions" />
     <MESSAGE value="create a new worksheet" />
@@ -507,25 +471,12 @@
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
     <MESSAGE value=" Building By Land Use Table updates" />
+    <MESSAGE value="updates" />
     <MESSAGE value="historic" />
     <MESSAGE value="no need to refresh" />
-    <MESSAGE value="added from npmrds as AvlStuff was giving an error" />
-    <MESSAGE value="Edits asset in ebr" />
-    <MESSAGE value="Asset edit working" />
-    <MESSAGE value="Asset view changed" />
-    <MESSAGE value="updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="updates" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/components/light-admin/wizard/index.js</url>
-          <line>8</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="default geo from auth plan" />
+    <option name="LAST_COMMIT_MESSAGE" value="default geo from auth plan" />
+    <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">
     <states>
