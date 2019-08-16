@@ -223,7 +223,7 @@ class Signup extends React.Component {
                 let args = COLS.map(key => this.state[key]);
                 return this.props.falcor.call(['roles', 'insert'], args, [], [])
                     .then(res => {
-                        console.log('inserted role, waiting for avail_auth',res)
+                        console.log('inserted role, waiting for avail_auth', res);
                         // avail_auth call
                         this.props.signup(this.state.contact_email)
                             .then(res => console.log('all done'))
@@ -338,7 +338,8 @@ class Signup extends React.Component {
                         </div>
 
                         <div className="col-sm-12">
-                            <div className="form-group"><label htmlFor={'contact_agency'}> Agency <small>(optional)</small></label>
+                            <div className="form-group"><label
+                                htmlFor={'contact_agency'}> Agency <small>(optional)</small></label>
                                 <input id='contact_agency' onChange={this.handleChange} className="form-control"
                                        placeholder="Agency" type="text" value={this.state.contact_agency}/></div>
                         </div>
@@ -413,7 +414,7 @@ class Signup extends React.Component {
     }
 
     render() {
-        console.log('came: ',localStorage.getItem('signedUp'));
+        console.log('came: ', this.props.signupComplete);
         const {from} = this.props.location.state || {from: {pathname: "/"}};
         const {redirectToReferrer} = this.state;
 
@@ -442,10 +443,22 @@ class Signup extends React.Component {
                         minWidth: '350px',
                         maxWidth: '650px'
                     }}>
-                        {/*<button onClick={() => this.props.signup('ssangdod@albany.edu')}>signup trigger</button>*/}
+                       {/* <button onClick={() => this.props.signup('ssangdod@albany.edu')}>signup trigger</button>*/}
                         <h4 className="auth-header" style={{paddingTop: 20}}>Hazard Mitigation Planner
                             <br/><span style={{fontSize: '0.8em', fontWeight: 100, color: '#047bf8'}}>Signup</span></h4>
-                        {this.renderWizard()}
+                        {!this.props.signupComplete ? this.renderWizard()
+                            : (
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div style={{'min-height': '300px'}}>
+                                            <div className='form-desc' align={'center'}>
+                                                Signup Successful. You should receive an email shortly with instructions for
+                                                login.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         <div style={{padding: 15, float: 'right'}}>
                             <Link to={'/login'}>Login?</Link>
                         </div>
@@ -462,7 +475,8 @@ const mapDispatchToProps = {signup};
 const mapStateToProps = state => {
     return {
         isAuthenticated: !!state.user.authed,
-        attempts: state.user.attempts // so componentWillReceiveProps will get called.
+        attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+        signupComplete: state.user.signupComplete
     };
 };
 

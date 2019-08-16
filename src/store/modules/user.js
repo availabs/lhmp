@@ -15,6 +15,7 @@ const AUTH_FAILURE = 'USER::AUTH_FAILURE';
 //const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
 const SET_PLANS_AUTH = 'USER::SET_PLANS_AUTH'
 const SET_PLANS_GEOID = 'USER::SET_PLANS_GEOID'
+const SIGNUP_SUCCESS = 'USER::SIGNUP_SUCCESS'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
 // ------------------------------------
@@ -193,7 +194,6 @@ export const auth = () => dispatch => {
 };
 
 export const signup = email => dispatch => {
-  localStorage.setItem('signedUp', false)
   console.log('came in signup on client', email)
   return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
@@ -206,13 +206,11 @@ export const signup = email => dispatch => {
     .then(res => res.json())
     .then(res => {
       if (res.error) {
-        localStorage.setItem('signedUp', true)
         dispatch(sendSystemMessage(res.error))
       } else {
-        localStorage.setItem('signedUp', false)
+        dispatch({ type: SIGNUP_SUCCESS })
         dispatch(sendSystemMessage(res.message));
       }
-      localStorage.setItem('signedUp', false)
 
       return res;
     });
@@ -279,7 +277,8 @@ let initialState = {
   attempts: 0,
   activePlan: null,
   authedPlans: [],
-  activeGeoid: null
+  activeGeoid: null,
+  signupComplete: false
 };
 
 // ------------------------------------
@@ -322,8 +321,13 @@ const ACTION_HANDLERS = {
       localStorage.setItem('geoId', newState.activeGeoid)
     }
     return newState
-  }
+  },
 
+  [SIGNUP_SUCCESS]: (state =initialState, action) => {
+    const newState = Object.assign({}, state)
+    newState.signupComplete = true
+    return newState
+  }
 };
 
 export default function userReducer(state = initialState, action) {
