@@ -3,9 +3,12 @@ import { sendSystemMessage } from './messages';
 import { AUTH_HOST, AUTH_PROJECT_NAME } from 'config';
 import {falcorGraph} from "../falcorGraph";
 import geo from "./geo";
+import withRouter from "react-router/es/withRouter";
 // ------------------------------------
 // Constants
 // ------------------------------------
+const PROJECT_HOST = 'localhost:3000'
+const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
 const USER_LOGOUT = 'USER::USER_LOGOUT';
 const AUTH_FAILURE = 'USER::AUTH_FAILURE';
@@ -190,25 +193,33 @@ export const auth = () => dispatch => {
 };
 
 export const signup = email => dispatch => {
+  localStorage.setItem('signedUp', false)
+  console.log('came in signup on client', email)
   return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME })
+    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: DEFAULT_GROUP, host: PROJECT_HOST, url: '/reset-password'})
   })
     .then(res => res.json())
     .then(res => {
       if (res.error) {
-        dispatch(sendSystemMessage(res.error));
+        localStorage.setItem('signedUp', true)
+        dispatch(sendSystemMessage(res.error))
       } else {
+        localStorage.setItem('signedUp', false)
         dispatch(sendSystemMessage(res.message));
       }
+      localStorage.setItem('signedUp', false)
+
+      return res;
     });
 };
 
 export const resetPassword = ({ email }) => dispatch => {
+  console.log('came in resetPassword on client', email)
   return fetch(`${AUTH_HOST}/password/reset`, {
     method: 'POST',
     headers: {
@@ -224,8 +235,31 @@ export const resetPassword = ({ email }) => dispatch => {
       } else {
         dispatch(sendSystemMessage(res.message));
       }
+      localStorage.setItem('signedUp', true)
     });
 };
+
+export const setPassword = ({ token, password }) => dispatch => {
+  console.log('came in setPassword on client', token, password)
+  return fetch(`${AUTH_HOST}/password/set`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token, password })
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.error) {
+        dispatch(sendSystemMessage(res.error));
+      } else {
+        dispatch(sendSystemMessage(res.message));
+      }
+    });
+};
+
+// call passwordSet with token from url
 
 export const actions = {
   login,

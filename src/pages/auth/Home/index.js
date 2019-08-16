@@ -19,11 +19,10 @@ class HomeView extends React.Component {
     var title ='Home';
     var subheader = 'Dashboard';
      */
-    //console.log('authProjects props',this.props);
     return(
       <div className='container'>
         <Element>
-        <form onSubmit={this.handleSubmit}>
+        <form>
         <h4  className="element-header">Mitigation Planner Home</h4>
         <h4>Home Page for {this.props.activePlan} {this.props.activeGeoid}</h4>
         </form>
@@ -34,6 +33,7 @@ class HomeView extends React.Component {
 }
 
 const mapStateToProps = state => {
+  console.log('user', state.user)
   return ({
     isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
