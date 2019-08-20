@@ -1,6 +1,6 @@
 import React from 'react'
 import ElementBox from '../containers/ElementBox'
-import DataTable from './DataTable'
+import DataTable from './DataTableHistoric'
 import Pagination from './Pagination'
 
 import * as d3format from "d3-format"
@@ -265,7 +265,7 @@ class TableBox extends React.Component {
 }
 
 TableBox.defaultProps = {
-    pageSize: 13,
+    pageSize: 10,
     data: [],
     columns: [],
     links: {},

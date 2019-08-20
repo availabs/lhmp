@@ -19,6 +19,7 @@ class Login extends Component {
   }
 
   validateForm() {
+    //console.log('validate', this.state)
     return this.state.email.length > 0 && this.state.password.length > 0;
   }
 
@@ -94,7 +95,6 @@ class Login extends Component {
                       id="email"
                       autoFocus
                       type="email"
-
                       value={this.state.email}
                       onChange={this.handleChange}
                       className="login-form-control"
@@ -107,6 +107,7 @@ class Login extends Component {
                   <input
                       value={this.state.password}
                       onChange={this.handleChange}
+                      onAnimationStart={this.handleChange}
                       id="password"
                       type="password"
                       className="login-form-control"
@@ -125,7 +126,7 @@ class Login extends Component {
               <div style={{padding: 15, float: 'right'}}>
                 <Link to={'/signup'}>Sign Up</Link>
                 {' | '}
-                <Link to={'/reset-password'}>Forgot Password?</Link>
+                <Link to={'/password/set'}>Forgot Password?</Link>
               </div>
             </div>
           </div>

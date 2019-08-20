@@ -53,7 +53,20 @@ const COLOR_SCALE = d3scale.scaleOrdinal()
     .range(D3_CATEGORY20);
 
 class GeographyScoreBarChart extends React.Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            geoid: this.props.geoid,
+            geoLevel: this.props.geoLevel,
+            dataType: this.props.dataType
+        }
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.geoid !== this.props.geoid){
+            this.setState({geoid: this.props.geoid})
+            this.fetchFalcorDeps(this.props.geoLevel, this.props.dataType, this.props.geoid)
+        }
+    }
     getHazardName(hazard) {
         try {
             return this.props.riskIndexGraph.meta[hazard].name;
@@ -63,15 +76,19 @@ class GeographyScoreBarChart extends React.Component {
         }
     }
 
-    fetchFalcorDeps() {
-        const { geoLevel, dataType, geoid } = this.props;
+    fetchFalcorDeps(geoLevel, dataType, geoid) {
+        if(!geoid)geoid = this.props.geoid;
+        if(!geoLevel)geoLevel = this.props.geoLevel;
+        if(!dataType)dataType = this.props.dataType;
+        //const { geoLevel, dataType, geoid } = this.state;
 
         return this.props.falcor.get(
             ['riskIndex', 'hazards'],
             ['geo', geoid, geoLevel]
         )
             .then(res => res.json.riskIndex.hazards)
-            .then(hazards => geoLevel === 'state' ? Promise.resolve({ hazards, geoids: [geoid] }) : this.props.falcor.get(['geo', geoid, geoLevel]).then(res => ({ hazards, geoids: res.json.geo[geoid][geoLevel] })))
+            .then(hazards => geoLevel === 'state' ? Promise.resolve({ hazards, geoids: [geoid] })
+                : this.props.falcor.get(['geo', geoid, geoLevel]).then(res => ({ hazards, geoids: res.json.geo[geoid][geoLevel] })))
             .then(({ hazards, geoids }) => {
                 this.props.colorScale.domain(hazards);
                 return this.props.falcor.get(
@@ -84,10 +101,10 @@ class GeographyScoreBarChart extends React.Component {
     }
 
     processData() {
-        const { geoid, geoLevel, dataType, hazard, lossType } = this.props;
+        const { geoid, geoLevel, dataType,  hazard, lossType } = this.props;
         try {
             let geoids = []
-            if (geoLevel === 'state' || geoLevel === 'county') {
+            if (geoLevel === 'state' || geoLevel === 'counties') {
                 geoids = [geoid];
             }
             else {
@@ -102,8 +119,10 @@ class GeographyScoreBarChart extends React.Component {
     render() {
         const { data, keys } = this.processData(),
             format = d3format.format(this.props.format);
-        if (!data.length) {
+        if (!data.length && this.props.geoid.length === 5) {
             return <ElementBox>Loading...</ElementBox>;
+        } else if (this.props.geoid.length > 5){
+            return null;
         }
         return (
             <div style={ { height: `${ this.props.height }px`, background: '#fff'} }>

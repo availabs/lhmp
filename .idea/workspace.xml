@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsEdit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/DataTableNew.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/DataTableNew.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsContent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -56,7 +52,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mitigate-api" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -70,18 +66,19 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
@@ -121,9 +118,6 @@
       <workItem from="1564159927429" duration="161000" />
       <workItem from="1564160106080" duration="10148000" />
       <workItem from="1564261312467" duration="47115000" />
-      <workItem from="1564771828581" duration="4978000" />
-      <workItem from="1565024960393" duration="10885000" />
-      <workItem from="1565099778746" duration="3757000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -399,46 +393,46 @@
       <updated>1564670096166</updated>
     </task>
     <task id="LOCAL-00040" summary="updates">
-      <created>1564771844464</created>
+      <created>1564773780250</created>
       <option name="number" value="00040" />
       <option name="presentableId" value="LOCAL-00040" />
       <option name="project" value="LOCAL" />
-      <updated>1564771844464</updated>
+      <updated>1564773780250</updated>
     </task>
-    <task id="LOCAL-00041" summary="updates">
-      <created>1564771872278</created>
+    <task id="LOCAL-00041" summary="historic">
+      <created>1565101438367</created>
       <option name="number" value="00041" />
       <option name="presentableId" value="LOCAL-00041" />
       <option name="project" value="LOCAL" />
-      <updated>1564771872278</updated>
+      <updated>1565101438367</updated>
     </task>
-    <task id="LOCAL-00042" summary="updates">
-      <created>1564775072013</created>
+    <task id="LOCAL-00042" summary="no need to refresh">
+      <created>1565104607088</created>
       <option name="number" value="00042" />
       <option name="presentableId" value="LOCAL-00042" />
       <option name="project" value="LOCAL" />
-      <updated>1564775072013</updated>
+      <updated>1565104607088</updated>
     </task>
-    <task id="LOCAL-00043" summary="updates">
-      <created>1564775086104</created>
+    <task id="LOCAL-00043" summary="default geo from auth plan">
+      <created>1565117208349</created>
       <option name="number" value="00043" />
       <option name="presentableId" value="LOCAL-00043" />
       <option name="project" value="LOCAL" />
-      <updated>1564775086104</updated>
+      <updated>1565117208349</updated>
     </task>
-    <task id="LOCAL-00044" summary="updates">
-      <created>1564775103767</created>
+    <task id="LOCAL-00044" summary="signup wizard">
+      <created>1565380639130</created>
       <option name="number" value="00044" />
       <option name="presentableId" value="LOCAL-00044" />
       <option name="project" value="LOCAL" />
-      <updated>1564775103767</updated>
+      <updated>1565380639130</updated>
     </task>
-    <task id="LOCAL-00045" summary="updates">
-      <created>1564775118059</created>
+    <task id="LOCAL-00045" summary="user page">
+      <created>1565987124882</created>
       <option name="number" value="00045" />
       <option name="presentableId" value="LOCAL-00045" />
       <option name="project" value="LOCAL" />
-      <updated>1564775118059</updated>
+      <updated>1565987124882</updated>
     </task>
     <option name="localTasksCounter" value="46" />
     <servers />
@@ -489,23 +483,13 @@
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
     <MESSAGE value=" Building By Land Use Table updates" />
     <MESSAGE value="updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="updates" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/components/light-admin/wizard/index.js</url>
-          <line>8</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js</url>
-          <line>66</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="historic" />
+    <MESSAGE value="no need to refresh" />
+    <MESSAGE value="default geo from auth plan" />
+    <MESSAGE value="signup wizard" />
+    <MESSAGE value="user page" />
+    <option name="LAST_COMMIT_MESSAGE" value="user page" />
+    <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">
     <states>

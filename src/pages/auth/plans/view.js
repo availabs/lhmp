@@ -6,7 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
-import {setActivePlan} from 'store/modules/user'
+import {setActivePlan, setActiveGeoid} from 'store/modules/user'
 
 import get from 'lodash.get'
 
@@ -38,9 +38,10 @@ class Plans extends React.Component {
 
     onPlanClick = async event =>{
         event.preventDefault()
-        let planId = event.target.getAttribute('value')
-        //console.log('planId click', planId,)
-        this.props.setActivePlan(planId)
+        let ids = event.target.getAttribute('value').split(',')
+        //let geoid = event.target.getAttribute('geoid')
+        this.props.setActivePlan(ids[0])
+        this.props.setActiveGeoid(ids[1])
         this.props.history.push('/')
     }
 
@@ -105,7 +106,7 @@ class Plans extends React.Component {
                                              <td>
                                              <a className=""
                                                 href='#'
-                                                value={plan.id.value}
+                                                value={plan['fips'] ? plan.id.value+','+ plan['fips'].value : plan.id.value+','+ ''}
                                                 onClick={this.onPlanClick}>
                                              {plan.county.value}
                                          </a>
@@ -143,7 +144,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     sendSystemMessage,
-    setActivePlan
+    setActivePlan,
+    setActiveGeoid
 };
 
 export default [

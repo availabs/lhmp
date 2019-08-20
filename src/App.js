@@ -37,7 +37,6 @@ class App extends Component {
     }
   }
 
-
   render() {
     //console.log('app render user',this.props.user)
     return (
@@ -45,22 +44,40 @@ class App extends Component {
         <div className="all-wrapper solid-bg-all">
           <BrowserRouter>
             <Switch>
-              {Routes.map((route, i) => {
-                return (
-                  <Layout
-                    {...route}
-                    authed={this.props.user.authed}
-                    breadcrumbs={route.breadcrumbs}
-                    isAuthenticating={this.state.isAuthenticating}
-                    key={i}
-                    menuSettings={route.menuSettings ? route.menuSettings : {}}
-                    menus={Routes}
-                    router={this.props.router}
-                    routes={route.routes}
-                    user={this.props.user}
-                  />
-                );
-              })}
+              {this.props.user.authLevel === 0 ?
+                  Routes.publicRoutes.map((route, i) => {
+                    return (
+                        <Layout
+                            {...route}
+                            authed={this.props.user.authed}
+                            breadcrumbs={route.breadcrumbs}
+                            isAuthenticating={this.state.isAuthenticating}
+                            key={i}
+                            menus={Routes.publicRoutes}
+                            menuSettings={route.menuSettings ? route.menuSettings : {}}
+                            router={this.props.router}
+                            routes={Routes.publicRoutes}
+                            user={this.props.user}
+                        />
+                    );
+                  }) :
+                  Routes.routes.map((route, i) => {
+                    return (
+                        <Layout
+                            {...route}
+                            authed={this.props.user.authed}
+                            breadcrumbs={route.breadcrumbs}
+                            isAuthenticating={this.state.isAuthenticating}
+                            key={i}
+                            menuSettings={route.menuSettings ? route.menuSettings : {}}
+                            menus={Routes.routes}
+                            router={this.props.router}
+                            routes={Routes.routes}
+                            user={this.props.user}
+                        />
+                    );
+                  })
+              }
             </Switch>
           </BrowserRouter>
           <Messages />

@@ -3,14 +3,30 @@ import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
 
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBoxDefault'
+import TableBox from 'components/light-admin/tables/TableBoxHistoric'
 
 import {
     fnum
 } from 'utils/sheldusUtils'
 
 class CousubTotalLossTable extends React.Component {
-    fetchFalcorDeps({ dataType, geoid }=this.props) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            geoid: this.props.geoid,
+            dataType: this.props.dataType
+        }
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.geoid !== this.props.geoid){
+            this.setState({geoid: this.props.geoid})
+            this.fetchFalcorDeps(this.props.dataType, this.props.geoid)
+        }
+    }
+
+    fetchFalcorDeps( dataType, geoid ) {
+        if(!geoid)geoid = this.props.geoid;
+        if(!dataType)dataType = this.props.dataType;
         return this.props.falcor.get(
             ['riskIndex', 'hazards'],
             ['geo', geoid, 'cousubs']
@@ -48,14 +64,12 @@ class CousubTotalLossTable extends React.Component {
             d["total damage"] = fnum(d["total damage"]);
         })
         data.sort((a, b) => b.sort - a.sort)
-        console.log('data',data)
         return { data, columns }
     }
 
     render() {
         try {
             let pData = this.processData();
-            console.log('pdata', pData)
             let linksToPass = {};
             linksToPass['name'] = pData.data;
             return (

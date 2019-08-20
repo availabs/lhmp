@@ -2,14 +2,20 @@ import { sendSystemMessage } from './messages';
 
 import { AUTH_HOST, AUTH_PROJECT_NAME } from 'config';
 import {falcorGraph} from "../falcorGraph";
+import geo from "./geo";
+import withRouter from "react-router/es/withRouter";
 // ------------------------------------
 // Constants
 // ------------------------------------
+const PROJECT_HOST = 'localhost:3000'
+const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
 const USER_LOGOUT = 'USER::USER_LOGOUT';
 const AUTH_FAILURE = 'USER::AUTH_FAILURE';
 //const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
 const SET_PLANS_AUTH = 'USER::SET_PLANS_AUTH'
+const SET_PLANS_GEOID = 'USER::SET_PLANS_GEOID'
+const SIGNUP_SUCCESS = 'USER::SIGNUP_SUCCESS'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
 // ------------------------------------
@@ -38,6 +44,13 @@ function setPlanAuth(planId,authedPlans,){
     type: SET_PLANS_AUTH,
     planId,
     authedPlans
+  }
+}
+
+function setPlanGeoid(geoid){
+  return {
+    type: SET_PLANS_GEOID,
+    geoid
   }
 }
 
@@ -96,12 +109,35 @@ export const authProjects = (user) => {
   }
 }
 
+export const authGeoid = (user) => {
+  return (dispatch) => {
+    let groups = user.groups
+    if (localStorage && localStorage.getItem('planId')) {
+      let planId = localStorage.getItem('planId');
+      falcorGraph.get(
+          ['plans','county','byId',planId, ['fips']])
+          .then(geo_response => {
+            let geoid = localStorage.getItem('geoId') ?
+                localStorage.getItem('geoId') :
+                geo_response.json.plans.county.byId[planId]['fips'];
+            dispatch(setPlanGeoid(geoid))
+          })
+    }
+
+  }
+}
+
 export const setActivePlan = (user) =>{
   return (dispatch) =>{
     dispatch(setPlanAuth(user))
   }
 }
 
+export const setActiveGeoid = (user) =>{
+  return (dispatch) =>{
+    dispatch(setPlanGeoid(user))
+  }
+}
 
 export const login = ({ email, password }) => dispatch =>
   fetch(`${AUTH_HOST}/login`, {
@@ -119,6 +155,7 @@ export const login = ({ email, password }) => dispatch =>
         dispatch(sendSystemMessage(res.error));
       } else {
         dispatch(authProjects(res.user))
+        dispatch(authGeoid(res.user))
         dispatch(receiveAuthResponse(res.user));
       }
     });
@@ -145,6 +182,7 @@ export const auth = () => dispatch => {
           dispatch(sendSystemMessage(res.error));
         } else {
           dispatch(authProjects(res.user));
+          dispatch(authGeoid(res.user));
           dispatch(receiveAuthResponse(res.user));
         }
       });
@@ -156,25 +194,30 @@ export const auth = () => dispatch => {
 };
 
 export const signup = email => dispatch => {
+  console.log('came in signup on client', email)
   return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME })
+    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: DEFAULT_GROUP, host: PROJECT_HOST, url: '/reset-password'})
   })
     .then(res => res.json())
     .then(res => {
       if (res.error) {
-        dispatch(sendSystemMessage(res.error));
+        dispatch(sendSystemMessage(res.error))
       } else {
+        dispatch({ type: SIGNUP_SUCCESS })
         dispatch(sendSystemMessage(res.message));
       }
+
+      return res;
     });
 };
 
 export const resetPassword = ({ email }) => dispatch => {
+  console.log('came in resetPassword on client', email)
   return fetch(`${AUTH_HOST}/password/reset`, {
     method: 'POST',
     headers: {
@@ -190,13 +233,37 @@ export const resetPassword = ({ email }) => dispatch => {
       } else {
         dispatch(sendSystemMessage(res.message));
       }
+      localStorage.setItem('signedUp', true)
     });
 };
+
+export const setPassword = ({ token, password }) => dispatch => {
+  console.log('came in setPassword on client', token, password)
+  return fetch(`${AUTH_HOST}/password/set`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token, password })
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.error) {
+        dispatch(sendSystemMessage(res.error));
+      } else {
+        dispatch(sendSystemMessage(res.message));
+      }
+    });
+};
+
+// call passwordSet with token from url
 
 export const actions = {
   login,
   logout,
-  setActivePlan
+  setActivePlan,
+  setActiveGeoid
 };
 
 // -------------------------------------
@@ -209,7 +276,9 @@ let initialState = {
   authed: false,
   attempts: 0,
   activePlan: null,
-  authedPlans: []
+  authedPlans: [],
+  activeGeoid: null,
+  signupComplete: false
 };
 
 // ------------------------------------
@@ -243,8 +312,22 @@ const ACTION_HANDLERS = {
       localStorage.setItem('planId', newState.activePlan)
     }
     return newState
-  }
+  },
 
+  [SET_PLANS_GEOID]: (state =initialState, action) => {
+    const newState = Object.assign({}, state)
+    if(action.geoid) {
+      newState.activeGeoid = action.geoid
+      localStorage.setItem('geoId', newState.activeGeoid)
+    }
+    return newState
+  },
+
+  [SIGNUP_SUCCESS]: (state =initialState, action) => {
+    const newState = Object.assign({}, state)
+    newState.signupComplete = true
+    return newState
+  }
 };
 
 export default function userReducer(state = initialState, action) {
