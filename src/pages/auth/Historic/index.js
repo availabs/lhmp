@@ -102,7 +102,7 @@ class Historic extends React.Component {
                         <div className="content-box">
                             <h4 className="element-header">{ this.getGeoidName() }</h4>
                             <div className="row">
-                                <div className="col-sm-8 col-xxxl-6">
+                                <div className="col-8">
                                     <div className="element-wrapper">
                                         <div className="element-box">
 
@@ -128,7 +128,7 @@ class Historic extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className='col-sm-4 d-xxxl-none'>
+                                <div className='col-sm-4'>
                                     <div className='element-wrapper'>
                                             <div className='element-box'>
                                                 <div className='row'>
