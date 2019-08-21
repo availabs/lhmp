@@ -96,7 +96,7 @@ class Plans extends React.Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                 {
+                                 {Object.values(this.props.plansList).length > 0 ?
                                      Object.values(this.props.plansList)
                                          .filter(plan => this.props.authedPlans.includes(plan.id.value))
                                          .map((plan,i) =>{
@@ -123,7 +123,7 @@ class Plans extends React.Component {
                                          }
                                      </tr>
                                      )
-                                })
+                                }) : null
                                 }
                                 </tbody>
                             </table>

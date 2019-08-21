@@ -21,12 +21,16 @@ class User extends React.Component {
         super(props);
 
         this.state = {
-            roles_data: []
+            roles_data: [],
+            rolesMeta: []
         }
     }
-
+/*    componentDidMount (){
+        if(this.props.location.data) console.log('handle submit called', this.props.location.data)
+    }*/
     fetchFalcorDeps() {
         let roles_data =[];
+        let email = this.props.user.email;
         return this.props.falcor.get(['roles','length'])
             .then(response => response.json.roles.length)
             .then(length => this.props.falcor.get(
@@ -46,32 +50,48 @@ class User extends React.Component {
             .then(ids =>
                 this.props.falcor.get(['roles','byId', ids, COLS])
                     .then(response => {
-                        Object.keys(response.json.roles.byId).filter(d => d!== '$__path').forEach(function(action,i){
-                            roles_data.push({
-                                'id' : action,
-                                'data': Object.values(response.json.roles.byId[action])
-                            })
+                        Object.keys(response.json.roles.byId)
+                            .filter(d => d!== '$__path')
+                            .forEach(function(action,i){
+                                console.log('email? ',response.json.roles.byId[action])
+                                if (response.json.roles.byId[action].contact_email === email){
+                                    roles_data.push({
+                                        'id' : action,
+                                        'data': Object.values(response.json.roles.byId[action])
+                                    })
+                                }
                         })
-                        console.log('falcor',roles_data)
                         this.setState({'roles_data':roles_data})
                         return roles_data
                     })
             )
+            .then(() => {
+                // fetch rolesMeta
+                this.props.falcor.get(['rolesmeta','roles', ['field']])
+                    .then(rolesMeta => {
+                        this.setState({'rolesMeta': rolesMeta.json.rolesmeta.roles.field});
+                        return rolesMeta
+                    })
+            })
     }
 
     render() {
-
         let userData = {'Email': this.props.user.email, 'Groups': this.props.user.groups.join()}
         let roleData = this.state.roles_data.map(d => d.data.slice(1,d.data.length))
         roleData = roleData.map(d => {
             let tmp = {}
             d.map((d1,d1_i) => {
-                tmp[COLS[d1_i+1]]=d1
+                //tmp[COLS[d1_i+1]]=d1 //without id
+                // COLS[d1_i] === 'id' ? tmp[COLS[d1_i]]=d1[2] :
+                    COLS[d1_i] === 'contact_title_role'
+                    ? tmp[COLS[d1_i]] = this.state.rolesMeta.filter(f => f.value === d1).length > 0 ?
+                        this.state.rolesMeta.filter(f => f.value === d1)[0].name : d1
+                    : tmp[COLS[d1_i]]=d1;
                 return tmp
             })
             return tmp
         })
-        console.log('roleData', roleData)
+        console.log('roleData', this.state.roles_data)
         return (
             <div className='container'>
                 <Element>
@@ -88,8 +108,8 @@ class User extends React.Component {
                                         {/* <img alt="" src="img/avatar1.jpg" />*/}
                                     </div>
                                 </div>
-                                <h1 className="up-header">User Name</h1>
-                                <h5 className="up-sub-header">Role Name</h5>
+                                <h1 className="up-header">{roleData.length > 0 ? roleData[0].contact_name : 'Loading'}</h1>
+                                <h5 className="up-sub-header">{roleData.length > 0 ? roleData[0].contact_title_role : 'Loading'}</h5>
                             </div>
                             <svg className="decor" width="842px" height="219px" viewBox="0 0 842 219"
                                  preserveAspectRatio="xMaxYMax meet" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -115,8 +135,6 @@ class User extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log('ownProps users', ownProps);
-
     return ({
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts, // so componentWillReceiveProps will get called.

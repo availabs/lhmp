@@ -137,7 +137,7 @@ class ActionsIndex extends React.Component {
         return (
             <div className='container'>
             <Element>
-                <h6 className="element-header">Actions
+                <h4 className="element-header">Actions
                     <span style={{float:'right'}}>
                         <Link 
                             className="btn btn-sm btn-primary"
@@ -157,7 +157,7 @@ class ActionsIndex extends React.Component {
                                 Create HMGP Action
                         </button>
                     </span>
-                </h6>
+                </h4>
                 <div className="element-box">
                     <div className="table-responsive" >
                         <table className="table table lightBorder">

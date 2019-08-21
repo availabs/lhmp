@@ -39,11 +39,12 @@ function setActiveProject(planId){
 }
  */
 
-function setPlanAuth(planId,authedPlans,){
+function setPlanAuth(planId,authedPlans,groupName){
   return {
     type: SET_PLANS_AUTH,
     planId,
-    authedPlans
+    authedPlans,
+    groupName
   }
 }
 
@@ -90,20 +91,28 @@ const removeUserToken = () => {
 export const authProjects = (user) => {
   return (dispatch) => {
     let groups = user.groups
+    console.log('got to auth projects', groups)
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
+          let groupName = null;
+          console.log('got a response from auth groups', response)
           let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
               .reduce((output, group) => {
-                output.push(group.plans)
+                if(group.plans && group.plans.length > 0) output.push(group.plans)
+                console.log('group',group.plans)
                 return output
               }, [])
           // make plan ids unique by magic
-          let AuthedPlans = [...new Set(allPlans[1])];
+          let AuthedPlans = allPlans.length > 0 ? [...new Set(allPlans[0])] : [null];
+          console.log('all plans', AuthedPlans)
           if (localStorage) {
-            let planId = localStorage.getItem('planId') ?
+            let planId = localStorage.getItem('planId') && AuthedPlans.includes(localStorage.getItem('planId'))?
                 localStorage.getItem('planId') :
                 AuthedPlans[0]
-            dispatch(setPlanAuth(planId,AuthedPlans))
+            Object.keys(response.json.plans.authGroups).map(f => {if (response.json.plans.authGroups[f].plans
+                                                            && response.json.plans.authGroups[f].plans.includes(planId)) groupName = f});
+            console.log('authProjects', planId, groupName)
+            dispatch(setPlanAuth(planId,AuthedPlans, groupName))
           }
         })
   }
@@ -114,11 +123,12 @@ export const authGeoid = (user) => {
     let groups = user.groups
     if (localStorage && localStorage.getItem('planId')) {
       let planId = localStorage.getItem('planId');
+      console.log('plan id while setting geoid', planId)
       falcorGraph.get(
           ['plans','county','byId',planId, ['fips']])
           .then(geo_response => {
-            let geoid = localStorage.getItem('geoId') ?
-                localStorage.getItem('geoId') :
+            let geoid = /*localStorage.getItem('geoId') ?
+                localStorage.getItem('geoId') :*/
                 geo_response.json.plans.county.byId[planId]['fips'];
             dispatch(setPlanGeoid(geoid))
           })
@@ -128,6 +138,7 @@ export const authGeoid = (user) => {
 }
 
 export const setActivePlan = (user) =>{
+  console.log('setActivePlan', user)
   return (dispatch) =>{
     dispatch(setPlanAuth(user))
   }
@@ -176,7 +187,7 @@ export const auth = () => dispatch => {
     })
       .then(res => res.json())
       .then(res => {
-        //console.log('auth happened')
+        console.log('auth happened', res)
         if (res.error) {
           dispatch({ type: AUTH_FAILURE });
           dispatch(sendSystemMessage(res.error));
@@ -193,15 +204,16 @@ export const auth = () => dispatch => {
   }
 };
 
-export const signup = email => dispatch => {
-  console.log('came in signup on client', email)
+export const signup = ({email, group}) => dispatch => {
+  if (!group) group = DEFAULT_GROUP;
+  console.log('came in signup on client', email, group)
   return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: DEFAULT_GROUP, host: PROJECT_HOST, url: '/reset-password'})
+    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: group, host: PROJECT_HOST, url: '/reset-password'})
   })
     .then(res => res.json())
     .then(res => {
@@ -278,6 +290,7 @@ let initialState = {
   activePlan: null,
   authedPlans: [],
   activeGeoid: null,
+  activeGroup: null,
   signupComplete: false
 };
 
@@ -303,11 +316,17 @@ const ACTION_HANDLERS = {
   },
 
   [SET_PLANS_AUTH]: (state =initialState, action) => {
+    //console.log('in planAuth', action)
     const newState = Object.assign({}, state)
     if(action.authedPlans) {
       newState.authedPlans = action.authedPlans
     }
+    if(action.groupName){
+      //console.log('setting auth plan and group', action)
+      newState.activeGroup = action.groupName
+    }
     if(Object.values(newState.authedPlans).includes(action.planId)) {
+      //console.log('new plan id: set activeGroup here', action)
       newState.activePlan = action.planId
       localStorage.setItem('planId', newState.activePlan)
     }

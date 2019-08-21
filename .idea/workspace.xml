@@ -2,8 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Users/admin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/TableView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Users/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Users/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/plans/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/plans/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -118,6 +131,9 @@
       <workItem from="1564159927429" duration="161000" />
       <workItem from="1564160106080" duration="10148000" />
       <workItem from="1564261312467" duration="47115000" />
+      <workItem from="1566414615129" duration="65000" />
+      <workItem from="1566414836375" duration="96000" />
+      <workItem from="1566414947890" duration="958000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -434,7 +450,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565987124882</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="signup form toggle on success">
+      <created>1565988553424</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1565988553424</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -463,7 +486,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap" />
     <MESSAGE value="changed the route of create actions worksheet" />
     <MESSAGE value="list all the actions" />
     <MESSAGE value="create a new worksheet" />
@@ -488,7 +510,8 @@
     <MESSAGE value="default geo from auth plan" />
     <MESSAGE value="signup wizard" />
     <MESSAGE value="user page" />
-    <option name="LAST_COMMIT_MESSAGE" value="user page" />
+    <MESSAGE value="signup form toggle on success" />
+    <option name="LAST_COMMIT_MESSAGE" value="signup form toggle on success" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

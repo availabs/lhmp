@@ -43,7 +43,15 @@ const DefaultLayout = ({component: Component, ...rest}) => {
       }}
     />
   ) : (
-    <Route {...rest} render={matchProps => (
+      checkAuthPage(rest) ?
+          (
+              <Redirect
+                  to={{
+                      pathname: "/",
+                      state: { from: rest.router.location }
+                  }}
+              />
+          ) : (<Route {...rest} render={matchProps => (
       <div className="layout-w" style={{ minHeight: '100vh' }}>
         <Menu {...rest} />
         <div style={contentStyle}>
@@ -52,14 +60,21 @@ const DefaultLayout = ({component: Component, ...rest}) => {
             <Component {...matchProps} {...rest}/>
           </ContentContainer>
         </div>
-      </div>  
-    )} />
-  )
+      </div>
+    )} />)
+      )
+
 }
 
 function checkAuth (props) {
   //console.log('checkAuth', props.auth, props.authed)
   return (props.auth && !props.authed)
+}
+
+function checkAuthPage (props) {
+    let authlevel = props.authLevel ? props.authLevel : 1;
+    //console.log('checkAuthPage',props.authed, props.userAuthLevel >= authlevel)
+    return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
 }
 
 export default DefaultLayout

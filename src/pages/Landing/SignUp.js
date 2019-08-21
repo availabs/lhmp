@@ -42,6 +42,7 @@ class Signup extends React.Component {
             countyList: [],
             cousubList: [],
             roleList: [],
+            group: null,
             nextButtonActiveStep1: false,
             nextButtonActiveStep2: false,
             nextButtonActiveStep3: false,
@@ -54,6 +55,12 @@ class Signup extends React.Component {
 
     validateForm() {
         return this.state.contact_email.length > 0 && this.state.contact_email === this.state.email_verify;
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.contact_county !== this.state.contact_county){
+            let tmpGroup = this.state.countyList.filter(f => f.id === this.state.contact_county)[0].name + ' Public';
+            this.setState({'group': tmpGroup})
+        }
     }
 
     fetchFalcorDeps() {
@@ -208,14 +215,13 @@ class Signup extends React.Component {
         } else {
             return null
         }
-
-
     }
 
     handleSubmit(event) {
         event.preventDefault();
         this.setState({isLoading: true});
         // get planId here so it calls falcor only once for it
+
         return this.props.falcor.get(['plans', 'county', 'byGeoid', [this.state.contact_county], 'id']).then(
             d => {
                 let plan_id = d.json.plans.county.byGeoid[this.state.contact_county].id;
@@ -225,7 +231,7 @@ class Signup extends React.Component {
                     .then(res => {
                         console.log('inserted role, waiting for avail_auth', res);
                         // avail_auth call
-                        this.props.signup(this.state.contact_email)
+                        this.props.signup({email:this.state.contact_email, group:this.state.group})
                             .then(res => console.log('all done'))
                     })
             })
@@ -386,9 +392,10 @@ class Signup extends React.Component {
                             <div className="form-group"><label htmlFor={'contact_name'}> Name</label>
                                 <input id='contact_name' required="required" onChange={this.handleChange}
                                        className="form-control" placeholder="Name" type="text"
-                                       value={this.state.contact_name}/></div>
-                            <div className="help-block form-text with-errors form-control-feedback"></div>
+                                       value={this.state.contact_name}/>
+                                <div className="help-block form-text with-errors form-control-feedback"></div>
 
+                            </div>
                         </div>
                         <div className="col-sm-12">
                             <div className="form-group"><label

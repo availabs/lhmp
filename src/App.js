@@ -44,33 +44,18 @@ class App extends Component {
         <div className="all-wrapper solid-bg-all">
           <BrowserRouter>
             <Switch>
-              {this.props.user.authLevel === 0 ?
-                  Routes.publicRoutes.map((route, i) => {
-                    return (
-                        <Layout
-                            {...route}
-                            authed={this.props.user.authed}
-                            breadcrumbs={route.breadcrumbs}
-                            isAuthenticating={this.state.isAuthenticating}
-                            key={i}
-                            menus={Routes.publicRoutes}
-                            menuSettings={route.menuSettings ? route.menuSettings : {}}
-                            router={this.props.router}
-                            routes={Routes.publicRoutes}
-                            user={this.props.user}
-                        />
-                    );
-                  }) :
+              {
                   Routes.routes.map((route, i) => {
                     return (
                         <Layout
                             {...route}
                             authed={this.props.user.authed}
+                            userAuthLevel={this.props.user.authLevel}
                             breadcrumbs={route.breadcrumbs}
                             isAuthenticating={this.state.isAuthenticating}
                             key={i}
                             menuSettings={route.menuSettings ? route.menuSettings : {}}
-                            menus={Routes.routes}
+                            menus={Routes.routes.filter(f => f.auth && f.authLevel ? f.authLevel <= this.props.user.authLevel : true)}
                             router={this.props.router}
                             routes={Routes.routes}
                             user={this.props.user}

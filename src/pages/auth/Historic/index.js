@@ -98,8 +98,8 @@ class Historic extends React.Component {
         return (
             <div className='container'>
                 <Element>
-                    <div className='content-i'>
-                        <div className="content-box">
+                   {/* <div className='content-i'>
+                        <div className="content-box">*/}
                             <h4 className="element-header">{ this.getGeoidName() }</h4>
                             <div className="row">
                                 <div className="col-sm-8 col-xxxl-6">
@@ -213,8 +213,8 @@ class Historic extends React.Component {
                             </div>
 
 
-                        </div>
-                    </div>
+                       {/* </div>
+                    </div>*/}
                 </Element>
             </div>
         )
@@ -222,6 +222,7 @@ class Historic extends React.Component {
 }
 
 const mapStateToProps = (state,ownProps) => {
+    console.log('historic mapstate', state)
     return {
         geoGraph: state.graph.geo,
         router: state.router,

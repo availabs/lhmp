@@ -10,9 +10,7 @@ class TableView extends Component {
 
     }
 
-    fetchFal
     render(){
-        console.log('table', this.props)
         return (
             <table className="table table lightBorder">
                 <thead>
@@ -24,7 +22,14 @@ class TableView extends Component {
                         VALUE
                     </th>
                     {this.props.edit ? (<th>
-                        <a className="btn btn-sm btn-outline-primary" href="/roles/edit/7">Edit</a>
+                        <Link className="btn btn-sm btn-outline-primary"
+                            to={{
+                                pathname: `/role/edit/${this.props.data['id']}`,
+                                returnPath: '/user',
+                                data: this.props.data
+                                //handleSubmit: this.handleSubmit.bind(this)
+                            }}
+                        >Edit</Link>
                     </th>) : ''}
                 </tr>
                 </thead>

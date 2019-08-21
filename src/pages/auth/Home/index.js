@@ -17,14 +17,14 @@ class HomeView extends React.Component {
   render() {
     /*
     var title ='Home';
-    var subheader = 'Dashboard';
+    var subheader = 'Dashboard';setActivePlan
      */
     return(
       <div className='container'>
         <Element>
         <form>
         <h4  className="element-header">Mitigation Planner Home</h4>
-        <h4>Home Page for {this.props.activePlan} {this.props.activeGeoid}</h4>
+        <h6>Home Page for {this.props.activePlan} {this.props.activeGeoid}</h6>
         </form>
         </Element>
       </div>
@@ -35,7 +35,6 @@ class HomeView extends React.Component {
 const mapStateToProps = state => {
   console.log('user', state.user)
   return ({
-    isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
     activeGeoid: state.user.activeGeoid
   });
@@ -43,8 +42,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = ({
   //sendSystemMessage
-  authProjects,
-  authGeoid
+  //authProjects,
+  //authGeoid
 
 });
 

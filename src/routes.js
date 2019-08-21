@@ -19,6 +19,8 @@ import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import RolesIndex from 'pages/auth/Roles/'
 import Public from 'pages/auth/Public/'
 import User from 'pages/auth/Users/'
+import Admin from 'pages/auth/Users/admin'
+import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Signup from './pages/Landing/SignUp'
@@ -44,30 +46,17 @@ const routes = [
    ...Historic,
    ...RolesIndex,
    ...Public,
-        ...User,
+   ...User,
+   ...Admin,
+   ...FormEditOrNew,
   PlanIndex,
   RiskMap,
   Logout,
   NoMatch
 
 ]
-
-const publicRoutes = [
-    Landing,
-    Login,
-    Signup,
-    ...ResetPassword,
-    ...Public,
-    Logout,
-    NoMatch
-
-
-
-]
-
 export default {
-    routes: routes,
-    publicRoutes: publicRoutes
+    routes: routes
 }
 
 

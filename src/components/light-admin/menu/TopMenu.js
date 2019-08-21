@@ -16,6 +16,7 @@ class Logo extends Component {
 
 class AvatarUser extends Component {
     render() {
+        console.log('TopMenu', this.props.user)
         return (
             <div className="logged-user-w avatar-inline">
                 <div className="logged-user-i">
@@ -24,7 +25,7 @@ class AvatarUser extends Component {
                     <div className="logged-user-info-w">
                         <div className="logged-user-name">{this.props.user.email ? this.props.user.email : ''}</div>
                         <div className="logged-user-role"
-                             style={{color: '#cdcdcd'}}>{this.props.user.groups ? this.props.user.groups[0] : ''}</div>
+                             style={{color: '#cdcdcd'}}>{this.props.user.activeGroup ? this.props.user.activeGroup : ''}</div>
                     </div>
                     <div className="logged-user-toggler-arrow">
                         <div className="os-icon os-icon-chevron-down"/>
@@ -46,7 +47,27 @@ class AvatarUser extends Component {
                                         className="logged-user-role">{this.props.user.groups ? this.props.user.groups[0] : ''}</div>
                                 </div>
                             </Link>
+
                         </div>
+                        <ul>
+                            {this.props.user.authedPlans && this.props.user.authedPlans.length > 1 ?
+                                    <li>
+                                        <a href='/plans'>
+                                            <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Plans </span>
+                                        </a>
+                                    </li>
+                                 : null
+                            }
+
+                            {this.props.user.authLevel >= 5 ?
+                                    <li>
+                                        <a href='/user/admin'>
+                                            <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Admin </span>
+                                        </a>
+                                    </li>
+                                 : null
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>
