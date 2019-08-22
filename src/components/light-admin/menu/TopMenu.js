@@ -44,7 +44,7 @@ class AvatarUser extends Component {
                                     <div
                                         className="logged-user-name">{this.props.user.email ? this.props.user.email : ''}</div>
                                     <div
-                                        className="logged-user-role">{this.props.user.groups ? this.props.user.groups[0] : ''}</div>
+                                        className="logged-user-role">{this.props.user.activeGroup ? this.props.user.activeGroup : ''}</div>
                                 </div>
                             </Link>
 

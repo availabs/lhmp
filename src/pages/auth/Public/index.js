@@ -58,6 +58,7 @@ export default [{
     exact: true,
     name: 'Public',
     auth: true,
+    authLevel: 0,
     mainNav: false,
     breadcrumbs: [
         { name: 'Public', path: '/' },

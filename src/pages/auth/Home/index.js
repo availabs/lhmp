@@ -52,6 +52,9 @@ export default {
   path: '/',
   exact: true,
   mainNav: true,
+  breadcrumbs: [
+    { name: 'Home', path: '/' }
+  ],
   menuSettings: {
     image: 'none',
     scheme: 'color-scheme-light',
