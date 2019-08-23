@@ -43,6 +43,8 @@ class Plans extends React.Component {
         this.props.setActivePlan(ids[0])
         this.props.setActiveGeoid(ids[1])
         this.props.history.push('/')
+        window.location.reload(true)
+
     }
 
     fetchFalcorDeps() {

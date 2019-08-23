@@ -13,7 +13,6 @@ class HomeView extends React.Component {
     super(props)
   }
 
-
   render() {
     /*
     var title ='Home';
@@ -64,6 +63,7 @@ export default {
   },
   name: 'Home',
   auth: true,
+  //authLevel: 0,
   component: connect(mapStateToProps,mapDispatchToProps)(HomeView)
 };
 

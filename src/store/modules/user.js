@@ -91,11 +91,10 @@ const removeUserToken = () => {
 export const authProjects = (user) => {
   return (dispatch) => {
     let groups = user.groups
-    console.log('got to auth projects', groups)
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
           let groupName = null;
-          console.log('got a response from auth groups', response)
+          console.log('uer object', user)
           let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
               .reduce((output, group) => {
                 if(group.plans && group.plans.length > 0) output.push(group.plans)
@@ -103,15 +102,34 @@ export const authProjects = (user) => {
                 return output
               }, [])
           // make plan ids unique by magic
-          let AuthedPlans = allPlans.length > 0 ? [...new Set(allPlans[0])] : [null];
-          console.log('all plans', AuthedPlans)
+          let AuthedPlans = allPlans.length > 0 ? [...new Set(allPlans.map(f => f[0]))] : [null];
+
           if (localStorage) {
-            let planId = localStorage.getItem('planId') && AuthedPlans.includes(localStorage.getItem('planId'))?
-                localStorage.getItem('planId') :
-                AuthedPlans[0]
-            Object.keys(response.json.plans.authGroups).map(f => {if (response.json.plans.authGroups[f].plans
-                                                            && response.json.plans.authGroups[f].plans.includes(planId)) groupName = f});
-            console.log('authProjects', planId, groupName)
+
+            /*Object.keys(response.json.plans.authGroups).map(f => {if (response.json.plans.authGroups[f].plans
+                                                            && response.json.plans.authGroups[f].plans.includes(planId)) groupName = f});*/
+            // if planId
+            let planId = null
+            if (localStorage.getItem('planId') && AuthedPlans.includes(localStorage.getItem('planId'))){
+               planId = localStorage.getItem('planId');
+               Object.keys(response.json.plans.authGroups)
+                   .filter( d => d !== '$__path')
+                   .map(groupNames => {
+                 if (response.json.plans.authGroups[groupNames].plans && planId.toString() === response.json.plans.authGroups[groupNames].plans[0].toString()){
+                   groupName = groupNames
+                 }
+               })
+            }else{
+              // if no planId
+              Object.keys(user.meta).map((f,f_i) => f_i > 0 ?
+                  user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
+                  : groupName = user.meta[f].group)
+              planId = localStorage.getItem('planId') && AuthedPlans.includes(localStorage.getItem('planId'))?
+                  localStorage.getItem('planId') :
+                  response.json.plans.authGroups[groupName].plans[0]
+            }
+
+            console.log('planid, groupname', planId, groupName)
             dispatch(setPlanAuth(planId,AuthedPlans, groupName))
           }
         })
@@ -299,6 +317,7 @@ let initialState = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [USER_LOGIN]: (state = initialState, action) => {
+    console.log('user login', action)
     const newState = Object.assign({}, state, action.user, { authed: true });
     ++newState.attempts;
     setUserToken(action.user);
