@@ -125,10 +125,11 @@ class EBRLayer extends MapLayer {
             buildingids.forEach(id => {
               const prop_class = get(byIdGraph, [id, "prop_class"], "000") + "",
                 owner_type = get(byIdGraph, [id, "owner_type"], "-999") + "",
-                inFloodZone = Boolean(get(byIdGraph, [id, "flood_zone"], false));
+                flood_zone = get(byIdGraph, [id, "flood_zone"], null),
+                risks = this.getBuildingRisks({ flood_zone });
 
               if (!shouldFilter({ prop_class, owner_type })) {
-                data.push({ id, measure, value: +get(byIdGraph, [id, measure], 0), inFloodZone });
+                data.push({ id, measure, value: +get(byIdGraph, [id, measure], 0), risks });
               }
               else {
                 filteredBuildingids.push(id.toString());
@@ -166,6 +167,25 @@ class EBRLayer extends MapLayer {
 
     return ({ owner_type, prop_class }) => propClassFilter(prop_class) || ownerTypeFilter(owner_type);
   }
+  getBuildingRisks({ flood_zone }) {
+    return [
+      this.getFloodZone(flood_zone)
+    ].filter(r => Boolean(r));
+  }
+  getFloodZone(flood_zone) {
+    if (!Boolean(flood_zone)) return false;
+
+    switch ((flood_zone + "").slice(0, 1).toLowerCase()) {
+      case "a":
+      case "v":
+        return "100-year";
+      case "x":
+      case "b":
+        return "500-year";
+      default:
+        return false;
+    }
+  }
   receiveData(map, [filteredBuildingids = [], data = []]) {
     const coloredBuildingIds = [],
       riskFilter = this.filters.risk.value,
@@ -175,7 +195,7 @@ class EBRLayer extends MapLayer {
       colors = data.reduce((a, c) => {
         a[c.id] = colorScale(c.value);
         coloredBuildingIds.push(c.id.toString());
-        if ((riskFilter === "Flood") && c.inFloodZone) {
+        if (riskFilter.reduce((aa, cc) => aa || c.risks.includes(cc), false)) {
           atRiskIds.push(c.id.toString());
         }
         return a;
@@ -329,9 +349,12 @@ export default function() {
       },
       risk: {
         name: "Risk",
-        type: "single",
-        domain: ["None", "Flood"],
-        value: "None"
+        type: "multi",
+        domain: [
+          { value: "100-year", name: "100-year Flood Zone" },
+          { value: "500-year", name: "500-year Flood Zone" }
+        ],
+        value: []
       },
       measure: {
         name: "Measure",
