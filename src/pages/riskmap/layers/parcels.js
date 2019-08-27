@@ -78,8 +78,6 @@ class ParcelLayer extends MapLayer {
   onAdd(map) {
     super.onAdd(map)
 
-    this.loading = true;
-
     const geoLevel = "cousubs";
     falcorGraph.get(["geo", "36", geoLevel])
       .then(res => res.json.geo['36'][geoLevel])
@@ -160,7 +158,7 @@ class ParcelLayer extends MapLayer {
           .then(() => {
             const measure = parcelLayer.filters.measure.value;
             let colors = {};
-            if (measure === "full_market_val") { 
+            if (measure === "full_market_val") {
               colors = this.processNonOrdinal(parcelids);
             }
             else {

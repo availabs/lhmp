@@ -16,7 +16,7 @@ class Logo extends Component {
 
 class AvatarUser extends Component {
     render() {
-        console.log('TopMenu', this.props.user)
+        // console.log('TopMenu', this.props.user)
         return (
             <div className="logged-user-w avatar-inline">
                 <div className="logged-user-i">
@@ -37,7 +37,7 @@ class AvatarUser extends Component {
                         </ul>
                         <div className="logged-user-avatar-info">
                             <div className="avatar-w"><i className='pre-icon os-icon os-icon-user-male-circle'
-                                                                                                 style={{'vertical-align': 'middle',
+                                                                                                 style={{'verticalAlign': 'middle',
                                                                                                  'color': 'white'}}/></div>
                             <Link to={'/user/'}>
                                 <div className="logged-user-info-w">
