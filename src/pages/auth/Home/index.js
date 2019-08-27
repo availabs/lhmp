@@ -13,7 +13,6 @@ class HomeView extends React.Component {
     super(props)
   }
 
-
   render() {
     /*
     var title ='Home';
@@ -52,6 +51,9 @@ export default {
   path: '/',
   exact: true,
   mainNav: true,
+  breadcrumbs: [
+    { name: 'Home', path: '/' }
+  ],
   menuSettings: {
     image: 'none',
     scheme: 'color-scheme-light',
@@ -61,6 +63,7 @@ export default {
   },
   name: 'Home',
   auth: true,
+  //authLevel: 0,
   component: connect(mapStateToProps,mapDispatchToProps)(HomeView)
 };
 

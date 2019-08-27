@@ -58,7 +58,7 @@ class Signup extends React.Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.contact_county !== this.state.contact_county){
-            let tmpGroup = this.state.countyList.filter(f => f.id === this.state.contact_county)[0].name + ' Public';
+            let tmpGroup = this.state.countyList.filter(f => f.id === this.state.contact_county)[0].name + ' HMP Public';
             this.setState({'group': tmpGroup})
         }
     }
@@ -227,11 +227,11 @@ class Signup extends React.Component {
                 let plan_id = d.json.plans.county.byGeoid[this.state.contact_county].id;
                 if (plan_id) this.setState({'associated_plan': plan_id});
                 let args = COLS.map(key => this.state[key]);
-                return this.props.falcor.call(['roles', 'insert'], args, [], [])
+                return this.props.signup({email:this.state.contact_email, group:this.state.group})
                     .then(res => {
-                        console.log('inserted role, waiting for avail_auth', res);
+                        console.log('inserted user, inserting in roles', res);
                         // avail_auth call
-                        this.props.signup({email:this.state.contact_email, group:this.state.group})
+                        this.props.falcor.call(['roles', 'insert'], args, [], [])
                             .then(res => console.log('all done'))
                     })
             })
@@ -421,7 +421,6 @@ class Signup extends React.Component {
     }
 
     render() {
-        console.log('came: ', this.props.signupComplete);
         const {from} = this.props.location.state || {from: {pathname: "/"}};
         const {redirectToReferrer} = this.state;
 

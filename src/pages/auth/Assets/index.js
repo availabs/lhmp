@@ -226,8 +226,8 @@ class AssetsIndex extends React.Component {
       <div className='container'>
 
             <Element>
-              <div className='content-i'>
-                <div className='content-box'>
+              {/*<div className='content-i'>
+                <div className='content-box'>*/}
                   <h4 className="element-header">Assets For {this.renderMenu()}</h4>
                   <div className="os-tabs-w mx-4">
                     <div className="os-tabs-controls">
@@ -306,8 +306,8 @@ class AssetsIndex extends React.Component {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                {/*</div>
+              </div>*/}
             </Element>
       </div>
 

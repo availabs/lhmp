@@ -25,10 +25,11 @@ select * from t
 
 rollback;
 
-update plans.county
-set groups = '{Sullivan County HMP, AVAIL, Sullivan County HMP General, Sullivan County HMP Admin, Sullivan County HMP Public}'
-where county = 'Sullivan County'
-returning groups;
+update plans.county dst
+set groups = ('{AVAIL, ' || src.county || ' HMP General, ' || src.county || ' HMP Admin, ' || src.county || ' HMP Public}') :: character varying[]
+FROM plans.county src
+where src.county = dst.county
+returning dst.groups;
 */
 
 const COLS = [

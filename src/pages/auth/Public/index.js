@@ -54,10 +54,11 @@ const mapDispatchToProps = {
 };
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/',
+    path: '/public',
     exact: true,
     name: 'Public',
     auth: true,
+    authLevel: 0,
     mainNav: false,
     breadcrumbs: [
         { name: 'Public', path: '/' },

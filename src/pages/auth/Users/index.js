@@ -53,7 +53,6 @@ class User extends React.Component {
                         Object.keys(response.json.roles.byId)
                             .filter(d => d!== '$__path')
                             .forEach(function(action,i){
-                                console.log('email? ',response.json.roles.byId[action])
                                 if (response.json.roles.byId[action].contact_email === email){
                                     roles_data.push({
                                         'id' : action,

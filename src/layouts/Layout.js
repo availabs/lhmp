@@ -15,7 +15,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
         <div className="all-wrapper solid-bg-all">
           <div className="layout-w">
             <ContentContainer>
-              <LoadingPage message={'Loading Plans...'}/>
+              <LoadingPage message={`Loading ${rest.name}...`}/>
             </ContentContainer>
           </div>
         </div>
@@ -23,7 +23,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     )
   }
 
-  //console.log('rest', rest)
+  console.log('rest', rest)
   let contentStyle = {width: '100%'}
   if (rest.menuSettings.position === 'menu-position-side') {
     contentStyle.marginLeft = 260
@@ -47,7 +47,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
           (
               <Redirect
                   to={{
-                      pathname: "/",
+                      pathname: rest.userAuthLevel === 0 ? "/public" : "/",
                       state: { from: rest.router.location }
                   }}
               />
@@ -72,8 +72,8 @@ function checkAuth (props) {
 }
 
 function checkAuthPage (props) {
-    let authlevel = props.authLevel ? props.authLevel : 1;
-    //console.log('checkAuthPage',props.authed, props.userAuthLevel >= authlevel)
+    let authlevel = props.authLevel !== undefined ? props.authLevel : 1;
+    //console.log('checkAuthPage',props.authed, props.userAuthLevel, authlevel, props)
     return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
 }
 
