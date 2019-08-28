@@ -27,7 +27,6 @@ class EBRLayer extends MapLayer {
 
   onAdd(map) {
     super.onAdd(map)
-    this.loading = true;
 
     const geoLevel = "cousubs";
     falcorGraph.get(["geo", "36", geoLevel])
@@ -113,12 +112,12 @@ class EBRLayer extends MapLayer {
             console.log('why?',res.json.building.byId, measure)
             let data = Object.keys(graph).reduce((out, curr) => {
               out[curr] = graph[curr][measure]
-              return out 
+              return out
             },{})
             return  data;
           })
       })
-    
+
   }
 
 
@@ -132,7 +131,7 @@ class EBRLayer extends MapLayer {
     console.log('receiveData',data)
     let colors = {}
     let domain = []
-   
+
     console.log(this.filters.measure.domain, this.filters.measure.value)
     let measureInfo = this.filters.measure.domain.filter(d => d.value === this.filters.measure.value)[0]
     if(measureInfo.type === 'ordinal') {
@@ -147,7 +146,7 @@ class EBRLayer extends MapLayer {
     this.legend.active = true;
     map.setFilter('ebr', ["in", "id", ...Object.keys(data).map(d => +d)])
     map.setPaintProperty('ebr', 'fill-color', ["get", ["to-string", ["get", "id"]], ["literal", colors]]);
-    
+
   }
 
 }
@@ -170,7 +169,7 @@ const EBR = new EBRLayer("Enhanced Buildings Risks", {
         'type': 'fill',
         'minzoom': 8,
         'paint': {
-            'fill-color': '#000000'        
+            'fill-color': '#000000'
         }
 
     }
@@ -199,7 +198,7 @@ const EBR = new EBRLayer("Enhanced Buildings Risks", {
         {name: "Critical Facilities (FCode)", value: 'critical', type: 'ordinal'}
       ],
       value: "replacement_value"
-      
+
     }
   },
    popover: {
@@ -225,7 +224,7 @@ const EBR = new EBRLayer("Enhanced Buildings Risks", {
             ["Critical Facilities (FCode)", (graph[id].critical) ],
             ["Flood Zone", (graph[id].flood_zone) ]
 
-     
+
         ]
       }
       catch (e) {
@@ -272,19 +271,19 @@ function processNonOrdinal(data, type='quantile', range=QUANTILE_RANGE) {
 
   function processOrdinal (data) {
     return Object.keys(data).reduce((out, building_id) => {
-      
+
         out[building_id] = data[building_id] ? 'red' : 'black';
-      
+
       return out;
     },{})
-  }  
+  }
 
    /* function processCritical (data) {
     return Object.keys(data).reduce((out, building_id) => {
       out[building_id] = data[building_id].critical ? 'red' : 'black';
       return out;
     },{})
-  }  
+  }
 */
 
 

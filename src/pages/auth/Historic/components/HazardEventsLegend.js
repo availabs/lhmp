@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { getDistanceScales } from 'viewport-mercator-project';
-
 import * as d3format from "d3-format"
 
 import ElementBox from 'components/light-admin/containers/ElementBox'
@@ -49,8 +47,7 @@ export default class HazardEventsLegend extends React.Component {
 
     render() {
         const { colorScale, radiusScale, viewport } = this.props;
-        const distanceScales = getDistanceScales(viewport()),
-            domain = colorScale.domain(),
+        const domain = colorScale.domain(),
             rows = [],
 
             numRows = 3,
