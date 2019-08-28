@@ -16,9 +16,8 @@ import { fnum } from "utils/sheldusUtils"
 
 import MapLayer from "components/AvlMap/MapLayer"
 
-import COLOR_RANGES from "constants/color-ranges"
-const LEGEND_COLOR_RANGE = COLOR_RANGES[5]
-  .reduce((a, c) => c.name === "RdYlBu" ? c.colors : a, []).slice()
+import { getColorRange } from "constants/color-ranges";
+const LEGEND_COLOR_RANGE = getColorRange(5, "RdYlBu");
 
 const IDENTITY = i => i;
 
@@ -61,9 +60,11 @@ class EBRLayer extends MapLayer {
       switch (newValue) {
         case "num_occupants":
           this.legend.format = IDENTITY;
+          this.legend.title = "Number of Occupants";
           break;
         case "replacement_value":
           this.legend.format = fnum;
+          this.legend.title = "Replacement Cost";
           break;
       }
     }
@@ -81,8 +82,10 @@ class EBRLayer extends MapLayer {
     }
     return this.fetchData();
   }
-  fetchData() {
+  getBuildingIds() {
     const geoids = this.filters.area.value;
+
+    if (!geoids.length) return Promise.resolve([]);
 
     return falcorGraph.get(["building", "byGeoid", geoids, "length"])
       .then(res => {
@@ -110,34 +113,15 @@ class EBRLayer extends MapLayer {
             return buildingids;
           })
       })
+  }
+  fetchData() {
+    return this.getBuildingIds()
       .then(buildingids => {
-        if (!buildingids.length) return [];
-
-        const filteredBuildingids = [];
-
-        const shouldFilter = this.makeShouldFilter();
+        if (!buildingids.length) return;
 
         return falcorChunkerNice(["building", "byId", buildingids, ["replacement_value", "owner_type", "prop_class", "num_occupants", "name", "type", "critical", "flood_zone"]])
-          .then(() => {
-            const byIdGraph = get(falcorGraph.getCache(), ["building", "byId"], {}),
-              measure = this.filters.measure.value,
-              data = [];
-            buildingids.forEach(id => {
-              const prop_class = get(byIdGraph, [id, "prop_class"], "000") + "",
-                owner_type = get(byIdGraph, [id, "owner_type"], "-999") + "",
-                flood_zone = get(byIdGraph, [id, "flood_zone"], null),
-                risks = this.getBuildingRisks({ flood_zone });
-
-              if (!shouldFilter({ prop_class, owner_type })) {
-                data.push({ id, measure, value: +get(byIdGraph, [id, measure], 0), risks });
-              }
-              else {
-                filteredBuildingids.push(id.toString());
-              }
-            })
-            return [filteredBuildingids, data]
-          })
       })
+      .then(() => this.falcorCache = falcorGraph.getCache())
   }
   makeCheckPropCategoryFilter() {
     const propCategoryFilters = this.filters.prop_category.value;
@@ -186,49 +170,115 @@ class EBRLayer extends MapLayer {
         return false;
     }
   }
-  receiveData(map, [filteredBuildingids = [], data = []]) {
-    const coloredBuildingIds = [],
-      riskFilter = this.filters.risk.value,
-      atRiskIds = [];
+  render(map) {
+    return this.getBuildingIds()
+      .then(buildingids => {
+        const filteredBuildingids = [];
 
-    const colorScale = this.getColorScale(data),
-      colors = data.reduce((a, c) => {
-        a[c.id] = colorScale(c.value);
-        coloredBuildingIds.push(c.id.toString());
-        if (riskFilter.reduce((aa, cc) => aa || c.risks.includes(cc), false)) {
-          atRiskIds.push(c.id.toString());
-        }
-        return a;
-      }, {});
+        const shouldFilter = this.makeShouldFilter();
 
-    const FILTERED_COLOR = "#666",
-      DEFAULT_COLOR = "#000";
+        const byIdGraph = get(falcorGraph.getCache(), ["building", "byId"], {}),
+          measure = this.filters.measure.value,
+          data = [];
 
-    this.falcorCache = falcorGraph.getCache();
+        buildingids.forEach(id => {
+          const prop_class = get(byIdGraph, [id, "prop_class"], "000") + "",
+            owner_type = get(byIdGraph, [id, "owner_type"], "-999") + "",
+            flood_zone = get(byIdGraph, [id, "flood_zone"], null),
+            risks = this.getBuildingRisks({ flood_zone });
 
-    map.setPaintProperty(
-      'ebr',
-      'fill-outline-color',
-  		["match", ["to-string", ["get", "id"]],
-        atRiskIds.length ? atRiskIds : "no-at-risk", "#fff",
-        coloredBuildingIds.length ? coloredBuildingIds.filter(id => !atRiskIds.includes(id)) : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
-        filteredBuildingids.length ? filteredBuildingids.filter(id => !atRiskIds.includes(id)) : "no-filtered", FILTERED_COLOR,
-        DEFAULT_COLOR
-      ],
-      { validate: false }
-    )
+          if (!shouldFilter({ prop_class, owner_type })) {
+            data.push({ id, measure, value: +get(byIdGraph, [id, measure], 0), risks });
+          }
+          else {
+            filteredBuildingids.push(id.toString());
+          }
+        })
+        return [filteredBuildingids, data]
+      })
+      .then(([filteredBuildingids = [], data = []]) => {
+        const coloredBuildingIds = [],
+          riskFilter = this.filters.risk.value,
+          atRiskIds = [];
 
-  	map.setPaintProperty(
-  		'ebr',
-  		'fill-color',
-  		["match", ["to-string", ["get", "id"]],
-        coloredBuildingIds.length ? coloredBuildingIds : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
-        filteredBuildingids.length ? filteredBuildingids : "no-filtered", FILTERED_COLOR,
-        DEFAULT_COLOR
-      ],
-      { validate: false }
-  	)
+        const colorScale = this.getColorScale(data),
+          colors = data.reduce((a, c) => {
+            a[c.id] = colorScale(c.value);
+            coloredBuildingIds.push(c.id.toString());
+            if (riskFilter.reduce((aa, cc) => aa || c.risks.includes(cc), false)) {
+              atRiskIds.push(c.id.toString());
+            }
+            return a;
+          }, {});
+
+        const FILTERED_COLOR = "#666",
+          DEFAULT_COLOR = "#000";
+
+        map.setPaintProperty(
+          'ebr',
+          'fill-outline-color',
+      		["match", ["to-string", ["get", "id"]],
+            atRiskIds.length ? atRiskIds : "no-at-risk", "#fff",
+            coloredBuildingIds.length ? coloredBuildingIds.filter(id => !atRiskIds.includes(id)) : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
+            filteredBuildingids.length ? filteredBuildingids.filter(id => !atRiskIds.includes(id)) : "no-filtered", FILTERED_COLOR,
+            DEFAULT_COLOR
+          ],
+          { validate: false }
+        )
+
+      	map.setPaintProperty(
+      		'ebr',
+      		'fill-color',
+      		["match", ["to-string", ["get", "id"]],
+            coloredBuildingIds.length ? coloredBuildingIds : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
+            filteredBuildingids.length ? filteredBuildingids : "no-filtered", FILTERED_COLOR,
+            DEFAULT_COLOR
+          ],
+          { validate: false }
+      	)
+      })
   }
+  // receiveData(map, [filteredBuildingids = [], data = []]) {
+  //   const coloredBuildingIds = [],
+  //     riskFilter = this.filters.risk.value,
+  //     atRiskIds = [];
+  //
+  //   const colorScale = this.getColorScale(data),
+  //     colors = data.reduce((a, c) => {
+  //       a[c.id] = colorScale(c.value);
+  //       coloredBuildingIds.push(c.id.toString());
+  //       if (riskFilter.reduce((aa, cc) => aa || c.risks.includes(cc), false)) {
+  //         atRiskIds.push(c.id.toString());
+  //       }
+  //       return a;
+  //     }, {});
+  //
+  //   const FILTERED_COLOR = "#666",
+  //     DEFAULT_COLOR = "#000";
+  //
+  //   this.falcorCache = falcorGraph.getCache();
+  //
+  //   map.setPaintProperty(
+  //     'ebr',
+  //     'fill-outline-color',
+  // 		["match", ["to-string", ["get", "id"]],
+  //       atRiskIds.length ? atRiskIds : "no-at-risk", "#fff",
+  //       coloredBuildingIds.length ? coloredBuildingIds.filter(id => !atRiskIds.includes(id)) : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
+  //       filteredBuildingids.length ? filteredBuildingids.filter(id => !atRiskIds.includes(id)) : "no-filtered", FILTERED_COLOR,
+  //       DEFAULT_COLOR
+  //     ]
+  //   )
+  //
+  // 	map.setPaintProperty(
+  // 		'ebr',
+  // 		'fill-color',
+  // 		["match", ["to-string", ["get", "id"]],
+  //       coloredBuildingIds.length ? coloredBuildingIds : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
+  //       filteredBuildingids.length ? filteredBuildingids : "no-filtered", FILTERED_COLOR,
+  //       DEFAULT_COLOR
+  //     ]
+  // 	)
+  // }
   getColorScale(data) {
     const { type, range } = this.legend;
     switch (type) {
@@ -250,10 +300,11 @@ class EBRLayer extends MapLayer {
   }
 }
 
-export default function() {
-  return new EBRLayer("Enhanced Building Risk", {
+export default (options = {}) =>
+  new EBRLayer("Enhanced Building Risk", {
     active: true,
     falcorCache: {},
+    buildingids: [],
     sources: [
       { id: "nys_buildings_avail",
         source: {
@@ -263,6 +314,7 @@ export default function() {
       }
     ],
     legend: {
+      title: "Replacement Cost",
       type: "quantile",
       types: ["quantile", "quantize"],
       vertical: false,
@@ -367,6 +419,6 @@ export default function() {
         ],
         value: "replacement_value"
       }
-    }
+    },
+    ...options
   })
-}
