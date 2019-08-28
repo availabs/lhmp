@@ -68,7 +68,7 @@ export function logout() {
   };
 }
 
-const setUserToken = user => {
+export const setUserToken = user => {
   if (localStorage) {
     // localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('userToken', user.token);
@@ -90,49 +90,58 @@ const removeUserToken = () => {
 
 export const authProjects = (user) => {
   return (dispatch) => {
-    let groups = user.groups
-    // console.log('got to auth projects', groups)
+    let groups = user.groups;
+    let subdomain =  window.location.hostname.split('.')[0].toLowerCase();
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
-          let groupName = null;
-          // console.log('got a response from auth groups', response)
+          let groupName = [];
+          console.log('uer object', user)
           let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
               .reduce((output, group) => {
                 if(group.plans && group.plans.length > 0) output.push(group.plans)
-                // console.log('group',group.plans)
+                console.log('group',group.plans)
                 return output
               }, [])
-          // make plan ids unique by magic
-          let AuthedPlans = allPlans.length > 0 ? [...new Set(allPlans.map(f => f[0]))] : [null];
 
-          if (localStorage) {
+          console.log('all plans', allPlans)
 
-            /*Object.keys(response.json.plans.authGroups).map(f => {if (response.json.plans.authGroups[f].plans
-                                                            && response.json.plans.authGroups[f].plans.includes(planId)) groupName = f});*/
-            // if planId
-            let planId = null
-            if (localStorage.getItem('planId') && AuthedPlans.includes(localStorage.getItem('planId'))){
-               planId = localStorage.getItem('planId');
-               Object.keys(response.json.plans.authGroups)
-                   .filter( d => d !== '$__path')
-                   .map(groupNames => {
-                 if (response.json.plans.authGroups[groupNames].plans && planId.toString() === response.json.plans.authGroups[groupNames].plans[0].toString()){
-                   groupName = groupNames
-                 }
-               })
-            }else{
-              // if no planId
-              Object.keys(user.meta).map((f,f_i) => f_i > 0 ?
-                  user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
-                  : groupName = user.meta[f].group)
-              planId = localStorage.getItem('planId') && AuthedPlans.includes(localStorage.getItem('planId'))?
-                  localStorage.getItem('planId') :
-                  response.json.plans.authGroups[groupName].plans[0]
-            }
+          let AuthedPlans = []; //allPlans.length > 0 ? [...new Set(...allPlans)] : [null];
+          allPlans.map(f =>
+              f.map(f_1 => {
+                if (AuthedPlans.indexOf(f_1) === -1) AuthedPlans.push(f_1)
+              })
+          );
+          console.log('authed plans',AuthedPlans, allPlans)
+          falcorGraph.get(['plans','county','bySubdomain', [subdomain], 'id'])
+              .then(planData => {
+                let planId =  planData.json.plans.county.bySubdomain[subdomain].id;
 
-            console.log('planid, groupname', planId, groupName)
-            dispatch(setPlanAuth(planId,AuthedPlans, groupName))
-          }
+                //if (AuthedPlans.includes(planId.toString())){
+                  Object.keys(response.json.plans.authGroups)
+                      .filter( d => d !== '$__path')
+                      .map(groupNames => {
+                        // instead, get all groups with this planId and fetch the highest auth group
+                        if (response.json.plans.authGroups[groupNames].plans &&
+                            response.json.plans.authGroups[groupNames].plans.includes(planId.toString())){
+                          groupName.push(groupNames)
+                        }
+                      })
+
+                  Object.keys(user.meta)
+                      //.filter(f => {console.log('---', user.meta[f].group, groupName); return user.meta[f].group})
+                      .filter(f => groupName.includes(user.meta[f].group))
+                      .map((f,f_i) => f_i > 0 ?
+                      user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
+                      : groupName = user.meta[f].group)
+
+                  console.log('planid, groupname', planId, groupName)
+                  dispatch(setPlanAuth(planId,AuthedPlans, groupName))
+                /*}else{
+                  dispatch({ type: AUTH_FAILURE });
+                  dispatch(sendSystemMessage("You are not authenticated for this county."));
+                }*/
+
+              })
         })
   }
 }
@@ -140,9 +149,10 @@ export const authProjects = (user) => {
 export const authGeoid = (user) => {
   return (dispatch) => {
     let groups = user.groups
-    if (localStorage && localStorage.getItem('planId')) {
-      let planId = localStorage.getItem('planId');
-      // console.log('plan id while setting geoid', planId)
+    if (user.activePlan || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
+      //let planId = localStorage.getItem('planId');
+      let planId = user.activePlan || localStorage.getItem('planId');
+      console.log('plan id while setting geoid', planId)
       falcorGraph.get(
           ['plans','county','byId',planId, ['fips']])
           .then(geo_response => {
@@ -151,13 +161,15 @@ export const authGeoid = (user) => {
                 geo_response.json.plans.county.byId[planId]['fips'];
             dispatch(setPlanGeoid(geoid))
           })
+    }else{
+      dispatch(sendSystemMessage("Geoid couldn't be set"));
     }
 
   }
 }
 
 export const setActivePlan = (user) =>{
-  // console.log('setActivePlan', user)
+  console.log('setActivePlan', user)
   return (dispatch) =>{
     dispatch(setPlanAuth(user))
   }
@@ -194,7 +206,7 @@ export const login = ({ email, password }) => dispatch =>
 
 export const auth = () => dispatch => {
   const token = getUserToken();
-  //console.log('auth attempt', token, `${AUTH_HOST}/auth`)
+  console.log('auth attempt', token)
   if (token) {
     return fetch(`${AUTH_HOST}/auth`, {
       method: 'POST',
@@ -225,7 +237,7 @@ export const auth = () => dispatch => {
 
 export const signup = ({email, group}) => dispatch => {
   if (!group) group = DEFAULT_GROUP;
-  // console.log('came in signup on client', email, group)
+  console.log('came in signup on client', email, group)
   return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
     headers: {
@@ -248,7 +260,7 @@ export const signup = ({email, group}) => dispatch => {
 };
 
 export const resetPassword = ({ email }) => dispatch => {
-  // console.log('came in resetPassword on client', email)
+  console.log('came in resetPassword on client', email)
   return fetch(`${AUTH_HOST}/password/reset`, {
     method: 'POST',
     headers: {
@@ -269,7 +281,7 @@ export const resetPassword = ({ email }) => dispatch => {
 };
 
 export const setPassword = ({ token, password }) => dispatch => {
-  // console.log('came in setPassword on client', token, password)
+  console.log('came in setPassword on client', token, password)
   return fetch(`${AUTH_HOST}/password/set`, {
     method: 'POST',
     headers: {

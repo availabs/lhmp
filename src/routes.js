@@ -2,6 +2,14 @@
 // -- Landing Routes
 import Landing from './pages/Landing'
 
+// -- Public Pages
+import Public from './pages/Public/Home/'
+import About from './pages/Public/About/'
+import Hazards from './pages/Public/Hazards/'
+import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
+import Strategies from './pages/Public/Strategies/'
+
+
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
@@ -17,7 +25,6 @@ import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import RolesIndex from 'pages/auth/Roles/'
-import Public from 'pages/auth/Public/'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
 import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
@@ -46,6 +53,10 @@ const routes = [
    ...Historic,
    ...RolesIndex,
    ...Public,
+   ...About,
+   ...Hazards,
+   ...Risk,
+   ...Strategies,
    ...User,
    ...Admin,
    ...FormEditOrNew,

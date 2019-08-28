@@ -4,20 +4,20 @@ import { reduxFalcor } from 'utils/redux-falcor'
 
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
-import { Link } from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
-import {setActivePlan, setActiveGeoid} from 'store/modules/user'
+import {setActivePlan, setActiveGeoid, setUserToken} from 'store/modules/user'
 
 import get from 'lodash.get'
 
 const ATTRIBUTES = [
-
     "county",
     "id",
     "fips",
     "plan_expiration",
     "plan_grant",
     "plan_status",
+    "subdomain"
 
 ]
 
@@ -40,17 +40,23 @@ class Plans extends React.Component {
         event.preventDefault()
         let ids = event.target.getAttribute('value').split(',')
         //let geoid = event.target.getAttribute('geoid')
-        this.props.setActivePlan(ids[0])
-        this.props.setActiveGeoid(ids[1])
-        this.props.history.push('/')
-        window.location.reload(true)
+        //this.props.setActivePlan(ids[0])
+        //this.props.setActiveGeoid(ids[1])
+        let newLocation = window.location.host.split('.')
+        newLocation[0] = ids[2];
+        window.location.assign('http://' + newLocation.join('.'))
+        this.props.setUserToken(this.props.token)
+        //this.props.history.push('/')
+
+        //window.location.reload(true)
 
     }
 
     fetchFalcorDeps() {
         let plan_data =[];
         return falcorGraph.get(['plans','county','length'])
-            .then(length => falcorGraph.get(['plans', 'county','byIndex', {from: 0, to: length.json.plans.county.length-1 }, 'id'])
+            .then(length =>
+                falcorGraph.get(['plans', 'county','byIndex', {from: 0, to: length.json.plans.county.length-1 }, 'id'])
                     .then(response => {
                         const ids = [];
                         for (let i = 0; i < length.json.plans.county.length; ++i) {
@@ -98,20 +104,29 @@ class Plans extends React.Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                 {Object.values(this.props.plansList).length > 0 ?
+                                 {
+                                     Object.keys(this.props.plansList).length > 0 ?
                                      Object.values(this.props.plansList)
-                                         .filter(plan => this.props.authedPlans.includes(plan.id.value))
+                                         .filter(plan => plan.id && this.props.authedPlans.includes(plan.id.value))
                                          .map((plan,i) =>{
+                                             let newLocation = window.location.host.split('.')
+                                             newLocation[0] = plan['subdomain'].value;
+                                             let link = 'http://' + newLocation.join('.') + '/admin';
                                      return(
                                      <tr>
                                          {
                                              <td>
                                              <a className=""
-                                                href='#'
-                                                value={plan['fips'] ? plan.id.value+','+ plan['fips'].value : plan.id.value+','+ ''}
-                                                onClick={this.onPlanClick}>
+                                                href={link + '/?t=' + this.props.user.token}
+                                                /*value={plan['fips']
+                                                    ? plan.id.value+','+ plan['fips'].value + ','+ plan['subdomain'].value
+                                                    : plan.id.value+','+ '' + ','+ plan['subdomain'].value
+                                                    }*/
+                                                //onClick={this.onPlanClick.bind(this)}
+                                             >
                                              {plan.county.value}
                                          </a>
+
                                              </td>
                                                  }
                                          {
@@ -141,13 +156,15 @@ const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     authedPlans: state.user.authedPlans,
     attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-    plansList: get(state.graph, 'plans.county.byId',{})
+    plansList: get(state.graph, 'plans.county.byId',{}),
+    token: state.user.token || null
 });
 
 const mapDispatchToProps = {
     sendSystemMessage,
     setActivePlan,
-    setActiveGeoid
+    setActiveGeoid,
+    setUserToken
 };
 
 export default [
@@ -156,6 +173,7 @@ export default [
         exact: true,
         name: 'Plans',
         auth: true,
+        authLevel: 0,
         mainNav: false,
         breadcrumbs: [
             {name: 'Plans', path: '/plans/' }

@@ -2,15 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Home/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Public/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Public/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Users/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Users/admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Users/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Users/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/plans/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/plans/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -78,15 +83,15 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -127,7 +132,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="42244000" />
+      <workItem from="1566414947890" duration="85643000" />
     </task>
     <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
       <created>1560804284998</created>
@@ -465,7 +470,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566482112488</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="admin">
+      <created>1566594157767</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1566594157767</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
