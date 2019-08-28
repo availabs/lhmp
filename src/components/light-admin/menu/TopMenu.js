@@ -50,7 +50,9 @@ class AvatarUser extends Component {
 
                         </div>
                         <ul>
-                            {this.props.user.authedPlans && this.props.user.authedPlans.length > 1 ?
+                            {
+                                (this.props.user.authedPlans && this.props.user.authedPlans.length > 1) ||
+                                (this.props.user.authed && this.props.user.authedPlans.indexOf(this.props.activePlan) === -1)?
                                     <li>
                                         <a href='/plans'>
                                             <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Plans </span>

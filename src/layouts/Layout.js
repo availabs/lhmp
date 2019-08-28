@@ -1,6 +1,5 @@
 import React from 'react';
-import { Route, Redirect } from "react-router-dom";
-
+import {Redirect, Route} from "react-router-dom";
 // Layout Components
 import Menu from 'components/light-admin/menu'
 import BreadcrumbBar from 'components/light-admin/breadcrumb-bar'
@@ -8,73 +7,100 @@ import ContentContainer from 'components/light-admin/containers/ContentContainer
 import LoadingPage from "components/loading/loadingPage"
 
 const DefaultLayout = ({component: Component, ...rest}) => {
-  
-  if ( rest.isAuthenticating ) { 
-    return (
-      <Route {...rest} render={matchProps => (
-        <div className="all-wrapper solid-bg-all">
-          <div className="layout-w">
-            <ContentContainer>
-              <LoadingPage message={`Loading ${rest.name}...`}/>
-            </ContentContainer>
-          </div>
-        </div>
-      )} />
-    )
-  }
-
-  console.log('rest', rest)
-  let contentStyle = {width: '100%'}
-  if (rest.menuSettings.position === 'menu-position-side') {
-    contentStyle.marginLeft = 260
-    if(rest.menuSettings.layout === 'menu-layout-compact') {
-      contentStyle.marginLeft = 160
-    } else if(rest.menuSettings.layout === 'menu-layout-mini') {
-      contentStyle.marginLeft = 60
+    if (rest.isAuthenticating) {
+        return (
+            <Route {...rest} render={matchProps => (
+                <div className="all-wrapper solid-bg-all">
+                    <div className="layout-w">
+                        <ContentContainer>
+                            <LoadingPage message={`Loading ${rest.name}...`}/>
+                        </ContentContainer>
+                    </div>
+                </div>
+            )}/>
+        )
     }
-  } 
-  
-  return checkAuth(rest) ?
-  (
-    <Redirect
-      to={{
-        pathname: "/login",
-        state: { from: rest.router.location }
-      }}
-    />
-  ) : (
-      checkAuthPage(rest) ?
-          (
-              <Redirect
-                  to={{
-                      pathname: rest.userAuthLevel === 0 ? "/public" : "/",
-                      state: { from: rest.router.location }
-                  }}
-              />
-          ) : (<Route {...rest} render={matchProps => (
-      <div className="layout-w" style={{ minHeight: '100vh' }}>
-        <Menu {...rest} />
-        <div style={contentStyle}>
-          <BreadcrumbBar layout={rest.breadcrumbs} match={rest.computedMatch}/>
-          <ContentContainer>
-            <Component {...matchProps} {...rest}/>
-          </ContentContainer>
-        </div>
-      </div>
-    )} />)
-      )
 
+    console.log('rest', rest);
+    let contentStyle = {width: '100%'};
+    if (rest.menuSettings.position === 'menu-position-side') {
+        contentStyle.marginLeft = 260;
+        if (rest.menuSettings.layout === 'menu-layout-compact') {
+            contentStyle.marginLeft = 160
+        } else if (rest.menuSettings.layout === 'menu-layout-mini') {
+            contentStyle.marginLeft = 60
+        }
+    }
+
+    return checkAuth(rest) ?
+        (
+            <Redirect
+                to={{
+                    pathname: "/", // if not authed
+                    state: {from: rest.router.location}
+                }}
+            />
+        )
+        : (
+            checkAuthPlan(rest) ?
+                (
+                    <Redirect
+                        to={{
+                            pathname: "/" , //default pages
+                            state: {from: rest.router.location}
+                        }}
+                    />
+                )
+                : (
+                    checkAuthPage(rest) ?
+                        (
+                            <Redirect
+                                to={{
+                                    pathname: rest.userAuthLevel === 0  ? "/" : "/admin", //default pages
+                                    state: {from: rest.router.location}
+                                }}
+                            />
+                        ) : (   // if authed
+                            <Route {...rest} render={matchProps => (
+                                <div className="layout-w" style={{minHeight: '100vh'}}>
+                                    <Menu {...rest} />
+                                    <div style={contentStyle}>
+                                        <BreadcrumbBar layout={rest.breadcrumbs} match={rest.computedMatch}/>
+                                        <ContentContainer>
+                                            <Component {...matchProps} {...rest}/>
+                                        </ContentContainer>
+                                    </div>
+                                </div>
+                            )}/>)
+                )
+        )
+
+};
+
+function checkAuth(props) {
+    console.log('checkAuth', (props.auth && !props.authed), props)
+    //alert('checkAuth '+ (props.auth && !props.authed))
+
+    return (props.auth && !props.authed)
 }
 
-function checkAuth (props) {
-  //console.log('checkAuth', props.auth, props.authed)
-  return (props.auth && !props.authed)
-}
-
-function checkAuthPage (props) {
+function checkAuthPage(props) {
     let authlevel = props.authLevel !== undefined ? props.authLevel : 1;
-    //console.log('checkAuthPage',props.authed, props.userAuthLevel, authlevel, props)
+    console.log('checkAuthPage', (props.auth && !(props.authed && props.userAuthLevel >= authlevel)), props)
+    //alert('checkAuthPage ' + (props.auth && !(props.authed && props.userAuthLevel >= authlevel)))
     return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
+
+}
+
+function checkAuthPlan(props) {
+console.log('checkAuthPlan', (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString()))),
+    props
+);
+//alert('checkAuthPlan '+ (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString()))));
+    /*return ['Plans', 'Admin', 'User'].includes(props.name)  ? (props.auth && !props.authed) :
+        (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString())))*/
+    return ['Plans', 'Home'].includes(props.name) ? false :
+    (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString())))
 }
 
 export default DefaultLayout

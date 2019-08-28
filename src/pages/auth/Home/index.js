@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import { reduxFalcor } from 'utils/redux-falcor'
 import {authProjects, authGeoid} from "../../../store/modules/user";
 // import { Link } from 'react-router-dom'
 
@@ -48,11 +49,11 @@ const mapDispatchToProps = ({
 
 export default {
   icon: 'os-icon-home',
-  path: '/',
+  path: '/admin',
   exact: true,
   mainNav: true,
   breadcrumbs: [
-    { name: 'Home', path: '/' }
+    { name: 'Home', path: '/admin' }
   ],
   menuSettings: {
     image: 'none',
@@ -63,7 +64,6 @@ export default {
   },
   name: 'Home',
   auth: true,
-  //authLevel: 0,
-  component: connect(mapStateToProps,mapDispatchToProps)(HomeView)
+  component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(HomeView))
 };
 
