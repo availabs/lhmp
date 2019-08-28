@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/PlanningTools/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Home/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Public/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Public/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/plans/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/plans/view.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
@@ -132,14 +126,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="85643000" />
-    </task>
-    <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
-      <created>1560804284998</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1560804284998</updated>
+      <workItem from="1566414947890" duration="100294000" />
     </task>
     <task id="LOCAL-00002" summary="changed the route of create actions worksheet">
       <created>1560867904809</created>
@@ -477,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566594157767</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="public, authed menu, public only access if not authed">
+      <created>1567008571656</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1567008571656</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -506,7 +500,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="create a new worksheet" />
     <MESSAGE value="view a worksheet by id" />
     <MESSAGE value="added routes for Action worksheet" />
     <MESSAGE value="added county and municipality in action worksheets" />
@@ -531,7 +524,8 @@
     <MESSAGE value="signup form toggle on success" />
     <MESSAGE value="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed" />
     <MESSAGE value="admin" />
-    <option name="LAST_COMMIT_MESSAGE" value="admin" />
+    <MESSAGE value="public, authed menu, public only access if not authed" />
+    <option name="LAST_COMMIT_MESSAGE" value="public, authed menu, public only access if not authed" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

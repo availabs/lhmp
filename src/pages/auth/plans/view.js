@@ -35,23 +35,6 @@ class Plans extends React.Component {
         this.fetchFalcorDeps();
     }
 
-
-    onPlanClick = async event =>{
-        event.preventDefault()
-        let ids = event.target.getAttribute('value').split(',')
-        //let geoid = event.target.getAttribute('geoid')
-        //this.props.setActivePlan(ids[0])
-        //this.props.setActiveGeoid(ids[1])
-        let newLocation = window.location.host.split('.')
-        newLocation[0] = ids[2];
-        window.location.assign('http://' + newLocation.join('.'))
-        this.props.setUserToken(this.props.token)
-        //this.props.history.push('/')
-
-        //window.location.reload(true)
-
-    }
-
     fetchFalcorDeps() {
         let plan_data =[];
         return falcorGraph.get(['plans','county','length'])
