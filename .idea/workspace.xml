@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/PlanningTools/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/plans/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/plans/view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -126,14 +120,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="100294000" />
-    </task>
-    <task id="LOCAL-00002" summary="changed the route of create actions worksheet">
-      <created>1560867904809</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1560867904809</updated>
+      <workItem from="1566414947890" duration="101161000" />
     </task>
     <task id="LOCAL-00003" summary="changed the route of create actions worksheet">
       <created>1560867944051</created>
@@ -471,7 +458,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567008571656</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="domain bug solved">
+      <created>1567029305959</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1567029305959</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -500,7 +494,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="view a worksheet by id" />
     <MESSAGE value="added routes for Action worksheet" />
     <MESSAGE value="added county and municipality in action worksheets" />
     <MESSAGE value="asset table working" />
@@ -525,7 +518,8 @@
     <MESSAGE value="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed" />
     <MESSAGE value="admin" />
     <MESSAGE value="public, authed menu, public only access if not authed" />
-    <option name="LAST_COMMIT_MESSAGE" value="public, authed menu, public only access if not authed" />
+    <MESSAGE value="domain bug solved" />
+    <option name="LAST_COMMIT_MESSAGE" value="domain bug solved" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

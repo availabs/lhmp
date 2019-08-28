@@ -93,7 +93,9 @@ class Plans extends React.Component {
                                          .filter(plan => plan.id && this.props.authedPlans.includes(plan.id.value))
                                          .map((plan,i) =>{
                                              let newLocation = window.location.host.split('.')
-                                             newLocation[0] = plan['subdomain'].value;
+                                             newLocation.length > 1
+                                                 ? newLocation[0] = plan['subdomain'].value
+                                                 : newLocation = [plan['subdomain'].value, newLocation[0]]
                                              let link = 'http://' + newLocation.join('.') + '/admin';
                                      return(
                                      <tr>
