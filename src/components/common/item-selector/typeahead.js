@@ -204,7 +204,7 @@ export default class Typeahead extends Component {
 
     // const searchOptions = this._generateSearchFunction();
     // return searchOptions(value, options);
-    
+
     const selector = this.props.displayOption;
     return options.reduce((a, c) => selector(c).toString().toLowerCase().includes(value.toLowerCase()) ? a.concat(c) : a, [])
   }
@@ -483,7 +483,7 @@ export default class Typeahead extends Component {
     return (
       <TypeaheadWrapper
         className={classList}
-        innerRef={comp => {
+        ref={comp => {
           this.root = comp;
         }}
         tabIndex="0"
@@ -496,7 +496,7 @@ export default class Typeahead extends Component {
         {this.props.searchable ? (
         <InputBox>
           <TypeaheadInput
-            innerRef={comp => {
+            ref={comp => {
               this.entry = comp;
             }}
             type="text"
