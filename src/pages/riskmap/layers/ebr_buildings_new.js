@@ -18,7 +18,7 @@ import MapLayer from "components/AvlMap/MapLayer"
 
 import COLOR_RANGES from "constants/color-ranges"
 const LEGEND_COLOR_RANGE = COLOR_RANGES[5]
-  .reduce((a, c) => c.name === "RdYlBu" ? c.colors : a)
+  .reduce((a, c) => c.name === "RdYlBu" ? c.colors : a, []).slice()
 
 const IDENTITY = i => i;
 
@@ -214,7 +214,8 @@ class EBRLayer extends MapLayer {
         coloredBuildingIds.length ? coloredBuildingIds.filter(id => !atRiskIds.includes(id)) : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
         filteredBuildingids.length ? filteredBuildingids.filter(id => !atRiskIds.includes(id)) : "no-filtered", FILTERED_COLOR,
         DEFAULT_COLOR
-      ]
+      ],
+      { validate: false }
     )
 
   	map.setPaintProperty(
@@ -224,7 +225,8 @@ class EBRLayer extends MapLayer {
         coloredBuildingIds.length ? coloredBuildingIds : "no-colored", ["get", ["to-string", ["get", "id"]], ["literal", colors]],
         filteredBuildingids.length ? filteredBuildingids : "no-filtered", FILTERED_COLOR,
         DEFAULT_COLOR
-      ]
+      ],
+      { validate: false }
   	)
   }
   getColorScale(data) {

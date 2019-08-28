@@ -5,7 +5,6 @@ import HttpDataSource from 'falcor-http-datasource'
 import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
 
-
 export let host = 'http://localhost:4444/'
 if (process.env.NODE_ENV === 'production') {
   host = 'https://mitigateny.availabs.org/api/'
