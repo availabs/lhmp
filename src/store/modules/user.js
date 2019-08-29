@@ -18,6 +18,7 @@ const SET_PLANS_GEOID = 'USER::SET_PLANS_GEOID'
 const SIGNUP_SUCCESS = 'USER::SIGNUP_SUCCESS'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -91,7 +92,10 @@ const removeUserToken = () => {
 export const authProjects = (user) => {
   return (dispatch) => {
     let groups = user.groups;
-    let subdomain =  window.location.hostname.split('.')[0].toLowerCase();
+    let subdomain =  window.location.hostname.split('.').length > 1?
+        window.location.hostname.split('.')[0].toLowerCase() : 'www'
+    ;
+    console.log('subdomain: ', subdomain)
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
           let groupName = [];
@@ -134,6 +138,13 @@ export const authProjects = (user) => {
                       user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
                       : groupName = user.meta[f].group)
 
+                  if(typeof groupName === 'object') {
+                      Object.keys(user.meta)
+                          .map((f,f_i) => f_i > 0 ?
+                              user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
+                              : groupName = user.meta[f].group)
+                  }
+
                   console.log('planid, groupname', planId, groupName)
                   dispatch(setPlanAuth(planId,AuthedPlans, groupName))
                 /*}else{
@@ -150,20 +161,18 @@ export const authGeoid = (user) => {
   return (dispatch) => {
     let groups = user.groups
     if (user.activePlan || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
-      //let planId = localStorage.getItem('planId');
-      let planId = user.activePlan || localStorage.getItem('planId');
-      console.log('plan id while setting geoid', planId)
-      falcorGraph.get(
-          ['plans','county','byId',planId, ['fips']])
+      let planId = user.activePlan ? user.activePlan : localStorage.getItem('planId');
+        falcorGraph.get(
+          ['plans','county','byId',[planId], ['fips']]
+        )
           .then(geo_response => {
-            let geoid = /*localStorage.getItem('geoId') ?
-                localStorage.getItem('geoId') :*/
-                geo_response.json.plans.county.byId[planId]['fips'];
+              console.log('authGeoRes', geo_response)
+            let geoid = geo_response.json.plans.county.byId[planId]['fips'];
             dispatch(setPlanGeoid(geoid))
           })
-    }else{
+    }/*else{
       dispatch(sendSystemMessage("Geoid couldn't be set"));
-    }
+    }*/
 
   }
 }
@@ -357,11 +366,14 @@ const ACTION_HANDLERS = {
       //console.log('setting auth plan and group', action)
       newState.activeGroup = action.groupName
     }
-    if(Object.values(newState.authedPlans).includes(action.planId)) {
+    if( action.planId
+        //Object.values(newState.authedPlans).includes(action.planId)
+    ) {
       //console.log('new plan id: set activeGroup here', action)
       newState.activePlan = action.planId
       localStorage.setItem('planId', newState.activePlan)
     }
+    console.log('new state after plans_auth', newState, action)
     return newState
   },
 

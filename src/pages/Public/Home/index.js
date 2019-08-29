@@ -3,7 +3,18 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
-
+const ATTRIBUTES = [
+    "fips",
+    "plan_consultant",
+    "plan_expiration",
+    "plan_grant",
+    "plan_url",
+    "plan_status",
+    "groups",
+    "id",
+    "county",
+    "subdomain"
+]
 class Public extends React.Component {
 
     constructor(props) {
@@ -12,12 +23,26 @@ class Public extends React.Component {
         }
     }
 
+    fetchFalcorDeps() {
+        if(!this.props.user.activePlan) return Promise.resolve();
+        return this.props.falcor.get(['plans','county','byId',[this.props.user.activePlan],ATTRIBUTES])
+            .then(planIdResponse => {
+                console.log('plansRes', planIdResponse)
+                return planIdResponse //.json.plans.county.byId[this.props.user.activePlan]
+            });
+    }
 
     render() {
         return (
             <div className='container'>
                 <Element>
-                    <h4 className="element-header">Public page</h4>
+                    <h4 className="element-header">{
+                        Object.keys(this.props.graph).length > 0
+                        && this.props.graph.county && this.props.graph.county.byId
+                        && this.props.graph.county.byId[this.props.user.activePlan]
+                        && this.props.graph.county.byId[this.props.user.activePlan].county
+                            ? this.props.graph.county.byId[this.props.user.activePlan].county.value
+                            : 'Loading'} page</h4>
                     <div className="row">
                         <div className="col-sm-8 col-xxxl-6">
                             <div className="element-wrapper">
@@ -34,8 +59,9 @@ class Public extends React.Component {
 }
 
 const mapStateToProps = (state,ownProps) => {
+    console.log('public home state', state)
     return {
-        geoGraph: state.graph.geo,
+        graph: state.graph.plans || {},
         router: state.router
     };
 };

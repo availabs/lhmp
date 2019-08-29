@@ -21,7 +21,7 @@ class Menu extends Component {
   	let defaultOptions = {
   		'location': 'menu-w',
   		'color': 'selected-menu-color-light',
-  		'hover': 'menu-activated-on-hover',
+  		'click': 'menu-activated-on-click',
   		'selected': 'menu-has-selected-link',
   		'image': this.props.menuSettings.image ? this.props.menuSettings.image :  'menu-with-image',
   		'scheme': this.props.menuSettings.scheme ? this.props.menuSettings.scheme : 'color-scheme-dark',

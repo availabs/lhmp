@@ -242,7 +242,7 @@ export default [
         exact: true,
         name: 'Roles',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             { name: 'Roles', path: '/roles/' },
