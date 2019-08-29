@@ -48,7 +48,7 @@ class MainMenu extends Component {
           key={'menuItem_' + index}
           className={`top-menu-tab has-sub-menu ${isActive}`} 
           id={'menuItem_' + index}
-          onMouseOver={this.menuMouseOver}
+          onClick={this.menuMouseOver}
           onMouseOut={this.menuMouseOut}
         >
           <Link to={menu.path}>
@@ -64,7 +64,7 @@ class MainMenu extends Component {
             </div>
             <div
               className="sub-menu-i"
-              onMouseOver={this.menuMouseOver}
+              onClick={this.menuMouseOver}
               onMouseOut={this.menuMouseOut}
             >
               {menu.subMenus.map((subMenu, sindex) => {
@@ -92,7 +92,13 @@ class MainMenu extends Component {
   }
   
   menuMouseOver (event) {
-    event.target.closest('.top-menu-tab').classList.add('active');
+   if (event.target.closest('.top-menu-tab').classList.value.indexOf('active') === -1) {
+     event.target.closest('.top-menu-tab').classList.add('active');
+   }else{
+     event.target.closest('.top-menu-tab').classList.remove('active');
+   }
+
+
   }
 
   menuMouseOut (event) {
