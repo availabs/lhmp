@@ -3,13 +3,30 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
+import config from './config/about-config'
+
 import Submenus from './plan-submenus'
+
+
 class AdminAbout extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
         }
+    }
+
+    renderElement (element) {
+        return (
+            <div className='element-box'>
+                <h4>{element.requirement}</h4>
+                {
+                  /*
+                    <ElementRender {...element} user={this.} geoid={}>
+                  */
+                }
+            </div>
+        )
     }
 
 
@@ -19,11 +36,24 @@ class AdminAbout extends React.Component {
                 <Element>
                     <h4 className="element-header">Admin About page</h4>
                     <div className="row">
-                        <div className="col-sm-8 col-xxxl-6">
+                        <div className="col-12">
                             <div className="element-wrapper">
-                                <div className="element-box">
-
-                                </div>
+                               
+                                {
+                                    Object.keys(config).map(section => {
+                                        return (
+                                            <div>
+                                                <h4 className='element-header'>{section}</h4>
+                                                {
+                                                    config[section].map(requirement => {
+                                                        return this.renderElement(requirement)
+                                                    })
+                                                }
+                                            </div>
+                                        )
+                                    })
+                                }
+                                
                             </div>
                         </div>
                     </div>
