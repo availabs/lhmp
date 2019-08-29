@@ -1,6 +1,6 @@
 import React from 'react';
 import AvlMap from 'components/AvlMap';
-import ebr_buildings from './layers/ebr_buildings_new'
+import ebr_buildings from 'components/AvlMap/layers/ebr_buildings_new'
 
 class Home extends React.Component {
   EBRLayer = ebr_buildings();
