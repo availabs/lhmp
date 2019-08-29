@@ -2,11 +2,8 @@ import get from "lodash.get";
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+import Submenus from './plan-submenus'
 import Element from 'components/light-admin/containers/Element'
-
-
-
 
 class Plan extends React.Component {
 
@@ -22,7 +19,17 @@ class Plan extends React.Component {
             <div className='container'>
                 <Element>
                     <h6 className="element-header">Plan page</h6>
-                    <div className="element-box">
+                    <div>
+                        {Submenus[0].map(submenu => {
+                            console.log(submenu)
+                            return (
+                                <a href='#'>
+                                    <div className="element-box">
+                                        {submenu.name}
+                                    </div>
+                                </a>
+                            )
+                        })}
                     </div>
                 </Element>
             </div>
@@ -39,22 +46,24 @@ const mapDispatchToProps = {
 
 export default [
     {
+        icon: 'os-icon-pencil-2',
         path: '/plan/',
         exact: true,
         name: 'Plan',
         auth: true,
         authLevel: 1,
         mainNav: true,
+        subMenus: Submenus,
         breadcrumbs: [
             {name: 'Plan', path: '/plan/' }
         ],
         menuSettings: {
-            image: 'os-icon-pencil-2',
+            image: 'none',
             scheme: 'color-scheme-dark',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
-            style: 'color-style-default'
+            style: 'color-style-default',
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(Plan)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(Plan))
     }
 ]

@@ -13,14 +13,21 @@ import Strategies from './pages/Public/Strategies/'
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
+
 import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
-import Plans from 'pages/auth/plans/view'
-import Plan from 'pages/auth/Plan/'
-import PlanPage from 'pages/auth/plans/planPage'
-import PlanIndex from 'components/plan/'
 
+import PlanIndex from 'components/plan/' // plans list
+import Plans from 'pages/auth/plans/view'
+import PlanPage from 'pages/auth/plans/planPage'
+
+import Plan from 'pages/auth/Plan/' // admin plan page
+import AdminAbout from 'pages/auth/Plan/about' // admin plan page - submenu
+import AdminRisk from 'pages/auth/Plan/risk' // admin plan page - submenu
+import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
+
+import PlanningTools from 'pages/auth/PlanningTools/'
 import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
@@ -48,7 +55,11 @@ const routes = [
    ...ActionsView,
    ...Plans,
    ...Plan,
+   ...AdminAbout,
+   ...AdminRisk,
+   ...AdminStrategies,
    ...PlanPage,
+   ...PlanningTools,
    ...Assets,
    ...AssetsView,
    ...AssetsEdit,

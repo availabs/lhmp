@@ -333,7 +333,7 @@ export default [{
   icon: 'os-icon-pencil-2',
   path: '/assets',
   exact: true,
-  mainNav: true,
+  mainNav: false,
   breadcrumbs: [
     { name: 'Home', path: '/' },
     { name: 'Assets', path: '/assets/' }

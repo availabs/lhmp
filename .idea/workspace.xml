@@ -2,9 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/plan-submenus.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/PlanningTools/planning-submenus.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/plans/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/plans/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/PlanningTools/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/PlanningTools/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -120,14 +130,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="101161000" />
-    </task>
-    <task id="LOCAL-00003" summary="changed the route of create actions worksheet">
-      <created>1560867944051</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1560867944051</updated>
+      <workItem from="1566414947890" duration="105358000" />
     </task>
     <task id="LOCAL-00004" summary="updates">
       <created>1561132137723</created>
@@ -465,7 +468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567029305959</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="domain bug solved">
+      <created>1567030053552</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1567030053552</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
