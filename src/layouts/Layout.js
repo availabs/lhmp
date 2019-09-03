@@ -93,9 +93,9 @@ function checkAuthPage(props) {
 }
 
 function checkAuthPlan(props) {
-/*console.log('checkAuthPlan', (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString()))),
+console.log('checkAuthPlan', props.auth , props.user.activePlan , props.user.authedPlans.includes(props.user.activePlan.toString()),
     props
-);*/
+);
 //alert('checkAuthPlan '+ (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString()))));
 
     return ['Plans', 'Home'].includes(props.name) ? false :

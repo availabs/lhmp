@@ -23,7 +23,7 @@ class Plan extends React.Component {
                         {Submenus[0].map(submenu => {
                             console.log(submenu)
                             return (
-                                <a href='#'>
+                                <a href={submenu.path}>
                                     <div className="element-box">
                                         {submenu.name}
                                     </div>

@@ -4,6 +4,8 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
 import config from './config/about-config'
+import ContentEditor from 'components/displayComponents/contentEditor'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import Submenus from './plan-submenus'
 
@@ -19,12 +21,8 @@ class AdminAbout extends React.Component {
     renderElement (element) {
         return (
             <div className='element-box'>
-                <h4>{element.requirement}</h4>
-                {
-                  /*
-                    <ElementRender {...element} user={this.} geoid={}>
-                  */
-                }
+                <h6>{element.requirement}</h6>
+                <ContentEditor {...element} user={this.props.user} />
             </div>
         )
     }
@@ -43,7 +41,7 @@ class AdminAbout extends React.Component {
                                     Object.keys(config).map(section => {
                                         return (
                                             <div>
-                                                <h4 className='element-header'>{section}</h4>
+                                                <h6 className='element-header'>{section}</h6>
                                                 {
                                                     config[section].map(requirement => {
                                                         return this.renderElement(requirement)

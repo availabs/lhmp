@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import Submenus from './planning-submenus'
 import Element from 'components/light-admin/containers/Element'
+import {sendSystemMessage} from 'store/modules/messages';
+import {setActivePlan, setActiveGeoid, setUserToken} from 'store/modules/user'
 
 class PlanningTools extends React.Component {
 
@@ -23,7 +25,7 @@ class PlanningTools extends React.Component {
                         {Submenus[0].map(submenu => {
                             console.log(submenu)
                             return (
-                                <a href='#'>
+                                <a href={submenu.path}>
                                     <div className="element-box">
                                         {submenu.name}
                                     </div>
@@ -37,11 +39,18 @@ class PlanningTools extends React.Component {
     }
 }
 const mapStateToProps = state => ({
-
+    isAuthenticated: !!state.user.authed,
+    authedPlans: state.user.authedPlans,
+    attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+    plansList: get(state.graph, 'plans.county.byId',{}),
+    token: state.user.token || null
 });
 
 const mapDispatchToProps = {
-
+    sendSystemMessage,
+    setActivePlan,
+    setActiveGeoid,
+    setUserToken
 };
 
 export default [
@@ -64,6 +73,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default',
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(PlanningTools))
+        component: connect(mapStateToProps,mapDispatchToProps)(PlanningTools)
     }
 ]
