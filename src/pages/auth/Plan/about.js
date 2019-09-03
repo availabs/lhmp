@@ -22,7 +22,7 @@ class AdminAbout extends React.Component {
         return (
             <div className='element-box'>
                 <h6>{element.requirement}</h6>
-                <ContentEditor {...element} user={this.props.user} />
+                <ContentEditor {...element} user={this.props.user}/>
             </div>
         )
     }

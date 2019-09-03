@@ -89,6 +89,15 @@ const removeUserToken = () => {
   //setActiveProject=-p
 };
 
+const removeUserPlanInfo = () => {
+  if (localStorage) {
+    localStorage.removeItem('planId');
+    localStorage.removeItem('geoId');
+    localStorage.removeItem('authedPlans');
+  }
+  //setActiveProject=-p
+};
+
 export const authProjects = (user) => {
     console.log('authProjects started', user)
   return (dispatch) => {
@@ -351,6 +360,7 @@ const ACTION_HANDLERS = {
   },
   [USER_LOGOUT]: (state = initialState, action) => {
     removeUserToken();
+    removeUserPlanInfo();
     return {...initialState};
   },
 
