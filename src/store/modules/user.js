@@ -114,9 +114,12 @@ export const authProjects = (user) => {
                 if (AuthedPlans.indexOf(f_1) === -1) AuthedPlans.push(f_1)
               })
           );
+          console.log('whats my subdomain', subdomain)
           falcorGraph.get(['plans','county','bySubdomain', [subdomain], 'id'])
               .then(planData => {
-                let planId =  planData.json.plans.county.bySubdomain[subdomain].id;
+
+                let planId =  planData.json.plans.county.bySubdomain[subdomain].id ? 
+                planData.json.plans.county.bySubdomain[subdomain].id : 63;
 
                 //if (AuthedPlans.includes(planId.toString())){
                   Object.keys(response.json.plans.authGroups)
