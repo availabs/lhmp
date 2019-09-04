@@ -1,9 +1,9 @@
 import React from 'react';
 import AvlMap from 'components/AvlMap';
-import ebr_buildings from 'components/AvlMap/layers/ebr_buildings_new'
+import EBRFactory from 'components/AvlMap/layers/ebr_buildings_new'
 
 class Home extends React.Component {
-  EBRLayer = ebr_buildings();
+  EBRLayer = EBRFactory();
   render() {
     return (
       <div style={ { width: '100%', height: '100vh' } }>

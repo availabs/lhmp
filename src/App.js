@@ -16,7 +16,9 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
+console.log("PROPS:", props)
     if(this.props.token){
+console.log("USER TOKEN:", this.props.token)
       localStorage.setItem('userToken', this.props.token.slice(3,this.props.token.length))
       //alert('setting this: ' + this.props.token)
     }
@@ -90,7 +92,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('state', state.router.location)
+  console.log('state.router.location', state.router.location)
   return ({
     user: state.user,
     router: state.router,
