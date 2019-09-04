@@ -90,7 +90,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('state', state.router.location)
+  console.log('state', state.router.location, state.user)
   return ({
     user: state.user,
     router: state.router,

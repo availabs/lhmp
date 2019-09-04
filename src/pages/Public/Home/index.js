@@ -20,16 +20,31 @@ class Public extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            activePlan: this.props.user.activePlan
         }
     }
 
     fetchFalcorDeps() {
-        if(!this.props.user.activePlan) return Promise.resolve();
-        return this.props.falcor.get(['plans','county','byId',[this.props.user.activePlan],ATTRIBUTES])
+        if(!(this.props.user.activePlan || this.props.user.activeGeoid)) return Promise.resolve();
+        return this.props.user.activePlan ?
+            this.props.falcor.get(['plans','county','byId',[this.props.user.activePlan],ATTRIBUTES])
             .then(planIdResponse => {
                 console.log('plansRes', planIdResponse)
                 return planIdResponse //.json.plans.county.byId[this.props.user.activePlan]
-            });
+            })
+            : this.props.user.activeGeoid ?
+                this.props.falcor.get(['plans','county','byGeoid',[parseInt(this.props.user.activeGeoid)],'id'])
+                    .then(planIdResponse => {
+                        console.log('plansRes', planIdResponse.json.plans.county.byGeoid[this.props.user.activeGeoid].id)
+                        this.setState({'activePlan':planIdResponse.json.plans.county.byGeoid[this.props.user.activeGeoid].id})
+                        this.props.falcor.get(
+                            ['plans','county','byId',[planIdResponse.json.plans.county.byGeoid[this.props.user.activeGeoid].id],ATTRIBUTES]
+                        )
+                            .then(planIdResponse => {
+                                console.log('plansRes', planIdResponse)
+                                return planIdResponse //.json.plans.county.byId[this.props.user.activePlan]
+                            })
+                    }) : Promise.resolve();
     }
 
     render() {
@@ -39,9 +54,9 @@ class Public extends React.Component {
                     <h4 className="element-header">{
                         Object.keys(this.props.graph).length > 0
                         && this.props.graph.county && this.props.graph.county.byId
-                        && this.props.graph.county.byId[this.props.user.activePlan]
-                        && this.props.graph.county.byId[this.props.user.activePlan].county
-                            ? this.props.graph.county.byId[this.props.user.activePlan].county.value
+                        && this.props.graph.county.byId[this.state.activePlan]
+                        && this.props.graph.county.byId[this.state.activePlan].county
+                            ? this.props.graph.county.byId[this.state.activePlan].county.value
                             : 'Loading'} page</h4>
                     <div className="row">
                         <div className="col-sm-8 col-xxxl-6">

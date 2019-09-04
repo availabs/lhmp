@@ -2,17 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/displayComponents/gridLayout.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/risk-config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/strategies-config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/graphFactory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/graphFactory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -128,14 +134,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="151773000" />
-    </task>
-    <task id="LOCAL-00008" summary="added routes for Action worksheet">
-      <created>1561132244106</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132244106</updated>
+      <workItem from="1566414947890" duration="164364000" />
     </task>
     <task id="LOCAL-00009" summary="updates">
       <created>1561132258921</created>
@@ -473,7 +472,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567544764470</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public">
+      <created>1567611026875</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1567611026875</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -502,7 +508,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="County and Municipality names added for Action worksheets" />
     <MESSAGE value="Updates in AssetTable and AssetIndex" />
     <MESSAGE value="AssetPieChart for Replacement Value" />
     <MESSAGE value="Building By Owner Type Table" />
@@ -527,7 +532,8 @@
     <MESSAGE value="submenu click" />
     <MESSAGE value="contentEditor work started" />
     <MESSAGE value="contentEditor insert + update done" />
-    <option name="LAST_COMMIT_MESSAGE" value="contentEditor insert + update done" />
+    <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
+    <option name="LAST_COMMIT_MESSAGE" value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

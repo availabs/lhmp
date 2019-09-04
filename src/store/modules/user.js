@@ -14,6 +14,7 @@ const USER_LOGOUT = 'USER::USER_LOGOUT';
 const AUTH_FAILURE = 'USER::AUTH_FAILURE';
 //const SET_ACTIVE_PROJECT = 'USER::SET_ACTIVE_PROJECT'
 const SET_PLANS_AUTH = 'USER::SET_PLANS_AUTH'
+const SET_USER_AUTH = 'USER::SET_USER_AUTH'
 const SET_PLANS_GEOID = 'USER::SET_PLANS_GEOID'
 const SIGNUP_SUCCESS = 'USER::SIGNUP_SUCCESS'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
@@ -50,8 +51,16 @@ function setPlanAuth(planId,authedPlans,groupName){
   }
 }
 
-function setPlanGeoid(geoid){
+function setUserAuthLevel(authLevel){
+    console.log('hey im here', authLevel)
   return {
+    type: SET_USER_AUTH,
+    authLevel
+  }
+}
+
+function setPlanGeoid(geoid){
+    return {
     type: SET_PLANS_GEOID,
     geoid
   }
@@ -94,6 +103,7 @@ const removeUserPlanInfo = () => {
     localStorage.removeItem('planId');
     localStorage.removeItem('geoId');
     localStorage.removeItem('authedPlans');
+    localStorage.removeItem('authLevel');
   }
   //setActiveProject=-p
 };
@@ -108,7 +118,8 @@ export const authProjects = (user) => {
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
           let groupName = [];
-          console.log('uer object', user)
+          let authLevel = null;
+            console.log('uer object', user)
           let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
               .reduce((output, group) => {
                 if(group.plans && group.plans.length > 0) output.push(group.plans)
@@ -123,13 +134,12 @@ export const authProjects = (user) => {
                 if (AuthedPlans.indexOf(f_1) === -1) AuthedPlans.push(f_1)
               })
           );
-          console.log('whats my subdomain', subdomain)
+          console.log('authed plans in user:authProjects', AuthedPlans)
           falcorGraph.get(['plans','county','bySubdomain', [subdomain], 'id'])
               .then(planData => {
 
                 let planId =  planData.json.plans.county.bySubdomain[subdomain] ? 
-                planData.json.plans.county.bySubdomain[subdomain].id : 63;
-
+                planData.json.plans.county.bySubdomain[subdomain].id : 63; // also in authGeoid
                 //if (AuthedPlans.includes(planId.toString())){
                   Object.keys(response.json.plans.authGroups)
                       .filter( d => d !== '$__path')
@@ -144,24 +154,37 @@ export const authProjects = (user) => {
                   Object.keys(user.meta)
                       //.filter(f => {console.log('---', user.meta[f].group, groupName); return user.meta[f].group})
                       .filter(f => groupName.includes(user.meta[f].group))
-                      .map((f,f_i) => f_i > 0 ?
-                      user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
-                      : groupName = user.meta[f].group)
+                      .map((f,f_i) => {
+                          if (f_i > 0 ) {
+                              if (user.meta[f].authLevel > user.meta[f_i-1].authLevel) {
+                                  groupName = user.meta[f].group;
+                                  authLevel = user.meta[f].authLevel
+                              }
+                          }
+                      else {
+                          groupName = user.meta[f].group;
+                          authLevel = user.meta[f].authLevel
+                          }
+                      })
 
                   if(typeof groupName === 'object') {
                       Object.keys(user.meta)
-                          .map((f,f_i) => f_i > 0 ?
-                              user.meta[f].authLevel > user.meta[f_i-1].authLevel ?  groupName = user.meta[f].group : ''
-                              : groupName = user.meta[f].group)
+                          .map((f,f_i) => {
+                              if ( f_i > 0) {
+                                  if (user.meta[f].authLevel > user.meta[f_i-1].authLevel) {
+                                      groupName = user.meta[f].group;
+                                      authLevel = user.meta[f].authLevel
+                                  }
+                              } else {
+                                  groupName = user.meta[f].group;
+                                  authLevel = user.meta[f].authLevel
+                              }
+                          })
                   }
                   if (!planId) planId = localStorage.getItem('planId');
-                  console.log('planid, groupname', planId, groupName)
-                  dispatch(setPlanAuth(planId,AuthedPlans, groupName))
-                /*}else{
-                  dispatch({ type: AUTH_FAILURE });
-                  dispatch(sendSystemMessage("You are not authenticated for this county."));
-                }*/
-
+                  console.log('planid, groupname, authLevel', planId, groupName, authLevel);
+                  dispatch(setPlanAuth(planId,AuthedPlans, groupName));
+                  dispatch(setUserAuthLevel(authLevel));
               })
         })
       console.log('authProjects ended', user)
@@ -171,8 +194,7 @@ export const authProjects = (user) => {
 export const authGeoid = (user) => {
     console.log('authGeoidstarted', user)
     return (dispatch) => {
-    let groups = user.groups
-    if (user.activePlan || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
+    if ((user && user.activePlan) || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
       let planId = user.activePlan ? user.activePlan : localStorage.getItem('planId');
         falcorGraph.get(
           ['plans','county','byId',[planId], ['fips']]
@@ -182,10 +204,25 @@ export const authGeoid = (user) => {
               console.log('geoid set to', geoid)
             dispatch(setPlanGeoid(geoid))
           })
-    }/*else{
-      dispatch(sendSystemMessage("Geoid couldn't be set"));
-    }*/
-        console.log('authGeoid ended', user)
+    }else{
+        let subdomain =  window.location.hostname.split('.').length > 1?
+            window.location.hostname.split('.')[0].toLowerCase() : 'www';
+        return falcorGraph.get(['plans','county','bySubdomain', [subdomain], 'id'])
+            .then(planData => {
+
+                let planId = planData.json.plans.county.bySubdomain[subdomain] ?
+                    planData.json.plans.county.bySubdomain[subdomain].id : 63; //also in authProjects
+                return falcorGraph.get(
+                    ['plans','county','byId',[planId], ['fips']]
+                )
+                    .then(geo_response => {
+                        let geoid = geo_response.json.plans.county.byId[planId]['fips'];
+                        console.log('geoid set to', geoid)
+                        dispatch(setPlanGeoid(geoid))
+                        return geo_response
+                    })
+            })
+    }
   }
 }
 
@@ -197,7 +234,7 @@ export const setActivePlan = (user) =>{
 }
 
 export const setActiveGeoid = (user) =>{
-  return (dispatch) =>{
+    return (dispatch) =>{
     dispatch(setPlanGeoid(user))
   }
 }
@@ -251,8 +288,8 @@ export const auth = () => dispatch => {
       });
   } else {
     // return Promise.resolve();
-    //console.log('no auth')
-    return dispatch({ type: AUTH_FAILURE });
+      dispatch(authGeoid());
+      return dispatch({ type: AUTH_FAILURE });
   }
 };
 
@@ -333,7 +370,7 @@ export const actions = {
 let initialState = {
   token: null,
   groups: [],
-  authLevel: 0,
+  authLevel: localStorage.getItem('authLevel') || 0,
   authed: false,
   attempts: 0,
     // todo: security concern
@@ -389,11 +426,22 @@ const ACTION_HANDLERS = {
     return newState
   },
 
+   [SET_USER_AUTH]: (state =initialState, action) => {
+    console.log('in userAuth', action)
+    const newState = Object.assign({}, state)
+    if(action.authLevel !== null) {
+        console.log('in userAuth setting authLevel', action.authLevel)
+        newState.authLevel = action.authLevel
+        localStorage.setItem('authLevel', action.authLevel)
+    }
+    return newState
+  },
+
   [SET_PLANS_GEOID]: (state =initialState, action) => {
     const newState = Object.assign({}, state)
     if(action.geoid) {
       newState.activeGeoid = action.geoid
-      localStorage.setItem('geoId', newState.activeGeoid)
+      localStorage.setItem('geoId', newState.activeGeoid);
     }
     return newState
   },

@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
-import Submenus from './plan-submenus'
+import config from './config/strategies-config'
+import GraphFactory from "components/displayComponents/graphFactory";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
 class AdminStrategies extends React.Component {
 
     constructor(props) {
@@ -12,6 +15,17 @@ class AdminStrategies extends React.Component {
         }
     }
 
+    renderElement (element) {
+        return (
+            <div className='element-box'>
+                <h6>{element.requirement}</h6>
+                <GraphFactory
+                    graph={{type: element.type + 'Editor'}}
+                    {...element}
+                    user={this.props.user}/>
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -19,11 +33,24 @@ class AdminStrategies extends React.Component {
                 <Element>
                     <h4 className="element-header">Admin About page</h4>
                     <div className="row">
-                        <div className="col-sm-8 col-xxxl-6">
+                        <div className="col-12">
                             <div className="element-wrapper">
-                                <div className="element-box">
 
-                                </div>
+                                {
+                                    Object.keys(config).map(section => {
+                                        return (
+                                            <div>
+                                                <h6 className='element-header'>{section}</h6>
+                                                {
+                                                    config[section].map(requirement => {
+                                                        return this.renderElement(requirement)
+                                                    })
+                                                }
+                                            </div>
+                                        )
+                                    })
+                                }
+
                             </div>
                         </div>
                     </div>

@@ -16,7 +16,7 @@ class Logo extends Component {
 
 class AvatarUser extends Component {
     render() {
-        // console.log('TopMenu', this.props.user)
+        console.log('TopMenu', this.props.user)
         return (
             <div className="logged-user-w avatar-inline">
                 <div className="logged-user-i">
@@ -31,10 +31,6 @@ class AvatarUser extends Component {
                         <div className="os-icon os-icon-chevron-down"/>
                     </div>
                     <div className="logged-user-menu">
-                        <ul>
-                            <li><Link to="/logout"><i className="os-icon os-icon-signs-11"/><span>Logout</span></Link>
-                            </li>
-                        </ul>
                         <div className="logged-user-avatar-info">
                             <div className="avatar-w"><i className='pre-icon os-icon os-icon-user-male-circle'
                                                                                                  style={{'verticalAlign': 'middle',
@@ -64,11 +60,23 @@ class AvatarUser extends Component {
                             {this.props.user.authLevel >= 5 ?
                                     <li>
                                         <a href='/user/admin'>
+                                            <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> User Admin </span>
+                                        </a>
+                                    </li>
+                                 : null
+                            }
+                            {this.props.user.authLevel >= 1 ? // check for current plan and not in general
+                                    <li>
+                                        <a href='/admin'>
                                             <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Admin </span>
                                         </a>
                                     </li>
                                  : null
                             }
+                        </ul>
+                        <ul>
+                            <li><Link to="/logout"><i className="os-icon os-icon-signs-11"/><span>Logout</span></Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -108,8 +116,8 @@ class TopNav extends Component {
             <span style={{width: '100%'}}>
         <Logo/>
         <TopSearch/>
-        <LoginMenu/>
         <AvatarUser/>
+        <LoginMenu/>
       </span>
         )
     }
