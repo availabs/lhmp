@@ -31,6 +31,10 @@ class Menu extends Component {
   		'layout': this.props.menuSettings.layout  ? this.props.menuSettings.layout : 'menu-layout-full',
   		'subemenustyle': 'sub-menu-style-inside'
   	}
+/*
+ menu-activated-on-click sub-menu-style-inside
+ menu-activated-on-hover sub-menu-style-flyout
+* */
     let displayOptions = Object.values(defaultOptions).join(' ')
 
     defaultOptions.position === 'menu-position-left'

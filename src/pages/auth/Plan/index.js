@@ -23,7 +23,7 @@ class Plan extends React.Component {
                         {Submenus[0].map(submenu => {
                             console.log(submenu)
                             return (
-                                <a href='#'>
+                                <a href={submenu.path}>
                                     <div className="element-box">
                                         {submenu.name}
                                     </div>
@@ -59,7 +59,7 @@ export default [
         ],
         menuSettings: {
             image: 'none',
-            scheme: 'color-scheme-dark',
+            scheme: 'color-scheme-light',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
             style: 'color-style-default',

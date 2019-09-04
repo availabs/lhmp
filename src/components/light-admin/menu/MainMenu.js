@@ -48,10 +48,10 @@ class MainMenu extends Component {
           key={'menuItem_' + index}
           className={`top-menu-tab has-sub-menu ${isActive}`} 
           id={'menuItem_' + index}
-          onMouseOver={this.menuMouseOver}
-          onMouseOut={this.menuMouseOut}
+          onClick={this.menuClick}
+          //onMouseOut={this.menuMouseOut}
         >
-          <Link to={menu.path}>
+          <Link to='#'>
             <div className="icon-w">
                 <div className="os-icon os-icon-layers"></div>
             </div>
@@ -64,8 +64,8 @@ class MainMenu extends Component {
             </div>
             <div
               className="sub-menu-i"
-              onMouseOver={this.menuMouseOver}
-              onMouseOut={this.menuMouseOut}
+              onClick={this.menuClick}
+              //onMouseOut={this.menuMouseOut}
             >
               {menu.subMenus.map((subMenu, sindex) => {
                 return (
@@ -91,6 +91,26 @@ class MainMenu extends Component {
     })
   }
   
+  menuClick (event) {
+   if (event.target.closest('.top-menu-tab').classList.value.indexOf('active') === -1) {
+     event.target.closest('.top-menu-tab').classList.add('active');
+   }else{
+     event.target.closest('.top-menu-tab').classList.remove('active');
+   }
+    // Get all submenu
+    let links = document.querySelectorAll('.top-menu-tab');
+
+    // Loop through each
+    for (let i = 0; i < links.length; i++) {
+      // If the link is the one clicked, skip it
+      if (links[i] === event.target.closest('.top-menu-tab')) {
+        continue;
+      }
+      // Remove the .active class
+      links[i].classList.remove('active');
+    }
+  }
+
   menuMouseOver (event) {
     event.target.closest('.top-menu-tab').classList.add('active');
   }
