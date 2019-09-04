@@ -1,21 +1,21 @@
 import React from 'react'
 import contentEditor from "./contentEditor";
-
+import contentViewer from "./contentViewer";
 const NA = ({ type, state, routes }) =>
-    <div>
-        { type } Not Implmented
-        <div>state:<br />{ JSON.stringify(state) }</div>
-    </div>
+{
+    return (
+        <div>
+            {type} Not Implmented
+            <div>state:<br />{ JSON.stringify(state) }</div>
+        </div>
+    )
+}
 
 const NE = ((props) => (<div>{props.type} Doesn't Exist</div>))
 export default {
-    contentEditor,
+    NA,
     NE,
-    NA
+    contentEditor,
+    contentViewer
 }
-export const GRAPH_TYPES = {
-    overview:
-        [
-            {type: "Content", category: "contentEdtor"},
-        ]
-};
+

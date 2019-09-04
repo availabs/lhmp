@@ -5,6 +5,8 @@ import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
 import config from './config/about-config'
 import ContentEditor from 'components/displayComponents/contentEditor'
+import GraphFactory from "components/displayComponents/graphFactory";
+
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import Submenus from './plan-submenus'
@@ -22,7 +24,10 @@ class AdminAbout extends React.Component {
         return (
             <div className='element-box'>
                 <h6>{element.requirement}</h6>
-                <ContentEditor {...element} user={this.props.user}/>
+                <GraphFactory
+                              graph={{type: element.type + 'Editor'}}
+                              {...element}
+                              user={this.props.user}/>
             </div>
         )
     }

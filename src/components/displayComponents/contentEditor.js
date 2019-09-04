@@ -30,7 +30,6 @@ class ContentEditor extends Component {
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
-            console.log('content res', contentRes);
             if (contentRes.json.content.byId[contentId]) {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 return contentRes.json.content.byId[contentId].body
@@ -78,7 +77,6 @@ class ContentEditor extends Component {
                         }
                     }
                 }).then(response => {
-                    console.log('edit res', response)
                     response.error ?
                         this.props.sendSystemMessage(`Error occurred during editing. Please try again later.`, {type: "danger"}) :
                         this.props.sendSystemMessage(`Content successfully edited.`, {type: "success"});
@@ -88,7 +86,6 @@ class ContentEditor extends Component {
                 this.props.falcor.call(
                     ['content', 'insert'], [contentId, '{}', html], [], []
                 ).then(response => {
-                    console.log('insert res', response)
                     response.error ?
                         this.props.sendSystemMessage(`Error occurred. Please try again later.`, {type: "danger"}) :
                         this.props.sendSystemMessage(`Content successfully added.`, {type: "success"})
@@ -99,23 +96,10 @@ class ContentEditor extends Component {
     }
 
     render() {
+        //console.log('contentEditor Render', this.props)
         let {editorState} = this.state;
-        /*const contentFromDB = this.state.contentFromDB;  // get content data if available
-        console.log('editor props',
-            contentFromDB, draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())),
-            contentFromDB === draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())));
-        if (contentFromDB) {
-            if (contentFromDB === draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())).toString()){
-                const contentBlock = htmlToDraft(contentFromDB);
-                if (contentBlock) {
-                    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                    editorState = EditorState.createWithContent(contentState);
-                }
-            }
-
-        }*/
         return (
-            this.props.type === 'content' ? (
+            //this.props.type === 'contentEditor' ? (
                 <div>
                     <Editor
                         editorState={editorState}
@@ -149,7 +133,7 @@ class ContentEditor extends Component {
                     </div>
                 </div>
 
-            ) : ''
+            //) : ''
         )
     }
 }

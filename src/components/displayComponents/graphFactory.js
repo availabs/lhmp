@@ -1,25 +1,24 @@
-/*
 import React from 'react'
-import CensusCharts from 'components/censusCharts/'
+import DisplayComponents from '../displayComponents'
 import TrackVisibility from 'react-on-screen';
 
 export default ({ graph, ...rest }) => {
     const graphType = graph.type.split(' ').join(''),
-        Graph = CensusCharts[graphType] || CensusCharts['NA']
+        Graph = DisplayComponents[graphType] || DisplayComponents['NA'];
     return (
         <TrackVisibility offset={100} style={{height: '100%'}}>
-            <GraphHider Graph={Graph} { ...rest } graph ={graph }/>
+            <ElementHider Graph={Graph} { ...rest } graph ={graph}/>
         </TrackVisibility>
     )
 }
 
 
 
-class GraphHider extends React.Component{
+class ElementHider extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            show: props.isVisible ? true : false
+            show: props.isVisible
         }
     }
 
@@ -32,8 +31,7 @@ class GraphHider extends React.Component{
     render () {
         let {isVisible, Graph, graph, ...rest} = this.props
         return this.state.show ?
-            <Graph {...rest} {...graph} /> :
+            <Graph {...rest} {...graph} {...this.props.rest}/> :
             <div>Loading...</div>
     }
 }
-*/
