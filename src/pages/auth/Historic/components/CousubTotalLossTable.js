@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
-
 import ElementBox from 'components/light-admin/containers/ElementBox'
 import TableBox from 'components/light-admin/tables/TableBoxHistoric'
+import {falcorChunkerNice} from "store/falcorGraph"
 
 import {
     fnum
@@ -38,6 +38,8 @@ class CousubTotalLossTable extends React.Component {
                     ['riskIndex', 'meta', hazards, 'name'],
                     [dataType, geoids, hazards, 'allTime', ['total_damage', 'fatalities']]
                 )
+                    .then(d => falcorChunkerNice(['geo', geoids, 'name']))
+                    .then(d => falcorChunkerNice([dataType, geoids, hazards, 'allTime', ['total_damage', 'fatalities']]))
             })
     }
 
@@ -74,7 +76,7 @@ class CousubTotalLossTable extends React.Component {
             linksToPass['name'] = pData.data;
             return (
                 <TableBox { ...pData }
-                          pageSize={ pData.data.length }
+                          pageSize={ this.props.geoid && this.props.geoid.length > 2 ? pData.data.length : 10}
                           links = {linksToPass}
                 />
             )

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
+import {falcorChunkerNice} from "store/falcorGraph"
 
 import * as d3scale from "d3-scale";
 
@@ -92,11 +93,16 @@ class GeographyScoreBarChart extends React.Component {
             .then(({ hazards, geoids }) => {
                 this.props.colorScale.domain(hazards);
                 return this.props.falcor.get(
-                    ['riskIndex', 'meta', hazards, ['id', 'name']],
-                    ['geo', geoids, ['name']],
-                    ['riskIndex', geoids, hazards, ['score', 'value']],
-                    [dataType, geoids, hazards, { from: EARLIEST_YEAR, to: LATEST_YEAR }, ['property_damage', 'total_loss', 'num_events','num_episodes', 'num_loans']]
+                    ['riskIndex', 'meta', hazards, ['id', 'name']]
+                    //['geo', geoids, ['name']],
+                    //['riskIndex', geoids, hazards, ['score', 'value']],
+                    //[dataType, geoids, hazards, { from: EARLIEST_YEAR, to: LATEST_YEAR }, ['property_damage', 'total_loss', 'num_events','num_episodes', 'num_loans']]
                 )
+                    .then(d => falcorChunkerNice(['geo', geoids, 'name']))
+                    .then(d => falcorChunkerNice(['riskIndex', geoids, hazards, ['score', 'value']]))
+                    .then(d => falcorChunkerNice(
+                        [dataType, geoids, hazards, { from: EARLIEST_YEAR, to: LATEST_YEAR }, ['property_damage', 'total_loss', 'num_events','num_episodes', 'num_loans']]
+                    ))
             })
     }
 

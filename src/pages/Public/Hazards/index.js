@@ -15,6 +15,7 @@ import HazardEventsTable from "pages/auth/Historic/components/HazardEventsTable"
 import {EARLIEST_YEAR, LATEST_YEAR} from "pages/auth/Historic/components/yearsOfSevereWeatherData";
 import Content from "components/cms/Content"
 import {getColorScale} from 'utils/sheldusUtils'
+import {falcorChunkerNice} from "store/falcorGraph"
 
 class Hazards extends React.Component {
 
@@ -48,13 +49,13 @@ class Hazards extends React.Component {
                 this.setState({hazards: hazards});
                 return this.props.falcor.get(
                     ['riskIndex', 'meta', hazards, ['id', 'name']],
-                    ['geo', geoids, ['name']],
-                    ['riskIndex', 'meta', hazards, ['id', 'name']],
                     [dataType, geoid, hazards, {
                         from: EARLIEST_YEAR,
                         to: LATEST_YEAR
                     }, ['property_damage', 'total_damage']],
-                )
+                ).then(d => {
+                    return falcorChunkerNice(['geo', geoids, ['name']])
+                })
             })
     }
 
