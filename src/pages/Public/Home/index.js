@@ -83,7 +83,7 @@ const mapStateToProps = (state,ownProps) => {
 
 const mapDispatchToProps = {};
 export default [{
-    icon: 'os-icon-pencil-2',
+    icon: 'os-icon-home',
     path: '/',
     exact: true,
     name: 'Home',
