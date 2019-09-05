@@ -192,10 +192,10 @@ export const authProjects = (user) => {
 }
 
 export const authGeoid = (user) => {
-    console.log('authGeoidstarted', user)
+    console.log('authGeoidstarted', user, localStorage)
     return (dispatch) => {
     if ((user && user.activePlan) || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
-      let planId = user.activePlan ? user.activePlan : localStorage.getItem('planId');
+      let planId = user && user.activePlan ? user.activePlan : localStorage.getItem('planId');
         falcorGraph.get(
           ['plans','county','byId',[planId], ['fips']]
         )

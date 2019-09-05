@@ -47,7 +47,36 @@ const config = {
         }
         ],
     Assets: [
-
+        {
+            requirement: 'Req-NYS-F-2',
+            type: 'table',
+            prompt: '',
+            intent: ''
+        },
+        {
+            requirement: 'Req-NYS-F-3A',
+            type: '',
+            prompt: '',
+            intent: ''
+        },
+        {
+            requirement: 'Req-NYS-F-3B',
+            type: '',
+            prompt: '',
+            intent: ''
+        },
+        {
+            requirement: 'Req-NYS-F-4A',
+            type: '',
+            prompt: '',
+            intent: ''
+        },
+        {
+            requirement: 'Req-NYS-F-4B',
+            type: '',
+            prompt: '',
+            intent: ''
+        }
     ],
     'Changes in Development' : [
         {

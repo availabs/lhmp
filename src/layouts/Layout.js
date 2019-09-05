@@ -36,7 +36,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
         (
             <Redirect
                 to={{
-                    pathname: "/", // if not authed
+                    pathname: "/login", // if not authed
                     state: {from: rest.router.location}
                 }}
             />
@@ -79,7 +79,6 @@ const DefaultLayout = ({component: Component, ...rest}) => {
 
 function checkAuth(props) {
     console.log('checkAuth', (props.auth && !props.authed), props)
-    //alert('checkAuth '+ (props.auth && !props.authed))
 
     return (props.auth && !props.authed)
 }
@@ -87,15 +86,12 @@ function checkAuth(props) {
 function checkAuthPage(props) {
     let authlevel = props.authLevel !== undefined ? props.authLevel : 1;
     console.log('checkAuthPage', (props.auth && !(props.authed && props.userAuthLevel >= authlevel)), props)
-    //alert('checkAuthPage ' + (props.auth && !(props.authed && props.userAuthLevel >= authlevel)))
     return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
 
 }
 
 function checkAuthPlan(props) {
-console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
-//alert('checkAuthPlan '+ (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString()))));
-
+    console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
     return ['Plans', 'Home'].includes(props.name) ? false :
     (props.auth && props.user.activePlan && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString())))
 }

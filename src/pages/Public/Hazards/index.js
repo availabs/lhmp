@@ -34,6 +34,7 @@ class Hazards extends React.Component {
         if (!geoid) geoid = this.props.geoid;
         if (!geoLevel) geoLevel = this.state.geoLevel;
         if (!dataType) dataType = this.state.dataType;
+        if (!geoid || !geoLevel || !dataType) return Promise.resolve();
         return this.props.falcor.get(
             ['geo', geoid, 'name'],
             ['geo', geoid, 'cousubs'],
