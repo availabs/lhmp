@@ -82,8 +82,7 @@ class Signup extends Component {
     if(currentStep !== endStep){
         return (
             buttonActive ? <a className="btn btn-primary step-trigger-btn" href ={'#'} onClick = {this._next} > Continue</a>
-                : <a className="btn btn-primary step-trigger-btn disabled" href ={'#'} onClick = {this.highlightRequired}
-                     style={{'pointer-events': 'none'}}> Continue</a>
+                : <a className="btn btn-primary step-trigger-btn disabled" href ={'#'} onClick = {this.highlightRequired}> Continue</a>
         )
     }
     return null;
@@ -96,7 +95,7 @@ class Signup extends Component {
       let endStep = this.props.steps.length
       if(currentStep === endStep-1){
           return(
-              buttonActive ? <button class="btn btn-primary step-trigger-btn" href ={'#'}> Submit</button>
+              buttonActive ? <button className="btn btn-primary step-trigger-btn" href ={'#'}> Submit</button>
                   : <button className="btn btn-primary step-trigger-btn" href={'#'} disabled> Submit</button>
           )
       }
@@ -112,12 +111,29 @@ class Signup extends Component {
                         <div className="step-triggers">
                             {
                                 this.props.steps.map((step,i) => {
-                                    return (
-                                        <a
-                                            href={'#'}
-                                            onClick={this.setStep.bind(this,i)}
-                                            className={`step-trigger ${i <= this.state.activeStep ? 'complete' : ''} ${i === this.state.activeStep ? 'active' : ''}`} >{step.title}</a>
-                                    )
+                                    if ((this.props.steps[i-1] && this.props.steps[i-1].nextButtonActive !== undefined && this.props.steps[i-1].nextButtonActive) ||
+                                        (this.props.steps[i-1] && this.props.steps[i-1].nextButtonActive === undefined)){
+                                            return (
+                                                <a
+                                                    href={'#'}
+                                                    onClick={this.setStep.bind(this,i)}
+                                                    className={`step-trigger ${i <= this.state.activeStep ? 'complete' : ''} ${i === this.state.activeStep ? 'active' : ''}`} >{step.title}</a>
+                                            )
+                                    }else if (this.props.steps[i-1] && this.props.steps[i-1].nextButtonActive !== undefined && !this.props.steps[i-1].nextButtonActive){
+                                            return (
+                                                <a
+                                                    href={'#'}
+                                                    className={`step-trigger ${i <= this.state.activeStep ? 'complete' : ''} ${i === this.state.activeStep ? 'active' : ''}`} >{step.title}</a>
+                                            )
+                                    }else {
+                                        return (
+                                            <a
+                                                href={'#'}
+                                                onClick={this.setStep.bind(this,i)}
+                                                className={`step-trigger ${i <= this.state.activeStep ? 'complete' : ''} ${i === this.state.activeStep ? 'active' : ''}`} >{step.title}</a>
+                                        )
+                                    }
+
                                 })
                             }
                         </div>

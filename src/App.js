@@ -16,10 +16,16 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
+    if(this.props.token){
+      localStorage.setItem('userToken', this.props.token.slice(3,this.props.token.length))
+      //alert('setting this: ' + this.props.token)
+    }
+    //alert('getItem: ' + localStorage.getItem('userToken'));
     this.props.auth();
     this.state = {
       isAuthenticating: true
     };
+    this.getUrlVars = this.getUrlVars.bind(this)
   }
 
 
@@ -31,36 +37,49 @@ class App extends Component {
   }
 
   componentWillMount(prevProps) {
+    //alert('getItem: ' + localStorage.getItem('userToken'));
+    this.props.auth();
     //console.log('update',prevProps, this.props.user.attempts)
     if (this.state.isAuthenticating && this.props.user.attempts ) {
       this.setState({ isAuthenticating: false });
     }
   }
-
-
+  getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
   render() {
     //console.log('app render user',this.props.user)
+
     return (
       <ThemeProvider theme={theme}>
         <div className="all-wrapper solid-bg-all">
           <BrowserRouter>
             <Switch>
-              {Routes.map((route, i) => {
-                return (
-                  <Layout
-                    {...route}
-                    authed={this.props.user.authed}
-                    breadcrumbs={route.breadcrumbs}
-                    isAuthenticating={this.state.isAuthenticating}
-                    key={i}
-                    menuSettings={route.menuSettings ? route.menuSettings : {}}
-                    menus={Routes}
-                    router={this.props.router}
-                    routes={route.routes}
-                    user={this.props.user}
-                  />
-                );
-              })}
+              {
+                  Routes.routes.map((route, i) => {
+                    return (
+                        <Layout
+                            {...route}
+                            authed={this.props.user.authed}
+                            userAuthLevel={this.props.user.authLevel}
+                            breadcrumbs={route.breadcrumbs}
+                            isAuthenticating={this.state.isAuthenticating}
+                            key={i}
+                            menuSettings={route.menuSettings ? route.menuSettings : {}}
+                            menus={Routes.routes
+                                .filter(f => route.auth === f.auth)}
+                                //.filter(f => f.auth && f.authLevel ? f.authLevel <= this.props.user.authLevel : true)}
+                            router={this.props.router}
+                            routes={Routes.routes}
+                            user={this.props.user}
+                        />
+                    );
+                  })
+              }
             </Switch>
           </BrowserRouter>
           <Messages />
@@ -70,10 +89,14 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-  router: state.router
-});
+const mapStateToProps = state => {
+  console.log('state', state.router.location, state.user)
+  return ({
+    user: state.user,
+    router: state.router,
+    token: state.router.location.search ? state.router.location.search : null
+  });
+}
 
 const mapDispatchToProps = { auth };
 

@@ -1,21 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import AvlMap from 'components/AvlMap';
-import ebr_buildings from './layers/ebr_buildings' //no need to put .js
-import ogs_buildings from './layers/ogs_buildings' 
-import osm_buildings from './layers/osm_buildings'
-import parcels from './layers/parcels'
+import ebr_buildings from 'components/AvlMap/layers/ebr_buildings_new'
 
-
-class Home extends Component {
-  render () {
-   return (
-     <div style={{width: '100vw', height: '100vh'}}>
-      <AvlMap
-        layers={[ebr_buildings,ogs_buildings,osm_buildings,parcels]}
-        zoom={13}
-        center={[-73.7749, 42.6583]}
-       />
-     </div>
+class Home extends React.Component {
+  EBRLayer = ebr_buildings();
+  render() {
+    return (
+      <div style={ { width: '100%', height: '100vh' } }>
+        <AvlMap
+          layers={ [this.EBRLayer] }
+          zoom={ 13 }
+          center={ [-73.7749, 42.6583] }/>
+      </div>
     )
   }
 }

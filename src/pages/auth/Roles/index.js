@@ -1,11 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
 import Element from 'components/light-admin/containers/Element'
-import {falcorGraph} from "store/falcorGraph";
+// import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
+// import {center} from "@turf/turf";
+// import {setActivePlan} from 'store/modules/user'
+/*
+begin;
+CREATE TEMPORARY TABLE t
+ON commit drop
+as (SELECT id, county, fips, plan_consultant, plan_expiration, plan_grant,
+       plan_url, plan_status, groups
+  FROM plans.county
+  WHERE county = 'Sullivan County');
+
+update t
+set groups = groups || '{Sullivan County HMP General, Sullivan County HMP Admin, Sullivan County HMP Public}'
+where county = 'Sullivan County'
+returning *;
+
+select * from t
+
+rollback;
+
+update plans.county dst
+set groups = ('{AVAIL, ' || src.county || ' HMP General, ' || src.county || ' HMP Admin, ' || src.county || ' HMP Public}') :: character varying[]
+FROM plans.county src
+where src.county = dst.county
+returning dst.groups;
+*/
 
 const COLS = [
     "id",
@@ -33,62 +58,45 @@ class RolesIndex extends React.Component {
 
         this.deleteWorksheet = this.deleteWorksheet.bind(this)
     }
-    componentDidMount(e) {
-        this.fetchFalcorDeps();
-    }
-
-    componentWillMount(){
-
-        this.fetchFalcorDeps().then(response =>{
-            this.setState({
-                action_data : response
-            })
-        })
-
-    }
+    // componentDidMount(e) {
+    //     this.fetchFalcorDeps();
+    // }
+    //
+    // componentWillMount(){
+    //
+    //     this.fetchFalcorDeps().then(response =>{
+    //         this.setState({
+    //             action_data : response
+    //         })
+    //     })
+    //
+    // }
 
     fetchFalcorDeps() {
         let action_data =[];
-        return falcorGraph.get(['roles','length'])
-            .then(response => response.json.roles.length)
-            .then(length => falcorGraph.get(
-                ['roles', 'byIndex', { from: 0, to: length -1 }, 'id']
-                )
-                    .then(response => {
-                        const ids = [];
-                        for (let i = 0; i < length; ++i) {
-                            const graph = response.json.roles.byIndex[i]
-                            if (graph) {
-                                ids.push(graph.id);
-                            }
-                        }
-                        return ids;
-                    })
-            )
-            .then(ids =>
-                falcorGraph.get(['roles','byId', ids, COLS])
-                    .then(response => {
-                        //ids.forEach(id =>{
-                        Object.keys(response.json.roles.byId).filter(d => d!== '$__path').forEach(function(action,i){
-                            action_data.push({
-                                'id' : action,
-                                'data': Object.values(response.json.roles.byId[action])
-                            })
+        if(!this.props.activePlan) return Promise.resolve();
+        return this.props.falcor.get(['roles','byPlanId', this.props.activePlan, COLS])
+            .then(response => {
+                console.log('res', response)
+                if (response.json.roles.byPlanId[this.props.activePlan]){
+                    Object.keys(response.json.roles.byPlanId).filter(d => d!== '$__path').forEach(function(action,i){
+                        console.log('---',response.json.roles.byPlanId[action])
+                        action_data.push({
+                            'id' : response.json.roles.byPlanId[action]['id'].toString(),
+                            'data': Object.values(response.json.roles.byPlanId[action])
                         })
-                        return action_data
-                    })
-            )
-
-
+                    })}
+                return this.setState({action_data})
+            })
     }
 
     deleteWorksheet(e){
         e.persist()
         let roleId = e.target.id
         this.props.sendSystemMessage(
-            `Are you sure you with to delete this Worksheet with id "${ roleId }"?`,
+            `Are you sure you with to delete this Role with id "${ roleId }"?`,
             {
-                onConfirm: () => falcorGraph.call(['roles','remove'],[roleId.toString()],[],[]).then(() => this.fetchFalcorDeps().then(response => {
+                onConfirm: () => this.props.falcor.call(['roles','remove'],[roleId.toString()],[],[]).then(() => this.fetchFalcorDeps().then(response => {
                     this.setState({
                         action_data:response
                     })
@@ -104,12 +112,13 @@ class RolesIndex extends React.Component {
     renderMainTable() {
         let table_data = [];
         let attributes = COLS.slice(0,4)
+        console.log('final data', this.state.action_data)
         this.state.action_data.map(function (each_row) {
-            console.log('each row', each_row)
-            table_data.push([each_row.id].concat(each_row.data.slice(1,4)))
+            console.log('each row: ',each_row)
+            table_data.push([].concat(each_row.data.slice(1,5)))
         })
 
-        return (
+        return table_data.length > 0 ?(
             <table className="table table lightBorder">
                 <thead>
                 <tr>
@@ -133,7 +142,7 @@ class RolesIndex extends React.Component {
                             }
                             <td>
                                 <Link className="btn btn-sm btn-outline-primary"
-                                      to={ `/roles/edit/${data[0]}` } >
+                                      to={ `/role/edit/${data[0]}` } >
                                     Edit
                                 </Link>
                             </td>
@@ -155,17 +164,17 @@ class RolesIndex extends React.Component {
                 }
                 </tbody>
             </table>
-        )
+        ) : <div> No Roles found.</div>
     }
 
     renderRoleView() {
         let roleid = this.state.roleid,
-            tableData = [roleid]
-            ;
+            tableData = [];
         this.state.action_data.map(function(f) {
+            console.log('f',f, typeof f.id, typeof roleid)
             if (f.id === roleid) tableData.push(...f.data.slice(1,f.data.length-1))
         });
-        console.log('data', tableData)
+        console.log('tableData view', tableData)
         return (
             <table className="table table lightBorder">
                 <thead>
@@ -189,18 +198,19 @@ class RolesIndex extends React.Component {
         )
     }
     render() {
+        console.log('authPLans', this.props.activePlan, this.props)
         return (
             <div className='container'>
                 <Element>
-                    <h6 className="element-header">Roles
+                    <h4 className="element-header">Roles : {this.props.activePlan}
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
-                            to={ `/roles/new` } >
+                            to={ `/role/new` } >
                                 Add New Role
                         </Link>
                     </span>
-                    </h6>
+                    </h4>
                     <div className="element-box">
                         <div className="table-responsive" >
                             { this.state.roleid ? this.renderRoleView() : this.renderMainTable() }
@@ -214,17 +224,16 @@ class RolesIndex extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log('ownProps roles', ownProps)
-
     return ({
-        isAuthenticated: !!state.user.authed,
-        attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-        roleid: ownProps.computedMatch.params.roleid
+        roleid: ownProps.computedMatch.params.roleid,
+        activePlan: state.user.activePlan,
+        //roles: state.graph.roles.planId || {}
     })
 };
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage,
+    //setActivePlan
 };
 
 export default [
@@ -233,7 +242,7 @@ export default [
         exact: true,
         name: 'Roles',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             { name: 'Roles', path: '/roles/' },
@@ -247,7 +256,7 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(RolesIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesIndex))
     },
     {
         path: '/roles/:roleid',
@@ -268,6 +277,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(RolesIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesIndex))
     }
 ]

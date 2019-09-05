@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import { reduxFalcor } from 'utils/redux-falcor'
 import {authProjects, authGeoid} from "../../../store/modules/user";
 // import { Link } from 'react-router-dom'
 
@@ -13,19 +14,17 @@ class HomeView extends React.Component {
     super(props)
   }
 
-
   render() {
     /*
     var title ='Home';
-    var subheader = 'Dashboard';
+    var subheader = 'Dashboard';setActivePlan
      */
-    //console.log('authProjects props',this.props);
     return(
       <div className='container'>
         <Element>
-        <form onSubmit={this.handleSubmit}>
+        <form>
         <h4  className="element-header">Mitigation Planner Home</h4>
-        <h4>Home Page for {this.props.activePlan} {this.props.activeGeoid}</h4>
+        <h6>Home Page for {this.props.activePlan} {this.props.activeGeoid}</h6>
         </form>
         </Element>
       </div>
@@ -34,8 +33,8 @@ class HomeView extends React.Component {
 }
 
 const mapStateToProps = state => {
+  console.log('user', state.user)
   return ({
-    isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
     activeGeoid: state.user.activeGeoid
   });
@@ -43,16 +42,19 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = ({
   //sendSystemMessage
-  authProjects,
-  authGeoid
+  //authProjects,
+  //authGeoid
 
 });
 
 export default {
   icon: 'os-icon-home',
-  path: '/',
+  path: '/admin',
   exact: true,
   mainNav: true,
+  breadcrumbs: [
+    { name: 'Home', path: '/admin' }
+  ],
   menuSettings: {
     image: 'none',
     scheme: 'color-scheme-light',
@@ -62,6 +64,6 @@ export default {
   },
   name: 'Home',
   auth: true,
-  component: connect(mapStateToProps,mapDispatchToProps)(HomeView)
+  component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(HomeView))
 };
 

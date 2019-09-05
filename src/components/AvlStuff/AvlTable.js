@@ -3,26 +3,149 @@ import React from "react"
 import styled from "styled-components"
 import get from "lodash.get"
 
-import { range } from "d3-array";
+import * as d3array from "d3-array";
 import { format } from "d3-format"
 
-import { Input } from "components/common/styled-components"
+import { Input, Tooltip } from "components/common/styled-components"
 import ItemSelector from 'components/common/item-selector/item-selector';
+
+let FILTER_ID = 0;
+const getFilterId = () => `filter-${ ++FILTER_ID }`;
+
+const StringEqualityFilter = (key, value) => {
+	value = value.toString().toLowerCase();
+	function filter(data) {
+		return data.filter(d => get(d, [key], "").toString().toLowerCase().includes(value));
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } includes ${ value }`;
+	return filter;
+}
+const NotEqualFilter = (key, value) => {
+	function filter(data) {
+		return data.filter(d => get(d, [key], undefined) != value);
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } != ${ value }`;
+	return filter;
+}
+const EqualityFilter = (key, value) => {
+	function filter(data) {
+		return data.filter(d => get(d, [key], undefined) == value);
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } == ${ value }`;
+	return filter;
+}
+const NumericGreaterThanFilter = (key, value) => {
+	function filter(data) {
+		return data.filter(d => get(d, [key], undefined) > value);
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } > ${ value }`;
+	return filter;
+}
+const NumericGreaterThanEqualToFilter = (key, value) => {
+	function filter(data) {
+		return data.filter(d => get(d, [key], undefined) >= value);
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } >= ${ value }`;
+	return filter;
+}
+const NumericLessThanFilter = (key, value) => {
+	function filter(data) {
+		return data.filter(d => get(d, [key], undefined) < value);
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } < ${ value }`;
+	return filter;
+}
+const NumericLessThanEqualToFilter = (key, value) => {
+	function filter(data) {
+		return data.filter(d => get(d, [key], undefined) <= value);
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } <= ${ value }`;
+	return filter;
+}
+const NumericRangeFilterRegex = /(\[|\()(\d+),(\d+)(\]|\))/
+const NumericRangeFilter = (key, lower, value1, value2, upper) => {
+	function filter(data) {
+		return data.filter(d => {
+			const value = get(d, [key], undefined);
+			return (lower === "[" ? value >= value1 : value > value1) &&
+				(upper === "]" ? value <= value2 : value < value2);
+		})
+	}
+	filter.id = getFilterId();
+	filter.display = `${ key } in range ${ lower }${ value1 }, ${ value2 }${ upper }`;
+	return filter;
+}
+
+const isNum = n => (n !== null) && !isNaN(+n);
+
+const hierSort = (data, keys, i = 0) => {
+	if (i >= keys.length) return data;
+
+	const groups = new Map();
+
+	const keyData = keys[i];
+	const keyFunc = d => d[keyData.key];
+
+	for (const row of data) {
+		const key = keyFunc(row),
+			group = groups.get(key);
+		if (group) {
+			group.push(row);
+		}
+		else {
+			groups.set(key, [row]);
+		}
+	}
+
+	for (const [key, values] of groups) {
+		groups.set(key, hierSort(values, keys, i + 1));
+	}
+
+	return Array.from(groups)
+		.sort(([a], [b]) => {
+			if ((a === null) || (a === undefined)) return 1;
+			if ((b === null) || (b === undefined)) return -1;
+
+			if (isNum(a) && isNum(b)) {
+				return (a - b) * keyData.dir;
+			}
+			a = a.toString().toLowerCase();
+			b = b.toString().toLowerCase();
+
+			return (a < b ? -1 : b < a ? 1 : 0) * keyData.dir;
+		})
+		.reduce((a, c) => {
+			a.push(...c[1])
+			return a;
+		}, [])
+}
 
 export default class AvlTable extends React.Component {
 	static defaultProps = {
 		data: [],
 		keys: [],
 		rowsPerPage: 10,
-		pageSpread: 2
+		pageSpread: 2,
+		downloadedFileName: "data.csv",
+		title: "",
+		showHelp: false
 	}
 
 	state = {
 		page: 0,
+		filters: [],
 		searchKey: null,
 		searchString: "",
 		sortKey: null,
-		sortDirection: 1
+		sortDirection: 1,
+		sortKeys: []
 	}
 
 	setPage(page) {
@@ -35,6 +158,57 @@ export default class AvlTable extends React.Component {
 	nextPage() {
 		const maxPage = Math.floor(this.props.data.length / this.props.rowsPerPage);
 		this.setState({ page: Math.min(maxPage, this.state.page + 1) });
+	}
+
+	addFilter() {
+		const { searchKey, searchString } = this.state;
+		let filter = false;
+		if (searchString.slice(0, 2) === "::") {
+			const argsString = searchString.slice(2).trim(),
+				args = argsString.split(/\s+/);
+
+			if (args[0] === "==") {
+				filter = EqualityFilter(searchKey, argsString.slice(2).trim());
+			}
+			else if (args[0] === "!=") {
+				filter = NotEqualFilter(searchKey, argsString.slice(2).trim());
+			}
+			else if (args[0] === ">") {
+				filter = NumericGreaterThanFilter(searchKey, argsString.slice(1).trim());
+			}
+			else if (args[0] === ">=") {
+				filter = NumericGreaterThanEqualToFilter(searchKey, argsString.slice(2).trim());
+			}
+			else if (args[0] === "<") {
+				filter = NumericLessThanFilter(searchKey, argsString.slice(1).trim());
+			}
+			else if (args[0] === "<=") {
+				filter = NumericLessThanEqualToFilter(searchKey, argsString.slice(2).trim());
+			}
+			else if ((args[0] === "range") || (args[0] === "in")) {
+				const value = argsString.slice(args[0].length).replace("/\s/g", ""),
+					match = NumericRangeFilterRegex.exec(value);
+
+				if (match) {
+					filter = NumericRangeFilter(searchKey, ...match.slice(1, 5));
+				}
+			}
+		}
+		if (!filter) {
+			filter = StringEqualityFilter(searchKey, searchString);
+		}
+
+		this.setState({
+			filters: [
+				...this.state.filters,
+				filter
+			],
+			searchKey: null,
+			searchString: ""
+		})
+	}
+	removeFilter(id) {
+		this.setState({ filters: this.state.filters.filter(f => f.id !== id) });
 	}
 
 	setSearchKey(searchKey = null) {
@@ -55,6 +229,30 @@ export default class AvlTable extends React.Component {
 		this.setState({ sortKey, sortDirection });
 	}
 
+	toggleSortKey(sortKey) {
+		let sortKeyFound = false;
+
+		const sortKeys = this.state.sortKeys.reduce((a, { key, dir }) => {
+			sortKeyFound = sortKeyFound || (key === sortKey);
+			if ((key === sortKey) && (dir === 1)) {
+				a.push({
+					key,
+					dir: -1
+				})
+			}
+			else if (key !== sortKey) {
+				a.push({ key, dir });
+			}
+			return a;
+		}, []);
+
+		if (!sortKeyFound) {
+			sortKeys.push({ key: sortKey, dir: 1 });
+		}
+
+		this.setState({ sortKeys });
+	}
+
 	getKeys() {
 		let { keys, data } = this.props;
 		if (!keys.length && data.length) {
@@ -64,59 +262,67 @@ export default class AvlTable extends React.Component {
 	}
 
 	getData() {
-		let { data } = this.props;
-
-		const searchKey = this.state.searchKey,
-			searchString = this.state.searchString.toLowerCase();
-		if ((searchKey !== null) && Boolean(searchString)) {
-			if ((searchString[0] === "!") && (searchString.length > 1)) {
-				data = data.filter(d => !get(d, [searchKey], "").toString().toLowerCase().includes(searchString.slice(1)));
-			}
-			else if (searchString[0] !== "!") {
-				data = data.filter(d => get(d, [searchKey], "").toString().toLowerCase().includes(searchString));
-			}
-		}
+		let data = this.state.filters.reduce((data, filter) => filter(data), [...this.props.data]);
 
 		const isN = n => !isNaN(+n);
 
-		const {
-			sortKey,
-			sortDirection
-		} = this.state;
-		if (sortKey !== null) {
-			data.sort((a, b) => {
-				a = get(a, [sortKey], false);
-				b = get(b, [sortKey], false);
+		const { sortKeys } = this.state;
 
-				if (!a) return 1;
-				if (!b) return -1;
+		data = hierSort(data, sortKeys);
 
-				if (isN(a) && isN(b)) {
-					return (a - b) * sortDirection;
-				}
-				a = a.toString().toLowerCase();
-				b = b.toString().toLowerCase();
+		return data;
+	}
 
-				return (a < b ? -1 : b < a ? 1 : 0) * sortDirection;
-			})
+	getKeysAndData() {
+		return [this.getKeys(), this.getData()];
+	}
+
+	downloadAsCsv(filtered = true) {
+		const keys = this.getKeys();
+
+		let data = this.props.data;
+
+		if (filtered) {
+			data = this.getData();
 		}
-		return [this.getKeys(), data];
+
+		const csvData = data.reduce((csvData, row) => {
+			csvData.push(keys.map(k => row[k]).join());
+			return csvData;
+		}, [keys.join()]).join("\n");
+
+		const blob = new Blob([csvData], {
+			type: 'text/csv;charset=utf-8;'
+		});
+
+		const link = document.createElement('a');
+
+		if (link.download !== undefined) {
+			const url = URL.createObjectURL(blob);
+			link.setAttribute('href', url);
+			link.setAttribute('download', this.props.downloadedFileName);
+			link.style.visibility = 'hidden';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
 	}
 
 	render() {
-		let [keys, data] = this.getData();
+		let [keys, data] = this.getKeysAndData();
 
-		let { page, searchKey, searchString, sortKey, sortDirection } = this.state;
+		let { page, searchKey, searchString, sortKeys } = this.state;
+		const keyMap = sortKeys.reduce((a, c, i) => ({ ...a, [c.key]: { dir: c.dir, i } }), {});
 
 		const { rowsPerPage, pageSpread } = this.props,
-			maxPage = Math.floor(data.length / rowsPerPage),
+			maxPage = Math.ceil(data.length / rowsPerPage) - 1,
 			length = data.length;
 
 		page = Math.min(maxPage, page);
 
 		data = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 		return (
-			<div ref={ this.container }>
+			<DivContainer>
 
 				<NavigationBar page={ page }
 					maxPage={ maxPage }
@@ -130,40 +336,61 @@ export default class AvlTable extends React.Component {
 					searchKey={ searchKey }
 					setSearchKey={ key => this.setSearchKey(key) }
 					searchString={ searchString }
-					setSearchString={ str => this.setSearchString(str) }/>
+					setSearchString={ str => this.setSearchString(str) }
+					addFilter={ () => this.addFilter() }
+					removeFilter={ id => this.removeFilter(id) }
+					filters={ this.state.filters }
+					downloadFiltered={ () => this.downloadAsCsv(true) }
+					downloadUnfiltered={ () => this.downloadAsCsv(false) }
+					title={ this.props.title }
+					showHelp={ this.props.showHelp }/>
 
-				<table>
-					<thead>
-						<tr>
+				<TableContainer>
+					<table className="table table-sm">
+						<thead>
+							<tr>
+								{
+									keys.map(key =>
+										<TH key={ key } onClick={ () => this.toggleSortKey(key) }
+											className={ keyMap[key] ? "active" : "" }>
+											{ !keyMap[key] ? null : `(${ keyMap[key].i + 1 })` } { key.replace("_", " ") }
+											{ !keyMap[key] ? null :
+												<span className="fa fa-lg fa-caret-down ml-1"
+													style={ { transform: `rotate(${ keyMap[key].dir === 1 ? 180 : 0 }deg)` } }/>
+											}
+										</TH>
+									)
+								}
+							</tr>
+						</thead>
+						<tbody>
 							{
-								keys.map(key =>
-									<TH key={ key } onClick={ () => this.setSortKey(key) }
-										className={ key === sortKey ? "active" : "" }>
-										{ key.replace("_", " ") }
-										{ key !== sortKey ? null :
-											<span className="fa fa-lg fa-caret-down ml-1"
-												style={ { transform: `rotate(${ sortDirection === 1 ? 180 : 0 }deg)` } }/>
-										}
-									</TH>
+								data.map((row, i) =>
+									<tr key={ i }>
+										{ keys.map(key => <td key={ key }>{ row[key] }</td>) }
+									</tr>
 								)
 							}
-						</tr>
-					</thead>
-					<tbody>
-						{
-							data.map((row, i) =>
-								<tr key={ i }>
-									{ keys.map(key => <td key={ key }>{ row[key] }</td>) }
-								</tr>
-							)
-						}
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</TableContainer>
 
-			</div>
+			</DivContainer>
 		)
 	}
 }
+
+const DivContainer = styled.div`
+	/*max-height: 700px;*/
+`
+const TableContainer = styled.div`
+	padding: 0px 10px;
+	${ props => props.theme.scrollBar };
+	overflow: auto;
+	max-height: 500px;
+	margin-top: 5px;
+`
+
 const TH = styled.th`
 	padding-top: 2px;
 	cursor: pointer;
@@ -182,6 +409,7 @@ const Button = styled.button`
 	border: none;
 	cursor: pointer;
 	font-weight: 400;
+	position: relative;
 
 	:hover {
 		background-color: rgb(60, 70, 80);
@@ -195,6 +423,20 @@ const Button = styled.button`
 	&.active {
 		background-color: ${ props => props.theme.textColor };
 		color: rgb(50, 50, 70);
+	}
+
+	> .button-dropdown {
+		display: none;
+		position: absolute;
+		right: 0;
+		top: 100%;
+		background-color: ${ props => props.theme.sidePanelBg };
+		padding: 20px;
+		z-index: 100;
+	}
+
+	:hover > .button-dropdown {
+		display: block;
 	}
 `
 
@@ -249,9 +491,31 @@ const getPageSpread = (page, maxPage, pageSpread) => {
 		low -= (high - maxPage);
 		high = maxPage;
 	}
-	return range(Math.max(0, low), Math.min(maxPage, high) + 1);
+	return d3array.range(Math.max(0, low), Math.min(maxPage, high) + 1);
 }
 const numberFormat = format(",d");
+
+const _FilterItem = styled.div`
+	padding: 2px 2px 2px 10px;
+	display: flex;
+	border: 2px solid ${ props => props.theme.textColor };
+	border-radius: 4px;
+
+	:hover {
+		border-color: ${ props => props.theme.textColorHl };
+	}
+
+	> div:first-child {
+		padding-right: 5px;
+	}
+`
+const FilterItem = ({ display, remove }) =>
+	<_FilterItem>
+		<div>{ display }</div>
+		<Button onClick={ remove }>
+			<span className="fa fa-times"/>
+		</Button>
+	</_FilterItem>
 
 const NavigationBar = ({ prevPage,
 													nextPage,
@@ -265,35 +529,78 @@ const NavigationBar = ({ prevPage,
 													setSearchString,
 													searchString,
 													rowsPerPage,
-													pageSpread
+													pageSpread,
+													addFilter,
+													removeFilter,
+													filters,
+													downloadFiltered,
+													downloadUnfiltered,
+													title,
+													showHelp
 												}) =>
 	<_NavigationBar>
 
 		<div>
-			Search Table
-		</div>
-
-		<div>
-			<div style={ { display: "flex", flexDirection: "row", width: "50%", display: "inline-block" } }>
-				<ItemSelector
-					placeholder="Select a search key..."
-					selectedItems={ searchKey }
-					multiSelect={ false }
-					searchable={ false }
-					displayOption={ d => d }
-					getOptionValue={ d => d }
-					onChange={ setSearchKey }
-					options={ searchKeys }/>
+			<div style={ { fontSize: "1rem", fontWeight: "bold", lineHeight: "23px" } }>
+				{ title }
 			</div>
-			<div style={ { width: "50%", display: "inline-block" } }>
-				<Input type="text" value={ searchString }
-					disabled={ !Boolean(searchKey) }
-					onChange={ ({ target: { value } }) => setSearchString(value) }
-					placeholder="search..."/>
+			<div>
+				<Button onClick={ downloadFiltered }>
+					Download Filtered Data
+				</Button>
+				<Button onClick={ downloadUnfiltered } style={ { marginLeft: "5px" } }>
+					Download Unfiltered Data
+				</Button>
+				{ !showHelp ? null :
+					<Button style={ { marginLeft: "5px" } }>
+						<span className="fa fa-question"/>
+						<TableHelp />
+					</Button>
+				}
 			</div>
 		</div>
 
-		<div>
+		<div style={ { marginTop: "5px" } }>
+			<form style={ { display: "flex", width: "100%" } }
+				onSubmit={ e => { e.preventDefault(); searchKey && searchString && addFilter() } }>
+					<div style={ { width: "40%" } }>
+						<ItemSelector
+							placeholder="Select a filter key..."
+							selectedItems={ searchKey }
+							multiSelect={ false }
+							searchable={ false }
+							displayOption={ d => d }
+							getOptionValue={ d => d }
+							onChange={ setSearchKey }
+							options={ searchKeys }/>
+					</div>
+					<div style={ { width: "40%" } }>
+						<Input type="text" value={ searchString }
+							disabled={ !Boolean(searchKey) }
+							onChange={ ({ target: { value } }) => setSearchString(value) }
+							placeholder="filter..."/>
+					</div>
+					<div style={ { width: "20%", display: "flex" } }>
+						<Button onClick={ addFilter } style={ { height: "100%", width: "100%" } }
+							disabled={ !searchKey || !searchString }>
+							Add Filter
+						</Button>
+					</div>
+			</form>
+		</div>
+
+		{ !filters.length ? null :
+			<div style={ { display: "flex" } }>
+				{ filters.map((f, i) =>
+						<FilterItem key={ f.id }
+							display={ f.display }
+							remove={ () => removeFilter(f.id) }/>
+					)
+				}
+			</div>
+		}
+
+		<div style={ { marginTop: "5px" } }>
 			<div>Displaying: { numberFormat(Math.min(page * rowsPerPage + 1, length)) } - { numberFormat(Math.min(page * rowsPerPage + rowsPerPage, length)) } of { numberFormat(length) }</div>
 			<div>Page: { numberFormat(page + 1) } of { numberFormat(maxPage + 1) }</div>
 		</div>
@@ -337,3 +644,112 @@ const NavigationBar = ({ prevPage,
 		</div>
 
 	</_NavigationBar>
+
+const TableHelp = () =>
+	<div className="button-dropdown">
+		<div style={ { fontSize: "1rem" } }>Search Commands</div>
+		<div>All search commands must adhere to the following pattern:</div>
+		<div>{ ':: command value' }</div>
+		<div>Where command is one of the following:</div>
+		<TableHelpTable>
+			<thead>
+				<tr>
+					<th>Command</th>
+					<th>Description</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{ ':: ==' }</td>
+					<td>(equal to)</td>
+					<td>Number / String</td>
+				</tr>
+					<tr>
+						<td>{ ':: !=' }</td>
+						<td>(not equal to)</td>
+						<td>Number / String</td>
+					</tr>
+				<tr>
+					<td>{ ':: >' }</td>
+					<td>(greater than)</td>
+					<td>Number / String</td>
+				</tr>
+				<tr>
+					<td>{ ':: >=' }</td>
+					<td>(greater than or equal to)</td>
+					<td>Number</td>
+				</tr>
+				<tr>
+					<td>{ ':: <' }</td>
+					<td>(less than)</td>
+					<td>Number / String</td>
+				</tr>
+				<tr>
+					<td>{ ':: <=' }</td>
+					<td>(less than or equal to)</td>
+					<td>Number</td>
+				</tr>
+				<tr>
+					<td>{ ':: in' }</td>
+					<td>(value bounds)</td>
+					<td>{ '[( Number, Number )]' }</td>
+				</tr>
+			</tbody>
+		</TableHelpTable>
+		<div style={ { fontSize: "1rem", marginTop: "5px" } }>Examples:</div>
+		<TableHelpTable>
+			<thead>
+				<tr>
+					<th>Command</th>
+					<th>Result</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{ ':: == 60' }</td>
+					<td>All data with selected key that has a value equal to 60</td>
+				</tr>
+				<tr>
+					<td>{ ':: > 70' }</td>
+					<td>All data with selected key that has a value greated than 70</td>
+				</tr>
+				<tr>
+					<td>{ ':: <= 90' }</td>
+					<td>All data with selected key that has a value less than or equal to 90</td>
+				</tr>
+				<tr>
+					<td>{ ':: in [50, 80]' }</td>
+					<td>
+						<div>All data with selected key that has a value greater than or equal to 50</div>
+						<div>and all data with selected key that has a value less than or equal to 80</div>
+					</td>
+				</tr>
+				<tr>
+					<td>{ ':: in (50, 80)' }</td>
+					<td>
+						<div>All data with selected key that has a value greater than 50</div>
+						<div>and all data with selected key that has a value less than 80</div>
+					</td>
+				</tr>
+				<tr>
+					<td>{ ':: in [50, 80)' }</td>
+					<td>
+						<div>All data with selected key that has a value greater than or equal to 50</div>
+						<div>and all data with selected key that has a value less than 80</div>
+					</td>
+				</tr>
+			</tbody>
+		</TableHelpTable>
+	</div>
+
+const TableHelpTable = styled.table`
+	white-space: nowrap;
+
+	th, td {
+		padding-right: 10px;
+	}
+	th:last-child, td:last-child {
+		padding-right: 0px;
+	}
+`

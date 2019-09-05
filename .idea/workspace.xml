@@ -2,12 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/risk-config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/strategies-config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/wizard/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/wizard/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,15 +85,15 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -121,62 +132,9 @@
       <workItem from="1564159927429" duration="161000" />
       <workItem from="1564160106080" duration="10148000" />
       <workItem from="1564261312467" duration="47115000" />
-    </task>
-    <task id="LOCAL-00001" summary="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap">
-      <created>1560804284998</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1560804284998</updated>
-    </task>
-    <task id="LOCAL-00002" summary="changed the route of create actions worksheet">
-      <created>1560867904809</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1560867904809</updated>
-    </task>
-    <task id="LOCAL-00003" summary="changed the route of create actions worksheet">
-      <created>1560867944051</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1560867944051</updated>
-    </task>
-    <task id="LOCAL-00004" summary="updates">
-      <created>1561132137723</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132137723</updated>
-    </task>
-    <task id="LOCAL-00005" summary="list all the actions">
-      <created>1561132163958</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132163958</updated>
-    </task>
-    <task id="LOCAL-00006" summary="create a new worksheet">
-      <created>1561132187832</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132187832</updated>
-    </task>
-    <task id="LOCAL-00007" summary="view a worksheet by id">
-      <created>1561132211948</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132211948</updated>
-    </task>
-    <task id="LOCAL-00008" summary="added routes for Action worksheet">
-      <created>1561132244106</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132244106</updated>
+      <workItem from="1566414615129" duration="65000" />
+      <workItem from="1566414836375" duration="96000" />
+      <workItem from="1566414947890" duration="164364000" />
     </task>
     <task id="LOCAL-00009" summary="updates">
       <created>1561132258921</created>
@@ -423,7 +381,105 @@
       <option name="project" value="LOCAL" />
       <updated>1565117208349</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="signup wizard">
+      <created>1565380639130</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1565380639130</updated>
+    </task>
+    <task id="LOCAL-00045" summary="user page">
+      <created>1565987124882</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1565987124882</updated>
+    </task>
+    <task id="LOCAL-00046" summary="signup form toggle on success">
+      <created>1565988553424</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1565988553424</updated>
+    </task>
+    <task id="LOCAL-00047" summary="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed">
+      <created>1566416168067</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1566416168068</updated>
+    </task>
+    <task id="LOCAL-00048" summary="admin">
+      <created>1566482112488</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1566482112488</updated>
+    </task>
+    <task id="LOCAL-00049" summary="admin">
+      <created>1566594157767</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1566594157767</updated>
+    </task>
+    <task id="LOCAL-00050" summary="public, authed menu, public only access if not authed">
+      <created>1567008571656</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1567008571656</updated>
+    </task>
+    <task id="LOCAL-00051" summary="domain bug solved">
+      <created>1567029305959</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1567029305959</updated>
+    </task>
+    <task id="LOCAL-00052" summary="domain bug solved">
+      <created>1567030053552</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1567030053552</updated>
+    </task>
+    <task id="LOCAL-00053" summary="submenu">
+      <created>1567090021594</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1567090021594</updated>
+    </task>
+    <task id="LOCAL-00054" summary="submenu click">
+      <created>1567095183312</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1567095183312</updated>
+    </task>
+    <task id="LOCAL-00055" summary="contentEditor work started">
+      <created>1567534931720</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1567534931720</updated>
+    </task>
+    <task id="LOCAL-00056" summary="contentEditor insert + update done">
+      <created>1567544764470</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1567544764470</updated>
+    </task>
+    <task id="LOCAL-00057" summary="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public">
+      <created>1567611026875</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1567611026875</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -452,16 +508,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added : landing page, creating a new action worksheet, login and logout, changed the route of riskMap" />
-    <MESSAGE value="changed the route of create actions worksheet" />
-    <MESSAGE value="list all the actions" />
-    <MESSAGE value="create a new worksheet" />
-    <MESSAGE value="view a worksheet by id" />
-    <MESSAGE value="added routes for Action worksheet" />
-    <MESSAGE value="added county and municipality in action worksheets" />
-    <MESSAGE value="asset table working" />
-    <MESSAGE value="asset table displays county names and municipality names" />
-    <MESSAGE value="County and Municipality names added for Action worksheets" />
     <MESSAGE value="Updates in AssetTable and AssetIndex" />
     <MESSAGE value="AssetPieChart for Replacement Value" />
     <MESSAGE value="Building By Owner Type Table" />
@@ -475,7 +521,19 @@
     <MESSAGE value="historic" />
     <MESSAGE value="no need to refresh" />
     <MESSAGE value="default geo from auth plan" />
-    <option name="LAST_COMMIT_MESSAGE" value="default geo from auth plan" />
+    <MESSAGE value="signup wizard" />
+    <MESSAGE value="user page" />
+    <MESSAGE value="signup form toggle on success" />
+    <MESSAGE value="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed" />
+    <MESSAGE value="admin" />
+    <MESSAGE value="public, authed menu, public only access if not authed" />
+    <MESSAGE value="domain bug solved" />
+    <MESSAGE value="submenu" />
+    <MESSAGE value="submenu click" />
+    <MESSAGE value="contentEditor work started" />
+    <MESSAGE value="contentEditor insert + update done" />
+    <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
+    <option name="LAST_COMMIT_MESSAGE" value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

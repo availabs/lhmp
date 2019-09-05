@@ -29,31 +29,38 @@ class Signup extends React.Component {
         this.state = {
             isLoading: false,
             contact_email: '',
-            email_verify: '',
             contact_county: '',
             contact_municipality: '',
             contact_agency: '',
             contact_department: '',
-            contact_role: '',
+            contact_title_role: '',
             contact_name: '',
             contact_phone: '',
             contact_address: '',
+            associated_plan: 0,
+            email_verify: '',
             countyList: [],
             cousubList: [],
             roleList: [],
+            group: null,
             nextButtonActiveStep1: false,
             nextButtonActiveStep2: false,
             nextButtonActiveStep3: false,
             redirectToReferrer: false
         };
         this.handleChange = this.handleChange.bind(this);
-        this.listCousubDropdown = this.listCousubDropdown.bind(this)
-
-        //this.onSubmit = this.onSubmit.bind(this)
+        this.listCousubDropdown = this.listCousubDropdown.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     validateForm() {
         return this.state.contact_email.length > 0 && this.state.contact_email === this.state.email_verify;
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.contact_county !== this.state.contact_county){
+            let tmpGroup = this.state.countyList.filter(f => f.id === this.state.contact_county)[0].name + ' HMP Public';
+            this.setState({'group': tmpGroup})
+        }
     }
 
     fetchFalcorDeps() {
@@ -148,31 +155,37 @@ class Signup extends React.Component {
             }
         }
         //step 1 continue validation
+        // have to be nested ifs otherwise all the previous 'next's and 'submit's will be disabled other than current step
         if (document.getElementById('contact_email') &&
-            document.getElementById('contact_email').value.length > 0 &&
-            document.getElementById('email_verify') &&
-            document.getElementById('email_verify').value.length > 0) {
-            this.setState({'nextButtonActiveStep1': true})
-        } else {
-            this.setState({'nextButtonActiveStep1': false})
+            document.getElementById('email_verify')
+        ) {
+            if (document.getElementById('contact_email').value.length > 0 &&
+                document.getElementById('email_verify').value.length > 0 &&
+                document.getElementById('contact_email').value === document.getElementById('email_verify').value) {
+                this.setState({'nextButtonActiveStep1': true})
+            } else {
+                this.setState({'nextButtonActiveStep1': false})
+            }
         }
 
         //step 2 continue validation
         if (document.getElementById('contact_county') &&
-            document.getElementById('contact_county').value.length > 0 &&
-            document.getElementById('contact_role') &&
-            document.getElementById('contact_role').value.length > 0) {
-            this.setState({'nextButtonActiveStep2': true})
-        } else {
-            this.setState({'nextButtonActiveStep2': false})
+            document.getElementById('contact_title_role')) {
+            if (document.getElementById('contact_county').value.length > 0 &&
+                document.getElementById('contact_title_role').value.length > 0) {
+                this.setState({'nextButtonActiveStep2': true})
+            } else {
+                this.setState({'nextButtonActiveStep2': false})
+            }
         }
 
         //step 3 continue validation
-        if (document.getElementById('contact_name') &&
-            document.getElementById('contact_name').value.length > 0) {
-            this.setState({'nextButtonActiveStep3': true})
-        } else {
-            this.setState({'nextButtonActiveStep3': false})
+        if (document.getElementById('contact_name')) {
+            if (document.getElementById('contact_name').value.length > 0) {
+                this.setState({'nextButtonActiveStep3': true})
+            } else {
+                this.setState({'nextButtonActiveStep3': false})
+            }
         }
 
         this.setState({
@@ -202,14 +215,27 @@ class Signup extends React.Component {
         } else {
             return null
         }
-
-
     }
 
-    handleSubmit = async event => {
+    handleSubmit(event) {
         event.preventDefault();
         this.setState({isLoading: true});
-        //this.props.signup(this.state.contact_email);
+        // get planId here so it calls falcor only once for it
+
+        return this.props.falcor.get(['plans', 'county', 'byGeoid', [this.state.contact_county], 'id']).then(
+            d => {
+                let plan_id = d.json.plans.county.byGeoid[this.state.contact_county].id;
+                if (plan_id) this.setState({'associated_plan': plan_id});
+                let args = COLS.map(key => this.state[key]);
+                return this.props.signup({email:this.state.contact_email, group:this.state.group})
+                    .then(res => {
+                        console.log('inserted user, inserting in roles', res);
+                        // avail_auth call
+                        this.props.falcor.call(['roles', 'insert'], args, [], [])
+                            .then(res => console.log('all done'))
+                    })
+            })
+
     };
 
     componentWillReceiveProps(nextProps) {
@@ -233,7 +259,7 @@ class Signup extends React.Component {
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="form-group">
-                                <label for={'contact_email'}> Email</label>
+                                <label htmlFor={'contact_email'}> Email</label>
                                 <input
                                     className="form-control"
                                     autoFocus
@@ -251,7 +277,7 @@ class Signup extends React.Component {
                         </div>
                         <div className="col-sm-12">
                             <div className="form-group">
-                                <label for={'email_verify'}> Confirm Email</label>
+                                <label htmlFor={'email_verify'}> Confirm Email</label>
                                 <input
                                     className="form-control"
                                     id='email_verify'
@@ -278,7 +304,7 @@ class Signup extends React.Component {
                 content: (
                     <div className="row">
                         <div className="col-sm-12">
-                            <div className="form-group"><label for={'contact_county'}> County</label>
+                            <div className="form-group"><label htmlFor={'contact_county'}> County</label>
                                 <select
                                     className="form-control"
                                     id='contact_county'
@@ -318,26 +344,27 @@ class Signup extends React.Component {
                         </div>
 
                         <div className="col-sm-12">
-                            <div className="form-group"><label for={'contact_agency'}> Agency <small>(optional)</small></label>
+                            <div className="form-group"><label
+                                htmlFor={'contact_agency'}> Agency <small>(optional)</small></label>
                                 <input id='contact_agency' onChange={this.handleChange} className="form-control"
                                        placeholder="Agency" type="text" value={this.state.contact_agency}/></div>
                         </div>
                         <div className="col-sm-12">
                             <div className="form-group"><label
-                                for={'contact_department'}> Department <small>(optional)</small></label>
+                                htmlFor={'contact_department'}> Department <small>(optional)</small></label>
                                 <input id='contact_department' onChange={this.handleChange} className="form-control"
                                        placeholder="Department" type="text" value={this.state.contact_department}/>
                             </div>
                         </div>
                         <div className="col-sm-12">
-                            <div className="form-group"><label for={'contact_role'}> Role</label>
+                            <div className="form-group"><label htmlFor={'contact_title_role'}> Role</label>
                                 <select
-                                    id='contact_role'
+                                    id='contact_title_role'
                                     required="required"
                                     onChange={this.handleChange}
                                     className="form-control"
                                     placeholder="Role"
-                                    value={this.state.contact_role}>
+                                    value={this.state.contact_title_role}>
                                     <option default value={''}>--Select Role--</option>
                                     {this.state.roleList.map((role, role_i) => {
                                         return (<option className="form-control" key={role_i + 1}
@@ -362,22 +389,23 @@ class Signup extends React.Component {
                 content: (
                     <div className="row">
                         <div className="col-sm-12">
-                            <div className="form-group"><label for={'contact_name'}> Name</label>
+                            <div className="form-group"><label htmlFor={'contact_name'}> Name</label>
                                 <input id='contact_name' required="required" onChange={this.handleChange}
                                        className="form-control" placeholder="Name" type="text"
-                                       value={this.state.contact_name}/></div>
-                            <div className="help-block form-text with-errors form-control-feedback"></div>
+                                       value={this.state.contact_name}/>
+                                <div className="help-block form-text with-errors form-control-feedback"></div>
 
+                            </div>
                         </div>
                         <div className="col-sm-12">
                             <div className="form-group"><label
-                                for={'contact_phone'}> Phone <small>(optional)</small></label>
+                                htmlFor={'contact_phone'}> Phone <small>(optional)</small></label>
                                 <input id='contact_phone' onChange={this.handleChange} className="form-control"
                                        placeholder="Phone" type="text" value={this.state.contact_phone}/></div>
                         </div>
                         <div className="col-sm-12">
                             <div className="form-group"><label
-                                for={'contact_address'}> Address <small>(optional)</small></label>
+                                htmlFor={'contact_address'}> Address <small>(optional)</small></label>
                                 <input id='contact_address' onChange={this.handleChange} className="form-control"
                                        placeholder="Address" type="text" value={this.state.contact_address}/></div>
                         </div>
@@ -388,7 +416,7 @@ class Signup extends React.Component {
         ];
 
         return (
-            <Wizard steps={wizardSteps} submit={this.onSubmit}/>
+            <Wizard steps={wizardSteps} submit={this.handleSubmit}/>
         )
     }
 
@@ -421,10 +449,22 @@ class Signup extends React.Component {
                         minWidth: '350px',
                         maxWidth: '650px'
                     }}>
-
+                       {/* <button onClick={() => this.props.signup('ssangdod@albany.edu')}>signup trigger</button>*/}
                         <h4 className="auth-header" style={{paddingTop: 20}}>Hazard Mitigation Planner
                             <br/><span style={{fontSize: '0.8em', fontWeight: 100, color: '#047bf8'}}>Signup</span></h4>
-                        {this.renderWizard()}
+                        {!this.props.signupComplete ? this.renderWizard()
+                            : (
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div style={{'min-height': '300px'}}>
+                                            <div className='form-desc' align={'center'}>
+                                                Signup Successful. You should receive an email shortly with instructions for
+                                                login.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         <div style={{padding: 15, float: 'right'}}>
                             <Link to={'/login'}>Login?</Link>
                         </div>
@@ -441,7 +481,8 @@ const mapDispatchToProps = {signup};
 const mapStateToProps = state => {
     return {
         isAuthenticated: !!state.user.authed,
-        attempts: state.user.attempts // so componentWillReceiveProps will get called.
+        attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+        signupComplete: state.user.signupComplete
     };
 };
 
