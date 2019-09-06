@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
@@ -50,59 +50,30 @@ const ATTRIBUTES = [
 class ActionsIndex extends React.Component {
 
     constructor(props){
-        super(props)
+        super(props);
 
-        this.state={
-            action_data: [],
-        }
-
-        this.deleteWorksheet = this.deleteWorksheet.bind(this)
+        this.deleteWorksheet = this.deleteWorksheet.bind(this);
+        this.actionTableData = this.actionTableData.bind(this);
     }
-    componentDidMount(e) {
+    componentWillMount() {
         this.fetchFalcorDeps();
     }
 
-    componentWillMount(){
-
-        this.fetchFalcorDeps().then(response =>{
-            this.setState({
-                action_data : response
-            })
-        })
-
-    }
 
     fetchFalcorDeps() {
-        let action_data =[];
-        return falcorGraph.get(['actions','worksheet','length'])
-            .then(response => response.json.actions.worksheet.length)
-            .then(length => falcorGraph.get(
-                ['actions', 'worksheet','byIndex', { from: 0, to: length -1 }, 'id']
-                )
-                    .then(response => {
-                        const ids = [];
-                        for (let i = 0; i < length; ++i) {
-                            const graph = response.json.actions.worksheet.byIndex[i]
-                            if (graph) {
-                                ids.push(graph.id);
-                            }
-                        }
-                        return ids;
-                    })
-            )
-            .then(ids =>
-                falcorGraph.get(['actions','worksheet','byId', ids, ATTRIBUTES])
-                    .then(response => {
-                        //ids.forEach(id =>{
-                            Object.keys(response.json.actions.worksheet.byId).filter(d => d!== '$__path').forEach(function(action,i){
-                                action_data.push({
-                                    'id' : action,
-                                    'data': Object.values(response.json.actions.worksheet.byId[action])
-                                })
-                            })
-                        return action_data
-                    })
-            )
+        let length = 0;
+        return this.props.falcor.get(['actions',[this.props.activePlan],'worksheet','length'])
+            .then(response => {
+                Object.keys(response.json.actions).filter(d => d !== '$__path').forEach(planId =>{
+                     length = response.json.actions[planId].worksheet.length;
+                })
+                return length
+            }).then(length => this.props.falcor.get(
+                ['actions',[this.props.activePlan],'worksheet','byIndex',{from:0,to:length-1},ATTRIBUTES]))
+            .then(response => {
+                return response
+            })
+
 
 
     }
@@ -126,31 +97,40 @@ class ActionsIndex extends React.Component {
 
     }
 
+    actionTableData(){
+        if (this.props.actions !== undefined && this.props.actions['worksheet'] !== undefined){
+            let attributes = ATTRIBUTES.slice(0,4);
+            let data = []
+            Object.value(this.props.actions['worksheet'].byId).forEach(action =>{
+                console.log('action',action)
+            })
+        }
+    }
+
     
     render() {
         let table_data = [];
-        let attributes = ATTRIBUTES.slice(0,4)
-        this.state.action_data.map(function (each_row) {
-            table_data.push(each_row.data.slice(1,5))
-        })
-
+        let attributes = ATTRIBUTES.slice(0,4);
+        this.actionTableData();
         return (
-            <div className='container'>
+            <div>null</div>
+            /*
+           <div className='container'>
             <Element>
                 <h4 className="element-header">Actions
                     <span style={{float:'right'}}>
-                        <Link 
+                        <Link
                             className="btn btn-sm btn-primary"
                             to={ `/actions/worksheet/new` } >
                                 Create Action Worksheet
                         </Link>
-                        <button 
+                        <button
                             disabled
                             className="btn btn-sm btn-disabled"
                             >
                                 Create Action Planner
                         </button>
-                        <button 
+                        <button
                             disabled
                             className="btn btn-sm btn-disabled"
                             >
@@ -209,14 +189,18 @@ class ActionsIndex extends React.Component {
                 </div>
             </Element>
             </div>
+             */
 
         )
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => (
+    {
+    activePlan : state.user.activePlan,
     isAuthenticated: !!state.user.authed,
-    attempts: state.user.attempts // so componentWillReceiveProps will get called.
+    attempts: state.user.attempts,
+    actions: get(state.graph,'actions',{})// so componentWillReceiveProps will get called.
 });
 
 const mapDispatchToProps = {
@@ -241,6 +225,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(ActionsIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsIndex))
     }
 ]
