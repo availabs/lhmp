@@ -14,7 +14,7 @@ const config =  {
 		},
 		{
 			requirement: 'Req-A-1C',
-			type: 'table',
+			type: 'rolesTable',
 			prompt: 'Identify who represented each jurisdiction.',
 			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?'
 		},
