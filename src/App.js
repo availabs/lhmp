@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter,Switch } from 'react-router-dom';
-
+import { createBrowserHistory } from 'history';
 import { ThemeProvider } from 'styled-components';
 import theme from 'components/common/themes/dark';
 
@@ -12,15 +12,16 @@ import Routes from './routes';
 import Messages from './components/messages';
 
 import './App.css';
+import Redirect from "react-router/Redirect";
+
+const history = createBrowserHistory();
 
 class App extends Component {
   constructor(props) {
     super(props);
     if(this.props.token){
       localStorage.setItem('userToken', this.props.token.slice(3,this.props.token.length))
-      //alert('setting this: ' + this.props.token)
     }
-    //alert('getItem: ' + localStorage.getItem('userToken'));
     this.props.auth();
     this.state = {
       isAuthenticating: true
@@ -90,7 +91,6 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('state', state.router.location, state.user)
   return ({
     user: state.user,
     router: state.router,
@@ -98,7 +98,7 @@ const mapStateToProps = state => {
   });
 }
 
-const mapDispatchToProps = { auth };
+const mapDispatchToProps = { auth, createBrowserHistory };
 
 export default connect(
   mapStateToProps,

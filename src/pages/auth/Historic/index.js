@@ -11,12 +11,11 @@ import CousubTotalLossTable from "./components/CousubTotalLossTable"
 import FemaDisasterDeclarationsTable from "./components/FemaDisasterDeclarationsTable"
 import HazardEventsTable from "./components/HazardEventsTable"
 import HMGPTable from "./components/HMGPTable"
-
 import Content from "components/cms/Content"
-
 import {getColorScale} from 'utils/sheldusUtils'
-
 import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
+import {falcorChunkerNice} from "store/falcorGraph"
+
 
 class Historic extends React.Component {
 
@@ -52,13 +51,13 @@ class Historic extends React.Component {
                 this.setState({hazards: hazards});
                 return this.props.falcor.get(
                     ['riskIndex', 'meta', hazards, ['id', 'name']],
-                    ['geo', geoids, ['name']],
-                    ['riskIndex', 'meta', hazards, ['id', 'name']],
                     [dataType, geoid, hazards, {
                         from: EARLIEST_YEAR,
                         to: LATEST_YEAR
                     }, ['property_damage', 'total_damage']],
-                )
+                ).then(d => {
+                    return falcorChunkerNice(['geo', geoids, ['name']])
+                })
             })
     }
 

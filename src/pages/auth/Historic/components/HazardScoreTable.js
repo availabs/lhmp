@@ -8,7 +8,8 @@ import { fnum } from 'utils/sheldusUtils'
 
 import ElementBox from 'components/light-admin/containers/ElementBox'
 import TableBox from 'components/light-admin/tables/TableBoxHistoric'
-import geo from "../../../../store/modules/geo";
+import {falcorChunkerNice} from "store/falcorGraph"
+import geo from "store/modules/geo";
 
 class HazardScoreTable extends Component {
 
@@ -28,14 +29,10 @@ class HazardScoreTable extends Component {
                 'daily_severe_event_prob'
             ]
             return this.props.falcor.get(
-                ['riskIndex','meta', hazard , ['id', 'name']],
-                ['geo', geoids, ['name']],
-                [dataType, geoids, hazard, "allTime", cols]
+                ['riskIndex','meta', hazard , ['id', 'name']]
             )
-                .then(d => {
-                    console.log('read this ', d);
-                    return d
-                })
+                .then(d => falcorChunkerNice(['geo', geoids, ['name']]))
+                .then(d => falcorChunkerNice([dataType, geoids, hazard, "allTime", cols]))
         })
     }
 

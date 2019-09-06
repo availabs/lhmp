@@ -2,22 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/risk-config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/strategies-config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/TopMenu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardListHeroStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardListHeroStats.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardScoreTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardScoreTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -134,28 +126,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="164364000" />
-    </task>
-    <task id="LOCAL-00009" summary="updates">
-      <created>1561132258921</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132258921</updated>
-    </task>
-    <task id="LOCAL-00010" summary="updates">
-      <created>1561132271302</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1561132271302</updated>
-    </task>
-    <task id="LOCAL-00011" summary="updates">
-      <created>1561142461766</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1561142461766</updated>
+      <workItem from="1566414947890" duration="180291000" />
     </task>
     <task id="LOCAL-00012" summary="updates">
       <created>1561142469357</created>
@@ -479,7 +450,28 @@
       <option name="project" value="LOCAL" />
       <updated>1567611026875</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well.">
+      <created>1567627745244</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1567627745244</updated>
+    </task>
+    <task id="LOCAL-00059" summary="on login /admin vs /">
+      <created>1567700968088</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1567700968088</updated>
+    </task>
+    <task id="LOCAL-00060" summary="home icon in public">
+      <created>1567701311584</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1567701311584</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -508,9 +500,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updates in AssetTable and AssetIndex" />
-    <MESSAGE value="AssetPieChart for Replacement Value" />
-    <MESSAGE value="Building By Owner Type Table" />
     <MESSAGE value="Building By Owner Type Pie Chart and Table" />
     <MESSAGE value="Building By owner Type Pie chart and Building By Land Use PieChart" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table" />
@@ -533,7 +522,10 @@
     <MESSAGE value="contentEditor work started" />
     <MESSAGE value="contentEditor insert + update done" />
     <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
-    <option name="LAST_COMMIT_MESSAGE" value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
+    <MESSAGE value="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well." />
+    <MESSAGE value="on login /admin vs /" />
+    <MESSAGE value="home icon in public" />
+    <option name="LAST_COMMIT_MESSAGE" value="home icon in public" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

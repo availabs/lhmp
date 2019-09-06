@@ -8,6 +8,7 @@ import withRouter from "react-router/es/withRouter";
 // Constants
 // ------------------------------------
 const PROJECT_HOST = 'localhost:3000'
+let SUBDOMAIN = 'www'
 const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
 const USER_LOGOUT = 'USER::USER_LOGOUT';
@@ -113,8 +114,8 @@ export const authProjects = (user) => {
   return (dispatch) => {
     let groups = user.groups;
     let subdomain =  window.location.hostname.split('.').length > 1?
-        window.location.hostname.split('.')[0].toLowerCase() : 'www'
-    ;
+        window.location.hostname.split('.')[0].toLowerCase() : 'www';
+    SUBDOMAIN = subdomain;
     falcorGraph.get(['plans', 'authGroups',groups , 'plans']) //what if there are multiple plan id`s
         .then(response => {
           let groupName = [];
@@ -192,10 +193,10 @@ export const authProjects = (user) => {
 }
 
 export const authGeoid = (user) => {
-    console.log('authGeoidstarted', user)
+    console.log('authGeoidstarted', user, localStorage)
     return (dispatch) => {
     if ((user && user.activePlan) || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
-      let planId = user.activePlan ? user.activePlan : localStorage.getItem('planId');
+      let planId = user && user.activePlan ? user.activePlan : localStorage.getItem('planId');
         falcorGraph.get(
           ['plans','county','byId',[planId], ['fips']]
         )
@@ -207,6 +208,7 @@ export const authGeoid = (user) => {
     }else{
         let subdomain =  window.location.hostname.split('.').length > 1?
             window.location.hostname.split('.')[0].toLowerCase() : 'www';
+        SUBDOMAIN = subdomain;
         return falcorGraph.get(['plans','county','bySubdomain', [subdomain], 'id'])
             .then(planData => {
 
@@ -295,13 +297,13 @@ export const auth = () => dispatch => {
 
 export const signup = ({email, group}) => dispatch => {
   if (!group) group = DEFAULT_GROUP;
-  return fetch(`${AUTH_HOST}/signup/request`, {
+    return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: group, host: PROJECT_HOST, url: '/reset-password'})
+    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: group, host: 'http://' + SUBDOMAIN + '.' + PROJECT_HOST, url: '/password/set'})
   })
     .then(res => res.json())
     .then(res => {

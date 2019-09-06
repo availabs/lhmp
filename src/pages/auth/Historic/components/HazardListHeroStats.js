@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
+import {falcorChunkerNice} from "store/falcorGraph"
 
 import { Link } from "react-router-dom"
 
@@ -17,14 +18,14 @@ class HazardListHeroStats extends React.Component {
     fetchFalcorDeps({ hazard, dataType, geoid }=this.props) {
         return this.props.falcor.get(
             ['riskIndex', 'meta', hazard, 'name'],
-            [dataType, geoid, hazard, 'allTime',
+        )
+            .then(d => falcorChunkerNice([dataType, geoid, hazard, 'allTime',
                 ['annualized_damage',
                     'annualized_num_events',
                     'annualized_num_severe_events',
                     'daily_event_prob',
                     'daily_severe_event_prob']
-            ]
-        )
+            ]))
     }
 
     render() {
