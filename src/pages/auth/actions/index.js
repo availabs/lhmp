@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
+import pick from "lodash.pick"
 
 const counties = ["36101","36003","36091","36075","36111","36097","36089","36031","36103","36041","36027","36077",
     "36109","36001","36011","36039","36043","36113","36045","36019","36059","36053","36115","36119","36049","36069",
@@ -50,66 +51,37 @@ const ATTRIBUTES = [
 class ActionsIndex extends React.Component {
 
     constructor(props){
-        super(props)
+        super(props);
 
-        this.state={
-            action_data: [],
-        }
-
-        this.deleteWorksheet = this.deleteWorksheet.bind(this)
+        this.deleteWorksheet = this.deleteWorksheet.bind(this);
+        this.actionTableData = this.actionTableData.bind(this);
     }
-    componentDidMount(e) {
+    componentWillMount() {
         this.fetchFalcorDeps();
     }
 
-    componentWillMount(){
-
-        this.fetchFalcorDeps().then(response =>{
-            this.setState({
-                action_data : response
-            })
-        })
-
-    }
 
     fetchFalcorDeps() {
-        let action_data =[];
-        return falcorGraph.get(['actions','worksheet','length'])
-            .then(response => response.json.actions.worksheet.length)
-            .then(length => falcorGraph.get(
-                ['actions', 'worksheet','byIndex', { from: 0, to: length -1 }, 'id']
-                )
-                    .then(response => {
-                        const ids = [];
-                        for (let i = 0; i < length; ++i) {
-                            const graph = response.json.actions.worksheet.byIndex[i]
-                            if (graph) {
-                                ids.push(graph.id);
-                            }
-                        }
-                        return ids;
-                    })
-            )
-            .then(ids =>
-                falcorGraph.get(['actions','worksheet','byId', ids, ATTRIBUTES])
-                    .then(response => {
-                        //ids.forEach(id =>{
-                            Object.keys(response.json.actions.worksheet.byId).filter(d => d!== '$__path').forEach(function(action,i){
-                                action_data.push({
-                                    'id' : action,
-                                    'data': Object.values(response.json.actions.worksheet.byId[action])
-                                })
-                            })
-                        return action_data
-                    })
-            )
+        let length = 0;
+        return this.props.falcor.get(['actions',[this.props.activePlan],'worksheet','length'])
+            .then(response => {
+                Object.keys(response.json.actions).filter(d => d !== '$__path').forEach(planId =>{
+                     length = response.json.actions[planId].worksheet.length;
+                })
+                return length
+            }).then(length => this.props.falcor.get(
+                ['actions',[this.props.activePlan],'worksheet','byIndex',{from:0,to:length-1},ATTRIBUTES]))
+            .then(response => {
+                return response
+            })
+
 
 
     }
 
     deleteWorksheet(e){
         e.persist()
-        let worksheetId = e.target.id
+        let worksheetId = e.target.id;
         this.props.sendSystemMessage(
             `Are you sure you with to delete this Worksheet with id "${ worksheetId }"?`,
         {
@@ -126,97 +98,107 @@ class ActionsIndex extends React.Component {
 
     }
 
-    
-    render() {
-        let table_data = [];
-        let attributes = ATTRIBUTES.slice(0,4)
-        this.state.action_data.map(function (each_row) {
-            table_data.push(each_row.data.slice(1,5))
-        })
-
-        return (
-            <div className='container'>
-            <Element>
-                <h4 className="element-header">Actions
-                    <span style={{float:'right'}}>
-                        <Link 
+    actionTableData(){
+        if (this.props.actions !== undefined && this.props.actions['worksheet'] !== undefined){
+            let attributes = ATTRIBUTES.slice(0,4);
+            let data = []
+            Object.values(this.props.actions['worksheet'].byId).forEach(action =>{
+                data.push(Object.values(pick(action,...attributes)))
+            });
+            return(
+                <div className='container'>
+                    <Element>
+                        <h4 className="element-header">Actions
+                            <span style={{float:'right'}}>
+                        <Link
                             className="btn btn-sm btn-primary"
                             to={ `/actions/worksheet/new` } >
                                 Create Action Worksheet
                         </Link>
-                        <button 
+                        <button
                             disabled
                             className="btn btn-sm btn-disabled"
-                            >
+                        >
                                 Create Action Planner
                         </button>
-                        <button 
+                        <button
                             disabled
                             className="btn btn-sm btn-disabled"
-                            >
+                        >
                                 Create HMGP Action
                         </button>
                     </span>
-                </h4>
-                <div className="element-box">
-                    <div className="table-responsive" >
-                        <table className="table table lightBorder">
-                            <thead>
-                            <tr>
-                                {attributes.map(function(action,index){
-                                    return (
-                                        <th>{action}</th>
-                                    )
-                                })
-                                }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {table_data.map((data) =>{
-                                return (
+                        </h4>
+                        <div className="element-box">
+                            <div className="table-responsive" >
+                                <table className="table table lightBorder">
+                                    <thead>
                                     <tr>
-                                        {data.map((d) => {
+                                        {attributes.map(function(action,index){
                                             return (
-                                                <td>{d}</td>
+                                                <th>{action}</th>
                                             )
                                         })
                                         }
-                                        <td>
-                                                <Link className="btn btn-sm btn-outline-primary"
-                                                      to={ `/actions/worksheet/edit/${data[0]}` } >
-                                                    Edit
-                                                </Link>
-                                        </td>
-                                        <td>
-                                                <Link className="btn btn-sm btn-outline-primary"
-                                                      to={ `/actions/worksheet/view/${data[0]}` }>
-                                                    View
-                                                </Link>
-                                        </td>
-                                        <td>
-                                                <button id= {data[0]} className="btn btn-sm btn-outline-danger"
-                                                        onClick={this.deleteWorksheet}>
-                                                    Delete
-                                                </button>
-                                        </td>
                                     </tr>
-                                )
-                            })
-                            }
-                            </tbody>
-                        </table>
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                    {data.map((item) =>{
+                                        return (
+                                            <tr>
+                                                {
+                                                    item.map((d) =>{
+                                                        return(
+                                                            <td>{d.value}</td>
+                                                        )
+                                                    })
+                                                }
+                                                <td>
+                                                    <Link className="btn btn-sm btn-outline-primary"
+                                                          to={ `/actions/worksheet/edit/${data[0]}` } >
+                                                        Edit
+                                                    </Link>
+                                                </td>
+                                                <td>
+                                                    <Link className="btn btn-sm btn-outline-primary"
+                                                          to={ `/actions/worksheet/view/${data[0]}` }>
+                                                        View
+                                                    </Link>
+                                                </td>
+                                                <td>
+                                                    <button id= {data[0]} className="btn btn-sm btn-outline-danger"
+                                                            onClick={this.deleteWorksheet}>
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </Element>
                 </div>
-            </Element>
-            </div>
+            )
+        }
+    }
 
+    
+    render() {
+        return (
+            <div>{this.actionTableData()}</div>
         )
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => (
+    {
+    activePlan : state.user.activePlan,
     isAuthenticated: !!state.user.authed,
-    attempts: state.user.attempts // so componentWillReceiveProps will get called.
+    attempts: state.user.attempts,
+    actions: get(state.graph,'actions',{})// so componentWillReceiveProps will get called.
 });
 
 const mapDispatchToProps = {
@@ -241,6 +223,9 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(ActionsIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsIndex))
     }
 ]
+/*
+
+ */
