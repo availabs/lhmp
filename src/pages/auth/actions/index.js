@@ -6,6 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
+import pick from "lodash.pick"
 
 const counties = ["36101","36003","36091","36075","36111","36097","36089","36031","36103","36041","36027","36077",
     "36109","36001","36011","36039","36043","36113","36045","36019","36059","36053","36115","36119","36049","36069",
@@ -80,7 +81,7 @@ class ActionsIndex extends React.Component {
 
     deleteWorksheet(e){
         e.persist()
-        let worksheetId = e.target.id
+        let worksheetId = e.target.id;
         this.props.sendSystemMessage(
             `Are you sure you with to delete this Worksheet with id "${ worksheetId }"?`,
         {
@@ -101,24 +102,14 @@ class ActionsIndex extends React.Component {
         if (this.props.actions !== undefined && this.props.actions['worksheet'] !== undefined){
             let attributes = ATTRIBUTES.slice(0,4);
             let data = []
-            Object.value(this.props.actions['worksheet'].byId).forEach(action =>{
-                console.log('action',action)
-            })
-        }
-    }
-
-    
-    render() {
-        let table_data = [];
-        let attributes = ATTRIBUTES.slice(0,4);
-        this.actionTableData();
-        return (
-            <div>null</div>
-            /*
-           <div className='container'>
-            <Element>
-                <h4 className="element-header">Actions
-                    <span style={{float:'right'}}>
+            Object.values(this.props.actions['worksheet'].byId).forEach(action =>{
+                data.push(Object.values(pick(action,...attributes)))
+            });
+            return(
+                <div className='container'>
+                    <Element>
+                        <h4 className="element-header">Actions
+                            <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
                             to={ `/actions/worksheet/new` } >
@@ -127,70 +118,77 @@ class ActionsIndex extends React.Component {
                         <button
                             disabled
                             className="btn btn-sm btn-disabled"
-                            >
+                        >
                                 Create Action Planner
                         </button>
                         <button
                             disabled
                             className="btn btn-sm btn-disabled"
-                            >
+                        >
                                 Create HMGP Action
                         </button>
                     </span>
-                </h4>
-                <div className="element-box">
-                    <div className="table-responsive" >
-                        <table className="table table lightBorder">
-                            <thead>
-                            <tr>
-                                {attributes.map(function(action,index){
-                                    return (
-                                        <th>{action}</th>
-                                    )
-                                })
-                                }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {table_data.map((data) =>{
-                                return (
+                        </h4>
+                        <div className="element-box">
+                            <div className="table-responsive" >
+                                <table className="table table lightBorder">
+                                    <thead>
                                     <tr>
-                                        {data.map((d) => {
+                                        {attributes.map(function(action,index){
                                             return (
-                                                <td>{d}</td>
+                                                <th>{action}</th>
                                             )
                                         })
                                         }
-                                        <td>
-                                                <Link className="btn btn-sm btn-outline-primary"
-                                                      to={ `/actions/worksheet/edit/${data[0]}` } >
-                                                    Edit
-                                                </Link>
-                                        </td>
-                                        <td>
-                                                <Link className="btn btn-sm btn-outline-primary"
-                                                      to={ `/actions/worksheet/view/${data[0]}` }>
-                                                    View
-                                                </Link>
-                                        </td>
-                                        <td>
-                                                <button id= {data[0]} className="btn btn-sm btn-outline-danger"
-                                                        onClick={this.deleteWorksheet}>
-                                                    Delete
-                                                </button>
-                                        </td>
                                     </tr>
-                                )
-                            })
-                            }
-                            </tbody>
-                        </table>
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                    {data.map((item) =>{
+                                        return (
+                                            <tr>
+                                                {
+                                                    item.map((d) =>{
+                                                        return(
+                                                            <td>{d.value}</td>
+                                                        )
+                                                    })
+                                                }
+                                                <td>
+                                                    <Link className="btn btn-sm btn-outline-primary"
+                                                          to={ `/actions/worksheet/edit/${data[0]}` } >
+                                                        Edit
+                                                    </Link>
+                                                </td>
+                                                <td>
+                                                    <Link className="btn btn-sm btn-outline-primary"
+                                                          to={ `/actions/worksheet/view/${data[0]}` }>
+                                                        View
+                                                    </Link>
+                                                </td>
+                                                <td>
+                                                    <button id= {data[0]} className="btn btn-sm btn-outline-danger"
+                                                            onClick={this.deleteWorksheet}>
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </Element>
                 </div>
-            </Element>
-            </div>
-             */
+            )
+        }
+    }
 
+    
+    render() {
+        return (
+            <div>{this.actionTableData()}</div>
         )
     }
 }
@@ -228,3 +226,6 @@ export default [
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsIndex))
     }
 ]
+/*
+
+ */
