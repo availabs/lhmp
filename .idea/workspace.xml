@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -121,14 +119,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="192445000" />
-    </task>
-    <task id="LOCAL-00014" summary="updates">
-      <created>1562013372998</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1562013372998</updated>
+      <workItem from="1566414947890" duration="198051000" />
     </task>
     <task id="LOCAL-00015" summary="updates">
       <created>1562084924841</created>
@@ -466,7 +457,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567782007988</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="stickyroll in admin-about">
+      <created>1567798816418</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1567798816418</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -495,7 +493,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
     <MESSAGE value=" Building By Land Use Table updates" />
@@ -520,7 +517,8 @@
     <MESSAGE value="home icon in public" />
     <MESSAGE value="hazard page for state: chunked requests; on signup email link values passed by county" />
     <MESSAGE value="req A-1C: roles editor/viewer" />
-    <option name="LAST_COMMIT_MESSAGE" value="req A-1C: roles editor/viewer" />
+    <MESSAGE value="stickyroll in admin-about" />
+    <option name="LAST_COMMIT_MESSAGE" value="stickyroll in admin-about" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">
