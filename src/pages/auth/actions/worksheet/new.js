@@ -148,7 +148,7 @@ class Worksheet extends React.Component {
             });
             Object.keys(this.state).forEach((d, i) => {
                 if (this.state[d] !== '') {
-                    console.log(data[d], d)
+                    console.log(data[d], d);
                     updated_data[d] = this.state[d];
                 }
             });
