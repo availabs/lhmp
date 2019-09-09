@@ -56,10 +56,6 @@ class ActionsIndex extends React.Component {
         this.deleteWorksheet = this.deleteWorksheet.bind(this);
         this.actionTableData = this.actionTableData.bind(this);
     }
-    componentWillMount() {
-        this.fetchFalcorDeps();
-    }
-
 
     fetchFalcorDeps() {
         let length = 0;
@@ -99,12 +95,13 @@ class ActionsIndex extends React.Component {
     }
 
     actionTableData(){
-        if (this.props.actions !== undefined && this.props.actions['worksheet'] !== undefined){
             let attributes = ATTRIBUTES.slice(0,4);
             let data = []
-            Object.values(this.props.actions['worksheet'].byId).forEach(action =>{
-                data.push(Object.values(pick(action,...attributes)))
-            });
+            Object.values(this.props.actions)
+                .forEach(action =>{
+                    data.push(Object.values(pick(action,...attributes)))
+                });
+
             return(
                 <div className='container'>
                     <Element>
@@ -183,7 +180,7 @@ class ActionsIndex extends React.Component {
                 </div>
             )
         }
-    }
+    
 
     
     render() {
@@ -198,7 +195,7 @@ const mapStateToProps = state => (
     activePlan : state.user.activePlan,
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts,
-    actions: get(state.graph,'actions',{})// so componentWillReceiveProps will get called.
+    actions: get(state.graph,'actions.worksheets.byId',{})// so componentWillReceiveProps will get called.
 });
 
 const mapDispatchToProps = {
