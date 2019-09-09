@@ -45,7 +45,7 @@ const ATTRIBUTES = [
     'progress_report',
     'updated_evaluation',
     'county',
-    'cousub'
+    'cousub',
 ]
 
 class ActionsIndex extends React.Component {
@@ -85,11 +85,8 @@ class ActionsIndex extends React.Component {
         this.props.sendSystemMessage(
             `Are you sure you with to delete this Worksheet with id "${ worksheetId }"?`,
         {
-            onConfirm: () => falcorGraph.call(['actions','worksheet','remove'],[worksheetId.toString()],[],[]).then(() => this.fetchFalcorDeps().then(response => {
-                this.setState({
-                    action_data:response
-                })
-            })),
+            onConfirm: () => falcorGraph.call(['actions','worksheet','remove'],[worksheetId])
+                .then(() => this.fetchFalcorDeps()),
             id: `delete-content-${ worksheetId }`,
             type: "danger",
             duration: 0
@@ -134,7 +131,7 @@ class ActionsIndex extends React.Component {
                                 <table className="table table lightBorder">
                                     <thead>
                                     <tr>
-                                        {attributes.map(function(action,index){
+                                        {attributes.map(function(action){
                                             return (
                                                 <th>{action}</th>
                                             )
@@ -143,36 +140,40 @@ class ActionsIndex extends React.Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {data.map((item) =>{
-                                        return (
-                                            <tr>
-                                                {
-                                                    item.map((d) =>{
-                                                        return(
-                                                            <td>{d.value}</td>
-                                                        )
-                                                    })
-                                                }
-                                                <td>
-                                                    <Link className="btn btn-sm btn-outline-primary"
-                                                          to={ `/actions/worksheet/edit/${data[0]}` } >
-                                                        Edit
-                                                    </Link>
-                                                </td>
-                                                <td>
-                                                    <Link className="btn btn-sm btn-outline-primary"
-                                                          to={ `/actions/worksheet/view/${data[0]}` }>
-                                                        View
-                                                    </Link>
-                                                </td>
-                                                <td>
-                                                    <button id= {data[0]} className="btn btn-sm btn-outline-danger"
-                                                            onClick={this.deleteWorksheet}>
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
+                                    {data.map((item,i) =>{
+                                        if(item.length !== 0){
+                                            return (
+                                                <tr>
+                                                    {
+                                                        item.map((d) =>{
+
+                                                            return(
+                                                                <td>{d.value}</td>
+                                                            )
+                                                        })
+                                                    }
+                                                    <td>
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/actions/worksheet/edit/${item[0].value}` } >
+                                                            Edit
+                                                        </Link>
+                                                    </td>
+                                                    <td>
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/actions/worksheet/view/${item[0].value}` }>
+                                                            View
+                                                        </Link>
+                                                    </td>
+                                                    <td>
+                                                        <button id= {item[0].value} className="btn btn-sm btn-outline-danger"
+                                                                onClick={this.deleteWorksheet}>
+                                                            Delete
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+
                                     })
                                     }
                                     </tbody>
