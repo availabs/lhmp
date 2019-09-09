@@ -32,7 +32,7 @@ class About extends React.Component {
                 <Element>
                     <h4 className="element-header">About page</h4>
                     <div className="row">
-                        <div className="col-sm-8 col-xxxl-6">
+                        <div className="col-12">
                             <div className="element-wrapper">
                                 {
                                     Object.keys(config).map(section => {
@@ -78,7 +78,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-top',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-full',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(About))

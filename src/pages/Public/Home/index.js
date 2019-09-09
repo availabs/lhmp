@@ -59,7 +59,7 @@ class Public extends React.Component {
                             ? this.props.graph.county.byId[this.state.activePlan].county.value
                             : 'Loading'} page</h4>
                     <div className="row">
-                        <div className="col-sm-8 col-xxxl-6">
+                        <div className="col-sm-12">
                             <div className="element-wrapper">
                                 <div className="element-box">
 
@@ -97,7 +97,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-top',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-full',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Public))
