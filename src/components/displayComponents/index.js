@@ -1,6 +1,8 @@
 import React from 'react'
 import contentEditor from "./contentEditor";
 import contentViewer from "./contentViewer";
+import rolesTableViewer from "./rolesTableViewer";
+import rolesTableEditor from "./rolesTableEditor";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -16,6 +18,8 @@ export default {
     NA,
     NE,
     contentEditor,
-    contentViewer
+    contentViewer,
+    rolesTableViewer,
+    rolesTableEditor
 }
 

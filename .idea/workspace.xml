@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Hazards/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CountyHeroStats.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/CousubTotalLossTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/GeographyScoreBarChart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardListHeroStats.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardListHeroStats.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardScoreTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/components/HazardScoreTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Historic/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -126,28 +119,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="180291000" />
-    </task>
-    <task id="LOCAL-00012" summary="updates">
-      <created>1561142469357</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1561142469357</updated>
-    </task>
-    <task id="LOCAL-00013" summary="updates">
-      <created>1561142531452</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1561142531452</updated>
-    </task>
-    <task id="LOCAL-00014" summary="updates">
-      <created>1562013372998</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1562013372998</updated>
+      <workItem from="1566414947890" duration="198051000" />
     </task>
     <task id="LOCAL-00015" summary="updates">
       <created>1562084924841</created>
@@ -471,7 +443,28 @@
       <option name="project" value="LOCAL" />
       <updated>1567701311584</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="hazard page for state: chunked requests; on signup email link values passed by county">
+      <created>1567717063024</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1567717063024</updated>
+    </task>
+    <task id="LOCAL-00062" summary="req A-1C: roles editor/viewer">
+      <created>1567782007988</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1567782007988</updated>
+    </task>
+    <task id="LOCAL-00063" summary="stickyroll in admin-about">
+      <created>1567798816418</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1567798816418</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -500,9 +493,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Building By Owner Type Pie Chart and Table" />
-    <MESSAGE value="Building By owner Type Pie chart and Building By Land Use PieChart" />
-    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
     <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
     <MESSAGE value=" Building By Land Use Table updates" />
@@ -525,7 +515,10 @@
     <MESSAGE value="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well." />
     <MESSAGE value="on login /admin vs /" />
     <MESSAGE value="home icon in public" />
-    <option name="LAST_COMMIT_MESSAGE" value="home icon in public" />
+    <MESSAGE value="hazard page for state: chunked requests; on signup email link values passed by county" />
+    <MESSAGE value="req A-1C: roles editor/viewer" />
+    <MESSAGE value="stickyroll in admin-about" />
+    <option name="LAST_COMMIT_MESSAGE" value="stickyroll in admin-about" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

@@ -52,53 +52,61 @@ class RolesIndex extends React.Component {
         super(props)
 
         this.state={
-            action_data: [],
+            role_data: [],
             roleid: this.props.roleid
         }
 
-        this.deleteWorksheet = this.deleteWorksheet.bind(this)
+        this.deleteRole = this.deleteRole.bind(this)
     }
-    // componentDidMount(e) {
-    //     this.fetchFalcorDeps();
-    // }
-    //
-    // componentWillMount(){
-    //
-    //     this.fetchFalcorDeps().then(response =>{
-    //         this.setState({
-    //             action_data : response
-    //         })
-    //     })
-    //
-    // }
 
     fetchFalcorDeps() {
-        let action_data =[];
+        let role_data =[];
         if(!this.props.activePlan) return Promise.resolve();
-        return this.props.falcor.get(['roles','byPlanId', this.props.activePlan, COLS])
-            .then(response => {
-                console.log('res', response)
-                if (response.json.roles.byPlanId[this.props.activePlan]){
-                    Object.keys(response.json.roles.byPlanId).filter(d => d!== '$__path').forEach(function(action,i){
-                        console.log('---',response.json.roles.byPlanId[action])
-                        action_data.push({
-                            'id' : response.json.roles.byPlanId[action]['id'].toString(),
-                            'data': Object.values(response.json.roles.byPlanId[action])
+        return this.props.falcor.get(['roles','length'])
+            .then(response => response.json.roles.length)
+            .then(length => this.props.falcor.get(
+                ['roles','byIndex', { from: 0, to: length -1 }, 'id']
+                )
+                    .then(response => {
+                        const ids = [];
+                        for (let i = 0; i < length; ++i) {
+                            const graph = response.json.roles.byIndex[i]
+                            if (graph) {
+                                ids.push(graph.id);
+                            }
+                        }
+                        return ids;
+                    })
+            )
+            .then(ids =>
+                this.props.falcor.get(['roles','byId', ids, COLS])
+                    .then(response => {
+                        Object.keys(response.json.roles.byId)
+                            .filter(d => d!== '$__path'
+                                && response.json.roles.byId[d].associated_plan === parseInt(this.props.activePlan))
+                            .forEach(function(role,i){
+                                console.log('each role',response.json.roles.byId)
+                            role_data.push({
+                                'id' : role,
+                                'data': Object.values(response.json.roles.byId[role])
+                            })
                         })
-                    })}
-                return this.setState({action_data})
-            })
+                        this.setState({role_data: role_data})
+                        return role_data
+                    })
+            )
     }
 
-    deleteWorksheet(e){
+    deleteRole(e){
         e.persist()
         let roleId = e.target.id
         this.props.sendSystemMessage(
             `Are you sure you with to delete this Role with id "${ roleId }"?`,
             {
                 onConfirm: () => this.props.falcor.call(['roles','remove'],[roleId.toString()],[],[]).then(() => this.fetchFalcorDeps().then(response => {
+                    console.log('after delete res', response)
                     this.setState({
-                        action_data:response
+                        role_data:response
                     })
                 })),
                 id: `delete-content-${ roleId }`,
@@ -112,8 +120,8 @@ class RolesIndex extends React.Component {
     renderMainTable() {
         let table_data = [];
         let attributes = COLS.slice(0,4)
-        console.log('final data', this.state.action_data)
-        this.state.action_data.map(function (each_row) {
+        console.log('final data', this.state.role_data)
+        this.state.role_data.map(function (each_row) {
             console.log('each row: ',each_row)
             table_data.push([].concat(each_row.data.slice(1,5)))
         })
@@ -122,9 +130,9 @@ class RolesIndex extends React.Component {
             <table className="table table lightBorder">
                 <thead>
                 <tr>
-                    {attributes.map(function(action,index){
+                    {attributes.map(function(role,index){
                         return (
-                            <th>{action}</th>
+                            <th>{role}</th>
                         )
                     })
                     }
@@ -154,7 +162,7 @@ class RolesIndex extends React.Component {
                             </td>
                             <td>
                                 <button id= {data[0]} className="btn btn-sm btn-outline-danger"
-                                        onClick={this.deleteWorksheet}>
+                                        onClick={this.deleteRole}>
                                     Delete
                                 </button>
                             </td>
@@ -170,7 +178,7 @@ class RolesIndex extends React.Component {
     renderRoleView() {
         let roleid = this.state.roleid,
             tableData = [];
-        this.state.action_data.map(function(f) {
+        this.state.role_data.map(function(f) {
             console.log('f',f, typeof f.id, typeof roleid)
             if (f.id === roleid) tableData.push(...f.data.slice(1,f.data.length-1))
         });
@@ -227,7 +235,7 @@ const mapStateToProps = (state, ownProps) => {
     return ({
         roleid: ownProps.computedMatch.params.roleid,
         activePlan: state.user.activePlan,
-        //roles: state.graph.roles.planId || {}
+        //roles: state.graph.roles || {}
     })
 };
 
