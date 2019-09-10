@@ -79,7 +79,7 @@ class ActionsIndex extends React.Component {
         e.persist()
         let worksheetId = e.target.id;
         this.props.sendSystemMessage(
-            `Are you sure you with to delete this Worksheet with id "${ worksheetId }"?`,
+            `Are you sure you want to delete this Worksheet id "${ worksheetId }"?`,
         {
             onConfirm: () => falcorGraph.call(['actions','worksheet','remove'],[worksheetId])
                 .then(() => this.fetchFalcorDeps()),
