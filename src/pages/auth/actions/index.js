@@ -93,7 +93,7 @@ class ActionsIndex extends React.Component {
 
     actionTableData(){
             let attributes = ATTRIBUTES.slice(0,4);
-            let data = []
+            let data = [];
             Object.values(this.props.actions)
                 .forEach(action =>{
                     data.push(Object.values(pick(action,...attributes)))
@@ -196,7 +196,7 @@ const mapStateToProps = state => (
     activePlan : state.user.activePlan,
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts,
-    actions: get(state.graph,'actions.worksheets.byId',{})// so componentWillReceiveProps will get called.
+    actions: get(state.graph,'actions.worksheet.byId',{})// so componentWillReceiveProps will get called.
 });
 
 const mapDispatchToProps = {
