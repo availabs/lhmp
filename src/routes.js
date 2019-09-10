@@ -32,6 +32,7 @@ import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
+import Capabilities from 'pages/auth/Capabilities'
 import RolesIndex from 'pages/auth/Roles/'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
@@ -64,6 +65,7 @@ const routes = [
    ...Assets,
    ...AssetsView,
    ...AssetsEdit,
+   ...Capabilities,
    ...Historic,
    ...RolesIndex,
    ...Public,

@@ -61,14 +61,14 @@ class ParticipationIndex extends React.Component {
                           ) 
                           .then(response => {
                                  
-                                console.log('response_1', response);
-                                console.log('response_2', response.json.participation.byPlan[this.props.activePlan].byIndex);
+                               // console.log('response_1', response);
+                                //console.log('response_2', response.json.participation.byPlan[this.props.activePlan].byIndex);
 
                                 let test = []
                                 Object.values(response.json.participation.byPlan[this.props.activePlan].byIndex).forEach(participation => {
                                   test.push(Object.values(pick(participation,...ATTRIBUTES)))
                                 })
-                                console.log('response_3', test )
+                              //  console.log('response_3', test )
 
                               return response
                           })
@@ -86,10 +86,10 @@ class ParticipationIndex extends React.Component {
            //let test = Object.values(this.props.planParticipation.byIndex)
           // console.log('this.props.planParticipation.byIndex_1',test)
 
-          console.log ('this.props.planParticipation', this.props.planParticipation )
+         // console.log ('this.props.planParticipation', this.props.planParticipation )
 
-          console.log('this.props.planParticipation.byIndex',this.props.planParticipation.byIndex )
-          console.log('this.props.planParticipationData',this.props.planParticipationData)
+         // console.log('this.props.planParticipation.byIndex',this.props.planParticipation.byIndex )
+         // console.log('this.props.planParticipationData',this.props.planParticipationData)
 
             Object.values(this.props.planParticipationData).forEach(participation =>{
                 data.push(Object.values(pick(participation,...ATTRIBUTES)))

@@ -1,4 +1,4 @@
-const UPDATE = 'redux-falcor/UPDATE';
+export const UPDATE = 'redux-falcor/UPDATE';
 
 export default function reduxFalcorReducer(state = {}, action) {
   switch (action.type) {

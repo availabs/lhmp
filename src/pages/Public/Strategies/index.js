@@ -32,7 +32,7 @@ class Strategies extends React.Component {
                 <Element>
                     <h4 className="element-header">Strategies page</h4>
                     <div className="row">
-                        <div className="col-sm-8 col-xxxl-6">
+                        <div className="col-12">
                             <div className="element-wrapper">
                                 {
                                     Object.keys(config).map(section => {
@@ -66,7 +66,7 @@ const mapStateToProps = (state,ownProps) => {
 
 const mapDispatchToProps = {};
 export default [{
-    icon: 'os-icon-pencil-2',
+    icon: '',
     path: '/strategies',
     exact: true,
     name: 'Strategies',
@@ -78,7 +78,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-top',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-full',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Strategies))
