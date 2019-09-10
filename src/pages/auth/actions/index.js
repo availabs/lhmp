@@ -68,10 +68,12 @@ class ActionsIndex extends React.Component {
                 Object.keys(response.json.actions).filter(d => d !== '$__path').forEach(planId =>{
                      length = response.json.actions[planId].worksheet.length;
                 })
+
                 return length
             }).then(length => this.props.falcor.get(
                 ['actions',[this.props.activePlan],'worksheet','byIndex',{from:0,to:length-1},ATTRIBUTES]))
             .then(response => {
+                console.log('response', response)
                 return response
             })
 
@@ -104,6 +106,7 @@ class ActionsIndex extends React.Component {
             let data = []
             Object.values(this.props.actions['worksheet'].byId).forEach(action =>{
                 data.push(Object.values(pick(action,...attributes)))
+                console.log('data', data)
             });
             return(
                 <div className='container'>
@@ -120,7 +123,7 @@ class ActionsIndex extends React.Component {
                             className="btn btn-sm btn-disabled"
                         >
                                 Create Action Planner
-                        </button>
+                        </button>zq21
                         <button
                             disabled
                             className="btn btn-sm btn-disabled"
