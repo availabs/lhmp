@@ -114,16 +114,6 @@ class ContentEditor extends Component {
     loadEditor(editorState){
         return (
             <div>
-                <div className="status-pill green" data-title="Complete" data-toggle="tooltip"
-                     data-original-title="" title="" style={{margin: '10px'}}>
-                    <div className="tooltip tooltip-top" role="tooltip">
-                        <div className="tooltip-arrow" onClick={(e) => e.tooltip('show')}></div>
-                        <div className="tooltip-inner">
-                            Some tooltip text!
-                        </div>
-                    </div>
-                </div>
-
                 <Editor
                     editorState={editorState}
                     toolbarClassName="toolbar"
