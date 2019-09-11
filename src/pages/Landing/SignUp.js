@@ -489,6 +489,7 @@ const mapStateToProps = state => {
 export default {
     path: '/signup',
     mainNav: false,
+    name: 'SignUp',
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Signup)),
     menuSettings: {hide: true}
 }

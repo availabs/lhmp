@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import Submenus from './plan-submenus'
 import Element from 'components/light-admin/containers/Element'
+import CSS_CONFIG from 'pages/auth/css-config'
 
 class Plan extends React.Component {
 
@@ -16,7 +17,7 @@ class Plan extends React.Component {
 
     render() {
         return (
-            <div className='container'>
+            <div className='container' style={{marginLeft: CSS_CONFIG.mainMenuWidth}}>
                 <Element>
                     <h6 className="element-header">Plan page</h6>
                     <div>
