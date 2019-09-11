@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+import get from "lodash.get"
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
+import pick from "lodash.pick";
 
 
 const ATTRIBUTES = [
-    'id',
+    //'id',
     'project_name',
     'project_number',
     'hazard_of_concern',
@@ -45,49 +46,47 @@ class ActionsIndex extends React.Component {
     constructor(props){
         super(props)
 
-        this.state={
-            action_data: [],
-            id:''
-        }
-
-    }
-    componentDidMount(e) {
-        this.fetchFalcorDeps();
-    }
-
-    componentWillMount(){
-
-        this.fetchFalcorDeps().then(response =>{
-            this.setState({
-                action_data : response
-            })
-        })
+        this.actionViewData = this.actionViewData.bind(this)
 
     }
 
     fetchFalcorDeps() {
-        let action_data =[];
+
         return falcorGraph.get(['actions','worksheet','byId', [this.props.match.params.worksheetId], ATTRIBUTES])
             .then(response => {
-                Object.keys(response.json.actions.worksheet.byId).filter(d => d!== '$__path').forEach(function(action,i){
-                    action_data.push({
-                        'id' : action,
-                        'data': Object.values(response.json.actions.worksheet.byId[action])
-                    })
-                })
-                return action_data
+                return response
             })
-
     }
 
-
-    render() {
+    actionViewData(){
         let table_data = [];
-        let attributes = ATTRIBUTES.slice(1)
-        this.state.action_data.map(function (each_row) {
-            table_data = each_row.data.slice(2)
-        });
+        let data = [];
+        if(this.props.actionViewData[this.props.match.params.worksheetId] !== undefined){
+            let graph = this.props.actionViewData[this.props.match.params.worksheetId];
+            data.push(pick(graph,...ATTRIBUTES));
+            data.forEach(item =>{
+                Object.keys(item).forEach(i =>{
+                    if (item[i].value.toString() === 'false'){
+                        table_data.push({
+                            attribute: i,
+                            value: 'no'
+                        })
+                    }
+                    else if(item[i].value.toString() === 'true'){
+                        table_data.push({
+                            attribute : i,
+                            value : 'yes'
+                        })
+                    }else{
+                        table_data.push({
+                            attribute : i,
+                            value: item[i].value
+                        })
+                    }
 
+                })
+            })
+        }
         return (
             <div className='container'>
                 <Element>
@@ -102,15 +101,16 @@ class ActionsIndex extends React.Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {attributes.map((attribute,i) =>{
-                                        return (
+                                {
+                                    table_data.map(data =>{
+                                        return(
                                             <tr>
-                                                <td>{attribute}</td>
-                                                <td>{table_data[i]}</td>
+                                                <td>{data.attribute}</td>
+                                                <td>{data.value}</td>
                                             </tr>
                                         )
+                                    })
 
-                                })
                                 }
                                 </tbody>
                             </table>
@@ -121,11 +121,22 @@ class ActionsIndex extends React.Component {
 
         )
     }
+
+    render() {
+        return(
+            <div>
+                {this.actionViewData()}
+            </div>
+
+        )
+
+    }
 }
 
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
-    attempts: state.user.attempts // so componentWillReceiveProps will get called.
+    attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+    actionViewData : get(state.graph,'actions.worksheet.byId',{})
 });
 
 const mapDispatchToProps = {
