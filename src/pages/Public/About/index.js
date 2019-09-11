@@ -6,7 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import config from "pages/auth/Plan/config/about-config";
 import GraphFactory from "components/displayComponents/graphFactory";
 
-class Public extends React.Component {
+class About extends React.Component {
 
     constructor(props) {
         super(props);
@@ -17,7 +17,7 @@ class Public extends React.Component {
     renderElement (element) {
         return (
             <div className='element-box'>
-                <h6>{element.requirement}</h6>
+                <h6>{element.title}</h6>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
                     {...element}
@@ -34,7 +34,6 @@ class Public extends React.Component {
                     <div className="row">
                         <div className="col-12">
                             <div className="element-wrapper">
-
                                 {
                                     Object.keys(config).map(section => {
                                         return (
@@ -49,7 +48,6 @@ class Public extends React.Component {
                                         )
                                     })
                                 }
-
                             </div>
                         </div>
                     </div>
@@ -80,9 +78,9 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-top',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-full',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Public))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(About))
 }];
 

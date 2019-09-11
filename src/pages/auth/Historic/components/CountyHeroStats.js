@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
+import {falcorChunkerNice} from "store/falcorGraph"
 
 import { format } from "d3-format"
 
@@ -29,9 +30,8 @@ class CountyHeroStats extends React.Component {
             .then(response => response.json.riskIndex.hazards)
             .then(hazards =>
                 this.props.falcor.get(
-                    ['riskIndex', 'meta', hazards, 'name'],
-                    [dataType, geoid, hazards, 'allTime', cols]
-                )
+                    ['riskIndex', 'meta', hazards, 'name']
+                ).then(d => falcorChunkerNice([dataType, geoid, hazards, 'allTime', cols]))
             )
     }
 

@@ -96,7 +96,6 @@ class AssetsEdit extends React.Component{
         if(this.props.match.params.assetId) {
             this.props.falcor.get(['building','byId',[this.props.match.params.assetId],Object.keys(this.state)])
                 .then(response =>{
-                    console.log('response',response)
                     Object.keys(this.state).forEach((key,i)=>{
                         let tmp_state = {};
                         tmp_state[key] = response.json.building.byId[this.props.match.params.assetId][key] || '' ;

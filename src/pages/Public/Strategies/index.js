@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
+import config from "pages/auth/Plan/config/strategies-config";
+import GraphFactory from "components/displayComponents/graphFactory";
 
-class Public extends React.Component {
+class Strategies extends React.Component {
 
     constructor(props) {
         super(props);
@@ -12,6 +14,17 @@ class Public extends React.Component {
         }
     }
 
+    renderElement (element) {
+        return (
+            <div className='element-box'>
+                <h6>{element.title}</h6>
+                <GraphFactory
+                    graph={{type: element.type + 'Viewer'}}
+                    {...element}
+                    user={this.props.user}/>
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -19,11 +32,22 @@ class Public extends React.Component {
                 <Element>
                     <h4 className="element-header">Strategies page</h4>
                     <div className="row">
-                        <div className="col-sm-8 col-xxxl-6">
+                        <div className="col-12">
                             <div className="element-wrapper">
-                                <div className="element-box">
-
-                                </div>
+                                {
+                                    Object.keys(config).map(section => {
+                                        return (
+                                            <div>
+                                                <h6 className='element-header'>{section}</h6>
+                                                {
+                                                    config[section].map(requirement => {
+                                                        return this.renderElement(requirement)
+                                                    })
+                                                }
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -42,7 +66,7 @@ const mapStateToProps = (state,ownProps) => {
 
 const mapDispatchToProps = {};
 export default [{
-    icon: 'os-icon-pencil-2',
+    icon: '',
     path: '/strategies',
     exact: true,
     name: 'Strategies',
@@ -54,9 +78,9 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-top',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-full',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Public))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Strategies))
 }];
 

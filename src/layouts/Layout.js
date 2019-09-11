@@ -5,6 +5,8 @@ import Menu from 'components/light-admin/menu'
 import BreadcrumbBar from 'components/light-admin/breadcrumb-bar'
 import ContentContainer from 'components/light-admin/containers/ContentContainer'
 import LoadingPage from "components/loading/loadingPage"
+import CSS_CONFIG from 'pages/auth/css-config'
+
 
 const DefaultLayout = ({component: Component, ...rest}) => {
     if (rest.isAuthenticating) {
@@ -22,7 +24,12 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     }
 
     console.log('rest', rest);
-    let contentStyle = {width: '100%'};
+    let contentStyle = {width: '100%',
+        marginLeft: rest.name === 'Scenarios'
+            ? 55
+            : rest.auth ? // if auth, menu is on left. else top.
+                CSS_CONFIG.mainMenuWidth : ''
+    };
     if (rest.menuSettings.position === 'menu-position-side') {
         contentStyle.marginLeft = 260;
         if (rest.menuSettings.layout === 'menu-layout-compact') {
@@ -36,7 +43,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
         (
             <Redirect
                 to={{
-                    pathname: "/", // if not authed
+                    pathname: "/login", // if not authed
                     state: {from: rest.router.location}
                 }}
             />
@@ -79,7 +86,6 @@ const DefaultLayout = ({component: Component, ...rest}) => {
 
 function checkAuth(props) {
     console.log('checkAuth', (props.auth && !props.authed), props)
-    //alert('checkAuth '+ (props.auth && !props.authed))
 
     return (props.auth && !props.authed)
 }
@@ -87,15 +93,12 @@ function checkAuth(props) {
 function checkAuthPage(props) {
     let authlevel = props.authLevel !== undefined ? props.authLevel : 1;
     console.log('checkAuthPage', (props.auth && !(props.authed && props.userAuthLevel >= authlevel)), props)
-    //alert('checkAuthPage ' + (props.auth && !(props.authed && props.userAuthLevel >= authlevel)))
     return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
 
 }
 
 function checkAuthPlan(props) {
-console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
-//alert('checkAuthPlan '+ (props.auth && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString()))));
-
+    console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
     return ['Plans', 'Home'].includes(props.name) ? false :
     (props.auth && props.user.activePlan && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString())))
 }

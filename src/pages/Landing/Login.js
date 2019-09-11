@@ -59,7 +59,7 @@ class Login extends Component {
    */
 
   render () {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { from } = this.props.location.state || { from: { pathname: "/admin" } };
     const { redirectToReferrer } = this.state;
 
     if (redirectToReferrer) {
@@ -150,7 +150,7 @@ export default
   icon: 'icon-map',
   path: '/login',
   mainNav: false,
-
+  name: 'Login',
   component: connect(mapStateToProps, mapDispatchToProps)(Login),
   menuSettings: {hide: true}
 }

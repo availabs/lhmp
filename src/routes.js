@@ -32,10 +32,14 @@ import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
+import Capabilities from 'pages/auth/Capabilities'
+import CapabilitiesNew from 'pages/auth/Capabilities/capability/new'
+import CapabilitiesView from 'pages/auth/Capabilities/capability/view'
 import RolesIndex from 'pages/auth/Roles/'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
 import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
+import Participation from "./pages/auth/Participation/";
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Signup from './pages/Landing/SignUp'
@@ -63,6 +67,9 @@ const routes = [
    ...Assets,
    ...AssetsView,
    ...AssetsEdit,
+   ...Capabilities,
+   ...CapabilitiesNew,
+   ...CapabilitiesView,
    ...Historic,
    ...RolesIndex,
    ...Public,
@@ -73,6 +80,7 @@ const routes = [
    ...User,
    ...Admin,
    ...FormEditOrNew,
+   ...Participation,
   PlanIndex,
   RiskMap,
   Logout,
