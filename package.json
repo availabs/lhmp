@@ -74,7 +74,7 @@
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "deploy": "aws s3 sync build/ s3://lhmp-prod && aws cloudfront create-invalidation --distribution-id ERYT3LJPUWTEV --paths \"/index.html\"",
+    "deploy": "aws s3 sync build/ s3://lhmp-prod && aws cloudfront create-invalidation --distribution-id ERYT3LJPUWTEV --paths \"index.html\"",
     "watch-css": "npm run build-css && node-sass-chokidar src/ --include-path ./node_modules src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
