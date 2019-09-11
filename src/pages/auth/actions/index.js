@@ -64,12 +64,10 @@ class ActionsIndex extends React.Component {
                 Object.keys(response.json.actions).filter(d => d !== '$__path').forEach(planId =>{
                      length = response.json.actions[planId].worksheet.length;
                 })
-
                 return length
             }).then(length => this.props.falcor.get(
                 ['actions',[this.props.activePlan],'worksheet','byIndex',{from:0,to:length-1},ATTRIBUTES]))
             .then(response => {
-                console.log('response', response)
                 return response
             })
 
@@ -81,7 +79,7 @@ class ActionsIndex extends React.Component {
         e.persist()
         let worksheetId = e.target.id;
         this.props.sendSystemMessage(
-            `Are you sure you with to delete this Worksheet with id "${ worksheetId }"?`,
+            `Are you sure you want to delete this Worksheet id "${ worksheetId }"?`,
         {
             onConfirm: () => falcorGraph.call(['actions','worksheet','remove'],[worksheetId])
                 .then(() => this.fetchFalcorDeps()),
@@ -95,7 +93,7 @@ class ActionsIndex extends React.Component {
 
     actionTableData(){
             let attributes = ATTRIBUTES.slice(0,4);
-            let data = []
+            let data = [];
 
             Object.values(this.props.actions)
                 .forEach(action =>{
@@ -117,7 +115,7 @@ class ActionsIndex extends React.Component {
                             className="btn btn-sm btn-disabled"
                         >
                                 Create Action Planner
-                        </button>zq21
+                        </button>
                         <button
                             disabled
                             className="btn btn-sm btn-disabled"
@@ -199,7 +197,7 @@ const mapStateToProps = state => (
     activePlan : state.user.activePlan,
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts,
-    actions: get(state.graph,'actions.worksheets.byId',{})// so componentWillReceiveProps will get called.
+    actions: get(state.graph,'actions.worksheet.byId',{})// so componentWillReceiveProps will get called.
 });
 
 const mapDispatchToProps = {

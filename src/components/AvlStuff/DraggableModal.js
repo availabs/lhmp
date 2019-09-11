@@ -12,10 +12,10 @@ import * as d3selection from "d3-selection"
 const DraggableContainer = styled.div`
 	position: fixed;
 	z-index: 500;
+	background-color: ${ props => props.theme.sidePanelBg };
 `
 const DraggableInner = styled.div`
 	${ props => props.theme.scrollBar };
-	background-color: ${ props => props.theme.sidePanelBg };
 	overflow: auto;
 	width: 100%;
 	height: 100%;
@@ -194,7 +194,7 @@ export default class DraggableModal extends React.Component {
 			const [x, y] = this.state.pos;
 
 			const newState = {
-				pos: [x + (x2 - x1), y + (y2 - y1)],
+				pos: [Math.max(0, x + (x2 - x1)), Math.max(0, y + (y2 - y1))],
 				prevPos: [x2, y2]
 			};
 
@@ -235,8 +235,8 @@ export default class DraggableModal extends React.Component {
 		return (
 			<DraggableContainer
 				style={ {
-					left: `${ left }px`,
-					top:`${ top }px`,
+					left: `${ Math.max(0, left) }px`,
+					top:`${ Math.max(0, top) }px`,
 					width: `${ width }px`,
 					height: `${ height }px`,
 					display: this.props.show ? "block" : "none"
@@ -258,7 +258,8 @@ export default class DraggableModal extends React.Component {
 				</CloseWrapper>
 
 				<DragHandle ref={ comp => this.dragHandle = comp }
-					style={ { cursor: this.state.dragging ? "grabbing" : "grab" } }>
+					style={ { cursor: this.state.dragging ? "grabbing" : "grab" } }
+					onMouseDown={ e => e.stopPropagation() }>
 					<VertDots height="26px"/>
 				</DragHandle>
 

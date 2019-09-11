@@ -17,7 +17,7 @@ class About extends React.Component {
     renderElement (element) {
         return (
             <div className='element-box'>
-                <h6>{element.requirement}</h6>
+                <h6>{element.title}</h6>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
                     {...element}

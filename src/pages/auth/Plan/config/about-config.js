@@ -1,36 +1,42 @@
 const config =  {
 	Process : [
 		{
+			title: 'The Planning Process',
 			requirement: 'Req-A-1A',
 			type: 'content',
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.'
 		},
 		{
+			title: 'Multi-Jurisdictional Mitigation Plan Milestones',
 			requirement: 'Req-A-1B',
 			type: 'date',
 			prompt: '',
 			intent: ''
 		},
 		{
+			title: 'Jurisdictional Representatives',
 			requirement: 'Req-A-1C',
 			type: 'rolesTable',
 			prompt: 'Identify who represented each jurisdiction.',
 			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?'
 		},
 		{
+			title: 'Multi-Jurisdictional Mitigation Plan Meetings and Participation',
 			requirement: 'Req-A-1D',
 			type: 'table',
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.'
 		},
 		{
+			title: 'Jurisdictional Participation',
 			requirement: 'Req-A-1E',
 			type: 'table',
 			prompt: '',
 			intent: 'Plan updates must include documentation of the current planning process undertaken to update the plan.'
 		},
 		{
+			title: 'Opportunities for Plan Participation',
 			requirement: 'Req-A-2',
 			type: 'content',
 			prompt: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard' +
@@ -41,6 +47,7 @@ const config =  {
 				' and who will be most affected by the plan’s outcomes.'
 		},
 		{
+			title: 'Public Participation in the Planning Process',
 			requirement: 'Req-A-3',
 			type: 'content',
 			prompt: 'Document how the public was involved in the planning process during the drafting stage.',
@@ -52,6 +59,7 @@ const config =  {
 	],
 	'Resource Review and Integration' : [
 		{
+			title: 'Review of Existing Planning Documents and Resources',
 			requirement: 'Req-A-4A',
 			type: 'table',
 			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
@@ -60,6 +68,7 @@ const config =  {
 				' mechanisms to implement the mitigation strategy.'
 		},
 		{
+			title: 'Review and Integration of Existing Planning Documents and Resources',
 			requirement: 'Req-A-4B',
 			type: 'content',
 			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
@@ -68,6 +77,7 @@ const config =  {
 				' mechanisms to implement the mitigation strategy.'
 		},
 		{
+			title: 'Plan Integration',
 			requirement: 'Req-C-6',
 			type: 'content',
 			prompt: 'Describe the community’s process to integrate the data, information, and hazard mitigation goals' +
@@ -78,6 +88,7 @@ const config =  {
 	],
 	'Plan Evaluation, Implementation, Maintenance' : [
 		{
+			title: 'Public Participation in Plan Maintenance',
 			requirement: 'Req-A-5A',
 			type: 'content',
 			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
@@ -85,6 +96,7 @@ const config =  {
 				' maintenance and implementation over time.'
 		},
 		{
+			title: 'Public Participation in Plan Maintenance Survey',
 			requirement: 'Req-A-5A2',
 			type: 'table',
 			prompt: '',
@@ -95,6 +107,7 @@ const config =  {
 				' annual questionnaires or surveys, public meetings, postings on social media and interactive websites.'
 		},
 		{
+			title: 'Method for Keeping the Plan Current: Monitoring, Evaluating, Updating',
 			requirement: 'Req-A-6',
 			type: 'content',
 			prompt: `Describe the method and schedule for keeping the plan current 
@@ -109,6 +122,7 @@ const config =  {
 	],
 	Adoption: [
 		{
+			title: 'Plan Adoption Documentation',
 			requirement: 'Req-E-1',
 			type: 'upload',
 			prompt: `The plan must include documentation of plan adoption, usually a resolution by the governing body or other authority.
@@ -121,6 +135,7 @@ const config =  {
 				' the plan, and to authorize responsible agencies to execute their responsibilities.  '
 		},
 		{
+			title: 'Formal Plan Adoption',
 			requirement: 'Req-E-2',
 			type: 'table',
 			prompt: 'Identify adopting authority and date of formal adoption.',

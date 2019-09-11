@@ -5,7 +5,6 @@ import {Editor} from 'react-draft-wysiwyg';
 import {ContentState, convertToRaw, EditorState} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './contentEditor.css'
@@ -15,28 +14,36 @@ const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        // each value to be an array of objects. each object to be key:value pair where key is curent key
+        // while setting the state, first filter then assign new value / append new obj
+        // while getting the state, filter by current content id
         this.state = {
             editorState: EditorState.createEmpty(),
-            contentFromDB: null
+            contentFromDB: null,
+            currentKey: null
         };
         this.onEditorStateChange = this.onEditorStateChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.loadEditor = this.loadEditor.bind(this)
 
     }
 
     fetchFalcorDeps() {
+        console.log('FFD',this.props.requirement, this.props.user.activePlan, this.props.user.activeGeoid)
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return Promise.resolve();
         let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
             if (contentRes.json.content.byId[contentId]) {
+                console.log('setting everything',contentRes.json.content.byId[contentId])
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
-                return contentRes.json.content.byId[contentId].body
-            }
-            return null
-        }).then( content => {
-            if (content) {
+                this.setState({'currentKey': contentId});
+
+                let content = contentRes.json.content.byId[contentId].body;
+                if (content) {
+                    console.log('new content', content)
                     const contentBlock = htmlToDraft(content);
                     if (contentBlock) {
                         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -44,8 +51,20 @@ class ContentEditor extends Component {
                         this.setState({'editorState': editorState})
                     }
                 }
-            return content
+            }else{
+                console.log('in else: no content from db for id ', contentId, contentRes)
+                this.setState({'editorState': EditorState.createEmpty()})
+                this.setState({contentFromDB: null})
+                this.setState({'currentKey': contentId});
+            }
+            return contentRes
         })
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('componentDidUpdate');
+        if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid){
+            this.fetchFalcorDeps();
+        }
     }
 
     onEditorStateChange(editorState) {
@@ -55,9 +74,6 @@ class ContentEditor extends Component {
     };
 
     handleSubmit() {
-        // if this.state.contentFromDB === current content : do nothing
-        // else if this.contentFromDB === null : insert?
-        // else update
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return null;
         let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
         let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
@@ -95,55 +111,57 @@ class ContentEditor extends Component {
         }
     }
 
-    render() {
-        //console.log('contentEditor Render', this.props)
-        let {editorState} = this.state;
+    loadEditor(editorState){
         return (
-            //this.props.type === 'contentEditor' ? (
-                <div>
-                    <Editor
-                        editorState={editorState}
-                        toolbarClassName="toolbar"
-                        wrapperClassName="wrapper"
-                        editorClassName="editor"
-                        onEditorStateChange={this.onEditorStateChange}
-                    />
-                    <a className='btn btn-primary step-trigger-btn'
-                       href='#'
-                       onClick={this.handleSubmit}
-                       style={{width: '100%'}}
-                    >Submit</a>
-                    <div className='row'>
-                        <div className='col-sm-6'>
-                            <Element>
-                                <h6>Prompt</h6>
-                                <div className='element-box'>
-                                    {this.props.prompt}
-                                </div>
-                            </Element>
-                        </div>
-                        <div className='col-sm-6'>
-                            <Element>
-                                <h6>Intent</h6>
-                                <div className='element-box'>
-                                    {this.props.intent}
-                                </div>
-                            </Element>
+            <div>
+                <div className="status-pill green" data-title="Complete" data-toggle="tooltip"
+                     data-original-title="" title="" style={{margin: '10px'}}>
+                    <div className="tooltip tooltip-top" role="tooltip">
+                        <div className="tooltip-arrow" onClick={(e) => e.tooltip('show')}></div>
+                        <div className="tooltip-inner">
+                            Some tooltip text!
                         </div>
                     </div>
                 </div>
 
-            //) : ''
+                <Editor
+                    editorState={editorState}
+                    toolbarClassName="toolbar"
+                    wrapperClassName="wrapper"
+                    editorClassName="editor"
+                    onEditorStateChange={this.onEditorStateChange}
+                />
+                <a className='hoverable btn btn-primary step-trigger-btn'
+                   href='#'
+                   onClick={this.handleSubmit}
+                >Submit</a>
+            </div>
         )
+    }
+    render() {
+        let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+
+        console.log('contentEditor Render', this.state.currentKey, currentKey, (this.state.currentKey === currentKey));
+
+        let editorState;
+        if (this.state.currentKey !== currentKey){
+            console.log('calling FFD from render');
+            this.fetchFalcorDeps();
+            return <div> Loading... </div>
+        }else {
+            editorState = this.state.editorState;
+            return this.loadEditor(editorState)
+        }
     }
 }
 
 const mapDispatchToProps = {sendSystemMessage};
 
 const mapStateToProps = state => {
+    console.log('content', state.graph.content);
     return {
         isAuthenticated: !!state.user.authed,
-        geoGraph: state.graph,
+        geoGraph: state.graph.content || {},
     };
 };
 
