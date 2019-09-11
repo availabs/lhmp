@@ -26,5 +26,5 @@ export default COLOR_RANGES
 const getColorRange = (size, name) =>
 	get(COLOR_RANGES, [size], [])
 		.reduce((a, c) => c.name === name ? c.colors : a, []).slice()
-
+console.log("COLOR_RANGES", COLOR_RANGES)
 export { getColorRange }
