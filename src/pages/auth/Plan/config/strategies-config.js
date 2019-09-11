@@ -1,6 +1,7 @@
 const config = {
     Capabilities : [
         {
+            title: ' Existing Capabilities 1A',
             requirement: 'Req-C-1A',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -12,6 +13,7 @@ const config = {
                 ' capability varies widely.'
         },
         {
+            title: 'Existing Capabilities 1A-1',
             requirement: 'Req-C-1A-1',
             type: 'table',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -24,12 +26,14 @@ const config = {
                 ' capability varies widely.'
         },
         {
+            title: 'Existing Capabilities Evaluation',
             requirement: 'Req-C-1B',
             type: 'table',
             prompt: '',
             intent: ''
         },
         {
+            title: 'NFIP Participation',
             requirement: 'Req-C-2',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
@@ -42,6 +46,7 @@ const config = {
                 ' capability and resource for flood hazard mitigation activities.'
         },
         {
+            title: 'NFIP Properties',
             requirement: 'Req-B-4',
             type: 'Visualizations - NFIP',
             prompt: '',
@@ -49,6 +54,7 @@ const config = {
                 ' numbers of repetitive loss properties located in identified flood hazard areas.'
         },
         {
+            title: 'NFIP Insured Structures and Problem Areas',
             requirement: 'Req-B-4A',
             type: 'content',
             prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
@@ -61,6 +67,7 @@ const config = {
     ],
     Actions: [
         {
+            title: 'Proposed Action Form',
             requirement: 'Req-C-4',
             type: 'form',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
@@ -81,6 +88,7 @@ const config = {
                 ' b. Integrate elements of Req-C-5 and Req-C-6'
         },
         {
+            title: 'Action Form',
             requirement: 'Req-D-2',
             type: 'form',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
@@ -90,6 +98,7 @@ const config = {
                 ' actions outlined in their mitigation strategy.'
         },
         {
+            title: 'Prioritization Criteria',
             requirement: 'Req-C-5A',
             type: 'content',
             prompt: 'Describe the criteria used for prioritizing implementation of the actions.' +
@@ -106,6 +115,7 @@ const config = {
     ],
     Objectives: [
         {
+            title: 'Goals 3A',
             requirement: 'Req-C-3-A',
             type: 'content',
             prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
@@ -114,6 +124,7 @@ const config = {
                 '  Goals are statements of the community’s visions for the future.'
         },
         {
+            title: 'Goals 3A-1',
             requirement: 'Req-C-3-A-1',
             type: 'form',
             prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
@@ -122,6 +133,7 @@ const config = {
                 '  Goals are statements of the community’s visions'
         },
         {
+            title: 'Changes in Priorities',
             requirement: 'Req-D-3',
             type: 'content',
             prompt: ' If applicable, describe changes to goals and objectives.',

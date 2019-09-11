@@ -150,7 +150,7 @@ export default
   icon: 'icon-map',
   path: '/login',
   mainNav: false,
-
+  name: 'Login',
   component: connect(mapStateToProps, mapDispatchToProps)(Login),
   menuSettings: {hide: true}
 }

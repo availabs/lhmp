@@ -5,6 +5,8 @@ import Menu from 'components/light-admin/menu'
 import BreadcrumbBar from 'components/light-admin/breadcrumb-bar'
 import ContentContainer from 'components/light-admin/containers/ContentContainer'
 import LoadingPage from "components/loading/loadingPage"
+import CSS_CONFIG from 'pages/auth/css-config'
+
 
 const DefaultLayout = ({component: Component, ...rest}) => {
     if (rest.isAuthenticating) {
@@ -22,7 +24,12 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     }
 
     console.log('rest', rest);
-    let contentStyle = {width: '100%'};
+    let contentStyle = {width: '100%',
+        marginLeft: rest.name === 'Scenarios'
+            ? 55
+            : rest.auth ? // if auth, menu is on left. else top.
+                CSS_CONFIG.mainMenuWidth : ''
+    };
     if (rest.menuSettings.position === 'menu-position-side') {
         contentStyle.marginLeft = 260;
         if (rest.menuSettings.layout === 'menu-layout-compact') {

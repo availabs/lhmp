@@ -39,9 +39,15 @@ class Menu extends Component {
 
         let dynamicStyle = {
             marginBottom: currentPath.subMenus ? 50 : 0,
+            position: 'fixed',
+            zIndex: 100
         };
 
-        // console.log('menuProps', currentPath, dynamicStyle)
+        defaultOptions.position === 'menu-position-top' ?
+            dynamicStyle['width'] = '100vw' : dynamicStyle['height'] = '100vh';
+
+
+            // console.log('menuProps', currentPath, dynamicStyle)
         let userMenu = this.props.user && !!this.props.user.authed
             ? <AvatarUser user={this.props.user}/>
             : <LoginMenu/>;
