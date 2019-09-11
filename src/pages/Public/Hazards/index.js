@@ -244,7 +244,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-top',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-full',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Hazards))

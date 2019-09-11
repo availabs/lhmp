@@ -11,7 +11,10 @@ const counties = ["36101","36003","36091","36075","36111","36097","36089","36031
     "36023","36085","36029","36079","36057","36105","36073","36065","36009","36123","36107","36055","36095","36007",
     "36083","36099","36081","36037","36117","36063","36047","36015","36121","36061","36021","36013","36033","36017",
     "36067","36035","36087","36051","36025","36071","36093","36005"];
-let countyNames = [];
+let countyName = [];
+let cousubsArray = [];
+let cousubsNames = [];
+let allCountyNames = [];
 class Worksheet extends React.Component {
 
     constructor (props) {
@@ -48,27 +51,27 @@ class Worksheet extends React.Component {
             date_of_report: '',
             progress_report: '',
             updated_evaluation: '',
+            plan_id: parseInt(this.props.activePlan)
         }
 
 
-        this.handleChange = this.handleChange.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.listCousubDropdown = this.listCousubDropdown.bind(this)
 
-
     }
-
     fetchFalcorDeps(){
-        return this.props.falcor.get(['geo',counties,['name']])
+        return this.props.falcor.get(['geo',[this.props.geoid],['name']],['geo',counties,['name']])
             .then(response => {
-                counties.map((county) => {
-                    countyNames.push(response.json.geo[county].name)
+                countyName.push(response.json.geo[this.props.geoid].name);
+                counties.map(county =>{
+                    allCountyNames.push(response.json.geo[county].name)
                 });
-                this.props.falcor.get(['geo',counties,'cousubs'])
-                    .then(res => {
-                        return res
-                    })
-            });
+            this.props.falcor.get(['geo',this.props.geoid,['cousubs']])
+            .then(res => {
+                return res
+            })
+        });
     }
 
 
@@ -91,10 +94,23 @@ class Worksheet extends React.Component {
 
     listCousubDropdown(event){
         let county = event.target.value;
-        if (event.target.value !== 'None'){
-            return this.props.falcor.get(['geo',[county],'cousubs'])
-                .then(response => response.json.geo[county].cousubs)
-                .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]))
+        if (event.target.value !== 'None') {
+            return this.props.falcor.get(['geo', county, 'cousubs'])
+                .then(response => {
+                    cousubsArray = response.json.geo[county].cousubs;
+                    return cousubsArray
+                })
+                .then(cousubsArray => {
+                    this.props.falcor.get(['geo', cousubsArray, ['name']])
+                        .then(names => {
+                            Object.keys(names.json.geo).filter(d => d !== '$__path').forEach((name, i) => {
+                                cousubsNames.push({
+                                    name: names.json.geo[name].name,
+                                    geoid: cousubsArray[i]
+                                })
+                            })
+                        })
+                })
         }
         else{
             return null
@@ -108,35 +124,35 @@ class Worksheet extends React.Component {
     };
 
     changeRadio = (id) => {
-        console.log(id,this.state)
+        console.log(id,this.state);
         this.setState({critical_facility: id});
     }
 
     onSubmit(event){
         event.preventDefault();
-        let args = []
+        let args = [];
         if(!this.props.match.params.worksheetId){
             Object.values(this.state).forEach(function(step_content){
                 args.push(step_content)
-            })
+            });
             return this.props.falcor.call(['actions', 'worksheet', 'insert'], args, [], [])
                 .then(response => {
                     this.props.sendSystemMessage(`Action worksheet was successfully created.`, {type: "success"});
                 })
         }else {
-
-            let attributes = Object.keys(this.state)
-            let updated_data ={}
-            let data = {}
+            let attributes = Object.keys(this.state);
+            let updated_data ={};
+            let data = {};
             Object.values(this.state).forEach(function(step_content){
                 args.push(step_content)
-            })
+            });
             Object.keys(this.state).forEach((d, i) => {
                 if (this.state[d] !== '') {
-                    console.log(data[d], d)
-                    updated_data[d] = this.state[d]
+                    console.log(data[d], d);
+                    updated_data[d] = this.state[d];
                 }
-            })
+            });
+
             return this.props.falcor.set({
                 paths: [
                     ['actions', 'worksheet', 'byId', [this.props.match.params.worksheetId], attributes]
@@ -159,19 +175,6 @@ class Worksheet extends React.Component {
     }
 
     render () {
-        let cousubsArray = [];
-        let cousubsNames = [];
-        if(this.props.cousubs !== undefined && this.state.county !== undefined && this.props.cousubs[this.state.county] !== undefined) {
-            this.props.cousubs[this.state.county].cousubs.value.forEach(cousub => {
-                    cousubsArray.push(cousub)
-            });
-            Object.keys(this.props.cousubs).forEach(item => {
-                if(this.props.cousubs[item].name !== undefined && item.slice(0,5)=== this.state.county && item.length >5){
-                    cousubsNames.push(this.props.cousubs[item].name)
-                }
-            })
-        }
-
         const wizardSteps = [
             {
                 title: (<span>
@@ -193,22 +196,22 @@ class Worksheet extends React.Component {
                                 <option className="form-control" key={0} value="None">No County selected</option>
                                 {
                                     counties.map((county,i) =>{
-                                    return(<option  className="form-control" key={i+1} value={county}>{countyNames[i]}</option>)
-                                })
+                                        return(<option  className="form-control" key={i+1} value={county}>{allCountyNames[i]}</option>)
+                                    })
                                 }
                             </select>
                         </div>
                     </div>
                     <div className="col-sm-12">
-                        {cousubsArray.length ?
+                        {cousubsNames.length ?
                             (
                                 <div className="form-group"><label htmlFor>Municipality</label>
                                     <select className="form-control justify-content-sm-end" id='cousub' onChange={this.handleChange} value={this.state.cousub}>
-
+                                        {this.listCousubDropdown}
                                         {
-                                            cousubsArray.map((cousub,i) =>{
-                                                if(cousub.slice(0,5) === this.state.county){
-                                                    return(<option className="form-control" key={i} value={cousub}>{cousubsNames[i]}</option>)
+                                            cousubsNames.map((cousub,i) =>{
+                                                if(cousub.geoid.slice(0,5) === this.state.county){
+                                                    return(<option className="form-control" key={i} value={cousub.geoid}>{cousub.name}</option>)
                                                 }
 
                                             })
@@ -390,9 +393,11 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => {
     return {
+        activePlan: state.user.activePlan,
+        geoid: state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-        cousubs: get(state.graph,'geo'),
+        cousubs: get(state.graph,'geo',{}),
 
     };
 };
