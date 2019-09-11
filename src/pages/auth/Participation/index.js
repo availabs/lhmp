@@ -10,6 +10,7 @@ import get from 'lodash.get'
 import pick from 'lodash.pick'
 
 const ATTRIBUTES = [
+       'id',
        'type', 
        'plan_id', 
        'owner_id', 
@@ -17,11 +18,13 @@ const ATTRIBUTES = [
        'end_date', 
        'hours', 
        'users', 
-       'roles', 
-       'id'
+       'roles'
 ]
 
-//let attributes = ATTRIBUTES.slice(0,3);
+
+const attributes = ['id', 'type',  'plan_id']
+      
+//let attributes = [ATTRIBUTES[0], ATTRIBUTES[1],ATTRIBUTES[8]]
 
 class ParticipationIndex extends React.Component {
 
@@ -80,7 +83,7 @@ class ParticipationIndex extends React.Component {
 
 
         if (this.props.planParticipation.byIndex !== undefined){
-            //let attributes = ATTRIBUTES.slice(0,4);
+            //let attributes = ATTRIBUTES[0], ATTRIBUTES[1,ATTRIBUTES[8]
             let data = []
 
            //let test = Object.values(this.props.planParticipation.byIndex)
@@ -92,7 +95,7 @@ class ParticipationIndex extends React.Component {
          // console.log('this.props.planParticipationData',this.props.planParticipationData)
 
             Object.values(this.props.planParticipationData).forEach(participation =>{
-                data.push(Object.values(pick(participation,...ATTRIBUTES)))
+                data.push(Object.values(pick(participation,...attributes)))
                
 /*
                   Object.values( this.props.planParticipationData).forEach(participation =>{
@@ -129,7 +132,7 @@ class ParticipationIndex extends React.Component {
                                                 <table className="table table lightBorder">
                                                     <thead>   
                                                     <tr>
-                                                    {ATTRIBUTES.map(function(participation,index){
+                                                    {attributes.map(function(participation,index){
                                                         return (
                                                             <th>{participation}</th>
                                                         )
@@ -148,7 +151,19 @@ class ParticipationIndex extends React.Component {
                                                                               )
                                                                           })
                                                                       }
-                                                                     
+                                                                     <td>
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/participation/edit/${item[0].value}` } >
+                                                            Edit
+                                                        </Link>
+                                                    </td>
+                                                    <td>
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/participation/view/${item[0].value}` }>
+                                                            View
+                                                        </Link>
+                                                    </td>
+                                                    
                                                                   </tr>
                                                               )
                                                           })

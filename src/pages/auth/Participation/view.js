@@ -8,61 +8,40 @@ import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick";
 
-
 const ATTRIBUTES = [
-    //'id',
-    'project_name',
-    'project_number',
-    'hazard_of_concern',
-    'problem_description',
-    'solution_description',
-    'critical_facility',
-    'protection_level',
-    'useful_life',
-    'estimated_cost',
-    'estimated_benefits',
-    'priority',
-    'estimated_implementation_time',
-    'organization_responsible',
-    'desired_implementation_time',
-    'funding_source',
-    'planning_mechanism',
-    'alternative_action_1',
-    'alternative_estimated_cost_1',
-    'alternative_evaluation_1',
-    'alternative_action_2',
-    'alternative_estimated_cost_2',
-    'alternative_evaluation_2',
-    'alternative_action_3',
-    'alternative_estimated_cost_3',
-    'alternative_evaluation_3',
-    'date_of_report',
-    'progress_report',
-    'updated_evaluation'
+       'id',
+       'type', 
+       'plan_id', 
+       'owner_id', 
+       'start_date', 
+       'end_date', 
+       'hours', 
+       'users', 
+       'roles'
 ]
 
-class ActionsIndex extends React.Component {
+class ParticipationIndex extends React.Component {
 
     constructor(props){
         super(props)
-
-        this.actionViewData = this.actionViewData.bind(this)
+        this.participationViewTable = this.participationViewTable.bind(this)
 
     }
 
     fetchFalcorDeps() {
 
-        return falcorGraph.get(['actions','worksheet','byId', [this.props.match.params.worksheetId], ATTRIBUTES])
+        return falcorGraph.get(['participation','byId', [this.props.match.params.Id], ATTRIBUTES])
             .then(response => {
+                console.log('response', response)
                 return response
             })
     }
 
-    actionViewData(){
+    participationViewTable(){
         let table_data = [];
         let data = [];
-        if(this.props.actionViewData[this.props.match.params.worksheetId] !== undefined){
-            let graph = this.props.actionViewData[this.props.match.params.worksheetId];
+        if(this.props.participationViewData[this.props.match.params.Id] !== undefined){
+            let graph = this.props.participationViewData[this.props.match.params.Id];
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
@@ -90,7 +69,7 @@ class ActionsIndex extends React.Component {
         return (
             <div className='container'>
                 <Element>
-                    <h6 className="element-header">Actions Worksheet</h6>
+                    <h6 className="element-header">Participation View</h6>
                     <div className="element-box">
                         <div className="table-responsive" >
                             <table className="table table lightBorder">
@@ -125,7 +104,7 @@ class ActionsIndex extends React.Component {
     render() {
         return(
             <div>
-                {this.actionViewData()}
+                {this.participationViewTable()}
             </div>
 
         )
@@ -136,7 +115,7 @@ class ActionsIndex extends React.Component {
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-    actionViewData : get(state.graph,'actions.worksheet.byId',{})
+    participationViewData : get(state.graph,['participation', 'byId'],{})
 });
 
 const mapDispatchToProps = {
@@ -145,14 +124,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/actions/worksheet/view/:worksheetId',
+        path: '/participation/view/:Id',
         exact: true,
-        name: 'Actions',
+        name: 'Participation',
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/worksheet/view/' },
-            { param: 'worksheetId', path: '/actions/worksheet/view/edit' }
+            { name: 'Participation', path: '/participation/view/' },
+            { param: 'Id', path: '/participation/view/' }
         ],
         menuSettings: {
             image: 'none',
@@ -161,6 +140,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(ActionsIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(ParticipationIndex)
     }
 ]
