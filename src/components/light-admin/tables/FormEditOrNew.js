@@ -51,6 +51,7 @@ class FormEditOrNew extends Component {
     }
 
     componentDidMount() {
+        this.setState({'associated_plan': parseInt(this.props.user.activePlan)});
         return this.props.falcor.get(
             ['geo', 36, 'counties']
         )
@@ -191,12 +192,12 @@ class FormEditOrNew extends Component {
         event.preventDefault();
         this.setState({isLoading: true});
         // get planId here so it calls falcor only once for it
-        return this.props.falcor.get(['plans', 'county', 'byGeoid', [this.state.contact_county], 'id']).then(
+        /*return this.props.falcor.get(['plans', 'county', 'byGeoid', [this.state.contact_county], 'id']).then(
             d => {
-                let plan_id = d.json.plans.county.byGeoid[this.state.contact_county].id;
-                if (plan_id) this.setState({'associated_plan': parseInt(plan_id)});
+                let plan_id = d.json.plans.county.byGeoid[this.state.contact_county].id;*/
+                /*let plan_id = parseInt(this.props.user.activePlan);
+                if (plan_id) this.setState({'associated_plan': plan_id});*/
                 let args = {};
-
                 this.props.match.params.roleid ?
                     COLS
                         .filter(f => f !== 'id')
@@ -237,7 +238,7 @@ class FormEditOrNew extends Component {
                             this.props.sendSystemMessage(`Role successfully added.`, {type: "success"});
                     })
                     )
-            });
+            //});
 
     };
 

@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -499,7 +496,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="no need to refresh" />
     <MESSAGE value="default geo from auth plan" />
     <MESSAGE value="signup wizard" />
     <MESSAGE value="user page" />
@@ -524,7 +520,8 @@
     <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
     <MESSAGE value="stickyroll on all pages" />
     <MESSAGE value="roles table update: view cols and scroll on sticky roll" />
-    <option name="LAST_COMMIT_MESSAGE" value="roles table update: view cols and scroll on sticky roll" />
+    <MESSAGE value="roles form update: municipality to jurisdiction; email optional while adding new role; additional options: county, state, federal available for jurisdiction" />
+    <option name="LAST_COMMIT_MESSAGE" value="roles form update: municipality to jurisdiction; email optional while adding new role; additional options: county, state, federal available for jurisdiction" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

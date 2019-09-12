@@ -49,7 +49,7 @@ class Signup extends React.Component {
             redirectToReferrer: false
         };
         this.handleChange = this.handleChange.bind(this);
-        this.listCousubDropdown = this.listCousubDropdown.bind(this);
+        //this.listCousubDropdown = this.listCousubDropdown.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -82,6 +82,24 @@ class Signup extends React.Component {
                                     return tmpObj;
                                 });
                         this.setState({'countyList': geoList});
+                        this.setState({'contact_county':this.props.user.activeGeoid});
+                        // jurisdiction code
+                        this.props.falcor.get(['geo', [this.props.user.activeGeoid], 'cousubs'])
+                            .then(response => response.json.geo[this.props.user.activeGeoid].cousubs)
+                            .then(cousubs => this.props.falcor.get(['geo', cousubs, ['name']]))
+                            .then(cousubs => {
+                                let geoList =
+                                    Object.keys(cousubs.json.geo)
+                                        .filter(f => f !== '$__path')
+                                        .map(geoid => {
+                                            let tmpObj = {};
+                                            tmpObj['id'] = geoid;
+                                            tmpObj['name'] = cousubs.json.geo[geoid].name;
+                                            return tmpObj;
+                                        });
+                                this.setState({'cousubList': geoList});
+                                return cousubs.json.geo
+                            })
                         return countyNames.json.geo
                     })
                     .then(d => {
@@ -193,7 +211,7 @@ class Signup extends React.Component {
         });
     };
 
-    listCousubDropdown(event) {
+/*    listCousubDropdown(event) {
         let county = event.target.value;
         if (county !== 'None') {
             return this.props.falcor.get(['geo', [county], 'cousubs'])
@@ -215,7 +233,7 @@ class Signup extends React.Component {
         } else {
             return null
         }
-    }
+    }*/
 
     handleSubmit(event) {
         event.preventDefault();
@@ -309,16 +327,17 @@ class Signup extends React.Component {
                                     className="form-control"
                                     id='contact_county'
                                     required="required"
+                                    disabled
                                     data-error="Please select county"
                                     onChange={this.handleChange}
-                                    onClick={this.listCousubDropdown}
+                                    //onClick={this.listCousubDropdown}
                                     placeholder="County"
                                     value={this.state.contact_county}>
-                                    <option default value={''}>--Select County--</option>
-                                    {this.state.countyList.map((county, county_i) => {
-                                        return (<option className="form-control" key={county_i + 1}
-                                                        value={county.id}> {county.name} </option>)
-                                    })}
+                                    {this.state.countyList.map((county, county_i) =>
+                                        county.id === this.props.user.activeGeoid ?
+                                        <option className="form-control" key={county_i + 1}
+                                                        value={county.id}> {county.name} </option> : ''
+                                    )}
                                 </select>
                                 <div className="help-block form-text with-errors form-control-feedback"></div>
                             </div>
@@ -326,7 +345,7 @@ class Signup extends React.Component {
 
                         <div className="col-sm-12">
                             <div className="form-group"
-                                 style={{display: "none"}}
+                                 style={{display: "block"}}
                             ><label htmlFor={'contact_municipality'}> Jurisdiction <small>(optional)</small></label>
                                 <select
                                     id='contact_municipality'
