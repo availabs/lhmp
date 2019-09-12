@@ -1,6 +1,7 @@
 const config = {
     'Elevated Risk Profiles' : [
         {
+            title: 'Elevated Risk Profiles',
             requirement: 'Req-B-1D',
             type: 'unknown',
             prompt: 'Identify which hazard risks are most significant and which jurisdictions or locations are most' +
@@ -11,6 +12,7 @@ const config = {
                 ' jurisdictions or locations are most adversely affected.'
         },
         {
+            title: 'Hazard Impact Narrative (based on Hazard Risk Data/Visualizations)',
             requirement: 'Req-B-3A',
             type: 'content',
             prompt: 'Narrative to Contextualize Hazard Data (related to visualizations in previous sub-element)',
@@ -22,6 +24,7 @@ const config = {
                 ' of potential future losses (such as percent damage of total exposure).'
         },
         {
+            title: 'Jurisdictional Vulnerability Narrative (based on Hazard Risk and Capabilities Data/Visualizations)',
             requirement: 'Req-B-3B-1',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
@@ -34,6 +37,7 @@ const config = {
                 ' and that will be addressed in the mitigation strategy.'
         },
         {
+            title: 'Jurisdictional Vulnerability Inventory',
             requirement: 'Req-B-3B-2',
             type: 'table',
             prompt: 'structures, systems, populations, or other community assets that are susceptible to damage or hazard events.',
@@ -48,30 +52,35 @@ const config = {
         ],
     Assets: [
         {
+            title: 'Critical Facilities 500 year flood event',
             requirement: 'Req-NYS-F-2',
             type: 'table',
             prompt: '',
             intent: ''
         },
         {
+            title: 'Potential Sites for Temporary Housing Units',
             requirement: 'Req-NYS-F-3A',
             type: '',
             prompt: '',
             intent: ''
         },
         {
+            title: 'Potential Relocation Zones',
             requirement: 'Req-NYS-F-3B',
             type: '',
             prompt: '',
             intent: ''
         },
         {
+            title: 'Evacuation Routes and Procedures',
             requirement: 'Req-NYS-F-4A',
             type: '',
             prompt: '',
             intent: ''
         },
         {
+            title: 'Shelters for evacuated citizens with a range of medical needs, plan for pets, and compliance with ADA',
             requirement: 'Req-NYS-F-4B',
             type: '',
             prompt: '',
@@ -80,6 +89,7 @@ const config = {
     ],
     'Changes in Development' : [
         {
+            title: 'Changes in Development A',
             requirement: 'Req-D-1A',
             type: 'content',
             prompt: 'The plan must describe changes in development that have occurred in hazard prone areas and increased' +
@@ -91,12 +101,14 @@ const config = {
                 ' vulnerability of the community.'
         },
         {
+            title: 'Changes in Development B',
             requirement: 'Req-D-1B',
             type: 'form',
             prompt: '',
             intent: ''
         },
         {
+            title: 'Changes in Development C',
             requirement: 'Req-D-1C',
             type: 'map?',
             prompt: '',

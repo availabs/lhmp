@@ -5,6 +5,8 @@ import Menu from 'components/light-admin/menu'
 import BreadcrumbBar from 'components/light-admin/breadcrumb-bar'
 import ContentContainer from 'components/light-admin/containers/ContentContainer'
 import LoadingPage from "components/loading/loadingPage"
+import CSS_CONFIG from 'pages/auth/css-config'
+
 
 const DefaultLayout = ({component: Component, ...rest}) => {
     if (rest.isAuthenticating) {
@@ -23,15 +25,15 @@ const DefaultLayout = ({component: Component, ...rest}) => {
 
     console.log('rest', rest);
     let contentStyle = {width: '100%'};
-    if (rest.menuSettings.position === 'menu-position-side') {
-        contentStyle.marginLeft = 260;
+    if (rest.menuSettings.position === 'menu-position-side' || rest.menuSettings.position === 'menu-position-left') {
+        contentStyle.marginLeft = CSS_CONFIG.mainMenuWidth;
         if (rest.menuSettings.layout === 'menu-layout-compact') {
-            contentStyle.marginLeft = 160
+            contentStyle.marginLeft = CSS_CONFIG.mainMenuWidth
         } else if (rest.menuSettings.layout === 'menu-layout-mini') {
             contentStyle.marginLeft = 60
         }
     }
-
+    console.log('rest: contentStyle', contentStyle)
     return checkAuth(rest) ?
         (
             <Redirect

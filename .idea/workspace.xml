@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +42,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
@@ -71,6 +76,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/pages" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -119,14 +125,7 @@
       <workItem from="1564261312467" duration="47115000" />
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
-      <workItem from="1566414947890" duration="198051000" />
-    </task>
-    <task id="LOCAL-00015" summary="updates">
-      <created>1562084924841</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1562084924841</updated>
+      <workItem from="1566414947890" duration="238216000" />
     </task>
     <task id="LOCAL-00016" summary="updates">
       <created>1562085029540</created>
@@ -464,7 +463,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567798816418</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="stickyroll in admin-about: progress bar done. next up: req nav">
+      <created>1567804466141</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1567804466141</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -493,11 +499,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table working" />
-    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
-    <MESSAGE value=" Building By Land Use Table updates" />
-    <MESSAGE value="updates" />
-    <MESSAGE value="historic" />
     <MESSAGE value="no need to refresh" />
     <MESSAGE value="default geo from auth plan" />
     <MESSAGE value="signup wizard" />
@@ -518,7 +519,12 @@
     <MESSAGE value="hazard page for state: chunked requests; on signup email link values passed by county" />
     <MESSAGE value="req A-1C: roles editor/viewer" />
     <MESSAGE value="stickyroll in admin-about" />
-    <option name="LAST_COMMIT_MESSAGE" value="stickyroll in admin-about" />
+    <MESSAGE value="stickyroll in admin-about: progress bar done. next up: req nav" />
+    <MESSAGE value="stickyroll in admin-about: nav done, contentEditor bug fixed" />
+    <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
+    <MESSAGE value="stickyroll on all pages" />
+    <MESSAGE value="roles table update: view cols and scroll on sticky roll" />
+    <option name="LAST_COMMIT_MESSAGE" value="roles table update: view cols and scroll on sticky roll" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">
