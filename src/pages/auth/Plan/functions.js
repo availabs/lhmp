@@ -5,12 +5,12 @@ import {Stickyroll} from '@stickyroll/stickyroll';
 import {Pagers} from "@stickyroll/pagers";
 import CSS_CONFIG from 'pages/auth/css-config'
 
-const renderReqNav = function(allRequirenments){
+const renderReqNav = function(allRequirenments, pageIndex){
     return (
         <ul className='ae-main-menu '>
             {
                 allRequirenments.map((f, f_i) =>
-                    <li><a href={'#' + (parseInt(f_i) + 1)}>
+                    <li className={f_i === pageIndex ? 'active' : ''}><a href={'#' + (parseInt(f_i) + 1)}>
                         <span style={{marginLeft: 0, 'word-break': 'break-word'}}>{f}</span>
                     </a></li>
                 )
@@ -101,7 +101,7 @@ const render = function(config, user){
                                         display: 'block',
                                         overflow: 'scroll',
                                     }}>
-                                    {this.renderReqNav(allRequirenments)}
+                                    {this.renderReqNav(allRequirenments, pageIndex)}
                                 </div>
 
                                 <div
