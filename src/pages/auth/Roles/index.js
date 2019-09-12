@@ -142,7 +142,7 @@ class RolesIndex extends React.Component {
                 <tr>
                     {attributes.map(function(role,index){
                         return (
-                            <th>{role}</th>
+                            <th>{role === 'contact_municipality' ? 'Jurisdiction' : role}</th>
                         )
                     })
                     }
@@ -205,7 +205,7 @@ class RolesIndex extends React.Component {
                     {tableData.map((data,data_i) =>{
                         return (
                             <tr>
-                                <td>{COLS[data_i]}</td>
+                                <td>{COLS[data_i] === 'contact_municipality' ? 'Jurisdiction' : COLS[data_i]}</td>
                                 <td>{data}</td>
                             </tr>
                         )

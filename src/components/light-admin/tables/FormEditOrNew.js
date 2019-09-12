@@ -174,8 +174,8 @@ class FormEditOrNew extends Component {
     }
 
     static validateForm () {
-         let cond1 =  (document.getElementById('contact_email'))
-             && (document.getElementById('contact_email').value.length > 0);
+        /* let cond1 =  (document.getElementById('contact_email'))
+             && (document.getElementById('contact_email').value.length > 0);*/
 
          let cond2 = (document.getElementById('contact_county') &&
              document.getElementById('contact_title_role'))
@@ -184,7 +184,7 @@ class FormEditOrNew extends Component {
 
          let cond3 = (document.getElementById('contact_name')) && (document.getElementById('contact_name').value.length > 0)
 
-        return cond1 && cond2 && cond3
+        return cond2 && cond3
     }
 
     handleSubmit(event) {
@@ -258,12 +258,11 @@ class FormEditOrNew extends Component {
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="form-group">
-                                <label htmlFor={'contact_email'}> Email</label>
+                                <label htmlFor={'contact_email'}> Email <small>(optional)</small></label>
                                 <input
                                     className="form-control"
                                     autoFocus
                                     id='contact_email'
-                                    required
                                     data-error="Your email address is invalid"
                                     type="email"
                                     onChange={this.handleChange}
@@ -301,16 +300,19 @@ class FormEditOrNew extends Component {
                         <div className="col-sm-12">
                             <div className="form-group"
                                  style={{display: this.displayMunicipality()}}
-                            ><label htmlFor={'contact_municipality'}> Municipality <small>(optional)</small></label>
+                            ><label htmlFor={'contact_municipality'}> Jurisdiction <small>(optional)</small></label>
                                 <select
                                     id='contact_municipality'
                                     onChange={this.handleChange}
                                     className="form-control"
                                     placeholder="Municipality"
                                     value={this.state.contact_municipality}>
-                                    <option default value={''}>--Select Municipality--</option>
+                                    <option default value={''} key={ 0 }>--Select Municipality--</option>
+                                    <option value={'county'} key={ 1 }> County </option>
+                                    <option value={'state'} key={ 2 }> State </option>
+                                    <option value={'federal'} key={ 3 }> Federal </option>
                                     {this.state.cousubList.map((cousub, cousub_i) => {
-                                        return (<option className="form-control" key={cousub_i + 1}
+                                        return (<option className="form-control" key={cousub_i + 4}
                                                         value={cousub.id}> {cousub.name} </option>)
                                     })}
                                 </select>

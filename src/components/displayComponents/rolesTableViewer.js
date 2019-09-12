@@ -88,7 +88,7 @@ class rolesTableViewer extends Component {
                 <tr>
                     {attributes.map(function(role,index){
                         return (
-                            <th>{role}</th>
+                            <th>{role === 'contact_municipality' ? 'Jurisdiction' : role}</th>
                         )
                     })
                     }
@@ -118,7 +118,7 @@ class rolesTableViewer extends Component {
             <div className='container'>
                 <Element>
                     <h6 className="element-header">Roles : {this.props.activePlan}</h6>
-                    <div className="element-box" style={{'overflow': 'scroll', 'height': '80vh'}}>
+                    <div className="element-box" style={{'overflow': 'scroll', 'maxHeight': '80vh'}}>
                         <div className="table-responsive" >
                             {this.renderMainTable()}
                         </div>
