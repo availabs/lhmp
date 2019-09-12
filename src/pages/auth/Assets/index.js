@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
+import AssetsPageEditor from 'components/displayComponents/assetsPageEditor'
 import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
 import BuildingByOwnerTypeTable from 'pages/auth/Assets/components/BuildingByOwnerTypeTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
@@ -229,34 +230,22 @@ class AssetsIndex extends React.Component {
               {/*<div className='content-i'>
                 <div className='content-box'>*/}
                   <h4 className="element-header">Assets For {this.renderMenu()}</h4>
-                  <div className="os-tabs-w mx-4">
-                    <div className="os-tabs-controls">
-                      <ul className="nav nav-tabs upper">
-                        <li className="nav-item">
-                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">ALL</a>
-                        </li>
-                        <li className="nav-item">
-                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">Critical Infrastructure</a>
-                        </li>
-                        <li className="nav-item">
-                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">Municipal</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
                   <div className="row">
-                    <div className="col-7">
+                    <div className="col-12">
                       <div className='element-wrapper'>
-                        <div className='element-box' style={{height:'2800px'}}>
-                          <span><h4>{this.state.geoid} : Assets Table</h4></span>
-                          {this.state.geoid
-                              ? <AssetsTable geoid={[this.state.geoid]}/>
-                              : ''
-                          }
+                        <div>
+                          <AssetsPageEditor filter_type={'propType'} filter_value={['210', '211']} geoid={[this.props.activeGeoid]}/>
                         </div>
+                          {/*
+                          <div className='element-box' style={{height:'2800px'}}>
+                              <span><h4>{this.state.geoid} : Assets Table</h4></span>
+                              {this.state.geoid
+                                  ? <AssetsTable geoid={[this.state.geoid]}/>
+                                  : ''
+                              }
+                          </div>
+                          */}
                       </div>
-                    </div>
-                    <div className='col-sm-6 d-xxl-16'>
                       <div className='element-wrapper'>
                         <div className='element-box'>
                         <h4>Buildings By Owner Type</h4>
@@ -320,7 +309,8 @@ const mapStateToProps = state => ({
 
   isAuthenticated: !!state.user.authed,
   activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
-  data: get(state.graph,'geo')
+  data: get(state.graph,'geo'),
+  activeGeoid: state.user.activeGeoid
 });
 
 const mapDispatchToProps = ({
