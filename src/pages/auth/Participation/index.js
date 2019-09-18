@@ -22,10 +22,6 @@ const ATTRIBUTES = [
 ]
 
 
-const attributes = ['id', 'type',  'plan_id']
-      
-//let attributes = [ATTRIBUTES[0], ATTRIBUTES[1],ATTRIBUTES[8]]
-
 class ParticipationIndex extends React.Component {
 
     constructor(props){
@@ -44,6 +40,7 @@ class ParticipationIndex extends React.Component {
               if (!this.props.activePlan) {
                   return Promise.resolve({})
                  }
+
         return falcorGraph.get(['participation','byPlan', [this.props.activePlan],'length'])
             .then(response =>{
 
@@ -83,16 +80,17 @@ class ParticipationIndex extends React.Component {
 
 
         if (this.props.planParticipation.byIndex !== undefined){
-            //let attributes = ATTRIBUTES[0], ATTRIBUTES[1,ATTRIBUTES[8]
+            
             let data = []
+            let attributes = ATTRIBUTES.slice(0,3)
 
-           //let test = Object.values(this.props.planParticipation.byIndex)
-          // console.log('this.props.planParticipation.byIndex_1',test)
+         /*  let test = Object.values(this.props.planParticipation.byIndex)
+           console.log('this.props.planParticipation.byIndex_1',test)
 
-         // console.log ('this.props.planParticipation', this.props.planParticipation )
+           console.log ('this.props.planParticipation', this.props.planParticipation )
 
-         // console.log('this.props.planParticipation.byIndex',this.props.planParticipation.byIndex )
-         // console.log('this.props.planParticipationData',this.props.planParticipationData)
+           console.log('this.props.planParticipation.byIndex',this.props.planParticipation.byIndex )
+           console.log('this.props.planParticipationData',this.props.planParticipationData)*/
 
             Object.values(this.props.planParticipationData).forEach(participation =>{
                 data.push(Object.values(pick(participation,...attributes)))
@@ -111,21 +109,20 @@ class ParticipationIndex extends React.Component {
                             <Element>
                                 <h4 className="element-header">Participation
                                     <span style={{float:'right'}}>
-                                        
-                                        
-                                        <button 
-                                            disabled
-                                            className="btn btn-sm btn-disabled"
-                                            >
-                                                Create New Item
-                                        </button>
+                                <Link
+                                    className="btn btn-sm btn-primary"
+                                    to={ `/participation/new` } >
+                                        Create New Participation
+                                </Link>
                                     </span>
                                 </h4>
                                 <div className="element-box">
 
-                                    {this.props.userId}
+                                  user ID: {this.props.userId}
+                                    
                                     <br />
-                                    length: {this.props.planParticipation.length}
+
+                                 {/*  length: {this.props.planParticipation.length}*/}
 
 
                                  <div className="table-responsive" >
@@ -242,7 +239,7 @@ export default [
         exact: true,
         name: 'Participation',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-tasks-checked',
         breadcrumbs: [
             { name: 'Participation', path: '/participation/' }

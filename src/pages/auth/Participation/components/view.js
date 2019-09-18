@@ -32,8 +32,8 @@ class ParticipationIndex extends React.Component {
 
         return falcorGraph.get(['participation','byId', [this.props.match.params.Id], ATTRIBUTES])
             .then(response => {
-                console.log('response', response)
                 return response
+
             })
     }
 
@@ -42,6 +42,7 @@ class ParticipationIndex extends React.Component {
         let data = [];
         if(this.props.participationViewData[this.props.match.params.Id] !== undefined){
             let graph = this.props.participationViewData[this.props.match.params.Id];
+          
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
@@ -115,12 +116,14 @@ class ParticipationIndex extends React.Component {
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-    participationViewData : get(state.graph,['participation', 'byId'],{})
+    participationViewData : get(state.graph,['participation','byId'],{})
 });
+
 
 const mapDispatchToProps = {
     sendSystemMessage
 };
+
 
 export default [
     {
@@ -130,7 +133,7 @@ export default [
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Participation', path: '/participation/view/' },
+            { name: 'Participation', path: '/participation/' },
             { param: 'Id', path: '/participation/view/' }
         ],
         menuSettings: {
