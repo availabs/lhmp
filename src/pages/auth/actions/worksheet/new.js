@@ -81,10 +81,21 @@ class Worksheet extends React.Component {
                 .then(response =>{
                     Object.keys(this.state).forEach((key,i)=>{
                         let tmp_state = {};
-                        tmp_state[key] = response.json.actions.worksheet.byId[this.props.match.params.worksheetId][key];
-                        this.setState(
-                            tmp_state
-                        )
+                        if(key === 'date_of_report'){
+                            var d = response.json.actions.worksheet.byId[this.props.match.params.worksheetId][key].slice(0, 10).split('-');
+                            let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                            tmp_state[key] = date
+                            this.setState(
+                                tmp_state
+                            )
+                        }
+                        else{
+                            tmp_state[key] = response.json.actions.worksheet.byId[this.props.match.params.worksheetId][key];
+                            this.setState(
+                                tmp_state
+                            )
+                        }
+
                     });
 
                 })
@@ -147,10 +158,10 @@ class Worksheet extends React.Component {
                 args.push(step_content)
             });
             Object.keys(this.state).forEach((d, i) => {
-                if (this.state[d] !== '') {
+                //if (this.state[d] !== '') {
                     console.log(data[d], d);
                     updated_data[d] = this.state[d];
-                }
+                //}
             });
 
             return this.props.falcor.set({

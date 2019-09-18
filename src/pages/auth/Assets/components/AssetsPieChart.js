@@ -14,7 +14,7 @@ class AssetsPieChart extends React.Component{
 
     fetchFalcorDeps(){
         //console.log('geoid in fetch',this.props.geoid)
-        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'owner',buildingOwners,'sum',['count','replacement_value']])
+        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,'sum',['count','replacement_value']])
         .then(response => {
             return response
         })
@@ -27,62 +27,60 @@ class AssetsPieChart extends React.Component{
         let geoid = this.props.geoid.map((geoid) => geoid);
         if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.replacement_value){
             let pieData = [];
-                Object.keys(this.props.data[geoid]).forEach((item,i)=>{
-                    if(this.props.data[geoid].owner !== undefined && item === 'owner'){
-                        buildingOwners.map((ownerType,j) =>{
-                            pieData.push({
-                                'id': ownerType,
-                                'label':buildingOwnersLabel[j],
-                                'value': parseFloat(this.props.data[geoid].owner[ownerType].sum.replacement_value.value),
-                                'color':colors[j]
-                            })
-                        })
+            if (Object.keys(this.props.data[geoid].ownerType).length === buildingOwners.length){
+                let graph = this.props.data[geoid].ownerType;
+                Object.keys(graph).forEach((item,j) =>{
+                    pieData.push({
+                        'id': item,
+                        'label':buildingOwnersLabel[j],
+                        'value': parseFloat(graph[item].sum.replacement_value.value)|| 0,
+                        'color':colors[j]
+                    })
+                })
+            }
 
-                    }
-
-                });
-                const style={
-                    height:200,
-                };
-                return(
-                    <div style={style}>
-                        <ResponsivePie
-                            data={pieData}
-                            width={200}
-                            height={200}
-                            margin={{
-                                "top": 0,
-                                "right": 10,
-                                "bottom": 0,
-                                "left": 10
-                            }}
-                            pixelRatio={1.2999999523162842}
-                            sortByValue={false}
-                            innerRadius={0.5}
-                            padAngle={0.7}
-                            cornerRadius={3}
-                            colors= {pieData.map((value) => value.color)}
-                            borderColor="inherit:darker(0.6)"
-                            radialLabel="value"
-                            enableRadialLabels ={false}
-                            radialLabelsSkipAngle={0}
-                            radialLabelsTextXOffset={6}
-                            radialLabelsTextColor="#333333"
-                            radialLabelsLinkOffset={-14}
-                            radialLabelsLinkDiagonalLength={36}
-                            radialLabelsLinkHorizontalLength={30}
-                            radialLabelsLinkStrokeWidth={1}
-                            radialLabelsLinkColor="inherit"
-                            slicesLabelsSkipAngle={10}
-                            enableSlicesLabels={false}
-                            slicesLabelsTextColor="#333333"
-                            animate={true}
-                            motionStiffness={90}
-                            motionDamping={15}
-                            tooltipFormat={value => '$'+`${Math.abs(value)}`}
-                        />
-                    </div>
-                )
+            const style={
+                height:200,
+            };
+            return(
+                <div style={style}>
+                    <ResponsivePie
+                        data={pieData}
+                        width={200}
+                        height={200}
+                        margin={{
+                            "top": 0,
+                            "right": 10,
+                            "bottom": 0,
+                            "left": 10
+                        }}
+                        pixelRatio={1.2999999523162842}
+                        sortByValue={false}
+                        innerRadius={0.5}
+                        padAngle={0.7}
+                        cornerRadius={3}
+                        colors= {pieData.map((value) => value.color)}
+                        borderColor="inherit:darker(0.6)"
+                        radialLabel="value"
+                        enableRadialLabels ={false}
+                        radialLabelsSkipAngle={0}
+                        radialLabelsTextXOffset={6}
+                        radialLabelsTextColor="#333333"
+                        radialLabelsLinkOffset={-14}
+                        radialLabelsLinkDiagonalLength={36}
+                        radialLabelsLinkHorizontalLength={30}
+                        radialLabelsLinkStrokeWidth={1}
+                        radialLabelsLinkColor="inherit"
+                        slicesLabelsSkipAngle={10}
+                        enableSlicesLabels={false}
+                        slicesLabelsTextColor="#333333"
+                        animate={true}
+                        motionStiffness={90}
+                        motionDamping={15}
+                        tooltipFormat={value => '$'+`${Math.abs(value)}`}
+                    />
+                </div>
+            )
 
 
         }

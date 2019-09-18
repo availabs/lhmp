@@ -8,7 +8,8 @@ import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
-import AssetsPageEditor from 'components/displayComponents/assetsPageEditor'
+import AssetsPagePropTypeEditor from 'components/displayComponents/assetsPagePropTypeEditor'
+import AssetsPageOwnerTypeEditor from 'components/displayComponents/assetsPageOwnerTypeEditor'
 import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
 import BuildingByOwnerTypeTable from 'pages/auth/Assets/components/BuildingByOwnerTypeTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
@@ -33,6 +34,7 @@ const HeaderSelect = styled.select`
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }`
 let countyValue = [];
+//http://albany.localhost:3000/assets/list/:type/:typeIds/hazard/:hazardIds
 const buildingOwnerType = [
   {
     'id':'1',
@@ -133,7 +135,8 @@ class AssetsIndex extends React.Component {
           })
     }
 
-  }  componentDidUpdate(prevProps,oldState){
+  }
+  componentDidUpdate(prevProps,oldState){
     if(this.props.activePlan && !this.state.geoid){
       return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
         .then(response => {
@@ -225,17 +228,16 @@ class AssetsIndex extends React.Component {
   render () {
     return (
       <div className='container'>
-
             <Element>
               {/*<div className='content-i'>
                 <div className='content-box'>*/}
                   <h4 className="element-header">Assets For {this.renderMenu()}</h4>
                   <div className="row">
                     <div className="col-12">
-                      <div className='element-wrapper'>
-                        <div>
-                          <AssetsPageEditor filter_type={'propType'} filter_value={['210', '211']} geoid={[this.props.activeGeoid]}/>
-                        </div>
+                          <AssetsPagePropTypeEditor filter_type={'propType'} filter_value={['210', '220','283']} geoid={[this.props.activeGeoid]}/>
+                          <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['2']} geoid={[this.props.activeGeoid]} title={'State owned Assets'}/>
+                          <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['3']} geoid={[this.props.activeGeoid]} title={'County owned Assets'}/>
+                          <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['4','5','6','7']} geoid={[this.props.activeGeoid]} title={'Municipality Owned Assets'}/>
                           {/*
                           <div className='element-box' style={{height:'2800px'}}>
                               <span><h4>{this.state.geoid} : Assets Table</h4></span>
@@ -245,7 +247,6 @@ class AssetsIndex extends React.Component {
                               }
                           </div>
                           */}
-                      </div>
                       <div className='element-wrapper'>
                         <div className='element-box'>
                         <h4>Buildings By Owner Type</h4>
