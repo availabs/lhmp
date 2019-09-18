@@ -70,7 +70,7 @@ const AccordionContainer = styled.div`
   position: relative;
   width: 100%;
   transition: height 0.5s;
-  background-color: #303336;
+  background-color: ${ props => props.theme.sidePanelHeaderBg };
 `
 const AccordionOption = styled.div`
   background-color: ${ props => props.theme.sidePanelBg };
@@ -92,7 +92,7 @@ const AccordionOption = styled.div`
   }
 
   :hover {
-    background-color: #273033;
+    background-color: ${ props => props.theme.sidePanelBg };
     color: ${ props => props.theme.textColorHl };
   }
 

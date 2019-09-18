@@ -21,6 +21,7 @@
 import React from 'react';
 import ItemSelector from '../common/item-selector/item-selector';
 import {PanelLabel} from '../common/styled-components';
+import theme from 'components/common/themes/light1';
 
 const MultiSelectFilter = ({filter, setFilter}) => (
   <div>
@@ -35,6 +36,7 @@ const MultiSelectFilter = ({filter, setFilter}) => (
       getOptionValue={d => d.value ? d.value : d}
       onChange={setFilter}
       inputTheme="secondary"
+      theme={theme}
     />
   </div>
 );

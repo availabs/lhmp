@@ -17,6 +17,10 @@ import Home from 'pages/auth/Home';
 import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
+import ActionsProjectIndex from 'pages/auth/actions/project'
+import ActionsProjectView from 'pages/auth/actions/project/view'
+import ActionsProjectUpload from 'pages/auth/actions/project/upload'
+import ActionProject from 'pages/auth/actions/project/new'
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
@@ -59,6 +63,10 @@ const routes = [
    ...ActionWorksheet,
    ...ActionsIndex,
    ...ActionsView,
+   ...ActionProject,
+   ...ActionsProjectIndex,
+   ...ActionsProjectView,
+   ...ActionsProjectUpload,
    ...Plans,
    ...Plan,
    ...AdminAbout,

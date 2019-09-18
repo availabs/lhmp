@@ -2,24 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/css-config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/themes/light1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/upload.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Landing/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Landing/SignUp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/config/about-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/about-config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/config/risk-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/risk-config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/config/strategies-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/strategies-config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/modal/MapModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/modal/MapModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff/AccordionSelector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff/AccordionSelector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/PlanningTools/planning-submenus.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/PlanningTools/planning-submenus.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +53,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
@@ -137,6 +137,8 @@
       <workItem from="1566414615129" duration="65000" />
       <workItem from="1566414836375" duration="96000" />
       <workItem from="1566414947890" duration="238216000" />
+      <workItem from="1568395712452" duration="52205000" />
+      <workItem from="1568820399996" duration="13446000" />
     </task>
     <task id="LOCAL-00016" summary="updates">
       <created>1562085029540</created>
@@ -510,13 +512,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Building By Land Use Type Pie chart and Building By Land Use Table updates" />
-    <MESSAGE value=" Building By Land Use Table updates" />
-    <MESSAGE value="updates" />
-    <MESSAGE value="historic" />
-    <MESSAGE value="no need to refresh" />
-    <MESSAGE value="default geo from auth plan" />
-    <MESSAGE value="signup wizard" />
     <MESSAGE value="user page" />
     <MESSAGE value="signup form toggle on success" />
     <MESSAGE value="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed" />
@@ -535,7 +530,14 @@
     <MESSAGE value="req A-1C: roles editor/viewer" />
     <MESSAGE value="stickyroll in admin-about" />
     <MESSAGE value="stickyroll in admin-about: progress bar done. next up: req nav" />
-    <option name="LAST_COMMIT_MESSAGE" value="stickyroll in admin-about: progress bar done. next up: req nav" />
+    <MESSAGE value="stickyroll in admin-about: nav done, contentEditor bug fixed" />
+    <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
+    <MESSAGE value="stickyroll on all pages" />
+    <MESSAGE value="roles table update: view cols and scroll on sticky roll" />
+    <MESSAGE value="roles form update: municipality to jurisdiction; email optional while adding new role; additional options: county, state, federal available for jurisdiction" />
+    <MESSAGE value="planid based on subdomain" />
+    <MESSAGE value="nav highlight + menu width" />
+    <option name="LAST_COMMIT_MESSAGE" value="nav highlight + menu width" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

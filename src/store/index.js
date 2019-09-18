@@ -3,7 +3,6 @@ import { routerReducer, routerMiddleware } from 'react-router-redux'
 import { reducer as graph } from 'utils/redux-falcor';
 //import { AvlInTheMiddle } from 'components/AvlMap/ReduxMiddleware.js'
 
-import { AvlInTheMiddle } from "components/AvlMap/ReduxMiddleware"
 
 import user from './modules/user'
 

@@ -46,6 +46,15 @@ const COLS = [
     "associated_plan"
 ]
 
+const COLS_TO_DISPLAY = [
+    "id",
+    "contact_title_role",
+    "contact_department",
+    "contact_agency",
+    "contact_municipality",
+    "contact_county",
+]
+
 class RolesIndex extends React.Component {
 
     constructor(props){
@@ -119,11 +128,12 @@ class RolesIndex extends React.Component {
 
     renderMainTable() {
         let table_data = [];
-        let attributes = COLS.slice(0,4)
+        let attributes = COLS_TO_DISPLAY
         console.log('final data', this.state.role_data)
         this.state.role_data.map(function (each_row) {
             console.log('each row: ',each_row)
-            table_data.push([].concat(each_row.data.slice(1,5)))
+            table_data.push([].concat(attributes.map(f => {
+                return each_row.data[ COLS.indexOf(f) + 1 ]} )))
         })
 
         return table_data.length > 0 ?(
@@ -132,7 +142,7 @@ class RolesIndex extends React.Component {
                 <tr>
                     {attributes.map(function(role,index){
                         return (
-                            <th>{role}</th>
+                            <th>{role === 'contact_municipality' ? 'Jurisdiction' : role}</th>
                         )
                     })
                     }
@@ -195,7 +205,7 @@ class RolesIndex extends React.Component {
                     {tableData.map((data,data_i) =>{
                         return (
                             <tr>
-                                <td>{COLS[data_i]}</td>
+                                <td>{COLS[data_i] === 'contact_municipality' ? 'Jurisdiction' : COLS[data_i]}</td>
                                 <td>{data}</td>
                             </tr>
                         )
