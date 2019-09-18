@@ -7,7 +7,6 @@ import participation from '../Participation'
 
 let submenu = [
     ...actions,
-    ...actionsProject,
     ...assets,
     ...capabilities,
     ...participation,
