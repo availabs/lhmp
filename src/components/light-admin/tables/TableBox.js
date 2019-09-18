@@ -124,7 +124,6 @@ toggleFilterColumn(column, value) {
           const filterColumns = this.props.filterColumns.map(column =>
               ({ column, values: this.getFilterValues(column) }));
           const tableLink = this.props.tableLink ? <a href={ this.props.tableLink }>{ this.props.tableLinkLabel }</a> : null;
-          const loading = this.state.loading ? <div>Loading...</div> : <div></div>;
               return (
                   <ElementBox title={this.props.title} desc={this.props.desc || tableLink}>
                       { !this.props.showControls ? null :
@@ -163,7 +162,7 @@ toggleFilterColumn(column, value) {
                           />
                       </div>
                       { paginate}
-                      {loading}
+                      { this.props.loading ? <div>Loading...</div> : null }
                   </ElementBox>
               )
           }
