@@ -30,7 +30,7 @@ class TableBox extends React.Component {
   setPage(page) {
       this.setState({
           page,
-          loading : true
+          loading : this.props.loading
       });
       let start = this.props.pageSize * page ;
       let end= Math.min(this.props.length,this.props.pageSize * page +this.props.pageSize + 1);
@@ -42,15 +42,20 @@ class TableBox extends React.Component {
   previousPage() {
     const page = Math.max(0, this.state.page - 1);
     this.setState({
-        page
+        page,
+        loading : this.props.loading
     });
+    this.setPage(page)
   }
   nextPage() {
-          const maxPages = Math.ceil( this.props.length / this.props.pageSize);
-          let page = Math.min(maxPages - 1, this.state.page + 1);
-          this.setState({
-              page
-          });
+      const maxPages = Math.ceil( this.props.length / this.props.pageSize);
+      let page = Math.min(maxPages - 1, this.state.page + 1);
+      this.setState({
+          page,
+          loading : this.props.loading
+      });
+      this.setPage(page)
+
   }
 
   getFilteredData() {
