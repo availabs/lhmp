@@ -114,7 +114,6 @@ class ActionsProjectIndex extends React.Component {
     actionTableData() {
         let attributes = ATTRIBUTES.slice(0, 4);
         let data = [];
-        console.log('action project', this.props.actions)
         Object.values(this.props.actions)
             .forEach(action => {
                 data.push(Object.values(pick(action, ...attributes)))
