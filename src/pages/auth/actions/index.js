@@ -110,12 +110,12 @@ class ActionsIndex extends React.Component {
                             to={ `/actions/worksheet/new` } >
                                 Create Action Worksheet
                         </Link>
-                        <button
-                            disabled
-                            className="btn btn-sm btn-disabled"
+                        <Link
+                            to= {'/actions/project/new'}
+                            className="btn btn-sm btn-primary"
                         >
                                 Create Action Planner
-                        </button>
+                        </Link>
                         <button
                             disabled
                             className="btn btn-sm btn-disabled"
