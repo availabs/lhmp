@@ -95,17 +95,24 @@ class ActionsIndex extends React.Component {
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    if (item[i].value.toString() === 'false'){
-                        table_data.push({
-                            attribute: i,
-                            value: 'no'
-                        })
-                    }
-                    else if(item[i].value.toString() === 'true'){
-                        table_data.push({
-                            attribute : i,
-                            value : 'yes'
-                        })
+                    if (item[i].value){
+                        if (item[i].value.toString() === 'false'){
+                            table_data.push({
+                                attribute: i,
+                                value: 'no'
+                            })
+                        }
+                        else if(item[i].value.toString() === 'true'){
+                            table_data.push({
+                                attribute : i,
+                                value : 'yes'
+                            })
+                        }else{
+                            table_data.push({
+                                attribute : i,
+                                value: item[i].value
+                            })
+                        }
                     }else{
                         table_data.push({
                             attribute : i,

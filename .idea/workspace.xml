@@ -2,23 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/common/themes/light1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/modal/MapModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/modal/MapModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff/AccordionSelector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff/AccordionSelector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/PlanningTools/planning-submenus.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/PlanningTools/planning-submenus.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/upload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -138,14 +126,7 @@
       <workItem from="1566414836375" duration="96000" />
       <workItem from="1566414947890" duration="238216000" />
       <workItem from="1568395712452" duration="52205000" />
-      <workItem from="1568820399996" duration="13446000" />
-    </task>
-    <task id="LOCAL-00016" summary="updates">
-      <created>1562085029540</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1562085029540</updated>
+      <workItem from="1568820399996" duration="20193000" />
     </task>
     <task id="LOCAL-00017" summary="updates">
       <created>1562085065371</created>
@@ -483,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567804466141</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="actions project">
+      <created>1568837301803</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1568837301810</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -512,7 +500,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="user page" />
     <MESSAGE value="signup form toggle on success" />
     <MESSAGE value="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed" />
     <MESSAGE value="admin" />
@@ -537,7 +524,8 @@
     <MESSAGE value="roles form update: municipality to jurisdiction; email optional while adding new role; additional options: county, state, federal available for jurisdiction" />
     <MESSAGE value="planid based on subdomain" />
     <MESSAGE value="nav highlight + menu width" />
-    <option name="LAST_COMMIT_MESSAGE" value="nav highlight + menu width" />
+    <MESSAGE value="actions project" />
+    <option name="LAST_COMMIT_MESSAGE" value="actions project" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

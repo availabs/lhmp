@@ -292,7 +292,7 @@ class project extends React.Component {
                                 <input id='date_of_lhmp_plan_approval' onChange={this.handleChange}
                                        required
                                        className="form-control" type="date"
-                                       value={this.state.date_of_lhmp_plan_approval.split('T')[0]}/></div>
+                                       value={this.state.date_of_lhmp_plan_approval ? this.state.date_of_lhmp_plan_approval.split('T')[0] : ''}/></div>
                         </div>
 
                         <div className="col-sm-12">
@@ -1044,7 +1044,8 @@ class project extends React.Component {
                                            required
                                            className="form-control"
                                            placeholder="Plan Maintenance - Date of Status Report" type="date"
-                                           value={this.state.plan_maintenance_date_of_status_report.split('T')[0]}/>
+                                           value={this.state.plan_maintenance_date_of_status_report
+                                               ? this.state.plan_maintenance_date_of_status_report.split('T')[0] : ''}/>
                                 </div>
                             </div>
                         </div>
