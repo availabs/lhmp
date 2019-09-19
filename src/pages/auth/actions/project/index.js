@@ -158,7 +158,7 @@ class ActionsProjectIndex extends React.Component {
                                                     item.map((d) => {
 
                                                         return (
-                                                            <td>{d.value}</td>
+                                                            <td>{d ? d.value : d}</td>
                                                         )
                                                     })
                                                 }

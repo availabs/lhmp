@@ -113,6 +113,7 @@ class ActionsIndex extends React.Component {
         super(props);
 
         this.deleteWorksheet = this.deleteWorksheet.bind(this);
+        this.deleteproject = this.deleteproject.bind(this);
         this.actionTableData = this.actionTableData.bind(this);
     }
 

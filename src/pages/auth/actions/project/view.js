@@ -187,7 +187,7 @@ export default [
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/project/' },
+            { name: 'Actions', path: '/actions/' },
             { param: 'projectId', path: '/actions/project/view/' }
         ],
         menuSettings: {

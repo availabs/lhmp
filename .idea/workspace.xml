@@ -3,9 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -125,14 +126,7 @@
       <workItem from="1566414836375" duration="96000" />
       <workItem from="1566414947890" duration="238216000" />
       <workItem from="1568395712452" duration="52205000" />
-      <workItem from="1568820399996" duration="21636000" />
-    </task>
-    <task id="LOCAL-00018" summary="updates">
-      <created>1562086071509</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1562086071509</updated>
+      <workItem from="1568820399996" duration="22692000" />
     </task>
     <task id="LOCAL-00019" summary="added county and municipality in action worksheets">
       <created>1562356540154</created>
@@ -470,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568906077693</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="actions page shows worksheet + project">
+      <created>1568907454899</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1568907454899</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -499,7 +500,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed" />
     <MESSAGE value="admin" />
     <MESSAGE value="public, authed menu, public only access if not authed" />
     <MESSAGE value="domain bug solved" />
@@ -524,7 +524,8 @@
     <MESSAGE value="nav highlight + menu width" />
     <MESSAGE value="actions project" />
     <MESSAGE value="actions project with uploader" />
-    <option name="LAST_COMMIT_MESSAGE" value="actions project with uploader" />
+    <MESSAGE value="actions page shows worksheet + project" />
+    <option name="LAST_COMMIT_MESSAGE" value="actions page shows worksheet + project" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

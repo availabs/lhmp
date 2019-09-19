@@ -1112,7 +1112,7 @@ export default [
         exact: true,
         mainNav: false,
         breadcrumbs: [
-            {name: 'Actions Project', path: '/actions/project'},
+            {name: 'Actions Project', path: '/actions/'},
             {name: 'New Actions project', path: '/actions/project/new'}
         ],
         menuSettings: {
@@ -1133,7 +1133,7 @@ export default [
         auth: true,
         exact: true,
         breadcrumbs: [
-            {name: 'Edit Actions Project', path: '/actions/project/'},
+            {name: 'Edit Actions Project', path: '/actions/'},
             {param: 'projectId', path: '/actions/project/edit/'}
         ],
         menuSettings: {
