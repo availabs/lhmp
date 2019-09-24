@@ -68,7 +68,9 @@ class assetsPagePropTypeEditor extends Component {
         if(this.props.buildingByPropClassData[this.props.geoid] !== undefined) {
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType;
             propClasses.forEach(propClass => {
-                floodData100[propClass] = graph[propClass].flood_100;
+                if(graph[propClass].flood_100 !== undefined){
+                    floodData100[propClass] = graph[propClass].flood_100;
+                }
                 if(graph[propClass].flood_500 !== undefined){
                     floodData500[propClass] = graph[propClass].flood_500
                 }
@@ -122,7 +124,7 @@ class assetsPagePropTypeEditor extends Component {
                                     <h4>Property Type Classification Codes : {this.props.filter_value.map(d => d).join(',')}</h4>
                                     <div className={'row'} style={{padding:'10px'}}>
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={"#"} style={{textAlign:'center'}}>
+                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}`} style={{textAlign:'center'}}>
                                                 <div>
                                                     <div className="label">Replacement Value</div>
                                                     <div className="value" style={{font:'8px'}}>
@@ -133,7 +135,7 @@ class assetsPagePropTypeEditor extends Component {
                                             </a>
                                         </div>
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={"#"}>
+                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_100`} style={{textAlign:'center'}}>
                                                 <div>
                                                     <div className="label">100-year flood zone Replacement Value</div>
                                                     <div className="value" style={{font:'8px'}}>
@@ -143,9 +145,8 @@ class assetsPagePropTypeEditor extends Component {
                                                 </div>
                                             </a>
                                         </div>
-
                                         <div className={'col-4'}>
-                                        <a className="element-box el-tablo" href={"#"}>
+                                        <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_500`} style={{textAlign:'center'}}>
                                             <div>
                                                 <div className="label">500-year flood zone Replacement Value</div>
                                                 <div className="value" style={{font:'8px'}}>
