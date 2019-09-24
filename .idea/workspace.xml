@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="just to pull">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/layerControl/layerHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/layerControl/layerHeader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff/AvlTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff/AvlTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/themes/light1.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/themes/light1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/falcorGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/falcorGraph.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,16 +76,16 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages/auth" />
-      <recent name="$PROJECT_DIR$/src/pages" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/styles" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/light-admin" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/auth" />
+      <recent name="$PROJECT_DIR$/src/pages" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -126,14 +128,8 @@
       <workItem from="1566414836375" duration="96000" />
       <workItem from="1566414947890" duration="238216000" />
       <workItem from="1568395712452" duration="52205000" />
-      <workItem from="1568820399996" duration="22692000" />
-    </task>
-    <task id="LOCAL-00019" summary="added county and municipality in action worksheets">
-      <created>1562356540154</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1562356540154</updated>
+      <workItem from="1568820399996" duration="26181000" />
+      <workItem from="1568986423319" duration="27803000" />
     </task>
     <task id="LOCAL-00020" summary="asset table working">
       <created>1562612649292</created>
@@ -471,7 +467,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568907454899</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="actions page shows worksheet + project minor update">
+      <created>1568909099502</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1568909099502</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -500,7 +503,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="admin" />
     <MESSAGE value="public, authed menu, public only access if not authed" />
     <MESSAGE value="domain bug solved" />
     <MESSAGE value="submenu" />
@@ -525,7 +527,8 @@
     <MESSAGE value="actions project" />
     <MESSAGE value="actions project with uploader" />
     <MESSAGE value="actions page shows worksheet + project" />
-    <option name="LAST_COMMIT_MESSAGE" value="actions page shows worksheet + project" />
+    <MESSAGE value="actions page shows worksheet + project minor update" />
+    <option name="LAST_COMMIT_MESSAGE" value="actions page shows worksheet + project minor update" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

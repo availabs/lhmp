@@ -403,7 +403,7 @@ const TH = styled.th`
 `
 
 const Button = styled.button`
-	background-color: rgb(50, 50, 70);
+	background-color: ${ props => props.theme.sidePanelHeaderBg };
 	color: ${ props => props.theme.textColorHl };
 	border-radius: 4px;
 	border: none;
@@ -416,7 +416,7 @@ const Button = styled.button`
 	}
 	:disabled {
 		cursor: not-allowed;
-		background-color: rgb(40, 50, 60);
+		background-color: ${ props => props.theme.btnDisabledLt }
 		color: ${ props => props.theme.textColor };
 	}
 
