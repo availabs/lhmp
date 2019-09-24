@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
@@ -15,9 +16,9 @@ class AssetsPieChart extends React.Component{
     fetchFalcorDeps(){
         //console.log('geoid in fetch',this.props.geoid)
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,'sum',['count','replacement_value']])
-        .then(response => {
-            return response
-        })
+            .then(response => {
+                return response
+            })
     }
 
     pieChart(){
@@ -29,6 +30,7 @@ class AssetsPieChart extends React.Component{
             let pieData = [];
             if (Object.keys(this.props.data[geoid].ownerType).length === buildingOwners.length){
                 let graph = this.props.data[geoid].ownerType;
+                console.log('graph',graph)
                 Object.keys(graph).forEach((item,j) =>{
                     pieData.push({
                         'id': item,
@@ -37,6 +39,7 @@ class AssetsPieChart extends React.Component{
                         'color':colors[j]
                     })
                 })
+                console.log('pieData',pieData)
             }
 
             const style={
@@ -93,7 +96,7 @@ class AssetsPieChart extends React.Component{
     render(){
         return(
             <div>
-            {this.pieChart()}
+                {this.pieChart()}
             </div>
         )
     }
@@ -119,5 +122,3 @@ const mapDispatchToProps =  {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsPieChart))
-
-
