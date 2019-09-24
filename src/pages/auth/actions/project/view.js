@@ -142,7 +142,11 @@ class ActionsIndex extends React.Component {
                                         return(
                                             <tr>
                                                 <td>{data.attribute}</td>
-                                                <td>{data.value}</td>
+                                                <td>{
+                                                    typeof data.value === 'object' && data.value !== null ?
+                                                        data.value.join(',') :
+                                                    data.value
+                                                }</td>
                                             </tr>
                                         )
                                     })
