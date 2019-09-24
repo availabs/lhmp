@@ -282,7 +282,6 @@ module.exports = [
     {value : '992',name : 'Hudson River-Black River Regulating District Aggregate Additional Assessments (Environmental Conservation Law, Section 15-2115)'},
     {value : '993',name : 'Transition Assessments for Taxable State Owned Land (Real Property Tax Law, Section 545)'},
     {value : '994',name : 'Transition Assessments for Exempt State Owned Land (Real Property Tax Law, Section 545)'}
-
 ];
 
 /*

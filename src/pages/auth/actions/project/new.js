@@ -33,14 +33,14 @@ class project extends React.Component {
             associated_hazards: '', // dropdown
             metric_for_measurement: '',
             name_of_associated_hazard_mitigation_plan: '',
-            date_of_lhmp_plan_approval: '',
+            date_of_lhmp_plan_approval: null,
             action_county: parseInt(this.props.activePlan),
             action_jurisdiction: '', // selected from dropdown (includes municipalities and county)
             action_location: '',
             // step 2
-            action_located_in_special_flood_hazard_area: '', // can it be populated from EBR based on location
-            action_located_in_hazard_zone: '', // can it be populated from EBR based on location
-            recent_damages_incurred_at_action_locations: '',
+            action_located_in_special_flood_hazard_area: null, // can it be populated from EBR based on location
+            action_located_in_hazard_zone: null, // can it be populated from EBR based on location
+            recent_damages_incurred_at_action_locations: null,
             // step 3
             action_point_of_contact: '', // select from dropdown or add new contact - opens contact entry form
             poc_title: '',
@@ -53,23 +53,23 @@ class project extends React.Component {
             estimated_timeframe_for_action_implementation: '',
             status: '', // dropdown: Ongoing, discontinued, completed, in-progress
             // step 4
-            is_pnp: '', //bool
-            action_associated_with_critical_facility: '', //bool
+            is_pnp: null, //bool
+            action_associated_with_critical_facility: null, //bool
             structure_type: '', //dropdown: new, existing, both, neither
             // step 5
             level_of_protection: '',
-            useful_life: '',
+            useful_life: null,
             // step 6
             local_planning_mechanisms_in_implementation: [], // multiselect: capabilities
             project_milestones: '',
             estimated_cost_range: '', // drop down: range 0-50, 50-100, 100-1,000, 1,000+, Jurisdictional
             // step 7
-            calculated_cost: '',
+            calculated_cost: null,
             population_served: '', // drop down: range 0-50, 50-100, 100-1,000, 1,000+, Jurisdictional
             estimated_benefit_future_losses_avoided: '', // BCA Calculations, this will come from municpal data + EBR data
             // step 8
-            phased_action: '', //bool
-            engineering_required: '', // bool
+            phased_action: null, //bool
+            engineering_required: null, // bool
             bca: '', // upload?
             // step 9
             primary_or_potential_funding_sources_type: '', // dropdown
@@ -90,7 +90,7 @@ class project extends React.Component {
             priority_scoring_technical_feasibility: '',
             priority_scoring_timeframe_of_implementation: '',
             // step 12
-            plan_maintenance_date_of_status_report: '', // date
+            plan_maintenance_date_of_status_report: null, // date
             plan_maintenance_progress_report: '',
             plan_maintenance_update_evaluation_of_problem_solution: '',
         };
@@ -183,7 +183,8 @@ class project extends React.Component {
         let args = [];
         if (!this.props.match.params.projectId) {
             Object.values(this.state).forEach(function (step_content) {
-                if (typeof step_content === 'object') args.push('{' + step_content.join(',') + '}');
+                console.log('step', step_content)
+                if (typeof step_content === 'object' && step_content !== null) args.push('{' + step_content.join(',') + '}');
                 else args.push(step_content)
                 console.log('inserting... ', args)
             });
@@ -196,7 +197,7 @@ class project extends React.Component {
             let attributes = Object.keys(this.state);
             let updated_data = {};
             Object.keys(this.state).forEach((d, i) => {
-                    if (typeof this.state[d] === 'object') updated_data[d] = '{' + this.state[d].join(',') + '}';
+                    if (typeof this.state[d] === 'object' && this.state[d] !== null) updated_data[d] = '{' + this.state[d].join(',') + '}';
                     else updated_data[d] = this.state[d];
             });
             console.log('updated data', updated_data);
@@ -290,7 +291,6 @@ class project extends React.Component {
                         <div className="col-sm-12">
                             <div className="form-group"><label htmlFor>Date of LHMP plan approval</label>
                                 <input id='date_of_lhmp_plan_approval' onChange={this.handleChange}
-                                       required
                                        className="form-control" type="date"
                                        value={this.state.date_of_lhmp_plan_approval ? this.state.date_of_lhmp_plan_approval.split('T')[0] : ''}/></div>
                         </div>
@@ -1041,7 +1041,6 @@ class project extends React.Component {
                                 <div className="form-group"><label htmlFor>Plan Maintenance - Date of Status
                                     Report</label>
                                     <input id='plan_maintenance_date_of_status_report' onChange={this.handleChange}
-                                           required
                                            className="form-control"
                                            placeholder="Plan Maintenance - Date of Status Report" type="date"
                                            value={this.state.plan_maintenance_date_of_status_report
