@@ -446,7 +446,7 @@ class AssetsView extends React.Component{
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
-                            to={ `/assets/edit/${this.props.match.params.assetId}` } >
+                            to={ `/assets/list/edit/${this.props.match.params.assetId}` } >
                                 Edit Asset
                         </Link>
                         </span>
@@ -492,14 +492,14 @@ const mapDispatchToProps =  {
 };
 export default [
     {
-        path: '/assets/:assetId',
+        path: '/assets/list/view/:assetId',
         exact: true,
         name: 'Assets',
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Assets', path: '/assets' },
-            { param: 'assetId', path: '/assets/' }
+            { name: 'Assets', path: '/assets/list/view/' },
+            { param: 'assetId', path: '/assets/list/view/' }
         ],
         menuSettings: {
             image: 'none',
