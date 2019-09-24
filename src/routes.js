@@ -30,7 +30,7 @@ import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - su
 import PlanningTools from 'pages/auth/PlanningTools/'
 import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
-//import AssetsView from "./pages/auth/Assets/components/AssetsView";
+import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
 import Capabilities from 'pages/auth/Capabilities'
@@ -66,7 +66,7 @@ const routes = [
    ...PlanPage,
    ...PlanningTools,
    ...Assets,
-   //...AssetsView,
+   ...AssetsView,
    ...AssetsEdit,
    ...AssetsListByTypeByHazard,
    ...Capabilities,
