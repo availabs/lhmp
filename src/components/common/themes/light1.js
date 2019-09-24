@@ -54,6 +54,7 @@ export const errorColor = '#F9042C';
 
 // Button
 export const primaryBtnBgd = '#0F9668';
+export const btnDisabledLt = '#94bbff'
 export const primaryBtnActBgd = '#13B17B';
 export const primaryBtnColor = '#black';
 export const primaryBtnActColor = '#black';
@@ -83,7 +84,7 @@ export const inputBoxHeight = '34px';
 export const inputPadding = '4px 10px';
 export const inputFontSize = '11px';
 export const inputFontWeight = 500;
-export const inputBgd = '#29323C';
+export const inputBgd = '#ccd9e6';
 export const inputBgdHover = '#deeeff';
 export const inputBgdActive = '#deeeff';
 export const inputBorderColor = '#29323C';
