@@ -15,12 +15,12 @@ class ParticipationNew extends React.Component {
         super(props)
 
         this.state = {
-            type: '', 
+            type: null, 
             plan_id: parseInt(this.props.activePlan), 
-            owner_id: '', 
-            start_date: '', 
-            end_date: '', 
-            hours: ''
+            owner_id: null, 
+            start_date: null, 
+            end_date: null, 
+            hours: null, 
           /*  users: [], 
             roles: []*/
         }
@@ -111,14 +111,10 @@ class ParticipationNew extends React.Component {
         }
 
     };*/
-
-    
       handleChange(e) {
             console.log('---',e.target.id,e.target.value,this.state);
             this.setState({ ...this.state, [e.target.id]: e.target.value });
         };
-
-
 
     
     onSubmit(event){
@@ -126,13 +122,16 @@ class ParticipationNew extends React.Component {
         let args = [];
         if(!this.props.match.params.participationId){
             
-            console.log('this.props.match.params.participationId', this.props.match.params.participationId)
-
             Object.values(this.state).forEach(function(step_content){
                 args.push(step_content)
             });
 
-            return this.props.falcor.call(['participation','insert'], args, [], [])
+
+                    console.log('args', args)
+
+
+            return this.props.falcor.call(['participation','insert'], args )
+
                 .then(response => {
 
                      console.log('response----', response)
@@ -155,7 +154,9 @@ class ParticipationNew extends React.Component {
 
         
             });
-            console.log('what are we submitting?', attributes, args, updated_data)
+
+            console.log('updated_data',  updated_data)
+
             return this.props.falcor.set({
                 paths: [
                     ['participation', 'byId', [this.props.match.params.participationId], attributes]
@@ -205,7 +206,14 @@ class ParticipationNew extends React.Component {
                                 <div className="form-group"><label htmlFor>Hours</label>
                                     <input id='hours' onChange={this.handleChange} className="form-control" placeholder="Hours" type="number" value={this.state.hours}/></div>
                             </div>
-                           
+                        {/*  <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Users</label>
+                                    <input id='users' onChange={this.handleChange} className="form-control" placeholder="Users" type="number" value={this.state.users[0]}/></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Role</label>
+                                    <input id='roles' onChange={this.handleChange} className="form-control" placeholder="Roles" type="number" value={this.state.roles[0]}/></div>
+                            </div>*/}
                              <div className="form-buttons-w text-right">
                                 <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>
                             </div>

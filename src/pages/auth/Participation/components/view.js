@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get"
 import Element from 'components/light-admin/containers/Element'
-import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick";
@@ -29,9 +28,9 @@ class ParticipationIndex extends React.Component {
     }
 
     fetchFalcorDeps() {
-
-        return falcorGraph.get(['participation','byId', [this.props.match.params.Id], ATTRIBUTES])
+        return this.props.falcor.get(['participation','byId',[this.props.match.params.Id],ATTRIBUTES])
             .then(response => {
+                console.log('response',response)
                 return response
 
             })
@@ -42,37 +41,39 @@ class ParticipationIndex extends React.Component {
         let data = [];
         if(this.props.participationViewData[this.props.match.params.Id] !== undefined){
             let graph = this.props.participationViewData[this.props.match.params.Id];
-          
+
+          console.log('graph of participationViewTable', graph)
+
             data.push(pick(graph,...ATTRIBUTES));
+
+         console.log('data of participationViewTable', data)
+         
+
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    if (item[i].value.toString() === 'false'){
-                        table_data.push({
-                            attribute: i,
-                            value: 'no'
-                        })
-                    }
-                    else if(item[i].value.toString() === 'true'){
-                        table_data.push({
-                            attribute : i,
-                            value : 'yes'
-                        })
-                    }else{
+               
                         table_data.push({
                             attribute : i,
                             value: item[i].value
                         })
-                    }
+                /*    }*/
 
                 })
             })
-        }
+        }  
+
+        console.log('table_data', table_data)
+
+
         return (
             <div className='container'>
                 <Element>
                     <h6 className="element-header">Participation View</h6>
                     <div className="element-box">
                         <div className="table-responsive" >
+
+                       
+
                             <table className="table table lightBorder">
                                 <thead>
                                 <tr>
@@ -103,6 +104,7 @@ class ParticipationIndex extends React.Component {
     }
 
     render() {
+        //this.fetchFalcorDeps()
         return(
             <div>
                 {this.participationViewTable()}
@@ -143,6 +145,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(ParticipationIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationIndex))
     }
 ]

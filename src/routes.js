@@ -46,6 +46,8 @@ import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
 import Participation from "./pages/auth/Participation/";
 import ParticipationView from "./pages/auth/Participation/components/view";
 import ParticipationNew from "./pages/auth/Participation/components/new";
+import ParticipationMeetingView from "./pages/auth/Participation/components/meetingview";
+
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Signup from './pages/Landing/SignUp'
@@ -93,6 +95,7 @@ const routes = [
    ...Participation,
    ...ParticipationView,
    ...ParticipationNew,
+   ...ParticipationMeetingView,
   PlanIndex,
   RiskMap,
   Logout,
