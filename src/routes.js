@@ -36,6 +36,7 @@ import Assets from 'pages/auth/Assets/'
 import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
+import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
 import Capabilities from 'pages/auth/Capabilities'
 import CapabilitiesNew from 'pages/auth/Capabilities/capability/new'
 import CapabilitiesView from 'pages/auth/Capabilities/capability/view'
@@ -79,6 +80,7 @@ const routes = [
    ...Assets,
    ...AssetsView,
    ...AssetsEdit,
+   ...AssetsListByTypeByHazard,
    ...Capabilities,
    ...CapabilitiesNew,
    ...CapabilitiesView,

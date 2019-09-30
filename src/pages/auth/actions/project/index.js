@@ -114,7 +114,6 @@ class ActionsProjectIndex extends React.Component {
     actionTableData() {
         let attributes = ATTRIBUTES.slice(0, 4);
         let data = [];
-
         Object.values(this.props.actions)
             .forEach(action => {
                 data.push(Object.values(pick(action, ...attributes)))
@@ -159,7 +158,7 @@ class ActionsProjectIndex extends React.Component {
                                                     item.map((d) => {
 
                                                         return (
-                                                            <td>{d.value}</td>
+                                                            <td>{d ? d.value : d}</td>
                                                         )
                                                     })
                                                 }

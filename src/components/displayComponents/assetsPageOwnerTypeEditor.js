@@ -57,7 +57,9 @@ class assetsPageOwnerTypeEditor extends Component {
             let graph = this.props.buildingByOwnerTypeData[this.props.geoid].ownerType;
 
             this.props.filter_value.forEach(value =>{
-                floodData100[value] = graph[value].owner_flood_100;
+                if(graph[value].owner_flood_100 !== undefined){
+                    floodData100[value] = graph[value].owner_flood_100;
+                }
                 if(graph[value].owner_flood_500 !== undefined){
                     floodData500[value] = graph[value].owner_flood_500
                 }
@@ -112,7 +114,7 @@ class assetsPageOwnerTypeEditor extends Component {
                                     <h4>{this.props.title !== "" ? this.props.title : tempTitle}</h4>
                                     <div className={'row'} style={{padding:'10px'}}>
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={"#"} style={{textAlign:'center'}}>
+                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}`} style={{textAlign:'center'}}>
                                                 <div>
                                                     <div className="label">Replacement Value</div>
                                                     <div className="value" style={{font:'8px'}}>
@@ -125,7 +127,7 @@ class assetsPageOwnerTypeEditor extends Component {
                                         </div>
 
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={"#"}>
+                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_100`} style={{textAlign:'center'}}>
                                                 <div>
                                                     <div className="label">100-year flood zone Replacement Value</div>
                                                     <div className="value" style={{font:'8px'}}>
@@ -137,7 +139,7 @@ class assetsPageOwnerTypeEditor extends Component {
                                         </div>
 
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={"#"}>
+                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_500`} style={{textAlign:'center'}}>
                                                 <div>
                                                     <div className="label">500-year flood zone Replacement Value</div>
                                                     <div className="value" style={{font:'8px'}}>
@@ -177,6 +179,8 @@ const mapStateToProps = (state, ownProps) => {
         activePlan: state.user.activePlan,
         geoid: ownProps.geoid,
         prop_class: ownProps.prop_class,
+        filter_type : ownProps.filter_type,
+        filter_value : ownProps.filter_value,
         title : ownProps.title,
         buildingByOwnerTypeData: get(state.graph,'building.byGeoid',{}),
     })

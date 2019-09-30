@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
     if (!tableData || tableData.length === 0) {
-        return ('No Data Sent to table. Loading ...')
+        return ('No Data Sent to table')
     }
     if (!columns.length) {
         columns = Object.keys(tableData[0])

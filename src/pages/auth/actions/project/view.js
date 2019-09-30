@@ -95,17 +95,24 @@ class ActionsIndex extends React.Component {
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    if (item[i].value.toString() === 'false'){
-                        table_data.push({
-                            attribute: i,
-                            value: 'no'
-                        })
-                    }
-                    else if(item[i].value.toString() === 'true'){
-                        table_data.push({
-                            attribute : i,
-                            value : 'yes'
-                        })
+                    if (item[i].value){
+                        if (item[i].value.toString() === 'false'){
+                            table_data.push({
+                                attribute: i,
+                                value: 'no'
+                            })
+                        }
+                        else if(item[i].value.toString() === 'true'){
+                            table_data.push({
+                                attribute : i,
+                                value : 'yes'
+                            })
+                        }else{
+                            table_data.push({
+                                attribute : i,
+                                value: item[i].value
+                            })
+                        }
                     }else{
                         table_data.push({
                             attribute : i,
@@ -135,7 +142,11 @@ class ActionsIndex extends React.Component {
                                         return(
                                             <tr>
                                                 <td>{data.attribute}</td>
-                                                <td>{data.value}</td>
+                                                <td>{
+                                                    typeof data.value === 'object' && data.value !== null ?
+                                                        data.value.join(',') :
+                                                    data.value
+                                                }</td>
                                             </tr>
                                         )
                                     })
@@ -180,7 +191,7 @@ export default [
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/project/' },
+            { name: 'Actions', path: '/actions/' },
             { param: 'projectId', path: '/actions/project/view/' }
         ],
         menuSettings: {
