@@ -70,41 +70,11 @@ class EBRLayer extends MapLayer {
     // }
     const geoids = this.filters.area.value
     return falcorGraph.get(["building", "byGeoid", geoids, "length"])
-      .then(res => {
-        console.log('length data', res)
-        let requests =  geoids.map(geoid => {
-          const length = res.json.building.byGeoid[geoid].length;
-          return ["building", "byGeoid", geoid, "byIndex", { from: 0, to: length-1}, "id"]
-        })
-        requests.push(["building", "byGeoid", geoids, "length"])
-        return requests
-      })
-      .then(requests => {
-        return falcorGraph.get(...requests)
-          .then(res => {
-            const buildingids = [];
-            console.log('got data', res)
-            geoids.forEach(geoid => {
-              const length = res.json.building.byGeoid[geoid].length;
-              const graph = res.json.building.byGeoid[geoid].byIndex;
-              console.log('building ids', geoid, graph, res.json.building.byGeoid)
-              Object.values(graph).forEach(building => {
-                if(building.id){
-                  buildingids.push(building.id)
-                }
-              })
-            })
-            return buildingids;
-          })
-      })
-      .then(buildingids => {
-        const requests = [],
-          num = 500;
-        for (let i = 0; i < buildingids.length; i += num) {
-          requests.push(buildingids.slice(i, i + num))
-        }
-        console.time('make requests')
-        return requests.reduce((a, c) => a.then(() => falcorGraph.get(["building", "byId", c, ["replacement_value","name", "type", "critical", "flood_zone"]])), Promise.resolve())
+      
+      .then(response => {
+        //let length = response.json.
+        return falcorGraph
+          .get(["building", "byGeoid", geoid, 'byIndex', {from:0, to: }, ["id","replacement_value","name", "type", "critical", "flood_zone"]])
           .then((res) => {
             console.timeEnd('make requests')
             let graph = falcorGraph.getCache().building.byId

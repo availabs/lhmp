@@ -4,6 +4,7 @@ import { BrowserRouter,Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { ThemeProvider } from 'styled-components';
 import theme from 'components/common/themes/dark';
+import themeLight1 from 'components/common/themes/light1';
 
 import { auth } from './store/modules/user';
 
@@ -58,7 +59,7 @@ console.log("USER TOKEN:", this.props.token)
     //console.log('app render user',this.props.user)
 
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeLight1}>
         <div className="all-wrapper solid-bg-all">
           <BrowserRouter>
             <Switch>

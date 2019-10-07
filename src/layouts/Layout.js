@@ -24,21 +24,16 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     }
 
     console.log('rest', rest);
-    let contentStyle = {width: '100%',
-        marginLeft: rest.name === 'Scenarios'
-            ? 55
-            : rest.auth ? // if auth, menu is on left. else top.
-                CSS_CONFIG.mainMenuWidth : ''
-    };
-    if (rest.menuSettings.position === 'menu-position-side') {
-        contentStyle.marginLeft = 260;
+    let contentStyle = {width: '100%'};
+    if (rest.menuSettings.position === 'menu-position-side' || rest.menuSettings.position === 'menu-position-left') {
+        contentStyle.marginLeft = CSS_CONFIG.mainMenuWidth;
         if (rest.menuSettings.layout === 'menu-layout-compact') {
-            contentStyle.marginLeft = 160
+            contentStyle.marginLeft = CSS_CONFIG.mainMenuWidth
         } else if (rest.menuSettings.layout === 'menu-layout-mini') {
             contentStyle.marginLeft = 60
         }
     }
-
+    console.log('rest: contentStyle', contentStyle)
     return checkAuth(rest) ?
         (
             <Redirect

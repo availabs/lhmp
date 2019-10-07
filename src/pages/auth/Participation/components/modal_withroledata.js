@@ -4,33 +4,8 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
 // import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
-import {sendSystemMessage} from 'store/modules/messages';
-// import {center} from "@turf/turf";
-// import {setActivePlan} from 'store/modules/user'
-/*
-begin;
-CREATE TEMPORARY TABLE t
-ON commit drop
-as (SELECT id, county, fips, plan_consultant, plan_expiration, plan_grant,
-       plan_url, plan_status, groups
-  FROM plans.county
-  WHERE county = 'Sullivan County');
+//import {sendSystemMessage} from 'store/modules/messages';
 
-update t
-set groups = groups || '{Sullivan County HMP General, Sullivan County HMP Admin, Sullivan County HMP Public}'
-where county = 'Sullivan County'
-returning *;
-
-select * from t
-
-rollback;
-
-update plans.county dst
-set groups = ('{AVAIL, ' || src.county || ' HMP General, ' || src.county || ' HMP Admin, ' || src.county || ' HMP Public}') :: character varying[]
-FROM plans.county src
-where src.county = dst.county
-returning dst.groups;
-*/
 
 const COLS = [
     "id",
@@ -55,18 +30,22 @@ const COLS_TO_DISPLAY = [
     "contact_county",
 ]
 
-class RolesIndex extends React.Component {
 
-    constructor(props){
+class Modal extends React.Component {
+
+  constructor(props){
         super(props)
 
         this.state={
             role_data: [],
-            roleid: this.props.roleid
+           // roleid: this.props.roleid
         }
 
-        this.deleteRole = this.deleteRole.bind(this)
+        //this.deleteRole = this.deleteRole.bind(this)
     }
+
+
+
 
     fetchFalcorDeps() {
         let role_data =[];
@@ -106,29 +85,10 @@ class RolesIndex extends React.Component {
             )
     }
 
-    deleteRole(e){
-        e.persist()
-        let roleId = e.target.id
-        this.props.sendSystemMessage(
-            `Are you sure you with to delete this Role with id "${ roleId }"?`,
-            {
-                onConfirm: () => this.props.falcor.call(['roles','remove'],[roleId.toString()],[],[]).then(() => this.fetchFalcorDeps().then(response => {
-                    console.log('after delete res', response)
-                    this.setState({
-                        role_data:response
-                    })
-                })),
-                id: `delete-content-${ roleId }`,
-                type: "danger",
-                duration: 0
-            }
-        )
 
-    }
-
-    renderMainTable() {
+renderMainTable() {
         let table_data = [];
-        let attributes = COLS_TO_DISPLAY
+        let attributes = COLS
         console.log('final data', this.state.role_data)
         this.state.role_data.map(function (each_row) {
             console.log('each row: ',each_row)
@@ -185,73 +145,61 @@ class RolesIndex extends React.Component {
         ) : <div> No Roles found.</div>
     }
 
-    renderRoleView() {
-        let roleid = this.state.roleid,
-            tableData = [];
-        this.state.role_data.map(function(f) {
-            console.log('f',f, typeof f.id, typeof roleid)
-            if (f.id === roleid) tableData.push(...f.data.slice(1,f.data.length-1))
-        });
-        console.log('tableData view', tableData)
-        return (
-            <table className="table table lightBorder">
-                <thead>
-                <tr>
-                    <th> ATTRIBUTE </th>
-                    <th> VALUE </th>
-                </tr>
-                </thead>
-                <tbody>
-                    {tableData.map((data,data_i) =>{
-                        return (
-                            <tr>
-                                <td>{COLS[data_i] === 'contact_municipality' ? 'Jurisdiction' : COLS[data_i]}</td>
-                                <td>{data}</td>
-                            </tr>
-                        )
-                    })
-                    }
-                </tbody>
-            </table>
-        )
-    }
-    render() {
-        console.log('authPLans', this.props.activePlan, this.props)
-        return (
-            <div className='container'>
-                <Element>
-                    <h4 className="element-header">Roles : {this.props.activePlan}
-                        <span style={{float:'right'}}>
-                        <Link
-                            className="btn btn-sm btn-primary"
-                            to={ `/role/new` } >
-                                Add New Role
-                        </Link>
-                    </span>
-                    </h4>
-                    <div className="element-box">
-                        <div className="table-responsive" >
-                            { this.state.roleid ? this.renderRoleView() : this.renderMainTable() }
-                        </div>
-                    </div>
-                </Element>
-            </div>
-        )
 
-    }
+
+  render () {
+    return (
+
+      <div 
+        className="onboarding-modal modal fade animated show" 
+        id="onboardingWideFormModal" role="dialog" tabIndex={-1} 
+        style={{paddingRight: '15px', display: this.props.display ? 'block' : 'none' }}
+        >
+        <div className="modal-dialog modal-lg modal-centered" role="document">
+          <div className="modal-content text-center">
+            
+            <button aria-label="Close" className="close" data-dismiss="modal" type="button" onClick={this.props.close}><span className="close-label">Skip Intro</span><span className="os-icon os-icon-close" /></button>
+
+            <div className="onboarding-side-by-side">
+              <div className="onboarding-media"><img alt="" src="img/bigicon5.png" width="200px" /></div>
+              <div className="onboarding-content with-gradient">
+                  
+                <div className='container'>
+                    <Element>
+                        <h4 className="element-header">Roles : {this.props.activePlan}
+                            
+                        </h4>
+                        <div className="element-box">
+                            <div className="table-responsive" >
+                             {  this.renderMainTable() }
+                            </div>
+                        </div>
+                    </Element>
+                </div>               
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
 }
+
+
 
 const mapStateToProps = (state, ownProps) => {
     return ({
-        roleid: ownProps.computedMatch.params.roleid,
+      //  roleid: ownProps.computedMatch.params.roleid,
         activePlan: state.user.activePlan,
         //roles: state.graph.roles || {}
+       // participationViewData : get(state.graph,['participation','byId'],{})
     })
-};
-
-const mapDispatchToProps = {
-    sendSystemMessage,
-    //setActivePlan
 };
 
 export default [
@@ -274,7 +222,7 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesIndex))
+        component: connect(mapStateToProps)(reduxFalcor(Modal))
     },
     {
         path: '/roles/:roleid',
@@ -295,6 +243,12 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesIndex))
+        component: connect(mapStateToProps)(reduxFalcor(Modal))
     }
 ]
+
+
+
+
+
+//export default Modal;

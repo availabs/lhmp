@@ -15,9 +15,9 @@ class CapabilityNew extends React.Component {
             capability: '',
             capability_name:'',
             regulatory_name:'',
-            adoption_date:'',
-            expiration_date:'',
-            development_update:'',
+            adoption_date:null,
+            expiration_date:null,
+            development_update:null,
             jurisdiction_utilization:'',
             adopting_authority:'',
             responsible_authority:'',
@@ -47,10 +47,20 @@ class CapabilityNew extends React.Component {
                 .then(response =>{
                     Object.keys(this.state).forEach((key,i)=>{
                         let tmp_state = {};
-                        tmp_state[key] = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key];
-                        this.setState(
-                            tmp_state
-                        )
+                        if(key === 'adoption_date' || key === 'expiration_date'){
+                            var d = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key].slice(0, 10).split('-');
+                            let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                            tmp_state[key] = date
+                            this.setState(
+                                tmp_state
+                            )
+                        }
+                        else{
+                            tmp_state[key] = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key];
+                            this.setState(
+                                tmp_state
+                            )
+                        }
                     });
 
                 })
@@ -114,10 +124,10 @@ class CapabilityNew extends React.Component {
                 args.push(step_content)
             });
             Object.keys(this.state).forEach((d, i) => {
-                if (this.state[d] !== '') {
+                //if (this.state[d] !== '') {
                     console.log(data[d], d);
                     updated_data[d] = this.state[d];
-                }
+                //}
             });
 
             return this.props.falcor.set({

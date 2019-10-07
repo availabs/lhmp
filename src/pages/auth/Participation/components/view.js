@@ -3,96 +3,77 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get"
 import Element from 'components/light-admin/containers/Element'
-import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick";
 
-
 const ATTRIBUTES = [
-    //'id',
-    'project_name',
-    'project_number',
-    'hazard_of_concern',
-    'problem_description',
-    'solution_description',
-    'critical_facility',
-    'protection_level',
-    'useful_life',
-    'estimated_cost',
-    'estimated_benefits',
-    'priority',
-    'estimated_implementation_time',
-    'organization_responsible',
-    'desired_implementation_time',
-    'funding_source',
-    'planning_mechanism',
-    'alternative_action_1',
-    'alternative_estimated_cost_1',
-    'alternative_evaluation_1',
-    'alternative_action_2',
-    'alternative_estimated_cost_2',
-    'alternative_evaluation_2',
-    'alternative_action_3',
-    'alternative_estimated_cost_3',
-    'alternative_evaluation_3',
-    'date_of_report',
-    'progress_report',
-    'updated_evaluation'
+       'id',
+       'type', 
+       'plan_id', 
+       'owner_id', 
+       'start_date', 
+       'end_date', 
+       'hours', 
+       'users', 
+       'roles'
 ]
 
-class ActionsIndex extends React.Component {
+class ParticipationIndex extends React.Component {
 
     constructor(props){
         super(props)
-
-        this.actionViewData = this.actionViewData.bind(this)
+        this.participationViewTable = this.participationViewTable.bind(this)
 
     }
 
     fetchFalcorDeps() {
-
-        return falcorGraph.get(['actions','worksheet','byId', [this.props.match.params.worksheetId], ATTRIBUTES])
+        return this.props.falcor.get(['participation','byId',[this.props.match.params.Id],ATTRIBUTES])
             .then(response => {
+                console.log('response',response)
                 return response
+
             })
     }
 
-    actionViewData(){
+    participationViewTable(){
         let table_data = [];
         let data = [];
-        if(this.props.actionViewData[this.props.match.params.worksheetId] !== undefined){
-            let graph = this.props.actionViewData[this.props.match.params.worksheetId];
+        if(this.props.participationViewData[this.props.match.params.Id] !== undefined){
+            let graph = this.props.participationViewData[this.props.match.params.Id];
+
+          console.log('graph of participationViewTable', graph)
+
             data.push(pick(graph,...ATTRIBUTES));
+
+         console.log('data of participationViewTable', data)
+         
+
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    if (item[i].value.toString() === 'false'){
-                        table_data.push({
-                            attribute: i,
-                            value: 'no'
-                        })
-                    }
-                    else if(item[i].value.toString() === 'true'){
-                        table_data.push({
-                            attribute : i,
-                            value : 'yes'
-                        })
-                    }else{
+               
                         table_data.push({
                             attribute : i,
                             value: item[i].value
                         })
-                    }
+                /*    }*/
 
                 })
             })
-        }
+        }  
+
+        console.log('table_data', table_data)
+
+
         return (
             <div className='container'>
                 <Element>
-                    <h6 className="element-header">Actions Worksheet</h6>
+                    <h6 className="element-header">Participation View</h6>
                     <div className="element-box">
                         <div className="table-responsive" >
+
+                       
+
                             <table className="table table lightBorder">
                                 <thead>
                                 <tr>
@@ -123,9 +104,10 @@ class ActionsIndex extends React.Component {
     }
 
     render() {
+        //this.fetchFalcorDeps()
         return(
             <div>
-                {this.actionViewData()}
+                {this.participationViewTable()}
             </div>
 
         )
@@ -136,23 +118,25 @@ class ActionsIndex extends React.Component {
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-    actionViewData : get(state.graph,'actions.worksheet.byId',{})
+    participationViewData : get(state.graph,['participation','byId'],{})
 });
+
 
 const mapDispatchToProps = {
     sendSystemMessage
 };
 
+
 export default [
     {
-        path: '/actions/worksheet/view/:worksheetId',
+        path: '/participation/view/:Id',
         exact: true,
-        name: 'Actions',
+        name: 'Participation',
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/worksheet/view/' },
-            { param: 'worksheetId', path: '/actions/worksheet/view/edit' }
+            { name: 'Participation', path: '/participation/' },
+            { param: 'Id', path: '/participation/view/' }
         ],
         menuSettings: {
             image: 'none',
@@ -161,6 +145,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(ActionsIndex)
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationIndex))
     }
 ]

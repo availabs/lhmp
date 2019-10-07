@@ -23,7 +23,6 @@ class BuildingByHazardRiskTable extends React.Component{
                     //console.log('res',response.json.building.hazard.meta)
                     const graph = response.json.building.hazard.meta;
                     if(graph){
-                        console.log('graph',graph.risk_zones)
                         let zones = graph.risk_zones[this.state.hazardRisk].zones;
                         return zones
                     }

@@ -1,9 +1,11 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {reduxFalcor} from 'utils/redux-falcor'
+import React from 'react';
+import { connect } from 'react-redux';
+import { reduxFalcor } from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
-import {EditorState} from "draft-js";
-import {Link} from "react-router-dom";
+// import {falcorGraph} from "store/falcorGraph";
+import { Link } from "react-router-dom"
+//import {sendSystemMessage} from 'store/modules/messages';
+
 
 const COLS = [
     "id",
@@ -21,20 +23,28 @@ const COLS = [
 
 const COLS_TO_DISPLAY = [
     "id",
+    "contact_name",
     "contact_title_role",
     "contact_department",
     "contact_agency",
     "contact_municipality",
-    "contact_county",
+
 ]
 
-class rolesTableViewer extends Component {
-    constructor(props) {
-        super(props);
+
+class Modal extends React.Component {
+
+  constructor(props){
+        super(props)
+
         this.state={
-            role_data: []
+            role_data: [],
+           // roleid: this.props.roleid
         }
+
+        //this.deleteRole = this.deleteRole.bind(this)
     }
+
 
     fetchFalcorDeps() {
         let role_data =[];
@@ -63,21 +73,24 @@ class rolesTableViewer extends Component {
                                 && response.json.roles.byId[d].associated_plan === parseInt(this.props.activePlan))
                             .forEach(function(role,i){
                                 console.log('each role',response.json.roles.byId)
-                                role_data.push({
-                                    'id' : role,
-                                    'data': Object.values(response.json.roles.byId[role])
-                                })
+                            role_data.push({
+                                'id' : role,
+                                'data': Object.values(response.json.roles.byId[role])
                             })
+                        })
                         this.setState({role_data: role_data})
                         return role_data
                     })
             )
     }
 
-    renderMainTable() {
+
+renderMainTable() {
         let table_data = [];
         let attributes = COLS_TO_DISPLAY
+        console.log('final data', this.state.role_data)
         this.state.role_data.map(function (each_row) {
+            console.log('each row: ',each_row)
             table_data.push([].concat(attributes.map(f => {
                 return each_row.data[ COLS.indexOf(f) + 1 ]} )))
         })
@@ -104,6 +117,14 @@ class rolesTableViewer extends Component {
                                 )
                             })
                             }
+                          
+                            <td>
+                                <Link className="btn btn-sm btn-outline-primary"
+                                      to={ `/roles/${data[0]}` }>
+                                    Invite
+                                </Link>
+                            </td>
+                          
                         </tr>
                     )
                 })
@@ -113,30 +134,67 @@ class rolesTableViewer extends Component {
         ) : <div> No Roles found.</div>
     }
 
-    render() {
-        return (
-            <div className='container'>
-                <Element>
-                    <h6 className="element-header">Roles : {this.props.activePlan}</h6>
-                    <div className="element-box" style={{'overflow': 'scroll', 'maxHeight': '80vh'}}>
-                        <div className="table-responsive" >
-                            {this.renderMainTable()}
-                        </div>
-                    </div>
-                </Element>
-            </div>
-        )
 
-    }
+
+  render () {
+    return (
+
+      <div 
+        className="onboarding-modal modal fade animated show" 
+        id="onboardingWideFormModal" role="dialog" tabIndex={-1} 
+        style={{paddingRight: '15px', display: this.props.display ? 'block' : 'none' }}
+        >
+        <div className="modal-dialog modal-lg modal-centered" role="document">
+          <div className="modal-content text-center">
+            
+            <button aria-label="Close" className="close" data-dismiss="modal" type="button" onClick={this.props.close}><span className="close-label">Close</span><span className="os-icon os-icon-close" /></button>
+
+            <div className="onboarding-side-by-side">
+              <div className="onboarding-media"><img alt="" src="img/bigicon5.png" width="200px" /></div>
+              <div className="onboarding-content with-gradient">
+                  
+                <div className='container'>
+                    <Element>
+                        <h4 className="element-header">Roles : {this.props.activePlan}
+                            
+                        </h4>
+                        <div className="element-box">
+                            <div className="table-responsive" >
+                             {  this.renderMainTable() }
+                            </div>
+                        </div>
+                    </Element>
+                </div>               
+
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
 }
 
+
+
 const mapStateToProps = (state, ownProps) => {
     return ({
+      //  roleid: ownProps.computedMatch.params.roleid,
         activePlan: state.user.activePlan,
+        //roles: state.graph.roles || {}
+       // participationViewData : get(state.graph,['participation','byId'],{})
     })
 };
 
-const mapDispatchToProps = {};
+export default connect(mapStateToProps)(reduxFalcor(Modal))
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(rolesTableViewer))
+
+
+
+
+//export default Modal;

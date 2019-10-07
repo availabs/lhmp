@@ -1,12 +1,15 @@
 import actions from '../actions'
+import actionsProject from '../actions/project'
 import assets from '../Assets'
 import roles from '../Roles'
 import capabilities from '../Capabilities'
+import participation from '../Participation'
 
 let submenu = [
     ...actions,
     ...assets,
     ...capabilities,
+    ...participation,
     roles[0]
 ]
 export default [

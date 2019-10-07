@@ -8,6 +8,9 @@ import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
+import AssetsPagePropTypeEditor from 'components/displayComponents/assetsPagePropTypeEditor'
+import AssetsPageOwnerTypeEditor from 'components/displayComponents/assetsPageOwnerTypeEditor'
+import AssetsPageCriticalTypeEditor from 'components/displayComponents/assetsPageCriticalTypeEditor'
 import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
 import BuildingByOwnerTypeTable from 'pages/auth/Assets/components/BuildingByOwnerTypeTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
@@ -32,6 +35,7 @@ const HeaderSelect = styled.select`
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }`
 let countyValue = [];
+//http://albany.localhost:3000/assets/list/:type/:typeIds/hazard/:hazardIds
 const buildingOwnerType = [
   {
     'id':'1',
@@ -117,9 +121,9 @@ class AssetsIndex extends React.Component {
   componentDidMount(prevProps,oldState){
     if(this.props.activePlan && !this.state.geoid){
       return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
-        .then(response => {
-          return response.json.plans.county.byId[this.props.activePlan].fips
-        }).then(fips => {
+          .then(response => {
+            return response.json.plans.county.byId[this.props.activePlan].fips
+          }).then(fips => {
             return this.props.falcor.get(['geo',[fips],'cousubs'],['geo',[fips],['name']])
                 .then(response => response.json.geo[fips].cousubs)
                 .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]))
@@ -132,12 +136,13 @@ class AssetsIndex extends React.Component {
           })
     }
 
-  }  componentDidUpdate(prevProps,oldState){
+  }
+  componentDidUpdate(prevProps,oldState){
     if(this.props.activePlan && !this.state.geoid){
       return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
-        .then(response => {
-          return response.json.plans.county.byId[this.props.activePlan].fips
-        }).then(fips => {
+          .then(response => {
+            return response.json.plans.county.byId[this.props.activePlan].fips
+          }).then(fips => {
             return this.props.falcor.get(['geo',[fips],'cousubs'],['geo',[fips],['name']])
                 .then(response => response.json.geo[fips].cousubs)
                 .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]))
@@ -173,8 +178,8 @@ class AssetsIndex extends React.Component {
 
     return (
         <HeaderSelect
-                id='geoid' onChange={this.handleChange}
-                value={this.state.geoid}>
+            id='geoid' onChange={this.handleChange}
+            value={this.state.geoid}>
           {countyValue.map((county,i) =>{
             return(
                 <option key={i} value={county}>{countyName}</option>
@@ -195,14 +200,14 @@ class AssetsIndex extends React.Component {
     return(
         <div>
           <select id='owner' onChange={this.handleChange} value={this.state.ownerType}>
-          <option default>--Select Owner Type--</option>
-          {
-            buildingOwnerType.map((owner) =>{
+            <option default>--Select Owner Type--</option>
+            {
+              buildingOwnerType.map((owner) =>{
                 return(
                     <option key={owner.id} value={owner.value}>{owner.value}</option>
                 )
-            })
-          }
+              })
+            }
           </select>
         </div>
     )
@@ -213,103 +218,90 @@ class AssetsIndex extends React.Component {
     return (
         <div>
           {JSON.stringify(this.state.filter.value)}
-            <MultiSelectFilter
-                filter = {this.state.filter}
-                setFilter = {this.handleMultiSelectFilterChange}
-            />
+          <MultiSelectFilter
+              filter = {this.state.filter}
+              setFilter = {this.handleMultiSelectFilterChange}
+          />
         </div>
-        )
-    }
+    )
+  }
 
   render () {
     return (
-      <div className='container'>
-
-            <Element>
-              {/*<div className='content-i'>
+        <div className='container'>
+          <Element>
+            {/*<div className='content-i'>
                 <div className='content-box'>*/}
-                  <h4 className="element-header">Assets For {this.renderMenu()}</h4>
-                  <div className="os-tabs-w mx-4">
-                    <div className="os-tabs-controls">
-                      <ul className="nav nav-tabs upper">
-                        <li className="nav-item">
-                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">ALL</a>
-                        </li>
-                        <li className="nav-item">
-                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">Critical Infrastructure</a>
-                        </li>
-                        <li className="nav-item">
-                          <a aria-expanded="false" className="nav-link" data-toggle="tab" href="#">Municipal</a>
-                        </li>
-                      </ul>
-                    </div>
+            <h4 className="element-header">Assets For {this.renderMenu()}</h4>
+            <div className="row">
+              <div className="col-12">
+                <AssetsPagePropTypeEditor filter_type={'propType'} filter_value={['210', '220','283']} geoid={[this.props.activeGeoid]}/>
+                <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['2']} geoid={[this.props.activeGeoid]} title={'State owned Assets'}/>
+                <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['3']} geoid={[this.props.activeGeoid]} title={'County owned Assets'}/>
+                <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['4','5','6','7']} geoid={[this.props.activeGeoid]} title={'Municipality Owned Assets'}/>
+                <AssetsPageCriticalTypeEditor filter_type={'critical'} filter_value={['all']} geoid={[this.props.activeGeoid]} title={'Critical Infrastructure'}/>
+                {/*
+                          <div className='element-box' style={{height:'2800px'}}>
+                              <span><h4>{this.state.geoid} : Assets Table</h4></span>
+                              {this.state.geoid
+                                  ? <AssetsTable geoid={[this.state.geoid]}/>
+                                  : ''
+                              }
+                          </div>
+                          */}
+                <div className='element-wrapper'>
+                  <div className='element-box'>
+                    <h4>Buildings By Owner Type</h4>
+                    {this.renderOwnerTypeMenu()}
+                    {this.state.geoid ?
+                        <AssetsPieChart geoid={[this.state.geoid]} replacement_value={true}/>
+                        :''
+                    }
+                    {this.state.geoid ?
+                        <BuildingByOwnerTypeTable geoid={[this.state.geoid]} buildingType={true}/>
+                        : ''
+                    }
                   </div>
-                  <div className="row">
-                    <div className="col-7">
-                      <div className='element-wrapper'>
-                        <div className='element-box' style={{height:'2800px'}}>
-                          <span><h4>{this.state.geoid} : Assets Table</h4></span>
-                          {this.state.geoid
-                              ? <AssetsTable geoid={[this.state.geoid]}/>
-                              : ''
-                          }
-                        </div>
-                      </div>
-                    </div>
-                    <div className='col-sm-6 d-xxl-16'>
-                      <div className='element-wrapper'>
-                        <div className='element-box'>
-                        <h4>Buildings By Owner Type</h4>
-                        {this.renderOwnerTypeMenu()}
-                          {this.state.geoid ?
-                            <AssetsPieChart geoid={[this.state.geoid]} replacement_value={true}/>
-                            :''
-                          }
-                          {this.state.geoid ?
-                            <BuildingByOwnerTypeTable geoid={[this.state.geoid]} buildingType={true}/>
-                            : ''
-                          }
-                      </div>
-                      </div>
-                      <div className='element-wrapper'>
-                        <div className='element-box'>
-                          <h4>Buildings By Land Use</h4>
-                          {this.renderLandUseMenu()}
-                          {
-                            this.state.geoid ?
-                            <BuildingByLandUsePieChart geoid={[this.state.geoid]}/>
-                            : ''
-                          }
-                          {
-                            this.state.geoid ?
-                            <BuildingByLandUseTable geoid={[this.state.geoid]} filters={this.state.filter.value}/>
-                            : ''
-                          }
-                        </div>
-                      </div>
-                      <div className='element-wrapper'>
-                        <div className='element-box'>
-                          <h4>Buildings By Hazard Risk</h4>
-                          {
-                            this.state.geoid ?
-                                <BuildingByHazardRiskPieChart geoid={[this.state.geoid]} replacement_value={true}/>
-                                : ''
-                          }
-
-                          {
-                            this.state.geoid ?
-                                <BuildingByHazardRiskTable geoid={[this.state.geoid]}/>
-                                : ''
-                          }
-
-                        </div>
-                      </div>
-                    </div>
+                </div>
+                <div className='element-wrapper'>
+                  <div className='element-box'>
+                    <h4>Buildings By Land Use</h4>
+                    {this.renderLandUseMenu()}
+                    {
+                      this.state.geoid ?
+                          <BuildingByLandUsePieChart geoid={[this.state.geoid]}/>
+                          : ''
+                    }
+                    {
+                      this.state.geoid ?
+                          <BuildingByLandUseTable geoid={[this.state.geoid]} filters={this.state.filter.value}/>
+                          : ''
+                    }
                   </div>
-                {/*</div>
+                </div>
+                <div className='element-wrapper'>
+                  <div className='element-box'>
+                    <h4>Buildings By Hazard Risk</h4>
+                    {
+                      this.state.geoid ?
+                          <BuildingByHazardRiskPieChart geoid={[this.state.geoid]} replacement_value={true}/>
+                          : ''
+                    }
+
+                    {
+                      this.state.geoid ?
+                          <BuildingByHazardRiskTable geoid={[this.state.geoid]}/>
+                          : ''
+                    }
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/*</div>
               </div>*/}
-            </Element>
-      </div>
+          </Element>
+        </div>
 
     )
   }
@@ -320,7 +312,8 @@ const mapStateToProps = state => ({
 
   isAuthenticated: !!state.user.authed,
   activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
-  data: get(state.graph,'geo')
+  data: get(state.graph,'geo'),
+  activeGeoid: state.user.activeGeoid
 });
 
 const mapDispatchToProps = ({
@@ -349,4 +342,3 @@ export default [{
   auth: true,
   component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsIndex))
 }];
-

@@ -17,7 +17,7 @@ class Plan extends React.Component {
 
     render() {
         return (
-            <div className='container' style={{marginLeft: CSS_CONFIG.mainMenuWidth}}>
+            <div className='container'>
                 <Element>
                     <h6 className="element-header">Plan page</h6>
                     <div>

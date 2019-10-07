@@ -81,6 +81,13 @@ class CapabilitiesIndex extends React.Component {
         Object.values(this.props.capabilities).forEach(capability =>{
             data.push(Object.values(pick(capability,...attributes)))
         });
+        return data
+
+    }
+
+    render() {
+        let attributes = ATTRIBUTES.slice(0,3);
+        let data = this.capabilitiesTableData()
         return(
             <div className='container'>
                 <Element>
@@ -160,14 +167,6 @@ class CapabilitiesIndex extends React.Component {
                     </div>
                 </Element>
             </div>
-        )
-
-    }
-
-
-    render() {
-        return (
-            <div>{this.capabilitiesTableData()}</div>
         )
     }
 }

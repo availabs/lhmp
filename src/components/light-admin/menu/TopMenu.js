@@ -23,9 +23,19 @@ class AvatarUser extends Component {
                     <div className="avatar-w" style={{border: 'none'}}><i
                         className='pre-icon os-icon os-icon-user-male-circle'/></div>
                     <div className="logged-user-info-w">
-                        <div className="logged-user-name">{this.props.user.email ? this.props.user.email : ''}</div>
+                        <div className="logged-user-name">
+                            {
+                            this.props.user.email ?
+                            this.props.user.email.length > 18 ?
+                                this.props.user.email.slice(0,15) + '...'
+                                : this.props.user.email
+                            : ''}</div>
                         <div className="logged-user-role"
-                             style={{color: '#cdcdcd'}}>{this.props.user.activeGroup ? this.props.user.activeGroup : ''}</div>
+                             style={{color: '#cdcdcd'}}>{this.props.user.activeGroup ?
+                            this.props.user.activeGroup.length > 18 ?
+                                this.props.user.activeGroup.slice(0,15) + '...' :
+                                this.props.user.activeGroup
+                            : ''}</div>
                     </div>
                     <div className="logged-user-toggler-arrow">
                         <div className="os-icon os-icon-chevron-down"/>
