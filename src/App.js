@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter,Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { ThemeProvider } from 'styled-components';
-import theme from 'components/common/themes/dark';
-import themeLight1 from 'components/common/themes/light1';
+import theme from 'components/common/themes/light_new';
 
 import { auth } from './store/modules/user';
 
@@ -59,7 +58,7 @@ console.log("USER TOKEN:", this.props.token)
     //console.log('app render user',this.props.user)
 
     return (
-      <ThemeProvider theme={themeLight1}>
+      <ThemeProvider theme={theme}>
         <div className="all-wrapper solid-bg-all">
           <BrowserRouter>
             <Switch>

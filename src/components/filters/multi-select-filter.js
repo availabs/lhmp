@@ -20,11 +20,10 @@
 
 import React from 'react';
 import ItemSelector from '../common/item-selector/item-selector';
-import {PanelLabel} from '../common/styled-components';
-import theme from 'components/common/themes/light1';
+import {PanelLabel,SidePanelSection} from '../common/styled-components';
 
 const MultiSelectFilter = ({filter, setFilter}) => (
-  <div>
+  <SidePanelSection>
     <PanelLabel htmlFor={`filter-${filter.id}`}>{filter.name}</PanelLabel>
     <ItemSelector
       selectedItems={filter.value}
@@ -36,9 +35,8 @@ const MultiSelectFilter = ({filter, setFilter}) => (
       getOptionValue={d => d.value ? d.value : d}
       onChange={setFilter}
       inputTheme="secondary"
-      theme={theme}
     />
-  </div>
+  </SidePanelSection>
 );
 
 export default MultiSelectFilter;
