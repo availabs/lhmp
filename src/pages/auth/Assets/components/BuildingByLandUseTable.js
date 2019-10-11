@@ -7,7 +7,7 @@ import {falcorGraph} from "../../../../store/falcorGraph";
 import {falcorChunkerNiceWithUpdate} from "store/falcorGraph"
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
 var _ = require('lodash/core');
-
+var numeral = require('numeral');
 
 class BuildingByLandUseTable extends React.Component{
     constructor(props){
@@ -103,7 +103,7 @@ class BuildingByLandUseTable extends React.Component{
                                                 <tr>
                                                     <td>{buildingLandUseNames[i]}</td>
                                                     <td>{buildingLandUseData[item].sum.count.value || 0}</td>
-                                                    <td>${buildingLandUseData[item].sum.replacement_value.value || 0}</td>
+                                                    <td>${numeral(buildingLandUseData[item].sum.replacement_value.value).format('0,0.a') || 0}</td>
                                                 </tr>
                                             )
                                         })
