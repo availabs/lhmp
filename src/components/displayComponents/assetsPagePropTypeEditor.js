@@ -49,16 +49,19 @@ class assetsPagePropTypeEditor extends Component {
         let sum_count = 0;
         if(this.props.buildingByPropClassData[this.props.geoid] !== undefined){
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType
-            Object.keys(graph).forEach(item =>{
-                if (this.props.filter_value.includes(item)){
-                    sum_replacement_value += parseInt(graph[item].sum.replacement_value.value) || 0;
-                    sum_count += parseInt(graph[item].sum.count.value) || 0;
-                }
-            });
-            data.push({
-                'sum_replacement_value':numeral(sum_replacement_value).format('0,0a') || 0,
-                'count': numeral(sum_count).format('0,0a') || 0
-            });
+            if(graph){
+                Object.keys(graph).forEach(item =>{
+                    if (this.props.filter_value.includes(item)){
+                        sum_replacement_value += parseInt(graph[item].sum.replacement_value.value) || 0;
+                        sum_count += parseInt(graph[item].sum.count.value) || 0;
+                    }
+                });
+                data.push({
+                    'sum_replacement_value':numeral(sum_replacement_value).format('0,0a') || 0,
+                    'count': numeral(sum_count).format('0,0a') || 0
+                });
+            }
+
         }
         return data
     }
@@ -75,35 +78,36 @@ class assetsPagePropTypeEditor extends Component {
         let propClasses = this.props.filter_value;
         if(this.props.buildingByPropClassData[this.props.geoid] !== undefined) {
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType;
-            propClasses.forEach(propClass => {
-                if(graph[propClass].flood_100 !== undefined){
-                    floodData100[propClass] = graph[propClass].flood_100;
-                }
-                if(graph[propClass].flood_500 !== undefined){
-                    floodData500[propClass] = graph[propClass].flood_500
-                }
-            });
-            Object.keys(floodData100).forEach(item => {
-                sum_replacement_value_100 += parseInt(floodData100[item].sum.replacement_value.value) || 0;
-                sum_count_100 += parseInt(floodData100[item].sum.count.value)
-            });
-            data100.push({
-                'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
-                'count': numeral(sum_count_100).format('0,0a') || 0
-            });
-            if(Object.keys(floodData500).length !== 0){
-                Object.keys(floodData500).forEach(item =>{
-                    sum_replacement_value_500 += parseInt(floodData500[item].sum.replacement_value.value) || 0;
-                    sum_count_500 += parseInt(floodData500[item].sum.count.value) || 0
+            if(graph){
+                propClasses.forEach(propClass => {
+                    if(graph[propClass] && graph[propClass].flood_100 !== undefined){
+                        floodData100[propClass] = graph[propClass].flood_100;
+                    }
+                    if(graph[propClass] && graph[propClass].flood_500 !== undefined){
+                        floodData500[propClass] = graph[propClass].flood_500
+                    }
                 });
-                data500.push({
-                    'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
-                    'count': numeral(sum_count_500).format('0,0a') || 0
-                })
+                Object.keys(floodData100).forEach(item => {
+                    sum_replacement_value_100 += parseInt(floodData100[item].sum.replacement_value.value) || 0;
+                    sum_count_100 += parseInt(floodData100[item].sum.count.value)
+                });
+                data100.push({
+                    'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
+                    'count': numeral(sum_count_100).format('0,0a') || 0
+                });
+                if(Object.keys(floodData500).length !== 0){
+                    Object.keys(floodData500).forEach(item =>{
+                        sum_replacement_value_500 += parseInt(floodData500[item].sum.replacement_value.value) || 0;
+                        sum_count_500 += parseInt(floodData500[item].sum.count.value) || 0
+                    });
+                    data500.push({
+                        'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
+                        'count': numeral(sum_count_500).format('0,0a') || 0
+                    })
+                }
             }
 
         }
-
         return [data100,data500]
     }
 
