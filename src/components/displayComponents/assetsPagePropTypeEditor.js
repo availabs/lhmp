@@ -13,6 +13,12 @@ class assetsPagePropTypeEditor extends Component {
         this.renderTableBoxes= this.renderTableBoxes.bind(this)
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps() {
         return this.props.falcor.get(
                 ['building','byGeoid'
@@ -34,6 +40,8 @@ class assetsPagePropTypeEditor extends Component {
 
             })
     }
+
+
 
     getBuildingsData() {
         let data = []
