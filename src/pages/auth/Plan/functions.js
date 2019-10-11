@@ -1,10 +1,31 @@
 import React from "react";
+import {falcorGraph} from "store/falcorGraph";
 import GraphFactory from "components/displayComponents/graphFactory";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {Stickyroll} from '@stickyroll/stickyroll';
 import {Pagers} from "@stickyroll/pagers";
 import CSS_CONFIG from 'pages/auth/css-config'
 
+const geoDropdown = function(geoInfo){
+    console.log('check this',geoInfo)
+    return geoInfo ? (
+        <div>
+            <select
+                className="form-control"
+                id='contact_county'
+                data-error="Please select county"
+                //onChange={}
+                //onClick={this.listCousubDropdown}
+                //value={}
+            >
+                {Object.keys(geoInfo).map((county, county_i) =>
+                        <option className="form-control" key={county_i + 1}
+                                value={county}> {geoInfo[county].name} </option>
+                )}
+            </select>
+        </div>
+    ) : <div></div>
+}
 const renderReqNav = function(allRequirenments, pageIndex){
     return (
         <ul className='ae-main-menu '>
@@ -70,7 +91,7 @@ const renderElement = function(element, section, index, user) {
     )
 }
 
-const render = function(config, user){
+const render = function(config, user, geoInfo){
     let PageList = [];
     let sections = {};
     let allRequirenments = [];
@@ -95,11 +116,22 @@ const render = function(config, user){
                                 <div
                                     className='ae-side-menu'
                                     style={{
-                                        height: '100vh',
+                                        height: '5vh',
+                                        width: CSS_CONFIG.reqNavWidth,
+                                        position: 'fixed',
+                                        display: 'block',
+                                    }}>
+                                    {this.geoDropdown(geoInfo)}
+                                </div>
+                                <div
+                                    className='ae-side-menu'
+                                    style={{
+                                        height: '93vh',
                                         width: CSS_CONFIG.reqNavWidth,
                                         position: 'absolute',
                                         display: 'block',
                                         overflow: 'scroll',
+                                        marginTop: '6vh'
                                     }}>
                                     {this.renderReqNav(allRequirenments, pageIndex)}
                                 </div>
@@ -143,6 +175,7 @@ const render = function(config, user){
 export default {
     renderReqNav: renderReqNav,
     renderElement: renderElement,
-    render : render
+    render : render,
+    geoDropdown: geoDropdown
 }
 

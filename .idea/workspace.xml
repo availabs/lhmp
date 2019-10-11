@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="just to pull">
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPEditor.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsEditor.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/layerControl/layerHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/layerControl/layerHeader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/components/sidebar/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff/AvlTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff/AvlTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/themes/light1.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/themes/light1.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/falcorGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/falcorGraph.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/tables/FormEditOrNew.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Capabilities/capability/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Capabilities/capability/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Capabilities/capability/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Capabilities/capability/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/config/about-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/config/about-config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -129,14 +140,12 @@
       <workItem from="1566414947890" duration="238216000" />
       <workItem from="1568395712452" duration="52205000" />
       <workItem from="1568820399996" duration="26181000" />
-      <workItem from="1568986423319" duration="27803000" />
-    </task>
-    <task id="LOCAL-00020" summary="asset table working">
-      <created>1562612649292</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1562612649292</updated>
+      <workItem from="1568986423319" duration="28463000" />
+      <workItem from="1569350719094" duration="1339000" />
+      <workItem from="1569424898354" duration="32000" />
+      <workItem from="1569530112565" duration="298000" />
+      <workItem from="1569862840274" duration="1222000" />
+      <workItem from="1570729384564" duration="24712000" />
     </task>
     <task id="LOCAL-00021" summary="asset table displays county names and municipality names">
       <created>1562618264486</created>
@@ -474,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568909099502</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="minor design changes">
+      <created>1569344306066</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1569344306066</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -503,7 +519,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="public, authed menu, public only access if not authed" />
     <MESSAGE value="domain bug solved" />
     <MESSAGE value="submenu" />
     <MESSAGE value="submenu click" />
@@ -528,7 +543,8 @@
     <MESSAGE value="actions project with uploader" />
     <MESSAGE value="actions page shows worksheet + project" />
     <MESSAGE value="actions page shows worksheet + project minor update" />
-    <option name="LAST_COMMIT_MESSAGE" value="actions page shows worksheet + project minor update" />
+    <MESSAGE value="minor design changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor design changes" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">
