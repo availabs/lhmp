@@ -16,24 +16,28 @@ class BuildingByHazardRiskTable extends React.Component{
         this.buildingByHazardRiskTable = this.buildingByHazardRiskTable.bind(this)
     }
 
+    fetchFalcorDeps(){
+        return this.props.falcor.get(['building','hazard','meta','risk_zones'])
+            .then(response => {
+                //console.log('res',response.json.building.hazard.meta)
+                const graph = response.json.building.hazard.meta;
+                if(graph){
+                    let zones = graph.risk_zones[this.state.hazardRisk].zones;
+                    return zones
+                }
+            })
+            .then(zones =>{
+                // should be this.props.geoid but hardcoded for the sake of creating the piechart
+                this.props.falcor.get(['building','byGeoid',this.props.geoid,'hazardRisk',[this.state.hazardRisk],'zones',zones,'sum',['count','replacement_value']])
+                    .then(data =>{
+                        return data
+                    })
+            })
+    }
+
     componentDidUpdate(newProps){
         if(this.props !== newProps){
-            return this.props.falcor.get(['building','hazard','meta','risk_zones'])
-                .then(response => {
-                    //console.log('res',response.json.building.hazard.meta)
-                    const graph = response.json.building.hazard.meta;
-                    if(graph){
-                        let zones = graph.risk_zones[this.state.hazardRisk].zones;
-                        return zones
-                    }
-                })
-                .then(zones =>{
-                    // should be this.props.geoid but hardcoded for the sake of creating the piechart
-                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'hazardRisk',[this.state.hazardRisk],'zones',zones,'sum',['count','replacement_value']])
-                        .then(data =>{
-                            return data
-                        })
-                })
+            this.fetchFalcorDeps()
         }
     }
 
@@ -44,7 +48,6 @@ class BuildingByHazardRiskTable extends React.Component{
         let total_count = 0;
         let total_replacement_value = 0;
         if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.data[this.props.geoid]['hazardRisk']!==undefined){
-
             let graph = this.props.data[geoid].hazardRisk[this.state.hazardRisk].zones
             if(graph){
                 Object.keys(graph).forEach((item,i)=>{
