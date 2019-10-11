@@ -4,7 +4,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import { ResponsiveSunburst } from '@nivo/sunburst'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
-import {falcorChunkerNice} from "store/falcorGraph"
+import {falcorChunkerNiceWithUpdate} from "store/falcorGraph"
 
 class BuildingByLandUsePieChart extends React.Component{
     constructor(props){
@@ -13,14 +13,20 @@ class BuildingByLandUsePieChart extends React.Component{
 
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps(){
         if(this.props.geoid !== undefined){
             let propTypes = []
             BuildingByLandUseConfig.map(item => {
                 propTypes.push(item.value)
             })
-            //return this.props.falcor.get()
-            return falcorChunkerNice(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
+            //return
+            return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
         }
 
     }

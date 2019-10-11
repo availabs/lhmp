@@ -15,6 +15,11 @@ class BuildingByOwnerTypeTable extends React.Component{
         this.renderBuildingTable = this.renderBuildingTable.bind(this)
     }
 
+    componentDidUpdate(prevProps){
+        if(prevProps !== this.props){
+            this.fetchFalcorDeps()
+        }
+    }
     fetchFalcorDeps(){
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,'sum',['count','replacement_value']])
             .then(response => {
@@ -27,8 +32,8 @@ class BuildingByOwnerTypeTable extends React.Component{
         let geoid = this.props.geoid.map((geoid) => geoid);
         if(this.props.data !== undefined && this.props.data[geoid] !== undefined && this.props.buildingType)
         {
-            if(Object.keys(this.props.data[geoid].ownerType).length === buildingOwners.length){
-                let graph = this.props.data[geoid].ownerType;
+            let graph = this.props.data[geoid].ownerType
+            if(graph && Object.keys(graph).length === buildingOwners.length){
                 Object.keys(graph).forEach((item,i) =>{
                     BuildingTypeData.push({
                         'owner':buildingOwnersType[i],

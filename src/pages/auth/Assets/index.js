@@ -34,7 +34,7 @@ const HeaderSelect = styled.select`
     font-size: 1em;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }`
-let countyValue = [];
+
 //http://albany.localhost:3000/assets/list/:type/:typeIds/hazard/:hazardIds
 const buildingOwnerType = [
   {
@@ -89,7 +89,7 @@ class AssetsIndex extends React.Component {
     super(props)
     this.state = {
       page: '',
-      geoid: null,
+      geoid: this.props.activeGeoid,
       ownerType: null,
       buildingByLandUse: null,
       filter: {
@@ -118,77 +118,51 @@ class AssetsIndex extends React.Component {
     this.setState({filter:newFilter})
   }
 
-  componentDidMount(prevProps,oldState){
-    if(this.props.activePlan && !this.state.geoid){
-      return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
-          .then(response => {
-            return response.json.plans.county.byId[this.props.activePlan].fips
-          }).then(fips => {
-            return this.props.falcor.get(['geo',[fips],'cousubs'],['geo',[fips],['name']])
-                .then(response => response.json.geo[fips].cousubs)
-                .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]))
-                .then(res => {
-                  this.setState({
-                    geoid : fips
-                  })
-                  return res
-                })
-          })
-    }
+  fetchFalcorDeps(){
+    return this.props.falcor.get(
+        ['geo',this.props.activeGeoid,['name']],
+        ['geo',this.props.activeGeoid,'cousubs'],
+        )
+        .then(response  => {
+          return this.props.falcor.get(["geo",response.json.geo[this.props.activeGeoid].cousubs,["name"]])
+        })
+
 
   }
-  componentDidUpdate(prevProps,oldState){
-    if(this.props.activePlan && !this.state.geoid){
-      return this.props.falcor.get(['plans','county','byId',[this.props.activePlan],'fips'])
-          .then(response => {
-            return response.json.plans.county.byId[this.props.activePlan].fips
-          }).then(fips => {
-            return this.props.falcor.get(['geo',[fips],'cousubs'],['geo',[fips],['name']])
-                .then(response => response.json.geo[fips].cousubs)
-                .then(cousubs => this.props.falcor.get(['geo',cousubs,['name']]))
-                .then(res => {
-                  this.setState({
-                    geoid : fips
-                  })
-                  return res
-                })
-          })
-    }
-
-  }
-
   renderMenu() {
-    let arrayCosubs = [];
-    let countyName = '';
-    let cousubsName = [];
-    if(this.props.data !== undefined){
-      Object.keys(this.props.data).forEach((item)=>
+    let county = [];
+    let cousubs = [];
+    if(this.props.geoidData !== undefined){
+      Object.keys(this.props.geoidData).forEach((item,i)=>
       {
-        if(item.length === 5){
-          countyName = this.props.data[item].name;
-          countyValue.indexOf(item) === -1 ? countyValue.push(item) : console.log("This item already exists");
-          this.props.data[item].cousubs.value.forEach(cousub => arrayCosubs.push(cousub))
-        }
-        else{
-          cousubsName.push(this.props.data[item].name)
+        if (i === 0){
+          county.push({
+            name : this.props.geoidData[this.props.activeGeoid].name,
+            value : item
+          })
+        }else{
+          cousubs.push({
+            name : this.props.geoidData[item].name,
+            value : item
+          })
         }
 
-      });
+      })
+
     }
-
     return (
         <HeaderSelect
             id='geoid' onChange={this.handleChange}
             value={this.state.geoid}>
-          {countyValue.map((county,i) =>{
+          {county.map((d,i) =>{
             return(
-                <option key={i} value={county}>{countyName}</option>
+                <option key={i} value={d.value}>{d.name}</option>
             )
           })}
 
-          {arrayCosubs.map((ac,ac_i) => {
+          {cousubs.map((ac,ac_i) => {
             return (
-                <option key={ac_i+2} value={ac}>{cousubsName[ac_i]}</option>
+                <option key={ac_i+2} value={ac.value}>{ac.name}</option>
             )
           })}
         </HeaderSelect>
@@ -230,25 +204,29 @@ class AssetsIndex extends React.Component {
     return (
         <div className='container'>
           <Element>
-            {/*<div className='content-i'>
-                <div className='content-box'>*/}
             <h4 className="element-header">Assets For {this.renderMenu()}</h4>
             <div className="row">
               <div className="col-12">
-                <AssetsPagePropTypeEditor filter_type={'propType'} filter_value={['210', '220','283']} geoid={[this.props.activeGeoid]}/>
-                <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['2']} geoid={[this.props.activeGeoid]} title={'State owned Assets'}/>
-                <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['3']} geoid={[this.props.activeGeoid]} title={'County owned Assets'}/>
-                <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['4','5','6','7']} geoid={[this.props.activeGeoid]} title={'Municipality Owned Assets'}/>
-                <AssetsPageCriticalTypeEditor filter_type={'critical'} filter_value={['all']} geoid={[this.props.activeGeoid]} title={'Critical Infrastructure'}/>
-                {/*
-                          <div className='element-box' style={{height:'2800px'}}>
-                              <span><h4>{this.state.geoid} : Assets Table</h4></span>
-                              {this.state.geoid
-                                  ? <AssetsTable geoid={[this.state.geoid]}/>
-                                  : ''
-                              }
-                          </div>
-                          */}
+                {this.state.geoid ?
+                    <AssetsPagePropTypeEditor filter_type={'propType'} filter_value={['210', '220','283']} geoid={[this.state.geoid]}/>
+                  :''
+                }
+                {this.state.geoid ?
+                    <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['2']} geoid={[this.state.geoid]} title={'State owned Assets'}/>
+                    :''
+                }
+                {this.state.geoid ?
+                    <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['3']} geoid={[this.state.geoid]} title={'County owned Assets'}/>
+                    :''
+                }
+                {this.state.geoid ?
+                    <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['4','5','6','7']} geoid={[this.state.geoid]} title={'Municipality Owned Assets'}/>
+                    :''
+                }
+                {this.state.geoid ?
+                    <AssetsPageCriticalTypeEditor filter_type={'critical'} filter_value={['all']} geoid={[this.state.geoid]} title={'Critical Infrastructure'}/>
+                    :''
+                }
                 <div className='element-wrapper'>
                   <div className='element-box'>
                     <h4>Buildings By Owner Type</h4>
@@ -296,10 +274,9 @@ class AssetsIndex extends React.Component {
 
                   </div>
                 </div>
+
               </div>
             </div>
-            {/*</div>
-              </div>*/}
           </Element>
         </div>
 
@@ -312,7 +289,7 @@ const mapStateToProps = state => ({
 
   isAuthenticated: !!state.user.authed,
   activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
-  data: get(state.graph,'geo'),
+  geoidData: get(state.graph,'geo'),
   activeGeoid: state.user.activeGeoid
 });
 
