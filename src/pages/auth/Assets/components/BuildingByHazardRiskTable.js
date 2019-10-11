@@ -6,6 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
 var _ = require('lodash/core');
+var numeral = require('numeral');
 
 class BuildingByHazardRiskTable extends React.Component{
     constructor(props){
@@ -53,11 +54,10 @@ class BuildingByHazardRiskTable extends React.Component{
                 Object.keys(graph).forEach((item,i)=>{
                     buildingByHazardRiskTableData.push({
                         'zone': item,
-                        'count':graph[item].sum.count.value || 0,
-                        'replacement_value':graph[item].sum.replacement_value.value || 0
+                        'count':graph[item].sum.count.value ? graph[item].sum.count.value : 0,
+                        'replacement_value':graph[item].sum.replacement_value.value ? graph[item].sum.replacement_value.value : 0
                     })
                 })
-
                 buildingByHazardRiskTableData.forEach((data)=>{
                     total_count += parseFloat(data.count)
                     total_replacement_value += parseFloat(data.replacement_value)
@@ -84,7 +84,7 @@ class BuildingByHazardRiskTable extends React.Component{
                                             <tr>
                                                 <td>{data.zone}</td>
                                                 <td>{data.count}</td>
-                                                <td>${data.replacement_value}</td>
+                                                <td>${numeral(data.replacement_value).format('0,0.a')}</td>
                                             </tr>
                                         )
                                     })
@@ -93,8 +93,8 @@ class BuildingByHazardRiskTable extends React.Component{
                                 <tfoot>
                                 <tr>
                                     <td><h6>Total :</h6></td>
-                                    <td><h6>{total_count}</h6></td>
-                                    <td><h6>${total_replacement_value}</h6></td>
+                                    <td><h6>{numeral(total_count).format('0,0.a')}</h6></td>
+                                    <td><h6>${numeral(total_replacement_value).format('0,0.a')}</h6></td>
                                 </tr>
                                 </tfoot>
                             </table>
