@@ -11,6 +11,12 @@ class assetsPageOwnerTypeEditor extends Component {
         this.renderTableBoxes= this.renderTableBoxes.bind(this)
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps() {
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,
             this.props.filter_type,this.props.filter_value,'sum',['count','replacement_value']],
