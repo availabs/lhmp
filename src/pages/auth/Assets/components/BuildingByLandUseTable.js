@@ -4,7 +4,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
-import {falcorChunkerNice} from "store/falcorGraph"
+import {falcorChunkerNiceWithUpdate} from "store/falcorGraph"
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
 var _ = require('lodash/core');
 
@@ -15,15 +15,22 @@ class BuildingByLandUseTable extends React.Component{
         this.buildingByLandUseTable = this.buildingByLandUseTable.bind(this)
     }
 
+    fetchFalcorDeps(){
+        let propTypes = [];
+        BuildingByLandUseConfig.forEach(item => {
+            propTypes.push(item.value)
+        })
+        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
+
+        }
+
     componentDidUpdate(ownProps){
         let propTypes = [];
         if(this.props !== ownProps){
             BuildingByLandUseConfig.forEach(item => {
                 propTypes.push(item.value)
             });
-
-            return falcorChunkerNice(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
-
+        this.fetchFalcorDeps()
         }
 
     }
