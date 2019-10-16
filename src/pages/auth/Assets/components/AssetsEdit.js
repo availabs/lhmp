@@ -453,7 +453,7 @@ sendSystemMessage,
 };
 
 export default [{
-    path: '/assets/edit/:assetId',
+    path: '/assets/list/edit/:assetId',
         name: 'Edit Actions',
     mainNav: false,
     auth: true,

@@ -17,7 +17,7 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
             </thead>
             <tbody>
             {
-                tableData.map((row, i) => (
+                tableData.map((row, i) =>(
                     <tr key={ i } onClick={ onClick ? onClick.bind(null, row) : null }>
                         { columns.map((col, ii) => {
                             return (
@@ -32,13 +32,13 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
                         }
                         <td>
                             <Link className="btn btn-sm btn-outline-primary"
-                                  to={ `assets/${row.id}` }>
+                                  to={ `/assets/list/view/${row.building_id}` }>
                                 View
                             </Link>
                         </td>
                         <td>
                             <Link className="btn btn-sm btn-outline-primary"
-                                  to={ `assets/edit/${row.id}` }>
+                                  to={ `assets/list/edit/${row.building_id}` }>
                                 Edit
                             </Link>
                         </td>
