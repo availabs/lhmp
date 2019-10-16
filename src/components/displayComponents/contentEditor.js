@@ -14,7 +14,7 @@ const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         // each value to be an array of objects. each object to be key:value pair where key is curent key
         // while setting the state, first filter then assign new value / append new obj
         // while getting the state, filter by current content id
@@ -30,9 +30,9 @@ class ContentEditor extends Component {
     }
 
     fetchFalcorDeps() {
-        console.log('FFD',this.props.requirement, this.props.user.activePlan, this.props.user.activeGeoid)
-        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return Promise.resolve();
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        console.log('FFD',this.props.requirement, this.props.user.activePlan, this.props.user.activeCousubid)
+        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return Promise.resolve();
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
@@ -62,7 +62,7 @@ class ContentEditor extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         console.log('componentDidUpdate');
-        if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid){
+        if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid){
             this.fetchFalcorDeps();
         }
     }
@@ -74,9 +74,9 @@ class ContentEditor extends Component {
     };
 
     handleSubmit() {
-        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return null;
+        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
         let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         if (html !== this.state.contentFromDB) {
             if (this.state.contentFromDB) {
                 // update
@@ -129,7 +129,7 @@ class ContentEditor extends Component {
         )
     }
     render() {
-        let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
 
         console.log('contentEditor Render', this.state.currentKey, currentKey, (this.state.currentKey === currentKey));
 

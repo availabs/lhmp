@@ -22,6 +22,7 @@ class CapabilityNew extends React.Component {
             county: '',
             cousub:'',
             capability: '',
+            capability_type:'',
             capability_name:'',
             regulatory_name:'',
             adoption_date:null,
@@ -61,8 +62,9 @@ class CapabilityNew extends React.Component {
                     Object.keys(this.state).forEach((key,i)=>{
                         let tmp_state = {};
                         if(key === 'adoption_date' || key === 'expiration_date'){
-                            var d = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key].slice(0, 10).split('-');
-                            let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                            var d = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key] ?
+                                response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key].slice(0, 10).split('-') : null;
+                            let date = d ? d[0] +'-'+ d[1] +'-'+ d[2] : null // 10/30/2010
                             tmp_state[key] = date
                             this.setState(
                                 tmp_state
@@ -85,6 +87,7 @@ class CapabilityNew extends React.Component {
         let capabilityDropDown = []
         Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
             meta.forEach(item =>{
+                if (item['capability_type'] === this.state.capability_type)
                 capabilityDropDown.push({
                     type: 'capability',
                     value: item['capability']
@@ -152,6 +155,33 @@ class CapabilityNew extends React.Component {
 
     }
 
+
+    capabilityTypeDropdown(){
+        let capabilityDropDown = []
+        Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
+            meta.forEach(item =>{
+                if (!capabilityDropDown.includes(item['capability_type']))
+                    capabilityDropDown.push(item['capability_type'])
+                console.log(item, capabilityDropDown)
+
+            })
+        })
+        return(
+            <div className="col-sm-12">
+                <div className="form-group"><label htmlFor>Capability Type</label>
+                    <select className="form-control justify-content-sm-end" id='capability_type' onChange={this.handleChange} value={this.state.capability_type}>
+                        <option default>--Select Capability Type--</option>
+                        <option className="form-control" key={0} value="None">No Capability Type Selected</option>
+                        {
+                            capabilityDropDown.map((capability_type,i) =>{
+                                return(<option  className="form-control" key={i+1} value={capability_type}>{capability_type}</option>)
+                            })
+                        }
+                    </select>
+                </div>
+            </div>
+        )
+    }
     handleChange(e) {
         console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
@@ -215,6 +245,7 @@ class CapabilityNew extends React.Component {
                     <h6 className="element-header">New Capability</h6>
                     <div className="element-box">
                         <div className="form-group">
+                            {this.capabilityTypeDropdown()}
                             <div className="col-sm-12">
                                 <div className="form-group"><label htmlFor>Capability County Location</label>
                                     <select className="form-control justify-content-sm-end" id='county' onChange={this.handleChange} value={this.state.county} onClick={this.capabilityCousubDropDown}>
@@ -352,7 +383,7 @@ export default [
         exact: true,
         breadcrumbs: [
             { name: 'Capabilities', path: '/capabilities/' },
-            { param: 'capabilityId', path: '/capabilities/edit' }
+            { param: 'capabilityId', path: '/capabilities/edit/' }
         ],
         menuSettings: {
             image: 'none',

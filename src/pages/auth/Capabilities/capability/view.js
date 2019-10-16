@@ -12,8 +12,8 @@ import {sendSystemMessage} from 'store/modules/messages';
 const ATTRIBUTES = [
     //'id',
     'capability',
+    'capability_type',
     'capability_name',
-    //'capability_type',
     'regulatory_name',
     'adoption_date',
     'expiration_date',
@@ -53,13 +53,13 @@ class CapabilityView extends React.Component {
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    if (item[i].value.toString() === 'false'){
+                    if (item[i].value && item[i].value.toString() === 'false'){
                         table_data.push({
                             attribute: i,
                             value: 'no'
                         })
                     }
-                    else if(item[i].value.toString() === 'true'){
+                    else if(item[i].value && item[i].value.toString() === 'true'){
                         table_data.push({
                             attribute : i,
                             value : 'yes'
@@ -136,7 +136,7 @@ export default [
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/view/' },
+            { name: 'Capabilities', path: '/capabilities/' },
             { param: 'capabilityId', path: '/capabilities/view/' }
         ],
         menuSettings: {
