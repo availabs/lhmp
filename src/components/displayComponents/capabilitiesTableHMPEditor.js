@@ -22,7 +22,9 @@ const ATTRIBUTES = [
     'affiliated_agency',
     'link_url',
     'upload',
-    'plan_id'
+    'plan_id',
+    'cousub',
+    'county'
 ];
 class capabilitiesTableHMPEditor extends Component {
     constructor(props) {
@@ -53,7 +55,10 @@ class capabilitiesTableHMPEditor extends Component {
         let attributes = ATTRIBUTES.slice(0,3);
         let data = [];
         Object.values(this.props.capabilities).forEach(capability =>{
-            if (capability.capability.value === "Hazard mitigation plan"){
+            if (capability.capability.value === "Hazard mitigation plan" &&
+                (capability.cousub && capability.cousub.value && capability.cousub.value === this.props.activeCousubid ||
+                    capability.county && capability.county.value && capability.county.value === this.props.activeCousubid)
+            ){
                 data.push(Object.values(pick(capability,...attributes)))
             }
         });
@@ -130,7 +135,9 @@ const mapStateToProps = (state, ownProps) => {
         activePlan : state.user.activePlan,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-        capabilities: get(state.graph,'capabilitiesLHMP.byId',{})// so componentWillReceiveProps will get called.
+        capabilities: get(state.graph,'capabilitiesLHMP.byId',{}),// so componentWillReceiveProps will get called.
+        activeCousubid: state.user.activeCousubid,
+        activeGeoid: state.user.activeGeoid
     })
 };
 

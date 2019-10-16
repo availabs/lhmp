@@ -18,22 +18,30 @@ class ContentViewer extends Component {
         };
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps.activeCousubid !== this.props.activeCousubid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps() {
-        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return Promise.resolve();
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        if (!this.props.requirement || !this.props.user.activePlan || !this.props.activeCousubid) return Promise.resolve();
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.activeCousubid;
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
+            console.log('from root', contentId,contentRes)
             if (contentRes.json.content.byId[contentId]) {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 return contentRes.json.content.byId[contentId].body
+            }else{
+                this.setState({contentFromDB: null})
             }
             return null
         })
     }
 
     render() {
-        console.log('contentViewer Render', this.state.contentFromDB ? convertFromHTML(this.state.contentFromDB).contentBlocks.characterList : '')
         let {editorState} = this.state;
         return (
             //this.props.type === 'contentEditor' ? (
@@ -52,6 +60,8 @@ const mapStateToProps = state => {
     return {
         isAuthenticated: !!state.user.authed,
         geoGraph: state.graph,
+        activeCousubid: state.user.activeCousubid
+
     };
 };
 

@@ -6,21 +6,27 @@ import {Stickyroll} from '@stickyroll/stickyroll';
 import {Pagers} from "@stickyroll/pagers";
 import CSS_CONFIG from 'pages/auth/css-config'
 
-const geoDropdown = function(geoInfo){
-    console.log('check this',geoInfo)
+const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGeos){
+    console.log('geo info',activecousubId)
     return geoInfo ? (
         <div>
             <select
-                className="form-control"
+                style={{height: '5vh', width:'250px'}}
+                className="ae-side-menu"
                 id='contact_county'
                 data-error="Please select county"
-                //onChange={}
-                //onClick={this.listCousubDropdown}
-                //value={}
+                onChange={(e) => {
+                    console.log('conchange',e.target.value)
+                    setActiveCousubid(e.target.value)
+                }}
+                value={activecousubId}
             >
-                {Object.keys(geoInfo).map((county, county_i) =>
-                        <option className="form-control" key={county_i + 1}
-                                value={county}> {geoInfo[county].name} </option>
+                {Object.keys(geoInfo)
+                    .filter(f => allowedGeos.includes(f))
+                    .map((county, county_i) =>
+                        <option className="ae-side-menu" key={county_i + 1}
+                                value={county}> {geoInfo[county].name}
+                        </option>
                 )}
             </select>
         </div>
@@ -91,7 +97,7 @@ const renderElement = function(element, section, index, user) {
     )
 }
 
-const render = function(config, user, geoInfo){
+const render = function(config, user, geoInfo, setActiveCousubid, activecousubId,allowedGeos){
     let PageList = [];
     let sections = {};
     let allRequirenments = [];
@@ -121,7 +127,7 @@ const render = function(config, user, geoInfo){
                                         position: 'fixed',
                                         display: 'block',
                                     }}>
-                                    {this.geoDropdown(geoInfo)}
+                                    {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
                                 </div>
                                 <div
                                     className='ae-side-menu'

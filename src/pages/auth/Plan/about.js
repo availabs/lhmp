@@ -5,7 +5,7 @@ import {falcorGraph} from "store/falcorGraph";
 import config from './config/about-config'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import functions from './functions'
-
+import {setActiveCousubid} from 'store/modules/user'
 class AdminAbout extends React.Component {
 
     constructor(props) {
@@ -40,8 +40,18 @@ class AdminAbout extends React.Component {
         && falcorGraph.getCache().geo[this.props.activeGeoid] ?
             falcorGraph.getCache().geo :
             null
-        console.log('res geo',geoInfo);
-        return functions.render(config, this.props.user, geoInfo)
+        let allowedGeos = falcorGraph.getCache().geo &&
+        falcorGraph.getCache().geo[this.props.activeGeoid] &&
+        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs &&
+        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value ?
+            [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value] :
+            [this.props.activeGeoid]
+        return functions.render(config,
+            this.props.user,
+            geoInfo,
+            this.props.setActiveCousubid,
+            this.props.activeCousubid,
+            allowedGeos)
     }
 }
 
@@ -49,11 +59,12 @@ const mapStateToProps = (state, ownProps) => {
     return {
         geoGraph: state.graph.geo,
         router: state.router,
-        activeGeoid: state.user.activeGeoid
+        activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
     };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
     path: '/plan/about',

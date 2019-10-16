@@ -119,12 +119,20 @@ class rolesTableEditor extends Component {
     renderMainTable() {
         let table_data = [];
         let attributes = COLS_TO_DISPLAY
-        this.state.role_data.map(function (each_row) {
+        this.state.role_data
+            .filter(each_row => each_row.data[COLS.indexOf('contact_municipality') + 1] ===
+                (falcorGraph.getCache().geo[this.props.activeCousubid] ?
+                    falcorGraph.getCache().geo[this.props.activeCousubid].name :
+                    null)
+            )
+            .map(function (each_row) {
             console.log('each row: ', each_row);
             table_data.push([].concat(attributes.map(f => {
                 if (f !== 'contact_county') {
                     if (f === 'contact_municipality')
-                        return each_row.data[COLS.indexOf(f) + 1] + ',' +each_row.data[COLS.indexOf('contact_county') + 1];
+                        return each_row.data[COLS.indexOf(f) + 1] ?
+                            each_row.data[COLS.indexOf(f) + 1] + ',' + each_row.data[COLS.indexOf('contact_county') + 1] :
+                            each_row.data[COLS.indexOf('contact_county') + 1];
                     else
                         return each_row.data[COLS.indexOf(f) + 1];
 
@@ -167,7 +175,7 @@ class rolesTableEditor extends Component {
         return (
             <div className='container'>
                 <Element>
-                    <h6 className="element-header">Roles : {this.props.activePlan}
+                    <h6 className="element-header">Roles : {this.props.activePlan} | {this.props.activeCousubid}
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
@@ -192,6 +200,7 @@ class rolesTableEditor extends Component {
 const mapStateToProps = (state, ownProps) => {
     return ({
         activePlan: state.user.activePlan,
+        activeCousubid: state.user.activeCousubid
     })
 };
 

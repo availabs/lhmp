@@ -176,7 +176,9 @@ class RolesIndex extends React.Component {
             table_data.push([].concat(attributes.map(f => {
                     if (f !== 'contact_county') {
                         if (f === 'contact_municipality')
-                            return each_row.data[COLS.indexOf(f) + 1] + ',' +each_row.data[COLS.indexOf('contact_county') + 1];
+                            return each_row.data[COLS.indexOf(f) + 1] ?
+                                each_row.data[COLS.indexOf(f) + 1] + ',' + each_row.data[COLS.indexOf('contact_county') + 1] :
+                                each_row.data[COLS.indexOf('contact_county') + 1];
                         else
                             return each_row.data[COLS.indexOf(f) + 1];
 

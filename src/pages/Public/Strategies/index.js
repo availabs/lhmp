@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
 import config from "pages/auth/Plan/config/strategies-config";
 import GraphFactory from "components/displayComponents/graphFactory";
+import geoDropdown from 'pages/auth/Plan/functions'
+import {falcorGraph} from "store/falcorGraph";
+import {setActiveCousubid} from 'store/modules/user'
 
 class Strategies extends React.Component {
 
@@ -12,6 +14,19 @@ class Strategies extends React.Component {
         super(props);
         this.state = {
         }
+    }
+
+    fetchFalcorDeps() {
+        if (!this.props.activeGeoid) return Promise.resolve();
+        return this.props.falcor.get(
+            ['geo', this.props.activeGeoid, 'cousubs']
+        )
+            .then(response => {
+                console.log(response,falcorGraph.getCache().geo[this.props.activeGeoid])
+                return this.props.falcor.get(
+                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value], ['name']],
+                )
+            })
     }
 
     renderElement (element) {
@@ -27,10 +42,24 @@ class Strategies extends React.Component {
     }
 
     render() {
+        let geoInfo = falcorGraph.getCache().geo
+        && falcorGraph.getCache().geo[this.props.activeGeoid] ?
+            falcorGraph.getCache().geo :
+            null
+        let allowedGeos = falcorGraph.getCache().geo &&
+        falcorGraph.getCache().geo[this.props.activeGeoid] &&
+        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs &&
+        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value ?
+            [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value] :
+            [this.props.activeGeoid]
         return (
             <div className='container'>
                 <Element>
-                    <h4 className="element-header">Strategies page</h4>
+                    <h4 className="element-header">Strategies page
+                        <span style={{float:'right'}}>
+                            {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
+                        </span>
+                    </h4>
                     <div className="row">
                         <div className="col-12">
                             <div className="element-wrapper">
@@ -60,11 +89,13 @@ class Strategies extends React.Component {
 const mapStateToProps = (state,ownProps) => {
     return {
         geoGraph: state.graph.geo,
-        router: state.router
+        router: state.router,
+        activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
     };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: '',
     path: '/strategies',

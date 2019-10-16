@@ -22,7 +22,9 @@ const ATTRIBUTES = [
     'affiliated_agency',
     'link_url',
     'upload',
-    'plan_id'
+    'plan_id',
+    'cousub',
+    'county'
 ];
 
 const DISPLAY_ATTRIBUTES = [
@@ -61,7 +63,9 @@ class planningDocumentsViewer extends Component {
         let data = [];
         Object.values(this.props.capabilities).forEach(capability =>{
             if (capability.capability_type && capability.capability_type.value &&
-                ["planning and regulatory","Administrative and Technical"].includes(capability.capability_type.value)){
+                ["planning and regulatory","Administrative and Technical"].includes(capability.capability_type.value) &&
+                (capability.cousub && capability.cousub.value && capability.cousub.value === this.props.activeCousubid ||
+                    capability.county && capability.county.value && capability.county.value === this.props.activeCousubid)){
                 data.push(Object.values(pick(capability,...attributes)))
             }
         });
@@ -112,13 +116,6 @@ class planningDocumentsViewer extends Component {
             <div className='container'>
                 <Element>
                     <h6 className="element-header">Planning Documents
-                        <span style={{float:'right'}}>
-                        <Link
-                            className="btn btn-sm btn-primary"
-                            to={ `/capabilities/` } >
-                                Edit Capabilities
-                        </Link>
-                    </span>
                     </h6>
                     <div className="element-box" style={{'overflow': 'scroll', 'maxHeight': '80vh'}}>
                         <div className="table-responsive" >
@@ -137,7 +134,9 @@ const mapStateToProps = (state, ownProps) => {
         activePlan : state.user.activePlan,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-        capabilities: get(state.graph,'capabilitiesLHMP.byId',{})// so componentWillReceiveProps will get called.
+        capabilities: get(state.graph,'capabilitiesLHMP.byId',{}), // so componentWillReceiveProps will get called.
+        activeCousubid: state.user.activeCousubid,
+        activeGeoid: state.user.activeGeoid
     })
 };
 
