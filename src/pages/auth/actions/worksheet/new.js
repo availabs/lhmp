@@ -117,7 +117,7 @@ class Worksheet extends React.Component {
                             Object.keys(names.json.geo).filter(d => d !== '$__path').forEach((name, i) => {
                                 cousubsNames.push({
                                     name: names.json.geo[name].name,
-                                    geoid: cousubsArray[i]
+                                    geoid: name
                                 })
                             })
                         })
@@ -218,7 +218,7 @@ class Worksheet extends React.Component {
                             (
                                 <div className="form-group"><label htmlFor>Municipality</label>
                                     <select className="form-control justify-content-sm-end" id='cousub' onChange={this.handleChange} value={this.state.cousub}>
-                                        {this.listCousubDropdown}
+                                        <option default>--Select Town--</option>
                                         {
                                             cousubsNames.map((cousub,i) =>{
                                                 if(cousub.geoid.slice(0,5) === this.state.county){
