@@ -20,7 +20,7 @@ const COLS = [
 ]
 
 const COLS_TO_DISPLAY = [
-    "id",
+    "contact_name",   
     "contact_title_role",
     "contact_department",
     "contact_agency",
