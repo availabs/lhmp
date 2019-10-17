@@ -17,6 +17,7 @@ const AUTH_FAILURE = 'USER::AUTH_FAILURE';
 const SET_PLANS_AUTH = 'USER::SET_PLANS_AUTH'
 const SET_USER_AUTH = 'USER::SET_USER_AUTH'
 const SET_PLANS_GEOID = 'USER::SET_PLANS_GEOID'
+const SET_COUSUBID = 'USER::SET_COUSUBID'
 const SIGNUP_SUCCESS = 'USER::SIGNUP_SUCCESS'
 // const RESET_PASSWORD = 'USER::RESET_PASSWORD';
 
@@ -61,9 +62,20 @@ function setUserAuthLevel(authLevel){
 }
 
 function setPlanGeoid(geoid){
+    console.log('setPlanGeoid', {
+        type: SET_PLANS_GEOID,
+        geoid
+    })
     return {
     type: SET_PLANS_GEOID,
     geoid
+  }
+}
+
+function setCousubid(id){
+    return {
+    type: SET_COUSUBID,
+    id
   }
 }
 
@@ -241,6 +253,12 @@ export const setActiveGeoid = (user) =>{
   }
 }
 
+export const setActiveCousubid = (id) =>{
+    return (dispatch) =>{
+    dispatch(setCousubid(id))
+  }
+}
+
 export const login = ({ email, password }) => dispatch =>
   fetch(`${AUTH_HOST}/login`, {
     method: 'POST',
@@ -363,7 +381,8 @@ export const actions = {
   login,
   logout,
   setActivePlan,
-  setActiveGeoid
+  setActiveGeoid,
+    setActiveCousubid
 };
 
 // -------------------------------------
@@ -379,6 +398,7 @@ let initialState = {
   activePlan: localStorage.getItem('planId') || null,
   authedPlans: localStorage.getItem('authedPlans') || [],
   activeGeoid: localStorage.getItem('geoId') || null,
+  activeCousubid: localStorage.getItem('cousubId') || null,
   activeGroup: null,
   signupComplete: false
 };
@@ -444,6 +464,19 @@ const ACTION_HANDLERS = {
     if(action.geoid) {
       newState.activeGeoid = action.geoid
       localStorage.setItem('geoId', newState.activeGeoid);
+
+        newState.activeCousubid = action.geoid
+        localStorage.setItem('cousubId', newState.geoid);
+    }
+    return newState
+  },
+
+    [SET_COUSUBID]: (state =initialState, action) => {
+      console.log('cousubId setting', action.id)
+    const newState = Object.assign({}, state)
+    if(action.id) {
+      newState.activeCousubid = action.id
+      localStorage.setItem('cousubId', newState.activeCousubid);
     }
     return newState
   },
@@ -456,6 +489,7 @@ const ACTION_HANDLERS = {
 };
 
 export default function userReducer(state = initialState, action) {
+    console.log('actions', action)
   const handler = ACTION_HANDLERS[action.type];
   return handler ? handler(state, action) : state;
 }
