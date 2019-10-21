@@ -239,7 +239,6 @@ class CapabilityNew extends React.Component {
     }
 
     displayPrompt(id){
-        console.log('id',id)
         return (
             <div>
                 <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
@@ -264,11 +263,9 @@ class CapabilityNew extends React.Component {
                             <div className="modal-body">
                                 {config.map(item =>{
                                     if(item.id === id && id !== 'upload'){
-                                        //console.log('in first if')
                                         return (<div>{item.prompt}</div>)
                                     }
                                     if (id === 'upload'){
-                                        //console.log('in if pf upload')
                                         return (
                                             <div>
                                                 {item.id === 'upload' ?
