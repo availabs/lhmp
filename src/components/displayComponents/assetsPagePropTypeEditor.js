@@ -20,6 +20,7 @@ class assetsPagePropTypeEditor extends Component {
     }
 
     fetchFalcorDeps() {
+        console.time('get assetsPagePropTypeEditor data')
         return this.props.falcor.get(
                 ['building','byGeoid'
                     ,this.props.geoid,
@@ -35,6 +36,7 @@ class assetsPagePropTypeEditor extends Component {
                         this.props.filter_type,this.props.filter_value,['flood_500'],'sum',['count','replacement_value']]
                 )
                     .then(response =>{
+                        console.timeEnd('get assetsPagePropTypeEditor data') 
                         return response
                     })
 
