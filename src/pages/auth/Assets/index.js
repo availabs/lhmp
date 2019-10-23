@@ -200,6 +200,7 @@ class AssetsIndex extends React.Component {
     )
   }
 
+
   render () {
     return (
         <div className='container'>
@@ -265,13 +266,11 @@ class AssetsIndex extends React.Component {
                           <BuildingByHazardRiskPieChart geoid={[this.state.geoid]} replacement_value={true}/>
                           : ''
                     }
-
                     {
                       this.state.geoid ?
                           <BuildingByHazardRiskTable geoid={[this.state.geoid]}/>
                           : ''
                     }
-
                   </div>
                 </div>
 
@@ -281,7 +280,9 @@ class AssetsIndex extends React.Component {
         </div>
 
     )
+
   }
+
 }
 
 

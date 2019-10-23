@@ -21,13 +21,9 @@ class assetsPageOwnerTypeEditor extends Component {
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,
             this.props.filter_type,this.props.filter_value,'sum',['count','replacement_value']],
             ['building','byGeoid',this.props.geoid,
-                this.props.filter_type,this.props.filter_value,['owner_flood_100'],'sum',['count','replacement_value']]
+                this.props.filter_type,this.props.filter_value,['flood_100','flood_500'],'sum',['count','replacement_value']]
             ).then(response =>{
-                this.props.falcor.get(['building','byGeoid',this.props.geoid,
-                    this.props.filter_type,this.props.filter_value,['owner_flood_500'],'sum',['count','replacement_value']])
-                    .then(response =>{
-                        return response
-                    })
+                return response
         })
     }
     getOwnerData() {
@@ -65,32 +61,23 @@ class assetsPageOwnerTypeEditor extends Component {
         if(this.props.buildingByOwnerTypeData[this.props.geoid] !== undefined){
             let graph = this.props.buildingByOwnerTypeData[this.props.geoid].ownerType;
             if(graph){
-                this.props.filter_value.forEach(value =>{
-                    if(graph[value] && graph[value].owner_flood_100 !== undefined){
-                        floodData100[value] = graph[value].owner_flood_100;
+                this.props.filter_value.forEach(filter => {
+                    if(graph[filter].flood_100 && graph[filter].flood_500){
+                        sum_replacement_value_100 += parseInt(graph[filter].flood_100.sum.replacement_value.value) || 0;
+                        sum_count_100 += parseInt(graph[filter].flood_100.sum.count.value)
+                        sum_replacement_value_500 += parseInt(graph[filter].flood_500.sum.replacement_value.value) || 0;
+                        sum_count_500 += parseInt(graph[filter].flood_500.sum.count.value) || 0
                     }
-                    if(graph[value] && graph[value].owner_flood_500 !== undefined){
-                        floodData500[value] = graph[value].owner_flood_500
-                    }
-                })
-                Object.keys(floodData100).forEach(item => {
-                    sum_replacement_value_100 += parseInt(floodData100[item].sum.replacement_value.value) || 0;
-                    sum_count_100 += parseInt(floodData100[item].sum.count.value)
+
                 });
                 data100.push({
                     'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
                     'count': numeral(sum_count_100).format('0,0a') || 0
                 });
-                if(Object.keys(floodData500).length !== 0){
-                    Object.keys(floodData500).forEach(item =>{
-                        sum_replacement_value_500 += parseInt(floodData500[item].sum.replacement_value.value) || 0;
-                        sum_count_500 += parseInt(floodData500[item].sum.count.value) || 0
-                    });
-                    data500.push({
-                        'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
-                        'count': numeral(sum_count_500).format('0,0a') || 0
-                    })
-                }
+                data500.push({
+                    'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
+                    'count': numeral(sum_count_500).format('0,0a') || 0
+                })
             }
 
         }
