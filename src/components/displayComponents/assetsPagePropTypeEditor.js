@@ -26,19 +26,11 @@ class assetsPagePropTypeEditor extends Component {
                     this.props.filter_type,this.props.filter_value,'sum',['count','replacement_value']],
                 ['building','byGeoid',
                     this.props.geoid,
-                this.props.filter_type,this.props.filter_value,['flood_100'],'sum',['count','replacement_value']]
-            )
-            .then(response =>{
-                this.props.falcor.get(
-                    ['building','byGeoid',
-                        this.props.geoid,
-                        this.props.filter_type,this.props.filter_value,['flood_500'],'sum',['count','replacement_value']]
-                )
-                    .then(response =>{
-                        return response
-                    })
+                this.props.filter_type,this.props.filter_value,['flood_100','flood_500'],'sum',['count','replacement_value']]
+            ).then(response =>{
+                return response
+        })
 
-            })
     }
 
 
@@ -48,6 +40,7 @@ class assetsPagePropTypeEditor extends Component {
         let sum_replacement_value = 0;
         let sum_count = 0;
         if(this.props.buildingByPropClassData[this.props.geoid] !== undefined){
+            console.log('data',this.props.buildingByPropClassData[this.props.geoid])
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType
             if(graph){
                 Object.keys(graph).forEach(item =>{
@@ -67,44 +60,29 @@ class assetsPagePropTypeEditor extends Component {
     }
 
     getBuildingsByPropTypeBy100YearRiskZone(){
-        let floodData100 = {};
         let data100 = [];
         let data500 = [];
-        let floodData500 = {};
         let sum_replacement_value_100 = 0;
         let sum_replacement_value_500 = 0;
         let sum_count_100 = 0;
         let sum_count_500 = 0;
-        let propClasses = this.props.filter_value;
         if(this.props.buildingByPropClassData[this.props.geoid] !== undefined) {
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType;
             if(graph){
-                propClasses.forEach(propClass => {
-                    if(graph[propClass] && graph[propClass].flood_100 !== undefined){
-                        floodData100[propClass] = graph[propClass].flood_100;
-                    }
-                    if(graph[propClass] && graph[propClass].flood_500 !== undefined){
-                        floodData500[propClass] = graph[propClass].flood_500
-                    }
-                });
-                Object.keys(floodData100).forEach(item => {
-                    sum_replacement_value_100 += parseInt(floodData100[item].sum.replacement_value.value) || 0;
-                    sum_count_100 += parseInt(floodData100[item].sum.count.value)
+                this.props.filter_value.forEach(propClass => {
+                    sum_replacement_value_100 += parseInt(graph[propClass].flood_100.sum.replacement_value.value) || 0;
+                    sum_count_100 += parseInt(graph[propClass].flood_100.sum.count.value)
+                    sum_replacement_value_500 += parseInt(graph[propClass].flood_500.sum.replacement_value.value) || 0;
+                    sum_count_500 += parseInt(graph[propClass].flood_500.sum.count.value) || 0
                 });
                 data100.push({
                     'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
                     'count': numeral(sum_count_100).format('0,0a') || 0
                 });
-                if(Object.keys(floodData500).length !== 0){
-                    Object.keys(floodData500).forEach(item =>{
-                        sum_replacement_value_500 += parseInt(floodData500[item].sum.replacement_value.value) || 0;
-                        sum_count_500 += parseInt(floodData500[item].sum.count.value) || 0
-                    });
-                    data500.push({
-                        'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
-                        'count': numeral(sum_count_500).format('0,0a') || 0
-                    })
-                }
+                data500.push({
+                    'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
+                    'count': numeral(sum_count_500).format('0,0a') || 0
+                })
             }
 
         }

@@ -38,7 +38,7 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
                         </td>
                         <td>
                             <Link className="btn btn-sm btn-outline-primary"
-                                  to={ `assets/list/edit/${row.building_id}` }>
+                                  to={ `/assets/list/edit/${row.building_id}` }>
                                 Edit
                             </Link>
                         </td>
