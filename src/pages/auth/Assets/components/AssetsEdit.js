@@ -6,8 +6,9 @@ import Wizard from 'components/light-admin/wizard'
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import {Link} from "react-router-dom";
+import {falcorGraph} from "../../../../store/falcorGraph";
 
-
+const actionCategory = [];
 class AssetsEdit extends React.Component{
     constructor(props){
         super(props)
@@ -49,7 +50,8 @@ class AssetsEdit extends React.Component{
             high_wind_speed: '',
             soil_type: '',
             storage_hazardous_materials: '',
-            topography: ''
+            topography: '',
+            action_type: '',
             /*
             flood_zone: '',
 
@@ -69,6 +71,7 @@ class AssetsEdit extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.propClassDropDown = this.propClassDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
+        this.actionTypeDropDown = this.actionTypeDropDown.bind(this);
         //this.floodZoneDropDown = this.floodZoneDropDown.bind(this);
         //this.ownerTypeDropDown = this.ownerTypeDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
@@ -78,6 +81,7 @@ class AssetsEdit extends React.Component{
        // this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
         this.heatTypeDropDown = this.heatTypeDropDown.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.getActionsCategoryAndType = this.getActionsCategoryAndType.bind(this);
     }
 
     handleChange(e) {
@@ -93,6 +97,7 @@ class AssetsEdit extends React.Component{
     }
 
     componentDidMount(){
+        this.getActionsCategoryAndType();
         if(this.props.match.params.assetId) {
             this.props.falcor.get(['building','byId',[this.props.match.params.assetId],Object.keys(this.state)])
                 .then(response =>{
@@ -109,7 +114,21 @@ class AssetsEdit extends React.Component{
         }
 
     }
+    getActionsCategoryAndType(){
+        this.props.falcor.get(
+            ['actions','project','meta']
+        )
+            .then(d => {
+                if (falcorGraph.getCache().actions &&
+                    falcorGraph.getCache().actions.project &&
+                    falcorGraph.getCache().actions.project.meta &&
+                    falcorGraph.getCache().actions.project.meta.value
+                ){
+                    actionCategory.push(...falcorGraph.getCache().actions.project.meta.value)
 
+                }
+            })
+    }
     propClassDropDown(){
         if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined){
             const graph = this.props.parcelMetaData['prop_class'];
@@ -146,6 +165,23 @@ class AssetsEdit extends React.Component{
                     })
                 }
             </select>
+        )
+    }
+
+    actionTypeDropDown(){
+        return (
+            <select className="form-control justify-content-sm-end" id='action_type' onChange={this.handleChange} value={this.state.action_type}>
+                <option default>--Select Action Type--</option>
+                <option className="form-control" key={0} value="None">No Action Type Selected</option>
+                {
+                    actionCategory.map((cat, i) => {
+                        console.log('cat',cat)
+                        return (<option className="form-control" key={i + 1}
+                                        value={cat.id}>{cat.actions_tracker_category | cat.actions_tracker_type}</option>)
+                    })
+                }
+            </select>
+
         )
     }
 
@@ -420,6 +456,16 @@ class AssetsEdit extends React.Component{
                     </div>
                 </div>)
             },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 7</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Actions</span></span>),
+                content: (
+                    <div className="row">
+                        {this.actionTypeDropDown()}
+                    </div>
+                    )
+                    }
 
         ]
         return (
