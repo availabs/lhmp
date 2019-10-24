@@ -253,7 +253,11 @@ class ActionsIndex extends React.Component {
                                                         data.attribute === 'action_point_of_contact' ?
                                                             data.value.map(d => {
                                                                 if(roleData.length>0){
-                                                                    return roleData.filter(role => role.id.value.toString() === d.toString())[0].contact_name.value
+                                                                    let tmpFilter = roleData.filter(role => role.id.value.toString() === d.toString())
+                                                                    return tmpFilter.length > 0 &&
+                                                                    tmpFilter[0] &&
+                                                                    tmpFilter[0].contact_name &&
+                                                                    tmpFilter[0].contact_name.value ? tmpFilter[0].contact_name.value : d
                                                                 }
                                                             }).join(',') :
                                                         data.value.join(',') :

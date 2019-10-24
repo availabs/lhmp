@@ -5,6 +5,7 @@ import get from "lodash.get";
 import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
 import {Link} from "react-router-dom";
+import {falcorGraph} from "../../../../store/falcorGraph";
 const BASIC_INFO = [
     'prop_class',
     'replacement_value',
@@ -59,6 +60,11 @@ const RISK_INFO = [
     'topography'
 ]
 
+const ACTIONS_INFO = [
+    'action_name',
+    'action_type'
+]
+
 class AssetsView extends React.Component{
     constructor(props){
         super(props)
@@ -85,9 +91,11 @@ class AssetsView extends React.Component{
             ['building','byId',[this.props.match.params.assetId],STRUCTURAL_INFO],
             ['building','byId',[this.props.match.params.assetId],SERVICES_INFO],
             ['building','byId',[this.props.match.params.assetId],COMMERCIAL_INFO],
-            ['building','byId',[this.props.match.params.assetId],RISK_INFO]
+            ['building','byId',[this.props.match.params.assetId],RISK_INFO],
+            ['actions', 'assets','byId',[this.props.match.params.assetId],ACTIONS_INFO]
         )
             .then(response =>{
+                console.log('asset info', falcorGraph.getCache().actions)
                 this.setState({
                     address : response.json.building.byId[this.props.match.params.assetId].address.toUpperCase()
                 });
@@ -437,6 +445,55 @@ class AssetsView extends React.Component{
 
     }
 
+    actionInfo(){
+        let tableData = []
+        if (falcorGraph.getCache().actions &&
+            falcorGraph.getCache().actions.assets &&
+            falcorGraph.getCache().actions.assets.byId &&
+            falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId] &&
+            Object.keys(falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId]).length > 0
+        ){
+            console.log('asset actions info', falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId])
+            tableData = falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId].value
+        }
+        console.log('tabledata', tableData)
+        return (
+            <div>
+                <Element>
+                    <h4>Actions Info</h4>
+                    <div className="table-responsive">
+                        <table className="table table lightBorder">
+                            <thead>
+                            <tr>
+                                <th>NAME</th>
+                                <th>TYPE</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            {tableData.length > 0 ?
+                                <tbody>
+                                {
+                                    tableData.map(data =>
+                                        <tr>
+                                            {ACTIONS_INFO.map(col => <td> {data[col]} </td>)}
+                                            <td>
+                                                <Link
+                                                    className="btn btn-sm btn-primary"
+                                                    to={ `/actions/project/view/${data['id']}` } >
+                                                    View Action
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                                </tbody>
+                                : null}
+                        </table>
+                    </div>
+                </Element>
+            </div>
+        )
+    }
     render(){
         return(
             <div className='container'>
@@ -468,6 +525,7 @@ class AssetsView extends React.Component{
                                     {this.servicesInfo()}
                                     {this.commercialInfo()}
                                     {this.riskInfo()}
+                                    {this.actionInfo()}
                                 </div>
                             </div>
                         </div>

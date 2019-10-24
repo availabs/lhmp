@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/light-admin/prompt/promptModal.js" afterDir="false" />
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="actions project wizard update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/filters/multi-select-filter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/layers/ebr_buildings_new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/layers/ebr_buildings_new.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsEdit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsEdit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Participation/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Participation/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Assets/components/AssetsView.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,7 +40,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/src/components/AvlMap" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="JsFlowSettings">
@@ -137,14 +133,7 @@
       <workItem from="1569530112565" duration="298000" />
       <workItem from="1569862840274" duration="1222000" />
       <workItem from="1570729384564" duration="52327000" />
-      <workItem from="1571252779583" duration="95981000" />
-    </task>
-    <task id="LOCAL-00023" summary="Updates in AssetTable and AssetIndex">
-      <created>1562782684574</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1562782684574</updated>
+      <workItem from="1571252779583" duration="114055000" />
     </task>
     <task id="LOCAL-00024" summary="Updates in AssetTable and AssetIndex">
       <created>1562783283188</created>
@@ -482,7 +471,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571241280590</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="actions project wizard update">
+      <created>1571859508200</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1571859508200</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -511,7 +507,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="submenu click" />
     <MESSAGE value="contentEditor work started" />
     <MESSAGE value="contentEditor insert + update done" />
     <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
@@ -536,7 +531,8 @@
     <MESSAGE value="minor design changes" />
     <MESSAGE value="changes in: plan-&gt;about, created display comp, changed roles table display" />
     <MESSAGE value="plans filter on towns now" />
-    <option name="LAST_COMMIT_MESSAGE" value="plans filter on towns now" />
+    <MESSAGE value="actions project wizard update" />
+    <option name="LAST_COMMIT_MESSAGE" value="actions project wizard update" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">
