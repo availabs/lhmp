@@ -64,7 +64,6 @@ class rolesTableEditor extends Component {
                         ).then(allIds => {
                             let cosubIds = [];
                             Object.values(allIds.json.geo).map(val => {
-                                console.log(val, val.cousubs);
                                 if (val.cousubs) {
                                     cosubIds.push(...val.cousubs)
                                 }
@@ -78,12 +77,10 @@ class rolesTableEditor extends Component {
                         ['rolesmeta', 'roles', ['field']]
                     )
                         .then(response => {
-                            console.log('res geo', response);
                             Object.keys(response.json.roles.byId)
                                 .filter(d => d !== '$__path'
                                     && response.json.roles.byId[d].associated_plan === parseInt(this.props.activePlan))
                                 .forEach(function (role, i) {
-                                    console.log('each role', response.json.roles.byId);
                                     response.json.roles.byId['contact_title_role'] = falcorGraph.getCache().rolesmeta.roles;
 
                                     // meta for role title
@@ -126,7 +123,6 @@ class rolesTableEditor extends Component {
                     null)
             )
             .map(function (each_row) {
-            console.log('each row: ', each_row);
             table_data.push([].concat(attributes.map(f => {
                 if (f !== 'contact_county') {
                     if (f === 'contact_municipality')

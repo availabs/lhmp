@@ -17,7 +17,7 @@ class MainMenu extends Component {
         let topMenu = menu.path ? menu.path.split('/')[1] : ''
         let currentTop = this.props.path ? this.props.path.split('/')[1] : ' ' 
         let isActive = topMenu === currentTop
-          ? 'active selected'
+          ? ' selected'
           : ''
         // console.log('isActive', isActive)
         if (!menu.subMenus) {

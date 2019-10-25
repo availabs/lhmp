@@ -30,7 +30,6 @@ class ContentViewer extends Component {
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
-            console.log('from root', contentId,contentRes)
             if (contentRes.json.content.byId[contentId]) {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 return contentRes.json.content.byId[contentId].body

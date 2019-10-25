@@ -489,7 +489,6 @@ const ACTION_HANDLERS = {
 };
 
 export default function userReducer(state = initialState, action) {
-    console.log('actions', action)
   const handler = ACTION_HANDLERS[action.type];
   return handler ? handler(state, action) : state;
 }
