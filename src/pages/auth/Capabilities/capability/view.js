@@ -44,11 +44,14 @@ class CapabilityView extends React.Component {
             .then(response => {
                 let county = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId].county
                 let cousub = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId].cousub
-                this.props.falcor.get(['geo',county,['name']],
-                    ['geo',cousub,['name']]
+                if(county !== undefined && cousub !== undefined){
+                    this.props.falcor.get(['geo',county,['name']],
+                        ['geo',cousub,['name']]
                     ).then(response =>{
-                    return response
-                })
+                        return response
+                    })
+                }
+
 
             })
 
@@ -57,13 +60,11 @@ class CapabilityView extends React.Component {
     capabilitiesViewTable(){
         let table_data = [];
         let data = [];
-        console.log('data',this.props.geoData)
         if(this.props.capabilitiesData[this.props.match.params.capabilityId] !== undefined){
             let graph = this.props.capabilitiesData[this.props.match.params.capabilityId];
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    console.log('i',i,item[i])
                     if (item[i].value && item[i].value.toString() === 'false'){
                         table_data.push({
                             attribute: i,
@@ -76,10 +77,18 @@ class CapabilityView extends React.Component {
                             value : 'yes'
                         })
                     }else if(i === 'county' || i === 'cousub'){
-                        table_data.push({
-                            attribute : i,
-                            value: this.props.geoData[item[i].value].name
-                        })
+                        if(item[i] === null){
+                            table_data.push({
+                                attribute : i,
+                                value: 'None'
+                            })
+                        }else{
+                            table_data.push({
+                                attribute : i,
+                                value: this.props.geoData[item[i].value] ? this.props.geoData[item[i].value].name : 'None'
+                            })
+                        }
+
                     }else{
                         table_data.push({
                             attribute : i,
