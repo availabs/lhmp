@@ -37,7 +37,7 @@ class assetsPageCriticalTypeEditor extends Component {
             let graph = this.props.buildingByCriticalTypeData[this.props.geoid].critical;
             if(graph){
                 Object.keys(graph).forEach(item =>{
-                    if (this.props.filter_value.includes(item)){
+                    if (graph[item].sum && this.props.filter_value.includes(item)){
                         sum_replacement_value += parseInt(graph[item].sum.replacement_value.value) || 0;
                         sum_count += parseInt(graph[item].sum.count.value) || 0;
                     }

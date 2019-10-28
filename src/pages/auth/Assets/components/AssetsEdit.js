@@ -511,7 +511,7 @@ class AssetsEdit extends React.Component{
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
-                            to={ `/assets/${this.props.match.params.assetId}` } >
+                            to={ `/assets/list/view/${this.props.match.params.assetId}` } >
                                 View Asset
                         </Link>
                         </span>
