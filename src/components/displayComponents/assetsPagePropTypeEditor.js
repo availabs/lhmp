@@ -40,11 +40,10 @@ class assetsPagePropTypeEditor extends Component {
         let sum_replacement_value = 0;
         let sum_count = 0;
         if(this.props.buildingByPropClassData[this.props.geoid] !== undefined){
-            console.log('data',this.props.buildingByPropClassData[this.props.geoid])
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType
             if(graph){
                 Object.keys(graph).forEach(item =>{
-                    if (this.props.filter_value.includes(item)){
+                    if (graph[item].sum && this.props.filter_value.includes(item)){
                         sum_replacement_value += parseInt(graph[item].sum.replacement_value.value) || 0;
                         sum_count += parseInt(graph[item].sum.count.value) || 0;
                     }
@@ -70,10 +69,13 @@ class assetsPagePropTypeEditor extends Component {
             let graph = this.props.buildingByPropClassData[this.props.geoid].propType;
             if(graph){
                 this.props.filter_value.forEach(propClass => {
-                    sum_replacement_value_100 += parseInt(graph[propClass].flood_100.sum.replacement_value.value) || 0;
-                    sum_count_100 += parseInt(graph[propClass].flood_100.sum.count.value)
-                    sum_replacement_value_500 += parseInt(graph[propClass].flood_500.sum.replacement_value.value) || 0;
-                    sum_count_500 += parseInt(graph[propClass].flood_500.sum.count.value) || 0
+                    if (graph[propClass].flood_100  && graph[propClass].flood_500){
+                        sum_replacement_value_100 += parseInt(graph[propClass].flood_100.sum.replacement_value.value) || 0;
+                        sum_count_100 += parseInt(graph[propClass].flood_100.sum.count.value)
+                        sum_replacement_value_500 += parseInt(graph[propClass].flood_500.sum.replacement_value.value) || 0;
+                        sum_count_500 += parseInt(graph[propClass].flood_500.sum.count.value) || 0
+                    }
+
                 });
                 data100.push({
                     'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
