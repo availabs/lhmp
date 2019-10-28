@@ -8,67 +8,115 @@ import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick";
 
-
+let countyName = '';
 const ATTRIBUTES = [
-    //"id"
+    //"id",
+    // step 1
+    "action_point_of_contact", // select from dropdown or add new contact - opens contact entry form
+
+    // step 2
     "action_name",
+    "action_category",
+    "action_type", // dropdown
     "action_number",
-    "action_type",
     "description_of_problem_being_mitigated",
     "action_description",
-    "associated_hazards",
+    "associated_hazards", // dropdown
     "metric_for_measurement",
+    "action_url",
+
+    // step 3
+    "new_or_update", // change to null
+    "status", // dropdown: Ongoing, discontinued, completed, in-progress
+    "status_justification",
+    "plan_maintenance_update_evaluation_of_problem_solution",
+    "phased_action", // bool
     "name_of_associated_hazard_mitigation_plan",
-    "date_of_lhmp_plan_approval",
+
+    // step 4
     "action_county",
-    "action_jurisdiction",
+    "action_jurisdiction", // selected from dropdown (includes municipalities and county)
     "action_location",
-    "action_located_in_special_flood_hazard_area",
-    "action_located_in_hazard_zone",
-    "recent_damages_incurred_at_action_locations",
-    "action_point_of_contact",
-    "poc_title",
-    "contact_department_agency_or_organization",
-    "lead_department_agency_or_organization",
-    "action_partners",
-    "alternative_action_1",
-    "alternative_action_2",
-    "no_alternative",
-    "estimated_timeframe_for_action_implementation",
-    "status",
-    "is_pnp",
-    "action_associated_with_critical_facility",
-    "structure_type",
-    "level_of_protection",
-    "useful_life",
-    "local_planning_mechanisms_in_implementation", // []
-    "project_milestones",
-    "estimated_cost_range",
+    "location_points", // add to db
+    "site_photographs", // upload
+    "property_names_or_hist_dist", // add to db
+
+    // step 5
+    "estimated_cost_range", // drop down: range 0-50, 50-100, 100-1,000, 1,000+, Jurisdictional
     "calculated_cost",
-    "population_served",
-    "estimated_benefit_future_losses_avoided",
-    "phased_action",
-    "engineering_required",
-    "bca",
-    "primary_or_potential_funding_sources_type",
-    "primary_or_potential_funding_sources_name",
-    "secondary_funding_source_type",
-    "secondary_funding_source_name",
+    "primary_or_potential_funding_sources_name", // dropdown
+    "secondary_funding_source_name", // dropdown
     "funding_received_to_date",
+
+    // step 6
+    "bca", // upload?
+    "bca_to_bcr", // need to be added to db?
+    "bcr", // upload
+    "level_of_protection",
+    "recurrence_interval", // add to db
+    "useful_life",
+    "estimated_timeframe_for_action_implementation",
+    "exact_timeframe_for_action_implementation", // add to db
+
+    // step 7
     "associated_mitigation_capability",
-    "associated_goals_objectives",
-    "prioritization",
-    "priority_scoring",
+
+    // step 8
+    "boolalternative",
+    "alternative_action_1",
+    "alternative_action_1_evaluation",
+    "alternative_action_2",
+    "alternative_action_2_evaluation",
+
+    // step 9
+    "priority_scoring_probability_of_acceptance_by_population",
     "priority_scoring_funding_availability",
     "priority_scoring_probability_of_matching_funds",
     "priority_scoring_benefit_cost_review",
     "priority_scoring_environmental_benefit",
     "priority_scoring_technical_feasibility",
     "priority_scoring_timeframe_of_implementation",
-    "plan_maintenance_date_of_status_report",
-    "plan_maintenance_progress_report",
-    "plan_maintenance_update_evaluation_of_problem_solution"
+
+    // step 10
+    "relates_to_protects_critical_facility_infrastructure",
+    "relates_to_protects_community_lifeline_by_fema",
+    "is_pnp", // bool
+    "is_state_agency",
+    "is_community_member_of_crs",
+    "is_community_member_of_good_standing_with_nfip",
+    "is_community_participate_in_climate_smart_communities",
+    "is_community_have_local_adopted_hmp",
+    "is_community_have_comprehensive_plan",
+    "is_community_have_land_use_zoning",
+    "is_community_have_subdivision_ordinances",
+    "is_community_have_building_codes",
+    "engineering_required", // bool
+    "is_final_engineering_design_completes", // bool
+    "is_mitigation", // bool
+    "is_preparedness", // bool
+    "is_response", // bool
+    "is_recovery", // bool
+    "is_climate_adaptation", // bool
+    "is_proposed_project_located_in_sfha", // bool
+    "is_project_structure_located_in_sfha", // bool
+    "is_protects_repetitive_loss_property", // bool
+    "is_protects_severe_repetitive_loss_property", // bool
+    "known_environmental_historic_preservation_protected_species_iss", // bool
+    "ground_distributed_other_than_agriculture", // bool
+    "indian_or_historic_artifacts_found_on_or_adjacent_project_area", // bool
+    "building_50_years_or_older_within_or_near", // bool
+    "is_shpo_survey", // bool
+    "shpo_survey", // upload
+
+    // step 11
+    "climate_smart_communities_action_type",
+
+    // step 12
+    "plan_maintenance_date_of_status_report", // date
+    "plan_maintenance_progress_report"
+
 ]
+let roleData = [];
 
 class ActionsIndex extends React.Component {
 
@@ -76,18 +124,56 @@ class ActionsIndex extends React.Component {
         super(props)
 
         this.actionViewData = this.actionViewData.bind(this)
+        this.getRolesData = this.getRolesData.bind(this)
 
     }
 
     fetchFalcorDeps() {
 
-        return falcorGraph.get(['actions','project','byId', [this.props.match.params.projectId], ATTRIBUTES])
-            .then(response => {
-                return response
+        return falcorGraph.get(
+            ['actions','project','byId', [this.props.match.params.projectId], ATTRIBUTES],
+            ['geo', [this.props.geoid], ['name']]
+        ).then(d => {
+            if (falcorGraph.getCache().geo &&
+                falcorGraph.getCache().geo[this.props.geoid] &&
+                falcorGraph.getCache().geo[this.props.geoid]['name']){
+                countyName = falcorGraph.getCache().geo[this.props.geoid]['name']
+            }
+        })
+            .then(d => this.getRolesData())
+    }
+
+    getRolesData(){
+        if (!(this.props.actionViewData &&
+            this.props.actionViewData[this.props.match.params.projectId] &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value.length > 0
+        )) return Promise.resolve();
+        console.log('action view data',this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value)
+
+        return this.props.falcor
+            .get(
+                ['roles','byId',this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value,['id','contact_name','associated_plan']]
+            ).then(d => {
+                if (falcorGraph.getCache().roles &&
+                    falcorGraph.getCache().roles.byId &&
+                    Object.keys(falcorGraph.getCache().roles.byId).length > 0
+                ){
+                    Object.keys(falcorGraph.getCache().roles.byId)
+                        .forEach(roleId => {
+                            if (falcorGraph.getCache().roles.byId[roleId].associated_plan.value && this.props.activePlan &&
+                                falcorGraph.getCache().roles.byId[roleId].associated_plan.value.toString() === this.props.activePlan.toString()
+                            ){
+                                roleData.push(falcorGraph.getCache().roles.byId[roleId])
+                            }
+                        })
+                }
             })
     }
 
     actionViewData(){
+        console.log('processing data...');
         let table_data = [];
         let data = [];
         if(this.props.actionViewData[this.props.match.params.projectId] !== undefined){
@@ -123,6 +209,7 @@ class ActionsIndex extends React.Component {
                 })
             })
         }
+        console.log('data processed...');
         return (
             <div className='container'>
                 <Element>
@@ -139,13 +226,26 @@ class ActionsIndex extends React.Component {
                                 <tbody>
                                 {
                                     table_data.map(data =>{
+                                        console.log('render processing started')
                                         return(
                                             <tr>
                                                 <td>{data.attribute}</td>
                                                 <td>{
                                                     typeof data.value === 'object' && data.value !== null ?
+                                                        data.attribute === 'action_point_of_contact' ?
+                                                            data.value.map(d => {
+                                                                if(roleData.length>0){
+                                                                    let tmpFilter = roleData.filter(role => role.id.value.toString() === d.toString())
+                                                                    return tmpFilter.length > 0 &&
+                                                                    tmpFilter[0] &&
+                                                                    tmpFilter[0].contact_name &&
+                                                                    tmpFilter[0].contact_name.value ? tmpFilter[0].contact_name.value : d
+                                                                }
+                                                            }).join(',') :
                                                         data.value.join(',') :
-                                                    data.value
+                                                        data.attribute === 'action_county' ?
+                                                            countyName :
+                                                            data.value
                                                 }</td>
                                             </tr>
                                         )
@@ -157,15 +257,18 @@ class ActionsIndex extends React.Component {
                         </div>
                     </div>
                 </Element>
+                {console.log('render processing ended...')}
             </div>
-
         )
     }
 
     render() {
+        console.log('in render')
         return(
             <div>
+                {console.log('calling function')}
                 {this.actionViewData()}
+                {console.log('function returned')}
             </div>
 
         )
@@ -175,6 +278,8 @@ class ActionsIndex extends React.Component {
 
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
+    activePlan: state.user.activePlan,
+    geoid: state.user.activeGeoid,
     attempts: state.user.attempts, // so componentWillReceiveProps will get called.
     actionViewData : get(state.graph,'actions.project.byId',{})
 });
@@ -201,6 +306,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(ActionsIndex)
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ActionsIndex))
     }
 ]

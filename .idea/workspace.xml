@@ -3,23 +3,18 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -145,35 +140,8 @@
       <workItem from="1569424898354" duration="32000" />
       <workItem from="1569530112565" duration="298000" />
       <workItem from="1569862840274" duration="1222000" />
-      <workItem from="1570729384564" duration="49850000" />
-    </task>
-    <task id="LOCAL-00022" summary="County and Municipality names added for Action worksheets">
-      <created>1562694006207</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1562694006207</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Updates in AssetTable and AssetIndex">
-      <created>1562782684574</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1562782684574</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Updates in AssetTable and AssetIndex">
-      <created>1562783283188</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1562783283188</updated>
-    </task>
-    <task id="LOCAL-00025" summary="AssetPieChart for Replacement Value">
-      <created>1563209549526</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1563209549526</updated>
+      <workItem from="1570729384564" duration="52327000" />
+      <workItem from="1571252779583" duration="126285000" />
     </task>
     <task id="LOCAL-00026" summary="updates">
       <created>1563209569706</created>
@@ -490,7 +458,35 @@
       <option name="project" value="LOCAL" />
       <updated>1570823634267</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="plans filter on towns now">
+      <created>1571241280590</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1571241280590</updated>
+    </task>
+    <task id="LOCAL-00072" summary="actions project wizard update">
+      <created>1571859508200</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1571859508200</updated>
+    </task>
+    <task id="LOCAL-00073" summary="added actions tab on click">
+      <created>1571945320434</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1571945320434</updated>
+    </task>
+    <task id="LOCAL-00074" summary="actions assets">
+      <created>1571945389851</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1571945389851</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -519,10 +515,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="submenu" />
-    <MESSAGE value="submenu click" />
-    <MESSAGE value="contentEditor work started" />
-    <MESSAGE value="contentEditor insert + update done" />
     <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
     <MESSAGE value="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well." />
     <MESSAGE value="on login /admin vs /" />
@@ -544,7 +536,11 @@
     <MESSAGE value="actions page shows worksheet + project minor update" />
     <MESSAGE value="minor design changes" />
     <MESSAGE value="changes in: plan-&gt;about, created display comp, changed roles table display" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes in: plan-&gt;about, created display comp, changed roles table display" />
+    <MESSAGE value="plans filter on towns now" />
+    <MESSAGE value="actions project wizard update" />
+    <MESSAGE value="added actions tab on click" />
+    <MESSAGE value="actions assets" />
+    <option name="LAST_COMMIT_MESSAGE" value="actions assets" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

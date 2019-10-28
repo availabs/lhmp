@@ -16,13 +16,11 @@ class AdminRisk extends React.Component {
     }
 
     fetchFalcorDeps() {
-        console.log('hits here')
         if (!this.props.activeGeoid) return Promise.resolve();
         return this.props.falcor.get(
             ['geo', this.props.activeGeoid, 'cousubs']
         )
             .then(response => {
-                console.log(response,falcorGraph.getCache().geo[this.props.activeGeoid])
                 return this.props.falcor.get(
                     ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value], ['name']],
                 )
@@ -77,7 +75,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-left',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminRisk))

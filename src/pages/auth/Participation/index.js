@@ -19,7 +19,7 @@ const ATTRIBUTES = [
        'hours'
 ]
 
-//const attributes = ATTRIBUTES.slice(0,3)
+//const attributes = ATTRIBUTES_PROJECT.slice(0,3)
 
 
 
@@ -69,7 +69,7 @@ class ParticipationIndex extends React.Component {
                                 let test = []
 /*
                                 Object.values(response.json.participation.byPlan[this.props.activePlan].byIndex).forEach(participation => {
-                                  test.push(Object.values(pick(participation,...ATTRIBUTES)))
+                                  test.push(Object.values(pick(participation,...ATTRIBUTES_PROJECT)))
                                 })
 */
                             if (response.json.participation.byPlan[this.props.activePlan].byIndex) 
@@ -80,7 +80,7 @@ class ParticipationIndex extends React.Component {
                               } 
 /*
                               get(response, ['json', 'participation', 'byPlan', this.props.activePlan, 'byIndex'], [{}]).forEach(participation => {
-                                  test.push(Object.values(pick(participation,...ATTRIBUTES)))
+                                  test.push(Object.values(pick(participation,...ATTRIBUTES_PROJECT)))
                                 })
                               */
 
