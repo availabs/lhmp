@@ -29,32 +29,35 @@ class TableBox extends React.Component {
   }
   setPage(page) {
       this.setState({
-          page,
+          page:page,
           loading : this.props.loading
       });
       let start = this.props.pageSize * page ;
-      let end= Math.min(this.props.length,this.props.pageSize * page +this.props.pageSize + 1);
+      let end= Math.min(this.props.length,((this.props.pageSize * page) +(this.props.pageSize + 1)));
+      //let end = Math.min(start+(this.props.pageSize - 1),this.props.length[0]-1)
       this.props.onPage(start,end);
       return {start,end}
-
   }
 
   previousPage() {
     const page = Math.max(0, this.state.page - 1);
     this.setState({
-        page,
+        page:page,
         loading : this.props.loading
     });
-    this.setPage(page)
+      this.setPage(page)
+
   }
   nextPage() {
-      const maxPages = Math.ceil( this.props.length / this.props.pageSize);
-      let page = Math.min(maxPages - 1, this.state.page + 1);
+      const maxPages = Math.ceil( this.props.length[0] / this.props.pageSize);
+      let page = Math.min(maxPages - 1, this.state.page +1);
+      console.log('next page and max Pages',page,maxPages,this.props.length[0],this.props.pageSize)
       this.setState({
-          page,
+          page:page,
           loading : this.props.loading
       });
       this.setPage(page)
+
 
   }
 
@@ -105,12 +108,12 @@ toggleFilterColumn(column, value) {
 
   render() {
       const {loading} =  this.state;
-      if(this.props.filterData || this.props.tableData.length) {
+      if(this.props.filterData || this.props.length[0]) {
               const data = this.props.tableData,
-                  paginate = data.length > this.props.pageSize ? ( // data.length
+                  paginate = (
                       <div className='controls-below-table'>
                           <Pagination
-                              length={this.props.length} //data.length
+                              length={this.props.length[0]} //data.length
                               page={this.state.page}
                               size={this.props.pageSize}
                               set={this.setPage}
@@ -118,7 +121,7 @@ toggleFilterColumn(column, value) {
                               next={this.nextPage}
                           />
                       </div>
-                  ) : null;
+                  )
           const page = this.state.page,
               size = this.props.pageSize;
           let tableData = data.slice();
