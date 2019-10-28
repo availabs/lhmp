@@ -124,6 +124,7 @@ class ActionsIndex extends React.Component {
         super(props)
 
         this.actionViewData = this.actionViewData.bind(this)
+        this.getRolesData = this.getRolesData.bind(this)
 
     }
 
@@ -139,61 +140,40 @@ class ActionsIndex extends React.Component {
                 countyName = falcorGraph.getCache().geo[this.props.geoid]['name']
             }
         })
+            .then(d => this.getRolesData())
     }
 
     getRolesData(){
-        this.props.falcor
-            .get(['roles','length'])
-            .then(d => {
-                if (falcorGraph.getCache() &&
-                    falcorGraph.getCache().roles &&
-                    falcorGraph.getCache().roles.length &&
-                    falcorGraph.getCache().roles.length.value){
-                    this.props.falcor
-                        .get(['roles','byIndex',{from:0, to:falcorGraph.getCache().roles.length.value-1}, 'id'])
-                        .then(d => {
-                            if (falcorGraph.getCache().roles && falcorGraph.getCache().roles.byIndex){
-                                const ids = [];
-                                for (let i = 0; i < falcorGraph.getCache().roles.length.value; ++i) {
-                                    const graph = falcorGraph.getCache().roles.byIndex[i];
-                                    if (graph && graph.id && graph.id.value) {
-                                        ids.push(graph.id.value);
-                                    }
-                                }
-                                return ids;
-                            }
-                        })
-                        .then(ids => {
-                            if (ids.length > 0){
-                                this.props.falcor
-                                    .get(
-                                        ['roles','byId',ids,['id','contact_name','associated_plan']]
-                                    ).then(d => {
-                                    if (falcorGraph.getCache().roles &&
-                                        falcorGraph.getCache().roles.byId &&
-                                        Object.keys(falcorGraph.getCache().roles.byId).length > 0
-                                    ){
-                                        Object.keys(falcorGraph.getCache().roles.byId)
-                                            .forEach(roleId => {
-                                                if (falcorGraph.getCache().roles.byId[roleId].associated_plan.value && this.props.activePlan &&
-                                                    falcorGraph.getCache().roles.byId[roleId].associated_plan.value.toString() === this.props.activePlan.toString()
-                                                ){
-                                                    roleData.push(falcorGraph.getCache().roles.byId[roleId])
-                                                }
-                                            })
-                                    }
-                                })
-                            }
-                        })
+        if (!(this.props.actionViewData &&
+            this.props.actionViewData[this.props.match.params.projectId] &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value.length > 0
+        )) return Promise.resolve();
+        console.log('action view data',this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value)
 
+        return this.props.falcor
+            .get(
+                ['roles','byId',this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value,['id','contact_name','associated_plan']]
+            ).then(d => {
+                if (falcorGraph.getCache().roles &&
+                    falcorGraph.getCache().roles.byId &&
+                    Object.keys(falcorGraph.getCache().roles.byId).length > 0
+                ){
+                    Object.keys(falcorGraph.getCache().roles.byId)
+                        .forEach(roleId => {
+                            if (falcorGraph.getCache().roles.byId[roleId].associated_plan.value && this.props.activePlan &&
+                                falcorGraph.getCache().roles.byId[roleId].associated_plan.value.toString() === this.props.activePlan.toString()
+                            ){
+                                roleData.push(falcorGraph.getCache().roles.byId[roleId])
+                            }
+                        })
                 }
             })
     }
-    componentDidMount() {
-        this.getRolesData()
-    }
 
     actionViewData(){
+        console.log('processing data...');
         let table_data = [];
         let data = [];
         if(this.props.actionViewData[this.props.match.params.projectId] !== undefined){
@@ -229,6 +209,7 @@ class ActionsIndex extends React.Component {
                 })
             })
         }
+        console.log('data processed...');
         return (
             <div className='container'>
                 <Element>
@@ -245,6 +226,7 @@ class ActionsIndex extends React.Component {
                                 <tbody>
                                 {
                                     table_data.map(data =>{
+                                        console.log('render processing started')
                                         return(
                                             <tr>
                                                 <td>{data.attribute}</td>
@@ -253,7 +235,11 @@ class ActionsIndex extends React.Component {
                                                         data.attribute === 'action_point_of_contact' ?
                                                             data.value.map(d => {
                                                                 if(roleData.length>0){
-                                                                    return roleData.filter(role => role.id.value.toString() === d.toString())[0].contact_name.value
+                                                                    let tmpFilter = roleData.filter(role => role.id.value.toString() === d.toString())
+                                                                    return tmpFilter.length > 0 &&
+                                                                    tmpFilter[0] &&
+                                                                    tmpFilter[0].contact_name &&
+                                                                    tmpFilter[0].contact_name.value ? tmpFilter[0].contact_name.value : d
                                                                 }
                                                             }).join(',') :
                                                         data.value.join(',') :
@@ -271,16 +257,18 @@ class ActionsIndex extends React.Component {
                         </div>
                     </div>
                 </Element>
+                {console.log('render processing ended...')}
             </div>
-
         )
     }
 
     render() {
-        console.log('role data', roleData)
+        console.log('in render')
         return(
             <div>
+                {console.log('calling function')}
                 {this.actionViewData()}
+                {console.log('function returned')}
             </div>
 
         )

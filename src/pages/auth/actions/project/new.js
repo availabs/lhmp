@@ -164,7 +164,8 @@ class project extends React.Component {
                     .then(res => {
                         return res
                     })
-            });
+            })
+            .then(d => this.getRolesData());
     }
     getEditData(){
         if (this.props.match.params.projectId) {
@@ -185,50 +186,30 @@ class project extends React.Component {
         }
     }
     getRolesData(){
-        this.props.falcor
-            .get(['roles','length'])
-            .then(d => {
-                if (falcorGraph.getCache() &&
-                    falcorGraph.getCache().roles &&
-                    falcorGraph.getCache().roles.length &&
-                    falcorGraph.getCache().roles.length.value){
-                    this.props.falcor
-                        .get(['roles','byIndex',{from:0, to:falcorGraph.getCache().roles.length.value-1}, 'id'])
-                        .then(d => {
-                            if (falcorGraph.getCache().roles && falcorGraph.getCache().roles.byIndex){
-                                const ids = [];
-                                    for (let i = 0; i < falcorGraph.getCache().roles.length.value; ++i) {
-                                        const graph = falcorGraph.getCache().roles.byIndex[i];
-                                        if (graph && graph.id && graph.id.value) {
-                                            ids.push(graph.id.value);
-                                        }
-                                    }
-                                    return ids;
-                            }
-                        })
-                        .then(ids => {
-                            if (ids.length > 0){
-                                this.props.falcor
-                                    .get(
-                                        ['roles','byId',ids,['id','contact_name','associated_plan']]
-                                    ).then(d => {
-                                        if (falcorGraph.getCache().roles &&
-                                            falcorGraph.getCache().roles.byId &&
-                                            Object.keys(falcorGraph.getCache().roles.byId).length > 0
-                                        ){
-                                            Object.keys(falcorGraph.getCache().roles.byId)
-                                                .forEach(roleId => {
-                                                    if (falcorGraph.getCache().roles.byId[roleId].associated_plan.value &&
-                                                        falcorGraph.getCache().roles.byId[roleId].associated_plan.value.toString() === this.props.activePlan.toString()
-                                                    ){
-                                                        roleData.push(falcorGraph.getCache().roles.byId[roleId])
-                                                    }
-                                                })
-                                        }
-                                })
-                            }
-                        })
+        if (!(this.props.actionViewData &&
+            this.props.actionViewData[this.props.match.params.projectId] &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value &&
+            this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value.length > 0
+        )) return Promise.resolve();
+        console.log('action view data',this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value)
 
+        return this.props.falcor
+            .get(
+                ['roles','byId',this.props.actionViewData[this.props.match.params.projectId].action_point_of_contact.value,['id','contact_name','associated_plan']]
+            ).then(d => {
+                if (falcorGraph.getCache().roles &&
+                    falcorGraph.getCache().roles.byId &&
+                    Object.keys(falcorGraph.getCache().roles.byId).length > 0
+                ){
+                    Object.keys(falcorGraph.getCache().roles.byId)
+                        .forEach(roleId => {
+                            if (falcorGraph.getCache().roles.byId[roleId].associated_plan.value && this.props.activePlan &&
+                                falcorGraph.getCache().roles.byId[roleId].associated_plan.value.toString() === this.props.activePlan.toString()
+                            ){
+                                roleData.push(falcorGraph.getCache().roles.byId[roleId])
+                            }
+                        })
                 }
             })
     }
@@ -265,7 +246,6 @@ class project extends React.Component {
         })
     }
     componentDidMount() {
-        this.getRolesData()
         this.getActionsCategoryAndType()
         this.getEditData()
         this.getCapabilitiesCategoryAndType()

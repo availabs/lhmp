@@ -7,8 +7,9 @@ import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import {Link} from "react-router-dom";
 import {falcorGraph} from "../../../../store/falcorGraph";
+import {ATTRIBUTES_PROJECT} from "../../actions/project";
 
-const actionCategory = [];
+const actionList = [];
 class AssetsEdit extends React.Component{
     constructor(props){
         super(props)
@@ -72,6 +73,7 @@ class AssetsEdit extends React.Component{
         this.propClassDropDown = this.propClassDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
         this.actionTypeDropDown = this.actionTypeDropDown.bind(this);
+        this.addActionToAsset = this.addActionToAsset.bind(this);
         //this.floodZoneDropDown = this.floodZoneDropDown.bind(this);
         //this.ownerTypeDropDown = this.ownerTypeDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
@@ -115,18 +117,29 @@ class AssetsEdit extends React.Component{
 
     }
     getActionsCategoryAndType(){
-        this.props.falcor.get(
-            ['actions','project','meta']
-        )
-            .then(d => {
-                if (falcorGraph.getCache().actions &&
-                    falcorGraph.getCache().actions.project &&
-                    falcorGraph.getCache().actions.project.meta &&
-                    falcorGraph.getCache().actions.project.meta.value
+        this.props.falcor.get(['actions', [this.props.activePlan], 'project', 'length'])
+            .then(response => {
+                console.log('actions len', falcorGraph.getCache().actions[this.props.activePlan].project.length)
+                if (
+                    falcorGraph.getCache().actions &&
+                    falcorGraph.getCache().actions[this.props.activePlan] &&
+                    falcorGraph.getCache().actions[this.props.activePlan].project &&
+                    falcorGraph.getCache().actions[this.props.activePlan].project.length
                 ){
-                    actionCategory.push(...falcorGraph.getCache().actions.project.meta.value)
-
+                    return falcorGraph.getCache().actions[this.props.activePlan].project.length
                 }
+            }).then(length => this.props.falcor.get(
+                ['actions', [this.props.activePlan], 'project', 'byIndex', {from: 0, to: length - 1}, ['id','action_name']]))
+            .then(response => {
+                if (
+                    falcorGraph.getCache().actions &&
+                    falcorGraph.getCache().actions.project &&
+                    falcorGraph.getCache().actions.project.byId &&
+                    Object.keys(falcorGraph.getCache().actions.project.byId).length > 0
+                ){
+                    actionList.push(...Object.values(falcorGraph.getCache().actions.project.byId))
+                }
+                return response
             })
     }
     propClassDropDown(){
@@ -173,16 +186,23 @@ class AssetsEdit extends React.Component{
             <select className="form-control justify-content-sm-end" id='action_type' onChange={this.handleChange} value={this.state.action_type}>
                 <option default>--Select Action Type--</option>
                 <option className="form-control" key={0} value="None">No Action Type Selected</option>
-                {
-                    actionCategory.map((cat, i) => {
-                        console.log('cat',cat)
-                        return (<option className="form-control" key={i + 1}
-                                        value={cat.id}>{cat.actions_tracker_category | cat.actions_tracker_type}</option>)
-                    })
+                {actionList.length > 0 ?
+                    actionList.map((cat, i) => {
+                        return (<option className="form-control" key={i + 1} value={cat.id.value}>
+                            {cat.id.value} - {cat.action_name ? cat.action_name.value : ''}
+                        </option>)
+                    }) : null
                 }
             </select>
 
         )
+    }
+    addActionToAsset(){
+        console.log('added? ', this.state.action_type, this.props.match.params.assetId)
+        this.props.falcor.call(['actions', 'assets', 'insert'], [this.props.match.params.assetId,this.state.action_type], [], [])
+            .then(response => {
+                this.props.sendSystemMessage(`Action was successfully added.`, {type: "success"});
+            })
     }
 
     buildingStyleDropDown(){
@@ -236,7 +256,9 @@ class AssetsEdit extends React.Component{
         if(this.props.match.params.assetId){
             let attributes = Object.keys(this.state)
             let updated_data ={};
-            Object.keys(this.state).forEach((d, i) => {
+            Object.keys(this.state)
+                .filter(f => f !== 'action_type')
+                .forEach((d, i) => {
                 console.log(this.state[d], d)
                 updated_data[d] = this.state[d]
             })
@@ -461,9 +483,23 @@ class AssetsEdit extends React.Component{
                     <span style={{fontSize:'0.7em'}}>Step 7</span>
                     <br /><span style={{fontSize:'0.9em'}}>Actions</span></span>),
                 content: (
-                    <div className="row">
-                        {this.actionTypeDropDown()}
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Select Action</label>
+                            <div className='input-group'>
+                                {this.actionTypeDropDown()}
+                                <div className="input-group-append">
+                                    <div className="input-group-text">
+                                        <Link
+                                            className='btn btn-sm btn-primary'
+                                            onClick={this.addActionToAsset}>
+                                            Add
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     )
                     }
 
@@ -490,7 +526,8 @@ class AssetsEdit extends React.Component{
 const mapStateToProps = (state,ownProps) => {
     return {
         geoid : ownProps.geoid,
-        parcelMetaData : get(state.graph,'parcel.meta',{})
+        parcelMetaData : get(state.graph,'parcel.meta',{}),
+        activePlan: state.user.activePlan
     }
 };
 
