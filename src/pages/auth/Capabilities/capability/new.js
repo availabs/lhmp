@@ -22,7 +22,7 @@ class CapabilityNew extends React.Component {
         this.state = {
             county: '',
             cousub:'',
-            capability: '',
+            capability_category: '',
             capability_type:'',
             capability_name:'',
             regulatory_name:'',
@@ -92,18 +92,42 @@ class CapabilityNew extends React.Component {
         let capabilityDropDown = []
         Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
             meta.forEach(item =>{
-                if (item['capability_type'] === this.state.capability_type)
-                capabilityDropDown.push({
-                    type: 'capability',
-                    value: item['capability']
-                })
+                if (!capabilityDropDown.includes(item['capability_type']))
+                    capabilityDropDown.push(item['capability_type'])
             })
         })
         return(
             <div className="col-sm-12">
-                <div className="form-group"><label htmlFor>Capability</label><span style={{'float': 'right'}}>{this.displayPrompt("capability")}</span>
-                    <select className="form-control justify-content-sm-end" id='capability' onChange={this.handleChange} value={this.state.capability}>
-                        <option className="form-control" key={0} value={''}>--No Capability Selected--</option>
+                <div className="form-group"><label htmlFor>Capability Category</label><span style={{'float': 'right'}}>{this.displayPrompt("capability")}</span>
+                    <select className="form-control justify-content-sm-end" id='capability_category' onChange={this.handleChange} value={this.state.capability_category}>
+                        <option className="form-control" key={0} value={''}>--No Capability Category Selected--</option>
+                        {
+                            capabilityDropDown.map((capability_type,i) =>{
+                                return(<option  className="form-control" key={i+1} value={capability_type}>{capability_type}</option>)
+                            })
+                        }
+                    </select>
+                </div>
+            </div>
+        )
+    }
+
+    capabilityTypeDropdown(){
+        let capabilityDropDown = []
+        Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
+            meta.forEach(item =>{
+                if (item['capability_type'] === this.state.capability_category)
+                    capabilityDropDown.push({
+                        type: 'capability',
+                        value: item['capability']
+                    })
+            })
+        })
+        return(
+            <div className="col-sm-12">
+                <div className="form-group"><label htmlFor>Capability Type</label><span style={{'float': 'right'}}>{this.displayPrompt("capability_type")}</span>
+                    <select className="form-control justify-content-sm-end" id='capability_type' onChange={this.handleChange} value={this.state.capability_type}>
+                        <option className="form-control" key={0} value={''}>--No Capability Type Selected--</option>
                         {
                             capabilityDropDown.map((capability,i) =>{
                                 return(<option  className="form-control" key={i+1} value={capability.value}>{capability.value}</option>)
@@ -114,7 +138,6 @@ class CapabilityNew extends React.Component {
             </div>
         )
     }
-
     capabilityCountyDropDown(){
         let countyData = []
         if(this.props.countyData){
@@ -159,30 +182,6 @@ class CapabilityNew extends React.Component {
 
     }
 
-
-    capabilityTypeDropdown(){
-        let capabilityDropDown = []
-        Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
-            meta.forEach(item =>{
-                if (!capabilityDropDown.includes(item['capability_type']))
-                    capabilityDropDown.push(item['capability_type'])
-            })
-        })
-        return(
-            <div className="col-sm-12">
-                <div className="form-group"><label htmlFor>Capability Category</label><span style={{'float': 'right'}}>{this.displayPrompt("capability_type")}</span>
-                    <select className="form-control justify-content-sm-end" id='capability_type' onChange={this.handleChange} value={this.state.capability_type}>
-                        <option className="form-control" key={0} value={''}>--No Capability Category Selected--</option>
-                        {
-                            capabilityDropDown.map((capability_type,i) =>{
-                                return(<option  className="form-control" key={i+1} value={capability_type}>{capability_type}</option>)
-                            })
-                        }
-                    </select>
-                </div>
-            </div>
-        )
-    }
     handleChange(e) {
         console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
@@ -195,6 +194,7 @@ class CapabilityNew extends React.Component {
 
 
     onSubmit(event){
+        console.log('state', this.state)
         event.preventDefault();
         let args = [];
         if(!this.props.match.params.capabilityId){
@@ -339,8 +339,8 @@ class CapabilityNew extends React.Component {
 
                                 }
                             </div>
-                            {this.capabilityTypeDropdown()}
                             {this.capabilityDropdown()}
+                            {this.capabilityTypeDropdown()}
                             <div className="col-sm-12">
                                 <div className="form-group"><label htmlFor>Capability Title</label><span style={{'float': 'right'}}>{this.displayPrompt("capability_name")}</span>
                                     <input id='capability_name' onChange={this.handleChange} className="form-control" placeholder="Capability Title" type="text" value={this.state.capability_name}/></div>
