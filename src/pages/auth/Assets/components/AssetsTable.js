@@ -43,11 +43,13 @@ class AssetsTable extends React.Component {
         if(this.props.land_use_category[0] !== oldProps.land_use_category[0]){
             this.fetchLandUseData()
         }
-        if(this.props.filters[0] && oldProps.filters[0] &&  this.props.filters[0].length !== oldProps.filters[0].length){
+        if(this.props.filters[0] && oldProps.filters[0] && this.props.filters[0].length !== oldProps.filters[0].length){
             this.fetchLandUseTypeData()
         }
         //if owner_type is not 0 or none and land use category is not 0 or none
-        if(this.props.owner_type[0] !== '0' && this.props.land_use_category[0] !== '0'){
+        // TODO rerendering because of this conditions
+        if(this.props.owner_type[0] !== oldProps.owner_type[0] && this.props.filters[0].length !== oldProps.filters[0].length){
+            console.log('in blah')
             this.fetchOwnerTypeLandUseData()
         }
 
@@ -302,7 +304,7 @@ class AssetsTable extends React.Component {
 
     fetchOwnerTypeLandUseData(){
         let to = 0
-        if(this.props.owner_type[0] !== '0' && this.props.land_use_category[0] !== '0' && this.props.filters[0].length >= 1){
+        //if(this.props.owner_type[0] !== '0' && this.props.land_use_category[0] !== '0' && this.props.filters[0].length >= 1){
             //TODO check the routes and run them here
             this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'ownerType',this.props.owner_type,'length'])
                 .then(response =>{
@@ -313,7 +315,34 @@ class AssetsTable extends React.Component {
                         }else{
                             to = data_length
                         }
-                        this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'ownerType',this.props.owner_type,'byIndex',[{from:0,to:to}],ATTRIBUTES])
+                        this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'ownerType',this.props.owner_type,'byIndex',[{from:0,to:to-1}],ATTRIBUTES],
+                            ['building','meta',['owner_type','prop_class']])
+                            .then(response =>{
+                                let graph = response.json.building.byGeoid[this.props.geoid].propType[this.props.filters[0]].ownerType[this.props.owner_type].byIndex;
+                                let meta = response.json.building.meta;
+                                data = [];
+                                if(graph){
+                                    Object.keys(graph).forEach(item =>{
+                                        if(graph[item] && graph[item]['$__path']){
+                                            data.push({
+                                                'address':graph[item].address,
+                                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                                'replacement_value':graph[item].replacement_value,
+                                                'building_id':graph[item]['$__path'][2]
+                                            })
+                                        }
+                                    })
+
+                                }
+
+                                data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
+                                data.map(d =>{
+                                    d.replacement_value = '$'+d.replacement_value
+                                })
+                                console.log('data',data)
+                                //this.setState({data : data ,loading: false});
+                            })
                     }else{
                        data_length = 0
                         let graph = response.json.building.byGeoid[this.props.geoid].propType
@@ -323,7 +352,7 @@ class AssetsTable extends React.Component {
 
                     }
                 })
-        }
+        //}
     }
 
     onPageChange(from, to) {
