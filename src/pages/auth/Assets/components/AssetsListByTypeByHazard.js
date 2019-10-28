@@ -66,12 +66,6 @@ class AssetsListByTypeByHazard extends React.Component{
     componentDidMount(){
         let data = [];
         let types = this.props.match.params.typeIds.toString()
-        let assetByTypeIds = [];
-        config.forEach(item =>{
-            assetByTypeIds.push(item.value)
-        });
-        assetByTypeIds.push(...this.props.match.params.typeIds.split('-'))
-        assetByTypeIds.push(...owner_types)
         if(this.props.match.params.hazardIds){
             this.setState({
                 loading : true
@@ -82,22 +76,23 @@ class AssetsListByTypeByHazard extends React.Component{
                     types,
                     [this.props.match.params.hazardIds],
                     'byIndex',{from:0, to:50},ATTRIBUTES],
-                ['building','meta',assetByTypeIds,'name'])
+                ['building','meta',['owner_type','prop_class'],'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types][this.props.match.params.hazardIds].byIndex;
                     Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path'] !== undefined && meta[graph[item].prop_class] !== undefined){
+                        if (graph[item]['$__path']){
                             data.push({
                                 'address':graph[item].address,
-                                'prop_class':meta[graph[item].prop_class].name || 'None',
-                                'owner_type':meta[graph[item].owner_type].name,
+                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
                                 'building_id':graph[item]['$__path'][2]
                             })
                         }
 
                     });
+                    console.log('data',data)
                     data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
                     data.map(d =>{
                         d.replacement_value = '$'+d.replacement_value
@@ -114,16 +109,16 @@ class AssetsListByTypeByHazard extends React.Component{
                     this.props.match.params.type,
                     types,
                     'byIndex',{from:0, to:50},ATTRIBUTES],
-                ['building','meta',assetByTypeIds,'name'])
+                ['building','meta',['owner_type','prop_class'],'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types].byIndex;
                     Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path'] !== undefined && meta[graph[item].prop_class] !== undefined){
+                        if (graph[item]['$__path'] !== undefined){
                             data.push({
                                 'address':graph[item].address,
-                                'prop_class':meta[graph[item].prop_class].name,
-                                'owner_type':meta[graph[item].owner_type].name,
+                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
                                 'building_id':graph[item]['$__path'][2]
                             })
@@ -142,12 +137,6 @@ class AssetsListByTypeByHazard extends React.Component{
     onPageChange(from, to) {
         let data = [];
         let types = this.props.match.params.typeIds.toString()
-        let assetByTypeIds = [];
-        config.forEach(item =>{
-            assetByTypeIds.push(item.value)
-        });
-        assetByTypeIds.push(...this.props.match.params.typeIds.split('-'))
-        assetByTypeIds.push(...owner_types)
         if(this.props.match.params.hazardIds){
             this.setState({
                 loading : true
@@ -159,16 +148,16 @@ class AssetsListByTypeByHazard extends React.Component{
                     types,
                     [this.props.match.params.hazardIds],
                     'byIndex',{from:from, to:to},ATTRIBUTES],
-                ['building','meta',assetByTypeIds,'name'])
+                ['building','meta',['owner_type','prop_class'],'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types][this.props.match.params.hazardIds].byIndex;
                     Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path'] !== undefined && meta[graph[item].prop_class] !== undefined){
+                        if (graph[item]['$__path'] !== undefined){
                             data.push({
                                 'address':graph[item].address,
-                                'prop_class':meta[graph[item].prop_class].name,
-                                'owner_type':meta[graph[item].owner_type].name,
+                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
                                 'building_id':graph[item]['$__path'][2]
                             })
@@ -190,16 +179,16 @@ class AssetsListByTypeByHazard extends React.Component{
                     this.props.match.params.type,
                     types,
                     'byIndex',{from:from, to:to},ATTRIBUTES],
-                ['building','meta',assetByTypeIds,'name'])
+                ['building','meta',['owner_type','prop_class'],'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types].byIndex;
                     Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path'] !== undefined && meta[graph[item].prop_class] !== undefined){
+                        if (graph[item]['$__path'] !== undefined){
                             data.push({
                                 'address':graph[item].address,
-                                'prop_class':meta[graph[item].prop_class].name,
-                                'owner_type':meta[graph[item].owner_type].name,
+                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
                                 'building_id':graph[item]['$__path'][2]
                             })
@@ -230,7 +219,6 @@ class AssetsListByTypeByHazard extends React.Component{
         }
         else if(this.props.match.params.type === 'ownerType'){
             let owner_type = this.props.match.params.typeIds.split('-')
-            console.log('owner',owner_type)
             if(owner_type.length === 1){
                 owner_config.forEach(d=>{
                     if (d.value === owner_type[0]){
