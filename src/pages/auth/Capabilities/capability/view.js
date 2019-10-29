@@ -64,7 +64,6 @@ class CapabilityView extends React.Component {
         if(this.props.capabilitiesData[this.props.match.params.capabilityId] !== undefined){
             let graph = this.props.capabilitiesData[this.props.match.params.capabilityId];
             data.push(pick(graph,...ATTRIBUTES));
-            console.log('data',data)
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
                     if (item[i].value && item[i].value.toString() === 'false'){
