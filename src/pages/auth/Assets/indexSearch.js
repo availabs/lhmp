@@ -67,12 +67,13 @@ class AssetsBySearch extends React.Component {
         this.state = {
             page: '',
             geoid: this.props.activeGeoid,
-            owner_type:'0',
-            land_use_category: '0',
+            owner_type:'no_owner',
+            land_use_category: 'no_prop',
             filter: {
                 domain: {},
                 value: []
             },
+            risk:'no_risk',
             height: '2565px'
 
         }
@@ -165,8 +166,7 @@ class AssetsBySearch extends React.Component {
                 <div>
                     <h6>Owner Type</h6>
                     <select className="form-control justify-content-sm-end" id='owner_type' onChange={this.handleChange} value={this.state.owner_type}>
-                        <option default>--Select Owner Type--</option>
-                        <option className="form-control" key={0} value="None">No Owner selected</option>
+                        <option className="form-control" key={0} value="no_owner">No Owner selected</option>
                         {
                             buildingOwnerType.map((owner) =>{
                                 return(
@@ -181,8 +181,7 @@ class AssetsBySearch extends React.Component {
                     <h6>Land Use Category</h6>
                     <select className="form-control justify-content-sm-end" id='land_use_category' onChange={this.handleChange}
                             value={this.state.land_use_category} onClick={this.renderLandUseTypeMenu}>
-                        <option default>--Select Land Use Category--</option>
-                        <option className="form-control" key={0} value="None">No Land Use Category selected</option>
+                        <option className="form-control" key={0} value="no_prop">No Land Use Category selected</option>
                         {
                             BuildingByLandUseConfig.map((config) => {
                                 if(parseInt(config.value) % 100 === 0){
@@ -207,6 +206,17 @@ class AssetsBySearch extends React.Component {
                        :
                        null
                     }
+                </div>
+                <br/>
+                <div>
+                    <h6>Risk</h6>
+                    <select className="form-control justify-content-sm-end" id='risk' onChange={this.handleChange}
+                            value={this.state.risk}>
+                        <option className="form-control" key={0} value="no_risk">No Risk selected</option>
+                        <option className="form-control" key={1} value="flood_100">100-year Flood Zone</option>
+                        <option className="form-control" key={2} value="flood_500">500-year Flood Zone</option>
+                        <option className="form-control" key={3} value="loss">Expected Annual Flood Loss</option>
+                    </select>
                 </div>
             </div>
 
@@ -244,7 +254,9 @@ class AssetsBySearch extends React.Component {
                             <AssetsTable geoid={[this.state.geoid]}
                                          owner_type={[this.state.owner_type]}
                                          land_use_category={[this.state.land_use_category]}
-                                         filters={[this.state.filter.value]}/>
+                                         filters={[this.state.filter.value]}
+                                         risk={[this.state.risk]}
+                            />
                         </div>
                     </div>
                 </div>
