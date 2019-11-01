@@ -4,14 +4,23 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import TableBox from 'components/light-admin/tables/TableBox'
-import config from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
-
+var numeral = require('numeral')
+var _ = require('lodash')
 const ATTRIBUTES =[
     'address',
     'prop_class',
     'owner_type',
     'replacement_value',
 ];
+
+const ATTRIBUTES_AAL =[
+    'address',
+    'prop_class',
+    'owner_type',
+    'replacement_value',
+    'expected_annual_flood_loss'
+];
+
 let data_length = 0;
 let data = [];
 const owner_type =['1','2','3','4','5','6','7','8','9','10','-999']
@@ -24,478 +33,208 @@ class AssetsTable extends React.Component {
             loading: false,
             page: 0,
             length : 0,
-            columns : ATTRIBUTES
+            columns : ATTRIBUTES,
+            flag:true
         };
-
         this.onPageChange = this.onPageChange.bind(this);
 
     }
-
-    componentDidUpdate(oldProps,oldState){
+    componentDidUpdate(oldProps){
         if(this.props.geoid[0] !== oldProps.geoid[0]){
-            //console.log('in first if of component did update')
-            this.fetchCountyData()
+            this.fetchFilteredData()
         }
         if(this.props.owner_type[0] !== oldProps.owner_type[0]){
-            //console.log('in second if of component did update')
-            this.fetchOwnerTypeData()
+            this.fetchFilteredData()
         }
         if(this.props.land_use_category[0] !== oldProps.land_use_category[0]){
-            this.fetchLandUseData()
+            this.fetchFilteredData()
         }
-        if(this.props.filters[0] && oldProps.filters[0] && this.props.filters[0].length !== oldProps.filters[0].length){
-            this.fetchLandUseTypeData()
+        if(this.props.filters[0].length !== oldProps.filters[0].length){
+            this.fetchFilteredData()
         }
-        //if owner_type is not 0 or none and land use category is not 0 or none
-        // TODO rerendering because of this conditions
-        if(this.props.owner_type[0] !== oldProps.owner_type[0] && this.props.filters[0].length !== oldProps.filters[0].length){
-            console.log('in blah')
-            this.fetchOwnerTypeLandUseData()
+        if(this.props.risk[0] !== oldProps.risk[0]){
+            this.fetchFilteredData()
         }
-
-
     }
 
     componentDidMount(){
-        this.fetchCountyData()
+        this.fetchFilteredData()
     }
 
-    fetchCountyData(){
-        if(this.props.owner_type[0] !== '0' && this.props.owner_type[0] !== "None"){
-            this.fetchOwnerTypeData()
+    fetchFilteredData(){
+        let prop_class = [];
+        let to = 0;
+        this.setState({
+            loading:true,
+            data : [],
+            length : 0
+        })
+        if(this.props.filters[0].length === 0){
+            prop_class = this.props.land_use_category
         }else{
-            this.setState({
-                loading : true
-            })
-            //let d = [];
-            return this.props.falcor.get(['building','byGeoid',this.props.geoid,'length'])
-                .then(response => {
-                    data_length = response.json.building.byGeoid[this.props.geoid].length
-                    this.props.falcor.get(['building', 'byGeoid',this.props.geoid, 'byIndex', {from:0, to:50},ATTRIBUTES],
-                        ['building','meta',['owner_type','prop_class']]
-                    )
-                        .then(response => {
-                            let graph = response.json.building.byGeoid[this.props.geoid].byIndex;
-                            let meta = response.json.building.meta;
-                            if(graph){
-                                Object.keys(graph).forEach((item)=>{
-                                    if(graph[item]['$__path']){
-                                        data.push({
-                                            'address':graph[item].address,
-                                            'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                            'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                            'replacement_value':graph[item].replacement_value,
-                                            'building_id':graph[item]['$__path'][2]
-                                        })
-                                    }
-
-
-                                });
-                                data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                                data.map(d =>{
-                                    d.replacement_value = '$'+d.replacement_value
-                                })
-                                this.setState({length : data_length,data : data ,loading: false});
-                            }
-                        })
-                })
-
+            prop_class = this.props.filters[0]
         }
-
-        }
-
-
-    fetchOwnerTypeData(){
-        let to = 0
-        if(this.props.owner_type[0] === "None"){
-            this.fetchCountyData()
-        }else{
-            return this.props.falcor.get(['building','byGeoid',
-                this.props.geoid,
-                'ownerType',this.props.owner_type,'length'
-            ])
-                .then(response =>{
-                    data_length = response.json.building.byGeoid[this.props.geoid].ownerType[this.props.owner_type].length
-                    if( data_length > 50){
-                        to = 50
-                    }else{
-                        to = data_length
-                    }
-                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',this.props.owner_type,'byIndex',[{from:0,to:to}],ATTRIBUTES],
-                        ['building','meta',['owner_type','prop_class']]
-                    )
-                        .then(response =>{
-                            let graph = response.json.building.byGeoid[this.props.geoid].ownerType[this.props.owner_type].byIndex;
-                            let meta = response.json.building.meta;
-                            data = []
-                            if(graph){
-                                Object.keys(graph).forEach(item =>{
-                                    if(graph[item] !== null && graph[item]['$__path']){
-                                        data.push({
-                                            'address':graph[item].address,
-                                            'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                            'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                            'replacement_value':graph[item].replacement_value,
-                                            'building_id':graph[item]['$__path'][2]
-                                        })
-                                    }
-                                })
-                            }
-                            data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                            data.map(d =>{
-                                d.replacement_value = '$'+d.replacement_value
-                            })
-                            this.setState({length : data_length,data : data ,loading: false});
-
-                        })
-                })
-        }
-
-    }
-
-    fetchLandUseData(){
-        if(this.props.land_use_category[0] === "None"){
-            this.fetchCountyData()
-        }else{
-            let to = 0
-            return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.land_use_category,'length'])
-                .then(response =>{
-                    data_length = response.json.building.byGeoid[this.props.geoid].propType[this.props.land_use_category].length
-
-                    if( data_length > 50){
-                        to = 50
-                    }else{
-                        to = data_length
-                    }
-                    this.setState({
-                        loading : true,
-                    })
-                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.land_use_category,'byIndex',[{from:0,to:to}],ATTRIBUTES],
-                        ['building','meta',['owner_type','prop_class']]
-                    )
-                        .then(response =>{
-                            let graph = response.json.building.byGeoid[this.props.geoid].propType[this.props.land_use_category].byIndex;
-                            let meta = response.json.building.meta;
-                            data = [];
-                            if(graph){
-                                    Object.keys(graph).forEach(item =>{
-                                        if(graph[item] !== null && graph[item]['$__path']){
-                                            data.push({
-                                                'address':graph[item].address,
-                                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                                'replacement_value':graph[item].replacement_value,
-                                                'building_id':graph[item]['$__path'][2]
-                                            })
-                                        }
-                                    })
-
-                            }
-
-                            data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                            data.map(d =>{
-                                d.replacement_value = '$'+d.replacement_value
-                            })
-                            this.setState({length : data_length,data : data ,loading: false});
-
-                        })
-                })
-        }
-
-    }
-
-    fetchLandUseTypeData(){
-        let to = 0
-        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'length'])
-            .then(response =>{
-                if(this.props.filters[0].length === 1){
-                    data_length = response.json.building.byGeoid[this.props.geoid].propType[this.props.filters[0]].length
-                    if(data_length > 50 ){
-                        to = 50
-                    }else{
-                        to = data_length
-                    }
-                    this.setState({
-                        loading : true,
-                        data : []
-                    })
-                    //console.log('data_length',data_length)
-                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'byIndex',[{from:0,to:to}],ATTRIBUTES],
-                        ['building','meta',['owner_type','prop_class']])
-                        .then(response =>{
-                            let graph = response.json.building.byGeoid[this.props.geoid].propType[this.props.filters[0]].byIndex;
-                            let meta = response.json.building.meta;
-                            data = [];
-                            if(graph){
-                                Object.keys(graph).forEach(item =>{
-                                    if(graph[item] !== null && graph[item]['$__path']){
-                                        data.push({
-                                            'address':graph[item].address,
-                                            'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                            'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                            'replacement_value':graph[item].replacement_value,
-                                            'building_id':graph[item]['$__path'][2]
-                                        })
-                                    }
-                                })
-
-                            }
-
-                            data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                            data.map(d =>{
-                                d.replacement_value = '$'+d.replacement_value
-                            })
-                            this.setState({length : data_length,data : data ,loading: false});
-
-                        })
-                }if(this.props.filters[0].length > 1){
-                    data_length = 0
-                    let graph = response.json.building.byGeoid[this.props.geoid].propType
-                    Object.keys(graph).filter(d => d !=='$__path').forEach(item =>{
-                        data_length += parseInt(graph[item].length)
-                    })
-                    this.setState({
-                        loading : true,
-                        data : []
-                    })
-                    if(data_length > 50 ){
-                        to = 50
-                    }else{
-                        to = data_length
-                    }
-                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'byIndex',[{from:0,to:to}],ATTRIBUTES],
-                        ['building','meta',['owner_type','prop_class']])
-                        .then(response =>{
-                            let graph = response.json.building.byGeoid[this.props.geoid]
-                            let meta = response.json.building.meta;
-                            data = [];
-                            if(graph){
-                                Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
-                                    this.props.filters[0].forEach(filter =>{
-                                        Object.values(graph[item][filter].byIndex).forEach(item =>{
-                                            if(item !== null && item['$__path']){
-                                                data.push({
-                                                    'address':item.address,
-                                                    'prop_class':meta.prop_class.map(d => d.value === item.prop_class ? d.name : null),
-                                                    'owner_type':meta.owner_type.map(d => d.value === item.owner_type ? d.name : null),
-                                                    'replacement_value':item.replacement_value,
-                                                    'building_id':item['$__path'][2]
-                                                })
-                                            }
-                                        })
-                                    })
-                                })
-
-                            }
-                            data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                            data.map(d =>{
-                                d.replacement_value = '$'+d.replacement_value
-                            })
-
-                            this.setState({length : data_length,data : data ,loading: false});
-
-                        })
-                }if(this.props.filters[0].length === 0){
-                    this.fetchLandUseData()
-                }
-
-            })
-    }
-
-    fetchOwnerTypeLandUseData(){
-        let to = 0
-        //if(this.props.owner_type[0] !== '0' && this.props.land_use_category[0] !== '0' && this.props.filters[0].length >= 1){
-            //TODO check the routes and run them here
-            this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'ownerType',this.props.owner_type,'length'])
-                .then(response =>{
-                    if (this.props.filters[0].length === 1){
-                        data_length = response.json.building.byGeoid[this.props.geoid].propType[this.props.filters[0]].ownerType[this.props.owner_type].length
-                        if(data_length > 50 ){
-                            to = 50
-                        }else{
-                            to = data_length
-                        }
-                        this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'ownerType',this.props.owner_type,'byIndex',[{from:0,to:to-1}],ATTRIBUTES],
-                            ['building','meta',['owner_type','prop_class']])
-                            .then(response =>{
-                                let graph = response.json.building.byGeoid[this.props.geoid].propType[this.props.filters[0]].ownerType[this.props.owner_type].byIndex;
-                                let meta = response.json.building.meta;
-                                data = [];
-                                if(graph){
-                                    Object.keys(graph).forEach(item =>{
-                                        if(graph[item] && graph[item]['$__path']){
-                                            data.push({
-                                                'address':graph[item].address,
-                                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                                'replacement_value':graph[item].replacement_value,
-                                                'building_id':graph[item]['$__path'][2]
-                                            })
-                                        }
-                                    })
-
-                                }
-
-                                data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                                data.map(d =>{
-                                    d.replacement_value = '$'+d.replacement_value
-                                })
-                                console.log('data',data)
-                                //this.setState({data : data ,loading: false});
-                            })
-                    }else{
-                       data_length = 0
-                        let graph = response.json.building.byGeoid[this.props.geoid].propType
-                        Object.keys(graph).filter(d => d !=='$__path').forEach(item =>{
-                            data_length += parseInt(graph[item].ownerType[this.props.owner_type].length)
-                        })
-
-                    }
-                })
-        //}
-    }
-
-    onPageChange(from, to) {
-        if(this.props.owner_type[0] !== '0' && this.props.owner_type[0] !== "None"){
-            this.setState({
-                loading : true
-            })
-                return this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',this.props.owner_type,'byIndex',[{from:from,to:to}],ATTRIBUTES],
-                    ['building','meta',['owner_type','prop_class']]
-                )
-                    .then(response =>{
-                        let graph = response.json.building.byGeoid[this.props.geoid].ownerType[this.props.owner_type].byIndex;
-                        let meta = response.json.building.meta;
-                        console.log('graph',graph)
-                        data = []
-                        if(graph){
-                            Object.keys(graph).forEach(item =>{
-                                if(graph[item] !== null && graph[item]['$__path']){
-                                    data.push({
-                                        'address':graph[item].address,
-                                        'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                        'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                        'replacement_value':graph[item].replacement_value,
-                                        'building_id':graph[item]['$__path'][2]
-                                    })
-                                }
-                            })
-                        }
-                        data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                        data.map(d =>{
-                            d.replacement_value = '$'+d.replacement_value
-                        })
-                        console.log('data',data)
-                        this.setState({data : data ,loading: false});
-
-                    })
-
-        }
-        if(this.props.land_use_category[0] !== '0' && this.props.land_use_category[0] !== "None") {
-            this.setState({
-                loading: true,
-            })
-            this.props.falcor.get(['building', 'byGeoid', this.props.geoid, 'propType', this.props.land_use_category, 'byIndex', [{
-                    from: from,
-                    to: to
-                }], ATTRIBUTES],
-                ['building', 'meta', ['owner_type', 'prop_class']]
-            )
-                .then(response => {
-                    let graph = response.json.building.byGeoid[this.props.geoid].propType[this.props.land_use_category].byIndex;
-                    let meta = response.json.building.meta;
-                    data = [];
-                    if (graph) {
-                        Object.keys(graph).forEach(item => {
-
-                            if (graph[item] !== null && graph[item]['$__path']) {
-                                data.push({
-                                    'address': graph[item].address,
-                                    'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                    'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                    'replacement_value': graph[item].replacement_value,
-                                    'building_id': graph[item]['$__path'][2]
-                                })
-                            }
-                        })
-
-                    }
-
-                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
-                    data.map(d => {
-                        d.replacement_value = '$' + d.replacement_value
-                    })
-                    this.setState({data: data, loading: false});
-                })
-        }if(this.props.filters[0].length >= 1){
-            this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',this.props.filters[0],'byIndex',[{from:from,to:to}],ATTRIBUTES],
+        if(this.props.risk[0] === 'loss'){
+            return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,this.props.risk,'length'],
                 ['building','meta',['owner_type','prop_class']])
                 .then(response =>{
-                    let graph = response.json.building.byGeoid[this.props.geoid]
-                    let meta = response.json.building.meta;
-                    data = [];
-                    if(graph){
-                        Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
-                            this.props.filters[0].forEach(filter =>{
-                                Object.values(graph[item][filter].byIndex).forEach(item =>{
-                                    if(item !== null && item['$__path']){
+                    let length = response.json.building.byGeoid[this.props.geoid].propType
+                    let meta = response.json.building.meta
+                    let graph = {}
+                    data_length = 0
+                    prop_class.forEach(prop =>{
+                        data_length +=length[prop].ownerType[this.props.owner_type].loss.length
+                    })
+                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'expected_annual_flood_loss_data'])
+                        .then(response =>{
+                            graph = response.json.building.byGeoid[this.props.geoid].propType
+                            prop_class.forEach(prop =>{
+                            let buildingData = graph[prop].ownerType[this.props.owner_type].expected_annual_flood_loss_data
+                            data = []
+                            buildingData.forEach((item,i) =>{
+                                if( i >= 0 && i <= 50){
+                                    data.push({
+                                        'address':item.address,
+                                        'prop_class':meta.prop_class.map(d => d.value === item.prop_class ? d.name : null),
+                                        'owner_type':meta.owner_type.map(d => d.value === item.owner_type ? d.name : null),
+                                        'replacement_value':item.replacement_value,
+                                        'expected_annual_flood_loss':item.expected_annual_flood_loss || 0,
+                                        'building_id':item.building_id
+                                    })
+                                }
+                            })
+                            })
+                            data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
+                            data.map(d =>{
+                                d.replacement_value = '$'+ numeral(d.replacement_value).format('0,0.0')
+                                d.expected_annual_flood_loss = '$' +numeral(d.expected_annual_flood_loss).format('0,0.0')
+                            })
+                            this.setState({length : data_length,data : data ,loading: false});
+                        })
+                })
+        }else{
+            return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'risk',this.props.risk,'length'],
+                ['building','meta',['owner_type','prop_class']])
+                .then(response =>{
+                    let length = response.json.building.byGeoid[this.props.geoid].propType
+                    let meta = response.json.building.meta
+                    let graph = {}
+                    data_length = 0
+                    prop_class.forEach(prop =>{
+                        data_length +=length[prop].ownerType[this.props.owner_type].risk[this.props.risk].length
+                    })
+                    if(data_length < 50){
+                        to = data_length
+                    }else{
+                        to = 50
+                    }
+                    this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'risk',this.props.risk,'byIndex',[{from:0,to:to}],ATTRIBUTES])
+                        .then(response =>{
+                            graph = response.json.building.byGeoid[this.props.geoid].propType
+                            prop_class.forEach(prop =>{
+                                let buildingData = graph[prop].ownerType[this.props.owner_type].risk[this.props.risk].byIndex
+                                data = []
+                                Object.keys(buildingData).forEach(item =>{
+                                    if(buildingData[item] !== null && buildingData[item]['$__path']){
                                         data.push({
-                                            'address':item.address,
-                                            'prop_class':meta.prop_class.map(d => d.value === item.prop_class ? d.name : null),
-                                            'owner_type':meta.owner_type.map(d => d.value === item.owner_type ? d.name : null),
-                                            'replacement_value':item.replacement_value,
-                                            'building_id':item['$__path'][2]
+                                            'address':buildingData[item].address,
+                                            'prop_class':meta.prop_class.map(d => d.value === buildingData[item].prop_class ? d.name : null),
+                                            'owner_type':meta.owner_type.map(d => d.value === buildingData[item].owner_type ? d.name : null),
+                                            'replacement_value':buildingData[item].replacement_value,
+                                            'building_id':buildingData[item]['$__path'][2]
                                         })
                                     }
                                 })
                             })
+                            data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
+                            data.map(d =>{
+                                d.replacement_value = '$'+ numeral(d.replacement_value).format('0,0.0')
+                            })
+                            this.setState({length : data_length,data : data ,loading: false});
                         })
-
-                    }
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
-                    })
-
-                    this.setState({data : data ,loading: false});
-        })
-        }
-        if(this.props.owner_type[0] === '0' || this.props.owner_type[0] === "None" || this.props.land_use_category[0] === '0' || this.props.land_use_category[0] === "None"){
-            this.setState({
-                loading : true
-            })
-            return this.props.falcor.get(['building', 'byGeoid',this.props.geoid, 'byIndex', {from:from, to:to},ATTRIBUTES],
-                ['building','meta',['owner_type','prop_class']]
-            )
-                .then(response => {
-                    let graph = response.json.building.byGeoid[this.props.geoid].byIndex;
-                    let meta = response.json.building.meta;
-                    if(graph){
-                        Object.keys(graph).forEach((item)=>{
-                            if(graph[item] !== null && graph[item]['$__path']){
-                                data.push({
-                                    'address':graph[item].address,
-                                    'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                    'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
-                                    'replacement_value':graph[item].replacement_value,
-                                    'building_id':graph[item]['$__path'][2]
-                                })
-                            }
-
-
-                        });
-                        data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                        data.map(d =>{
-                            d.replacement_value = '$'+d.replacement_value
-                        })
-                        this.setState({data : data ,loading: false});
-                    }
                 })
         }
 
+    }
+
+    onPageChange(from,to){
+        let prop_class = [];
+        let graph = {}
+        this.setState({
+            loading:true
+        })
+        if(this.props.filters[0].length === 0){
+            prop_class = this.props.land_use_category
+        }else{
+            prop_class = this.props.filters[0]
+        }
+        if(this.props.risk[0] === 'loss'){
+            this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'expected_annual_flood_loss_data'],
+                ['building','meta',['owner_type','prop_class']])
+                .then(response =>{
+                    graph = response.json.building.byGeoid[this.props.geoid].propType
+                    let meta = response.json.building.meta
+                    prop_class.forEach(prop =>{
+                        let buildingData = graph[prop].ownerType[this.props.owner_type].expected_annual_flood_loss_data
+                        data = []
+                        buildingData.forEach((item,i) =>{
+                            if( i >= from && i <= to){
+                                data.push({
+                                    'address':item.address,
+                                    'prop_class':meta.prop_class.map(d => d.value === item.prop_class ? d.name : null),
+                                    'owner_type':meta.owner_type.map(d => d.value === item.owner_type ? d.name : null),
+                                    'replacement_value':item.replacement_value,
+                                    'expected_annual_flood_loss':item.expected_annual_flood_loss || 0,
+                                    'building_id':item.building_id
+                                })
+                            }
+                        })
+                    })
+                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
+                    data.map(d =>{
+                        d.replacement_value = '$'+ numeral(d.replacement_value).format('0,0.0')
+                        d.expected_annual_flood_loss = '$' +numeral(d.expected_annual_flood_loss).format('0,0.0')
+                    })
+                    this.setState({length : data_length,data : data ,loading: false});
+                })
+        }else{
+            this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'risk',this.props.risk,'byIndex',[{from:from,to:to}],ATTRIBUTES],
+                ['building','meta',['owner_type','prop_class']])
+                .then(response =>{
+                    let graph = response.json.building.byGeoid[this.props.geoid].propType
+                    let meta = response.json.building.meta
+                    prop_class.forEach(prop =>{
+                        let buildingData = graph[prop].ownerType[this.props.owner_type].risk[this.props.risk].byIndex
+                        Object.keys(buildingData).forEach(item =>{
+                            if(buildingData[item] !== null && buildingData[item]['$__path']){
+                                data.push({
+                                    'address':buildingData[item].address,
+                                    'prop_class':meta.prop_class.map(d => d.value === buildingData[item].prop_class ? d.name : null),
+                                    'owner_type':meta.owner_type.map(d => d.value === buildingData[item].owner_type ? d.name : null),
+                                    'replacement_value':buildingData[item].replacement_value,
+                                    'building_id':buildingData[item]['$__path'][2]
+                                })
+                            }
+                        })
+                    })
+                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
+                    data.map(d =>{
+                        d.replacement_value = '$'+ numeral(d.replacement_value).format('0,0.0')
+                    })
+                    this.setState({length : data_length,data : data ,loading: false});
+                })
+        }
 
     }
+
+
     render(){
+        let columns = []
+        if(this.props.risk[0] === 'loss'){
+            columns = ATTRIBUTES_AAL
+        }else{
+            columns = this.state.columns
+        }
         return (
             <div>
             <Element>
@@ -509,7 +248,7 @@ class AssetsTable extends React.Component {
                                 onPage={this.onPageChange.bind(this)}
                                 filterData = {true}
                                 tableData = {this.state.data}
-                                columns = {this.state.columns}
+                                columns = {columns}
                             />
                         </div>
                     </div>
@@ -536,7 +275,7 @@ const mapStateToProps = (state,ownProps) => {
     land_use_category:ownProps.land_use_category,
     filters:ownProps.filters,
     cousubs: get(state.graph, 'geo',{}),
-    buildingData : get(state.graph,'building.byId',{})
+    buildingData : get(state.graph,'building.byGeoid',{})
     }
 };
 
