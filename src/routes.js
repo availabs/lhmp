@@ -48,6 +48,7 @@ import Participation from "./pages/auth/Participation/";
 import ParticipationView from "./pages/auth/Participation/components/view";
 import ParticipationNew from "./pages/auth/Participation/components/new";
 import ParticipationMeetingView from "./pages/auth/Participation/components/meetingview";
+import ParticipationUserRoles from "./pages/auth/Participation/components/userroles";
 
 // -- Util Routes
 import Login from './pages/Landing/Login'
@@ -98,6 +99,8 @@ const routes = [
    ...ParticipationView,
    ...ParticipationNew,
    ...ParticipationMeetingView,
+   ...ParticipationUserRoles,
+
   PlanIndex,
   RiskMap,
   Logout,

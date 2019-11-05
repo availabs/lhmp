@@ -26,6 +26,8 @@ class ParticipationNew extends React.Component {
         }
 
 
+
+
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         //this.capabilityDropdown = this.capabilityDropdown.bind(this)
