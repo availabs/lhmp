@@ -1,11 +1,14 @@
-import React from 'react';
+import React , {Fragment} from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import TableBox from 'components/light-admin/tables/TableBox'
+import {asyncContainer, Typeahead} from 'react-bootstrap-typeahead';
+//import 'react-bootstrap-typeahead/css/Typeahead.css';
 var numeral = require('numeral')
 var _ = require('lodash')
+const AsyncTypeahead = asyncContainer(Typeahead);
 const ATTRIBUTES =[
     'address',
     'prop_class',
@@ -34,9 +37,14 @@ class AssetsTable extends React.Component {
             page: 0,
             length : 0,
             columns : ATTRIBUTES,
-            flag:true
+            flag:true,
+            isLoading: false,
+            options: [],
+            allowNew: true,
+            multiple: false,
         };
         this.onPageChange = this.onPageChange.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
 
     }
     componentDidUpdate(oldProps){
@@ -60,6 +68,7 @@ class AssetsTable extends React.Component {
     componentDidMount(){
         this.fetchFilteredData()
     }
+
 
     fetchFilteredData(){
         let prop_class = [];
@@ -228,6 +237,113 @@ class AssetsTable extends React.Component {
     }
 
 
+    handleSearch(text){
+        this.setState({isLoading: true});
+        let prop_class = [];
+        if(this.props.filters[0].length === 0){
+            prop_class = this.props.land_use_category
+        }else{
+            prop_class = this.props.filters[0]
+        }
+        if(this.props.risk[0] === 'loss'){
+            // TODO for expected annual loss
+            if(text.length >=3){
+                return this.props.falcor.get(['building','byGeoid',['36025'],'propType',prop_class,'ownerType',this.props.owner_type,'text',text,'numResults',this.props.num_results,'expected_annual_flood_loss'])
+                    .then(response =>{
+                        let graph = response.json.building.byGeoid['36025'].propType;
+                        prop_class.forEach(prop =>{
+                            let addressArrayData = graph[prop].ownerType[this.props.owner_type].text[text].numResults[this.props.num_results].expected_annual_flood_loss
+                            this.setState({
+                                isLoading: false,
+                                options: addressArrayData ? addressArrayData : []
+                            })
+                        })
+                    })
+            }
+        }else{
+            if(text.length >= 3){
+                return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'risk',this.props.risk,'text',text,'numResults',this.props.num_results,'address'])
+                    .then(response =>{
+                        let graph = response.json.building.byGeoid[this.props.geoid].propType;
+                        prop_class.forEach(prop =>{
+                            let addressArrayData = graph[prop].ownerType[this.props.owner_type].risk[this.props.risk].text[text].numResults[this.props.num_results].address
+                            this.setState({
+                                isLoading: false,
+                                options: addressArrayData ? addressArrayData : []
+                            })
+                        })
+                    })
+            }
+        }
+
+
+    }
+    onChangeFilter(selected){
+        let address = selected[0]
+        let building_id = ''
+        this.state.options.forEach(item =>{
+            if(item.address === address){
+                building_id = item.building_id
+            }
+        })
+        this.setState({loading:true,data:[]})
+        if(this.props.risk[0] === 'loss'){
+            if(building_id){
+                return this.props.falcor.get(['building','byLoss','byId',[building_id],ATTRIBUTES_AAL],
+                    ['building','meta',['owner_type','prop_class']])
+                    .then(response =>{
+                        let graph = response.json.building.byLoss.byId;
+                        let meta = response.json.building.meta;
+                        data = []
+                        if(graph){
+                            data.push({
+                                'address':graph[building_id].address,
+                                'prop_class':meta.prop_class.map(d => d.value === graph[building_id].prop_class ? d.name : null),
+                                'owner_type':meta.owner_type.map(d => d.value === graph[building_id].owner_type ? d.name : null),
+                                'replacement_value':graph[building_id].replacement_value,
+                                'expected_annual_flood_loss':graph[building_id].expected_annual_flood_loss,
+                                'building_id':building_id
+                            })
+                        }
+                        data.map(d =>{
+                            d.replacement_value = '$'+ numeral(d.replacement_value).format('0,0.0')
+                            d.expected_annual_flood_loss = '$' + numeral(d.expected_annual_flood_loss).format('0,0.0')
+                        })
+                        this.setState({length : 1,data : data ,loading: false});
+                    })
+            }else{
+                this.fetchFilteredData()
+            }
+        }else{
+            if(building_id){
+                return this.props.falcor.get(['building','byId',[building_id],ATTRIBUTES],
+                    ['building','meta',['owner_type','prop_class']])
+                    .then(response =>{
+                        let graph = response.json.building.byId;
+                        let meta = response.json.building.meta;
+                        data = []
+                        if(graph){
+                            data.push({
+                                'address':graph[building_id].address,
+                                'prop_class':meta.prop_class.map(d => d.value === graph[building_id].prop_class ? d.name : null),
+                                'owner_type':meta.owner_type.map(d => d.value === graph[building_id].owner_type ? d.name : null),
+                                'replacement_value':graph[building_id].replacement_value,
+                                'building_id':building_id
+                            })
+                        }
+                        data.map(d =>{
+                            d.replacement_value = '$'+ numeral(d.replacement_value).format('0,0.0')
+                        })
+                        this.setState({length : 1,data : data ,loading: false});
+                    })
+            }else{
+                this.fetchFilteredData()
+            }
+        }
+        
+
+    }
+
     render(){
         let columns = []
         if(this.props.risk[0] === 'loss'){
@@ -238,20 +354,30 @@ class AssetsTable extends React.Component {
         return (
             <div>
             <Element>
-                    <div id="dataTable1_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4" >
-                        <div className="row">
-                            <TableBox
-                                page={this.state.page}
-                                size={this.props.size}
-                                length={[this.state.length]}
-                                loading={this.state.loading}
-                                onPage={this.onPageChange.bind(this)}
-                                filterData = {true}
-                                tableData = {this.state.data}
-                                columns = {columns}
-                            />
-                        </div>
+                <AsyncTypeahead
+                    isLoading={this.state.isLoading}
+                    onSearch={this.handleSearch}
+                    minLength = {3}
+                    id="my-typeahead-id"
+                    placeholder="Search for an Address..."
+                    options={this.state.options.map(d => d.address)}
+                    labelKey="address"
+                    onChange = {this.onChangeFilter.bind(this)}
+                />
+                <div id="dataTable1_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4" >
+                    <div className="row">
+                        <TableBox
+                            page={this.state.page}
+                            size={this.props.size}
+                            length={[this.state.length]}
+                            loading={this.state.loading}
+                            onPage={this.onPageChange.bind(this)}
+                            filterData = {true}
+                            tableData = {this.state.data}
+                            columns = {columns}
+                        />
                     </div>
+                </div>
             </Element>
             </div>
         )
@@ -273,6 +399,7 @@ const mapStateToProps = (state,ownProps) => {
     activeGeoid: state.user.activeGeoid,
     owner_type:ownProps.owner_type,
     land_use_category:ownProps.land_use_category,
+    num_results :ownProps.num_results,
     filters:ownProps.filters,
     cousubs: get(state.graph, 'geo',{}),
     buildingData : get(state.graph,'building.byGeoid',{})
