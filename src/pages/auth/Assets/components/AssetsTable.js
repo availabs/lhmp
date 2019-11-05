@@ -247,9 +247,9 @@ class AssetsTable extends React.Component {
         }
         if(this.props.risk[0] === 'loss'){
             if(text.length >=3){
-                return this.props.falcor.get(['building','byGeoid',['36025'],'propType',prop_class,'ownerType',this.props.owner_type,'text',text,'numResults',this.props.num_results,'expected_annual_flood_loss'])
+                return this.props.falcor.get(['building','byGeoid',this.props.geoid,'propType',prop_class,'ownerType',this.props.owner_type,'text',text,'numResults',this.props.num_results,'expected_annual_flood_loss'])
                     .then(response =>{
-                        let graph = response.json.building.byGeoid['36025'].propType;
+                        let graph = response.json.building.byGeoid[this.props.geoid].propType;
                         prop_class.forEach(prop =>{
                             let addressArrayData = graph[prop].ownerType[this.props.owner_type].text[text].numResults[this.props.num_results].expected_annual_flood_loss
                             this.setState({
