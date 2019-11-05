@@ -246,7 +246,6 @@ class AssetsTable extends React.Component {
             prop_class = this.props.filters[0]
         }
         if(this.props.risk[0] === 'loss'){
-            // TODO for expected annual loss
             if(text.length >=3){
                 return this.props.falcor.get(['building','byGeoid',['36025'],'propType',prop_class,'ownerType',this.props.owner_type,'text',text,'numResults',this.props.num_results,'expected_annual_flood_loss'])
                     .then(response =>{
