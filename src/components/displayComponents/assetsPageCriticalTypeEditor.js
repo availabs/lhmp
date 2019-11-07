@@ -12,18 +12,21 @@ class assetsPageCriticalTypeEditor extends Component {
         this.renderTableBoxes= this.renderTableBoxes.bind(this)
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps() {
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,
                 this.props.filter_type,this.props.filter_value,'sum',['count','replacement_value']],
             ['building','byGeoid',this.props.geoid,
-                this.props.filter_type,this.props.filter_value,['flood_100'],'sum',['count','replacement_value']])
-        .then(response =>{
-            this.props.falcor.get(['building','byGeoid',this.props.geoid,
-                this.props.filter_type,this.props.filter_value,['flood_500'],'sum',['count','replacement_value']])
-                .then(response =>{
-                    return response
-                })
-        })
+                this.props.filter_type,this.props.filter_value,['flood_100','flood_500'],'sum',['count','replacement_value']])
+            .then(response =>{
+                return response
+            })
+
          
     }
     getCriticalData() {
@@ -32,57 +35,49 @@ class assetsPageCriticalTypeEditor extends Component {
         let sum_count = 0;
         if(this.props.buildingByCriticalTypeData[this.props.geoid] !== undefined){
             let graph = this.props.buildingByCriticalTypeData[this.props.geoid].critical;
-            Object.keys(graph).forEach(item =>{
-                if (this.props.filter_value.includes(item)){
-                    sum_replacement_value += parseInt(graph[item].sum.replacement_value.value) || 0;
-                    sum_count += parseInt(graph[item].sum.count.value) || 0;
-                }
-            })
-            data.push({
-                'sum_replacement_value':numeral(sum_replacement_value).format('0,0a') || 0,
-                'count': numeral(sum_count).format('0,0a') || 0
-            })
+            if(graph){
+                Object.keys(graph).forEach(item =>{
+                    if (graph[item].sum && this.props.filter_value.includes(item)){
+                        sum_replacement_value += parseInt(graph[item].sum.replacement_value.value) || 0;
+                        sum_count += parseInt(graph[item].sum.count.value) || 0;
+                    }
+                })
+                data.push({
+                    'sum_replacement_value':numeral(sum_replacement_value).format('0,0a') || 0,
+                    'count': numeral(sum_count).format('0,0a') || 0
+                })
+            }
+
         }
         return data
     }
     
     getBuildingsByCriticalTypeByRiskZone(){
-        let floodData100 = {};
         let data100 = [];
         let data500 = [];
-        let floodData500 = {};
         let sum_replacement_value_100 = 0;
         let sum_replacement_value_500 = 0;
         let sum_count_100 = 0;
         let sum_count_500 = 0;
         if(this.props.buildingByCriticalTypeData[this.props.geoid] !== undefined){
             let graph = this.props.buildingByCriticalTypeData[this.props.geoid].critical;
-            this.props.filter_value.forEach(value =>{
-                if(graph[value].flood_100 !== undefined){
-                    floodData100[value] = graph[value].flood_100;
-                }
-                if(graph[value].flood_500 !== undefined){
-                    floodData500[value] = graph[value].flood_500
-                }
-            })
-            Object.keys(floodData100).forEach(item => {
-                sum_replacement_value_100 += parseInt(floodData100[item].sum.replacement_value.value) || 0;
-                sum_count_100 += parseInt(floodData100[item].sum.count.value)
-            });
-            data100.push({
-                'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
-                'count': numeral(sum_count_100).format('0,0a') || 0
-            });
-            if(Object.keys(floodData500).length !== 0){
-                Object.keys(floodData500).forEach(item =>{
-                    sum_replacement_value_500 += parseInt(floodData500[item].sum.replacement_value.value) || 0;
-                    sum_count_500 += parseInt(floodData500[item].sum.count.value) || 0
+            if(graph){
+                this.props.filter_value.forEach(filter => {
+                    sum_replacement_value_100 += parseInt(graph[filter].flood_100.sum.replacement_value.value) || 0;
+                    sum_count_100 += parseInt(graph[filter].flood_100.sum.count.value)
+                    sum_replacement_value_500 += parseInt(graph[filter].flood_500.sum.replacement_value.value) || 0;
+                    sum_count_500 += parseInt(graph[filter].flood_500.sum.count.value) || 0
+                });
+                data100.push({
+                    'sum_replacement_value': numeral(sum_replacement_value_100).format('0,0a') || 0,
+                    'count': numeral(sum_count_100).format('0,0a') || 0
                 });
                 data500.push({
                     'sum_replacement_value':numeral(sum_replacement_value_500).format('0,0a') || 0,
                     'count': numeral(sum_count_500).format('0,0a') || 0
                 })
             }
+
         }
         return [data100,data500]
     }

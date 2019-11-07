@@ -9313,7 +9313,7 @@ span.loginMenu {
             .menu-w ul.main-menu > li > a:hover span {
               transform: translateX(5px); } }
       .menu-w ul.main-menu > li .icon-w {
-        color: #0073ff;
+        color: #303030;
         font-size: 27px;
         display: block;
         padding: 1rem 1rem 1rem 0rem;
@@ -10561,7 +10561,7 @@ span.loginMenu {
             .menu-mobile ul.main-menu > li > a:hover span {
               transform: translateX(5px); } }
       .menu-mobile ul.main-menu > li .icon-w {
-        color: #0073ff;
+        color: #303030;
         font-size: 27px;
         display: block;
         padding: 1rem;

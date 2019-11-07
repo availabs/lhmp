@@ -61,7 +61,7 @@ const config =  {
 		{
 			title: 'Review of Existing Planning Documents and Resources',
 			requirement: 'Req-A-4A',
-			type: 'table',
+			type: 'planningDocuments',
 			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
@@ -98,7 +98,7 @@ const config =  {
 		{
 			title: 'Public Participation in Plan Maintenance Survey',
 			requirement: 'Req-A-5A2',
-			type: 'table',
+			type: 'content',
 			prompt: '',
 			intent: 'The plan must describe how the jurisdiction(s) will continue to seek public participation after the' +
 				' plan has been approved and during the plan’s implementation, monitoring and evaluation. Participation' +
@@ -124,7 +124,7 @@ const config =  {
 		{
 			title: 'Plan Adoption Documentation',
 			requirement: 'Req-E-1',
-			type: 'upload',
+			type: 'capabilitiesTableHMP',
 			prompt: `The plan must include documentation of plan adoption, usually a resolution by the governing body or other authority.
 			a.   Upload Prompts: 
 				i.	Meeting minutes
@@ -134,14 +134,14 @@ const config =  {
 			intent: 'To demonstrate the jurisdiction’s commitment to fulfilling the hazard mitigation goals outlined in' +
 				' the plan, and to authorize responsible agencies to execute their responsibilities.  '
 		},
-		{
+/*		{
 			title: 'Formal Plan Adoption',
 			requirement: 'Req-E-2',
 			type: 'table',
 			prompt: 'Identify adopting authority and date of formal adoption.',
 			intent: 'Each jurisdiction that is included in the plan must have its governing body adopt the plan prior to' +
 				' FEMA approval, even when a regional agency has the authority to prepare such plans.'
-		},
+		},*/
 	]
 }
 

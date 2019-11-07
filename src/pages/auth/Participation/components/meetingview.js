@@ -11,6 +11,7 @@ import Modal from './modal'
 
 
 
+
 const ATTRIBUTES = [
        'id',
        'type', 
@@ -19,6 +20,8 @@ const ATTRIBUTES = [
        'start_date', 
        'end_date', 
        'hours', 
+       'narrative', 
+       'topics_list'
 /*       'users', 
        'roles'*/
 ]
@@ -159,7 +162,10 @@ class ParticipationMeetingIndex extends React.Component {
                                     })
 
                                 }
+
+
                                 </tbody>
+
                             </table>
                         </div>
                     </div>

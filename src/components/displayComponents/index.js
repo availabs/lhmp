@@ -3,6 +3,10 @@ import contentEditor from "./contentEditor";
 import contentViewer from "./contentViewer";
 import rolesTableViewer from "./rolesTableViewer";
 import rolesTableEditor from "./rolesTableEditor";
+import capabilitiesTableHMPEditor from "./capabilitiesTableHMPEditor";
+import capabilitiesTableHMPViewer from "./capabilitiesTableHMPViewer";
+import planningDocumentsEditor from "./planningDocumentsEditor";
+import planningDocumentsViewer from "./planningDocumentsViewer";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -20,6 +24,10 @@ export default {
     contentEditor,
     contentViewer,
     rolesTableViewer,
-    rolesTableEditor
+    rolesTableEditor,
+    capabilitiesTableHMPEditor,
+    capabilitiesTableHMPViewer,
+    planningDocumentsEditor,
+    planningDocumentsViewer
 }
 

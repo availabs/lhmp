@@ -13,6 +13,12 @@ class AssetsPieChart extends React.Component{
         this.pieChart = this.pieChart.bind(this)
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps(){
         //console.log('geoid in fetch',this.props.geoid)
         return this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,'sum',['count','replacement_value']])
@@ -25,12 +31,10 @@ class AssetsPieChart extends React.Component{
         let colors = ["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f", "#e5c494",'#1AA3CB',
             '#C01616','#091860','#E0E540','#C15E0A','#074F28','#564B8E','#287F2C',
             '#F7C9B9', '#F4F3AF', '#C2ECF3', '#F4AD4D', '#2AF70E', '#D8AFE7', '#88DE73', '#718CD1', '#EA6A7D'];
-        let geoid = this.props.geoid.map((geoid) => geoid);
-        if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.replacement_value){
+        if(this.props.data!== undefined && this.props.data[this.props.geoid] !== undefined && this.props.replacement_value){
             let pieData = [];
-            if (Object.keys(this.props.data[geoid].ownerType).length === buildingOwners.length){
-                let graph = this.props.data[geoid].ownerType;
-                console.log('graph',graph)
+            let graph = this.props.data[this.props.geoid].ownerType
+            if (graph && Object.keys(graph).length === buildingOwners.length){
                 Object.keys(graph).forEach((item,j) =>{
                     pieData.push({
                         'id': item,
@@ -39,7 +43,6 @@ class AssetsPieChart extends React.Component{
                         'color':colors[j]
                     })
                 })
-                console.log('pieData',pieData)
             }
 
             const style={

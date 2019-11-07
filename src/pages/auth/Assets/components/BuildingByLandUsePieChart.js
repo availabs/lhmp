@@ -13,15 +13,23 @@ class BuildingByLandUsePieChart extends React.Component{
 
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps(){
+
         if(this.props.geoid !== undefined){
             let propTypes = []
             BuildingByLandUseConfig.map(item => {
                 propTypes.push(item.value)
             })
-            //return this.props.falcor.get()
             return falcorChunkerNice(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
+
         }
+
 
     }
 

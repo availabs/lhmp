@@ -11,12 +11,14 @@ import {sendSystemMessage} from 'store/modules/messages';
 
 const ATTRIBUTES = [
     //'id',
-    'capability',
+    'county',
+    'cousub',
+    'capability_category',
+    'capability_type',
     'capability_name',
-    //'capability_type',
     'regulatory_name',
     'adoption_date',
-    'expiration_date',
+    //'expiration_date',
     'development_update',
     'jurisdiction_utilization',
     'adopting_authority',
@@ -40,7 +42,18 @@ class CapabilityView extends React.Component {
     fetchFalcorDeps() {
         return this.props.falcor.get(['capabilitiesLHMP','byId', [this.props.match.params.capabilityId], ATTRIBUTES])
             .then(response => {
-                return response
+
+                let county = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId].county
+                let cousub = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId].cousub
+                if(county !== undefined && county!== null && cousub !== undefined && cousub !== null){
+                    this.props.falcor.get(['geo',county,['name']],
+                        ['geo',cousub,['name']]
+                    ).then(response =>{
+                        return response
+                    })
+                }
+
+
             })
 
     }
@@ -53,17 +66,30 @@ class CapabilityView extends React.Component {
             data.push(pick(graph,...ATTRIBUTES));
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
-                    if (item[i].value.toString() === 'false'){
+                    if (item[i].value && item[i].value.toString() === 'false'){
                         table_data.push({
                             attribute: i,
                             value: 'no'
                         })
                     }
-                    else if(item[i].value.toString() === 'true'){
+                    else if(item[i].value && item[i].value.toString() === 'true'){
                         table_data.push({
                             attribute : i,
                             value : 'yes'
                         })
+                    }else if(i === 'county' || i === 'cousub'){
+                        if(item[i] === null){
+                            table_data.push({
+                                attribute : i,
+                                value: 'None'
+                            })
+                        }else{
+                            table_data.push({
+                                attribute : i,
+                                value: this.props.geoData[item[i].value] ? this.props.geoData[item[i].value].name : 'None'
+                            })
+                        }
+
                     }else{
                         table_data.push({
                             attribute : i,
@@ -121,7 +147,8 @@ class CapabilityView extends React.Component {
 const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     attempts: state.user.attempts,// so componentWillReceiveProps will get called.
-    capabilitiesData: get(state.graph,'capabilitiesLHMP.byId',{})
+    capabilitiesData: get(state.graph,'capabilitiesLHMP.byId',{}),
+    geoData : get(state.graph,'geo',{})
 });
 
 const mapDispatchToProps = {
@@ -136,7 +163,7 @@ export default [
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/view/' },
+            { name: 'Capabilities', path: '/capabilities/' },
             { param: 'capabilityId', path: '/capabilities/view/' }
         ],
         menuSettings: {

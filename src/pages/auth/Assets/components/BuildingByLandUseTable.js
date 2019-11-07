@@ -7,7 +7,7 @@ import {falcorGraph} from "../../../../store/falcorGraph";
 import {falcorChunkerNice} from "store/falcorGraph"
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
 var _ = require('lodash/core');
-
+var numeral = require('numeral');
 
 class BuildingByLandUseTable extends React.Component{
     constructor(props){
@@ -15,15 +15,22 @@ class BuildingByLandUseTable extends React.Component{
         this.buildingByLandUseTable = this.buildingByLandUseTable.bind(this)
     }
 
+    fetchFalcorDeps(){
+        let propTypes = [];
+        BuildingByLandUseConfig.forEach(item => {
+            propTypes.push(item.value)
+        })
+        return falcorChunkerNice(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
+
+        }
+
     componentDidUpdate(ownProps){
         let propTypes = [];
         if(this.props !== ownProps){
             BuildingByLandUseConfig.forEach(item => {
                 propTypes.push(item.value)
             });
-
-            return falcorChunkerNice(['building','byGeoid',this.props.geoid,'propType',propTypes,'sum',['count','replacement_value']])
-
+        this.fetchFalcorDeps()
         }
 
     }
@@ -96,7 +103,7 @@ class BuildingByLandUseTable extends React.Component{
                                                 <tr>
                                                     <td>{buildingLandUseNames[i]}</td>
                                                     <td>{buildingLandUseData[item].sum.count.value || 0}</td>
-                                                    <td>${buildingLandUseData[item].sum.replacement_value.value || 0}</td>
+                                                    <td>${numeral(buildingLandUseData[item].sum.replacement_value.value).format('0,0.a') || 0}</td>
                                                 </tr>
                                             )
                                         })

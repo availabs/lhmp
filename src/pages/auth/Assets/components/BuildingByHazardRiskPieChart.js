@@ -13,6 +13,12 @@ class BuildingByHazardRiskPieChart extends React.Component{
         this.buildingByHazardRiskPieChart = this.buildingByHazardRiskPieChart.bind(this)
     }
 
+    componentDidUpdate(prevProps,oldState){
+        if(this.props.geoid !== prevProps.geoid){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps(){
         return this.props.falcor.get(['building','hazard','meta','risk_zones'])
             .then(response => {
@@ -38,7 +44,6 @@ class BuildingByHazardRiskPieChart extends React.Component{
         let geoid = this.props.geoid.map((geoid) => geoid);
         //let geoid = this.props.geoid;
         if(this.props.data!== undefined && this.props.data[geoid] !== undefined && this.props.data[this.props.geoid]['hazardRisk']!==undefined){
-            console.log('this.props',this.props.data);
             let buildingHazardRiskPieChartData = {
                 "name":'HazardRisk',
                 "color":"hsl(116, 70%, 50%)",
@@ -51,21 +56,24 @@ class BuildingByHazardRiskPieChart extends React.Component{
                 ]
             };
             let graph = this.props.data[this.props.geoid]['hazardRisk']
-            Object.keys(graph).forEach((risk) =>{
-                let zoneNames = Object.keys(graph[risk].zones)
-                zoneNames.forEach((zone,i) =>{
-                    buildingHazardRiskPieChartData.children.forEach((child)=>{
-                        if(risk === child.name ){
-                            child.children.push({
-                                "name":zone,
-                                "color":colors[i],
-                                "loc": graph[risk].zones[zone].sum.replacement_value.value || 0
-                            })
-                        }
+            if(graph){
+                Object.keys(graph).forEach((risk) =>{
+                    let zoneNames = Object.keys(graph[risk].zones)
+                    zoneNames.forEach((zone,i) =>{
+                        buildingHazardRiskPieChartData.children.forEach((child)=>{
+                            if(risk === child.name ){
+                                child.children.push({
+                                    "name":zone,
+                                    "color":colors[i],
+                                    "loc": graph[risk].zones[zone].sum.replacement_value.value || 0
+                                })
+                            }
+                        })
                     })
-                })
 
-            });
+                })
+            }
+            ;
             const style={
                 height:200,
             };

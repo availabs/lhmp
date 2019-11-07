@@ -14,7 +14,7 @@ const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         // each value to be an array of objects. each object to be key:value pair where key is curent key
         // while setting the state, first filter then assign new value / append new obj
         // while getting the state, filter by current content id
@@ -30,20 +30,17 @@ class ContentEditor extends Component {
     }
 
     fetchFalcorDeps() {
-        console.log('FFD',this.props.requirement, this.props.user.activePlan, this.props.user.activeGeoid)
-        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return Promise.resolve();
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return Promise.resolve();
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
             if (contentRes.json.content.byId[contentId]) {
-                console.log('setting everything',contentRes.json.content.byId[contentId])
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 this.setState({'currentKey': contentId});
 
                 let content = contentRes.json.content.byId[contentId].body;
                 if (content) {
-                    console.log('new content', content)
                     const contentBlock = htmlToDraft(content);
                     if (contentBlock) {
                         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -52,7 +49,6 @@ class ContentEditor extends Component {
                     }
                 }
             }else{
-                console.log('in else: no content from db for id ', contentId, contentRes)
                 this.setState({'editorState': EditorState.createEmpty()})
                 this.setState({contentFromDB: null})
                 this.setState({'currentKey': contentId});
@@ -61,8 +57,7 @@ class ContentEditor extends Component {
         })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('componentDidUpdate');
-        if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid){
+        if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid){
             this.fetchFalcorDeps();
         }
     }
@@ -74,9 +69,9 @@ class ContentEditor extends Component {
     };
 
     handleSubmit() {
-        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeGeoid) return null;
+        if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
         let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
+        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         if (html !== this.state.contentFromDB) {
             if (this.state.contentFromDB) {
                 // update
@@ -129,13 +124,10 @@ class ContentEditor extends Component {
         )
     }
     render() {
-        let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeGeoid;
-
-        console.log('contentEditor Render', this.state.currentKey, currentKey, (this.state.currentKey === currentKey));
+        let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
 
         let editorState;
         if (this.state.currentKey !== currentKey){
-            console.log('calling FFD from render');
             this.fetchFalcorDeps();
             return <div> Loading... </div>
         }else {
@@ -148,7 +140,6 @@ class ContentEditor extends Component {
 const mapDispatchToProps = {sendSystemMessage};
 
 const mapStateToProps = state => {
-    console.log('content', state.graph.content);
     return {
         isAuthenticated: !!state.user.authed,
         geoGraph: state.graph.content || {},

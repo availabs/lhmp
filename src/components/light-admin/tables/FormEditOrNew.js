@@ -418,7 +418,7 @@ export default [
         mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            { name: 'edit', path: '/form/edit/' },
+            { name: 'edit', path: '/roles/' },
             { param: 'roleid', path: '/form/edit/' }
 
         ],

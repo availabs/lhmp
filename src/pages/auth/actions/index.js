@@ -7,7 +7,7 @@ import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
-
+import {ATTRIBUTES_PROJECT} from './project/index'
 const counties = ["36101","36003","36091","36075","36111","36097","36089","36031","36103","36041","36027","36077",
     "36109","36001","36011","36039","36043","36113","36045","36019","36059","36053","36115","36119","36049","36069",
     "36023","36085","36029","36079","36057","36105","36073","36065","36009","36123","36107","36055","36095","36007",
@@ -47,66 +47,6 @@ const ATTRIBUTES = [
     'county',
     'cousub',
 ]
-const ATTRIBUTES_PROJECT = [
-    "id",
-    "action_name",
-    "action_number",
-    "action_type",
-    "description_of_problem_being_mitigated",
-    "action_description",
-    "associated_hazards",
-    "metric_for_measurement",
-    "name_of_associated_hazard_mitigation_plan",
-    "date_of_lhmp_plan_approval",
-    "action_county",
-    "action_jurisdiction",
-    "action_location",
-    "action_located_in_special_flood_hazard_area",
-    "action_located_in_hazard_zone",
-    "recent_damages_incurred_at_action_locations",
-    "action_point_of_contact",
-    "poc_title",
-    "contact_department_agency_or_organization",
-    "lead_department_agency_or_organization",
-    "action_partners",
-    "alternative_action_1",
-    "alternative_action_2",
-    "no_alternative",
-    "estimated_timeframe_for_action_implementation",
-    "status",
-    "is_pnp",
-    "action_associated_with_critical_facility",
-    "structure_type",
-    "level_of_protection",
-    "useful_life",
-    "local_planning_mechanisms_in_implementation", // []
-    "project_milestones",
-    "estimated_cost_range",
-    "calculated_cost",
-    "population_served",
-    "estimated_benefit_future_losses_avoided",
-    "phased_action",
-    "engineering_required",
-    "bca",
-    "primary_or_potential_funding_sources_type",
-    "primary_or_potential_funding_sources_name",
-    "secondary_funding_source_type",
-    "secondary_funding_source_name",
-    "funding_received_to_date",
-    "associated_mitigation_capability",
-    "associated_goals_objectives",
-    "prioritization",
-    "priority_scoring",
-    "priority_scoring_funding_availability",
-    "priority_scoring_probability_of_matching_funds",
-    "priority_scoring_benefit_cost_review",
-    "priority_scoring_environmental_benefit",
-    "priority_scoring_technical_feasibility",
-    "priority_scoring_timeframe_of_implementation",
-    "plan_maintenance_date_of_status_report",
-    "plan_maintenance_progress_report",
-    "plan_maintenance_update_evaluation_of_problem_solution"
-];
 class ActionsIndex extends React.Component {
 
     constructor(props){

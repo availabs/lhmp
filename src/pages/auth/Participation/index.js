@@ -65,7 +65,7 @@ class ParticipationIndex extends React.Component {
                               } 
 /*
                               get(response, ['json', 'participation', 'byPlan', this.props.activePlan, 'byIndex'], [{}]).forEach(participation => {
-                                  test.push(Object.values(pick(participation,...ATTRIBUTES)))
+                                  test.push(Object.values(pick(participation,...ATTRIBUTES_PROJECT)))
                                 })
                               */
 
