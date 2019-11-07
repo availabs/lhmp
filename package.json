@@ -47,6 +47,7 @@
     "numeral": "^2.0.6",
     "prop-types": "^15.6.1",
     "react": "^16.8.6",
+    "react-bootstrap-typeahead": "^3.4.7",
     "react-dd-menu": "^2.0.2",
     "react-dom": "^16.8.6",
     "react-draft-wysiwyg": "^1.13.2",

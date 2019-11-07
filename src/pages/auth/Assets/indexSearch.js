@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import { Link } from 'react-router-dom'
 
 import { reduxFalcor } from 'utils/redux-falcor'
@@ -8,11 +8,13 @@ import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
+import {asyncContainer, Typeahead} from 'react-bootstrap-typeahead';
+//import 'react-bootstrap-typeahead/css/Typeahead.css';
 import AssetsTable from 'pages/auth/Assets/components/AssetsTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 
-//http://albany.localhost:3000/assets/list/:type/:typeIds/hazard/:hazardIds
+const AsyncTypeahead = asyncContainer(Typeahead);
 const buildingOwnerType = [
     {
         'id':'1',
@@ -107,6 +109,9 @@ class AssetsBySearch extends React.Component {
             })
 
     }
+
+
+
     renderLandUseTypeMenu(event){
         let land_use_category = event.target.value
         if(land_use_category !== "None"){
@@ -256,6 +261,7 @@ class AssetsBySearch extends React.Component {
                                          land_use_category={[this.state.land_use_category]}
                                          filters={[this.state.filter.value]}
                                          risk={[this.state.risk]}
+                                         num_results = {[10]}
                             />
                         </div>
                     </div>
