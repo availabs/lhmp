@@ -53,6 +53,7 @@
     "react-draft-wysiwyg": "^1.13.2",
     "react-file-reader": "^1.1.4",
     "react-map-gl": "^5.0.7",
+    "react-mapbox-gl": "^4.7.3",
     "react-markdown-renderer": "^1.4.0",
     "react-modal-resizable-draggable": "^0.1.2",
     "react-on-screen": "^2.1.1",
