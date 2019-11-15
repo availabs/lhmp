@@ -19,10 +19,8 @@ const ATTRIBUTES = [
        'hours'
 ]
 
-//const attributes = ATTRIBUTES_PROJECT.slice(0,3)
 
-
-
+const attributes = ATTRIBUTES.slice(0,3)
 
 class ParticipationIndex extends React.Component {
 
@@ -45,33 +43,20 @@ class ParticipationIndex extends React.Component {
         return falcorGraph.get(['participation','byPlan', [this.props.activePlan],'length'])
             .then(response =>{
 
-                 const length = get(response, ['json', 'participation', 'byPlan', this.props.activePlan, 'length'], 0)
-                
-                return length 
+                 let length = get(response, ['json', 'participation', 'byPlan', this.props.activePlan, 'length'], 0)
 
-
-               /* Object.keys(response.json.participation.byPlan).filter(d => d !== '$__path').forEach(PlanId => {
-                                   length = response.json.participation.byPlan[PlanId].length;
-                              })
-                        console.log('length', length)
-                              return length  */                          
+                              return length                            
                             
                      }) 
                       .then(length => 
-                          falcorGraph.get(
-                              ['participation','byPlan',[this.props.activePlan],'byIndex',{from: 0, to: length-1},ATTRIBUTES])
+                             falcorGraph.get(['participation','byPlan',[this.props.activePlan],'byIndex',{from: 0, to: length-1},ATTRIBUTES])
                           )  
                           .then(response => {
                                  
                                console.log('response_1', response);
-                                //console.log('response_2', response.json.participation.byPlan[this.props.activePlan].byIndex);
 
                                 let test = []
-/*
-                                Object.values(response.json.participation.byPlan[this.props.activePlan].byIndex).forEach(participation => {
-                                  test.push(Object.values(pick(participation,...ATTRIBUTES_PROJECT)))
-                                })
-*/
+
                             if (response.json.participation.byPlan[this.props.activePlan].byIndex) 
                               {
                                   Object.values(response.json.participation.byPlan[this.props.activePlan].byIndex).forEach(participation => {
@@ -84,9 +69,6 @@ class ParticipationIndex extends React.Component {
                                 })
                               */
 
-                        //console.log('get(response)', get(response, ['json', 'participation', 'byPlan', this.props.activePlan, 'byIndex'], [{}]))
-                              //  console.log('response_3', test )
-
                               return response
                           })
 
@@ -97,46 +79,7 @@ class ParticipationIndex extends React.Component {
 
     participationTableData(){
 
-
-      // if (this.props.planParticipation.byIndex !== undefined){
-            
-      //      let nulldata = null
-
-/*
-          console.log('this.props.planParticipation',this.props.planParticipation)
-           console.log('this.props.planParticipation.byIndex',this.props.planParticipation.byIndex )
-           console.log('this.props.planParticipationData',this.props.planParticipationData)*/
-
-/*
-              get(this.props.planParticipation).forEach(participation => {
-                  test.push(Object.values(pick(participation,...attributes)))
-                })*/
-
-/*
-                       const byIndex = this.props.planParticipationData;
-                      // get(byIndex, [byId])
-                       const indexValues = byIndex && Object.values(this.props.planParticipationData)
-                       console.log('indexlen', byIndex)*/
-
-
-                                               /*         if (indexValues) {
-                                                          for (let i = 0; i < indexValues.length; ++i) {
-                                                            const participation = indexValues[i]                              
-                                                            if (participation) {
-                                                              const attributes = Object.values(pick(participation,...attributes),
-                                                              data.push(attributes)
-                                                            }
-                                                          }
-                                                        }*/
-
-      //    } else {
-
-
-
-// if (this.props.planParticipation.byIndex !== undefined){
-
-            let data = []
-            let attributes = ATTRIBUTES.slice(0,3)
+         let data =[]
 
         /*
             Object.values(this.props.planParticipationData).forEach(participation =>{
@@ -145,30 +88,18 @@ class ParticipationIndex extends React.Component {
                 console.log('data', data)
             });
         */
-
              const databyId = this.props.planParticipationData;
              //const databyId1= this.props.planParticipationData[this.props.match.params.Id];
              console.log('databyId', databyId)
 
-             const dataValue = Object.values(databyId);
-             console.log('dataValue', dataValue)
-             
-
-             //console.log('dataValueType', dataValueType)
-
-             //console.log ('GetdatabyId', get(databyId,[2],[] ))
-                //  console.log ('databyId1', databyId1)
-
-           //  console.log(Object.keys(databyId))
-           // [this.props.match.params.Id]
+             data = Object.values(databyId);
+          
+              console.log('data', data)
 
 
             // get(databyId,['id'], []).forEach(participation =>{
             //     data.push(Object.values(pick(participation,...attributes)))
             // });
-
-
- 
 
               return (
                         <div className='container'>
@@ -188,10 +119,7 @@ class ParticipationIndex extends React.Component {
                                     
                                     <br />
 
-                                 {/*  length: {this.props.planParticipation.length}*/}
-
-
-                                 <div className="table-responsive" >
+                             <div className="table-responsive" >
                                                 <table className="table table lightBorder">
                                                     <thead>   
                                                     <tr>
@@ -204,31 +132,33 @@ class ParticipationIndex extends React.Component {
                                                 </tr>
                                                     </thead>
                                                     <tbody>
-                                                      {
-                                                        Object.values(this.props.planParticipationData).map((item) =>{
+
+                                                   {
+                                                        data.map((item) =>{
                                                           return (
                                                               <tr>
-                                                                  
-                                                                  <td>{item.id}</td>
-                                                                  <td>{item.type}</td>
-                                                                  <td>{item.plan_id}</td>
-                                                                 <td>
+                                          
+                                                                  <td>{item.id.value}</td>
+                                                                  <td>{item.type.value}</td>
+                                                                  <td>{item.plan_id.value}</td>
+                         
+                                                                  <td>
                                                                     <Link className="btn btn-sm btn-outline-primary"
-                                                                          to={ `/participation/edit/${item.id}` } >
+                                                                          to={ `/participation/edit/${item.id.value}` } >
                                                                         Edit
                                                                     </Link>
                                                                 </td>
                                                                 <td>
 
-                                                                 { item.type === 'meeting' || item.type === 'Meeting' ? 
+                                                                 { item.type.value === 'meeting' || item.type.value === 'Meeting' ? 
                                                                         <Link className="btn btn-sm btn-outline-primary"
-                                                                              to={ `/meeting/view/${item.id}` }>
+                                                                              to={ `/meeting/view/${item.id.value}` }>
                                                                             View
                                                                         </Link>
                                                                                       
                                                                 : 
                                                                         <Link className="btn btn-sm btn-outline-primary"
-                                                                              to={ `/participation/view/${item.id}` }>
+                                                                              to={ `/participation/view/${item.id.value}` }>
                                                                             View
                                                                         </Link>
                                                                  } 
@@ -239,10 +169,10 @@ class ParticipationIndex extends React.Component {
                                                           )
                                                         })
                                                       }
+                          
                                                     </tbody>
                                                 </table>
                                             </div>
-
                                 </div>
                             </Element>
                         </div>
@@ -251,15 +181,12 @@ class ParticipationIndex extends React.Component {
                // }
             }
 
-
               render() {
                   return (
                         <div>{this.participationTableData()}</div>
                     )
                   }
         }
-
-
 
     // deleteWorksheet(e){
     //     e.persist()
@@ -279,10 +206,6 @@ class ParticipationIndex extends React.Component {
     //     )
 
     // }
-
-    
-  
-        
 
       
 const mapStateToProps = state => ({

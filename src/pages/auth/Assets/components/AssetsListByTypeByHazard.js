@@ -92,7 +92,7 @@ class AssetsListByTypeByHazard extends React.Component{
                         }
 
                     });
-                    console.log('data',data)
+
                     data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
                     data.map(d =>{
                         d.replacement_value = '$'+d.replacement_value

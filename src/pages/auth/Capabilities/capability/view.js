@@ -45,7 +45,7 @@ class CapabilityView extends React.Component {
 
                 let county = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId].county
                 let cousub = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId].cousub
-                if(county !== undefined || county!== null || cousub !== undefined || cousub !== null){
+                if(county !== undefined && county!== null && cousub !== undefined && cousub !== null){
                     this.props.falcor.get(['geo',county,['name']],
                         ['geo',cousub,['name']]
                     ).then(response =>{
@@ -64,7 +64,6 @@ class CapabilityView extends React.Component {
         if(this.props.capabilitiesData[this.props.match.params.capabilityId] !== undefined){
             let graph = this.props.capabilitiesData[this.props.match.params.capabilityId];
             data.push(pick(graph,...ATTRIBUTES));
-            console.log('data',data)
             data.forEach(item =>{
                 Object.keys(item).forEach(i =>{
                     if (item[i].value && item[i].value.toString() === 'false'){
