@@ -2,26 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/img/public_home_background.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/components/DomGraph.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/components/HazardTotalGraph.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components/NumberOfHazardsStackedBarGraph.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components/yearsOfSevereWeatherData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/introduction.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/planningTeam.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap/layers/ebr_buildings_new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap/layers/ebr_buildings_new.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -89,19 +73,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
-      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
-      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers" />
-      <recent name="$PROJECT_DIR$/src/img" />
-      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext" />
       <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/index.js" />
       <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers" />
+      <recent name="$PROJECT_DIR$/src/img" />
+      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -532,7 +516,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="on login /admin vs /" />
     <MESSAGE value="home icon in public" />
     <MESSAGE value="hazard page for state: chunked requests; on signup email link values passed by county" />
     <MESSAGE value="req A-1C: roles editor/viewer" />
@@ -557,7 +540,8 @@
     <MESSAGE value="actions assets" />
     <MESSAGE value="plan pages design + minor" />
     <MESSAGE value="home page" />
-    <option name="LAST_COMMIT_MESSAGE" value="home page" />
+    <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

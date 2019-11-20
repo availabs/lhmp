@@ -234,7 +234,6 @@ const tractLayer = new TractLayer("Tracts Layer", {
             {
                 return ["tract",
                     ["GeoId", feature.properties.geoid],
-                    ["len", feature.properties.geoid.length],
                     ["Damage", get(tractLayer, `data.${feature.properties.geoid}.total_damage`, 0)],
                 ]
             }
