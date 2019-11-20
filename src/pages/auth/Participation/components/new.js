@@ -36,40 +36,7 @@ class ParticipationNew extends React.Component {
 
     }
 
-   /* fetchFalcorDeps(){
-        return this.props.falcor.get(['capabilitiesLHMP','meta'])
-            .then(response => {
-                return response
-            });
 
-        capabilityDropdown(){
-            let capabilityDropDown = []
-            Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
-                meta.forEach(item =>{
-                    capabilityDropDown.push({
-                        type: 'capability',
-                        value: item['capability']
-                    })
-                })
-            })
-            return(
-                <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>Capability</label>
-                        <select className="form-control justify-content-sm-end" id='capability' onChange={this.handleChange} value={this.state.capability}>
-                            <option default>--Select Capability--</option>
-                            <option className="form-control" key={0} value="None">No Capability Selected</option>
-                            {
-                                capabilityDropDown.map((capability,i) =>{
-                                    return(<option  className="form-control" key={i+1} value={capability.value}>{capability.value}</option>)
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
-            )
-        }    
-
-    }*/
  
 
     componentDidMount(){

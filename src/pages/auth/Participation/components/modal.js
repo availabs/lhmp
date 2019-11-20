@@ -189,7 +189,7 @@ renderMainTable() {
         console.log('modal_data', modal_data)
         let invitedIds = modal_data.map(modal => {
            console.log("modal", modal)
-            if (modal.status &&  modal.status === 'invited' ) {
+            if (modal.status &&  modal.status === 'invited' || modal.status &&  modal.status === 'attending') {
                 return modal.role_id
             }
         })

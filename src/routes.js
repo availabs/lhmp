@@ -41,6 +41,9 @@ import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListB
 import Capabilities from 'pages/auth/Capabilities'
 import CapabilitiesNew from 'pages/auth/Capabilities/capability/new'
 import CapabilitiesView from 'pages/auth/Capabilities/capability/view'
+import CapabilitiesFormsList from 'pages/auth/Capabilities/capability_forms'
+import CapabilitiesFormsView from 'pages/auth/Capabilities/capability_forms/view'
+import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
 import RolesIndex from 'pages/auth/Roles/'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
@@ -85,9 +88,15 @@ const routes = [
    ...AssetsView,
    ...AssetsEdit,
    ...AssetsListByTypeByHazard,
-   ...Capabilities,
-   ...CapabilitiesNew,
-   ...CapabilitiesView,
+   ...CapabilitiesFormsList,
+   ...CapabilitiesFormsView,
+   ...CapabilitiesFormsNew,
+   /*
+   OLD CAPABILITIES FORMS
+   //...Capabilities,
+   //...CapabilitiesNew,
+   //...CapabilitiesView,
+    */
    ...Historic,
    ...RolesIndex,
    ...Public,

@@ -81,6 +81,7 @@ class CapabilitiesIndex extends React.Component {
         Object.values(this.props.capabilities).forEach(capability =>{
             data.push(Object.values(pick(capability,...attributes)))
         });
+        console.log('data',data)
         return data
 
     }

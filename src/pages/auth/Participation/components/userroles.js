@@ -67,7 +67,7 @@ class ParticipationUserRoles extends React.Component {
                 console.log('test -------', this.props.userroleparticipationViewData)
                 let participationRoleData = []
 
-                if (response.json.Users[this.props.email].roles) 
+/*                if (response.json.Users[this.props.email].roles) 
                   {
                       Object.values(
                         response.json.Users[this.props.email].roles
@@ -76,7 +76,22 @@ class ParticipationUserRoles extends React.Component {
                     })
                    console.log('Users by emails-------', participationRoleData);
                   } 
-                  return response
+*/
+
+                const getResponse = get(response,['json','Users', this.props.email, 'roles'], {} )
+
+                 console.log('getResponse-------', getResponse);
+
+
+                Object.values(
+                       getResponse
+                        ).forEach(participation => {
+                      participationRoleData.push(Object.values(pick(participation,...ATTRIBUTES)))
+                    })
+
+                console.log('Users by emails-------', participationRoleData);
+
+                  return getResponse
               })
 
 
