@@ -9,7 +9,6 @@ import Hazards from './pages/Public/Hazards/'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
 import Strategies from './pages/Public/Strategies/'
 
-
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
