@@ -58,84 +58,125 @@ class HomeView extends React.Component {
   fetchFalcorDeps() {
      // let roles_data =[];
      // let email = this.props.email;
-      return  this.props.falcor.get(['users', [this.props.email], 'roles', 'length'])
+
+      return  this.props.falcor.get(['users', [this.props.email], 'roles', 'length'])  // how to change this to loadash
+
 
           .then(response =>{
-                 //console.log('byEmail response-------------', response)  
+            
+                 console.log('byEmail response-------------', response)  
+
                const length = get(response, ['json','users', this.props.email,'roles','length'], 0)
+
                 console.log('byEmail length-------------', length)  
+
                return length  
-                   })
+            })
        
           .then(length => {
 
-            return  this.props.falcor.get(['Users', [this.props.email], 'roles',{from: 0, to: length-1}, ATTRIBUTES]) 
+              return  this.props.falcor.get(['Users', [this.props.email], 'roles',{from: 0, to: length-1}, ATTRIBUTES]) 
            
 
-            .then(response => {
+                .then(response => {
 
-              console.log('User test  -----', response);
-              console.log('test -------', this.props.userroleparticipationViewData)
-
-
-
-              let participationRoleData = []
-
-              if (response.json.Users[this.props.email].roles) 
-                {
-                    Object.values(
-                      response.json.Users[this.props.email].roles
-                      ).forEach(participation => {
-                         //console.log('participation-----', participation)
-                    participationRoleData.push(Object.values(pick(participation,...ATTRIBUTES)))
-                  })
-                 console.log('Users by emails-------', participationRoleData,  participationRoleData[2]);
-                } 
-                return response
-            })
+                  console.log('User test  -----', response);
+                  console.log('test -------', this.props.userroleparticipationViewData)
 
 
-                .then (responsebyId =>  { 
-                console.log('responsebyId-----------test', responsebyId )
 
-                  let participationIds = []
-                   let ParticipationIds = []
-                    let NParticipationIds = []
+                  let participationRoleData = []
 
-                  if (responsebyId.json.Users[this.props.email].roles) 
-                        {
-                            Object.values(
-                              responsebyId.json.Users[this.props.email].roles
+            /*      if (response.json.Users[this.props.email].roles) 
+                    {
+                        Object.values(
+                          response.json.Users[this.props.email].roles
+                          ).forEach(participation => {
+                             //console.log('participation-----', participation)
+                        participationRoleData.push(Object.values(pick(participation,...ATTRIBUTES)))
+                      })
+                     console.log('Users by emails-------', participationRoleData,  participationRoleData[2]);
+                    } 
+                    return response*/
+
+                     const getResponse = get(response,['json','Users', this.props.email, 'roles'], {} )
+                     
+                     console.log('getResponse-------', getResponse);
+
+                      Object.values(
+                             getResponse
                               ).forEach(participation => {
-                                 console.log('participation-----', participation)
-                                 //console.log('participation-----id', participation.participation_id)
-
-                            participationIds.push(participation.participation_id)
+                            participationRoleData.push(Object.values(pick(participation,...ATTRIBUTES)))
                           })
 
-                 
-                        //  ParticipationIds  =  participationIds.filter(v => v !== undefined);
-                       //  NParticipationIds =   Object.values(ParticipationIds)
+                      console.log('Users by emails-------', participationRoleData);
 
-                         console.log('ParticipationIds-------', participationIds);
-                       
-                        } 
+                      return response
+
+              
 
 
-                 return this.props.falcor.get(['participation','byId',participationIds,PATTRIBUTES])
-                    .then(response => {
-                        console.log('responsebyId----------------------',response)
-                        return response
-
-                    })  
-
-                  })
+                })
 
 
-      })
+                    .then (responsebyId =>  { 
+                    console.log('responsebyId-----------test', responsebyId )
+
+                      let participationIds = []
+                       let ParticipationIds = []
+                        let NParticipationIds = []
+    /*
+                      if (responsebyId.json.Users[this.props.email].roles) 
+                            {
+                                Object.values(
+                                  responsebyId.json.Users[this.props.email].roles
+                                  ).forEach(participation => {
+                                     console.log('participation-----', participation)
+                                     //console.log('participation-----id', participation.participation_id)
+
+                                participationIds.push(participation.participation_id)
+                              })
+
+                     
+                            //  ParticipationIds  =  participationIds.filter(v => v !== undefined);
+                           //  NParticipationIds =   Object.values(ParticipationIds)
+
+                             console.log('ParticipationIds-------', participationIds);
+                           
+                            } */
+
+                        const getResponseById = get(responsebyId,['json','Users', this.props.email, 'roles'], {} )
+
+                         console.log('getResponseById-------', getResponseById);
+
+                             Object.values(
+                               getResponseById
+                                ).forEach(participation => {
+                                        // console.log('participation-----', participation)
+                                    participationIds.push(participation.participation_id)
+                            })
+
+                             console.log('ParticipationIds-------', participationIds);
 
 
-  
+
+
+
+                         return this.props.falcor.get(['participation','byId',participationIds,PATTRIBUTES])
+
+
+
+                            .then(response => {
+                                console.log('responsebyId----------------------',response)
+                                return response
+
+                            })  
+
+                    })
+
+
+             })
+
 
   }
 
@@ -348,7 +389,7 @@ class HomeView extends React.Component {
 
 
 const mapStateToProps = state => {
-  console.log('user', state.user)
+  console.log('graph', state.graph)
   return ({
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
     activeGeoid: state.user.activeGeoid,
@@ -357,9 +398,10 @@ const mapStateToProps = state => {
         attempts: state.user.attempts, // so componentWillReceiveProps will get called.
         geoGraph: state.graph,
         email:state.user.email,
-        activePlan: state.user.activePlan,
         userroleparticipationViewData : get(state.graph,['Users',state.user.email,'roles'],{}),
-        userroleLength : get(state.graph, ['users', state.user.email, 'roles', 'length'],{}),
+        userroleLength :  get(state.graph, ['users', state.user.email, 'roles', 'length'],{}),
+        //userroleLength :  get(state.graph, `users.${state.user.email}.roles.length`,{}), //['users', state.user.email, 'roles', 'length'],{}),  
+        // state.graph.users[state.user.email].roles.length
         participationViewData : get(state.graph,['participation','byId'],{})
         //userroleLength1 : state.graph.users.state.user.email.roles.length,
         //userroleStatus: get(state.graph,['Users',state.user.email,'roles', 0, 'status'],{})

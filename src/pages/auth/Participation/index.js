@@ -57,12 +57,26 @@ class ParticipationIndex extends React.Component {
 
                                 let test = []
 
-                            if (response.json.participation.byPlan[this.props.activePlan].byIndex) 
+
+                                const byPlanResponse = get (response, ['json', 'participation', 'byPlan', this.props.activePlan, 'byIndex'], [{}])
+
+                                console.log ('byPlanResponse----', byPlanResponse)
+
+                                  Object.values(byPlanResponse).forEach(participation => {
+                                            test.push(Object.values(pick(participation,...ATTRIBUTES)))
+                                    })
+ 
+
+                               console.log ('test----', test)
+
+                         /*   if (response.json.participation.byPlan[this.props.activePlan].byIndex) 
                               {
                                   Object.values(response.json.participation.byPlan[this.props.activePlan].byIndex).forEach(participation => {
                                   test.push(Object.values(pick(participation,...ATTRIBUTES)))
                                 })
-                              } 
+                              } */
+
+                              
 /*
                               get(response, ['json', 'participation', 'byPlan', this.props.activePlan, 'byIndex'], [{}]).forEach(participation => {
                                   test.push(Object.values(pick(participation,...ATTRIBUTES_PROJECT)))
