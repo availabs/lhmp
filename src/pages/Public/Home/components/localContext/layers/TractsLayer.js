@@ -173,7 +173,7 @@ class TractLayer extends MapLayer {
         map.setPaintProperty(
             'tracts-layer',
             'fill-opacity',
-            0.7
+            0
         );
         map.setPaintProperty(
             'tracts-layer',
@@ -223,7 +223,7 @@ const tractLayer = new TractLayer("Tracts Layer", {
             'source-layer': 'tracts',
             'type': 'fill',
             'paint': {
-                'fill-color': 'rgba(9, 98, 186, 0.5)',
+                'fill-color': 'rgba(9, 98, 186, 0)',
             }
         },
         {
