@@ -51,19 +51,21 @@ class AvlFormsNewData extends React.Component{
     componentDidMount(){
         if(this.props.id[0]){
             let attributes = this.props.config.map(d => Object.keys(d.attributes));
-            return this.props.falcor.get(['forms','byId',this.props.id,'attributes',...attributes])
+            return this.props.falcor.get(['forms','byId',this.props.id])
                 .then(response =>{
-
-                    let graph = response.json.forms.byId[this.props.id].attributes;
+                    let graph = response.json.forms.byId[this.props.id];
                     let tmp_state = {}
                     if(graph){
                         attributes[0].forEach(attribute =>{
-                            tmp_state[attribute] = graph[attribute]
+                            tmp_state[attribute] = graph.attributes[attribute]
                         });
                         this.setState(
                             tmp_state
                         )
                     }
+                    /*
+
+                     */
                 })
         }
     }
@@ -130,13 +132,11 @@ class AvlFormsNewData extends React.Component{
             let args = []
             let plan_id = parseInt(this.props.activePlan);
             let type = this.props.config.map(d => d.type);
-            let sub_type = this.props.config.map(d => d.sub_type)
             let attributes = {}
             Object.keys(this.state).forEach(item =>{
                 attributes[item] = this.state[item]
             });
-
-            args.push(type[0],plan_id,attributes,sub_type[0]);
+            args.push(type[0],plan_id,attributes);
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
                     this.props.sendSystemMessage(`Capability was successfully created.`, {type: "success"});
