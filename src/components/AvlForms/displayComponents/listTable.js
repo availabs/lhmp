@@ -52,9 +52,9 @@ class AvlFormsListTable extends React.Component{
             Object.keys(graph).forEach(item =>{
                 let data = {};
                 formAttributes[0].forEach(attribute =>{
-                    if(graph[item].attributes[attribute]){
+                    if(graph[item].value && graph[item].value.attributes[attribute]){
                         data['id'] = item
-                        data[attribute] = graph[item].attributes[attribute].value || 'None'
+                        data[attribute] = graph[item].value.attributes[attribute] || ' '
                     }
                 })
                 listViewData.push(data)
@@ -71,24 +71,39 @@ class AvlFormsListTable extends React.Component{
         return (
                 <div className='container'>
                     <Element>
-                        <h4 className="element-header">Capabilities
+                        <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
-                            to={ `/capabilities/new` } >
-                                Create New Capability
+                            to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                                Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                         </Link>
+                        {this.props.config.map(d => {
+                            if(d.type === 'actions'){
+                                return (
+                                    <button
+                                        className="btn btn-sm btn-primary"
+                                    >
+                                        Create {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                    </button>
+                                )
+                            }else{
+                                return (
+                                    <button
+                                        disabled
+                                        className="btn btn-sm btn-disabled"
+                                    >
+                                        Create {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                    </button>
+                                )
+                            }
+                        })}
+
                         <button
                             disabled
                             className="btn btn-sm btn-disabled"
                         >
-                                Create Capability Planner
-                        </button>
-                        <button
-                            disabled
-                            className="btn btn-sm btn-disabled"
-                        >
-                                Create HMGP Capability
+                                Create HMGP {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                         </button>
                     </span>
                         </h4>
@@ -123,10 +138,19 @@ class AvlFormsListTable extends React.Component{
                                                             </Link>
                                                         </td>
                                                         <td>
-                                                            <Link className="btn btn-sm btn-outline-primary"
-                                                                  to={ `/${formType[0]}/view/${item['id']}` }>
-                                                                View
-                                                            </Link>
+                                                            {formType[0] === 'actions' ?
+
+                                                                <Link className="btn btn-sm btn-outline-primary"
+                                                                    to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
+                                                                     View
+                                                                </Link>
+                                                                :
+                                                                <Link className="btn btn-sm btn-outline-primary"
+                                                                      to={ `/${formType[0]}/view/${item['id']}` }>
+                                                                    View
+                                                                </Link>
+                                                            }
+
                                                         </td>
                                                         <td>
                                                             <button id= {item['id']} className="btn btn-sm btn-outline-danger"

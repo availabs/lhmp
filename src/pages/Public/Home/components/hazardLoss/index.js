@@ -101,9 +101,9 @@ class HazardLoss extends Component {
                                     scrollZoom={false}
                                     zoom={6}
                                     update={[this.state.update]}
-                                    style='New'
-                                    styles={[{ name: "New",
-                                        style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii" }]}
+                                    style='Clear'
+                                    styles={[{ name: "Clear",
+                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia" }]}
                                     fitBounds={[
                                         [
                                             -79.8046875,

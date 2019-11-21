@@ -13,11 +13,15 @@ import Strategies from './pages/Public/Strategies/'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
 
+
 import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
+import ActionsProjectView from 'pages/auth/actions/project/view'
+
+//import ActionsFormIndex from 'pages/auth/actions/forms_index'
+//import ActionsWorkSheetView from 'pages/auth/actions/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import ActionsProjectIndex from 'pages/auth/actions/project'
-import ActionsProjectView from 'pages/auth/actions/project/view'
 import ActionsProjectUpload from 'pages/auth/actions/project/upload'
 import ActionProject from 'pages/auth/actions/project/new'
 
@@ -71,9 +75,12 @@ const routes = [
    ...ActionWorksheet,
    ...ActionsIndex,
    ...ActionsView,
+   ...ActionsProjectView,
+
+   //...ActionsFormIndex,
+   //...ActionsWorkSheetView,
    ...ActionProject,
    ...ActionsProjectIndex,
-   ...ActionsProjectView,
    ...ActionsProjectUpload,
    ...Plans,
    ...Plan,
