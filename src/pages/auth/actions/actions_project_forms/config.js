@@ -4,24 +4,25 @@ module.exports = [
         list_attributes:['action_name','action_type','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [],
-        /*
         attributes: {
-            :{
-                prompt:'Choose the county the capability is located from the list of all counties.',
+            action_county:{
+                sub_type:'project',
+                prompt:'',
                 edit_type:'dropdown',
                 display_type:'text',
                 meta: 'true',
-                section: ''
+                section: '1'
             },
-            municipality:{
-                prompt:'Choose the jurisdiction where the capability is located. Jurisdictions that occur are based on the County selected in question 1',
+            action_jurisdiction:{
+                sub_type:'project',
+                prompt:'',
                 edit_type:'dropdown',
                 display_type:'text',
                 meta: 'true',
                 depend_on:'county',
-                section: ''
+                section: '1'
             },
         }
-         */
+
     }
 ];
