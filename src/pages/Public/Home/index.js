@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
+import Analysis from './components/Analysis/'
+import PlanningTeam from './components/planningTeam'
+import Introduction from './components/introduction'
+import LocalContext from './components/localContext/'
+import HazardLoss from './components/hazardLoss/'
 const ATTRIBUTES = [
     "fips",
     "plan_consultant",
@@ -49,32 +54,18 @@ class Public extends React.Component {
 
     render() {
         return (
-            <div className='container'>
-                <Element>
-                    <h4 className="element-header">{
-                        Object.keys(this.props.graph).length > 0
-                        && this.props.graph.county && this.props.graph.county.byId
-                        && this.props.graph.county.byId[this.state.activePlan]
-                        && this.props.graph.county.byId[this.state.activePlan].county
-                            ? this.props.graph.county.byId[this.state.activePlan].county.value
-                            : 'Loading'} page</h4>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="element-wrapper">
-                                <div className="element-box">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Element>
+            <div>
+                <Introduction/>
+                <Analysis/>
+                <PlanningTeam/>
+                <LocalContext/>
+                <HazardLoss/>
             </div>
         )
     }
 }
 
 const mapStateToProps = (state,ownProps) => {
-    console.log('public home state', state)
     return {
         graph: state.graph.plans || {},
         router: state.router

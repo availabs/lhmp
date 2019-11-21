@@ -398,7 +398,6 @@ const mapStateToProps = state => {
         attempts: state.user.attempts, // so componentWillReceiveProps will get called.
         geoGraph: state.graph,
         email:state.user.email,
-        activePlan: state.user.activePlan,
         userroleparticipationViewData : get(state.graph,['Users',state.user.email,'roles'],{}),
         userroleLength :  get(state.graph, ['users', state.user.email, 'roles', 'length'],{}),
         //userroleLength :  get(state.graph, `users.${state.user.email}.roles.length`,{}), //['users', state.user.email, 'roles', 'length'],{}),  

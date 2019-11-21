@@ -3,18 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/MainMenu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/new.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/project/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,7 +52,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mitigate-api" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -82,16 +71,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
-      <recent name="$PROJECT_DIR$/src/pages/auth" />
-      <recent name="$PROJECT_DIR$/src/styles" />
-      <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/components/light-admin" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/index.js" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
       <recent name="$PROJECT_DIR$/src/pages/auth" />
       <recent name="$PROJECT_DIR$/src/pages" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers" />
+      <recent name="$PROJECT_DIR$/src/img" />
+      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -141,21 +133,14 @@
       <workItem from="1569530112565" duration="298000" />
       <workItem from="1569862840274" duration="1222000" />
       <workItem from="1570729384564" duration="52327000" />
-      <workItem from="1571252779583" duration="126285000" />
-    </task>
-    <task id="LOCAL-00026" summary="updates">
-      <created>1563209569706</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1563209569706</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Building By Owner Type Table">
-      <created>1563290364858</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1563290364858</updated>
+      <workItem from="1571252779583" duration="126556000" />
+      <workItem from="1572026925119" duration="30000" />
+      <workItem from="1572882371630" duration="679000" />
+      <workItem from="1573068052746" duration="632000" />
+      <workItem from="1573662336844" duration="37513000" />
+      <workItem from="1574089042386" duration="1795000" />
+      <workItem from="1574091816301" duration="45070000" />
+      <workItem from="1574280072212" duration="2905000" />
     </task>
     <task id="LOCAL-00028" summary="Building By Owner Type Pie Chart and Table">
       <created>1563290396727</created>
@@ -486,7 +471,21 @@
       <option name="project" value="LOCAL" />
       <updated>1571945389851</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="plan pages design + minor">
+      <created>1572026667908</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1572026667908</updated>
+    </task>
+    <task id="LOCAL-00076" summary="home page">
+      <created>1574282754232</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1574282754233</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -515,10 +514,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
-    <MESSAGE value="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well." />
-    <MESSAGE value="on login /admin vs /" />
-    <MESSAGE value="home icon in public" />
     <MESSAGE value="hazard page for state: chunked requests; on signup email link values passed by county" />
     <MESSAGE value="req A-1C: roles editor/viewer" />
     <MESSAGE value="stickyroll in admin-about" />
@@ -540,7 +535,11 @@
     <MESSAGE value="actions project wizard update" />
     <MESSAGE value="added actions tab on click" />
     <MESSAGE value="actions assets" />
-    <option name="LAST_COMMIT_MESSAGE" value="actions assets" />
+    <MESSAGE value="plan pages design + minor" />
+    <MESSAGE value="home page" />
+    <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
+    <MESSAGE value="hazard loss - public home" />
+    <option name="LAST_COMMIT_MESSAGE" value="hazard loss - public home" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="masterDetails">

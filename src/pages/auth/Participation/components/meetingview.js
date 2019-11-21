@@ -58,8 +58,11 @@ class ParticipationMeetingIndex extends React.Component {
           .then(response =>{
 
                  const length = get(response, ['json', 'participation', 'byId', this.props.match.params.Id,'roles','length'], 0)
+
+                        console.log('length-------------', length)   
+
                  return length  
-                  console.log('length-------------', length)   
+            
 
                      })
          
