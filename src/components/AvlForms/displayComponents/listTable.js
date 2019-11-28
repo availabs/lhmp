@@ -33,7 +33,7 @@ class AvlFormsListTable extends React.Component{
         e.persist()
         let id = e.target.id;
         this.props.sendSystemMessage(
-            `Are you sure you want to delete this Capability with id "${ id }"?`,
+            `Are you sure you want to delete this form with id "${ id }"?`,
             {
                 onConfirm: () => this.props.falcor.call(['forms','remove'],[id])
                     .then(() => this.fetchFalcorDeps()),
@@ -73,19 +73,28 @@ class AvlFormsListTable extends React.Component{
                     <Element>
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
-                        <Link
-                            className="btn btn-sm btn-primary"
-                            to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                        {formType[0] === 'actions'?
+                            <Link
+                                className="btn btn-sm btn-primary"
+                                to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
                                 Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                        </Link>
+                            </Link>
+                            :
+                            <Link
+                                className="btn btn-sm btn-primary"
+                                to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                                Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                            </Link>
+                        }
+
                         {this.props.config.map(d => {
                             if(d.type === 'actions'){
                                 return (
-                                    <button
+                                    <Link
                                         className="btn btn-sm btn-primary"
-                                    >
-                                        Create {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
-                                    </button>
+                                        to={ `/${this.props.config.map(d=> d.type)}/project/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                    </Link>
                                 )
                             }else{
                                 return (
@@ -132,10 +141,18 @@ class AvlFormsListTable extends React.Component{
                                                             )
                                                         })}
                                                         <td>
-                                                            <Link className="btn btn-sm btn-outline-primary"
-                                                                  to={ `/${formType[0]}/edit/${item['id']}` } >
-                                                                Edit
-                                                            </Link>
+                                                            {formType[0] === 'actions' ?
+                                                                <Link className="btn btn-sm btn-outline-primary"
+                                                                      to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
+                                                                    Edit
+                                                                </Link>
+                                                                :
+                                                                <Link className="btn btn-sm btn-outline-primary"
+                                                                      to={ `/${formType[0]}/edit/${item['id']}` } >
+                                                                    Edit
+                                                                </Link>
+                                                            }
+
                                                         </td>
                                                         <td>
                                                             {formType[0] === 'actions' ?
