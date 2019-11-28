@@ -12,18 +12,18 @@ import Strategies from './pages/Public/Strategies/'
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
-
-
+import ActionsFormIndex from 'pages/auth/actions/forms_index'
+import ActionsFormView from 'pages/auth/actions/view'
+import ActionsWorksheetFormNew from 'pages/auth/actions/new'
+/*
 import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
 import ActionsProjectView from 'pages/auth/actions/project/view'
-
-//import ActionsFormIndex from 'pages/auth/actions/forms_index'
-//import ActionsWorkSheetView from 'pages/auth/actions/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import ActionsProjectIndex from 'pages/auth/actions/project'
 import ActionsProjectUpload from 'pages/auth/actions/project/upload'
 import ActionProject from 'pages/auth/actions/project/new'
+ */
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
@@ -72,16 +72,18 @@ const routes = [
   Login,
   Signup,
    ...ResetPassword,
+   ...ActionsFormIndex,
+   ...ActionsFormView,
+   ...ActionsWorksheetFormNew,
+   /*
    ...ActionWorksheet,
    ...ActionsIndex,
    ...ActionsView,
    ...ActionsProjectView,
-
-   //...ActionsFormIndex,
-   //...ActionsWorkSheetView,
    ...ActionProject,
    ...ActionsProjectIndex,
    ...ActionsProjectUpload,
+    */
    ...Plans,
    ...Plan,
    ...AdminAbout,
