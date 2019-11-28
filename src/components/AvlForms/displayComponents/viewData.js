@@ -72,7 +72,7 @@ class AvlFormsViewData extends React.Component{
                         else{
                             data.push({
                                 attribute:d,
-                                value: graph[item].attributes[d].toString() || 'None'
+                                value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : ''
                             })
                         }
                     }
@@ -80,39 +80,42 @@ class AvlFormsViewData extends React.Component{
                         if(d !== 'sub_type' && d !== 'type' && d !=='plan_id'){
                             missing_attributes = config_attributes[0].filter(i => Object.keys(graph[item].attributes).indexOf(i) < 0);
                             missing_attributes.forEach(ma =>{
-                                let renamed_column = config[0][ma].rename_column
-                                Object.keys(renamed_column).forEach(rc =>{
-                                    if(graph[item].attributes[rc]){
-                                        if(graph[item].attributes[rc] === county || graph[item].attributes[rc] === cousub){
-                                            data.push({
-                                                attribute : ma,
-                                                value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None'
-                                            })
+                                let renamed_column = config[0][ma].rename_column;
+                                console.log('renamed_column',renamed_column)
+                                if(renamed_column){
+                                    Object.keys(renamed_column).forEach(rc =>{
+                                        if(graph[item].attributes[rc]){
+                                            if(graph[item].attributes[rc] === county || graph[item].attributes[rc] === cousub){
+                                                data.push({
+                                                    attribute : ma,
+                                                    value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None'
+                                                })
+                                            }else{
+                                                data.push({
+                                                    attribute : ma,
+                                                    value : graph[item].attributes[rc]
+                                                })
+                                            }
                                         }else{
-                                            data.push({
-                                                attribute : ma,
-                                                value : graph[item].attributes[rc]
+                                            renamed_column[rc].forEach(rcc =>{
+                                                if(graph[item].attributes[rcc]){
+                                                    if(graph[item].attributes[rcc] === county || graph[item].attributes[rcc] === cousub){
+                                                        data.push({
+                                                            attribute : ma,
+                                                            value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None'
+                                                        })
+                                                    }else{
+                                                        data.push({
+                                                            attribute : ma,
+                                                            value : graph[item].attributes[rcc]
+                                                        })
+                                                    }
+                                                }
+
                                             })
                                         }
-                                    }else{
-                                        renamed_column[rc].forEach(rcc =>{
-                                            if(graph[item].attributes[rcc]){
-                                                if(graph[item].attributes[rcc] === county || graph[item].attributes[rcc] === cousub){
-                                                    data.push({
-                                                        attribute : ma,
-                                                        value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None'
-                                                    })
-                                                }else{
-                                                    data.push({
-                                                        attribute : ma,
-                                                        value : graph[item].attributes[rcc]
-                                                    })
-                                                }
-                                            }
-
-                                        })
-                                    }
-                                })
+                                    })
+                                }
                             })
                         }
                     }
