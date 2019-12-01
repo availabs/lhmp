@@ -3,14 +3,9 @@ import * as d3scale from "d3-scale"
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
-import {falcorGraph, falcorChunkerNiceWithUpdate} from "store/falcorGraph"
+import {falcorChunkerNiceWithUpdate, falcorGraph} from "store/falcorGraph"
 import * as turf from '@turf/turf'
 import COLOR_RANGES from "constants/color-ranges"
-
-// import MapLayer from "components/AvlMap/MapLayer"
-// import React from "react"
-// import styled from 'styled-components';
-
 
 const getColor = (name) => COLOR_RANGES[9].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -50,10 +45,11 @@ class TractLayer extends MapLayer {
         return falcorGraph.get(
             ['geo', store.getState().user.activeGeoid, 'tracts'],
             ['geo', store.getState().user.activeGeoid, this.displayFeatures],
-            ["geo", [store.getState().user.activeGeoid], ["boundingBox",'geom']]
+            ["geo", [store.getState().user.activeGeoid], ["boundingBox", 'geom']]
         )
             .then(d => {
-                let countiesOrCousubs = get(falcorGraph.getCache(),
+                let graph = falcorGraph.getCache()
+                let countiesOrCousubs = get(graph,
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
                     null);
                 if (countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0) {
@@ -64,19 +60,20 @@ class TractLayer extends MapLayer {
                 return d
             })
             .then(data => {
+                let graph = falcorGraph.getCache()
                 // set map bounds
                 let initalBbox =
-                    get(falcorGraph.getCache(), `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
+                    get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
                         .slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                let bounds = get(falcorGraph.getCache(), `geo.${store.getState().user.activeGeoid}.geom.value`, null);
+                let bounds = get(graph, `geo.${store.getState().user.activeGeoid}.geom.value`, null);
                 if (bounds) bounds = JSON.parse(bounds);
                 map.resize();
                 map.fitBounds(bbox);
                 // filter out everything outside of the bounds
                 map.addSource('mask', {
                     "type": "geojson",
-                    "data": this.polyMask(bounds, [...bbox[0],...bbox[1]])
+                    "data": this.polyMask(bounds, [...bbox[0], ...bbox[1]])
                 });
 
                 map.addLayer({
@@ -89,8 +86,8 @@ class TractLayer extends MapLayer {
                     }
                 });
                 // get tracts
-                let tracts = get(falcorGraph.getCache(),
-                    `geo.${store.getState().user.activeGeoid}.tracts]`,
+                let tracts = get(graph,
+                    `geo.${store.getState().user.activeGeoid}.tracts`,
                     null);
                 if (tracts && tracts.value) {
                     this.tracts = tracts.value;
@@ -100,14 +97,14 @@ class TractLayer extends MapLayer {
 
                 // show cousubs or counties
                 if (get(store.getState(), `user.activeGeoid.length`, null) === 2) {
-                    let counties = get(falcorGraph.getCache(),
+                    let counties = get(graph,
                         `geo.${store.getState().user.activeGeoid}.counties`,
                         null);
                     if (counties && counties.value && counties.value.length > 0) {
                         map.setFilter('tracts-layer-line', ['all', ['in', 'geoid', ...counties.value]])
                     }
                 } else {
-                    let cousubs = get(falcorGraph.getCache(),
+                    let cousubs = get(graph,
                         `geo.${store.getState().user.activeGeoid}.cousubs`,
                         null);
                     if (cousubs && cousubs.value && cousubs.value.length > 0) {
@@ -116,38 +113,34 @@ class TractLayer extends MapLayer {
                 }
 
                 // get data and paint map
-                this.fetchData().then(data => this.receiveData(map, data))
+                this.fetchData(graph).then(data => this.receiveData(map, data))
             })
 
     }
 
-    fetchData() {
-        let geos = get(falcorGraph.getCache(),
+    fetchData(graph) {
+        if (!graph) graph = falcorGraph.getCache()
+        let geos = get(graph,
             `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
             null);
 
         if (!(geos && geos.value && geos.value.length > 0)) return Promise.resolve();
 
-        return falcorChunkerNiceWithUpdate(['acs',geos.value, ['2017'],['B01003_001E']])
+        return falcorChunkerNiceWithUpdate(['acs', geos.value, ['2017'], ['B01003_001E']])
             .then(d => falcorChunkerNiceWithUpdate(['geo', geos.value, 'name']))
             .then(fullData => {
-                this.data = {};
-                geos.value.forEach(c => {
-                    this.data[c] = {population: get(falcorGraph.getCache(),
-                            `acs.${c}.2017.B01003_001E`,
-                            0)}
-                })
-                return falcorGraph.getCache().acs
+                return Promise.resolve()
             })
     }
 
     receiveData(map, data) {
-
+        let graph = falcorGraph.getCache();
+        data = graph.acs;
         let keyDomain = Object.keys(data).filter(d => d != '$__path').reduce((out, curr) => {
-            let allTracts = get(falcorGraph.getCache(),
-                `geo.${curr}.tracts]`,
+            let allTracts = get(graph,
+                `geo.${curr}.tracts`,
                 null);
-            if (allTracts && allTracts.value && allTracts.value.length > 0){
+            if (allTracts && allTracts.value && allTracts.value.length > 0) {
                 allTracts.value.forEach(t => out[t] = data[curr][2017]['B01003_001E'])
             }
             out[curr] = data[curr][2017]['B01003_001E'];
@@ -183,15 +176,15 @@ class TractLayer extends MapLayer {
 
     }
 
-    polyMask(mask, bounds){
+    polyMask(mask, bounds) {
         /*let bboxPoly = turf.bboxPolygon(bounds);
         return turf.difference(bboxPoly, mask);*/
         return turf.mask(mask)
     }
 }
 
-const tractLayer = new TractLayer("Tracts Layer", {
-    name: 'TL',
+const tractLayer = new TractLayer("Local Context Layer", {
+    name: 'Local Context',
     active: true,
     sources: [
         {
@@ -253,7 +246,7 @@ const tractLayer = new TractLayer("Tracts Layer", {
                 'tracts-layer-line',
                 'fill-outline-color',
                 ["case",
-                    ["==",['get', 'geoid'], feature[0].properties.geoid],
+                    ["==", ['get', 'geoid'], feature[0].properties.geoid],
                     '#ff1200',
                     'rgba(0,0,0,0.3)'
                 ]
@@ -264,7 +257,7 @@ const tractLayer = new TractLayer("Tracts Layer", {
                     'tracts-layer-line',
                     'fill-outline-color',
                     ["case",
-                        ["==",['get', 'geoid'], feature[0].properties.geoid],
+                        ["==", ['get', 'geoid'], feature[0].properties.geoid],
                         '#000',
                         '#000'
                     ]
@@ -275,12 +268,12 @@ const tractLayer = new TractLayer("Tracts Layer", {
     popover: {
         layers: ['tracts-layer-line'],
         dataFunc: feature => {
-            console.log('data', falcorGraph.getCache())
-
+            let graph = falcorGraph.getCache()
             return ["tract",
-                ["GeoId", feature.properties.geoid],
-                ["Name", get(falcorGraph.getCache(), `geo.${feature.properties.geoid}.name`, 0)],
-                ["Population", get(tractLayer, `data.${feature.properties.geoid}.population`, 0)],
+                ["Name", get(graph, `geo.${feature.properties.geoid}.name`, 0)],
+                ["Population", get(graph,
+                    `acs.${feature.properties.geoid}.2017.B01003_001E`,
+                    0)],
             ]
         }
     }

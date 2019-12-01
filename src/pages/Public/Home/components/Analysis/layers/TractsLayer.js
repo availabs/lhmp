@@ -3,14 +3,11 @@ import * as d3scale from "d3-scale"
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
-import {falcorGraph, falcorChunkerNiceWithUpdate} from "store/falcorGraph"
+import {falcorGraph} from "store/falcorGraph"
 
 import COLOR_RANGES from "constants/color-ranges"
-
-// import MapLayer from "components/AvlMap/MapLayer"
-// import React from "react"
-// import styled from 'styled-components';
-
+import _ from "lodash";
+import hazardcolors from "../../../../../../constants/hazardColors";
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -43,7 +40,13 @@ const hazardMeta = [
 
 
 class TractLayer extends MapLayer {
-
+    receiveProps(oldProps, newProps){
+        if (this.filters.hazard.value !== newProps.hazard) this.filters.hazard.value = newProps.hazard
+    }
+    onPropsChange(oldProps, newProps){
+        if (this.filters.hazard.value !== newProps.hazard) this.filters.hazard.value = newProps.hazard
+        this.doAction(["fetchLayerData"]);
+    }
     onAdd(map) {
         super.onAdd(map);
         if (!store.getState().user.activeGeoid) return Promise.resolve();
@@ -65,16 +68,17 @@ class TractLayer extends MapLayer {
                 return d
             })
             .then(data => {
+                let graph = falcorGraph.getCache()
                 // set map bounds
                 let initalBbox =
-                    get(falcorGraph.getCache(), `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
+                    get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
                         .slice(4,-1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "),initalBbox[1].split(" ")] : null;
                 map.resize();
                 map.fitBounds(bbox);
 
                 // get tracts
-                let tracts = get(falcorGraph.getCache(),
+                let tracts = get(graph,
                     `geo.${store.getState().user.activeGeoid}.tracts]`,
                     null);
                 if (tracts && tracts.value){
@@ -85,14 +89,14 @@ class TractLayer extends MapLayer {
 
                 // show cousubs or counties
                 if (get(store.getState(), `user.activeGeoid.length`, null) === 2){
-                    let counties = get(falcorGraph.getCache(),
+                    let counties = get(graph,
                         `geo.${store.getState().user.activeGeoid}.counties`,
                         null);
                     if (counties && counties.value && counties.value.length > 0){
                         map.setFilter('tracts-layer-line', ['all', ['in', 'geoid', ...counties.value]])
                     }
                 }else{
-                    let cousubs = get(falcorGraph.getCache(),
+                    let cousubs = get(graph,
                         `geo.${store.getState().user.activeGeoid}.cousubs`,
                         null);
                     if (cousubs && cousubs.value && cousubs.value.length > 0){
@@ -101,57 +105,84 @@ class TractLayer extends MapLayer {
                 }
 
                 // get data and paint map
-                this.fetchData().then(data => this.receiveData(map, data))
+                this.fetchData(graph).then(data => this.receiveData(map, data))
             })
 
     }
 
-    fetchData() {
+    fetchData(graph) {
+        console.log('in ffd: analysis');
+        if (!graph) graph = falcorGraph.getCache();
         if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve({route: []});
-        return falcorChunkerNiceWithUpdate(
-            ['severeWeather', [...this.tracts, store.getState().user.activeGeoid], this.filters.hazard.value, 'tract_totals', 'total_damage']
-        )
-            .then(fullData => {
-                let countiesOrCousubs = get(falcorGraph.getCache(),
-                    `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
-                    null);
-                this.data = {};
-                if (countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0){
+        let countiesOrCousubs = get(graph,
+            `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
+            null);
 
-                    countiesOrCousubs.value.forEach(c => {
-                        let subTracts = get(falcorGraph.getCache(),
-                            `geo.${c}.tracts.value`,
-                            0);
-                        let total  = subTracts.reduce((a,current) => {
-                            return a + get(falcorGraph.getCache(),
-                                `severeWeather.${current}.${this.filters.hazard.value}.tract_totals.total_damage`,
-                                0);
-                        }, 0);
-                        this.data[c] = {total_damage: total}
-                    })
-                }
-                return falcorGraph.getCache().severeWeather
+        if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve()
+
+        if (this.displayFeatures === 'counties'){
+            return falcorGraph.get(
+                ['geo', countiesOrCousubs.value, 'name'],
+                ['severeWeather', [...countiesOrCousubs.value,...this.tracts], this.filters.hazard.value, 'tract_totals', 'total_damage']
+            ).then(d => {
+                this.data = _.mapValues(get(d,
+                    `json.severeWeather`,
+                    0), `${this.filters.hazard.value}.tract_totals.total_damage`);
+                return d
             })
+        }else {
+            return falcorGraph.get(
+                ['geo', countiesOrCousubs.value, 'name'],
+                ['severeWeather', this.tracts, this.filters.hazard.value, 'tract_totals', 'total_damage'])
+                .then(fullData => {
+                    this.data = {};
+                    graph = falcorGraph.getCache();
+                    let countiesOrCousubs = get(graph,
+                        `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
+                        null);
+                    if (countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0){
+                        countiesOrCousubs.value.forEach(c => {
+                            let subTracts = get(graph,
+                                `geo.${c}.tracts.value`,
+                                []);
+                            console.log('analysis: for', c)
+                            this.data[c] = subTracts.reduce((a, current) => {
+                                let currVal = get(graph,
+                                    `severeWeather.${current}.${this.filters.hazard.value}.tract_totals.total_damage`,
+                                    0)
+                                this.data[current] = currVal;
+                                return a + currVal;
+                            }, 0)
+                        })
+                    }
+                    return Promise.resolve()
+                })
+
+        }
+
     }
 
     receiveData(map, data) {
-        data = falcorGraph.getCache().severeWeather;
-        let keyDomain = Object.keys(data).filter(d => d != '$__path').reduce((out, curr) => {
-            out[curr] = data[curr][this.filters.hazard.value].tract_totals.total_damage;
-            return out;
-        }, {});
+        console.log('in recData: analysis')
+        let keyDomain = this.data;
+        let maxDamage = Math.max(...Object.keys(keyDomain)
+            .filter(f => f.length === 11)
+            .map(f => keyDomain[f]));
+        let domain = [0,1,2,3,4].map(i => ((maxDamage)*(i/4)));
+
         console.log('keyDomain', keyDomain);
-        let range = hazardMeta.filter(d => d.value === this.filters.hazard.value)[0].colors;
-        console.log('range', range);
+        let range = hazardcolors[this.filters.hazard.value + '_range'];
+        console.log('range',maxDamage, range, domain);
+
         let colorScale = d3scale.scaleThreshold()
-            .domain([50000, 1000000, 2000000, 4000000, 600000])
+            .domain(domain)
             .range(range);
 
         let mapColors = Object.keys(keyDomain).reduce((out, curr) => {
-            out[curr] = colorScale(keyDomain[curr]);
+            if (keyDomain[curr]) out[curr] = colorScale(keyDomain[curr]);
             return out;
         }, {});
-        console.log('mapColors', mapColors);
+        console.log('map colors', mapColors);
         map.setPaintProperty(
             'tracts-layer',
             'fill-color',
@@ -172,8 +203,8 @@ class TractLayer extends MapLayer {
     }
 }
 
-const tractLayer = new TractLayer("Tracts Layer", {
-    name: 'TL',
+const tractLayer = new TractLayer("Analysis Layer", {
+    name: 'Analysis',
     active: true,
     sources: [
         {
@@ -214,7 +245,7 @@ const tractLayer = new TractLayer("Tracts Layer", {
                     'source-layer': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                     'type': 'fill',
                     'paint': {
-                        'fill-color': 'rgba(0,0,0,0)',
+                        'fill-color': 'rgba(255,255,255,0)',
                         'fill-outline-color': '#000'
                     }
                 }
@@ -225,7 +256,8 @@ const tractLayer = new TractLayer("Tracts Layer", {
             name: "hazard",
             type: "hidden",
             domain: hazardMeta,
-            value: "hurricane"
+            value: "hurricane",
+            onChange: (map, layer, value) => this.fetchData()
         }
     },
     popover: {
@@ -233,8 +265,9 @@ const tractLayer = new TractLayer("Tracts Layer", {
         dataFunc: feature =>
             {
                 return ["tract",
-                    ["GeoId", feature.properties.geoid],
-                    ["Damage", get(tractLayer, `data.${feature.properties.geoid}.total_damage`, 0)],
+                    ["Name", get(falcorGraph.getCache(), `geo.${feature.properties.geoid}.name`, 0)],
+                    ["Event", get(tractLayer, `filters.hazard.value`, 0)],
+                    ["Damage", get(tractLayer, `data.${feature.properties.geoid}`, 0)],
                 ]
             }
     }

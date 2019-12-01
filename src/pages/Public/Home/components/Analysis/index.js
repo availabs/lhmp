@@ -1,13 +1,8 @@
 import React, {Component} from 'react';
-// import { Link } from 'react-router-dom'
 import AvlMap from 'components/AvlMap'
 
 import TractsLayer from './layers/TractsLayer'
 import HazardTotalGraph from './components/HazardTotalGraph'
-import Element from 'components/light-admin/containers/Element'
-// import { connect } from 'react-redux';
-
-// const Section = styled.div
 
 let backgroundCss = {
     //backgroundColor: '#fafafa',
@@ -40,7 +35,7 @@ class Analysis extends Component {
             update: {
                 layer: 'Tracts Layer',
                 filter: 'hazard',
-                value: 'huricane'
+                value: 'hurricane'
             }
         };
         this.setHazard = this.setHazard.bind(this);
@@ -62,7 +57,7 @@ class Analysis extends Component {
                 <div className='col-sm-6' style={{float: 'left'}}>
                     <div className="element-wrapper">
                         <div className="element-box">
-                            <div style={{height: '100vh', width: '100%'}}>
+                            <div style={{minHeight: '100vh', height:'fit-content', width: '100%'}}>
                                 <PlaceComponent setHazard={this.setHazard}/>
                             </div>
                         </div>
@@ -73,8 +68,8 @@ class Analysis extends Component {
                         <div className="element-box">
                             <div style={{height: '100vh', width: '100%'}}>
                                 <AvlMap
-                                    id='unique-id-1'
                                     sidebar={false}
+                                    mapactions={false}
                                     scrollZoom={false}
                                     zoom={6}
                                     update={[this.state.update]}
@@ -91,6 +86,11 @@ class Analysis extends Component {
                                             45.042478050891546
                                         ]]}
                                     layers={[TractsLayer]}
+                                    layerProps={ {
+                                        [TractsLayer.name]: {
+                                            hazard: this.state.update.value
+                                        }
+                                    } }
                                 />
                             </div>
                         </div>

@@ -5,8 +5,9 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import {connect} from "react-redux";
 import styled from "styled-components";
-import TractsLayer from './layers/TractsLayer'
+import NfipLossesTable from "./components/NfipLossesTable";
 import {falcorGraph} from "../../../../../store/falcorGraph";
+import NfipLossesLayer from './components/NfipLossesLayer';
 
 let backgroundCss = {
     //background: '#fafafa',
@@ -45,7 +46,7 @@ const LABEL = styled.div`
     text-align: center;
     letter-spacing: 1px;
 `
-class LocalContext extends Component {
+class NFIP extends Component {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
@@ -56,7 +57,7 @@ class LocalContext extends Component {
     fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
         return this.props.falcor.get(
-            ['acs', parseInt(this.props.activeCousubid), ['2017'],['B19013_001E','B01003_001E','B17001_002E']]
+            ['nfip', 'losses', 'byGeoid', parseInt(this.props.activeCousubid), 'allTime', ['total_payments', 'total_losses']],
         )
     }
 
@@ -69,38 +70,33 @@ class LocalContext extends Component {
                             <div style={{height: '100vh', width: '100%'}}>
                                 <h1>County</h1>
                                 <div className='row'>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-6">
                                                 <BOX>
-                                                    <LABEL>Population</LABEL>
+                                                    <LABEL>Total
+                                                        {this.props.activeCousubid.length === 2 ? ' State ' : ' County '}
+                                                        NFIP # of losses</LABEL>
                                                     <LABEL style={{fontWeight:'100'}}>
                                                         {get(falcorGraph.getCache(),
-                                                            `acs.${parseInt(this.props.activeCousubid)}.2017.B01003_001E`, null)}
+                                                            `nfip.losses.byGeoid.${parseInt(this.props.activeCousubid)}.allTime.total_losses`, 0)}
                                                     </LABEL>
                                                 </BOX>
-                                    </div><div className="col-sm-4">
+                                    </div><div className="col-sm-6">
                                                 <BOX>
-                                                    <LABEL>% in Poverty</LABEL>
-                                                    <LABEL style={{fontWeight:'100'}}>
-                                                        {
-                                                            ((100 * get(falcorGraph.getCache(),
-                                                                    `acs.${parseInt(this.props.activeCousubid)}.2017.B17001_002E`, null))
-                                                                /
-                                                                get(falcorGraph.getCache(),
-                                                                    `acs.${parseInt(this.props.activeCousubid)}.2017.B01003_001E`, null)
-                                                            ).toFixed(2)
-                                                        }
-                                                    </LABEL>
-                                                </BOX>
-                                    </div><div className="col-sm-4">
-                                                <BOX>
-                                                    <LABEL>Median Income</LABEL>
+                                                    <LABEL>Total
+                                                        {this.props.activeCousubid.length === 2 ? ' State ' : ' County '}
+                                                        $ Payment</LABEL>
                                                     <LABEL style={{fontWeight:'100'}}>
                                                         {get(falcorGraph.getCache(),
-                                                        `acs.${parseInt(this.props.activeCousubid)}.2017.B19013_001E`, null)}
+                                                            `nfip.losses.byGeoid.${parseInt(this.props.activeCousubid)}.allTime.total_payments`, 0)}
                                                     </LABEL>
                                                 </BOX>
                                     </div>
 
+                                </div>
+                                <div className='row'>
+                                    <NfipLossesTable
+                                        title={ "NFIP Losses by Municipality" }
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -115,10 +111,11 @@ class LocalContext extends Component {
                                     mapactions={false}
                                     scrollZoom={false}
                                     zoom={6}
-                                    update={[this.state.update]}
-                                    style='New'
-                                    styles={[{ name: "New",
-                                        style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii" }]}
+                                    style='Clear'
+                                    styles={[{
+                                        name: "Clear",
+                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
+                                    }]}
                                     fitBounds={[
                                         [
                                             -79.8046875,
@@ -128,7 +125,7 @@ class LocalContext extends Component {
                                             -71.7626953125,
                                             45.042478050891546
                                         ]]}
-                                    layers={[TractsLayer]}
+                                    layers={[NfipLossesLayer]}
                                 />
                             </div>
                         </div>
@@ -150,4 +147,4 @@ const mapStateToProps = (state,ownProps) => {
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(LocalContext))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(NFIP))
