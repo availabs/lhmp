@@ -24,13 +24,13 @@ class Public extends React.Component {
     render() {
         return (
             <div>
-                {/*<Introduction/>
+                <Introduction/>
                 <Analysis/>
                 <PlanningTeam/>
                 <LocalContext/>
                 <HazardLoss/>
                 <HazardEvents/>
-                <NFIP/>*/}
+                <NFIP/>
                 <Assets/>
             </div>
         )

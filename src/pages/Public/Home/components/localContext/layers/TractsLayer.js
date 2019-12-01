@@ -146,7 +146,7 @@ class TractLayer extends MapLayer {
             out[curr] = data[curr][2017]['B01003_001E'];
             return out;
         }, {});
-        console.log('keyDomain', keyDomain);
+        // console.log('keyDomain', keyDomain);
         let range = getColor('Blues');
         let colorScale = d3scale.scaleThreshold()
             .domain([1000, 3000, 6000, 8000, 10000, 50000, 100000, 500000, 1000000])
@@ -156,7 +156,7 @@ class TractLayer extends MapLayer {
             out[curr] = colorScale(keyDomain[curr]);
             return out;
         }, {});
-        console.log('mapColors', mapColors);
+        // console.log('mapColors', mapColors);
         map.setPaintProperty(
             'tracts-layer',
             'fill-color',

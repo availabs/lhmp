@@ -84,7 +84,7 @@ class NFIP extends Component {
                 <div className='col-sm-6' style={{float: 'left'}}>
                     <div className="element-wrapper">
                         <div className="element-box">
-                            {/*<div style={{height: '100vh', width: '100%'}}>
+                            <div style={{height: '100vh', width: '100%'}}>
                                     <BOX>
                                         <LABEL>
                                             County owned Assets
@@ -103,7 +103,7 @@ class NFIP extends Component {
                                     </LABEL>
                                     <AssetsPageCriticalTypeEditor filter_type={'critical'} filter_value={['all']} geoid={[parseInt(this.props.activeCousubid)]} />
                                 </BOX>
-                            </div>*/}
+                            </div>
                         </div>
                     </div>
                 </div>

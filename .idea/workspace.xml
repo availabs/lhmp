@@ -2,31 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/light-admin/tables/TableBoxOriginal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/constants/hazardColors.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/components/NfipLossesLayer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/components/NfipLossesTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/components/NfipLossesLayer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/components/NfipLossesTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardEvents/components/NumberOfHazardsStackedBarGraph.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardEvents/components/yearsOfSevereWeatherData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardEvents/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardEvents/layers/TractsLayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/components/HazardTotalGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/components/HazardTotalGraph.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components/NumberOfHazardsStackedBarGraph.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components/NumberOfHazardsStackedBarGraph.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/components/NfipLossesLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/components/NfipLossesLayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/planningTeam.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/planningTeam.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -538,7 +520,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="stickyroll in admin-about" />
     <MESSAGE value="stickyroll in admin-about: progress bar done. next up: req nav" />
     <MESSAGE value="stickyroll in admin-about: nav done, contentEditor bug fixed" />
     <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
@@ -563,7 +544,8 @@
     <MESSAGE value="hazard loss - public home" />
     <MESSAGE value="fill opac changed" />
     <MESSAGE value="mapactions visibility as prop" />
-    <option name="LAST_COMMIT_MESSAGE" value="mapactions visibility as prop" />
+    <MESSAGE value="homepage" />
+    <option name="LAST_COMMIT_MESSAGE" value="homepage" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">

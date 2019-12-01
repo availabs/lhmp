@@ -99,7 +99,7 @@ class TractLayer extends MapLayer {
     }
 
     fetchData(graph) {
-        console.log('in ffd: haz loss');
+        // console.log('in ffd: haz loss');
         if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
         if (!graph) graph = falcorGraph.getCache()
         let countiesOrCousubs = get(graph,
@@ -118,7 +118,7 @@ class TractLayer extends MapLayer {
     }
 
     receiveData(map, data) {
-        console.log('in recData: haz loss', this.displayFeatures);
+        // console.log('in recData: haz loss', this.displayFeatures);
         let graph = falcorGraph.getCache();
 
         let countiesOrCousubs = get(graph,
@@ -136,7 +136,7 @@ class TractLayer extends MapLayer {
             keyDomain = currVal
         } else {
             countiesOrCousubs.value.forEach(c => {
-                console.log('hazard loss: for', c);
+                // console.log('hazard loss: for', c);
                 let subTracts = get(graph,
                     `geo.${c}.tracts.value`,
                     0);
@@ -160,9 +160,9 @@ class TractLayer extends MapLayer {
             .map(f => keyDomain[f]));
         let domain = [0, 1, 2, 3, 4].map(i => ((maxDamage) * (i / 4)));
 
-        console.log('keyDomain', keyDomain);
+        // console.log('keyDomain', keyDomain);
         let range = hazardMeta.filter(d => d.value === this.filters.hazard.value)[0].colors;
-        console.log('range', maxDamage, range, domain);
+        // console.log('range', maxDamage, range, domain);
 
         let colorScale = d3scale.scaleThreshold()
             .domain(domain)
@@ -172,7 +172,7 @@ class TractLayer extends MapLayer {
             if (keyDomain[curr]) out[curr] = colorScale(keyDomain[curr]);
             return out;
         }, {});
-        console.log('map colors', mapColors);
+        // console.log('map colors', mapColors);
         map.setPaintProperty(
             'tracts-layer',
             'fill-color',

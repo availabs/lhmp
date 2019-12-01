@@ -111,7 +111,7 @@ class TractLayer extends MapLayer {
     }
 
     fetchData(graph) {
-        console.log('in ffd: analysis');
+        // console.log('in ffd: analysis');
         if (!graph) graph = falcorGraph.getCache();
         if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve({route: []});
         let countiesOrCousubs = get(graph,
@@ -145,7 +145,7 @@ class TractLayer extends MapLayer {
                             let subTracts = get(graph,
                                 `geo.${c}.tracts.value`,
                                 []);
-                            console.log('analysis: for', c)
+                            // console.log('analysis: for', c)
                             this.data[c] = subTracts.reduce((a, current) => {
                                 let currVal = get(graph,
                                     `severeWeather.${current}.${this.filters.hazard.value}.tract_totals.total_damage`,
@@ -163,16 +163,16 @@ class TractLayer extends MapLayer {
     }
 
     receiveData(map, data) {
-        console.log('in recData: analysis')
+        // console.log('in recData: analysis')
         let keyDomain = this.data;
         let maxDamage = Math.max(...Object.keys(keyDomain)
             .filter(f => f.length === 11)
             .map(f => keyDomain[f]));
         let domain = [0,1,2,3,4].map(i => ((maxDamage)*(i/4)));
 
-        console.log('keyDomain', keyDomain);
+        // console.log('keyDomain', keyDomain);
         let range = hazardcolors[this.filters.hazard.value + '_range'];
-        console.log('range',maxDamage, range, domain);
+        // console.log('range',maxDamage, range, domain);
 
         let colorScale = d3scale.scaleThreshold()
             .domain(domain)
@@ -182,7 +182,7 @@ class TractLayer extends MapLayer {
             if (keyDomain[curr]) out[curr] = colorScale(keyDomain[curr]);
             return out;
         }, {});
-        console.log('map colors', mapColors);
+        // console.log('map colors', mapColors);
         map.setPaintProperty(
             'tracts-layer',
             'fill-color',

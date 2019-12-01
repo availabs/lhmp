@@ -4,7 +4,7 @@ import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
-import {falcorChunkerNiceWithUpdate} from "../../../../../../store/falcorGraph";
+import {falcorChunkerNiceWithUpdate, falcorChunker} from "../../../../../../store/falcorGraph";
 import {update} from "utils/redux-falcor/components/duck"
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
@@ -54,7 +54,7 @@ class TractLayer extends MapLayer {
             ["geo", [store.getState().user.activeGeoid], "boundingBox"]
         )
             .then(d => {
-                let graph = falcorGraph.getCache()
+                let graph = d.json
                 let countiesOrCousubs = get(graph,
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
                     null);
@@ -94,7 +94,7 @@ class TractLayer extends MapLayer {
                 }
 
                 // get data and paint map
-                this.fetchData(graph).then(data => this.receiveData(map, data))
+                return this.fetchData(graph).then(data => this.receiveData(map, data))
             })
 
     }
@@ -188,16 +188,6 @@ class TractLayer extends MapLayer {
 
         console.log(countyOwned, municipalityOwned, critical)
 
-        map.setPaintProperty(
-            'tracts-layer',
-            'fill-opacity',
-            0.7
-        );
-        map.setPaintProperty(
-            'tracts-layer',
-            'fill-outline-color',
-            'rgba(9, 98, 186, 0.5)'
-        );
         map.setFilter("ebr-line", ["in", "id",
             ...countyOwned.map(id => +id),
             ...municipalityOwned.map(id => +id),
@@ -217,12 +207,11 @@ class TractLayer extends MapLayer {
             'line-color',
             ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
         )
-
     }
 }
 
-const tractLayer = new TractLayer("Hazard Loss Layer", {
-    name: 'Hazard Loss',
+const tractLayer = new TractLayer("Assets Layer", {
+    name: 'Assets',
     active: true,
     sources: [
         {
@@ -260,7 +249,8 @@ const tractLayer = new TractLayer("Hazard Loss Layer", {
             'source-layer': 'tracts',
             'type': 'fill',
             'paint': {
-                'fill-color': 'rgba(9, 98, 186, 0.2)',
+                'fill-color': 'rgba(9, 98, 186, 0.5)',
+                'fill-opacity': 0.5
             }
         },
         {
@@ -279,7 +269,8 @@ const tractLayer = new TractLayer("Hazard Loss Layer", {
             'type': 'fill',
             'paint': {
                 'fill-color': '#000000'
-            }
+            },
+            filter: ["in", "id", "none"]
 
         },
         { id: "ebr-line",

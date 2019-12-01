@@ -82,7 +82,7 @@ class TractLayer extends MapLayer {
         for (let i = 0; i < geos.value.length; i += 50) {
             requests.push(geos.value.slice(i, i + 50));
         }
-        console.log('reqs', requests, graph, geos)
+        // console.log('reqs', requests, graph, geos)
         return requests.reduce((a, c) =>
                 a.then(() => falcorGraph.get(
                     ['nfip', 'losses', 'byGeoid', c, 'allTime', 'total_payments'],
@@ -97,23 +97,23 @@ class TractLayer extends MapLayer {
             `geo.${store.getState().user.activeGeoid}.cousubs`,
             null);
         data = get(graph, `nfip.losses.byGeoid`, {});
-        console.log('old data',data)
+        // console.log('old data',data)
 
         let keyDomain = geos.value
             .reduce((out, curr) => {
-                console.log('out', curr,  data)
+                // console.log('out', curr,  data)
             out[curr] = data[curr]['allTime']['total_payments'];
             return out;
         }, {});
-        console.log('keyDomain nfip', keyDomain);
+        // console.log('keyDomain nfip', keyDomain);
         let maxDamage = Math.max(...Object.keys(keyDomain)
             .filter(f => f.length === 10)
             .map(f => keyDomain[f]));
         let domain = [0, 1, 2, 3, 4].map(i => ((maxDamage) * (i / 4)));
 
-        console.log('keyDomain', keyDomain);
+        // console.log('keyDomain', keyDomain);
         let range = getColor('Reds');
-        console.log('range', maxDamage, range, domain);
+        // console.log('range', maxDamage, range, domain);
 
         let colorScale = d3scale.scaleThreshold()
             .domain(domain)
@@ -123,7 +123,7 @@ class TractLayer extends MapLayer {
             if (keyDomain[curr]) out[curr] = colorScale(keyDomain[curr]);
             return out;
         }, {});
-        console.log('map colors', mapColors);
+        // console.log('map colors', mapColors);
 
         map.setPaintProperty(
             'tracts-layer-line',
