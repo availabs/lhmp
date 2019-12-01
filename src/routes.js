@@ -12,14 +12,18 @@ import Strategies from './pages/Public/Strategies/'
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import Home from 'pages/auth/Home';
-
+import ActionsFormIndex from 'pages/auth/actions/forms_index'
+import ActionsFormView from 'pages/auth/actions/view'
+import ActionsWorksheetFormNew from 'pages/auth/actions/new'
+/*
 import ActionsIndex from 'pages/auth/actions'
 import ActionsView from 'pages/auth/actions/worksheet/view'
+import ActionsProjectView from 'pages/auth/actions/project/view'
 import ActionWorksheet from 'pages/auth/actions/worksheet/new'
 import ActionsProjectIndex from 'pages/auth/actions/project'
-import ActionsProjectView from 'pages/auth/actions/project/view'
 import ActionsProjectUpload from 'pages/auth/actions/project/upload'
 import ActionProject from 'pages/auth/actions/project/new'
+ */
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
@@ -45,6 +49,7 @@ import CapabilitiesFormsList from 'pages/auth/Capabilities/capability_forms'
 import CapabilitiesFormsView from 'pages/auth/Capabilities/capability_forms/view'
 import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
 import RolesIndex from 'pages/auth/Roles/'
+//import RolesFormsList from 'pages/auth/Roles/roles_forms/index'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
 import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
@@ -68,13 +73,18 @@ const routes = [
   Login,
   Signup,
    ...ResetPassword,
+   ...ActionsFormIndex,
+   ...ActionsFormView,
+   ...ActionsWorksheetFormNew,
+   /*
    ...ActionWorksheet,
    ...ActionsIndex,
    ...ActionsView,
+   ...ActionsProjectView,
    ...ActionProject,
    ...ActionsProjectIndex,
-   ...ActionsProjectView,
    ...ActionsProjectUpload,
+    */
    ...Plans,
    ...Plan,
    ...AdminAbout,
@@ -99,6 +109,7 @@ const routes = [
     */
    ...Historic,
    ...RolesIndex,
+    //...RolesFormsList,
    ...Public,
    ...About,
    ...Hazards,

@@ -375,7 +375,7 @@ class project extends React.Component {
                     </div>
                 )
             },
-            {
+                {
                 title: (<span>
                     <span style={{fontSize: '0.7em'}}>Step 2</span>
                     <br/><span style={{fontSize: '0.9em'}}>General Information</span></span>),
@@ -2258,7 +2258,6 @@ class project extends React.Component {
                             
                             <div className='row'>
                                 <label htmlFor className='col-sm-6'>Known Environmental/Historic Preservation/Protected Species Issues?</label>
-
                                 <div className='col-sm-1'>
                                     <div className='form-inline'>
                                         <label className='mb-2 mr-sm-2 mb-sm-0'>
@@ -2689,7 +2688,7 @@ class project extends React.Component {
                             <div className='form-check'>
                                 <label className='form-check-label'>
                                     <input
-                                        checked={['(4) Environmentally sound and relatively easy to implement; or no adverse impact on environment']
+                                        checked={['(4) Environmentally (0) Benefit Cost Review unknownsound and relatively easy to implement; or no adverse impact on environment']
                                             .includes(this.state.priority_scoring_environmental_benefit)}
                                         id='priority_scoring_environmental_benefit'
                                         className="form-check-input"
