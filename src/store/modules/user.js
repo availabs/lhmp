@@ -7,7 +7,7 @@ import withRouter from "react-router/es/withRouter";
 // ------------------------------------
 // Constants
 // ------------------------------------
-const PROJECT_HOST = 'localhost:3000'
+const PROJECT_HOST = 'mitigateny.org'
 let SUBDOMAIN = 'www'
 const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
@@ -343,7 +343,7 @@ export const resetPassword = ({ email }) => dispatch => {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email , project_name: AUTH_PROJECT_NAME})
   })
     .then(res => res.json())
     .then(res => {

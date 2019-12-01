@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="homepage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Analysis/layers/TractsLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/components/NfipLossesLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/NFIP/components/NfipLossesLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/layers/TractsLayer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers/TractsLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -31,7 +31,7 @@ class Public extends React.Component {
                 <HazardLoss/>
                 <HazardEvents/>
                 <NFIP/>
-                <Assets/>
+               {/* <Assets/>*/}
             </div>
         )
     }
