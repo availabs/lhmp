@@ -7,13 +7,13 @@ const config =  {
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.'
 		},
-		{
-			title: 'Multi-Jurisdictional Mitigation Plan Milestones',
-			requirement: 'Req-A-1B',
-			type: 'date',
-			prompt: '',
-			intent: ''
-		},
+		// {
+		// 	title: 'Multi-Jurisdictional Mitigation Plan Milestones',
+		// 	requirement: 'Req-A-1B',
+		// 	type: 'date',
+		// 	prompt: '',
+		// 	intent: ''
+		// },
 		{
 			title: 'Jurisdictional Representatives',
 			requirement: 'Req-A-1C',

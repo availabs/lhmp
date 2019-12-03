@@ -8,6 +8,8 @@ import geoDropdown from 'pages/auth/Plan/functions'
 import {falcorGraph} from "store/falcorGraph";
 import {setActiveCousubid} from 'store/modules/user'
 
+import {StatementText, HeaderImage} from 'pages/Public/theme/components'
+
 class About extends React.Component {
 
     constructor(props) {
@@ -54,11 +56,28 @@ class About extends React.Component {
         return (
             <div className='container'>
                 <Element>
-                    <h4 className="element-header">About page
+                    <h4 className="element-header">Planning Process
+                    {
+                        /*
                         <span style={{float:'right'}}>
                             {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
                         </span>
+                        */
+                    }
                     </h4>
+                    <div className="row">
+                        <div className="col-12">
+                            <StatementText>
+                                The planning process is integral to understanding the approach to mitigation results.
+                            </StatementText>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                           <HeaderImage />
+                        </div>
+                    </div>
+                    
                     <div className="row">
                         <div className="col-12">
                             <div className="element-wrapper">
@@ -97,13 +116,13 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/about',
+    path: '/planning-process',
     exact: true,
-    name: 'About',
+    name: 'Planning Process',
     auth: false,
     mainNav: true,
     breadcrumbs: [
-        { name: 'About', path: '/about' }],
+        { name: 'Planning Process', path: '/planning-process' }],
     menuSettings: {
         image: 'none',
         scheme: 'color-scheme-light',

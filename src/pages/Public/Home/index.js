@@ -25,13 +25,15 @@ class Public extends React.Component {
         return (
             <div>
                 <Introduction/>
-                <Analysis/>
+                {/* Planning Context  */}
+                <LocalContext/> 
                 <PlanningTeam/>
-                <LocalContext/>
-                <HazardLoss/>
+                {/* Risk */}
+                <Analysis/>
+                {/* <HazardLoss/> */}
                 <HazardEvents/>
                 <NFIP/>
-               {/* <Assets/>*/}
+                <Assets/>
             </div>
         )
     }

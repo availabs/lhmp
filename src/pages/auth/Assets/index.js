@@ -121,10 +121,7 @@ class AssetsIndex extends React.Component {
               <h4 className="element-header">Assets For {this.renderMenu()}</h4>
               <div className="row">
               <div className="col-12">
-              {this.state.geoid ?
-                  <AssetsPagePropTypeEditor filter_type={'propType'} filter_value={['210', '220','283']} geoid={[this.state.geoid]}/>
-                  :''
-              }
+              
               {this.state.geoid ?
                   <AssetsPageOwnerTypeEditor filter_type={'ownerType'} filter_value={['2']} geoid={[this.state.geoid]} title={'State owned Assets'}/>
                   :''
