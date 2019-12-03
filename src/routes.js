@@ -48,8 +48,10 @@ import CapabilitiesView from 'pages/auth/Capabilities/capability/view'
 import CapabilitiesFormsList from 'pages/auth/Capabilities/capability_forms'
 import CapabilitiesFormsView from 'pages/auth/Capabilities/capability_forms/view'
 import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
-import RolesIndex from 'pages/auth/Roles/'
-//import RolesFormsList from 'pages/auth/Roles/roles_forms/index'
+//import RolesIndex from 'pages/auth/Roles/'
+import RolesFormsList from 'pages/auth/Roles/roles_forms/index'
+import RolesFormView from 'pages/auth/Roles/roles_forms/view'
+import RolesFormNew from 'pages/auth/Roles/roles_forms/new'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
 import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
@@ -62,6 +64,7 @@ import ParticipationUserRoles from "./pages/auth/Participation/components/userro
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Signup from './pages/Landing/SignUp'
+import SignUpForms from './pages/Landing/signup_forms/SignUp'
 import ResetPassword from './pages/Landing/ResetPassword'
 import Logout from './pages/Logout'
 import NoMatch from './pages/404.js'
@@ -71,7 +74,8 @@ const routes = [
   Landing,
   Home,
   Login,
-  Signup,
+  //Signup,
+   ...SignUpForms,
    ...ResetPassword,
    ...ActionsFormIndex,
    ...ActionsFormView,
@@ -108,8 +112,10 @@ const routes = [
    //...CapabilitiesView,
     */
    ...Historic,
-   ...RolesIndex,
-    //...RolesFormsList,
+   //...RolesIndex,
+   ...RolesFormsList,
+   ...RolesFormView,
+   ...RolesFormNew,
    ...Public,
    ...About,
    ...Hazards,

@@ -1,27 +1,26 @@
 import React from 'react';
-import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
+import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import config from 'pages/auth/Roles/roles_forms/config.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
-import {falcorGraph} from "store/falcorGraph";
-import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
-import pick from "lodash.pick"
 
-
-class RolesFormsIndex extends React.Component{
+class RolesFormsView extends React.Component{
     constructor(props){
         super(props);
-
     }
 
     render(){
         return(
-            <AvlFormsListTable
-                json = {config}
-            />
+            <Element>
+                <h6 className="element-header">Roles</h6>
+                <AvlFormsViewData
+                    json = {config}
+                    id = {[this.props.match.params.id]}
+                />
+            </Element>
         )
     }
 }
@@ -40,14 +39,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/roles/',
+        path: `/roles/view/:id`,
         exact: true,
         name: 'Roles',
         auth: true,
         mainNav: false,
-        icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            { name: 'Roles', path: '/roles/' }
+            { name: 'roles', path: '/roles/' },
+            { param: 'id', path: '/roles/view/' }
         ],
         menuSettings: {
             image: 'none',
@@ -56,6 +55,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsIndex))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsView))
     }
 ]

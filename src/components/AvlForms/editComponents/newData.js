@@ -28,6 +28,7 @@ class AvlFormsNewData extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
+
     }
 
     fetchFalcorDeps(){
@@ -213,6 +214,8 @@ class AvlFormsNewData extends React.Component{
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        data_error : item.attributes[attribute].data_error,
+                        required: item.attributes[attribute].field_required,
                         type:item.attributes[attribute].edit_type,
                         meta : countyData,
                         area:item.attributes[attribute].area,
@@ -240,6 +243,7 @@ class AvlFormsNewData extends React.Component{
                         state : this.state,
                         title : attribute,
                         type: item.attributes[attribute].edit_type,
+                        required: item.attributes[attribute].field_required,
                         meta: meta_data,
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on
@@ -264,6 +268,8 @@ class AvlFormsNewData extends React.Component{
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        data_error : item.attributes[attribute].data_error,
+                        required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
                         type:item.attributes[attribute].edit_type
                     })
@@ -276,8 +282,19 @@ class AvlFormsNewData extends React.Component{
     }
 
 
-    render(){
+    static validateForm () {
+        let cond2 = (document.getElementById('contact_county') &&
+            document.getElementById('contact_title_role'))
+            && (document.getElementById('contact_county').value.length > 0 &&
+                document.getElementById('contact_title_role').value.length > 0);
 
+        let cond3 = (document.getElementById('contact_name')) && (document.getElementById('contact_name').value.length > 0)
+
+        return cond2 && cond3
+    }
+
+
+    render(){
         let test = this.implementData();
         let data = [];
         test.forEach((d,i) =>{
@@ -301,7 +318,7 @@ class AvlFormsNewData extends React.Component{
                             }
 
                             <div className="form-buttons-w text-right">
-                                <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>
+                                <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm()}> Submit</button>
                             </div>
                         </div>
                     </div>
@@ -323,7 +340,8 @@ const mapStateToProps = (state,ownProps) => {
 };
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage,
+    AvlFormsNewData
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsNewData))

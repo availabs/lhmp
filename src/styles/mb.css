@@ -5740,7 +5740,7 @@ pre .hll {
 
 /* No Styling, Just Default:
 
-  pre .nx, Normal Text
+  pre .nx, Normal TextComponent
   pre .ni  Name.Entity
   pre .nf Name.Entity
   pre .no Name.Constant
@@ -5874,7 +5874,7 @@ pre .ow {
 pre .w {
   color: #bbbbbb; }
 
-/* Text.Whitespace */
+/* TextComponent.Whitespace */
 pre .sc {
   color: #8080F0; }
 
@@ -5904,7 +5904,7 @@ pre .si {
 pre .p {
   color: #444444; }
 
-/* Normal Text */
+/* Normal TextComponent */
 pre .ss {
   color: #f0c080; }
 

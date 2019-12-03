@@ -19,11 +19,12 @@ const counties = [
 ];
 
 
-class AvlFormsNewDataWizard extends React.Component{
+class AvlFormsSignUpWizard extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
+            nextButtonActiveStep1:false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -44,22 +45,75 @@ class AvlFormsNewDataWizard extends React.Component{
         }else{
             form = form_type
         }
-
         return this.props.falcor.get(['geo',counties,['name']])
             .then(() =>{
-                this.props.falcor.get(['forms',[form],'meta'],
-                    ['forms',['roles'],'byPlanId',this.props.activePlan,'attributes']) // to populate action_point_of_contact for actions project
+                this.props.falcor.get(['forms',[form],'meta'])
                     .then(response =>{
                         return response
                     })
             })
+
     }
 
-    handleChange(e){
-        console.log('---',e.target.id,e.target.value,this.state);
-        this.setState({ ...this.state, [e.target.id]: e.target.value });
+    handleChange(event){
+        console.log('---',event.target.id,event.target.value,this.state);
+        let error_class_name = 'form-group has-error has-danger';
+        let normal_class_name = 'form-group';
+        // if emails do not match
+        if (event.target.id === 'email_verify') {
+            if (event.target.value !== document.getElementById('contact_email').value
+                && !document.getElementById(event.target.id + 'EmailsMatch')) {
+                let div = document.createElement('div');
+                div.id = event.target.id + 'EmailsMatch';
+                div.innerText = 'Emails do not match!';
+                event.target.nextSibling.appendChild(div)
+            } else if (event.target.value === document.getElementById('contact_email').value
+                && document.getElementById(event.target.id + 'EmailsMatch')) {
+                event.target.nextSibling.removeChild(document.getElementById(event.target.id + 'EmailsMatch'))
+            }
+        }
+
+        //step 1 continue validation
+        // have to be nested ifs otherwise all the previous 'next's and 'submit's will be disabled other than current step
+        /*
+        if (document.getElementById('contact_email') &&
+            document.getElementById('email_verify')
+        ) {
+            if (document.getElementById('contact_email').value.length > 0 &&
+                document.getElementById('email_verify').value.length > 0 &&
+                document.getElementById('contact_email').value === document.getElementById('email_verify').value) {
+                this.setState({'nextButtonActiveStep1': true})
+            } else {
+                this.setState({'nextButtonActiveStep1': false})
+            }
+        }
+         */
+
+        /*
+        //step 2 continue validation
+        if (document.getElementById('contact_county') &&
+            document.getElementById('contact_title_role')) {
+            if (document.getElementById('contact_county').value.length > 0 &&
+                document.getElementById('contact_title_role').value.length > 0) {
+                this.setState({'nextButtonActiveStep2': true})
+            } else {
+                this.setState({'nextButtonActiveStep2': false})
+            }
+        }
+
+        //step 3 continue validation
+        if (document.getElementById('contact_name')) {
+            if (document.getElementById('contact_name').value.length > 0) {
+                this.setState({'nextButtonActiveStep3': true})
+            } else {
+                this.setState({'nextButtonActiveStep3': false})
+            }
+        }
+         */
+        this.setState({ ...this.state, [event.target.id]: event.target.value });
     }
 
+    /*
     handleMultiSelectFilterChange(e, id, domain=[]) {
 
         let tmpObj = {};
@@ -73,9 +127,11 @@ class AvlFormsNewDataWizard extends React.Component{
         console.log('multi select', e, tmpObj, this.state);
         this.setState(tmpObj);
     }
+     */
 
 
 
+    /*
     componentDidMount(){
         if(this.props.id && this.props.id[0]){
             console.log(' in componenet did mount',this.props)
@@ -95,9 +151,12 @@ class AvlFormsNewDataWizard extends React.Component{
                 })
         }
     }
+     */
+
 
     onSubmit(e){
         e.preventDefault();
+        /*
         let args = [];
         let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
@@ -146,8 +205,11 @@ class AvlFormsNewDataWizard extends React.Component{
                     this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"});
                 })
         }
+         */
     }
 
+
+    /*
     cousubDropDown(event){
         let county = event.target.value;
         if(county !== 'None'){
@@ -163,6 +225,7 @@ class AvlFormsNewDataWizard extends React.Component{
             return null
         }
     }
+     */
 
     geoData(){
         let countyData = [];
@@ -184,6 +247,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 }
             })
         }
+
         return [countyData,cousubsData]
     }
 
@@ -226,11 +290,12 @@ class AvlFormsNewDataWizard extends React.Component{
         let data = [];
         let countyData = this.geoData()[0];
         let cousubsData = this.geoData()[1];
+        console.log('cousubsData',cousubsData)
         let filter_data = [];
         if(this.props.meta_data){
             this.props.config.forEach(item => {
                 Object.keys(item.attributes).forEach(attribute => {
-                    if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined){
+                    if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropDownSignUp' && item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined){
                         data.push({
                             section_id : item.attributes[attribute].section,
                             label: item.attributes[attribute].label,
@@ -240,11 +305,12 @@ class AvlFormsNewDataWizard extends React.Component{
                             title : attribute,
                             type:item.attributes[attribute].edit_type,
                             meta : countyData,
+                            signup_county: this.props.activeGeoid,
                             area:item.attributes[attribute].area,
                             prompt: this.displayPrompt.bind(this),
-                            onClick : this.cousubDropDown.bind(this)
                         })
-                    }else if(item.attributes[attribute].area === 'true' && item.attributes[attribute].depend_on  && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                    }
+                    else if(item.attributes[attribute].area === 'true' && item.attributes[attribute].depend_on === 'false'  && item.attributes[attribute].edit_type === 'dropDownSignUp' && item.attributes[attribute].meta){
                         data.push({
                             section_id : item.attributes[attribute].section,
                             label: item.attributes[attribute].label,
@@ -269,7 +335,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             }
 
                         }
-                        console.log('item.attributes[attribute]',item.attributes[attribute])
+
                         if(item.attributes[attribute].depend_on === undefined){
                             data.push({
                                 section_id : item.attributes[attribute].section,
@@ -298,7 +364,6 @@ class AvlFormsNewDataWizard extends React.Component{
                                 meta : filter_data ? filter_data : [],
                             })
                         }
-                        console.log('data',data)
                     }
                     else if(item.attributes[attribute].edit_type === 'radio') {
                         data.push({
@@ -389,14 +454,15 @@ class AvlFormsNewDataWizard extends React.Component{
                             display_condition:item.attributes[attribute].display_condition
                         })
                     }
+
                 })
             });
 
         }
-        console.log('data',data)
+
         return data
 
-        }
+    }
 
     createWizardSections(){
         let data = this.createWizardData();
@@ -433,7 +499,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             <div className="col-sm-12">
                                 {step.content.map(d => d)}
                             </div>
-                        )
+                        ),
 
                     })
                 }
@@ -461,7 +527,8 @@ class AvlFormsNewDataWizard extends React.Component{
                         <div className="col-sm-12">
                             {step.content.map(d => d)}
                         </div>
-                    )
+                    ),
+                    //nextButtonActive: this.state.nextButtonActiveStep1
 
                 })
             }
@@ -470,8 +537,9 @@ class AvlFormsNewDataWizard extends React.Component{
         return wizard_steps
     }
     render(){
-
         let sections = this.createWizardSections();
+        console.log('sections',sections);
+        //console.log('this.state',this.state)
         return(
             <div className="container">
                 <Element>
@@ -497,5 +565,5 @@ const mapDispatchToProps = {
     sendSystemMessage
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsNewDataWizard))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsSignUpWizard))
 

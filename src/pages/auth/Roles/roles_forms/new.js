@@ -3,11 +3,11 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import {sendSystemMessage} from 'store/modules/messages';
 import Element from 'components/light-admin/containers/Element'
 import React from 'react';
-import config from 'pages/auth/Capabilities/capability_forms/config.js'
+import config from 'pages/auth/Roles/roles_forms/config.js'
 import AvlFormsNewData from 'components/AvlForms/editComponents/newData.js'
 import get from "lodash.get";
 
-class CapabilitiesFormsNew extends React.Component{
+class RolesFormsNew extends React.Component{
     constructor(props){
         super(props);
     }
@@ -15,7 +15,7 @@ class CapabilitiesFormsNew extends React.Component{
     render(){
         return(
             <Element>
-                <h6 className="element-header">New Capability</h6>
+                <h6 className="element-header">New Role</h6>
                 <AvlFormsNewData
                     json = {config}
                     id = {[this.props.match.params.id]}
@@ -43,12 +43,12 @@ const mapStateToProps = state => {
 export default [
     {
         icon: 'os-icon',
-        path: '/capabilities/new',
+        path: '/roles/new',
         exact: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/' },
-            { name: 'New Capability', path: '/capabilities/new' }
+            { name: 'Roles', path: '/roles/' },
+            { name: 'New Role', path: '/roles/new' }
         ],
         menuSettings: {
             image: 'none',
@@ -57,19 +57,19 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        name: 'Create Capability',
+        name: 'Create Roles',
         auth: true,
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsNew))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsNew))
     },
     {
-        path: '/capabilities/edit/:id',
-        name: 'Edit Capabilities',
+        path: '/roles/edit/:id',
+        name: 'Edit Role',
         mainNav: false,
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/' },
-            { param: 'id', path: '/capabilities/edit/' }
+            { name: 'Roles', path: '/roles/' },
+            { param: 'id', path: '/roles/edit/' }
         ],
         menuSettings: {
             image: 'none',
@@ -78,7 +78,7 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsNew))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsNew))
     }
 
 ]

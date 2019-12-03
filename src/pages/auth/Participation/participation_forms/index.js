@@ -1,6 +1,6 @@
 import React from 'react';
 import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
-import config from 'pages/auth/Roles/roles_forms/config.js'
+import config from 'pages/auth/Capabilities/capability_forms/config.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
@@ -11,7 +11,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
 
 
-class RolesFormsIndex extends React.Component{
+class ParticipationFormsIndex extends React.Component{
     constructor(props){
         super(props);
 
@@ -40,14 +40,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/roles/',
+        path: '/capabilities/',
         exact: true,
-        name: 'Roles',
+        name: 'Capabilities',
         auth: true,
         mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            { name: 'Roles', path: '/roles/' }
+            { name: 'capabilities', path: '/capabilities/' }
         ],
         menuSettings: {
             image: 'none',
@@ -56,6 +56,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsIndex))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsIndex))
     }
 ]
