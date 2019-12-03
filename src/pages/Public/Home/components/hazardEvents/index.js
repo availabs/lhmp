@@ -1,22 +1,18 @@
 import React, {Component} from 'react';
 import AvlMap from 'components/AvlMap'
-import Element from 'components/light-admin/containers/Element'
-import { reduxFalcor } from 'utils/redux-falcor'
-import get from "lodash.get";
+import {reduxFalcor} from 'utils/redux-falcor'
 import {connect} from "react-redux"
 import {getColorScale} from 'utils/sheldusUtils'
 import styled from "styled-components";
 import TractsLayer from './layers/TractsLayer'
 import NumberOfHazardsStackedBarGraph from "./components/NumberOfHazardsStackedBarGraph";
-import {falcorGraph} from "../../../../../store/falcorGraph";
-import GeographyScoreBarChart from "../../../../auth/Historic/components/GeographyScoreBarChart";
 
 let backgroundCss = {
     //background: '#fafafa',
     backgroundSize: '100vw 100vh',
     display: 'flex',
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     position: 'relative',
     //marginTop: '50vh',
     zIndex: '8'
@@ -26,7 +22,7 @@ const FLEXBOX = styled.div`
     justify-content: space-evenly;
     width: 25vw;
     height: 200px;
-`
+`;
 const BOX = styled.div`
      color: rgb(239, 239, 239); 
      background: rgba(0, 0, 0, 0.7); 
@@ -37,7 +33,7 @@ const BOX = styled.div`
      margin-right: 10px;
      padding: 5px;
      ${props => props.theme.modalScrollBar}
-`
+`;
 
 const LABEL = styled.div`
     color: rgb(239, 239, 239);
@@ -47,21 +43,22 @@ const LABEL = styled.div`
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 1px;
-`
+`;
+
 class HazardLoss extends Component {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
-        this.state = {
-        };
+        this.state = {};
     }
 
-    fetchFalcorDeps(){
+    fetchFalcorDeps() {
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
         return this.props.falcor.get(
-            ['acs', parseInt(this.props.activeCousubid), ['2017'],['B19013_001E','B01003_001E','B17001_002E']]
+            ['acs', parseInt(this.props.activeCousubid), ['2017'], ['B19013_001E', 'B01003_001E', 'B17001_002E']]
         )
     }
+
     setGeoLevel(geoid_len) {
         return geoid_len < 5 ? 'state'
             : geoid_len === 5 ? 'counties'
@@ -69,6 +66,7 @@ class HazardLoss extends Component {
                     : geoid_len === 11 ? 'tracts'
                         : geoid_len === 12 ? 'blockgroup' : ''
     }
+
     render() {
         return (
             <div style={backgroundCss}>
@@ -80,11 +78,11 @@ class HazardLoss extends Component {
                                     showYlabel={false}
                                     showXlabel={false}
                                     lossType={'num_events'}
-                                    geoid = {this.props.activeGeoid}
-                                    geoLevel = {this.setGeoLevel(this.props.activeGeoid.length)}
-                                    dataType = 'severeWeather'
-                                    colorScale = {getColorScale([1, 2])}
-                                    hazards = {['hurricane', 'hail']}
+                                    geoid={this.props.activeGeoid}
+                                    geoLevel={this.setGeoLevel(this.props.activeGeoid.length)}
+                                    dataType='severeWeather'
+                                    colorScale={getColorScale([1, 2])}
+                                    hazards={['hurricane', 'hail']}
                                     //hazard = {'hurricane'}
                                 />
                             </div>
@@ -102,8 +100,10 @@ class HazardLoss extends Component {
                                     zoom={6}
                                     update={[this.state.update]}
                                     style='Clear'
-                                    styles={[{ name: "Clear",
-                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia" }]}
+                                    styles={[{
+                                        name: "Clear",
+                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
+                                    }]}
                                     fitBounds={[
                                         [
                                             -79.8046875,
@@ -124,7 +124,7 @@ class HazardLoss extends Component {
     }
 }
 
-const mapStateToProps = (state,ownProps) => {
+const mapStateToProps = (state, ownProps) => {
     return {
         activePlan: state.user.activePlan || null,
         activeCousubid: state.user.activeCousubid || null,

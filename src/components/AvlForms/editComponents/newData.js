@@ -1,12 +1,10 @@
 import React from 'react';
-import Wizard from 'components/light-admin/wizard'
 import { reduxFalcor } from 'utils/redux-falcor'
 import {sendSystemMessage} from 'store/modules/messages';
 import {connect} from "react-redux";
 import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get";
 import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
-import config from "../../../pages/auth/Capabilities/capability/config";
 
 var _ = require("lodash");
 
@@ -63,9 +61,6 @@ class AvlFormsNewData extends React.Component{
                             tmp_state
                         )
                     }
-                    /*
-
-                     */
                 })
         }
     }
@@ -108,6 +103,7 @@ class AvlFormsNewData extends React.Component{
 
     onSubmit(e){
         e.preventDefault();
+        let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
             let attributes = Object.keys(this.state)
             return this.props.falcor.set({
@@ -125,21 +121,33 @@ class AvlFormsNewData extends React.Component{
                 }
             })
                 .then(response => {
-                    this.props.sendSystemMessage(`Capability was successfully edited.`, {type: "success"});
+                    this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
                 })
 
         }else{
             let args = []
             let plan_id = parseInt(this.props.activePlan);
-            let type = this.props.config.map(d => d.type);
-            let attributes = {}
+            let attributes = {};
+            let sub_type = ''
+            this.props.config.forEach(config =>{
+                Object.keys(config.attributes).forEach(item =>{
+                    if(config.attributes[item].sub_type.length > 0){
+                        sub_type = config.attributes[item].sub_type
+                    }
+                })
+            })
             Object.keys(this.state).forEach(item =>{
-                attributes[item] = this.state[item]
+                if(sub_type.length > 0){
+                    attributes['sub_type'] = sub_type
+                    attributes[item] = this.state[item]
+                }else{
+                    attributes[item] = this.state[item]
+                }
             });
             args.push(type[0],plan_id,attributes);
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
-                    this.props.sendSystemMessage(`Capability was successfully created.`, {type: "success"});
+                    this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"});
                 })
         }
     }
@@ -198,31 +206,36 @@ class AvlFormsNewData extends React.Component{
         }
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
-                if(attribute === 'county' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined){
                     data.push({
                         formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
                         type:item.attributes[attribute].edit_type,
                         meta : countyData,
+                        area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         onClick : this.cousubDropDown.bind(this)
                     })
-                }else if(attribute === 'municipality' && this.state.county !== undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                }else if(item.attributes[attribute].area === 'true' && item.attributes[attribute].depend_on && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta === 'true'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
                         type:item.attributes[attribute].edit_type,
                         depend_on : item.attributes[attribute].depend_on,
+                        area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         meta : cousubsData,
                     })
-                }else if(attribute !== 'county' && attribute !== 'municipality' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
                     data.push({
                         formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
@@ -235,6 +248,7 @@ class AvlFormsNewData extends React.Component{
                 }else if(item.attributes[attribute].edit_type === 'radio'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
@@ -246,6 +260,7 @@ class AvlFormsNewData extends React.Component{
                 else{
                     data.push({
                         formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
@@ -272,7 +287,6 @@ class AvlFormsNewData extends React.Component{
         return(
             <div className="container">
                 <Element>
-                    <h6 className="element-header">New Capability</h6>
                     <div className="element-box">
                         <div className="form-group">
                             {data ?

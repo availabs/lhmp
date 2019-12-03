@@ -7,8 +7,6 @@ import ProjectConfig from 'pages/auth/actions/actions_project_forms/config.js'
 import WorksheetConfig from 'pages/auth/actions/actions_worksheet_forms/config.js'
 import {sendSystemMessage} from 'store/modules/messages';
 
-
-
 class ActionsFormsIndex extends React.Component {
 
     constructor(props){

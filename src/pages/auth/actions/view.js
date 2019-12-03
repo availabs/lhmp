@@ -30,7 +30,6 @@ class ActionsWorkSheetFormsView extends React.Component{
 
     render(){
         let config = this.chooseConfig();
-        console.log('config',config)
         return(
             <Element>
                 <h6 className="element-header">Actions Worksheet</h6>

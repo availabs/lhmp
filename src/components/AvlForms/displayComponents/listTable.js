@@ -8,6 +8,12 @@ import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
 
+const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
+    "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
+    "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
+    "36083", "36099", "36081", "36037", "36117", "36063", "36047", "36015", "36121", "36061", "36021", "36013", "36033", "36017",
+    "36067", "36035", "36087", "36051", "36025", "36071", "36093", "36005"];
+
 class AvlFormsListTable extends React.Component{
     constructor(props){
         super(props);
@@ -29,11 +35,27 @@ class AvlFormsListTable extends React.Component{
             })
     }
 
+    componentDidMount(){
+        return this.props.falcor.get(['geo',counties,'cousubs'],
+            ['geo',counties,['name']])
+            .then(response =>{
+                let graph = response.json.geo;
+                let cousubs = []
+                Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
+                    cousubs.push(graph[item].cousubs)
+                })
+                this.props.falcor.get(['geo',cousubs.flat(1),['name']])
+                    .then(response =>{
+                        return response
+                    })
+            })
+    }
+
     deleteItem (e){
         e.persist()
         let id = e.target.id;
         this.props.sendSystemMessage(
-            `Are you sure you want to delete this Capability with id "${ id }"?`,
+            `Are you sure you want to delete this form with id "${ id }"?`,
             {
                 onConfirm: () => this.props.falcor.call(['forms','remove'],[id])
                     .then(() => this.fetchFalcorDeps()),
@@ -45,20 +67,26 @@ class AvlFormsListTable extends React.Component{
     }
 
     formsListTable(){
+        let geo = this.props.geoData
         let graph = this.props.formsListData;
         let formAttributes = this.props.config.map(d => d.list_attributes);
+        let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         if(graph){
             Object.keys(graph).forEach(item =>{
                 let data = {};
                 formAttributes[0].forEach(attribute =>{
-                    if(graph[item].value && graph[item].value.attributes[attribute]){
-                        data['id'] = item
-                        data[attribute] = graph[item].value.attributes[attribute] || ' '
-                    }
+                    if(graph[item].value && graph[item].value.attributes){
+                        if(Object.keys(graph[item].value.attributes).filter(d => d!=='sub_type').includes(attribute)){
+                            data['id'] = item
+                            data[attribute] = graph[item].value.attributes[attribute] || ' '
+                        }
+
+                        }
                 })
                 listViewData.push(data)
             });
+
             return listViewData
         }
 
@@ -73,19 +101,28 @@ class AvlFormsListTable extends React.Component{
                     <Element>
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
-                        <Link
-                            className="btn btn-sm btn-primary"
-                            to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                        {formType[0] === 'actions'?
+                            <Link
+                                className="btn btn-sm btn-primary"
+                                to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
                                 Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                        </Link>
+                            </Link>
+                            :
+                            <Link
+                                className="btn btn-sm btn-primary"
+                                to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                                Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                            </Link>
+                        }
+
                         {this.props.config.map(d => {
                             if(d.type === 'actions'){
                                 return (
-                                    <button
+                                    <Link
                                         className="btn btn-sm btn-primary"
-                                    >
-                                        Create {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
-                                    </button>
+                                        to={ `/${this.props.config.map(d=> d.type)}/project/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                    </Link>
                                 )
                             }else{
                                 return (
@@ -132,10 +169,18 @@ class AvlFormsListTable extends React.Component{
                                                             )
                                                         })}
                                                         <td>
-                                                            <Link className="btn btn-sm btn-outline-primary"
-                                                                  to={ `/${formType[0]}/edit/${item['id']}` } >
-                                                                Edit
-                                                            </Link>
+                                                            {formType[0] === 'actions' ?
+                                                                <Link className="btn btn-sm btn-outline-primary"
+                                                                      to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
+                                                                    Edit
+                                                                </Link>
+                                                                :
+                                                                <Link className="btn btn-sm btn-outline-primary"
+                                                                      to={ `/${formType[0]}/edit/${item['id']}` } >
+                                                                    Edit
+                                                                </Link>
+                                                            }
+
                                                         </td>
                                                         <td>
                                                             {formType[0] === 'actions' ?
@@ -181,7 +226,9 @@ const mapStateToProps = (state,ownProps) => {
         activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
         config: ownProps.json,
-        formsListData : get(state.graph,['forms','byId'],{})
+        formsListData : get(state.graph,['forms','byId'],{}),
+        geoData : get(state.graph,['geo'],{})
+
     }
 };
 
@@ -190,3 +237,23 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsListTable))
+
+/*
+if(combine_list_attributes.length > 0 && combine_list_attributes[0].attributes ){
+                            /*
+                            let value = '';
+                            combine_list_attributes[0].attributes.forEach(attribute =>{
+                                Object.keys(geo).forEach(g =>{
+                                    if(g === graph[item].value.attributes[attribute]){
+                                        data['id'] = item
+                                        data[combine_list_attributes[0].result] = geo[g].name
+                                    }
+                                })
+                                console.log('checking',item,graph[item].value.attributes[attribute])
+                            })
+                            /*
+                            data['id'] = item
+                            data[combine_list_attributes[0].result] = graph[item].value.attributes[combine_list_attributes] || ' '
+                             */
+
+
