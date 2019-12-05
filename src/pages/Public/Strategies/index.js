@@ -1,14 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-import Element from 'components/light-admin/containers/Element'
 import config from "pages/auth/Plan/config/strategies-config";
 import GraphFactory from "components/displayComponents/graphFactory";
 import geoDropdown from 'pages/auth/Plan/functions'
 import {falcorGraph} from "store/falcorGraph";
 import {setActiveCousubid} from 'store/modules/user'
 
-class Strategies extends React.Component {
+import {
+    PageContainer,
+    PageHeader,
+    StatementText, 
+    HeaderImage,
+    HeaderContainer,
+    SectionBox,
+    SectionHeader,
+    ContentHeader,
+    ContentContainer,
+    SectionBoxMain,
+    SectionBoxSidebar,
+    SidebarCallout
+    
+} 
+from 'pages/Public/theme/components'
+
+class About extends React.Component {
 
     constructor(props) {
         super(props);
@@ -28,16 +44,29 @@ class Strategies extends React.Component {
                 )
             })
     }
-
     renderElement (element) {
         return (
-            <div className='element-box'>
-                <h6>{element.title}</h6>
-                <GraphFactory
-                    graph={{type: element.type + 'Viewer'}}
-                    {...element}
-                    user={this.props.user}/>
-            </div>
+            <SectionBox>
+                {['right'].includes(element.align) ? 
+                    <SectionBoxSidebar >
+                        {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
+                    </SectionBoxSidebar>
+                    : React.fragment
+                }
+                <SectionBoxMain>
+                    <ContentHeader>{element.title}</ContentHeader>
+                    <GraphFactory
+                        graph={{type: element.type + 'Viewer'}}
+                        {...element}
+                        user={this.props.user}/>
+                </SectionBoxMain>
+                {['right', 'full'].includes(element.align) ? 
+                    React.fragment :
+                    <SectionBoxSidebar >
+                        {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
+                    </SectionBoxSidebar>
+                }
+            </SectionBox>
         )
     }
 
@@ -53,35 +82,53 @@ class Strategies extends React.Component {
             [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value] :
             [this.props.activeGeoid]
         return (
-            <div className='container'>
-                <Element>
-                    <h4 className="element-header">Strategies page
-                        <span style={{float:'right'}}>
-                            {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
-                        </span>
-                    </h4>
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="element-wrapper">
-                                {
-                                    Object.keys(config).map(section => {
-                                        return (
-                                            <div>
-                                                <h6 className='element-header'>{section}</h6>
-                                                {
-                                                    config[section].map(requirement => {
-                                                        return this.renderElement(requirement)
-                                                    })
-                                                }
-                                            </div>
-                                        )
-                                    })
-                                }
+            <PageContainer>
+                <HeaderContainer>
+                    
+                        <PageHeader>Strategies</PageHeader>
+                        {
+                            /*
+                            <span style={{float:'right'}}>
+                                {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
+                            </span>
+                            */
+                        }
+                        
+                        <div className="row">
+                            <div className="col-12">
+                                <StatementText>
+                                    We are finding ways to reduce our risk by investing in mitigatoin.
+                                </StatementText>
                             </div>
                         </div>
-                    </div>
-                </Element>
-            </div>
+                </HeaderContainer>
+                <HeaderImage />
+                <ContentContainer>
+                        
+                        
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="element-wrapper">
+                                    {
+                                        Object.keys(config).map(section => {
+                                            return (
+                                                <div>
+                                                    <SectionHeader>{section}</SectionHeader>
+                                                    {
+                                                        config[section].map(requirement => {
+                                                            return this.renderElement(requirement)
+                                                        })
+                                                    }
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    
+                </ContentContainer>
+            </PageContainer>
         )
     }
 }
@@ -103,15 +150,15 @@ export default [{
     name: 'Strategies',
     auth: false,
     mainNav: true,
-    breadcrumbs: [
-        { name: 'Strategies', path: '/strategies' }],
     menuSettings: {
         image: 'none',
-        scheme: 'color-scheme-light',
+        scheme: 'color-scheme-dark',
         position: 'menu-position-top',
         layout: 'menu-layout-full',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Strategies))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(About))
 }];
+
+
 
