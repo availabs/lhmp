@@ -3,22 +3,21 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import {sendSystemMessage} from 'store/modules/messages';
 import Element from 'components/light-admin/containers/Element'
 import React from 'react';
-import WorksheetConfig from 'pages/auth/actions/actions_worksheet_forms/config.js'
-import AvlFormsNewDataWizard from 'components/AvlForms/editComponents/newDataWithWizard.js'
+import config from 'pages/auth/Roles/roles_forms/config.js'
+import AvlFormsNewData from 'components/AvlForms/editComponents/newData.js'
 import get from "lodash.get";
 
-class ActionsProjectFormsNew extends React.Component{
+class RolesFormsNew extends React.Component{
     constructor(props){
         super(props);
     }
 
-
     render(){
         return(
             <Element>
-                <h6 className="element-header">Actions Project</h6>
-                <AvlFormsNewDataWizard
-                    json = {WorksheetConfig}
+                <h6 className="element-header">New Role</h6>
+                <AvlFormsNewData
+                    json = {config}
                     id = {[this.props.match.params.id]}
                 />
             </Element>
@@ -44,12 +43,12 @@ const mapStateToProps = state => {
 export default [
     {
         icon: 'os-icon',
-        path: '/actions/new/',
+        path: '/roles/new',
         exact: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/' },
-            { name: 'New Project', path: '/actions/new/' }
+            { name: 'Roles', path: '/roles/' },
+            { name: 'New Role', path: '/roles/new' }
         ],
         menuSettings: {
             image: 'none',
@@ -58,19 +57,19 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        name: 'Create Actions Project',
+        name: 'Create Roles',
         auth: true,
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsProjectFormsNew))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsNew))
     },
     {
-        path: '/actions/edit/:id',
-        name: 'Edit Actions Project',
+        path: '/roles/edit/:id',
+        name: 'Edit Role',
         mainNav: false,
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/' },
-            { param: 'id', path: '/actions/new/edit' }
+            { name: 'Roles', path: '/roles/' },
+            { param: 'id', path: '/roles/edit/' }
         ],
         menuSettings: {
             image: 'none',
@@ -79,7 +78,7 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsProjectFormsNew))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsNew))
     }
 
 ]

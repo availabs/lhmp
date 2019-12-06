@@ -8,6 +8,8 @@ import NumberComponent from "./numberComponent";
 import FileComponent from "./fileComponent";
 import MultiSelectComponent from "./multiSelectComponent";
 import DropDownNoMetaComponent from "./dropDownNoMeta";
+import EmailComponent from "./emailComponent";
+import dropDownSignUp from "./dropDownSignUp"
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -30,6 +32,8 @@ export default {
     number: NumberComponent,
     file: FileComponent,
     multiselect: MultiSelectComponent,
-    dropdown_no_meta: DropDownNoMetaComponent
+    dropdown_no_meta: DropDownNoMetaComponent,
+    email: EmailComponent,
+    dropDownSignUp:dropDownSignUp
 }
 

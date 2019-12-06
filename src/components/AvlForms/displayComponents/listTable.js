@@ -7,7 +7,8 @@ import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
-
+import {push} from "react-router-redux";
+var _ = require('lodash')
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
     "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
@@ -18,22 +19,42 @@ class AvlFormsListTable extends React.Component{
     constructor(props){
         super(props);
 
+        this.state = {
+            form_ids : [],
+            data : []
+
+        }
         this.formsListTable = this.formsListTable.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
     }
 
     fetchFalcorDeps(){
         let formType = this.props.config.map(d => d.type)
-        let formAttributes = this.props.config.map(d => d.list_attributes)
+        let formAttributes = this.props.config.map(d => d.list_attributes);
+        let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
-                let length = response.json.forms[formType].byPlanId[this.props.activePlan].length
-                this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
-                    .then(response =>{
-                        return response
-                    })
+                let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
+                if(length > 0){
+                    this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
+                        .then(response =>{
+                            let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
+                            Object.keys(graph).filter(d => d !== '$__path').forEach(id =>{
+                                if(graph[id]){
+                                    ids.push(graph[id].id)
+                                }
+
+                            })
+                            this.setState({
+                                form_ids : ids
+                            })
+                            return response
+                        })
+                }
+
             })
     }
+
 
     componentDidMount(){
         return this.props.falcor.get(['geo',counties,'cousubs'],
@@ -73,38 +94,87 @@ class AvlFormsListTable extends React.Component{
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         if(graph){
-            Object.keys(graph).forEach(item =>{
-                let data = {};
-                formAttributes[0].forEach(attribute =>{
-                    if(graph[item].value && graph[item].value.attributes){
-                        if(Object.keys(graph[item].value.attributes).filter(d => d!=='sub_type').includes(attribute)){
-                            data['id'] = item
-                            data[attribute] = graph[item].value.attributes[attribute] || ' '
-                        }
+            if(combine_list_attributes[0] === undefined){
+                Object.keys(graph).forEach(item =>{
+                    let data = {};
+                    formAttributes[0].forEach(attribute =>{
+                        if(graph[item].value && graph[item].value.attributes){
+                            if(this.state.form_ids.includes(item)){
+                                data['id'] = item
+                                data[attribute] = graph[item].value.attributes[attribute] || ' '
+                            }
 
                         }
+                    });
+                    listViewData.push(data)
+
+                });
+            }else{
+                Object.keys(graph).forEach(item =>{
+                    let initial_data = {}
+                    let data = {};
+                    combine_list_attributes[0].attributes.forEach((attribute,i) =>{
+                        Object.keys(geo).filter(d => d !== 'S__path').forEach(g =>{
+                            if(this.state.form_ids.includes(item)){
+                                initial_data['id'] = item;
+                                initial_data[attribute] = geo[graph[item].value.attributes[attribute]] ? geo[graph[item].value.attributes[attribute]].name || '' : graph[item].value.attributes[attribute]
+                            }
+
+                        })
+                    });
+
+                    formAttributes[0].filter(d=> !combine_list_attributes[0].attributes.includes(d)).forEach(attribute =>{
+                        if(graph[item].value && graph[item].value.attributes){
+                            if(this.state.form_ids.includes(item)){
+                                data['id'] = item
+                                data[attribute] = graph[item].value.attributes[attribute] || ' '
+                                let value = Object.keys(initial_data).filter(d => d !== 'id').map(function(k)
+                                {
+                                    if(initial_data['id'] === item)
+                                        return initial_data[k]
+                                })
+                                data[combine_list_attributes[0].result] = !value.includes("") ? value.join(",") : value
+                            }
+                        }
+                    })
+                    listViewData.push(data)
+
                 })
-                listViewData.push(data)
-            });
-
+            }
             return listViewData
         }
 
     }
 
     render(){
-        let formAttributes = this.props.config.map(d => d.list_attributes);
-        let listViewData = this.formsListTable();
-        let formType = this.props.config.map(d => d.type)
+        let formAttributes = [];
+        let listViewData = [];
+        let data = this.formsListTable();
+        listViewData = data.filter(value => Object.keys(value).length !== 0)
+        let formType = this.props.config.map(d => d.type);
+        if(listViewData && listViewData.length > 0){
+            if(!_.isEqual(Object.keys(...listViewData).sort(),this.props.config[0].list_attributes.sort())){
+                formAttributes = Object.keys(...listViewData).filter(d => d !== 'id')
+            }else{
+                formAttributes = this.props.config[0].list_attributes
+            }
+        }
+        let sub_type = ''
+        Object.keys(this.props.config[0].attributes).forEach(d =>{
+            if(this.props.config[0].attributes[d].sub_type !== 'project'){
+                sub_type = this.props.config[0].attributes[d].sub_type
+            }
+        })
+        console.log('listViewData',listViewData)
         return (
                 <div className='container'>
                     <Element>
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
-                        {formType[0] === 'actions'?
+                        {formType[0] === 'actions' || formType[0] === 'participation'?
                             <Link
                                 className="btn btn-sm btn-primary"
-                                to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
+                                to={ `/${this.props.config.map(d=> d.type)}/${sub_type}/new` } >
                                 Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             </Link>
                             :
@@ -124,7 +194,16 @@ class AvlFormsListTable extends React.Component{
                                         Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
                                     </Link>
                                 )
-                            }else{
+                            }else if(d.type === 'participation'){
+                                return(
+                                    <Link
+                                        className="btn btn-sm btn-primary"
+                                        to={ `/${this.props.config.map(d=> d.type)}/meeting/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Meeting
+                                    </Link>
+                                )
+                            }
+                            else{
                                 return (
                                     <button
                                         disabled
@@ -144,76 +223,84 @@ class AvlFormsListTable extends React.Component{
                         </button>
                     </span>
                         </h4>
-                        <div className="element-box">
+                        {
+                            listViewData.length > 0 ?
+                            <div className="element-box">
                             <div className="table-responsive" >
-                                <table className="table table lightBorder">
-                                    <thead>
-                                    <tr>
-                                        {formAttributes[0].map((item) => {
-                                            return (
-                                                <th>{item}</th>
-                                            )
-                                        })
-                                        }
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        listViewData.map(item =>{
-                                            if(Object.keys(item).length > 0){
-                                                return (
-                                                    <tr>
-                                                        {formAttributes[0].map(attribute =>{
-                                                            return (
-                                                                <td>{item[attribute]}</td>
-                                                            )
-                                                        })}
-                                                        <td>
-                                                            {formType[0] === 'actions' ?
-                                                                <Link className="btn btn-sm btn-outline-primary"
-                                                                      to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
-                                                                    Edit
-                                                                </Link>
-                                                                :
-                                                                <Link className="btn btn-sm btn-outline-primary"
-                                                                      to={ `/${formType[0]}/edit/${item['id']}` } >
-                                                                    Edit
-                                                                </Link>
-                                                            }
+                            <table className="table table lightBorder">
+                            <thead>
+                            <tr>
+                            {
+                                formAttributes ? formAttributes.map((item) => {
+                                        return (
+                                            <th>{item}</th>
+                                        )
+                                    })
+                                    :
+                                    null
+                            }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                listViewData.map(item =>{
+                                    if(Object.keys(item).length > 0){
+                                        return (
+                                            <tr>
+                                                {formAttributes ? formAttributes.map(attribute =>{
+                                                    return (
+                                                        <td>{item[attribute]}</td>
+                                                    )
+                                                }):null}
+                                                <td>
+                                                    {formType[0] === 'actions' || formType[0] === 'participation'?
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
+                                                            Edit
+                                                        </Link>
+                                                        :
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/${formType[0]}/edit/${item['id']}` } >
+                                                            Edit
+                                                        </Link>
+                                                    }
 
-                                                        </td>
-                                                        <td>
-                                                            {formType[0] === 'actions' ?
+                                                </td>
+                                                <td>
+                                                    {formType[0] === 'actions' || formType[0] === 'participation' ?
 
-                                                                <Link className="btn btn-sm btn-outline-primary"
-                                                                    to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
-                                                                     View
-                                                                </Link>
-                                                                :
-                                                                <Link className="btn btn-sm btn-outline-primary"
-                                                                      to={ `/${formType[0]}/view/${item['id']}` }>
-                                                                    View
-                                                                </Link>
-                                                            }
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
+                                                            View
+                                                        </Link>
+                                                        :
+                                                        <Link className="btn btn-sm btn-outline-primary"
+                                                              to={ `/${formType[0]}/view/${item['id']}` }>
+                                                            View
+                                                        </Link>
+                                                    }
 
-                                                        </td>
-                                                        <td>
-                                                            <button id= {item['id']} className="btn btn-sm btn-outline-danger"
-                                                                    onClick={this.deleteItem}>
-                                                                Delete
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
-
-                                        })
+                                                </td>
+                                                <td>
+                                                    <button id= {item['id']} className="btn btn-sm btn-outline-danger"
+                                                            onClick={this.deleteItem}>
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
                                     }
-                                    </tbody>
 
-                                </table>
+                                })
+                            }
+                            </tbody>
+
+                            </table>
                             </div>
-                        </div>
+                            </div>
+                            :
+                                <div className="element-box">No data found...</div>
+                        }
                     </Element>
                 </div>
 
@@ -227,7 +314,8 @@ const mapStateToProps = (state,ownProps) => {
         activeGeoid: state.user.activeGeoid,
         config: ownProps.json,
         formsListData : get(state.graph,['forms','byId'],{}),
-        geoData : get(state.graph,['geo'],{})
+        geoData : get(state.graph,['geo'],{}),
+        formsByIdData: get(state.graph,['forms'])
 
     }
 };
@@ -238,22 +326,6 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsListTable))
 
-/*
-if(combine_list_attributes.length > 0 && combine_list_attributes[0].attributes ){
-                            /*
-                            let value = '';
-                            combine_list_attributes[0].attributes.forEach(attribute =>{
-                                Object.keys(geo).forEach(g =>{
-                                    if(g === graph[item].value.attributes[attribute]){
-                                        data['id'] = item
-                                        data[combine_list_attributes[0].result] = geo[g].name
-                                    }
-                                })
-                                console.log('checking',item,graph[item].value.attributes[attribute])
-                            })
-                            /*
-                            data['id'] = item
-                            data[combine_list_attributes[0].result] = graph[item].value.attributes[combine_list_attributes] || ' '
-                             */
+
 
 

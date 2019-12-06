@@ -16,7 +16,7 @@ class Logo extends Component {
 
 class AvatarUser extends Component {
     render() {
-        console.log('TopMenu', this.props.user)
+        //console.log('TopMenu', this.props.user)
         return (
             <div className="logged-user-w avatar-inline">
                 <div className="logged-user-i">

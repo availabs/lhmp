@@ -32,6 +32,7 @@ import PlanPage from 'pages/auth/plans/planPage'
 import Plan from 'pages/auth/Plan/' // admin plan page
 import AdminAbout from 'pages/auth/Plan/about' // admin plan page - submenu
 import AdminRisk from 'pages/auth/Plan/risk' // admin plan page - submenu
+import PlanHazards from 'pages/auth/Plan/hazards'
 import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
 
 import PlanningTools from 'pages/auth/PlanningTools/'
@@ -48,20 +49,26 @@ import CapabilitiesView from 'pages/auth/Capabilities/capability/view'
 import CapabilitiesFormsList from 'pages/auth/Capabilities/capability_forms'
 import CapabilitiesFormsView from 'pages/auth/Capabilities/capability_forms/view'
 import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
-import RolesIndex from 'pages/auth/Roles/'
-//import RolesFormsList from 'pages/auth/Roles/roles_forms/index'
+//import RolesIndex from 'pages/auth/Roles/'
+import RolesFormsList from 'pages/auth/Roles/roles_forms/index'
+import RolesFormView from 'pages/auth/Roles/roles_forms/view'
+import RolesFormNew from 'pages/auth/Roles/roles_forms/new'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
 import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
-import Participation from "./pages/auth/Participation/";
-import ParticipationView from "./pages/auth/Participation/components/view";
-import ParticipationNew from "./pages/auth/Participation/components/new";
+import ParticipationListView from "./pages/auth/Participation/forms_index"
+import ParticipationView from "./pages/auth/Participation/view"
+import ParticipationFromsNew from "./pages/auth/Participation/new"
+//import Participation from "./pages/auth/Participation/";
+//import ParticipationView from "./pages/auth/Participation/components/view";
+//import ParticipationNew from "./pages/auth/Participation/components/new";
 import ParticipationMeetingView from "./pages/auth/Participation/components/meetingview";
 import ParticipationUserRoles from "./pages/auth/Participation/components/userroles";
 
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Signup from './pages/Landing/SignUp'
+//import SignUpForms from './pages/Landing/signup_forms/SignUp'
 import ResetPassword from './pages/Landing/ResetPassword'
 import Logout from './pages/Logout'
 import NoMatch from './pages/404.js'
@@ -72,6 +79,7 @@ const routes = [
   Home,
   Login,
   Signup,
+   //...SignUpForms,
    ...ResetPassword,
    ...ActionsFormIndex,
    ...ActionsFormView,
@@ -88,6 +96,7 @@ const routes = [
    ...Plans,
    ...Plan,
    ...AdminAbout,
+   ...PlanHazards,
    ...AdminRisk,
    ...AdminStrategies,
    ...PlanPage,
@@ -108,8 +117,10 @@ const routes = [
    //...CapabilitiesView,
     */
    ...Historic,
-   ...RolesIndex,
-    //...RolesFormsList,
+   //...RolesIndex,
+   ...RolesFormsList,
+   ...RolesFormView,
+   ...RolesFormNew,
    ...Public,
    ...About,
    ...Hazards,
@@ -118,9 +129,11 @@ const routes = [
    ...User,
    ...Admin,
    ...FormEditOrNew,
-   ...Participation,
+   //...Participation,
+   ...ParticipationListView,
    ...ParticipationView,
-   ...ParticipationNew,
+   ...ParticipationFromsNew,
+   //...ParticipationNew,
    ...ParticipationMeetingView,
    ...ParticipationUserRoles,
 

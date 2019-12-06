@@ -57,7 +57,7 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        name: 'Create Actions Worksheet',
+        name: 'Create Capability',
         auth: true,
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsNew))
     },

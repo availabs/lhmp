@@ -25,15 +25,14 @@ class Public extends React.Component {
         return (
             <div>
                 <Introduction/>
-                {/* Planning Context  */}
-                <LocalContext/> 
-                <PlanningTeam/>
-                {/* Risk */}
-                <Analysis/>
-                {/* <HazardLoss/> */}
-                <HazardEvents/>
-                <NFIP/>
-                <Assets/>
+                
+                    <LocalContext/> 
+                    <PlanningTeam/>
+                    <Analysis/>
+                    <HazardEvents/>
+                    <NFIP/>
+                    
+                    
             </div>
         )
     }
@@ -60,7 +59,7 @@ export default [{
     ],
     menuSettings: {
         image: 'none',
-        scheme: 'color-scheme-light',
+        scheme: 'color-scheme-dark',
         position: 'menu-position-top',
         layout: 'menu-layout-full',
         style: 'color-style-default'

@@ -70,10 +70,13 @@ class AvlFormsViewData extends React.Component{
                             })
                         }
                         else{
-                            data.push({
-                                attribute:d,
-                                value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : ''
-                            })
+                            if( !config[0][d].hidden && config[0][d].hidden !== 'true'){
+                                data.push({
+                                    attribute:d,
+                                    value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : ''
+                                })
+                            }
+
                         }
                     }
                     else{

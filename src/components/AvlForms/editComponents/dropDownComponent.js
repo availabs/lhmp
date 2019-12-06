@@ -18,7 +18,13 @@ class DropDownComponent extends React.Component{
             return (
                 <div className="col-sm-12">
                     <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
-                        <select className="form-control justify-content-sm-end" id={this.props.title} onChange={this.props.handleChange} value={this.props.state[this.props.title] || ''} onClick={this.props.onClick}>
+                        <select className="form-control justify-content-sm-end"
+                                id={this.props.title}
+                                onChange={this.props.handleChange}
+                                value={this.props.state[this.props.title] || ''}
+                                data-error = {this.props.data_error ? this.props.data_error : ""}
+                                required = {this.props.required ? this.props.required : ""}
+                                onClick={this.props.onClick}>
                             <option className="form-control" key={0} value={'None'}>--No {this.props.label} Selected--</option>
                             {
                                 this.props.meta ?
@@ -29,6 +35,7 @@ class DropDownComponent extends React.Component{
                                     null
                             }
                         </select>
+                        <div className="help-block form-text with-errors form-control-feedback">{this.props.required}</div>
                     </div>
                     <br/>
                 </div>
@@ -43,7 +50,10 @@ class DropDownComponent extends React.Component{
                                 {
                                     this.props.meta ?
                                         this.props.meta.map((item,i) =>{
-                                            return(<option  className="form-control" key={i+1} value={item.value}>{item.name}</option>)
+                                            if(item.value.slice(0,5) === this.props.state[this.props.depend_on]){
+                                                return(<option  className="form-control" key={i+1} value={item.value}>{item.name}</option>)
+                                            }
+
                                         })
                                         :
                                         null
@@ -90,6 +100,7 @@ class DropDownComponent extends React.Component{
                         <select className="form-control justify-content-sm-end"
                                 id={this.props.title} onChange={this.props.handleChange}
                                 value={this.props.state[this.props.title] || ''}
+                                required={this.props.required ? this.props.required : ""}
                                 disabled = {this.props.disable_condition !== '' && this.props.disable_condition ? this.props.state[this.props.disable_condition.attribute] !== this.props.disable_condition.check : null}
                         >
                             <option className="form-control" key={0} value='None'>--No {this.props.label} Selected--</option>
@@ -109,6 +120,7 @@ class DropDownComponent extends React.Component{
                                 })
                             }
                         </select>
+                        <div className="help-block form-text with-errors form-control-feedback">{this.props.required}</div>
                     </div>
                     <br/>
                 </div>

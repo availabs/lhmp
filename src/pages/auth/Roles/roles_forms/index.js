@@ -42,12 +42,12 @@ export default [
     {
         path: '/roles/',
         exact: true,
-        name: 'Capabilities',
+        name: 'Roles',
         auth: true,
         mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            { name: 'capabilities', path: '/roles/' }
+            { name: 'Roles', path: '/roles/' }
         ],
         menuSettings: {
             image: 'none',

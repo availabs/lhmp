@@ -865,7 +865,7 @@ const theme = {
   panelHeaderHeight,
   panelDropdownScrollBar,
 
-  // Text
+  // TextComponent
   textColor,
   textColorLT,
   textColorHl,

@@ -111,6 +111,8 @@ class Hazards extends React.Component {
                                         </div>
 
                                         <div className="table-responsive">
+                                            <h4>Hazard Loss by Municipality</h4>
+                                            <span> From 1996 to 2017</span>
                                             <CousubTotalLossTable
                                                 {...this.state}/>
                                         </div>
@@ -139,12 +141,7 @@ class Hazards extends React.Component {
 
                         <div className='row'>
                             <div className='col-12'>
-                                <HMGPTable {...this.state}/>
-                            </div>
-                        </div>
-
-                        <div className='row'>
-                            <div className='col-12'>
+                                <h4>Hazard Loss by Type</h4>
                                 <strong>1996-2017</strong>
                                 <div>The table below summarizes the loss amount due to Hazards in dollars
                                     for {this.getGeoidName()}.
