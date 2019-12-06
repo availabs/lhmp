@@ -7,8 +7,8 @@ import {connect} from "react-redux";
 import { reduxFalcor } from 'utils/redux-falcor'
 import {setActiveCousubid} from 'store/modules/user'
 import get from 'lodash.get'
+import styled from "styled-components";
 // import './menu.css'
-
 
 class Menu extends Component {
     fetchFalcorDeps() {
@@ -62,7 +62,12 @@ class Menu extends Component {
         defaultOptions.position === 'menu-position-top' ?
             dynamicStyle['width'] = '100vw' : dynamicStyle['height'] = '100vh';
 
-
+        const DROPDOWN = defaultOptions.scheme === 'color-scheme-dark' ? styled.div`
+                        div > select {
+                        color: #ccc;
+                        border: none;
+                        }
+                    ` : styled.div``;
             // console.log('menuProps', currentPath, dynamicStyle)
         let userMenu = this.props.user && !!this.props.user.authed
             ? <AvatarUser user={this.props.user}/>
@@ -76,7 +81,9 @@ class Menu extends Component {
 				<h1 className="menu-page-header">{this.props.title}</h1>
                 <MainMenu {...this.props} />
                 {!this.props.auth ?
-                    geoDropdown.geoDropdown(this.props.geoGraph,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)
+                    <DROPDOWN>
+                        {geoDropdown.geoDropdown(this.props.geoGraph,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
+                    </DROPDOWN>
                 : ''}
             </div>
 
