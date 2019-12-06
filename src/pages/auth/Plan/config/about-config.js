@@ -1,25 +1,12 @@
 const config =  {
-	Process : [
+	'Planning Context' : [
 		{
 			title: 'The Planning Process',
 			requirement: 'Req-A-1A',
 			type: 'content',
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
-			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.'
-		},
-		{
-			title: 'Multi-Jurisdictional Mitigation Plan Milestones',
-			requirement: 'Req-A-1B',
-			type: 'date',
-			prompt: '',
-			intent: ''
-		},
-		{
-			title: 'Jurisdictional Representatives',
-			requirement: 'Req-A-1C',
-			type: 'rolesTable',
-			prompt: 'Identify who represented each jurisdiction.',
-			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?'
+			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
+			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.'
 		},
 		{
 			title: 'Multi-Jurisdictional Mitigation Plan Meetings and Participation',
@@ -27,13 +14,6 @@ const config =  {
 			type: 'table',
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.'
-		},
-		{
-			title: 'Jurisdictional Participation',
-			requirement: 'Req-A-1E',
-			type: 'table',
-			prompt: '',
-			intent: 'Plan updates must include documentation of the current planning process undertaken to update the plan.'
 		},
 		{
 			title: 'Opportunities for Plan Participation',
@@ -44,8 +24,24 @@ const config =  {
 				' to be involved in the planning process.',
 			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise' +
 				' needed to develop the plan, with responsibility or authority to implement hazard mitigation activities,' +
-				' and who will be most affected by the plan’s outcomes.'
+				' and who will be most affected by the plan’s outcomes.',
+			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard'
 		},
+		{
+			title: 'Jurisdictional Representatives',
+			requirement: 'Req-A-1C',
+			type: 'rolesTable',
+			align: 'full',
+			prompt: 'Identify who represented each jurisdiction.',
+			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?'
+		},
+		// {
+		// 	title: 'Jurisdictional Participation',
+		// 	requirement: 'Req-A-1E',
+		// 	type: 'table',
+		// 	prompt: '',
+		// 	intent: 'Plan updates must include documentation of the current planning process undertaken to update the plan.'
+		// },
 		{
 			title: 'Public Participation in the Planning Process',
 			requirement: 'Req-A-3',
@@ -62,6 +58,7 @@ const config =  {
 			title: 'Review of Existing Planning Documents and Resources',
 			requirement: 'Req-A-4A',
 			type: 'planningDocuments',
+			align: 'full',
 			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
@@ -118,7 +115,7 @@ const config =  {
 `,
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.'
-		},
+		}
 	],
 	Adoption: [
 		{
@@ -135,6 +132,14 @@ const config =  {
 				' the plan, and to authorize responsible agencies to execute their responsibilities.  '
 		},
 /*		{
+			title: 'Multi-Jurisdictional Mitigation Plan Milestones',
+			requirement: 'Req-A-1B',
+			type: 'date',
+			prompt: '',
+			intent: ''
+		},
+		
+		{
 			title: 'Formal Plan Adoption',
 			requirement: 'Req-E-2',
 			type: 'table',

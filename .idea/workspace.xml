@@ -13,7 +13,11 @@
       <change afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/view.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="homepage">
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AvlForms/displayComponents/listTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/displayComponents/listTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/TextComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/TextComponent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/dropDownComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/dropDownComponent.js" afterDir="false" />
@@ -182,6 +186,220 @@
       <workItem from="1574091816301" duration="45070000" />
       <workItem from="1574280072212" duration="2905000" />
       <workItem from="1574954634724" duration="53339000" />
+      <workItem from="1575244543491" duration="33000" />
+      <workItem from="1575296627916" duration="137000" />
+      <workItem from="1575300508660" duration="105000" />
+      <workItem from="1575389960697" duration="15095000" />
+    </task>
+    <task id="LOCAL-00028" summary="Building By Owner Type Pie Chart and Table">
+      <created>1563290396727</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1563290396727</updated>
+    </task>
+    <task id="LOCAL-00029" summary="updates">
+      <created>1563376115866</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1563376115866</updated>
+    </task>
+    <task id="LOCAL-00030" summary="updates">
+      <created>1563548923913</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1563548923913</updated>
+    </task>
+    <task id="LOCAL-00031" summary="updates">
+      <created>1563553056249</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1563553056249</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Building By owner Type Pie chart and Building By Land Use PieChart">
+      <created>1563553094097</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1563553094097</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Building By Land Use Type Pie chart and Building By Land Use Table">
+      <created>1563828620513</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1563828620513</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Building By Land Use Type Pie chart and Building By Land Use Table working">
+      <created>1563901481083</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1563901481083</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Building By Land Use Type Pie chart and Building By Land Use Table updates">
+      <created>1563906665741</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1563906665741</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Building By Land Use Type Pie chart and Building By Land Use Table updates">
+      <created>1563907625825</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1563907625825</updated>
+    </task>
+    <task id="LOCAL-00037" summary=" Building By Land Use Table updates">
+      <created>1563915118516</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1563915118516</updated>
+    </task>
+    <task id="LOCAL-00038" summary="updates">
+      <created>1563994897677</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1563994897677</updated>
+    </task>
+    <task id="LOCAL-00039" summary="updates">
+      <created>1564670096166</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1564670096166</updated>
+    </task>
+    <task id="LOCAL-00040" summary="updates">
+      <created>1564773780250</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1564773780250</updated>
+    </task>
+    <task id="LOCAL-00041" summary="historic">
+      <created>1565101438367</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1565101438367</updated>
+    </task>
+    <task id="LOCAL-00042" summary="no need to refresh">
+      <created>1565104607088</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1565104607088</updated>
+    </task>
+    <task id="LOCAL-00043" summary="default geo from auth plan">
+      <created>1565117208349</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1565117208349</updated>
+    </task>
+    <task id="LOCAL-00044" summary="signup wizard">
+      <created>1565380639130</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1565380639130</updated>
+    </task>
+    <task id="LOCAL-00045" summary="user page">
+      <created>1565987124882</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1565987124882</updated>
+    </task>
+    <task id="LOCAL-00046" summary="signup form toggle on success">
+      <created>1565988553424</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1565988553424</updated>
+    </task>
+    <task id="LOCAL-00047" summary="on signup group, topmenu active group, plans link, header sizes, admin link and page: yet to list them, setting of activeplan, activeGeo, activePlan etc changed">
+      <created>1566416168067</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1566416168068</updated>
+    </task>
+    <task id="LOCAL-00048" summary="admin">
+      <created>1566482112488</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1566482112488</updated>
+    </task>
+    <task id="LOCAL-00049" summary="admin">
+      <created>1566594157767</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1566594157767</updated>
+    </task>
+    <task id="LOCAL-00050" summary="public, authed menu, public only access if not authed">
+      <created>1567008571656</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1567008571656</updated>
+    </task>
+    <task id="LOCAL-00051" summary="domain bug solved">
+      <created>1567029305959</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1567029305959</updated>
+    </task>
+    <task id="LOCAL-00052" summary="domain bug solved">
+      <created>1567030053552</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1567030053552</updated>
+    </task>
+    <task id="LOCAL-00053" summary="submenu">
+      <created>1567090021594</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1567090021594</updated>
+    </task>
+    <task id="LOCAL-00054" summary="submenu click">
+      <created>1567095183312</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1567095183312</updated>
+    </task>
+    <task id="LOCAL-00055" summary="contentEditor work started">
+      <created>1567534931720</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1567534931720</updated>
+    </task>
+    <task id="LOCAL-00056" summary="contentEditor insert + update done">
+      <created>1567544764470</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1567544764470</updated>
+    </task>
+    <task id="LOCAL-00057" summary="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public">
+      <created>1567611026875</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1567611026875</updated>
     </task>
     <task id="LOCAL-00058" summary="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well.">
       <created>1567627745244</created>
@@ -546,7 +764,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="stickyroll in admin-about: progress bar done. next up: req nav" />
     <MESSAGE value="stickyroll in admin-about: nav done, contentEditor bug fixed" />
     <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
     <MESSAGE value="stickyroll on all pages" />
@@ -575,7 +792,8 @@
     <MESSAGE value="fill opac changed" />
     <MESSAGE value="mapactions visibility as prop" />
     <MESSAGE value="homepage" />
-    <option name="LAST_COMMIT_MESSAGE" value="homepage" />
+    <MESSAGE value="signup, reset password host : &lt;subdomain&gt;.mitigationny.org" />
+    <option name="LAST_COMMIT_MESSAGE" value="signup, reset password host : &lt;subdomain&gt;.mitigationny.org" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -617,31 +835,57 @@
       </breakpoints>
     </breakpoint-manager>
   </component>
+  <component name="WindowStateProjectService">
+    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2" timestamp="1575570309161">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2/0.34.1920.1046@0.34.1920.1046" timestamp="1575570309161" />
+    <state x="100" y="132" width="1720" height="848" key="DiffContextDialog" timestamp="1575570308503">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="100" y="132" width="1720" height="848" key="DiffContextDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575570308503" />
+    <state x="621" y="227" width="675" height="655" key="StructurePopup" timestamp="1575389968432">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="621" y="227" width="675" height="655" key="StructurePopup/0.34.1920.1046@0.34.1920.1046" timestamp="1575389968432" />
+    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2" timestamp="1575475032363">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2/0.34.1920.1046@0.34.1920.1046" timestamp="1575475032363" />
+    <state x="778" y="231" width="353" height="650" key="VcsDiffUtil.ChangesDialog" timestamp="1575472549707">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="778" y="231" width="353" height="650" key="VcsDiffUtil.ChangesDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575472549707" />
+    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog" timestamp="1575474508577">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575474508577" />
+    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup" timestamp="1575390126191">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup/0.34.1920.1046@0.34.1920.1046" timestamp="1575390126191" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/constants/hazardColors.js</url>
           <line>167</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
-          <line>132</line>
-          <properties lambdaOrdinal="-1" />
+          <line>129</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
-          <line>136</line>
-          <properties lambdaOrdinal="-1" />
+          <line>133</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
-          <line>140</line>
-          <properties lambdaOrdinal="-1" />
+          <line>137</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>

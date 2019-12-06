@@ -7,7 +7,7 @@ import { update } from "utils/redux-falcor/components/duck"
 
 export let host = 'http://localhost:4444/'
 if (process.env.NODE_ENV === 'production') {
-  host = 'https://mitigateny.availabs.org/api/'
+  host = 'https://graph.availabs.org/'
 }
 // export const host = 'https://mitigateny.availabs.org/api/'
 class CustomSource extends HttpDataSource {

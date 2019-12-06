@@ -32,6 +32,7 @@ import PlanPage from 'pages/auth/plans/planPage'
 import Plan from 'pages/auth/Plan/' // admin plan page
 import AdminAbout from 'pages/auth/Plan/about' // admin plan page - submenu
 import AdminRisk from 'pages/auth/Plan/risk' // admin plan page - submenu
+import PlanHazards from 'pages/auth/Plan/hazards'
 import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
 
 import PlanningTools from 'pages/auth/PlanningTools/'
@@ -95,6 +96,7 @@ const routes = [
    ...Plans,
    ...Plan,
    ...AdminAbout,
+   ...PlanHazards,
    ...AdminRisk,
    ...AdminStrategies,
    ...PlanPage,

@@ -20,6 +20,7 @@ class assetsPagePropTypeEditor extends Component {
     }
 
     fetchFalcorDeps() {
+        console.time('get assetsPagePropTypeEditor data')
         return this.props.falcor.get(
                 ['building','byGeoid'
                     ,this.props.geoid,
@@ -30,7 +31,6 @@ class assetsPagePropTypeEditor extends Component {
             ).then(response =>{
                 return response
         })
-
     }
 
 

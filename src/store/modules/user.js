@@ -197,6 +197,7 @@ export const authProjects = (user) => {
                   }
                   if (!planId) planId = localStorage.getItem('planId');
                   //console.log('planid, groupname, authLevel', planId, groupName, authLevel);
+                  // console.log('planid, groupname, authLevel', planId, groupName, authLevel);
                   dispatch(setPlanAuth(planId,AuthedPlans, groupName));
                   dispatch(setUserAuthLevel(authLevel));
               })
@@ -207,6 +208,7 @@ export const authProjects = (user) => {
 
 export const authGeoid = (user) => {
     //console.log('authGeoidstarted', user, localStorage)
+    // console.log('authGeoidstarted', user, localStorage)
     return (dispatch) => {
     if ((user && user.activePlan) || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
       let planId = user && user.activePlan ? user.activePlan : localStorage.getItem('planId');
@@ -216,6 +218,7 @@ export const authGeoid = (user) => {
           .then(geo_response => {
             let geoid = geo_response.json.plans.county.byId[planId]['fips'];
               //console.log('geoid set to', geoid)
+              // console.log('geoid set to', geoid)
             dispatch(setPlanGeoid(geoid))
           })
     }else{
@@ -233,6 +236,7 @@ export const authGeoid = (user) => {
                     .then(geo_response => {
                         let geoid = geo_response.json.plans.county.byId[planId]['fips'];
                         //console.log('geoid set to', geoid)
+                        // console.log('geoid set to', geoid)
                         dispatch(setPlanGeoid(geoid))
                         return geo_response
                     })

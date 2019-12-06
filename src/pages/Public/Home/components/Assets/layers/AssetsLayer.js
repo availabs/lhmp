@@ -100,7 +100,6 @@ class TractLayer extends MapLayer {
     }
 
     fetchData(graph) {
-        console.log('in ffd: haz loss');
         if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
         if (!store.getState().user.activeGeoid) return Promise.resolve();
         if (!graph) graph = falcorGraph.getCache()
@@ -112,81 +111,50 @@ class TractLayer extends MapLayer {
             null);
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
         return falcorGraph.get(
-            ['geo', countiesOrCousubs.value, 'name'],
-            ["building", "byGeoid", geoids.value, "length"]
-        )
-            .then(res => {
-                return geoids.value.map(geoid => {
-                    const length = res.json.building.byGeoid[geoid].length;
-                    return ["building", "byGeoid", geoid, "byIndex", {
-                        from: 0,
-                        to: length - 1
-                    }, ["id",  "owner_type", "critical", "flood_zone"]]
-                });
-            })
-            .then(requests => {
-                console.log('about to chnk', requests)
-                return requests.reduce((a,c) => a.then(() => falcorChunkerNiceWithUpdate(c)), Promise.resolve())
-                /*    .then(res => {
-                        console.log('chnked', res, falcorGraph.getCache())
-                        const buildingids = [],
-                            graph = get(res.payload, ["building", "byId"], {});
-                        console.log('graph', graph)
-                        geoids.value.forEach(geoid => {
-                            const byIndex = get(graph, [geoid, "byIndex"], {});
-                            console.log('byIndex', byIndex)
-                            Object.values(byIndex).forEach(({ id }) => {
-                                if (id) {
-                                    buildingids.push(id)
-                                }
-                            })
-                        })
-                        // console.log('buildingids', buildingids)
-                        return buildingids;
-                    })*/
-            })
-            /*.then(buildingids => {
-                console.log('buildingIds', buildingids)
-                if (!buildingids.length) return;
-                return falcorChunkerNiceWithUpdate(["building", "byId", buildingids, ["owner_type", "critical", "flood_zone"]])
-            })
-            .then(() => store.dispatch(update(falcorGraph.getCache())))*/
-
-
+            ['building','byGeoid', store.getState().user.activeGeoid, 'flood_zone',
+                ['flood_100'],'owner_type',['3','4','5','6','7'],'critical',['true', 'false']] //, ["id",  "owner_type", "critical", "flood_zone"]
+        )/*.then(d => {
+            console.log('all hail my new query', d)
+        })*/
     }
 
     receiveData(map, data) {
-        console.log('in rec data')
-        let graph = falcorGraph.getCache(),
+        let graph = get(falcorGraph.getCache(), `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
             countyOwned = [],
             municipalityOwned = [],
             critical = [],
             buildingColors = {};
-        console.log(graph)
-        if (!graph.building || !graph.building.byId) return Promise.resolve();
+        //'owner_type',['3','4','5','6','7'],'critical',['true', 'false']
 
-        console.log('before loop')
-        Object.keys(graph.building.byId)
-            .filter(buildingId => ['AE','A','AH','VE','AO'].includes(graph.building.byId[buildingId].flood_zone))
-            .forEach(buildingId => {
-                let building = graph.building.byId[buildingId];
-                if (['3'].includes(building.owner_type)){
-                    countyOwned.push(buildingId)
-                    buildingColors[buildingId] = '#0fcc1b'
-                }else if (['4','5','6','7'].includes(building.owner_type)){
-                    municipalityOwned.push(buildingId)
-                    buildingColors[buildingId] = '#0d1acc'
+        if (!graph) return Promise.resolve();
+
+        Object.keys(graph)
+            .forEach(owner_type => {
+                let allBuildings = get(graph[owner_type], `critical`);
+
+                if (owner_type === '3'){
+                    [...allBuildings.true.value.map(f => f.id),...allBuildings.false.value.map(f => f.id)]
+                        .forEach(buildingId => {
+                        countyOwned.push(buildingId)
+                        buildingColors[buildingId] = '#0fcc1b'
+                    })
+                }else if(['4','5','6','7'].includes(owner_type)){
+                    [...allBuildings.true.value.map(f => f.id),...allBuildings.false.value.map(f => f.id)]
+                        .forEach(buildingId => {
+                        municipalityOwned.push(buildingId)
+                        buildingColors[buildingId] = '#0d1acc'
+                    })
 
                 }
 
-                if (building.critical){
-                    critical.push(buildingId)
-                    buildingColors[buildingId] = '#cc1e0a'
+                allBuildings.true.value
+                    .map(f => f.id)
+                    .forEach(buildingId => {
+                        critical.push(buildingId)
+                        buildingColors[buildingId] = '#cc1e0a'
+                    });
 
-                }
             });
-
-        console.log(countyOwned, municipalityOwned, critical)
 
         map.setFilter("ebr-line", ["in", "id",
             ...countyOwned.map(id => +id),
