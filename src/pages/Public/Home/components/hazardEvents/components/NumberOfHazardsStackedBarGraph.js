@@ -12,7 +12,6 @@ import ElementBox from 'components/light-admin/containers/ElementBox'
 import {getHazardName, processDataForBarChart} from 'utils/sheldusUtils'
 
 import {EARLIEST_YEAR, LATEST_YEAR} from "./yearsOfSevereWeatherData";
-
 import hazardcolors from "constants/hazardColors";
 
 class NumberOfHazardsStackedBarGraph extends React.Component {
@@ -166,6 +165,7 @@ NumberOfHazardsStackedBarGraph.defaultProps = {
     showXlabel: true,
     geoid: '36',
     geoLevel: 'state',
+    colorScale: hazardcolors,
     dataType: "severeWeather"
 };
 

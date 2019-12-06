@@ -12,6 +12,7 @@
       <change afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/new.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/view.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="homepage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AvlForms/displayComponents/listTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/displayComponents/listTable.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/TextComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/TextComponent.js" afterDir="false" />
@@ -32,6 +33,9 @@
       <change beforePath="$PROJECT_DIR$/src/styles/bootstrap-override/bootstrap/utilities/_text.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/bootstrap-override/bootstrap/utilities/_text.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/styles/mb.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/mb.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/styles/mb.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/mb.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +92,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../mitigate-api" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/pages/Public/Home/components/Assets" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -114,11 +119,11 @@
       <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/index.js" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/Assets" />
       <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
       <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers" />
       <recent name="$PROJECT_DIR$/src/img" />
-      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -567,6 +572,10 @@
     <MESSAGE value="roles forms config" />
     <MESSAGE value="updates- for capabilities and Actions worksheet and project" />
     <option name="LAST_COMMIT_MESSAGE" value="updates- for capabilities and Actions worksheet and project" />
+    <MESSAGE value="fill opac changed" />
+    <MESSAGE value="mapactions visibility as prop" />
+    <MESSAGE value="homepage" />
+    <option name="LAST_COMMIT_MESSAGE" value="homepage" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -604,6 +613,36 @@
           <line>507</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/constants/hazardColors.js</url>
+          <line>167</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
+          <line>132</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
+          <line>136</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
+          <line>140</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

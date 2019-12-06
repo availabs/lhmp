@@ -1,6 +1,6 @@
 import React from 'react';
 import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
-import config from 'pages/auth/Capabilities/capability_forms/config.js'
+import config from 'pages/auth/Participation/participation_forms_time/config.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
@@ -29,6 +29,7 @@ class ParticipationFormsIndex extends React.Component{
 const mapStateToProps = state => (
     {
         activePlan : state.user.activePlan,
+        userEmail:state.user.email,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         capabilities: get(state.graph,'capabilitiesLHMP.byId',{})// so componentWillReceiveProps will get called.
@@ -40,14 +41,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/capabilities/',
+        path: '/participation/',
         exact: true,
-        name: 'Capabilities',
+        name: 'Participation',
         auth: true,
         mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            { name: 'capabilities', path: '/capabilities/' }
+            { name: 'participation', path: '/participation/' }
         ],
         menuSettings: {
             image: 'none',
@@ -56,6 +57,6 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsIndex))
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationFormsIndex))
     }
 ]

@@ -19,9 +19,9 @@ const history = createBrowserHistory();
 class App extends Component {
   constructor(props) {
     super(props);
-console.log("PROPS:", props)
+//console.log("PROPS:", props)
     if(this.props.token){
-console.log("USER TOKEN:", this.props.token)
+//console.log("USER TOKEN:", this.props.token)
       localStorage.setItem('userToken', this.props.token.slice(3,this.props.token.length))
     }
     this.props.auth();

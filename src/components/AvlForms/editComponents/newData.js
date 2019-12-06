@@ -32,12 +32,22 @@ class AvlFormsNewData extends React.Component{
     }
 
     fetchFalcorDeps(){
-        let form_type = this.props.config.map(d => d.type)
+        let form_type = this.props.config.map(d => d.type);
+
         return this.props.falcor.get(['geo',counties,['name']])
             .then(() =>{
                 this.props.falcor.get(['forms',form_type,'meta'])
                     .then(response =>{
                         return response
+                    })
+                // to get the roleIds with logged in user`s email
+                this.props.falcor.get(['forms',['roles'],'byPlanId',this.props.activePlan,'length'])
+                    .then(response =>{
+                        let length = response.json.forms['roles'].byPlanId[this.props.activePlan].length
+                        this.props.falcor.get(['forms',['roles'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['contact_email']])
+                            .then(response =>{
+                                return response
+                            })
                     })
             })
     }
@@ -48,6 +58,7 @@ class AvlFormsNewData extends React.Component{
     }
 
     componentDidMount(){
+
         if(this.props.id[0]){
             let attributes = this.props.config.map(d => Object.keys(d.attributes));
             return this.props.falcor.get(['forms','byId',this.props.id])
@@ -56,7 +67,14 @@ class AvlFormsNewData extends React.Component{
                     let tmp_state = {}
                     if(graph){
                         attributes[0].forEach(attribute =>{
-                            tmp_state[attribute] = graph.attributes[attribute]
+                            if(attribute.includes('date')){
+                                let d = graph.attributes[attribute].slice(0, 10).split('-');
+                                let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                                tmp_state[attribute] = date
+                            }else{
+                                tmp_state[attribute] = graph.attributes[attribute]
+                            }
+
                         });
                         this.setState(
                             tmp_state
@@ -129,7 +147,16 @@ class AvlFormsNewData extends React.Component{
             let args = []
             let plan_id = parseInt(this.props.activePlan);
             let attributes = {};
-            let sub_type = ''
+            let sub_type = '';
+            let user_email = this.props.userEmail;
+            let owner_ids = []
+
+            // to find role ids for the logged in user to be inserted in participation time
+            Object.keys(this.props.forms_roles_data).forEach(d =>{
+                if(this.props.forms_roles_data[d].value && this.props.forms_roles_data[d].value.attributes.contact_email === user_email){
+                    owner_ids.push(this.props.forms_roles_data[d].value.id)
+                }
+            })
             this.props.config.forEach(config =>{
                 Object.keys(config.attributes).forEach(item =>{
                     if(config.attributes[item].sub_type.length > 0){
@@ -139,8 +166,15 @@ class AvlFormsNewData extends React.Component{
             })
             Object.keys(this.state).forEach(item =>{
                 if(sub_type.length > 0){
-                    attributes['sub_type'] = sub_type
-                    attributes[item] = this.state[item]
+                    if(sub_type === 'time'){
+                        attributes['sub_type'] = sub_type
+                        attributes[item] = this.state[item]
+                        attributes['owner_id'] = owner_ids
+                    }else{
+                        attributes['sub_type'] = sub_type
+                        attributes[item] = this.state[item]
+                    }
+
                 }else{
                     attributes[item] = this.state[item]
                 }
@@ -261,7 +295,7 @@ class AvlFormsNewData extends React.Component{
                         values:item.attributes[attribute].edit_type_values
                     })
                 }
-                else{
+                else if(!item.attributes[attribute].hidden && item.attributes[attribute].hidden !== 'true'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
@@ -318,7 +352,22 @@ class AvlFormsNewData extends React.Component{
                             }
 
                             <div className="form-buttons-w text-right">
-                                <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm()}> Submit</button>
+                                {data ?
+                                    data.map((d,i) =>{
+
+                                        if(i === 0){
+                                            if(d.formType[0] === 'roles'){
+                                                return (<button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm()}> Submit</button>)
+                                            }else{
+                                                return (<button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>)
+                                            }
+                                        }
+
+                                    })
+                                    :
+                                    null
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -329,14 +378,19 @@ class AvlFormsNewData extends React.Component{
 }
 
 const mapStateToProps = (state,ownProps) => {
+    //console.log('state',state.user.email)
     return {
+        userEmail:state.user.email,
         activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
         config: ownProps.json,
         id : ownProps.id,
         geoData : get(state.graph,['geo'],{}),
-        meta_data : get(state.graph,['forms',])
+        meta_data : get(state.graph,['forms']),
+        forms_roles_data: get(state.graph,['forms','byId'])
+
     }
+
 };
 
 const mapDispatchToProps = {

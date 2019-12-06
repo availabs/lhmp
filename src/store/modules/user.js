@@ -7,7 +7,7 @@ import withRouter from "react-router/es/withRouter";
 // ------------------------------------
 // Constants
 // ------------------------------------
-const PROJECT_HOST = 'localhost:3000'
+const PROJECT_HOST = 'mitigateny.org'
 let SUBDOMAIN = 'www'
 const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
@@ -26,7 +26,6 @@ const SIGNUP_SUCCESS = 'USER::SIGNUP_SUCCESS'
 // Actions
 // ------------------------------------
 function receiveAuthResponse(user) {
-    console.log('receiveAuthResponse started')
   return {
     type: USER_LOGIN,
     user
@@ -54,7 +53,7 @@ function setPlanAuth(planId,authedPlans,groupName){
 }
 
 function setUserAuthLevel(authLevel){
-    console.log('hey im here', authLevel)
+    //console.log('hey im here', authLevel)
   return {
     type: SET_USER_AUTH,
     authLevel
@@ -62,10 +61,12 @@ function setUserAuthLevel(authLevel){
 }
 
 function setPlanGeoid(geoid){
+    /*
     console.log('setPlanGeoid', {
         type: SET_PLANS_GEOID,
         geoid
     })
+    */
     return {
     type: SET_PLANS_GEOID,
     geoid
@@ -122,7 +123,7 @@ const removeUserPlanInfo = () => {
 };
 
 export const authProjects = (user) => {
-    console.log('authProjects started', user)
+    //console.log('authProjects started', user)
   return (dispatch) => {
     let groups = user.groups;
     let subdomain =  window.location.hostname.split('.').length > 1?
@@ -132,11 +133,11 @@ export const authProjects = (user) => {
         .then(response => {
           let groupName = [];
           let authLevel = null;
-            console.log('uer object', user)
+            //console.log('uer object', user)
           let allPlans = Object.values(response.json.plans.authGroups).filter( d => d !== '$__path')
               .reduce((output, group) => {
                 if(group.plans && group.plans.length > 0) output.push(group.plans)
-                console.log('group',group.plans)
+                //console.log('group',group.plans)
                 return output
               }, [])
 
@@ -147,7 +148,7 @@ export const authProjects = (user) => {
                 if (AuthedPlans.indexOf(f_1) === -1) AuthedPlans.push(f_1)
               })
           );
-          console.log('authed plans in user:authProjects', AuthedPlans)
+          //console.log('authed plans in user:authProjects', AuthedPlans)
           falcorGraph.get(['plans','county','bySubdomain', [subdomain], 'id'])
               .then(planData => {
 
@@ -195,17 +196,17 @@ export const authProjects = (user) => {
                           })
                   }
                   if (!planId) planId = localStorage.getItem('planId');
-                  console.log('planid, groupname, authLevel', planId, groupName, authLevel);
+                  //console.log('planid, groupname, authLevel', planId, groupName, authLevel);
                   dispatch(setPlanAuth(planId,AuthedPlans, groupName));
                   dispatch(setUserAuthLevel(authLevel));
               })
         })
-      console.log('authProjects ended', user)
+      //console.log('authProjects ended', user)
   }
 }
 
 export const authGeoid = (user) => {
-    console.log('authGeoidstarted', user, localStorage)
+    //console.log('authGeoidstarted', user, localStorage)
     return (dispatch) => {
     if ((user && user.activePlan) || (localStorage && localStorage.getItem('planId'))) { //localStorage && localStorage.getItem('planId')
       let planId = user && user.activePlan ? user.activePlan : localStorage.getItem('planId');
@@ -214,7 +215,7 @@ export const authGeoid = (user) => {
         )
           .then(geo_response => {
             let geoid = geo_response.json.plans.county.byId[planId]['fips'];
-              console.log('geoid set to', geoid)
+              //console.log('geoid set to', geoid)
             dispatch(setPlanGeoid(geoid))
           })
     }else{
@@ -231,7 +232,7 @@ export const authGeoid = (user) => {
                 )
                     .then(geo_response => {
                         let geoid = geo_response.json.plans.county.byId[planId]['fips'];
-                        console.log('geoid set to', geoid)
+                        //console.log('geoid set to', geoid)
                         dispatch(setPlanGeoid(geoid))
                         return geo_response
                     })
@@ -241,7 +242,7 @@ export const authGeoid = (user) => {
 }
 
 export const setActivePlan = (user) =>{
-  console.log('setActivePlan', user)
+  //console.log('setActivePlan', user)
   return (dispatch) =>{
     dispatch(setPlanAuth(user))
   }
@@ -284,7 +285,7 @@ export const login = ({ email, password }) => dispatch =>
 
 export const auth = () => dispatch => {
   const token = getUserToken();
-  console.log('auth attempt', token)
+  //console.log('auth attempt', token)
   if (token) {
     return fetch(`${AUTH_HOST}/auth`, {
       method: 'POST',
@@ -296,7 +297,7 @@ export const auth = () => dispatch => {
     })
       .then(res => res.json())
       .then(res => {
-        console.log('auth happened', res)
+        //console.log('auth happened', res)
         if (res.error) {
           dispatch({ type: AUTH_FAILURE });
           dispatch(sendSystemMessage(res.error));
@@ -343,7 +344,7 @@ export const resetPassword = ({ email }) => dispatch => {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email , project_name: AUTH_PROJECT_NAME})
   })
     .then(res => res.json())
     .then(res => {
@@ -408,7 +409,7 @@ let initialState = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [USER_LOGIN]: (state = initialState, action) => {
-    console.log('user login', action)
+    //console.log('user login', action)
     const newState = Object.assign({}, state, action.user, { authed: true });
     ++newState.attempts;
     setUserToken(action.user);
@@ -427,7 +428,7 @@ const ACTION_HANDLERS = {
   },
 
   [SET_PLANS_AUTH]: (state =initialState, action) => {
-    console.log('in planAuth', action)
+    //console.log('in planAuth', action)
     const newState = Object.assign({}, state)
     if(action.authedPlans) {
       newState.authedPlans = action.authedPlans
@@ -444,15 +445,15 @@ const ACTION_HANDLERS = {
       newState.activePlan = action.planId
       localStorage.setItem('planId', newState.activePlan)
     }
-    console.log('new state after plans_auth', newState, action)
+    //console.log('new state after plans_auth', newState, action)
     return newState
   },
 
    [SET_USER_AUTH]: (state =initialState, action) => {
-    console.log('in userAuth', action)
+    //console.log('in userAuth', action)
     const newState = Object.assign({}, state)
     if(action.authLevel !== null) {
-        console.log('in userAuth setting authLevel', action.authLevel)
+        //console.log('in userAuth setting authLevel', action.authLevel)
         newState.authLevel = action.authLevel
         localStorage.setItem('authLevel', action.authLevel)
     }
@@ -472,7 +473,7 @@ const ACTION_HANDLERS = {
   },
 
     [SET_COUSUBID]: (state =initialState, action) => {
-      console.log('cousubId setting', action.id)
+      //console.log('cousubId setting', action.id)
     const newState = Object.assign({}, state)
     if(action.id) {
       newState.activeCousubid = action.id

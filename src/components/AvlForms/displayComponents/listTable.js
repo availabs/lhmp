@@ -34,21 +34,24 @@ class AvlFormsListTable extends React.Component{
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
-                let length = response.json.forms[formType].byPlanId[this.props.activePlan].length
-                this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
-                    .then(response =>{
-                        let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
-                        Object.keys(graph).filter(d => d !== '$__path').forEach(id =>{
-                            if(graph[id]){
-                                ids.push(graph[id].id)
-                            }
+                let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
+                if(length > 0){
+                    this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
+                        .then(response =>{
+                            let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
+                            Object.keys(graph).filter(d => d !== '$__path').forEach(id =>{
+                                if(graph[id]){
+                                    ids.push(graph[id].id)
+                                }
 
+                            })
+                            this.setState({
+                                form_ids : ids
+                            })
+                            return response
                         })
-                        this.setState({
-                            form_ids : ids
-                        })
-                        return response
-                    })
+                }
+
             })
     }
 
@@ -156,16 +159,22 @@ class AvlFormsListTable extends React.Component{
                 formAttributes = this.props.config[0].list_attributes
             }
         }
-
+        let sub_type = ''
+        Object.keys(this.props.config[0].attributes).forEach(d =>{
+            if(this.props.config[0].attributes[d].sub_type !== 'project'){
+                sub_type = this.props.config[0].attributes[d].sub_type
+            }
+        })
+        console.log('listViewData',listViewData)
         return (
                 <div className='container'>
                     <Element>
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
-                        {formType[0] === 'actions'?
+                        {formType[0] === 'actions' || formType[0] === 'participation'?
                             <Link
                                 className="btn btn-sm btn-primary"
-                                to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
+                                to={ `/${this.props.config.map(d=> d.type)}/${sub_type}/new` } >
                                 Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             </Link>
                             :
@@ -185,7 +194,16 @@ class AvlFormsListTable extends React.Component{
                                         Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
                                     </Link>
                                 )
-                            }else{
+                            }else if(d.type === 'participation'){
+                                return(
+                                    <Link
+                                        className="btn btn-sm btn-primary"
+                                        to={ `/${this.props.config.map(d=> d.type)}/meeting/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Meeting
+                                    </Link>
+                                )
+                            }
+                            else{
                                 return (
                                     <button
                                         disabled
@@ -235,7 +253,7 @@ class AvlFormsListTable extends React.Component{
                                                     )
                                                 }):null}
                                                 <td>
-                                                    {formType[0] === 'actions' ?
+                                                    {formType[0] === 'actions' || formType[0] === 'participation'?
                                                         <Link className="btn btn-sm btn-outline-primary"
                                                               to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
                                                             Edit
@@ -249,7 +267,7 @@ class AvlFormsListTable extends React.Component{
 
                                                 </td>
                                                 <td>
-                                                    {formType[0] === 'actions' ?
+                                                    {formType[0] === 'actions' || formType[0] === 'participation' ?
 
                                                         <Link className="btn btn-sm btn-outline-primary"
                                                               to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
@@ -281,7 +299,7 @@ class AvlFormsListTable extends React.Component{
                             </div>
                             </div>
                             :
-                                <div className="element-box">Loading...</div>
+                                <div className="element-box">No data found...</div>
                         }
                     </Element>
                 </div>
@@ -308,22 +326,6 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsListTable))
 
-/*
-if(combine_list_attributes.length > 0 && combine_list_attributes[0].attributes ){
-                            /*
-                            let value = '';
-                            combine_list_attributes[0].attributes.forEach(attribute =>{
-                                Object.keys(geo).forEach(g =>{
-                                    if(g === graph[item].value.attributes[attribute]){
-                                        data['id'] = item
-                                        data[combine_list_attributes[0].result] = geo[g].name
-                                    }
-                                })
-                                console.log('checking',item,graph[item].value.attributes[attribute])
-                            })
-                            /*
-                            data['id'] = item
-                            data[combine_list_attributes[0].result] = graph[item].value.attributes[combine_list_attributes] || ' '
-                             */
+
 
 

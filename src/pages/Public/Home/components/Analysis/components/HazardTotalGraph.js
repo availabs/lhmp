@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import {fnum} from "utils/sheldusUtils"
 import COLOR_RANGES from "constants/color-ranges"
+import hazardcolors from "../../../../../../constants/hazardColors";
 
 
 // <i class="os-icon os-icon-phone-21"></i>
@@ -13,24 +14,24 @@ import COLOR_RANGES from "constants/color-ranges"
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
 const hazardMeta = {
-    'wind': {color: getColor('Greys'), icon: 'wind'},
-    'wildfire': {color: getColor('Blues'), icon: 'forest-fire'},
-    'tsunami': {color: getColor('Blues'), icon: 'tsunami'},
-    'tornado': {color: getColor('Oranges'), icon: 'tornado'},
-    'riverine': {color: getColor('PuBuGn'), icon: 'flood'},
-    'lightning': {color: getColor('YlOrRd'), icon: 'storm'},
-    'landslide': {color: getColor('BrBG'), icon: 'landslide'},
-    'icestorm': {color: getColor('BuPu'), icon: 'snow'},
-    'hurricane': {color: getColor('Purples'), icon: 'flood-1'},
-    'heatwave': {color: getColor('YlOrBr'), icon: 'drought'},
-    'hail': {color: getColor('Blues'), icon: 'hail'},
-    'earthquake': {color: getColor('Blues'), icon: 'earthquake'},
-    'drought': {color: getColor('Blues'), icon: 'drought'},
-    'avalanche': {color: getColor('Blues'), icon: 'avalanche'},
-    'coldwave': {color: getColor('Blues'), icon: 'snow'},
-    'winterweat': {color: getColor('Blues'), icon: 'snow'},
-    'volcano': {color: getColor('Blues'), icon: 'flood'},
-    'coastal': {color: getColor('Blues'), icon: 'flood'},
+    'wind': {color: hazardcolors['wind'], icon: 'wind'},
+    'wildfire': {color: hazardcolors['wildfire'], icon: 'forest-fire'},
+    'tsunami': {color: hazardcolors['tsunami'], icon: 'tsunami'},
+    'tornado': {color: hazardcolors['tornado'], icon: 'tornado'},
+    'riverine': {color: hazardcolors['riverine'], icon: 'flood'},
+    'lightning': {color: hazardcolors['lightning'], icon: 'storm'},
+    'landslide': {color: hazardcolors['landslide'], icon: 'landslide'},
+    'icestorm': {color: hazardcolors['icestorm'], icon: 'snow'},
+    'hurricane': {color: hazardcolors['hurricane'], icon: 'flood-1'},
+    'heatwave': {color: hazardcolors['heatwave'], icon: 'drought'},
+    'hail': {color: hazardcolors['hail'], icon: 'hail'},
+    'earthquake': {color: hazardcolors['earthquake'], icon: 'earthquake'},
+    'drought': {color: hazardcolors['drought'], icon: 'drought'},
+    'avalanche': {color: hazardcolors['avalanche'], icon: 'avalanche'},
+    'coldwave': {color: hazardcolors['coldwave'], icon: 'snow'},
+    'winterweat': {color: hazardcolors['winterweat'], icon: 'snow'},
+    'volcano': {color: hazardcolors['volcano'], icon: 'flood'},
+    'coastal': {color: hazardcolors['coastal'], icon: 'flood'},
 };
 
 
@@ -165,7 +166,7 @@ class HazardList extends React.Component {
                     const name = this.props.riskIndex.meta[hazard].name;
                     return (
                         <GraphListItem onClick={this.props.setHazard.bind(this, hazard)}>
-                            <GraphIcon color={hazardMeta[hazard].color[3]}
+                            <GraphIcon color={hazardMeta[hazard].color}
                                        className={`fi fa-${hazardMeta[hazard].icon}`}/>
                             <BarContainer>
                                 <GraphLabel>
@@ -179,7 +180,7 @@ class HazardList extends React.Component {
                                 <Bar>
                                     <BarValue
                                         width={((this.props.severeWeather[this.props.geoid][hazard].allTime.annualized_damage / totalLoss) * 100)}
-                                        color={hazardMeta[hazard].color[3]}
+                                        color={hazardMeta[hazard].color}
                                     />
                                 </Bar>
                             </BarContainer>

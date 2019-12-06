@@ -78,7 +78,6 @@ class AvlFormsNewDataWizard extends React.Component{
 
     componentDidMount(){
         if(this.props.id && this.props.id[0]){
-            console.log(' in componenet did mount',this.props)
             let attributes = this.props.config.map(d => Object.keys(d.attributes));
             return this.props.falcor.get(['forms','byId',this.props.id])
                 .then(response =>{
@@ -86,7 +85,13 @@ class AvlFormsNewDataWizard extends React.Component{
                     let tmp_state = {}
                     if(graph){
                         attributes[0].forEach(attribute =>{
-                            tmp_state[attribute] = graph.attributes[attribute]
+                            if(attribute.includes('date')){
+                                let d = graph.attributes[attribute].slice(0, 10).split('-');
+                                let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                                tmp_state[attribute] = date
+                            }else{
+                                tmp_state[attribute] = graph.attributes[attribute]
+                            }
                         });
                         this.setState(
                             tmp_state
