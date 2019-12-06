@@ -42,6 +42,7 @@ class planningDocumentsViewer extends Component {
 
     fetchFalcorDeps() {
         let length = 0;
+        if (!this.props.activePlan) return Promise.resolve();
         return this.props.falcor.get(['capabilitiesLHMP',[this.props.activePlan],'length'])
             .then(response => {
                 //console.log('first response',response)

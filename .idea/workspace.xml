@@ -3,9 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/light-admin/menu/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,14 +154,8 @@
       <workItem from="1575244543491" duration="33000" />
       <workItem from="1575296627916" duration="137000" />
       <workItem from="1575300508660" duration="105000" />
-      <workItem from="1575389960697" duration="15095000" />
-    </task>
-    <task id="LOCAL-00028" summary="Building By Owner Type Pie Chart and Table">
-      <created>1563290396727</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1563290396727</updated>
+      <workItem from="1575389960697" duration="15411000" />
+      <workItem from="1575648505322" duration="9890000" />
     </task>
     <task id="LOCAL-00029" summary="updates">
       <created>1563376115866</created>
@@ -495,7 +493,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574282754233</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="Assets comp on homepage with new route">
+      <created>1575570479851</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1575570479852</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -524,7 +529,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="stickyroll in admin-about: nav done, contentEditor bug fixed" />
     <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
     <MESSAGE value="stickyroll on all pages" />
     <MESSAGE value="roles table update: view cols and scroll on sticky roll" />
@@ -549,14 +553,15 @@
     <MESSAGE value="mapactions visibility as prop" />
     <MESSAGE value="homepage" />
     <MESSAGE value="signup, reset password host : &lt;subdomain&gt;.mitigationny.org" />
-    <option name="LAST_COMMIT_MESSAGE" value="signup, reset password host : &lt;subdomain&gt;.mitigationny.org" />
+    <MESSAGE value="Assets comp on homepage with new route" />
+    <option name="LAST_COMMIT_MESSAGE" value="Assets comp on homepage with new route" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2" timestamp="1575570309161">
+    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2" timestamp="1575570479671">
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
-    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2/0.34.1920.1046@0.34.1920.1046" timestamp="1575570309161" />
+    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2/0.34.1920.1046@0.34.1920.1046" timestamp="1575570479671" />
     <state x="100" y="132" width="1720" height="848" key="DiffContextDialog" timestamp="1575570308503">
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
@@ -565,22 +570,26 @@
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
     <state x="621" y="227" width="675" height="655" key="StructurePopup/0.34.1920.1046@0.34.1920.1046" timestamp="1575389968432" />
-    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2" timestamp="1575475032363">
+    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2" timestamp="1575570502978">
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
-    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2/0.34.1920.1046@0.34.1920.1046" timestamp="1575475032363" />
+    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2/0.34.1920.1046@0.34.1920.1046" timestamp="1575570502978" />
     <state x="778" y="231" width="353" height="650" key="VcsDiffUtil.ChangesDialog" timestamp="1575472549707">
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
     <state x="778" y="231" width="353" height="650" key="VcsDiffUtil.ChangesDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575472549707" />
-    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog" timestamp="1575474508577">
+    <state x="100" y="132" width="1720" height="848" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1575666037384">
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
-    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575474508577" />
-    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup" timestamp="1575390126191">
+    <state x="100" y="132" width="1720" height="848" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575666037384" />
+    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog" timestamp="1575570491686">
       <screen x="0" y="34" width="1920" height="1046" />
     </state>
-    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup/0.34.1920.1046@0.34.1920.1046" timestamp="1575390126191" />
+    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575570491686" />
+    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup" timestamp="1575664651562">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup/0.34.1920.1046@0.34.1920.1046" timestamp="1575664651562" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

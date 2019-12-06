@@ -35,6 +35,7 @@ class capabilitiesTableHMPViewer extends Component {
 
     fetchFalcorDeps() {
         let length = 0;
+        if (!this.props.activePlan) return Promise.resolve();
         return this.props.falcor.get(['capabilitiesLHMP',[this.props.activePlan],'length'])
             .then(response => {
                 //console.log('first response',response)
@@ -43,8 +44,11 @@ class capabilitiesTableHMPViewer extends Component {
                 });
                 //console.log('length',length)
                 return length
-            }).then(length => this.props.falcor.get(
-                ['capabilitiesLHMP',[this.props.activePlan],'byIndex',{from:0,to:length-1},ATTRIBUTES]))
+            }).then(length => {
+                if (length === 0) return Promise.resolve();
+                return this.props.falcor.get(
+                    ['capabilitiesLHMP',[this.props.activePlan],'byIndex',{from:0,to:length-1},ATTRIBUTES])
+            })
             .then(response => {
                 return response
             })

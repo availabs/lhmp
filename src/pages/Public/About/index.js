@@ -58,11 +58,9 @@ class About extends React.Component {
                 <Element>
                     <h4 className="element-header">Planning Process
                     {
-                        /*
-                        <span style={{float:'right'}}>
+                        /*<span style={{float:'right'}}>
                             {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
-                        </span>
-                        */
+                        </span>*/
                     }
                     </h4>
                     <div className="row">

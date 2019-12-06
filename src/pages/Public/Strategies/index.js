@@ -56,9 +56,9 @@ class Strategies extends React.Component {
             <div className='container'>
                 <Element>
                     <h4 className="element-header">Strategies page
-                        <span style={{float:'right'}}>
+                      {/*  <span style={{float:'right'}}>
                             {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
-                        </span>
+                        </span>*/}
                     </h4>
                     <div className="row">
                         <div className="col-12">
