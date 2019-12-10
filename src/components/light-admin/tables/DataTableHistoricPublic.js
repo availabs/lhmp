@@ -40,7 +40,7 @@ const Row = args => {
                 return (
                     (col in links || col === urlColumn) ?
                         <td key={ii}>
-                            <Link to={`/historic/${row['geoid']}`}>{row[col]}</Link>
+                            <Link to={`/hazards/${row['geoid']}`}>{row[col]}</Link>
                         </td>
                         : <td key={ii} colSpan={Math.floor(numColumns / columns.length)}>{row[col]}</td>
                 )

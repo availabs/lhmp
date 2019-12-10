@@ -5,18 +5,32 @@ import { createMatchSelector } from 'react-router-redux'
 import Element from 'components/light-admin/containers/Element'
 import {authGeoid} from "store/modules/user";
 import GeographyScoreBarChart from "pages/auth/Historic/components/GeographyScoreBarChart";
-import CousubTotalLossTable from "pages/auth/Historic/components/CousubTotalLossTable";
+import CousubTotalLossTable from "./components/CousubTotalLossTable";
 import MunicipalityStats from "pages/auth/Historic/components/MunicipalityStats";
-import CountyHeroStats from "pages/auth/Historic/components/CountyHeroStats";
+import CountyHeroStats from "./components/CountyHeroStats";
 import HMGPTable from "pages/auth/Historic/components/HMGPTable";
-import HazardScoreTable from "pages/auth/Historic/components/HazardScoreTable";
+import HazardEvents from '../Hazards/components/hazardEvents/'
+import HazardScoreTable from "./components/HazardScoreTable";
 import FemaDisasterDeclarationsTable from "pages/auth/Historic/components/FemaDisasterDeclarationsTable";
-import HazardEventsTable from "pages/auth/Historic/components/HazardEventsTable";
+import HazardEventsTable from "./components/HazardEventsTable";
 import {EARLIEST_YEAR, LATEST_YEAR} from "pages/auth/Historic/components/yearsOfSevereWeatherData";
 import Content from "components/cms/Content"
 import {getColorScale} from 'utils/sheldusUtils'
 import {falcorChunkerNice} from "store/falcorGraph"
-
+import NumberOfHazardsMonthStackedBarGraph from "./components/NumberOfHazardsMonthStackedBarGraph";
+import ElementBox from "../../../components/light-admin/containers/ElementBox";
+import styled from "styled-components";
+const STICKYDROPDOWN = styled.div`
+                       select {
+                       height: 5vh;
+                       width: 250px;
+                       float: right;
+                       z-index:100;
+                       position:fixed;
+                       background: rgba(0,0,0,0.3);
+                       }
+         
+                        `;
 class Hazards extends React.Component {
 
     constructor(props) {
@@ -85,12 +99,36 @@ class Hazards extends React.Component {
             return "Loading...";
         }
     }
-    
+
+    stickyHazards(){
+        return this.state.hazards && this.state.hazards.length > 0 ?
+            (
+                <STICKYDROPDOWN>
+                    <select
+                        style={{right:10}}
+                        className="ae-side-menu"
+                        id='hazard'
+                        data-error="Please select county"
+                        onChange={(e) => {
+                            console.log('setting value to ', e.target.value)
+                            this.setState({hazard: e.target.value})
+                        }}
+                        value={this.state.hazard}
+                    >
+                        <option key={0} value={'none'}>--Select Hazard--</option>
+                        {this.state.hazards.map((h,h_i) => <option key={h_i+1} value={h}>{h}</option>)}
+                    </select>
+                </STICKYDROPDOWN>
+            ) : null
+    }
     render() {
         return (
             this.props.geoid ? (
                 <div className='container'>
                     <Element>
+                        {
+                           this.stickyHazards()
+                        }
                         <h4 className="element-header">{this.getGeoidName()}</h4>
                         <div className="row">
                             <div className="col-8">
@@ -208,6 +246,42 @@ class Hazards extends React.Component {
                                 }
                             </div>
                         </div>
+
+                        <div className='row'>
+                            <div className='col-12'>
+                                <div>
+                                    <h5>Hazard Events</h5>
+                                    <strong>1996-2017</strong>
+                                    <div> Total number of events and Damage caused.
+                                    </div>
+                                    <HazardEvents />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className='row'>
+                            <div className='col-12'>
+                                <div>
+                                    <h5>Number of Hazards per Month</h5>
+                                    <strong>1996-2017</strong>
+                                    <ElementBox>
+                                        <NumberOfHazardsMonthStackedBarGraph
+                                            showYlabel={false}
+                                            showXlabel={false}
+                                            lossType={'num_events'}
+                                            geoid={this.props.geoid}
+                                            geoLevel={this.setGeoLevel(this.props.geoid.length)}
+                                            dataType='severeWeather'
+                                            colorScale={getColorScale([1, 2])}
+                                            hazards={['hurricane', 'hail']}
+                                            //hazard = {'hurricane'}
+                                        />
+                                    </ElementBox>
+                                </div>
+                            </div>
+                        </div>
+
                     </Element>
                 </div>
             ) : ( null )
@@ -237,6 +311,24 @@ export default [{
     mainNav: true,
     breadcrumbs: [
         { name: 'Hazards', path: '/hazards' }],
+    menuSettings: {
+        image: 'none',
+        scheme: 'color-scheme-light',
+        position: 'menu-position-top',
+        layout: 'menu-layout-full',
+        style: 'color-style-default'
+    },
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Hazards))
+},{
+    icon: 'os-icon-pencil-2',
+    path: '/hazards/:geoid',
+    exact: true,
+    name: 'Hazards',
+    auth: false,
+    mainNav: false,
+    breadcrumbs: [
+        { name: 'Hazards', path: '/hazards' },
+        { name: 'geoid', path: '/hazards/' }],
     menuSettings: {
         image: 'none',
         scheme: 'color-scheme-light',
