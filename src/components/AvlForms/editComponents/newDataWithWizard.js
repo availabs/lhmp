@@ -86,7 +86,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     if(graph){
                         attributes[0].forEach(attribute =>{
                             if(attribute.includes('date')){
-                                let d = graph.attributes[attribute].slice(0, 10).split('-');
+                                let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
                                 tmp_state[attribute] = date
                             }else{
@@ -274,7 +274,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             }
 
                         }
-                        console.log('item.attributes[attribute]',item.attributes[attribute])
+
                         if(item.attributes[attribute].depend_on === undefined){
                             data.push({
                                 section_id : item.attributes[attribute].section,
@@ -303,7 +303,7 @@ class AvlFormsNewDataWizard extends React.Component{
                                 meta : filter_data ? filter_data : [],
                             })
                         }
-                        console.log('data',data)
+
                     }
                     else if(item.attributes[attribute].edit_type === 'radio') {
                         data.push({
@@ -398,7 +398,7 @@ class AvlFormsNewDataWizard extends React.Component{
             });
 
         }
-        console.log('data',data)
+
         return data
 
         }
