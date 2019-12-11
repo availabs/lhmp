@@ -10,6 +10,7 @@ import TractsLayer from './layers/TractsLayer'
 import NumberOfHazardsStackedBarGraph from "./components/NumberOfHazardsStackedBarGraph";
 import {falcorGraph} from "../../../../../store/falcorGraph";
 import GeographyScoreBarChart from "../../../../auth/Historic/components/GeographyScoreBarChart";
+import hazardcolors from "constants/hazardColors";
 
 let backgroundCss = {
     //background: '#fafafa',
@@ -86,6 +87,7 @@ class HazardLoss extends Component {
                                     colorScale = {getColorScale([1, 2])}
                                     hazards = {['hurricane', 'hail']}
                                     //hazard = {'hurricane'}
+                                    hazardcolors={hazardcolors}
                                 />
                             </div>
                         </div>

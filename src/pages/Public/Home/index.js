@@ -8,7 +8,6 @@ import PlanningTeam from './components/planningTeam'
 import Introduction from './components/introduction'
 import LocalContext from './components/localContext/'
 import HazardLoss from './components/hazardLoss/'
-import HazardEvents from './components/hazardEvents/'
 import NFIP from './components/NFIP'
 import Assets from './components/Assets/'
 
@@ -26,11 +25,11 @@ class Public extends React.Component {
             <div>
                 <Introduction/>
                 
-                    <LocalContext/> 
+                    <LocalContext/>
                     <PlanningTeam/>
                     <Analysis/>
-                    <HazardEvents/>
                     <NFIP/>
+                    <HazardLoss/>
                     
                     
             </div>

@@ -105,7 +105,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                     keys={keys}
                     indexBy="year"
                     colorBy={'id'}
-                    colors={(d) => this.props.hazardcolors[d.id]}
+                    colors={(d) => hazardcolors[d.id]}
                     enableLabel={false}
                     tooltipFormat={this.props.format}
                     margin={{
@@ -140,7 +140,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                                     display: "inline-block",
                                     width: "15px",
                                     height: "15px",
-                                    backgroundColor: this.props.hazardcolors[d.id]
+                                    backgroundColor: hazardcolors[d.id]
                                 }}/>
                                 <span style={{paddingLeft: "5px"}}>{this.getHazardName(d.id)}</span>
                                 <span style={{paddingLeft: "5px"}}>{format(d.value)}</span>
@@ -166,8 +166,8 @@ NumberOfHazardsStackedBarGraph.defaultProps = {
     showXlabel: true,
     geoid: '36',
     geoLevel: 'state',
-    dataType: "severeWeather",
-    hazardcolors: hazardcolors
+    hazardcolors: hazardcolors,
+    dataType: "severeWeather"
 };
 
 const mapStateToProps = state => {

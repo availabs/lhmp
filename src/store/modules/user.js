@@ -60,16 +60,18 @@ function setUserAuthLevel(authLevel){
   }
 }
 
-function setPlanGeoid(geoid){
+function setPlanGeoid(geoid, planid){
     /*
     console.log('setPlanGeoid', {
         type: SET_PLANS_GEOID,
-        geoid
+        geoid,
+        planid
     })
     */
     return {
     type: SET_PLANS_GEOID,
-    geoid
+    geoid,
+        planid
   }
 }
 
@@ -237,7 +239,7 @@ export const authGeoid = (user) => {
                         let geoid = geo_response.json.plans.county.byId[planId]['fips'];
                         //console.log('geoid set to', geoid)
                         // console.log('geoid set to', geoid)
-                        dispatch(setPlanGeoid(geoid))
+                        dispatch(setPlanGeoid(geoid, planId))
                         return geo_response
                     })
             })
@@ -473,6 +475,13 @@ const ACTION_HANDLERS = {
         newState.activeCousubid = action.geoid
         localStorage.setItem('cousubId', newState.geoid);
     }
+      if( action.planid
+          //Object.values(newState.authedPlans).includes(action.planId)
+      ) {
+          //console.log('new plan id: set activeGroup here', action)
+          newState.activePlan = action.planid
+          localStorage.setItem('planId', newState.activePlan)
+      }
     return newState
   },
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import ElementBox from '../containers/ElementBox'
-import DataTable from './DataTableHistoric'
+import DataTable from './DataTableHistoricPublic'
 import Pagination from './Pagination'
 import * as d3format from 'd3-format'
 
