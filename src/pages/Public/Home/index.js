@@ -25,18 +25,23 @@ class Public extends React.Component {
         return (
             <div>
                 <Introduction/>
-                
-                    <LocalContext/> 
-                    <PlanningTeam/>
-                    <Analysis/>
-                    <HazardEvents/>
-                    <NFIP/>
-                    
-                    
+                <LocalContext/>
+                <PlanningTeam/>
+                <Analysis/>
+                <HazardEvents/>
+                <NFIP/>
+                <Assets />
             </div>
         )
     }
 }
+
+    //  
+    // 
+    // 
+    // 
+                    
+               
 
 const mapStateToProps = (state, ownProps) => {
     return {

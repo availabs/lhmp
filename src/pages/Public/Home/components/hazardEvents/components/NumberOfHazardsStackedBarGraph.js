@@ -93,12 +93,12 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
             format = d3format.format(this.props.format);
 
         if (!data.length && this.props.geoid.length === 5) {
-            return <ElementBox>Loading...</ElementBox>;
+            return <div>Loading...</div>;
         } else if (this.props.geoid.length > 5) {
             return null;
         }
         return (
-            <div style={{height: `${this.props.height}px`, background: '#fff'}}>
+            <div style={{height: `${this.props.height}px`,}}>
                 <ResponsiveBar
                     data={data}
                     keys={keys}

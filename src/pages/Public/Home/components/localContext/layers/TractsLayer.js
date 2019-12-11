@@ -81,7 +81,7 @@ class TractLayer extends MapLayer {
                     "source": "mask",
                     "type": "fill",
                     "paint": {
-                        "fill-color": "white",
+                        "fill-color": this.backgroundColor,
                         'fill-opacity': 0.999
                     }
                 });
@@ -239,6 +239,7 @@ const tractLayer = new TractLayer("Local Context Layer", {
             value: "hurricane"
         }
     },
+   
     onHover: {
         layers: ['tracts-layer-line'],
         dataFunc: (feature) => {

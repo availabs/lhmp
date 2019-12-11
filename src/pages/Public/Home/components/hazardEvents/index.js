@@ -6,6 +6,15 @@ import {getColorScale} from 'utils/sheldusUtils'
 import styled from "styled-components";
 import TractsLayer from './layers/TractsLayer'
 import NumberOfHazardsStackedBarGraph from "./components/NumberOfHazardsStackedBarGraph";
+import get from "lodash.get";
+
+import {
+    VerticalAlign,
+    ContentHeader,
+    PageContainer,
+    HeaderContainer,
+    backgroundColor
+} from 'pages/Public/theme/components'
 
 let backgroundCss = {
     //background: '#fafafa',
@@ -17,33 +26,7 @@ let backgroundCss = {
     //marginTop: '50vh',
     zIndex: '8'
 };
-const FLEXBOX = styled.div`
-    display: flex;
-    justify-content: space-evenly;
-    width: 25vw;
-    height: 200px;
-`;
-const BOX = styled.div`
-     color: rgb(239, 239, 239); 
-     background: rgba(0, 0, 0, 0.7); 
-     border-radius: 4px;
-     overflow: auto;
-     height: fit-content;
-     margin-left: 10px;
-     margin-right: 10px;
-     padding: 5px;
-     ${props => props.theme.modalScrollBar}
-`;
 
-const LABEL = styled.div`
-    color: rgb(239, 239, 239);
-    display: block;
-    font-size: 1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 1px;
-`;
 
 class HazardLoss extends Component {
     constructor(props) {
@@ -69,11 +52,19 @@ class HazardLoss extends Component {
 
     render() {
         return (
-            <div style={backgroundCss}>
-                <div className='col-sm-6' style={{float: 'left'}}>
-                    <div className="element-wrapper">
-                        <div className="element-box">
-                            <div style={{height: '100vh', width: '100%'}}>
+            <PageContainer >
+                <HeaderContainer>
+                    <div className='row'>
+                        <div className='col-12' style={{textAlign:'center'}}>
+                            <ContentHeader>
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Events
+                            </ContentHeader>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-sm-6'>
+                            <VerticalAlign>
+                                <h5> Hazard Events <span style={{fontSize: '14px'}}> Number of Events by Hazard Type (1996-2017)</span></h5>
                                 <NumberOfHazardsStackedBarGraph
                                     showYlabel={false}
                                     showXlabel={false}
@@ -85,41 +76,39 @@ class HazardLoss extends Component {
                                     hazards={['hurricane', 'hail']}
                                     //hazard = {'hurricane'}
                                 />
-                            </div>
+                            </VerticalAlign>
                         </div>
-                    </div>
-                </div>
-                <div className='col-sm-6' style={{float: 'right'}}>
-                    <div className="element-wrapper">
-                        <div className="element-box">
-                            <div style={{height: '100vh', width: '100%'}}>
-                                <AvlMap
-                                    sidebar={false}
-                                    mapactions={false}
-                                    scrollZoom={false}
-                                    zoom={6}
-                                    update={[this.state.update]}
-                                    style='Clear'
-                                    styles={[{
-                                        name: "Clear",
-                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
-                                    }]}
-                                    fitBounds={[
-                                        [
-                                            -79.8046875,
-                                            40.538851525354666
-                                        ],
-                                        [
-                                            -71.7626953125,
-                                            45.042478050891546
-                                        ]]}
-                                    layers={[TractsLayer]}
-                                />
-                            </div>
+                        <div className='col-sm-6' >
+                            
+                                    <div style={{height: '80vh', width: '100%'}}>
+                                        <AvlMap
+                                            sidebar={false}
+                                            mapactions={false}
+                                            scrollZoom={false}
+                                            zoom={6}
+                                            update={[this.state.update]}
+                                            style='Clear'
+                                            styles={[{
+                                                name: "Clear",
+                                                style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
+                                            }]}
+                                            fitBounds={[
+                                                [
+                                                    -79.8046875,
+                                                    40.538851525354666
+                                                ],
+                                                [
+                                                    -71.7626953125,
+                                                    45.042478050891546
+                                                ]]}
+                                            layers={[TractsLayer]}
+                                        />
+                                    </div>
                         </div>
+                    
                     </div>
-                </div>
-            </div>
+                </HeaderContainer>
+            </PageContainer>
         )
     }
 }
