@@ -1,6 +1,5 @@
 let config = [
     {
-        // TODO check the list view if no data
         type:'roles',
         list_attributes : ['contact_name','contact_county','contact_municipality','contact_agency','contact_title_role','contact_department'],
         combine_list_attributes:{attributes:['contact_county','contact_municipality'],result:'Jurisidiction'},
