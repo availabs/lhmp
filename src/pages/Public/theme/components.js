@@ -1,11 +1,26 @@
 import styled from "styled-components"
 
-export const backgroundColor =   '#d1dbe9' // '#b3c3db' //'#6787b7';
-export const mainFontColor  = '#3E4B5B'
-export const mainFontSize = '1.4em';
-export const mainFontWeight = '400';
-export const mainFontLineHeight = '2'
-export const mainFontFamily = `'Roboto', sans-serif`//'"Avenir Next W01", "Proxima Nova W01", "Rubik", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+
+let themes = [
+    {
+        backgroundColor:   '#d1dbe9', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`
+    }
+]
+
+let selectedTheme = 0
+
+
+export const backgroundColor = themes[selectedTheme].backgroundColor 
+export const mainFontColor  = themes[selectedTheme].mainFontColor  
+export const mainFontSize = themes[selectedTheme].mainFontSize 
+export const mainFontWeight = themes[selectedTheme].mainFontWeight 
+export const mainFontLineHeight = themes[selectedTheme].mainFontLineHeight 
+export const mainFontFamily = themes[selectedTheme].mainFontFamily 
 
 export const ImageContainer = styled.div`
     background: #fafafa;
@@ -24,7 +39,7 @@ export const ImageContainer = styled.div`
 `
 
 export const StatementText = styled.div`
-	font-size: 3em;
+	font-size: 3rem;
 	font-weight: 500;
 	padding: 120px;
 `
@@ -134,4 +149,61 @@ export const FeatureBox = styled.div`
     padding-bottom: 20px;
     background-color: #f9f9f9;
     transition: all 0.2s ease;
+`
+
+export const Feature = styled.div`
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding-bottom: 20px;
+    background-color: #f9f9f9;
+    transition: all 0.2s ease;
+    margin-top: ${props => props.highlight ? '-20px' :  '0px'}
+    margin-bottom:  ${props => props.highlight ? '-20px' :  '0px'}
+    position:  ${props => props.highlight ? 'relative' :  ''}
+    z-index: 2;
+    box-shadow:  ${props => props.highlight ? '0 2px 30px 0 rgba(54, 88, 206, 0.2);' :  'none'}
+`
+
+export const FeatureDescription = styled.div`
+    text-align: left;
+    padding: 30px 15%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+`
+export const FeatureName = styled.div`
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    color: ${mainFontColor};
+    font-weight: 500;
+    padding-bottom: 40px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`
+export const FeatureImage = styled.div`
+    
+    img {
+        width: 80px;
+        vertical-align: middle;
+        border-style: none;
+    }
+`
+export const FeatureHeader = styled.div`    
+    background-color: ${backgroundColor};
+    padding-top: 40px;
+    
+    
+`
+export const TwoPaneContainer = styled.div`
+    display: flex;
+`
+
+export const VerticalAlign = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+
 `

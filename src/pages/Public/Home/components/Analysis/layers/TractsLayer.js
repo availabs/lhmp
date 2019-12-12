@@ -6,8 +6,9 @@ import get from 'lodash.get'
 import {falcorGraph} from "store/falcorGraph"
 
 import COLOR_RANGES from "constants/color-ranges"
+import { fnum } from "utils/sheldusUtils"
 import _ from "lodash";
-import hazardcolors from "../../../../../../constants/hazardColors";
+import hazardcolors from "constants/hazardColors";
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -75,7 +76,7 @@ class TractLayer extends MapLayer {
                         .slice(4,-1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "),initalBbox[1].split(" ")] : null;
                 map.resize();
-                map.fitBounds(bbox);
+                map.fitBounds(bbox, {maxDuration: 0});
 
                 // get tracts
                 let tracts = get(graph,
@@ -169,17 +170,30 @@ class TractLayer extends MapLayer {
             .filter(f => f.length === 11)
             .map(f => keyDomain[f]));
         let domain = [0,1,2,3,4].map(i => ((maxDamage)*(i/4)));
-
+        domain = [10000,50000,100000,500000,1000000]
+        domain = [10000,100000,1e6,1e7,1e8]
         // console.log('keyDomain', keyDomain);
         let range = hazardcolors[this.filters.hazard.value + '_range'];
         // console.log('range',maxDamage, range, domain);
+
 
         let colorScale = d3scale.scaleThreshold()
             .domain(domain)
             .range(range);
 
+        let testScale = d3scale.scaleThreshold()
+            .domain(domain)
+            .range([1,2,3,4,5]);
+
+        this.legend.domain = domain;
+        this.legend.range = range;
+        this.legend.title = `${this.filters.hazard.value} Loss`.toUpperCase()
+        this.legend.active = true;
         let mapColors = Object.keys(keyDomain).reduce((out, curr) => {
-            if (keyDomain[curr]) out[curr] = colorScale(keyDomain[curr]);
+            if (keyDomain[curr]) {
+                console.log('testing', curr, keyDomain[curr],colorScale(keyDomain[curr]) )
+                out[curr] = colorScale(keyDomain[curr]);
+            }
             return out;
         }, {});
         // console.log('map colors', mapColors);
@@ -260,6 +274,20 @@ const tractLayer = new TractLayer("Analysis Layer", {
             onChange: (map, layer, value) => this.fetchData()
         }
     },
+     legend: {
+        active: false,
+
+        type: "threshold",
+
+        types: ["threshold", "linear", "quantile", "quantize"],
+
+        domain: [1.1, 1.25, 1.5, 1.75, 2],
+        range: [],
+
+        title: ``,
+        format: fnum,
+        vertical: false
+    },
     popover: {
         layers: ['tracts-layer-line'],
         dataFunc: feature =>
@@ -267,10 +295,11 @@ const tractLayer = new TractLayer("Analysis Layer", {
                 return ["tract",
                     ["Name", get(falcorGraph.getCache(), `geo.${feature.properties.geoid}.name`, 0)],
                     ["Event", get(tractLayer, `filters.hazard.value`, 0)],
-                    ["Damage", get(tractLayer, `data.${feature.properties.geoid}`, 0)],
+                    ["Damage", fnum(get(tractLayer, `data.${feature.properties.geoid}`, 0))],
                 ]
             }
     }
 });
 
 export default tractLayer
+

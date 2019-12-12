@@ -97,7 +97,7 @@ class About extends React.Component {
                         <div className="row">
                             <div className="col-12">
                                 <StatementText>
-                                    We are finding ways to reduce our risk by investing in mitigatoin.
+                                    We are finding ways to reduce our risk by investing in mitigation.
                                 </StatementText>
                             </div>
                         </div>

@@ -1,51 +1,26 @@
 import React, {Component} from 'react';
-import AvlMap from 'components/AvlMap'
-import Element from 'components/light-admin/containers/Element'
 import { reduxFalcor } from 'utils/redux-falcor'
+import {falcorGraph} from "store/falcorGraph";
+
 import get from "lodash.get";
 import {connect} from "react-redux";
 import styled from "styled-components";
+
+import AvlMap from 'components/AvlMap'
+import { fnum } from "utils/sheldusUtils"
 import NfipLossesTable from "./components/NfipLossesTable";
-import {falcorGraph} from "../../../../../store/falcorGraph";
 import NfipLossesLayer from './components/NfipLossesLayer';
 
-let backgroundCss = {
-    //background: '#fafafa',
-    backgroundSize: '100vw 100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems:'center',
-    position: 'relative',
-    //marginTop: '50vh',
-    zIndex: '8'
-};
-const FLEXBOX = styled.div`
-    display: flex;
-    justify-content: space-evenly;
-    width: 25vw;
-    height: 200px;
-`
-const BOX = styled.div`
-     color: rgb(239, 239, 239); 
-     background: rgba(0, 0, 0, 0.7); 
-     border-radius: 4px;
-     overflow: auto;
-     height: fit-content;
-     margin-left: 10px;
-     margin-right: 10px;
-     padding: 5px;
-     ${props => props.theme.modalScrollBar}
-`
+import {
+    VerticalAlign,
+    ContentHeader,
+    PageContainer,
+    HeaderContainer,
+    backgroundColor
+} from 'pages/Public/theme/components'
 
-const LABEL = styled.div`
-    color: rgb(239, 239, 239);
-    display: block;
-    font-size: 1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 1px;
-`
+import StatBox from 'pages/Public/theme/statBox'
+
 class NFIP extends Component {
     constructor(props) {
         super(props);
@@ -63,75 +38,71 @@ class NFIP extends Component {
 
     render() {
         return (
-            <div style={backgroundCss}>
-                <div className='col-sm-6' style={{float: 'left'}}>
-                    <div className="element-wrapper">
-                        <div className="element-box">
-                            <div style={{height: '100vh', width: '100%'}}>
-                                <h1>County</h1>
+             <PageContainer >
+                <HeaderContainer>
+                    <div className='row'>
+                        <div className='col-12' style={{textAlign:'center'}}>
+                            <ContentHeader>
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} NFIP Claims
+                            </ContentHeader>
+                        </div>
+                    </div>
+                <div className='row'>
+                    <div className='col-lg-6'>
+                        <VerticalAlign>
                                 <div className='row'>
                                     <div className="col-sm-6">
-                                                <BOX>
-                                                    <LABEL>Total
-                                                        {this.props.activeCousubid.length === 2 ? ' State ' : ' County '}
-                                                        NFIP # of losses</LABEL>
-                                                    <LABEL style={{fontWeight:'100'}}>
-                                                        {get(falcorGraph.getCache(),
-                                                            `nfip.losses.byGeoid.${parseInt(this.props.activeCousubid)}.allTime.total_losses`, 0)}
-                                                    </LABEL>
-                                                </BOX>
+                                        <StatBox 
+                                            title={`Number NFIP Claims`}
+                                            value={get(this.props.graph,
+                                                            `nfip.losses.byGeoid.${parseInt(this.props.activeCousubid)}.allTime.total_losses`, 0).toLocaleString()}
+                                            />
                                     </div><div className="col-sm-6">
-                                                <BOX>
-                                                    <LABEL>Total
-                                                        {this.props.activeCousubid.length === 2 ? ' State ' : ' County '}
-                                                        $ Payment</LABEL>
-                                                    <LABEL style={{fontWeight:'100'}}>
-                                                        {get(falcorGraph.getCache(),
-                                                            `nfip.losses.byGeoid.${parseInt(this.props.activeCousubid)}.allTime.total_payments`, 0)}
-                                                    </LABEL>
-                                                </BOX>
+                                        <StatBox 
+                                            title={`Total Payments`}
+                                            value={fnum(get(this.props.graph,
+                                                            `nfip.losses.byGeoid.${parseInt(this.props.activeCousubid)}.allTime.total_payments`, 0))}
+                                            />
+                                               
                                     </div>
 
                                 </div>
-                                <div className='row'>
+                                <div  >
                                     <NfipLossesTable
                                         title={ "NFIP Losses by Municipality" }
                                     />
                                 </div>
-                            </div>
+                        </VerticalAlign>
+                    </div>
+                    <div className='col-lg-6'>
+                    
+                        <div style={{height: '80vh', width: '100%'}}>
+                            <AvlMap
+                                sidebar={false}
+                                mapactions={false}
+                                scrollZoom={false}
+                                zoom={6}
+                                style='Clear'
+                                styles={[{
+                                    name: "Clear",
+                                    style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
+                                }]}
+                                fitBounds={[
+                                    [
+                                        -79.8046875,
+                                        40.538851525354666
+                                    ],
+                                    [
+                                        -71.7626953125,
+                                        45.042478050891546
+                                    ]]}
+                                layers={[NfipLossesLayer]}
+                            />
                         </div>
                     </div>
-                </div>
-                <div className='col-sm-6' style={{float: 'right'}}>
-                    <div className="element-wrapper">
-                        <div className="element-box">
-                            <div style={{height: '100vh', width: '100%'}}>
-                                <AvlMap
-                                    sidebar={false}
-                                    mapactions={false}
-                                    scrollZoom={false}
-                                    zoom={6}
-                                    style='Clear'
-                                    styles={[{
-                                        name: "Clear",
-                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
-                                    }]}
-                                    fitBounds={[
-                                        [
-                                            -79.8046875,
-                                            40.538851525354666
-                                        ],
-                                        [
-                                            -71.7626953125,
-                                            45.042478050891546
-                                        ]]}
-                                    layers={[NfipLossesLayer]}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </div>        
+            </HeaderContainer>
+        </PageContainer>
         )
     }
 }
