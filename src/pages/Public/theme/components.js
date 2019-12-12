@@ -1,11 +1,26 @@
 import styled from "styled-components"
 
-export const backgroundColor =   '#d1dbe9';//'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7';
-export const mainFontColor  = '#3E4B5B'
-export const mainFontSize = '1.4em';
-export const mainFontWeight = '400';
-export const mainFontLineHeight = '2'
-export const mainFontFamily = `'Roboto', sans-serif`//'"Avenir Next W01", "Proxima Nova W01", "Rubik", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+
+let themes = [
+    {
+        backgroundColor:   '#d1dbe9', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`
+    }
+]
+
+let selectedTheme = 0
+
+
+export const backgroundColor = themes[selectedTheme].backgroundColor 
+export const mainFontColor  = themes[selectedTheme].mainFontColor  
+export const mainFontSize = themes[selectedTheme].mainFontSize 
+export const mainFontWeight = themes[selectedTheme].mainFontWeight 
+export const mainFontLineHeight = themes[selectedTheme].mainFontLineHeight 
+export const mainFontFamily = themes[selectedTheme].mainFontFamily 
 
 export const ImageContainer = styled.div`
     background: #fafafa;
