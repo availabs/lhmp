@@ -10911,18 +10911,10 @@ a.el-tablo {
     transition: all 0.25s ease; }
   a.el-tablo .label {
     transition: all 0.25s ease; }
-  a.el-tablo:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0px 5px 12px rgba(126, 142, 177, 0.2); }
-    a.el-tablo:hover .value {
-      transform: translateY(-3px);
-      color: #047bf8; }
-    a.el-tablo:hover .label {
-      color: #3395fc; }
-    a.el-tablo:hover.centered .value {
-      transform: scale(1.1) translateY(-3px); }
-    a.el-tablo:hover .label {
-      transform: translateY(-2px); }
+  a.el-tablo:hover .value {
+    color: #047bf8; }
+  a.el-tablo:hover .label {
+    color: #3395fc; }
 
 .el-buttons-list .btn, .el-buttons-list .all-wrapper .fc-button, .all-wrapper .el-buttons-list .fc-button {
   margin: 0px;
@@ -13363,6 +13355,96 @@ a.with-avatar span {
   src: url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.eot?#iefix) format("embedded-opentype"), url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.woff) format("woff"), url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.ttf) format("truetype"), url(https://www.ny.gov/sites/all/themes/ny_gov/fonts/oswald-regular-webfont.svg#oswaldbook) format("svg");
   font-weight: 400;
   font-style: normal; }
+
+/*
+    Flaticon icon font: Flaticon
+    Creation date: 30/08/2018 08:11
+    */
+@font-face {
+  font-family: "Flaticon";
+  src: url("/fonts/Flaticon.eot");
+  src: url("/fonts/Flaticon.eot?#iefix") format("embedded-opentype"), url("/fonts/Flaticon.woff") format("woff"), url("/fonts/Flaticon.ttf") format("truetype"), url("/fonts/Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("/fonts/Flaticon.svg#Flaticon") format("svg"); } }
+
+.fi:before {
+  display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased; }
+
+.fa-earthquake:before {
+  content: "\f100"; }
+
+.fa-earthquake-1:before {
+  content: "\f101"; }
+
+.fa-tornado:before {
+  content: "\f102"; }
+
+.fa-forest-fire:before {
+  content: "\f103"; }
+
+.fa-fire:before {
+  content: "\f104"; }
+
+.fa-storm:before {
+  content: "\f105"; }
+
+.fa-flood:before {
+  content: "\f106"; }
+
+.fa-flood-1:before {
+  content: "\f107"; }
+
+.fa-tsunami:before {
+  content: "\f108"; }
+
+.fa-drought:before {
+  content: "\f109"; }
+
+.fa-wind:before {
+  content: "\f10a"; }
+
+.fa-volcano:before {
+  content: "\f10b"; }
+
+.fa-avalanche:before {
+  content: "\f10c"; }
+
+.fa-landslide:before {
+  content: "\f10d"; }
+
+.fa-co2:before {
+  content: "\f10e"; }
+
+.fa-dust-storm:before {
+  content: "\f10f"; }
+
+.fa-hail:before {
+  content: "\f110"; }
+
+.fa-hole:before {
+  content: "\f111"; }
+
+.fa-comet:before {
+  content: "\f112"; }
+
+.fa-snow:before {
+  content: "\f113"; }
 
 /* 12. Chat */
 /* 

@@ -23,7 +23,11 @@ class ParticipationNew extends React.Component {
             hours: null, 
           /*  users: [], 
             roles: []*/
+            narrative: null,
+            topics_list:null
         }
+
+
 
 
         this.handleChange = this.handleChange.bind(this);
@@ -32,40 +36,7 @@ class ParticipationNew extends React.Component {
 
     }
 
-   /* fetchFalcorDeps(){
-        return this.props.falcor.get(['capabilitiesLHMP','meta'])
-            .then(response => {
-                return response
-            });
 
-        capabilityDropdown(){
-            let capabilityDropDown = []
-            Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
-                meta.forEach(item =>{
-                    capabilityDropDown.push({
-                        type: 'capability',
-                        value: item['capability']
-                    })
-                })
-            })
-            return(
-                <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>Capability</label>
-                        <select className="form-control justify-content-sm-end" id='capability' onChange={this.handleChange} value={this.state.capability}>
-                            <option default>--Select Capability--</option>
-                            <option className="form-control" key={0} value="None">No Capability Selected</option>
-                            {
-                                capabilityDropDown.map((capability,i) =>{
-                                    return(<option  className="form-control" key={i+1} value={capability.value}>{capability.value}</option>)
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
-            )
-        }    
-
-    }*/
  
 
     componentDidMount(){
@@ -214,7 +185,23 @@ class ParticipationNew extends React.Component {
                                 <div className="form-group"><label htmlFor>Role</label>
                                     <input id='roles' onChange={this.handleChange} className="form-control" placeholder="Roles" type="number" value={this.state.roles[0]}/></div>
                             </div>*/}
-                             <div className="form-buttons-w text-right">
+
+
+                            <div className="col-sm-12">
+                                <div className="form-group">
+                                <label htmlFor>Narrative</label>
+                                    <textarea rows="4"  id='narrative' onChange={this.handleChange} className="form-control" placeholder="Type Narrative here" type="text" value={this.state.narrative}/>
+                                </div>
+                            </div>
+
+                            <div className="col-sm-12">
+                                <div className="form-group">
+                                <label htmlFor>Topics list</label>
+                                    <textarea rows="4"  id='topics_list' onChange={this.handleChange} className="form-control" placeholder="Type Topics list here" type="text" value={this.state.topics_list}/>
+                                </div>
+                            </div>
+
+                            <div className="form-buttons-w text-right">
                                 <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>
                             </div>
                            

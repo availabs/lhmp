@@ -30,20 +30,17 @@ class ContentEditor extends Component {
     }
 
     fetchFalcorDeps() {
-        console.log('FFD',this.props.requirement, this.props.user.activePlan, this.props.user.activeCousubid)
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return Promise.resolve();
         let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
             if (contentRes.json.content.byId[contentId]) {
-                console.log('setting everything',contentRes.json.content.byId[contentId])
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 this.setState({'currentKey': contentId});
 
                 let content = contentRes.json.content.byId[contentId].body;
                 if (content) {
-                    console.log('new content', content)
                     const contentBlock = htmlToDraft(content);
                     if (contentBlock) {
                         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -52,7 +49,6 @@ class ContentEditor extends Component {
                     }
                 }
             }else{
-                console.log('in else: no content from db for id ', contentId, contentRes)
                 this.setState({'editorState': EditorState.createEmpty()})
                 this.setState({contentFromDB: null})
                 this.setState({'currentKey': contentId});
@@ -61,7 +57,6 @@ class ContentEditor extends Component {
         })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('componentDidUpdate');
         if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid){
             this.fetchFalcorDeps();
         }
@@ -131,11 +126,8 @@ class ContentEditor extends Component {
     render() {
         let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
 
-        console.log('contentEditor Render', this.state.currentKey, currentKey, (this.state.currentKey === currentKey));
-
         let editorState;
         if (this.state.currentKey !== currentKey){
-            console.log('calling FFD from render');
             this.fetchFalcorDeps();
             return <div> Loading... </div>
         }else {
@@ -148,7 +140,6 @@ class ContentEditor extends Component {
 const mapDispatchToProps = {sendSystemMessage};
 
 const mapStateToProps = state => {
-    console.log('content', state.graph.content);
     return {
         isAuthenticated: !!state.user.authed,
         geoGraph: state.graph.content || {},

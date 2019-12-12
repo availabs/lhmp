@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="updates- for capabilities and Actions worksheet and project">
+      <change afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/dropDownSignUp.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/emailComponent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/signUpWizard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Landing/signup_forms/SignUp.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Landing/signup_forms/config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Participation/participation_forms/config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Participation/participation_forms/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/new.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="homepage">
     <list default="true" id="88831e58-a038-4eaf-b96b-ee3deb0049ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/capabilitiesTableHMPViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/contentViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/planningDocumentsViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/displayComponents/rolesTableViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/About/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/About/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/RiskAssessmentAndVulnerability/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Strategies/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/about.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/functions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/risk.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Plan/strategies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlStuff" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlStuff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/components/Assets/layers/AssetsLayer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlForms/displayComponents/listTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/displayComponents/listTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/TextComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/TextComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/dropDownComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/dropDownComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/newData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/newData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlForms/editComponents/newDataWithWizard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlForms/editComponents/newDataWithWizard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvlMap" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvlMap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/themes/dark.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/themes/dark.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/themes/light1.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/themes/light1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/themes/light_new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/themes/light_new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Capabilities/capability_forms/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Capabilities/capability_forms/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/actions/worksheet/new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/bootstrap-override/bootstrap/mixins/_text-truncate.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/bootstrap-override/bootstrap/mixins/_text-truncate.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/bootstrap-override/bootstrap/utilities/_text.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/bootstrap-override/bootstrap/utilities/_text.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/mb.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/mb.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/mb.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/mb.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Public/Home/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Public/Home/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/user.js" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +63,9 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="lhmp" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -64,11 +86,17 @@
   </component>
   <component name="ProjectId" id="1OT7ZdGHxaYJXK0BkybPHVrzi2s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../mitigate-api" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/pages/Public/Home/components/Assets" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -87,27 +115,30 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/light-admin/tables" />
-      <recent name="$PROJECT_DIR$/src/pages/auth" />
-      <recent name="$PROJECT_DIR$/src/styles" />
-      <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/components/light-admin" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/pages/auth" />
-      <recent name="$PROJECT_DIR$/src/pages" />
+      <recent name="$PROJECT_DIR$/src/pages/auth/Roles/roles_forms" />
+      <recent name="$PROJECT_DIR$/src/pages/auth/actions" />
+      <recent name="$PROJECT_DIR$/src/pages/auth/actions/actions_worksheet_forms" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/index.js" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/Assets" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/hazardLoss/components" />
+      <recent name="$PROJECT_DIR$/src/pages/Public/Home/components/localContext/layers" />
+      <recent name="$PROJECT_DIR$/src/img" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
+  <component name="ServiceViewManager">
+    <option name="viewStates">
       <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
       </list>
     </option>
   </component>
@@ -145,49 +176,20 @@
       <workItem from="1569424898354" duration="32000" />
       <workItem from="1569530112565" duration="298000" />
       <workItem from="1569862840274" duration="1222000" />
-      <workItem from="1570729384564" duration="49850000" />
-    </task>
-    <task id="LOCAL-00022" summary="County and Municipality names added for Action worksheets">
-      <created>1562694006207</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1562694006207</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Updates in AssetTable and AssetIndex">
-      <created>1562782684574</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1562782684574</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Updates in AssetTable and AssetIndex">
-      <created>1562783283188</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1562783283188</updated>
-    </task>
-    <task id="LOCAL-00025" summary="AssetPieChart for Replacement Value">
-      <created>1563209549526</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1563209549526</updated>
-    </task>
-    <task id="LOCAL-00026" summary="updates">
-      <created>1563209569706</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1563209569706</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Building By Owner Type Table">
-      <created>1563290364858</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1563290364858</updated>
+      <workItem from="1570729384564" duration="52327000" />
+      <workItem from="1571252779583" duration="126556000" />
+      <workItem from="1572026925119" duration="30000" />
+      <workItem from="1572882371630" duration="679000" />
+      <workItem from="1573068052746" duration="632000" />
+      <workItem from="1573662336844" duration="37513000" />
+      <workItem from="1574089042386" duration="1795000" />
+      <workItem from="1574091816301" duration="45070000" />
+      <workItem from="1574280072212" duration="2905000" />
+      <workItem from="1574954634724" duration="53339000" />
+      <workItem from="1575244543491" duration="33000" />
+      <workItem from="1575296627916" duration="137000" />
+      <workItem from="1575300508660" duration="105000" />
+      <workItem from="1575389960697" duration="15095000" />
     </task>
     <task id="LOCAL-00028" summary="Building By Owner Type Pie Chart and Table">
       <created>1563290396727</created>
@@ -490,17 +492,260 @@
       <option name="project" value="LOCAL" />
       <updated>1570823634267</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="plans filter on towns now">
+      <created>1571241280590</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1571241280590</updated>
+    </task>
+    <task id="LOCAL-00072" summary="actions project wizard update">
+      <created>1571859508200</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1571859508200</updated>
+    </task>
+    <task id="LOCAL-00073" summary="added actions tab on click">
+      <created>1571945320434</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1571945320434</updated>
+    </task>
+    <task id="LOCAL-00074" summary="actions assets">
+      <created>1571945389851</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1571945389851</updated>
+    </task>
+    <task id="LOCAL-00075" summary="plan pages design + minor">
+      <created>1572026667908</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1572026667908</updated>
+    </task>
+    <task id="LOCAL-00076" summary="home page">
+      <created>1574282754232</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1574282754233</updated>
+    </task>
+    <task id="LOCAL-00077" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952480132</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952480132</updated>
+    </task>
+    <task id="LOCAL-00078" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952488972</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952488972</updated>
+    </task>
+    <task id="LOCAL-00079" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952497502</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952497502</updated>
+    </task>
+    <task id="LOCAL-00080" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952504265</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952504265</updated>
+    </task>
+    <task id="LOCAL-00081" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952511224</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952511224</updated>
+    </task>
+    <task id="LOCAL-00082" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952520268</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952520268</updated>
+    </task>
+    <task id="LOCAL-00083" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952529561</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952529561</updated>
+    </task>
+    <task id="LOCAL-00084" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952538172</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952538172</updated>
+    </task>
+    <task id="LOCAL-00085" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952545556</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952545556</updated>
+    </task>
+    <task id="LOCAL-00086" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952554496</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952554496</updated>
+    </task>
+    <task id="LOCAL-00087" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952560270</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952560270</updated>
+    </task>
+    <task id="LOCAL-00088" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952566907</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952566907</updated>
+    </task>
+    <task id="LOCAL-00089" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952572266</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952572266</updated>
+    </task>
+    <task id="LOCAL-00090" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952581580</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952581580</updated>
+    </task>
+    <task id="LOCAL-00091" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952591740</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952591740</updated>
+    </task>
+    <task id="LOCAL-00092" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952600387</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952600387</updated>
+    </task>
+    <task id="LOCAL-00093" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952609978</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952609978</updated>
+    </task>
+    <task id="LOCAL-00094" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952617416</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952617416</updated>
+    </task>
+    <task id="LOCAL-00095" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952626668</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952626669</updated>
+    </task>
+    <task id="LOCAL-00096" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952972017</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952972018</updated>
+    </task>
+    <task id="LOCAL-00097" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574952985209</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1574952985209</updated>
+    </task>
+    <task id="LOCAL-00098" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574953003536</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1574953003536</updated>
+    </task>
+    <task id="LOCAL-00099" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574953011768</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1574953011768</updated>
+    </task>
+    <task id="LOCAL-00100" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574953019838</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1574953019838</updated>
+    </task>
+    <task id="LOCAL-00101" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574953028891</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1574953028891</updated>
+    </task>
+    <task id="LOCAL-00102" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574974277356</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1574974277357</updated>
+    </task>
+    <task id="LOCAL-00103" summary="roles forms index">
+      <created>1574974294806</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1574974294806</updated>
+    </task>
+    <task id="LOCAL-00104" summary="roles forms config">
+      <created>1574974309371</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1574974309371</updated>
+    </task>
+    <task id="LOCAL-00105" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574974318217</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1574974318217</updated>
+    </task>
+    <task id="LOCAL-00106" summary="updates- for capabilities and Actions worksheet and project">
+      <created>1574974326048</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1574974326048</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
-  </component>
-  <component name="TodoView" selected-index="4">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -519,18 +764,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="submenu" />
-    <MESSAGE value="submenu click" />
-    <MESSAGE value="contentEditor work started" />
-    <MESSAGE value="contentEditor insert + update done" />
-    <MESSAGE value="contentViewer + menu click done. next up: risk and Strategies. get Hazards page to public" />
-    <MESSAGE value="risk and Strategies. Hazards page un on public. changing user authLevel on group change. topmenu change (added /admin, changed /user/admin display name to User Admin, brought logout to bottom), setting Geoid for not authed user as well." />
-    <MESSAGE value="on login /admin vs /" />
-    <MESSAGE value="home icon in public" />
-    <MESSAGE value="hazard page for state: chunked requests; on signup email link values passed by county" />
-    <MESSAGE value="req A-1C: roles editor/viewer" />
-    <MESSAGE value="stickyroll in admin-about" />
-    <MESSAGE value="stickyroll in admin-about: progress bar done. next up: req nav" />
     <MESSAGE value="stickyroll in admin-about: nav done, contentEditor bug fixed" />
     <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
     <MESSAGE value="stickyroll on all pages" />
@@ -544,8 +777,119 @@
     <MESSAGE value="actions page shows worksheet + project minor update" />
     <MESSAGE value="minor design changes" />
     <MESSAGE value="changes in: plan-&gt;about, created display comp, changed roles table display" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes in: plan-&gt;about, created display comp, changed roles table display" />
+    <MESSAGE value="plans filter on towns now" />
+    <MESSAGE value="actions project wizard update" />
+    <MESSAGE value="added actions tab on click" />
+    <MESSAGE value="actions assets" />
+    <MESSAGE value="plan pages design + minor" />
+    <MESSAGE value="home page" />
+    <MESSAGE value="Merge branch 'master' of https://github.com/availabs/lhmp&#10;&#10; Conflicts:&#10;&#9;package-lock.json" />
+    <MESSAGE value="hazard loss - public home" />
+    <MESSAGE value="roles forms index" />
+    <MESSAGE value="roles forms config" />
+    <MESSAGE value="updates- for capabilities and Actions worksheet and project" />
+    <option name="LAST_COMMIT_MESSAGE" value="updates- for capabilities and Actions worksheet and project" />
+    <MESSAGE value="fill opac changed" />
+    <MESSAGE value="mapactions visibility as prop" />
+    <MESSAGE value="homepage" />
+    <MESSAGE value="signup, reset password host : &lt;subdomain&gt;.mitigationny.org" />
+    <option name="LAST_COMMIT_MESSAGE" value="signup, reset password host : &lt;subdomain&gt;.mitigationny.org" />
     <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="463" y="84" width="1060" height="944" key="CommitChangelistDialog2" timestamp="1574974325987">
+      <screen x="77" y="34" width="1843" height="1046" />
+    </state>
+    <state x="463" y="84" width="1060" height="944" key="CommitChangelistDialog2/77.34.1843.1046@77.34.1843.1046" timestamp="1574974325987" />
+    <state x="728" y="257" width="530" height="598" key="FileChooserDialogImpl" timestamp="1574959098317">
+      <screen x="77" y="34" width="1843" height="1046" />
+    </state>
+    <state x="728" y="257" width="530" height="598" key="FileChooserDialogImpl/77.34.1843.1046@77.34.1843.1046" timestamp="1574959098317" />
+    <state x="493" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2" timestamp="1574974343850">
+      <screen x="77" y="34" width="1843" height="1046" />
+    </state>
+    <state x="493" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2/77.34.1843.1046@77.34.1843.1046" timestamp="1574974343850" />
+    <state x="614" y="304" width="758" height="503" key="git4idea.merge.GitPullDialog" timestamp="1574974334971">
+      <screen x="77" y="34" width="1843" height="1046" />
+    </state>
+    <state x="614" y="304" width="758" height="503" key="git4idea.merge.GitPullDialog/77.34.1843.1046@77.34.1843.1046" timestamp="1574974334971" />
+    <state x="577" y="45" width="840" height="1034" key="search.everywhere.popup" timestamp="1575040567165">
+      <screen x="77" y="34" width="1843" height="1046" />
+    </state>
+    <state x="577" y="45" width="840" height="1034" key="search.everywhere.popup/77.34.1843.1046@77.34.1843.1046" timestamp="1575040567165" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/actions/project/new.js</url>
+          <line>1552</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/components/AvlForms/editComponents/signUpWizard.js</url>
+          <line>507</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2" timestamp="1575570309161">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="425" y="84" width="1060" height="944" key="CommitChangelistDialog2/0.34.1920.1046@0.34.1920.1046" timestamp="1575570309161" />
+    <state x="100" y="132" width="1720" height="848" key="DiffContextDialog" timestamp="1575570308503">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="100" y="132" width="1720" height="848" key="DiffContextDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575570308503" />
+    <state x="621" y="227" width="675" height="655" key="StructurePopup" timestamp="1575389968432">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="621" y="227" width="675" height="655" key="StructurePopup/0.34.1920.1046@0.34.1920.1046" timestamp="1575389968432" />
+    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2" timestamp="1575475032363">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="455" y="229" width="1000" height="654" key="Vcs.Push.Dialog.v2/0.34.1920.1046@0.34.1920.1046" timestamp="1575475032363" />
+    <state x="778" y="231" width="353" height="650" key="VcsDiffUtil.ChangesDialog" timestamp="1575472549707">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="778" y="231" width="353" height="650" key="VcsDiffUtil.ChangesDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575472549707" />
+    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog" timestamp="1575474508577">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="587" y="304" width="735" height="503" key="git4idea.merge.GitPullDialog/0.34.1920.1046@0.34.1920.1046" timestamp="1575474508577" />
+    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup" timestamp="1575390126191">
+      <screen x="0" y="34" width="1920" height="1046" />
+    </state>
+    <state x="539" y="45" width="840" height="1034" key="search.everywhere.popup/0.34.1920.1046@0.34.1920.1046" timestamp="1575390126191" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/constants/hazardColors.js</url>
+          <line>167</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
+          <line>129</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
+          <line>133</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/auth/Assets/index.js</url>
+          <line>137</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="masterDetails">
     <states>

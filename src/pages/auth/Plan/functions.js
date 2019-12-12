@@ -5,9 +5,10 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {Stickyroll} from '@stickyroll/stickyroll';
 import {Pagers} from "@stickyroll/pagers";
 import CSS_CONFIG from 'pages/auth/css-config'
+import Element from "components/light-admin/containers/Element";
+import ElementBox from "components/light-admin/containers/ElementBox";
 
 const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGeos){
-    console.log('geo info',activecousubId)
     return geoInfo ? (
         <div>
             <select
@@ -16,7 +17,6 @@ const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGe
                 id='contact_county'
                 data-error="Please select county"
                 onChange={(e) => {
-                    console.log('conchange',e.target.value)
                     setActiveCousubid(e.target.value)
                 }}
                 value={activecousubId}
@@ -52,8 +52,9 @@ const renderElement = function(element, section, index, user) {
             width: '100%',
             height: '100%',
         }}>
-            <label style={{'width': '100%'}}> <big>{section}</big> |
-                <small> {element.title}
+            <Element>
+            <label style={{'width': '100%'}} className='element-header'> <h4>{section} |
+                <smaall className='text-muted'> {element.title}
                     <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
                             onClick={
                                 (e) => document.getElementById('closeMe').style.display =
@@ -61,7 +62,8 @@ const renderElement = function(element, section, index, user) {
                             }
                             style={{'float': 'right'}}> ?
                     </button>
-                </small>
+                </smaall>
+            </h4>
             </label>
             <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-sm show" role="dialog"
                  id='closeMe'
@@ -70,9 +72,7 @@ const renderElement = function(element, section, index, user) {
                     <div className="modal-content">
                         <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                             <button aria-label="Close" className="close" data-dismiss="modal" type="button"
-                                    onClick={(e) => {
-                                        console.log('cancel button', e.target.closest('#closeMe').style.display = 'none')
-                                    }}>
+                                    onClick={(e) => e.target.closest('#closeMe').style.display = 'none'}>
                                 <span aria-hidden="true"> ×</span></button>
                         </div>
                         <div className="modal-body">
@@ -87,12 +87,15 @@ const renderElement = function(element, section, index, user) {
                     </div>
                 </div>
             </div>
-            <GraphFactory
-                graph={{type: element.type + 'Editor'}}
-                {...element}
-                user={user}
-                index={index}
-            />
+                <ElementBox>
+                <GraphFactory
+                    graph={{type: element.type + 'Editor'}}
+                    {...element}
+                    user={user}
+                    index={index}
+                />
+                </ElementBox>
+            </Element>
         </div>
     )
 }
@@ -141,34 +144,33 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
                                     }}>
                                     {this.renderReqNav(allRequirenments, pageIndex)}
                                 </div>
+                                 <div
+                                        style={{
+                                            width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
+                                            height: '100%',
+                                            marginLeft: `calc(${CSS_CONFIG.reqNavWidth})`,
+                                            display: 'absolute',
+                                            alignContent: 'stretch',
+                                            alignItems: 'stretch',
+                                        }}>
+                                        <Pagers useContext={true}/>
 
-                                <div
-                                    style={{
-                                        width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
-                                        height: '100%',
-                                        marginLeft: `calc(${CSS_CONFIG.reqNavWidth})`,
-                                        display: 'absolute',
-                                        alignContent: 'stretch',
-                                        alignItems: 'stretch',
-                                    }}>
-                                    <Pagers useContext={true}/>
+                                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow={page / pages}
+                                             className="progress-bar bg-success" role="progressbar"
+                                             style={{
+                                                 width: page / pages * 100 + '%',
+                                                 height: '15px'
+                                             }}>{(page / pages * 100).toFixed(2)} %
+                                        </div>
 
-                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow={page / pages}
-                                         className="progress-bar bg-success" role="progressbar"
-                                         style={{
-                                             width: page / pages * 100 + '%',
-                                             height: '15px'
-                                         }}>{(page / pages * 100).toFixed(2)} %
+                                        <div style={{
+                                            height: '100vh',
+                                            width: '100%',
+                                        }}>
+
+                                            {Content}
+                                        </div>
                                     </div>
-
-                                    <div style={{
-                                        height: '100vh',
-                                        width: '100%',
-                                    }}>
-
-                                        {Content}
-                                    </div>
-                                </div>
                             </div>
                         );
                     }}

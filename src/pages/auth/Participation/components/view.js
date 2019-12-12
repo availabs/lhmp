@@ -15,8 +15,9 @@ const ATTRIBUTES = [
        'start_date', 
        'end_date', 
        'hours', 
-       'users', 
-       'roles'
+       'narrative', 
+       'topics_list'
+       
 ]
 
 class ParticipationIndex extends React.Component {

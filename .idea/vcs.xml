@@ -4,5 +4,9 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/components/AvlMap" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/components/AvlStuff" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/components/npmrds4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/components/npmrds4/src/components/AvlGraph" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/components/npmrds4/src/components/AvlMap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/components/npmrds4/src/components/AvlStuff" vcs="Git" />
   </component>
 </project>

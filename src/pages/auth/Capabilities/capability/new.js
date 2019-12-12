@@ -22,7 +22,7 @@ class CapabilityNew extends React.Component {
         this.state = {
             county: '',
             cousub:'',
-            capability: '',
+            capability_category: '',
             capability_type:'',
             capability_name:'',
             regulatory_name:'',
@@ -62,6 +62,7 @@ class CapabilityNew extends React.Component {
         if(this.props.match.params.capabilityId) {
             this.props.falcor.get(['capabilitiesLHMP','byId',[this.props.match.params.capabilityId],Object.keys(this.state)])
                 .then(response =>{
+                    console.log('response',response)
                     Object.keys(this.state).forEach((key,i)=>{
                         let tmp_state = {};
                         if(key === 'adoption_date' || key === 'expiration_date'){
@@ -73,6 +74,7 @@ class CapabilityNew extends React.Component {
                                 tmp_state
                             )
                         }
+
                         else{
                             tmp_state[key] = response.json.capabilitiesLHMP.byId[this.props.match.params.capabilityId][key];
                             this.setState(
@@ -90,19 +92,42 @@ class CapabilityNew extends React.Component {
         let capabilityDropDown = []
         Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
             meta.forEach(item =>{
-                if (item['capability_type'] === this.state.capability_type)
-                capabilityDropDown.push({
-                    type: 'capability',
-                    value: item['capability']
-                })
+                if (!capabilityDropDown.includes(item['capability_type']))
+                    capabilityDropDown.push(item['capability_type'])
             })
         })
         return(
             <div className="col-sm-12">
-                <div className="form-group"><label htmlFor>Capability</label><span style={{'float': 'right'}}>{this.displayPrompt("capability")}</span>
-                    <select className="form-control justify-content-sm-end" id='capability' onChange={this.handleChange} value={this.state.capability}>
-                        <option default>--Select Capability--</option>
-                        <option className="form-control" key={0} value="None">No Capability Selected</option>
+                <div className="form-group"><label htmlFor>Capability Category</label><span style={{'float': 'right'}}>{this.displayPrompt("capability")}</span>
+                    <select className="form-control justify-content-sm-end" id='capability_category' onChange={this.handleChange} value={this.state.capability_category}>
+                        <option className="form-control" key={0} value={''}>--No Capability Category Selected--</option>
+                        {
+                            capabilityDropDown.map((capability_type,i) =>{
+                                return(<option  className="form-control" key={i+1} value={capability_type}>{capability_type}</option>)
+                            })
+                        }
+                    </select>
+                </div>
+            </div>
+        )
+    }
+
+    capabilityTypeDropdown(){
+        let capabilityDropDown = []
+        Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
+            meta.forEach(item =>{
+                if (item['capability_type'] === this.state.capability_category)
+                    capabilityDropDown.push({
+                        type: 'capability',
+                        value: item['capability']
+                    })
+            })
+        })
+        return(
+            <div className="col-sm-12">
+                <div className="form-group"><label htmlFor>Capability Type</label><span style={{'float': 'right'}}>{this.displayPrompt("capability_type")}</span>
+                    <select className="form-control justify-content-sm-end" id='capability_type' onChange={this.handleChange} value={this.state.capability_type}>
+                        <option className="form-control" key={0} value={''}>--No Capability Type Selected--</option>
                         {
                             capabilityDropDown.map((capability,i) =>{
                                 return(<option  className="form-control" key={i+1} value={capability.value}>{capability.value}</option>)
@@ -113,7 +138,6 @@ class CapabilityNew extends React.Component {
             </div>
         )
     }
-
     capabilityCountyDropDown(){
         let countyData = []
         if(this.props.countyData){
@@ -158,31 +182,6 @@ class CapabilityNew extends React.Component {
 
     }
 
-
-    capabilityTypeDropdown(){
-        let capabilityDropDown = []
-        Object.values(this.props.capabilitiesMeta).filter(d => d!=='atom').forEach(meta =>{
-            meta.forEach(item =>{
-                if (!capabilityDropDown.includes(item['capability_type']))
-                    capabilityDropDown.push(item['capability_type'])
-            })
-        })
-        return(
-            <div className="col-sm-12">
-                <div className="form-group"><label htmlFor>Capability Category</label><span style={{'float': 'right'}}>{this.displayPrompt("capability_type")}</span>
-                    <select className="form-control justify-content-sm-end" id='capability_type' onChange={this.handleChange} value={this.state.capability_type}>
-                        <option default>--Select Capability Category--</option>
-                        <option className="form-control" key={0} value="None">No Capability Category Selected</option>
-                        {
-                            capabilityDropDown.map((capability_type,i) =>{
-                                return(<option  className="form-control" key={i+1} value={capability_type}>{capability_type}</option>)
-                            })
-                        }
-                    </select>
-                </div>
-            </div>
-        )
-    }
     handleChange(e) {
         console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
@@ -195,6 +194,7 @@ class CapabilityNew extends React.Component {
 
 
     onSubmit(event){
+        console.log('state', this.state)
         event.preventDefault();
         let args = [];
         if(!this.props.match.params.capabilityId){
@@ -239,7 +239,6 @@ class CapabilityNew extends React.Component {
     }
 
     displayPrompt(id){
-        console.log('id',id)
         return (
             <div>
                 <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
@@ -264,11 +263,9 @@ class CapabilityNew extends React.Component {
                             <div className="modal-body">
                                 {config.map(item =>{
                                     if(item.id === id && id !== 'upload'){
-                                        //console.log('in first if')
                                         return (<div>{item.prompt}</div>)
                                     }
                                     if (id === 'upload'){
-                                        //console.log('in if pf upload')
                                         return (
                                             <div>
                                                 {item.id === 'upload' ?
@@ -309,8 +306,7 @@ class CapabilityNew extends React.Component {
                             <div className="col-sm-12">
                                 <div className="form-group"><label htmlFor>Capability County Location</label><span style={{'float': 'right'}}>{this.displayPrompt("county")}</span>
                                     <select className="form-control justify-content-sm-end" id='county' onChange={this.handleChange} value={this.state.county} onClick={this.capabilityCousubDropDown}>
-                                        <option default>--Select County--</option>
-                                        <option className="form-control" key={0} value="None">No County selected</option>
+                                        <option className="form-control" key={0} value={''}>--No County selected--</option>
                                         {
                                             countyData.map((county,i) =>{
                                                 return(<option  className="form-control" key={i+1} value={county.geoid}>{county.name}</option>)
@@ -320,11 +316,11 @@ class CapabilityNew extends React.Component {
                             </div>
                             </div>
                             <div className="col-sm-12">
-                                { cousubsData.length !== 0 ?
+                                { cousubsData.length !== 0 && cousubsData[0] !== ''?
                                     (
                                         <div className="form-group"><label htmlFor>Municipality</label><span style={{'float': 'right'}}>{this.displayPrompt("cousub")}</span>
                                             <select className="form-control justify-content-sm-end" id='cousub' onChange={this.handleChange} value={this.state.cousub}>
-                                                <option default>--Select Town--</option>
+                                                <option className="form-control" key={0} value={''}>--No Municipality selected--</option>
                                                 {
                                                     cousubsData.map((cousub,i) =>{
                                                         if(cousub.geoid.slice(0,5) === this.state.county){
@@ -343,8 +339,8 @@ class CapabilityNew extends React.Component {
 
                                 }
                             </div>
-                            {this.capabilityTypeDropdown()}
                             {this.capabilityDropdown()}
+                            {this.capabilityTypeDropdown()}
                             <div className="col-sm-12">
                                 <div className="form-group"><label htmlFor>Capability Title</label><span style={{'float': 'right'}}>{this.displayPrompt("capability_name")}</span>
                                     <input id='capability_name' onChange={this.handleChange} className="form-control" placeholder="Capability Title" type="text" value={this.state.capability_name}/></div>

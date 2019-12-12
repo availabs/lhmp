@@ -74,7 +74,7 @@ class EBRLayer extends MapLayer {
       .then(response => {
         //let length = response.json.
         return falcorGraph
-          .get(["building", "byGeoid", geoid, 'byIndex', {from:0, to: }, ["id","replacement_value","name", "type", "critical", "flood_zone"]])
+          .get(["building", "byGeoid", geoid, 'byIndex', {from:0, to: 0 }, ["id","replacement_value","name", "type", "critical", "flood_zone"]])
           .then((res) => {
             console.timeEnd('make requests')
             let graph = falcorGraph.getCache().building.byId

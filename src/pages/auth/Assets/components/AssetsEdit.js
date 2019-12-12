@@ -6,8 +6,10 @@ import Wizard from 'components/light-admin/wizard'
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import {Link} from "react-router-dom";
+import {falcorGraph} from "../../../../store/falcorGraph";
+import {ATTRIBUTES_PROJECT} from "../../actions/project";
 
-
+const actionList = [];
 class AssetsEdit extends React.Component{
     constructor(props){
         super(props)
@@ -49,7 +51,8 @@ class AssetsEdit extends React.Component{
             high_wind_speed: '',
             soil_type: '',
             storage_hazardous_materials: '',
-            topography: ''
+            topography: '',
+            action_type: '',
             /*
             flood_zone: '',
 
@@ -69,6 +72,8 @@ class AssetsEdit extends React.Component{
         this.handleChange = this.handleChange.bind(this);
         this.propClassDropDown = this.propClassDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
+        this.actionTypeDropDown = this.actionTypeDropDown.bind(this);
+        this.addActionToAsset = this.addActionToAsset.bind(this);
         //this.floodZoneDropDown = this.floodZoneDropDown.bind(this);
         //this.ownerTypeDropDown = this.ownerTypeDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
@@ -78,6 +83,7 @@ class AssetsEdit extends React.Component{
        // this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
         this.heatTypeDropDown = this.heatTypeDropDown.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.getActionsCategoryAndType = this.getActionsCategoryAndType.bind(this);
     }
 
     handleChange(e) {
@@ -93,6 +99,7 @@ class AssetsEdit extends React.Component{
     }
 
     componentDidMount(){
+        this.getActionsCategoryAndType();
         if(this.props.match.params.assetId) {
             this.props.falcor.get(['building','byId',[this.props.match.params.assetId],Object.keys(this.state)])
                 .then(response =>{
@@ -109,7 +116,32 @@ class AssetsEdit extends React.Component{
         }
 
     }
-
+    getActionsCategoryAndType(){
+        this.props.falcor.get(['actions', [this.props.activePlan], 'project', 'length'])
+            .then(response => {
+                console.log('actions len', falcorGraph.getCache().actions[this.props.activePlan].project.length)
+                if (
+                    falcorGraph.getCache().actions &&
+                    falcorGraph.getCache().actions[this.props.activePlan] &&
+                    falcorGraph.getCache().actions[this.props.activePlan].project &&
+                    falcorGraph.getCache().actions[this.props.activePlan].project.length
+                ){
+                    return falcorGraph.getCache().actions[this.props.activePlan].project.length
+                }
+            }).then(length => this.props.falcor.get(
+                ['actions', [this.props.activePlan], 'project', 'byIndex', {from: 0, to: length - 1}, ['id','action_name']]))
+            .then(response => {
+                if (
+                    falcorGraph.getCache().actions &&
+                    falcorGraph.getCache().actions.project &&
+                    falcorGraph.getCache().actions.project.byId &&
+                    Object.keys(falcorGraph.getCache().actions.project.byId).length > 0
+                ){
+                    actionList.push(...Object.values(falcorGraph.getCache().actions.project.byId))
+                }
+                return response
+            })
+    }
     propClassDropDown(){
         if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined){
             const graph = this.props.parcelMetaData['prop_class'];
@@ -147,6 +179,30 @@ class AssetsEdit extends React.Component{
                 }
             </select>
         )
+    }
+
+    actionTypeDropDown(){
+        return (
+            <select className="form-control justify-content-sm-end" id='action_type' onChange={this.handleChange} value={this.state.action_type}>
+                <option default>--Select Action Type--</option>
+                <option className="form-control" key={0} value="None">No Action Type Selected</option>
+                {actionList.length > 0 ?
+                    actionList.map((cat, i) => {
+                        return (<option className="form-control" key={i + 1} value={cat.id.value}>
+                            {cat.id.value} - {cat.action_name ? cat.action_name.value : ''}
+                        </option>)
+                    }) : null
+                }
+            </select>
+
+        )
+    }
+    addActionToAsset(){
+        console.log('added? ', this.state.action_type, this.props.match.params.assetId)
+        this.props.falcor.call(['actions', 'assets', 'insert'], [this.props.match.params.assetId,this.state.action_type], [], [])
+            .then(response => {
+                this.props.sendSystemMessage(`Action was successfully added.`, {type: "success"});
+            })
     }
 
     buildingStyleDropDown(){
@@ -200,7 +256,9 @@ class AssetsEdit extends React.Component{
         if(this.props.match.params.assetId){
             let attributes = Object.keys(this.state)
             let updated_data ={};
-            Object.keys(this.state).forEach((d, i) => {
+            Object.keys(this.state)
+                .filter(f => f !== 'action_type')
+                .forEach((d, i) => {
                 console.log(this.state[d], d)
                 updated_data[d] = this.state[d]
             })
@@ -420,6 +478,30 @@ class AssetsEdit extends React.Component{
                     </div>
                 </div>)
             },
+            {
+                title: (<span>
+                    <span style={{fontSize:'0.7em'}}>Step 7</span>
+                    <br /><span style={{fontSize:'0.9em'}}>Actions</span></span>),
+                content: (
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Select Action</label>
+                            <div className='input-group'>
+                                {this.actionTypeDropDown()}
+                                <div className="input-group-append">
+                                    <div className="input-group-text">
+                                        <Link
+                                            className='btn btn-sm btn-primary'
+                                            onClick={this.addActionToAsset}>
+                                            Add
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    )
+                    }
 
         ]
         return (
@@ -429,7 +511,7 @@ class AssetsEdit extends React.Component{
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
-                            to={ `/assets/${this.props.match.params.assetId}` } >
+                            to={ `/assets/list/view/${this.props.match.params.assetId}` } >
                                 View Asset
                         </Link>
                         </span>
@@ -444,7 +526,8 @@ class AssetsEdit extends React.Component{
 const mapStateToProps = (state,ownProps) => {
     return {
         geoid : ownProps.geoid,
-        parcelMetaData : get(state.graph,'parcel.meta',{})
+        parcelMetaData : get(state.graph,'parcel.meta',{}),
+        activePlan: state.user.activePlan
     }
 };
 

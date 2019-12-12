@@ -23,7 +23,8 @@ const DefaultLayout = ({component: Component, ...rest}) => {
         )
     }
 
-    console.log('rest', rest);
+    //console.log('rest', rest);
+    // console.log('rest', rest);
     let contentStyle = {width: '100%'};
     if (rest.menuSettings.position === 'menu-position-side' || rest.menuSettings.position === 'menu-position-left') {
         contentStyle.marginLeft = CSS_CONFIG.mainMenuWidth;
@@ -33,7 +34,8 @@ const DefaultLayout = ({component: Component, ...rest}) => {
             contentStyle.marginLeft = 60
         }
     }
-    console.log('rest: contentStyle', contentStyle)
+    //console.log('rest: contentStyle', contentStyle)
+    // console.log('rest: contentStyle', contentStyle)
     return checkAuth(rest) ?
         (
             <Redirect
@@ -80,20 +82,22 @@ const DefaultLayout = ({component: Component, ...rest}) => {
 };
 
 function checkAuth(props) {
-    console.log('checkAuth', (props.auth && !props.authed), props)
+    //console.log('checkAuth', (props.auth && !props.authed), props)
+    // console.log('checkAuth', (props.auth && !props.authed), props)
 
     return (props.auth && !props.authed)
 }
 
 function checkAuthPage(props) {
     let authlevel = props.authLevel !== undefined ? props.authLevel : 1;
-    console.log('checkAuthPage', (props.auth && !(props.authed && props.userAuthLevel >= authlevel)), props)
+    //console.log('checkAuthPage', (props.auth && !(props.authed && props.userAuthLevel >= authlevel)), props)
     return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
 
 }
 
 function checkAuthPlan(props) {
-    console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
+    //console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
+    // console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
     return ['Plans', 'Home'].includes(props.name) ? false :
     (props.auth && props.user.activePlan && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString())))
 }

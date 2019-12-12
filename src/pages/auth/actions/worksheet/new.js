@@ -386,7 +386,6 @@ class Worksheet extends React.Component {
                 </div>)
             }
         ]
-
         return (
             <div className='container'>
                 <Element>
@@ -416,12 +415,12 @@ const mapStateToProps = state => {
 export default [
     {
     icon: 'os-icon',
-    path: '/actions/worksheet/new',
+    path: '/actions/worksheet/new/',
     exact: true,
     mainNav: false,
     breadcrumbs: [
         { name: 'Actions', path: '/actions/' },
-        { name: 'New Worksheet', path: '/actions/worksheet/new' }
+        { name: 'New Worksheet', path: '/actions/worksheet/new/' }
     ],
     menuSettings: {
         image: 'none',
