@@ -77,7 +77,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-left',
-        layout: 'menu-layout-compact',
+        layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminAbout))
