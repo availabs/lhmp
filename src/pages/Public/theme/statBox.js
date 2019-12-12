@@ -3,13 +3,6 @@ import React, { Component } from 'react';
 import get from 'lodash.get'
 import styled from "styled-components"
 
-const YearDiv = styled.div`
-  position: ${ props => props.position === "block" ? "static" : "absolute" };
-  text-align: ${ props => props.position === "block" ? "center" : "left" };
-  bottom: ${ props => props.position.includes("bottom") ? "10px" : "auto" };
-  left: ${ props => props.position.includes("left") ? "20px" : "auto" };
-  right: ${ props => props.position.includes("right") ? "20px" : "auto" };
-`
 
 class StatBox extends React.Component {
    

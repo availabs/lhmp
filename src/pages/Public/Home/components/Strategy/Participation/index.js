@@ -54,25 +54,15 @@ class PlanningTeam extends Component {
 
     render() {
         return (
-            <PageContainer style={{height: '80vh'}}>
+            <PageContainer>
                 <HeaderContainer>
                     <PageHeader>Participation</PageHeader>
                 </HeaderContainer>
                 <VerticalAlign>
                     <div className = 'd-flex justify-content-center'>
-                            <Feature className={`col-sm-6 no-gutters`} highlight={true}>
-                                
                         
-                                <FeatureDescription>
-                                     <FeatureName>Hazard Mitigation Plan Participation</FeatureName>
-                                        <div className='table-responsive'>
-                                        {this.renderMainTable()}
-                                    </div>
-                            </FeatureDescription>
-                            </Feature>
                     </div>
                 </VerticalAlign>
-                
             </PageContainer>
         )
     }
