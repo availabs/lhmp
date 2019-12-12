@@ -51,12 +51,16 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
             ['geo', geoid, geoLevel]
         )
             .then(res => res.json.riskIndex.hazards)
-            .then(hazards => geoLevel === 'state' ? Promise.resolve({hazards, geoids: [geoid]})
-                : this.props.falcor.get(['geo', geoid, geoLevel]).then(res => ({
-                    hazards,
-                    geoids: res.json.geo[geoid][geoLevel]
-                })))
+            .then(hazards => {
+                hazards = this.props.hazards ? this.props.hazards : hazards;
+                return geoLevel === 'state' ? Promise.resolve({hazards, geoids: [geoid]})
+                    : this.props.falcor.get(['geo', geoid, geoLevel]).then(res => ({
+                        hazards,
+                        geoids: res.json.geo[geoid][geoLevel]
+                    }))
+            })
             .then(({hazards, geoids}) => {
+                hazards = this.props.hazards ? this.props.hazards : hazards;
                 return this.props.falcor.get(
                     ['riskIndex', 'meta', hazards, ['id', 'name']]
                     //['geo', geoids, ['name']],
@@ -66,10 +70,9 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                     .then(d => falcorChunkerNice(['geo', geoids, 'name']))
                     .then(d => falcorChunkerNice(['riskIndex', geoids, hazards, ['score', 'value']]))
                     .then(d => falcorChunkerNice(
-                        [dataType, geoids, hazards, {
-                            from: EARLIEST_YEAR,
-                            to: LATEST_YEAR
-                        }, ['property_damage', 'total_loss', 'num_events', 'num_episodes', 'num_loans']]
+                        [dataType,'byMonth', geoids, hazards, ['January','February', 'March', 'April', 'May','June','July',
+                            'August','September', 'October', 'November', 'December'],
+                            ['property_damage', 'total_damage', 'num_events', 'num_episodes']]
                     ))
             })
     }
@@ -83,7 +86,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
             } else {
                 geoids = this.props.geoGraph[geoid][geoLevel].value;
             }
-            return processDataForBarChart(get(this.props, dataType, {}), geoids, lossType, hazard);
+            return processDataForBarChart(get(this.props, `${dataType}.byMonth`, {}), geoids, lossType, hazard);
         } catch (e) {
             return {data: [], keys: []}
         }
@@ -98,6 +101,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
         } else if (this.props.geoid.length > 5) {
             return null;
         }
+        console.log('data,keys', data,keys)
         return (
             <div style={{height: `${this.props.height}px`, background: '#fff'}}>
                 <ResponsiveBar
@@ -105,7 +109,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                     keys={keys}
                     indexBy="year"
                     colorBy={'id'}
-                    colors={(d) => this.props.hazardcolors[d.id]}
+                    colors={(d) => hazardcolors[d.id]}
                     enableLabel={false}
                     tooltipFormat={this.props.format}
                     margin={{
@@ -118,10 +122,10 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         "orient": "bottom",
                         "tickSize": 5,
                         "tickPadding": 5,
-                        "legend": this.props.showXlabel ? "Year" : undefined,
+                        "legend": this.props.showXlabel ? "Month" : undefined,
                         "legendPosition": "middle",
                         "legendOffset": 40,
-                        "tickRotation": this.props.showYlabel ? 0 : 45
+                        "tickRotation": this.props.showYlabel ? 0 : 30
                     }}
                     axisLeft={{
                         "orient": "left",
@@ -140,7 +144,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                                     display: "inline-block",
                                     width: "15px",
                                     height: "15px",
-                                    backgroundColor: this.props.hazardcolors[d.id]
+                                    backgroundColor: hazardcolors[d.id]
                                 }}/>
                                 <span style={{paddingLeft: "5px"}}>{this.getHazardName(d.id)}</span>
                                 <span style={{paddingLeft: "5px"}}>{format(d.value)}</span>
@@ -166,8 +170,8 @@ NumberOfHazardsStackedBarGraph.defaultProps = {
     showXlabel: true,
     geoid: '36',
     geoLevel: 'state',
-    dataType: "severeWeather",
-    hazardcolors: hazardcolors
+    hazardcolors: hazardcolors,
+    dataType: "severeWeather"
 };
 
 const mapStateToProps = state => {

@@ -1,10 +1,8 @@
 import React from 'react'
 import ElementBox from '../containers/ElementBox'
-import DataTable from './DataTable'
+import DataTable from './DataTableHistoricPublic'
 import Pagination from './Pagination'
-
-import * as d3format from "d3-format"
-import sort from "d3-selection/src/selection/sort";
+import * as d3format from 'd3-format'
 
 const COERCE = {
     string: s => s && s.toString(),
@@ -32,7 +30,6 @@ class TableBox extends React.Component {
             this.setState({ sortOrder: -this.state.sortOrder })
         }
         else {
-
             this.setState({ sortColumn, sortOrder: -1 })
         }
     }
@@ -55,7 +52,7 @@ class TableBox extends React.Component {
 
         if (column in ct) {
             data = COERCE[ct[column]](data);
-            if (ct[column]) {
+            if (ct[column] !== 'string') {
                 return data;
             }
         }
@@ -99,25 +96,7 @@ class TableBox extends React.Component {
             data.sort((a, b) => {
                 const va = this.getValue(a[sc], sc),
                     vb = this.getValue(b[sc], sc);
-                if (va === vb) {
-                    return 0;
-                }
-                // nulls sort after anything else
-                else if (va === null) {
-                    return 1;
-                }
-                else if (vb === null) {
-                    return -1;
-                }
-                // otherwise, if we're ascending, lowest sorts first
-                else if (va < vb) {
-                    return -so;
-                }
-                // if descending, highest sorts first
-                else {
-                    return so;
-                }
-
+                return va < vb ? -so : va > vb ? so : 0;
             })
         }
         for (const c in fc) {
@@ -184,6 +163,7 @@ class TableBox extends React.Component {
 
     downloadAsCsv(e) {
         e.preventDefault();
+
         let { data, columns } = this.props;
         if (!data.length) return;
         if (!columns.length) {
@@ -260,8 +240,9 @@ class TableBox extends React.Component {
                 }
                 <div className="table-responsive"
                      style={ {
-                         // minHeight: `${ this.props.pageSize * 46 + 39 }px`,
-                         // maxHeight: this.props.tableScroll ? `${ this.props.pageSize * 46 + 39 }px` : 'auto',
+                         minHeight: `${ this.props.pageSize * 46 + 39 }px`,
+                         maxHeight: this.props.tableScroll ? `${ this.props.pageSize * 46 + 39 }px` : 'auto',
+                         overflowY: this.props.tableScroll ? 'auto' : 'inherit'
                      } }>
                     <DataTable tableData={ tableData }
                                columns={ this.props.columns.filter(c => !this.props.expandColumns.includes(c)) }
@@ -274,10 +255,7 @@ class TableBox extends React.Component {
                                urlColumn={ this.props.urlColumn }
                                toggleSortColumn={ this.toggleSortColumn.bind(this) }
                                sortColumn={ this.state.sortColumn }
-                               sortOrder={ this.state.sortOrder }
-                               maxHeight = {this.props.maxHeight || 'none'}
-                               tableScroll = { this.props.tableScroll}
-                               />
+                               sortOrder={ this.state.sortOrder }/>
                 </div>
                 { !this.props.tableScroll ? paginate : null }
             </ElementBox>
@@ -286,7 +264,7 @@ class TableBox extends React.Component {
 }
 
 TableBox.defaultProps = {
-    pageSize: 13,
+    pageSize: 10,
     data: [],
     columns: [],
     links: {},

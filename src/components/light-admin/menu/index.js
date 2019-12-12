@@ -64,10 +64,28 @@ class Menu extends Component {
 
         const DROPDOWN = defaultOptions.scheme === 'color-scheme-dark' ? styled.div`
                         div > select {
-                        color: #ccc;
+                        color: #fff;
                         border: none;
+                        font-size: 0.81rem;
+                        font-weight: 500;
+                        text-transform: uppercase;
+                        white-space: nowrap;
+                        letter-spacing: 2px;
+                        padding: 0px;
                         }
-                    ` : styled.div``;
+                    ` : styled.div`
+                    div > select {
+                    color: #3E4B5B;
+                    border: none;
+                    background: none;
+                    font-size: 0.81rem;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    white-space: nowrap;
+                    letter-spacing: 2px;
+                    padding: 0px;
+                    }
+                    `;
             // console.log('menuProps', currentPath, dynamicStyle)
         let userMenu = this.props.user && !!this.props.user.authed
             ? <AvatarUser user={this.props.user}/>

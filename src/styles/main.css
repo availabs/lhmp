@@ -10911,18 +10911,10 @@ a.el-tablo {
     transition: all 0.25s ease; }
   a.el-tablo .label {
     transition: all 0.25s ease; }
-  a.el-tablo:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0px 5px 12px rgba(126, 142, 177, 0.2); }
-    a.el-tablo:hover .value {
-      transform: translateY(-3px);
-      color: #047bf8; }
-    a.el-tablo:hover .label {
-      color: #3395fc; }
-    a.el-tablo:hover.centered .value {
-      transform: scale(1.1) translateY(-3px); }
-    a.el-tablo:hover .label {
-      transform: translateY(-2px); }
+  a.el-tablo:hover .value {
+    color: #047bf8; }
+  a.el-tablo:hover .label {
+    color: #3395fc; }
 
 .el-buttons-list .btn, .el-buttons-list .all-wrapper .fc-button, .all-wrapper .el-buttons-list .fc-button {
   margin: 0px;

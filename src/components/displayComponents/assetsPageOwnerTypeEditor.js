@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
+import { Link } from 'react-router-dom'
 import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get"
 var numeral = require('numeral')
@@ -93,11 +94,8 @@ class assetsPageOwnerTypeEditor extends Component {
         if (buildingsByOwnerTypeBy500YearRiskZoneData.length === 0){
             return (
                 <div className="container">
-                        <div className="element-wrapper">
-                            <div className="element-box">
+                       
                                 <h4><center>Loading ...</center></h4>
-                            </div>
-                        </div>
                 </div>
             )
         }
@@ -112,40 +110,40 @@ class assetsPageOwnerTypeEditor extends Component {
                                     <h4>{this.props.title !== "" ? this.props.title : tempTitle}</h4>
                                     <div className={'row'} style={{padding:'10px'}}>
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}`} style={{textAlign:'center'}}>
+                                            <Link className="el-tablo centered" to={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}`} style={{textAlign:'center'}}>
                                                 <div>
-                                                    <div className="label">Replacement Value</div>
+                                                    <div className="label">All Buildings</div>
                                                     <div className="value" style={{font:'8px'}}>
                                                         ${item.sum_replacement_value}<br/>
 
                                                     </div>
                                                     <div className="label">{item.count} buildings</div>
                                                 </div>
-                                            </a>
+                                            </Link>
                                         </div>
 
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_100`} style={{textAlign:'center'}}>
+                                            <Link className="el-tablo centered" to={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_100`} style={{textAlign:'center'}}>
                                                 <div>
-                                                    <div className="label">100-year flood zone Replacement Value</div>
+                                                    <div className="label">100-year Flood Plain</div>
                                                     <div className="value" style={{font:'8px'}}>
                                                         ${buildingsByOwnerTypeBy100YearRiskZoneData ? buildingsByOwnerTypeBy100YearRiskZoneData[i].sum_replacement_value:null}<br/>
                                                     </div>
                                                     <div className="label">{buildingsByOwnerTypeBy100YearRiskZoneData[i].count} buildings</div>
                                                 </div>
-                                            </a>
+                                            </Link>
                                         </div>
 
                                         <div className={'col-4'}>
-                                            <a className="element-box el-tablo" href={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_500`} style={{textAlign:'center'}}>
+                                            <Link className="el-tablo centered" to={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_500`} style={{textAlign:'center'}}>
                                                 <div>
-                                                    <div className="label">500-year flood zone Replacement Value</div>
+                                                    <div className="label">500-year Flodd Plain</div>
                                                     <div className="value" style={{font:'8px'}}>
                                                         ${buildingsByOwnerTypeBy500YearRiskZoneData[i] ? buildingsByOwnerTypeBy500YearRiskZoneData[i].sum_replacement_value : null}<br/>
                                                     </div>
                                                     <div className="label">{buildingsByOwnerTypeBy500YearRiskZoneData[i]? buildingsByOwnerTypeBy500YearRiskZoneData[i].count : null} buildings</div>
                                                 </div>
-                                            </a>
+                                            </Link>
                                         </div>
 
                                     </div>

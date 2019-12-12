@@ -7,8 +7,7 @@ import { fnum } from "utils/sheldusUtils"
 
 import get from "lodash.get";
 
-import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBoxOriginal'
+import TableBox from 'components/light-admin/tables/TableBox3'
 
 class NfipTable extends React.Component {
 
@@ -53,8 +52,11 @@ class NfipTable extends React.Component {
         try {
             return (
                 <TableBox { ...this.processData() }
-                          pageSize={ 4 }
-                          title={ this.props.title }
+                          pageSize={ 100 }
+                          tableScroll={true}
+                          maxHeight={'60vh'}
+                          showControls={false}
+                          widths={['25%','15%','15%','15%','15%','15%','15%']}
                           columnFormats= { {
                               "total losses": ",d",
                               "closed losses": ",d",
@@ -65,7 +67,7 @@ class NfipTable extends React.Component {
             )
         }
         catch (e) {
-            return <ElementBox>Loading...</ElementBox>;
+            return <div>Loading...</div>;
         }
     }
 }

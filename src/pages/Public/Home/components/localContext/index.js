@@ -47,7 +47,7 @@ class LocalContext extends Component {
                 censusKeys: ['B01003_001E']
             },
             {
-                title: 'Poverty',
+                title: 'Household Income Below Poverty Level',
                 sumType: 'pct',
                 valueSuffix: '%',
                 censusKeys: ['B17001_002E'],
@@ -82,7 +82,7 @@ class LocalContext extends Component {
                     <div className='row'>
                         <div className='col-12' style={{textAlign:'center'}}>
                             <ContentHeader>
-                                About {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Context
                             </ContentHeader>
                         </div>
                     </div>

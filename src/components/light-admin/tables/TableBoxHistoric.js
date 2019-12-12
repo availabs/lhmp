@@ -2,8 +2,7 @@ import React from 'react'
 import ElementBox from '../containers/ElementBox'
 import DataTable from './DataTableHistoric'
 import Pagination from './Pagination'
-
-import * as d3format from "d3-format"
+import * as d3format from 'd3-format'
 
 const COERCE = {
     string: s => s && s.toString(),

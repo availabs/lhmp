@@ -24,7 +24,7 @@ export const ImageContainer = styled.div`
 `
 
 export const StatementText = styled.div`
-	font-size: 3em;
+	font-size: 3rem;
 	font-weight: 500;
 	padding: 120px;
 `

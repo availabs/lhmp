@@ -8,9 +8,12 @@ import PlanningTeam from './components/planningTeam'
 import Introduction from './components/introduction'
 import LocalContext from './components/localContext/'
 import HazardLoss from './components/hazardLoss/'
-import HazardEvents from './components/hazardEvents/'
+import HazardEvents from 'pages/Public/Hazards/components/hazardEvents/'
 import NFIP from './components/NFIP'
 import Assets from './components/Assets/'
+import Narrative from './components/Strategy/Narrative'
+import Goals from './components/Strategy/Goals'
+import Capabilities from './components/Strategy/Capabilities'
 
 class Public extends React.Component {
 
@@ -31,6 +34,9 @@ class Public extends React.Component {
                 <HazardEvents/>
                 <NFIP/>
                 <Assets />
+                <Narrative />
+                <Goals />
+                <Capabilities />
             </div>
         )
     }

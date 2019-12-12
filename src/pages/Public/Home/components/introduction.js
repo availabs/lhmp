@@ -1,9 +1,11 @@
  import React, {Component} from 'react';
+import { reduxFalcor } from 'utils/redux-falcor'
+
 // import { Link } from 'react-router-dom'
 import AvlMap from 'components/AvlMap'
-import Element from 'components/light-admin/containers/Element'
 import { connect } from 'react-redux';
-import reduxFalcor from "utils/redux-falcor";
+import get from "lodash.get";
+
 import styled from "styled-components";
 import {
     PageContainer,
@@ -39,6 +41,12 @@ class Introduction extends Component {
         // Don't call this.setState() here!
         this.state = {
         };
+    }
+    fetchFalcorDeps(){
+        if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
+        return this.props.falcor.get(
+            ['geo', parseInt(this.props.activeCousubid), 'name']
+        )
     }
     priceTest () {
         let info = [
@@ -113,7 +121,7 @@ class Introduction extends Component {
         return (
             <PageContainer>
                 <HeaderContainer>
-                        <PageHeader>X County Hazard Mitigation Plan</PageHeader>
+                        <PageHeader>{get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Mitigation Plan</PageHeader>
                         <div className="row">
                             <div className="col-12">
                                 <StatementText>
@@ -133,4 +141,16 @@ class Introduction extends Component {
     }
 }
 
-export default Introduction
+const mapStateToProps = (state, ownProps) => {
+    return {
+        activePlan: get(state, `user.activePlan`, null),
+        activeCousubid: get(state, `user.activeCousubid`, null),
+        graph: state.graph,
+        router: state.router
+    };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Introduction))
+

@@ -67,7 +67,7 @@ class Analysis extends Component {
                         </div>
                     </div>
                 <div className='row'>
-                    <div className='col-sm-6'>
+                    <div className='col-lg-6'>
                         <VerticalAlign>
                             
                                 <PlaceComponent setHazard={this.setHazard}/>
@@ -75,7 +75,7 @@ class Analysis extends Component {
                         </VerticalAlign>
                        
                     </div>
-                    <div className='col-sm-6' >
+                    <div className='col-lg-6' >
                         
                         <div style={{height: '80vh', width: '100%'}}>
                             <AvlMap
