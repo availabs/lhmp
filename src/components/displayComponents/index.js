@@ -1,12 +1,12 @@
 import React from 'react'
 import contentEditor from "./contentEditor";
 import contentViewer from "./contentViewer";
-import rolesTableViewer from "./rolesTableViewer";
+import rolesTableViewer from "./jurisdictionRepresentatives/rolesTableViewer";
 import rolesTableEditor from "./rolesTableEditor";
 import capabilitiesTableHMPEditor from "./capabilitiesTableHMPEditor";
-import capabilitiesTableHMPViewer from "./capabilitiesTableHMPViewer";
+import capabilitiesTableHMPViewer from "./capabiltiesTableHMP/capabilitiesTableHMPViewer";
 import planningDocumentsEditor from "./planningDocumentsEditor";
-import planningDocumentsViewer from "./planningDocumentsViewer";
+import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer";
 const NA = ({ type, state, routes }) =>
 {
     return (
