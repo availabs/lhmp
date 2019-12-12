@@ -64,7 +64,7 @@ class HazardLoss extends Component {
                     <div className='row'>
                         <div className='col-lg-6'>
                             <VerticalAlign>
-                                <h5> Hazard Events <span style={{fontSize: '14px'}}> Number of Events by Hazard Type (1996-2017)</span></h5>
+                                <ContentHeader> Hazard Events <span style={{fontSize: '14px'}}> Number of Events by Hazard Type (1996-2017)</span></ContentHeader>
                                 <NumberOfHazardsStackedBarGraph
                                     showYlabel={false}
                                     showXlabel={false}

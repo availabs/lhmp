@@ -23,8 +23,8 @@ TractsLayer.backgroundColor = backgroundColor;
 const PlaceComponent = (props) => (
     <div>
         <div style={{padding: 20, position: 'relative'}}>
-            <h5> Hazard Risk <span style={{fontSize: '14px'}}> Annual Average Loss by Hazard Type (1996-2017)</span>
-            </h5>
+            <ContentHeader> Hazard Risk <span style={{fontSize: '14px'}}> Annual Average Loss by Hazard Type (1996-2017)</span>
+            </ContentHeader>
             <HazardTotalGraph setHazard={props.setHazard}/>
         </div>
     </div>
@@ -39,7 +39,7 @@ class Analysis extends Component {
             update: {
                 layer: 'Tracts Layer',
                 filter: 'hazard',
-                value: 'hurricane'
+                value: 'riverine'
             }
         };
         this.setHazard = this.setHazard.bind(this);

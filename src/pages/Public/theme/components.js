@@ -5,6 +5,34 @@ let themes = [
     {
         backgroundColor:   '#d1dbe9', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
         mainFontColor : '#3E4B5B',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`
+    },
+    {
+        backgroundColor:   '#293148', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#fff',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`
+    },
+    {
+        backgroundColor:   '#efefef', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`
+    },
+    {
+        backgroundColor:   '#fff', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        DarkFontColor: '#3E4B5B',
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
@@ -12,11 +40,12 @@ let themes = [
     }
 ]
 
-let selectedTheme = 0
+let selectedTheme = 3  
 
 
 export const backgroundColor = themes[selectedTheme].backgroundColor 
 export const mainFontColor  = themes[selectedTheme].mainFontColor  
+export const DarkFontColor  = themes[selectedTheme].DarkFontColor  
 export const mainFontSize = themes[selectedTheme].mainFontSize 
 export const mainFontWeight = themes[selectedTheme].mainFontWeight 
 export const mainFontLineHeight = themes[selectedTheme].mainFontLineHeight 
@@ -42,6 +71,7 @@ export const StatementText = styled.div`
 	font-size: 3rem;
 	font-weight: 500;
 	padding: 120px;
+    color: ${mainFontColor};
 `
 
 export const HeaderImage = styled.div`
@@ -86,11 +116,12 @@ export const PageContainer = styled.div`
 export const PageHeader = styled.h4`
 	padding-top: 50px;
 	text-transform: uppercase;
+    color: ${mainFontColor};
 `
 
 export const SectionHeader = styled.h2`
 	padding-top: 50px;
-
+    color: ${mainFontColor};
 	text-transform: uppercase;
 `
 export const ContentContainer = styled.div`
@@ -105,6 +136,7 @@ export const HeaderContainer = styled.div`
 
 export const ContentHeader = styled.h3`
 	padding-top: 50px;
+    color: ${mainFontColor};
 `
 
 export const SectionBox = styled.div`
@@ -175,12 +207,24 @@ export const FeatureName = styled.div`
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 1.5rem;
+    color: ${DarkFontColor};
+    font-weight: 500;
+    padding-bottom: 40px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`
+
+export const FeatureName2 = styled.div`
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
     color: ${mainFontColor};
     font-weight: 500;
     padding-bottom: 40px;
     transition: all 0.2s ease;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `
+
 export const FeatureImage = styled.div`
     
     img {
@@ -206,4 +250,29 @@ export const VerticalAlign = styled.div`
     justify-content: center;
     height: 100%;
 
+`
+export const NameLabel = styled.div`
+    font-size: .6667em;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: ${mainFontColor};
+`
+
+export const NumberLabel = styled.div`
+    font-feature-settings: "tnum";
+    text-align: right;
+    font-size: .6667em;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: ${mainFontColor};
+`
+
+export const NumberLabelBig = styled.h3`
+    color: ${mainFontColor};
 `

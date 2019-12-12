@@ -26,6 +26,7 @@ import {
     Feature,
     FeatureDescription,
     FeatureName,
+    FeatureName2,
     FeatureImage,
     FeatureHeader
 } from 'pages/Public/theme/components'
@@ -91,7 +92,7 @@ class Introduction extends Component {
                       <FeatureImage>
                         <img alt src={sect.image} />
                       </FeatureImage>
-                      <FeatureName>{sect.title}</FeatureName>
+                      <FeatureName2>{sect.title}</FeatureName2>
                     </FeatureHeader>
                
                     <FeatureDescription>

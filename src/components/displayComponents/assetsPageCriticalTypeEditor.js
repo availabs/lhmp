@@ -5,6 +5,18 @@ import { Link } from 'react-router-dom'
 
 import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get"
+
+import {
+    VerticalAlign,
+    ContentHeader,
+    PageContainer,
+    HeaderContainer,
+    NameLabel,
+    NumberLabel,
+    NumberLabelBig,
+    backgroundColor
+} from 'pages/Public/theme/components'
+
 var numeral = require('numeral')
 
 class assetsPageCriticalTypeEditor extends Component {
@@ -110,12 +122,12 @@ class assetsPageCriticalTypeEditor extends Component {
                                         <div className={'col-4'}>
                                             <Link className="el-tablo centered" to={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}`} style={{textAlign:'center'}}>
                                                 <div>
-                                                    <div className="label">All Buildings</div>
-                                                    <div className="value" style={{font:'8px'}}>
+                                                    <NameLabel>All Buildings</NameLabel>
+                                                    <NumberLabelBig className="value" style={{font:'8px'}}>
                                                         ${item.sum_replacement_value}<br/>
 
-                                                    </div>
-                                                    <div className="label">{item.count} buildings</div>
+                                                    </NumberLabelBig>
+                                                    <NameLabel>{item.count} buildings</NameLabel>
                                                 </div>
                                             </Link>
                                         </div>
@@ -123,11 +135,11 @@ class assetsPageCriticalTypeEditor extends Component {
                                         <div className={'col-4'}>
                                             <Link className="el-tablo centered" to={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_100`} style={{textAlign:'center'}}>
                                                 <div>
-                                                    <div className="label">100-year Flood Plain</div>
-                                                    <div className="value" style={{font:'8px'}}>
+                                                    <NameLabel>100-year Flood Plain</NameLabel>
+                                                    <NumberLabelBig className="value" style={{font:'8px'}}>
                                                         ${buildingsByCriticalTypeBy100YearRiskZoneData ? buildingsByCriticalTypeBy100YearRiskZoneData[i].sum_replacement_value:null}<br/>
-                                                    </div>
-                                                    <div className="label">{buildingsByCriticalTypeBy100YearRiskZoneData[i].count} buildings</div>
+                                                    </NumberLabelBig>
+                                                    <NameLabel>{buildingsByCriticalTypeBy100YearRiskZoneData[i].count} buildings</NameLabel>
                                                 </div>
                                             </Link>
                                         </div>
@@ -135,11 +147,11 @@ class assetsPageCriticalTypeEditor extends Component {
                                         <div className={'col-4'}>
                                             <Link className="el-tablo centered" to={`/assets/list/${this.props.filter_type}/${this.props.filter_value.join('-')}/hazard/flood_500`} style={{textAlign:'center'}}>
                                                 <div>
-                                                    <div className="label">500-year Flood Plain</div>
-                                                    <div className="value" style={{font:'8px'}}>
+                                                    <NameLabel>500-year Flood Plain</NameLabel>
+                                                    <NumberLabelBig className="value" style={{font:'8px'}}>
                                                         ${buildingsByCriticalTypeBy500YearRiskZoneData[i] ? buildingsByCriticalTypeBy500YearRiskZoneData[i].sum_replacement_value : null}<br/>
-                                                    </div>
-                                                    <div className="label">{buildingsByCriticalTypeBy500YearRiskZoneData[i]? buildingsByCriticalTypeBy500YearRiskZoneData[i].count : null} buildings</div>
+                                                    </NumberLabelBig>
+                                                    <NameLabel>{buildingsByCriticalTypeBy500YearRiskZoneData[i]? buildingsByCriticalTypeBy500YearRiskZoneData[i].count : null} buildings</NameLabel>
                                                 </div>
                                             </Link>
                                         </div>
