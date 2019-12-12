@@ -73,39 +73,45 @@ class HazardLoss extends Component {
                                     geoLevel={this.setGeoLevel(this.props.activeGeoid.length)}
                                     dataType='severeWeather'
                                     colorScale={getColorScale([1, 2])}
-                                    hazards={['hurricane', 'hail']}
-                                    //hazard = {'hurricane'}
+                                    hazards={this.props.hazards}
+                                    hazard = {this.props.hazard}
                                 />
                             </VerticalAlign>
                         </div>
                         <div className='col-lg-6' >
-                            
+
                                     <div style={{height: '80vh', width: '100%'}}>
-                                        <AvlMap
-                                            sidebar={false}
-                                            mapactions={false}
-                                            scrollZoom={false}
-                                            zoom={6}
-                                            update={[this.state.update]}
-                                            style='Clear'
-                                            styles={[{
-                                                name: "Clear",
-                                                style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
-                                            }]}
-                                            fitBounds={[
-                                                [
-                                                    -79.8046875,
-                                                    40.538851525354666
-                                                ],
-                                                [
-                                                    -71.7626953125,
-                                                    45.042478050891546
-                                                ]]}
-                                            layers={[TractsLayer]}
-                                        />
-                                    </div>
+                                <AvlMap
+                                    sidebar={false}
+                                    mapactions={false}
+                                    scrollZoom={false}
+                                    zoom={6}
+                                    update={[this.state.update]}
+                                    style='Clear'
+                                    styles={[{
+                                        name: "Clear",
+                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
+                                    }]}
+                                    fitBounds={[
+                                        [
+                                            -79.8046875,
+                                            40.538851525354666
+                                        ],
+                                        [
+                                            -71.7626953125,
+                                            45.042478050891546
+                                        ]]}
+                                    layers={[TractsLayer]}
+                                    layerProps={ {
+                                        [TractsLayer.name]: {
+                                            hazard: this.props.hazard,
+                                            hazards: this.props.hazards
+                                        }
+                                    } }
+                                />
+                            </div>
                         </div>
-                    
+
                     </div>
                 </HeaderContainer>
             </PageContainer>

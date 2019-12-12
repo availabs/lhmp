@@ -106,7 +106,6 @@ class GeographyScoreBarChart extends React.Component {
         } else if (this.props.geoid.length > 5){
             return null;
         }
-        console.log('data for scorebar', data, keys)
         return (
             <div>
                 <div className="os-tabs-controls" style={{right: 0, top: 0,marginBottom:0, zIndex:100}}>
@@ -152,7 +151,7 @@ class GeographyScoreBarChart extends React.Component {
                             "tickPadding": 5,
                             "tickRotation": 0,
                             "legend": this.props.showYlabel ? this.props.lossType : undefined,
-                            "legendPosition": "center",
+                            "legendPosition": "middle",
                             "legendOffset": -100,
                             "format": fnum
                         } }

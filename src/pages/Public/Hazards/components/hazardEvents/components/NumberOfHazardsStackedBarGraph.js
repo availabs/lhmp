@@ -83,6 +83,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
             } else {
                 geoids = this.props.geoGraph[geoid][geoLevel].value;
             }
+            //console.log('bar chart events:', this.props[dataType])
             return processDataForBarChart(get(this.props, dataType, {}), geoids, lossType, hazard);
         } catch (e) {
             return {data: [], keys: []}

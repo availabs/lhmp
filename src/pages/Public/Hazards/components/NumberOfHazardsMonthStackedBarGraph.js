@@ -101,7 +101,6 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
         } else if (this.props.geoid.length > 5) {
             return null;
         }
-        console.log('data,keys', data,keys)
         return (
             <div style={{height: `${this.props.height}px`, background: '#fff'}}>
                 <ResponsiveBar

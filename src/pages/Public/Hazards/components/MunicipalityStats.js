@@ -23,7 +23,6 @@ class MunicipalityStats extends React.Component {
             ['geo', geoid, [2016], ['population']],
             ['geo', geoid, 'cousubs']
         ).then(d => {
-            console.log('resFetchFalcorDepsMS',d);
             return d
         })
     }

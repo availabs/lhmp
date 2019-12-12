@@ -46,7 +46,11 @@ let eventsGeo = {
 class TractLayer extends MapLayer {
     paintEvents(map) {
         const events = falcorGraph.getCache().severeWeather.events.borked; //[geoid][hazard][year]["property_damage"].value;
-
+        eventsGeo = {
+            type: "FeatureCollection",
+            features: []
+        };
+        //console.log('events borked',events)
         if (events) {
             let radiusScale = d3scale.scaleThreshold()
                 .domain(
@@ -60,7 +64,9 @@ class TractLayer extends MapLayer {
                     [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.8, 2, 2.2]
                 );
             Object.keys(events).forEach(geo => {
-                Object.keys(events[geo]).forEach(haz => {
+                Object.keys(events[geo])
+                    .filter(f => this.filters.hazard.value && this.filters.hazard.value.includes(f))
+                    .forEach(haz => {
                     Object.keys(events[geo][haz]).forEach(year => {
                         if (events[geo][haz][year].property_damage.value && events[geo][haz][year].property_damage.value.length > 0) {
                             events[geo][haz][year].property_damage.value.forEach(data => {
@@ -86,23 +92,43 @@ class TractLayer extends MapLayer {
             colors.push(hazardcolors[h.value]);
         });
         colors.push('#000');
-        map.addSource("events", {
-            'type': 'geojson',
-            'data': eventsGeo
-        });
-        map.addLayer(
-            {
-                id: 'events-layer',
-                type: 'fill',
-                source: 'events',
-                "paint": {
-                    "fill-color": colors,
-                    "fill-opacity": 0.5
-                },
-            }
-        );
+        if (map.getSource('events')){
+            console.log('gets source', map.getSource('events'))
+            map.removeLayer('events-layer')
+            map.removeSource('events')
+        }
+
+        if (!map.getSource('events')){
+            map.addSource("events", {
+                'type': 'geojson',
+                'data': eventsGeo
+            });
+            map.addLayer(
+                {
+                    id: 'events-layer',
+                    type: 'fill',
+                    source: 'events',
+                    "paint": {
+                        "fill-color": colors,
+                        "fill-opacity": 0.5
+                    },
+                }
+            );
+        }
+
     }
 
+    receiveProps(oldProps, newProps){
+        if (this.filters.hazard.value !== newProps.hazard)
+            this.filters.hazard.value = newProps.hazard ?
+                newProps.hazard : newProps.hazards ? newProps.hazards : null
+    }
+    onPropsChange(oldProps, newProps){
+        if (this.filters.hazard.value !== newProps.hazard)
+            this.filters.hazard.value = newProps.hazard ?
+                newProps.hazard : newProps.hazards ? newProps.hazards : null
+        this.doAction(["fetchLayerData"]);
+    }
     onAdd(map) {
         super.onAdd(map);
         if (!store.getState().user.activeGeoid) return Promise.resolve();
@@ -262,7 +288,7 @@ const tractLayer = new TractLayer("Hazard Events Layer", {
             name: "hazard",
             type: "hidden",
             domain: hazardMeta,
-            value: "hurricane"
+            value: ["hurricane"]
         }
     },
     popover: {
