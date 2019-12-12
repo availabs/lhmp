@@ -82,8 +82,8 @@ class HazardLoss extends Component {
                                     geoLevel={this.setGeoLevel(this.props.activeGeoid.length)}
                                     dataType='severeWeather'
                                     colorScale={getColorScale([1, 2])}
-                                    hazards={['hurricane', 'hail']}
-                                    //hazard = {'hurricane'}
+                                    hazards={this.props.hazards}
+                                    hazard = {this.props.hazard}
                                 />
                             </div>
                         </div>
@@ -114,6 +114,12 @@ class HazardLoss extends Component {
                                             45.042478050891546
                                         ]]}
                                     layers={[TractsLayer]}
+                                    layerProps={ {
+                                        [TractsLayer.name]: {
+                                            hazard: this.props.hazard,
+                                            hazards: this.props.hazards
+                                        }
+                                    } }
                                 />
                             </div>
                         </div>

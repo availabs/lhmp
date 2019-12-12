@@ -45,7 +45,7 @@ class Hazards extends React.Component {
             dataType: 'severeWeather',
             colorScale: getColorScale([1, 2]),
             hazards: [],
-            hazard: null
+            hazard: undefined
         }
     }
 
@@ -116,7 +116,7 @@ class Hazards extends React.Component {
                         onChange={(e) => {
                             if (e.target.value !== 'none'){
                                 e.target.value === 'all' ?
-                                    this.setState({hazard: null}) :
+                                    this.setState({hazard: undefined}) :
                                     this.setState({hazard: e.target.value})
                             }
                         }}
@@ -278,7 +278,10 @@ class Hazards extends React.Component {
                                     <strong>1996-2017</strong>
                                     <div> Total number of events and Damage caused.
                                     </div>
-                                    <HazardEvents />
+                                    <HazardEvents
+                                        hazards={this.state.hazards}
+                                        hazard={this.state.hazard}
+                                    />
                                 </div>
                             </div>
                         </div>
