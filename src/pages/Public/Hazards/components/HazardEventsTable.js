@@ -15,17 +15,16 @@ import {
 class HazardEventsTable extends React.Component {
 
     fetchFalcorDeps() {
-        const { hazard, year } = this.props;
-        return (hazard ? Promise.resolve([...hazard]) :
-            this.props.falcor.get(
-                ['riskIndex', 'hazards']
-            )
+        let hazard = this.props.hazard ?
+            [this.props.hazard] :
+            this.props.hazards && this.props.hazards.length > 0 ?
+                this.props.hazards : null;
+
+        return this.props.falcor.get(['riskIndex', 'hazards'])
                 .then(response => {
-                    return response.json.riskIndex.hazards;
-                }))
+                    return hazard ? hazard : response.json.riskIndex.hazards;
+                })
             .then(hazardids => {
-// console.log("hazardids",hazardids)
-// 'severeWeather.events[{keys:geoids}][{keys:hazardids}][{integers:years}].length'
                 return this.props.falcor.get(
                     [this.props.dataType, 'events', this.props.geoid, hazardids, 'top', 'property_damage']
                 )
@@ -35,12 +34,10 @@ class HazardEventsTable extends React.Component {
                             const ids = response.json[this.props.dataType].events[this.props.geoid][hazardid].top.property_damage;
                             event_ids = event_ids.concat(ids);
                         })
-// console.log("event_ids",event_ids)
                         return event_ids;
                     })
             })
             .then(event_ids => {
-// console.log("event_ids",event_ids.length)
                 const requests = [],
                     eventIdsPerRequest = 500;
                 for (let i = 0; i < event_ids.length; i += eventIdsPerRequest) {
@@ -65,8 +62,8 @@ class HazardEventsTable extends React.Component {
     }
 
     processData() {
-        const { hazard, dataType, geoid, year } = this.props,
-            hazardids = hazard ? hazard : this.props.riskIndex.hazards.value,
+        const { hazard, hazards, dataType, geoid, year } = this.props,
+            hazardids = hazard ? [hazard] : hazards && hazards.length > 0 ? hazards : this.props.riskIndex.hazards.value,
             graphEventsByGeoid = this.props[dataType].events[geoid],
             graphEventsById = this.props[dataType].events.byId,
             data = [];
@@ -110,7 +107,6 @@ class HazardEventsTable extends React.Component {
             )
         }
         catch (e) {
-// console.log(e)
             return (
                 <ElementBox>Loading...</ElementBox>
             )
@@ -123,7 +119,8 @@ HazardEventsTable.defaultProps = {
     geoid: "36",
     year: 2017,
     expandColumns: ['narrative'],
-    hazard: "riverine"
+    hazard: null,
+    hazards: []
 }
 
 const mapStateToProps = state => {

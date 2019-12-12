@@ -9,7 +9,7 @@ import styled from "styled-components";
 import TractsLayer from './layers/TractsLayer'
 import NumberOfHazardsStackedBarGraph from "./components/NumberOfHazardsStackedBarGraph";
 import {falcorGraph} from "../../../../../store/falcorGraph";
-import GeographyScoreBarChart from "../../../../auth/Historic/components/GeographyScoreBarChart";
+import GeographyScoreBarChart from "../../../Hazards/components/GeographyScoreBarChart";
 import hazardcolors from "constants/hazardColors";
 
 let backgroundCss = {

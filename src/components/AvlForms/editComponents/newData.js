@@ -68,7 +68,7 @@ class AvlFormsNewData extends React.Component{
                     if(graph){
                         attributes[0].forEach(attribute =>{
                             if(attribute.includes('date')){
-                                let d = graph.attributes[attribute].slice(0, 10).split('-');
+                                let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
                                 tmp_state[attribute] = date
                             }else{

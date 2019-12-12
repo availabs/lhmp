@@ -26,7 +26,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.geoid !== this.props.geoid) {
+        if (prevProps.geoid !== this.props.geoid || prevProps.hazard !== this.props.hazard) {
             this.setState({geoid: this.props.geoid});
             this.fetchFalcorDeps(this.props.geoLevel, this.props.dataType, this.props.geoid)
         }
@@ -166,6 +166,7 @@ NumberOfHazardsStackedBarGraph.defaultProps = {
     lossType: "property_damage",
     format: "d",
     hazard: null,
+    hazards: [],
     showYlabel: true,
     showXlabel: true,
     geoid: '36',

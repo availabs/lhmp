@@ -5,32 +5,57 @@ import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import {EditorState} from "draft-js";
 import {Link} from "react-router-dom";
-
-const COLS = [
-    "id",
-    "contact_name",
-    "contact_email",
-    "contact_phone",
-    "contact_address",
-    "contact_title_role",
-    "contact_department",
-    "contact_agency",
-    "contact_municipality",
-    "contact_county",
-    "associated_plan"
-]
-
-const COLS_TO_DISPLAY = [
-    "contact_name",   
-    "contact_title_role",
-    "contact_department",
-    "contact_agency",
-    "contact_municipality",
-    "contact_county",
-]
+import AvlFormsListTableHMP from "../../AvlForms/displayComponents/listTableHMP";
+import config from "components/displayComponents/jurisdictionRepresentatives/rolesTable_config.js"
 
 class rolesTableViewer extends Component {
+
     constructor(props) {
+        super(props);
+        this.state={
+            list_attributes : []
+        }
+    }
+
+    orderListAttributes(){
+        let list_attributes = []
+        for (var i = 0; i < config[0].list_attributes.length; i++){
+            list_attributes.push(config[0].list_attributes[i])
+        }
+        this.setState({
+            list_attributes : list_attributes
+        })
+    }
+    componentWillMount(){
+        this.orderListAttributes()
+    }
+
+    render(){
+        return(
+            <AvlFormsListTableHMP
+                json = {config}
+                list_attributes = {this.state.list_attributes}
+            />
+        )
+    }
+
+
+}
+
+const mapStateToProps = (state, ownProps) => {
+    return ({
+        activePlan: state.user.activePlan,
+        activeCousubid: state.user.activeCousubid
+
+    })
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(rolesTableViewer))
+
+/*
+constructor(props) {
         super(props);
         this.state={
             role_data: []
@@ -182,17 +207,4 @@ class rolesTableViewer extends Component {
         )
 
     }
-
-}
-
-const mapStateToProps = (state, ownProps) => {
-    return ({
-        activePlan: state.user.activePlan,
-        activeCousubid: state.user.activeCousubid
-
-    })
-};
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(rolesTableViewer))
+ */

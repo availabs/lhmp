@@ -39,7 +39,6 @@ import PlanningTools from 'pages/auth/PlanningTools/'
 import Assets from 'pages/auth/Assets/'
 import AssetsByType from 'pages/auth/Assets/indexbyType'
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
-import Historic from 'pages/auth/Historic/'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
@@ -116,7 +115,6 @@ const routes = [
    //...CapabilitiesNew,
    //...CapabilitiesView,
     */
-   ...Historic,
    //...RolesIndex,
    ...RolesFormsList,
    ...RolesFormView,

@@ -84,7 +84,6 @@ class AvlFormsViewData extends React.Component{
                             missing_attributes = config_attributes[0].filter(i => Object.keys(graph[item].attributes).indexOf(i) < 0);
                             missing_attributes.forEach(ma =>{
                                 let renamed_column = config[0][ma].rename_column;
-                                console.log('renamed_column',renamed_column)
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
                                         if(graph[item].attributes[rc]){

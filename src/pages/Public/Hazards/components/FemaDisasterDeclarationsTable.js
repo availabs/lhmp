@@ -15,19 +15,24 @@ import {
 } from 'utils/sheldusUtils'
 
 class FemaDisasterDeclarationsTable extends React.Component {
-
-    fetchFalcorDeps(hazard, geoid) {
-        if (!hazard) hazard = this.props.hazard;
-        if (!geoid) geoid = this.props.geoid;
+    constructor(props) {
+        super(props);
+        this.state = {
+            disasterNumbers: []
+        }
+    }
+    fetchFalcorDeps() {
+        let geoid = this.props.geoid;
 
         return this.props.falcor.get(
             ['riskIndex', 'hazards']
         )
             .then(response => response.json.riskIndex.hazards)
             .then(hazards => {
-                console.log('hazards, haz 1', hazard)
-                hazards = hazard ? hazard : hazards;
-                console.log('hazards, haz 2', hazards)
+                hazards = this.props.hazard ?
+                    [this.props.hazard] :
+                    this.props.hazards && this.props.hazards.length > 0 ?
+                        this.props.hazards : hazards;
 
 // `femaDisaster[{keys:geoids}][{keys:hazardids}][{integers:years}].length`
                 return this.props.falcor.get(
@@ -43,7 +48,10 @@ class FemaDisasterDeclarationsTable extends React.Component {
                                 max = Math.max(max, length);
                             }
                         })
-                        if (!max) return;
+                        if (!max) {
+                            this.setState({disasterNumbers:[]});
+                            return Promise.resolve()
+                        };
                         return this.props.falcor.get(
                             ["femaDisaster", geoid, hazards, { from: EARLIEST_YEAR, to: LATEST_YEAR }, { from: 0, to: max -1 }, "disasternumber"]
                         )
@@ -65,6 +73,7 @@ class FemaDisasterDeclarationsTable extends React.Component {
                             })
                             .then(disasternumbers => {
                                 if (!disasternumbers.length) return;
+                                this.setState({disasterNumbers:disasternumbers});
                                 return this.props.falcor.get(
                                     ["femaDisaster", "byDisasterNumber", disasternumbers, ['disasternumber','disastername', 'declarationtype', 'date', 'hazard']]
                                 )
@@ -73,9 +82,9 @@ class FemaDisasterDeclarationsTable extends React.Component {
             })
     }
     componentDidUpdate(prevProps) {
-        if (prevProps.geoid !== this.props.geoid){
+        if (prevProps.geoid !== this.props.geoid || prevProps.hazard !== this.props.hazard){
             this.setState({geoid: this.props.geoid})
-            this.fetchFalcorDeps(this.props.hazards, this.props.geoid)
+            this.fetchFalcorDeps()
         }
     }
     getHazardName(hazard) {
@@ -92,7 +101,7 @@ class FemaDisasterDeclarationsTable extends React.Component {
             case 'disasternumber':
                 return 'disaster number';
             case 'disastername':
-                return 'disaster name]';
+                return 'disaster name';
             case 'declarationtype':
                 return 'declaration type';
             default:
@@ -104,6 +113,7 @@ class FemaDisasterDeclarationsTable extends React.Component {
         const graph = this.props.femaDisaster.byDisasterNumber,
             keys = {},
             data = Object.keys(graph)
+                .filter(f => this.state.disasterNumbers.includes(parseInt(f)))
                 .map(key => {
                     let row = {};
                     for (const column in graph[key]) {
@@ -140,6 +150,7 @@ class FemaDisasterDeclarationsTable extends React.Component {
 FemaDisasterDeclarationsTable.defaultProps = {
     geoid: "36",
     hazard: null,
+    hazards: [],
     columnTypes: { date: 'date' },
     filterColumns: [],
     expandColumns: []

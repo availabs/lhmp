@@ -18,7 +18,7 @@ class CousubTotalLossTable extends React.Component {
         }
     }
     componentDidUpdate(prevProps) {
-        if (prevProps.geoid !== this.props.geoid){
+        if (prevProps.geoid !== this.props.geoid || prevProps.hazard !== this.props.hazard){
             this.setState({geoid: this.props.geoid})
             this.fetchFalcorDeps(this.props.dataType, this.props.geoid)
         }
@@ -33,6 +33,10 @@ class CousubTotalLossTable extends React.Component {
         )
             .then(response => [response.json.riskIndex.hazards, response.json.geo[geoid].cousubs])
             .then(([hazards, geoids]) => {
+                hazards = this.props.hazard ?
+                    this.props.hazard :
+                    this.props.hazards && this.props.hazards.length > 0 ?
+                        this.props.hazards : hazards;
                 return this.props.falcor.get(
                     ['geo', geoids, 'name'],
                     ['riskIndex', 'meta', hazards, 'name'],
@@ -54,10 +58,15 @@ class CousubTotalLossTable extends React.Component {
             }
             const graph = this.props[dataType][geoid];
             for (const hazard in graph) {
-                const td = +graph[hazard].allTime.total_damage,
-                    f = +graph[hazard].allTime.fatalities;
-                data[geoid]["total damage"] += td;
-                data[geoid]["fatalities"] += f;
+                if (
+                    (this.props.hazard && this.props.hazard === hazard) ||
+                        (!this.props.hazard && this.props.hazards && this.props.hazards.length > 0 && this.props.hazards.includes(hazard))
+                ){
+                    const td = +graph[hazard].allTime.total_damage,
+                        f = +graph[hazard].allTime.fatalities;
+                    data[geoid]["total damage"] += td;
+                    data[geoid]["fatalities"] += f;
+                }
             }
         })
         data = Object.values(data);
@@ -103,7 +112,8 @@ class CousubTotalLossTable extends React.Component {
 }
 
 CousubTotalLossTable.defaultProps = {
-    dataType: "severeWeather"
+    dataType: "severeWeather",
+    hazards: []
 }
 
 const mapStateToProps = state => ({

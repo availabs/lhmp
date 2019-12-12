@@ -159,30 +159,38 @@ class AvlFormsListTable extends React.Component{
                 formAttributes = this.props.config[0].list_attributes
             }
         }
-        let sub_type = ''
-        Object.keys(this.props.config[0].attributes).forEach(d =>{
-            if(this.props.config[0].attributes[d].sub_type !== 'project'){
-                sub_type = this.props.config[0].attributes[d].sub_type
-            }
-        })
-        console.log('listViewData',listViewData)
         return (
                 <div className='container'>
                     <Element>
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
-                        {formType[0] === 'actions' || formType[0] === 'participation'?
-                            <Link
-                                className="btn btn-sm btn-primary"
-                                to={ `/${this.props.config.map(d=> d.type)}/${sub_type}/new` } >
-                                Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                            </Link>
-                            :
-                            <Link
-                                className="btn btn-sm btn-primary"
-                                to={ `/${this.props.config.map(d=> d.type)}/new` } >
-                                Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                            </Link>
+                        {this.props.config.map(d =>{
+                            if(d.type === 'actions'){
+                                return(
+                                    <Link
+                                        className="btn btn-sm btn-primary"
+                                        to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                    </Link>
+                                )
+                            }else if(d.type === 'participation'){
+                                return (
+                                    <Link
+                                        className="btn btn-sm btn-primary"
+                                        to={ `/${this.props.config.map(d=> d.type)}/time/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                    </Link>
+                                )
+                            }else{
+                                return (
+                                    <Link
+                                        className="btn btn-sm btn-primary"
+                                        to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                    </Link>
+                                )
+                            }
+                        })
                         }
 
                         {this.props.config.map(d => {

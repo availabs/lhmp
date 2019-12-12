@@ -17,7 +17,7 @@ import { CircleLabel } from "./HazardEventsLegend"
 import {
     EARLIEST_YEAR,
     LATEST_YEAR
-} from "./yearsOfSevereWeatherData";
+} from "../../../auth/Historic/components/yearsOfSevereWeatherData";
 
 import {
     fnum
