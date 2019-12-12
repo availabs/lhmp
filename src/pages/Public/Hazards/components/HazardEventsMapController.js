@@ -25,7 +25,7 @@ import {
 import {
     EARLIEST_YEAR,
     LATEST_YEAR
-} from "./yearsOfSevereWeatherData";
+} from "../../../auth/Historic/components/yearsOfSevereWeatherData";
 
 let UNIQUE_ID = 0;
 const getUniqueId = () => `controller-${ ++UNIQUE_ID }`

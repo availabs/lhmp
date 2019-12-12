@@ -25,33 +25,8 @@ import {
 import {
     EARLIEST_YEAR,
     LATEST_YEAR
-} from "./yearsOfSevereWeatherData";
-
-const D3_CATEGORY20 = [
-    "#1f77b4",
-    "#aec7e8",
-    "#ff7f0e",
-    "#ffbb78",
-    "#2ca02c",
-    "#98df8a",
-    "#d62728",
-    "#ff9896",
-    "#9467bd",
-    "#c5b0d5",
-    "#8c564b",
-    "#c49c94",
-    "#e377c2",
-    "#f7b6d2",
-    "#7f7f7f",
-    "#c7c7c7",
-    "#bcbd22",
-    "#dbdb8d",
-    "#17becf",
-    "#9edae5"
-];
-
-const COLOR_SCALE = d3scale.scaleOrdinal()
-    .range(D3_CATEGORY20);
+} from "../../../auth/Historic/components/yearsOfSevereWeatherData";
+import hazardcolors from "constants/hazardColors";
 
 class GeographyScoreBarChart extends React.Component {
     constructor(props) {
@@ -59,7 +34,8 @@ class GeographyScoreBarChart extends React.Component {
         this.state = {
             geoid: this.props.geoid,
             geoLevel: this.props.geoLevel,
-            dataType: this.props.dataType
+            dataType: this.props.dataType,
+            maxValue: 100000
         }
     }
     componentDidUpdate(prevProps) {
@@ -130,54 +106,71 @@ class GeographyScoreBarChart extends React.Component {
         } else if (this.props.geoid.length > 5){
             return null;
         }
+        console.log('data for scorebar', data, keys)
         return (
-            <div style={ { height: `${ this.props.height }px`, background: '#fff'} }>
-                <ResponsiveBar
-                    data={ data }
-                    keys={ keys }
-                    indexBy="year"
-                    colorBy={ d => this.props.colorScale(d.id) }
-                    enableLabel={ false }
-                    tooltipFormat={ this.props.format }
-                    margin={ {
-                        "top": 25,
-                        "right": this.props.showYlabel ? 25 : 0,
-                        "bottom": this.props.showXlabel ? 50 : 40,
-                        "left": this.props.showYlabel ? 90 : 50
-                    } }
-                    axisBottom={ {
-                        "orient": "bottom",
-                        "tickSize": 5,
-                        "tickPadding": 5,
-                        "legend": this.props.showXlabel ? "Year" : undefined,
-                        "legendPosition": "center",
-                        "legendOffset": 40,
-                        "tickRotation": this.props.showYlabel ? 0 : 45
-                    } }
-                    axisLeft={ {
-                        "orient": "left",
-                        "tickSize": 5,
-                        "tickPadding": 5,
-                        "tickRotation": 0,
-                        "legend": this.props.showYlabel ? this.props.lossType : undefined,
-                        "legendPosition": "center",
-                        "legendOffset": -100,
-                        "format": fnum
-                    } }
-                    tooltip={
-                        d => (
-                            <div>
-                                <div style={ { display: "inline-block", width: "15px", height: "15px", backgroundColor: this.props.colorScale(d.id) } }/>
-                                <span style={ { paddingLeft: "5px" } }>{ this.getHazardName(d.id) }</span>
-                                <span style={ { paddingLeft: "5px" } }>{ format(d.value) }</span>
-                            </div>
-                        )
-                    }
-                    theme={ {
-                        "axis": {
-                            "legendFontSize": "18px"
+            <div>
+                <div className="os-tabs-controls" style={{right: 0, top: 0,marginBottom:0, zIndex:100}}>
+                    <ul className="nav nav-tabs" style={{padding:0}}>
+                        <li className="nav-item" style={{width: '23%'}}><a className={this.state.maxValue === 100000 ? 'nav-link active small' : 'nav-link small'}
+                                                    onClick={() => this.setState({maxValue: 100000})}> 1M</a></li>
+                        <li className="nav-item" style={{width: '23%'}}><a className={this.state.maxValue === 1000000 ? 'nav-link active small' : 'nav-link small'}
+                                                    onClick={() => this.setState({maxValue: 1000000})}> 10M</a></li>
+                        <li className="nav-item" style={{width: '23%'}}><a className={this.state.maxValue === 10000000 ? 'nav-link active small' : 'nav-link small'}
+                                                    onClick={() => this.setState({maxValue: 100000000})}> 100M</a></li>
+                        <li className="nav-item" style={{width: '23%'}}><a className={this.state.maxValue === 'auto' ? 'nav-link active small' : 'nav-link small'}
+                                                    onClick={() => this.setState({maxValue: 'auto'})}> Max</a></li>
+                    </ul>
+                </div>
+                <div style={ { height: `${ this.props.height }px`, background: '#fff'} }>
+                    <ResponsiveBar
+                        data={ data }
+                        keys={ keys }
+                        indexBy="year"
+                        colorBy={'id'}
+                        colors={(d) => this.props.hazardcolors[d.id]}
+                        enableLabel={ false }
+                        tooltipFormat={ this.props.format }
+                        maxValue={this.state.maxValue}
+                        margin={ {
+                            "top": 25,
+                            "right": this.props.showYlabel ? 25 : 0,
+                            "bottom": this.props.showXlabel ? 50 : 40,
+                            "left": this.props.showYlabel ? 90 : 50
+                        } }
+                        axisBottom={ {
+                            "orient": "bottom",
+                            "tickSize": 5,
+                            "tickPadding": 5,
+                            "legend": this.props.showXlabel ? "Year" : undefined,
+                            "legendPosition": "center",
+                            "legendOffset": 40,
+                            "tickRotation": this.props.showYlabel ? 0 : 45
+                        } }
+                        axisLeft={ {
+                            "orient": "left",
+                            "tickSize": 5,
+                            "tickPadding": 5,
+                            "tickRotation": 0,
+                            "legend": this.props.showYlabel ? this.props.lossType : undefined,
+                            "legendPosition": "center",
+                            "legendOffset": -100,
+                            "format": fnum
+                        } }
+                        tooltip={
+                            d => (
+                                <div>
+                                    <div style={ { display: "inline-block", width: "15px", height: "15px", backgroundColor: this.props.hazardcolors[d.id] }}/>
+                                    <span style={ { paddingLeft: "5px" } }>{ this.getHazardName(d.id) }</span>
+                                    <span style={ { paddingLeft: "5px" } }>{ format(d.value) }</span>
+                                </div>
+                            )
                         }
-                    } }/>
+                        theme={ {
+                            "axis": {
+                                "legendFontSize": "18px"
+                            }
+                        } }/>
+                </div>
             </div>
         )
     }
@@ -191,7 +184,7 @@ GeographyScoreBarChart.defaultProps = {
     showXlabel: true,
     geoid: '36',
     geoLevel: 'state',
-    colorScale: getColorScale(),
+    hazardcolors: hazardcolors,
     dataType: "severeWeather"
 }
 
