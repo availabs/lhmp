@@ -15,7 +15,7 @@ let themes = [
         backgroundColor:   '#293148', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
         mainFontColor : '#fff',
         DarkFontColor: '#3E4B5B',
-        mainFontSize: '1.4em',
+        mainFontSize: '1.2em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
         mainFontFamily: `'Roboto', sans-serif`
@@ -40,7 +40,7 @@ let themes = [
     }
 ]
 
-let selectedTheme = 3  
+let selectedTheme = 0  
 
 
 export const backgroundColor = themes[selectedTheme].backgroundColor 
