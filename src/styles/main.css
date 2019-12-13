@@ -10271,6 +10271,7 @@ span.loginMenu {
   .menu-position-top.menu-w.selected-menu-color-light.color-scheme-light .sub-menu-w {
     border-top: 1px solid rgba(0, 0, 0, 0.05); }
   .menu-position-top.menu-w.selected-menu-color-dark ul.main-menu > li.selected {
+    color: green;
     border-right-color: #323c58; }
     .menu-position-top.menu-w.selected-menu-color-dark ul.main-menu > li.selected > a {
       background-color: #323c58; }
