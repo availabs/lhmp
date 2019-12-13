@@ -1970,6 +1970,7 @@ span.loginMenu {
 
   &.selected-menu-color-dark {
     ul.main-menu > li.selected {
+      color: green;
       border-right-color: $sub-menu-dark-bg-color;
       > a {
         background-color: $sub-menu-dark-bg-color;

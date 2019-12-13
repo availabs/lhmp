@@ -4,13 +4,13 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import {createMatchSelector} from 'react-router-redux'
 
 import SideMenu from 'pages/Public/theme/SideMenu'
+import { Link, Element } from 'react-scroll'
 
 import Analysis from './components/Analysis/'
 import PlanningTeam from './components/planningTeam'
 import Introduction from './components/introduction'
 
 import LocalContext from './components/localContext/'
-import HazardLoss from './components/hazardLoss/'
 import HazardEvents from 'pages/Public/Hazards/components/hazardEvents/'
 import NFIP from './components/NFIP'
 import Assets from './components/Assets/'
@@ -30,6 +30,84 @@ import {
 } from 'pages/Public/theme/components'
 
 
+let sideMenuConfig = [
+    {
+        label: 'Planning Context',
+        items:  [
+            {
+                name:'Introduction',
+                component:Introduction,
+                icon: 'os-icon-layout'
+            },
+            {
+                name:'Local Context',
+                component:LocalContext,
+                icon: 'os-icon-fingerprint'
+            },
+            {
+                name:'Planning Team',
+                component:PlanningTeam,
+                icon: 'os-icon-users'
+            },
+        ]
+    },
+    {
+        label: 'Risk',
+        items: [
+            {
+                name:'Analysis',
+                component:Analysis,
+                icon: 'os-icon-layers'
+            },
+            {
+                name:'HazardEvents',
+                component:HazardEvents,
+                icon: 'os-icon-others-43'
+            },
+            {
+                name:'NFIP',
+                component:NFIP,
+                icon: 'os-icon-phone-21'
+            },
+            {
+                name:'Assets',
+                component:Assets,
+                icon: 'os-icon-home'
+            }
+        ]
+    },
+    {
+        label: 'Strategies', 
+        items: [
+            {
+                name:'Overview',
+                component:Narrative,
+                icon:'os-icon-newspaper'
+            },
+            {
+                name:'Goals & Objectives',
+                component:Goals,
+                icon:'os-icon-tasks-checked'
+            },
+            {
+                name:'Capabilities',
+                component:Capabilities,
+                icon:'os-icon-donut-chart-1'
+            },
+            {
+                name:'Actions',
+                component:Actions,
+                icon:'os-icon-grid-circles'
+            },
+            {
+                name:'Participation',
+                component:Participation,
+                icon:'os-icon-cv-2'
+            }
+        ]
+    }
+]
+
 class Public extends React.Component {
 
     constructor(props) {
@@ -42,24 +120,22 @@ class Public extends React.Component {
     render() {
         return (
             <div style={{backgroundColor: backgroundColor}}>
-                <div style={{position: 'fixed', left: 0, width: '220px', height: '100%'}}>
-                    <SideMenu />
+                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
+                    <SideMenu config={sideMenuConfig}/>
                 </div>
                 <div style={{marginLeft: 220}}>
-                    <Introduction/>
-                    <LocalContext/>
-                    <PlanningTeam/>
-                    
-                    <Analysis/>
-                    <HazardEvents/>
-                    <NFIP/>
-                    <Assets />
-
-                    <Narrative />
-                    <Goals />
-                    <Capabilities />
-                    <Actions />
-                    <Participation />
+                    {
+                        sideMenuConfig.map(section => {
+                            return section.items.map(item=>{
+                                let Comp = item.component
+                                return (
+                                    <Element name={item.name}>
+                                        <Comp />
+                                    </Element>
+                                )
+                            })         
+                        })
+                    }
                 </div>
             </div>
         )
