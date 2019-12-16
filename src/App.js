@@ -5,16 +5,19 @@ import { createBrowserHistory } from 'history';
 import { ThemeProvider } from 'styled-components';
 import theme from 'components/common/themes/light_new';
 
-import { auth } from './store/modules/user';
+import { auth } from 'store/modules/user';
 
-import Layout from './layouts/Layout';
-import Routes from './routes';
-import Messages from './components/messages';
+
+import Layout from 'layouts/Layout';
+import Routes from 'routes';
+import Messages from 'components/messages';
+import ScrollToTop from 'utils/ScrollToTop'
 
 import './App.css';
 import Redirect from "react-router/Redirect";
 
 const history = createBrowserHistory();
+
 
 class App extends Component {
   constructor(props) {
@@ -61,29 +64,31 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <div className="all-wrapper solid-bg-all">
           <BrowserRouter>
-            <Switch>
-              {
-                  Routes.routes.map((route, i) => {
-                    return (
-                        <Layout
-                            {...route}
-                            authed={this.props.user.authed}
-                            userAuthLevel={this.props.user.authLevel}
-                            breadcrumbs={route.breadcrumbs}
-                            isAuthenticating={this.state.isAuthenticating}
-                            key={i}
-                            menuSettings={route.menuSettings ? route.menuSettings : {}}
-                            menus={Routes.routes
-                                .filter(f => route.auth === f.auth)}
-                                //.filter(f => f.auth && f.authLevel ? f.authLevel <= this.props.user.authLevel : true)}
-                            router={this.props.router}
-                            routes={Routes.routes}
-                            user={this.props.user}
-                        />
-                    );
-                  })
-              }
-            </Switch>
+            <ScrollToTop>
+              <Switch>
+                {
+                    Routes.routes.map((route, i) => {
+                      return (
+                          <Layout
+                              {...route}
+                              authed={this.props.user.authed}
+                              userAuthLevel={this.props.user.authLevel}
+                              breadcrumbs={route.breadcrumbs}
+                              isAuthenticating={this.state.isAuthenticating}
+                              key={i}
+                              menuSettings={route.menuSettings ? route.menuSettings : {}}
+                              menus={Routes.routes
+                                  .filter(f => route.auth === f.auth)}
+                                  //.filter(f => f.auth && f.authLevel ? f.authLevel <= this.props.user.authLevel : true)}
+                              router={this.props.router}
+                              routes={Routes.routes}
+                              user={this.props.user}
+                          />
+                      );
+                    })
+                }
+              </Switch>
+            </ScrollToTop>
           </BrowserRouter>
           <Messages />
         </div>
