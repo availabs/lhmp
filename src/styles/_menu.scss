@@ -1880,6 +1880,7 @@ span.loginMenu {
 
   // Selected menu item
 
+
   ul.main-menu > li.selected {
     position: static;
     background-color: $sub-menu-light-bg-color;
@@ -2497,3 +2498,12 @@ span.loginMenu {
   }
 }
 
+
+
+ul.main-menu > li > a.selected {
+    color: $primary;
+}
+
+ul.main-menu > li > a.selected > .icon-w {
+    color: $primary;
+}

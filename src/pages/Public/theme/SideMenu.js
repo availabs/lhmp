@@ -3,6 +3,14 @@ import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } 
 
 
 
+import {
+    sidebarScheme,
+    sidebarStyle,
+    sidebarColor,
+    sidebarLayout
+} 
+from 'pages/Public/theme/components'
+
 import get from 'lodash.get'
 import styled from "styled-components"
 
@@ -12,17 +20,14 @@ class SideMenu extends React.Component {
     render(){
         return(
          <div style={{height: '100%', paddingTop: 20}} 
-            className="menu-w 
-                selected-menu-color-dark 
-                menu-has-selected-link 
-                menu-activated-on-click 
-                color-scheme-transparent 
-                color-style-transparent 
-                sub-menu-color-light 
+            className={`menu-w 
+                color-scheme-${sidebarScheme} 
+                color-style-${sidebarStyle} 
                 menu-position-side 
                 menu-side-left 
-                menu-layout-full 
-                sub-menu-style-inside">
+                menu-layout-${sidebarLayout} 
+                sub-menu-style-inside
+            `}>
             {/*
             <div className="element-search autosuggest-search-activator">
                 <input placeholder="Start typing to search..." type="text" />
@@ -30,19 +35,21 @@ class SideMenu extends React.Component {
             */}
             <ul className="main-menu">
                 {
-                    this.props.config.map(section => {
+                    Object.keys(this.props.config).map(section => {
                         return (
                             <React.Fragment>
-                                <li className="sub-header"><span>{section.label}</span></li>
+                                <li className="sub-header"><span>{section}</span></li>
                                 {
-                                    section.items.map(item=>{
+                                    this.props.config[section].map(item=>{
                                         return (
                                             <li >
-                                                <Link activeClass='active' to={item.name}>
-                                                    <div className="icon-w">
-                                                        <div className={`os-icon ${item.icon}`}></div>
-                                                    </div>
-                                                    <span>{item.name}</span>
+                                                <Link activeClass='selected' to={item.title} spy={true} offset={-50} >
+                                                    {item.icon ? (
+                                                        <div className="icon-w">
+                                                            <div className={`os-icon ${item.icon}`}></div>
+                                                        </div>
+                                                    ) : ''}
+                                                    <span>{item.title}</span>
                                                 </Link>
                                             </li>
                                         )

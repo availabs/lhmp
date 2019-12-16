@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-import Element from 'components/light-admin/containers/Element'
 import config from "pages/auth/Plan/config/about-config";
 import GraphFactory from "components/displayComponents/graphFactory";
 import geoDropdown from 'pages/auth/Plan/functions'
 import {falcorGraph} from "store/falcorGraph";
 import {setActiveCousubid} from 'store/modules/user'
+
+import { Element } from 'react-scroll'
+import SideMenu from 'pages/Public/theme/SideMenu'
 
 import {
     PageContainer,
@@ -47,88 +49,98 @@ class About extends React.Component {
     }
     renderElement (element) {
         return (
-            <SectionBox>
-                {['right'].includes(element.align) ? 
-                    <SectionBoxSidebar >
-                        {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
-                    </SectionBoxSidebar>
-                    : React.fragment
-                }
-                <SectionBoxMain>
-                    <ContentHeader>{element.title}</ContentHeader>
-                    <GraphFactory
-                        graph={{type: element.type + 'Viewer'}}
-                        {...element}
-                        user={this.props.user}/>
-                </SectionBoxMain>
-                {['right', 'full'].includes(element.align) ? 
-                    React.fragment :
-                    <SectionBoxSidebar >
-                        {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
-                    </SectionBoxSidebar>
-                }
-            </SectionBox>
+            <Element name={element.title}>
+                <SectionBox>
+                    {['right'].includes(element.align) ? 
+                        <SectionBoxSidebar >
+                            {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
+                        </SectionBoxSidebar>
+                        : React.fragment
+                    }
+                    <SectionBoxMain>
+                        <ContentHeader>{element.title}</ContentHeader>
+                        <GraphFactory
+                            graph={{type: element.type + 'Viewer'}}
+                            {...element}
+                            user={this.props.user}/>
+                    </SectionBoxMain>
+                    {['right', 'full'].includes(element.align) ? 
+                        React.fragment :
+                        <SectionBoxSidebar >
+                            {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
+                        </SectionBoxSidebar>
+                    }
+                </SectionBox>
+            </Element>
         )
     }
 
     render() {
-        let geoInfo = falcorGraph.getCache().geo
-        && falcorGraph.getCache().geo[this.props.activeGeoid] ?
-            falcorGraph.getCache().geo :
+        let graph = this.props.graph
+        let geoInfo = graph.geo
+            && graph.geo[this.props.activeGeoid] ?
+            graph.geo :
             null
-        let allowedGeos = falcorGraph.getCache().geo &&
-        falcorGraph.getCache().geo[this.props.activeGeoid] &&
-        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs &&
-        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value ?
-            [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value] :
+
+        let allowedGeos = graph.geo &&
+            graph.geo[this.props.activeGeoid] &&
+            graph.geo[this.props.activeGeoid].cousubs &&
+            graph.geo[this.props.activeGeoid].cousubs.value ?
+            [this.props.activeGeoid, ...graph.geo[this.props.activeGeoid].cousubs.value] :
             [this.props.activeGeoid]
+
         return (
             <PageContainer>
-                <HeaderContainer>
-                    
-                        <PageHeader>Planning Process</PageHeader>
-                        {
-                            /*
-                            <span style={{float:'right'}}>
-                                {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
-                            </span>
-                            */
-                        }
+                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
+                    <SideMenu config={config}/>
+                </div>
+                <div style={{marginLeft: 220}}>
+                    <HeaderContainer>
                         
-                        <div className="row">
-                            <div className="col-12">
-                                <StatementText>
-                                    The planning process is integral to understanding the approach to mitigation results.
-                                </StatementText>
-                            </div>
-                        </div>
-                </HeaderContainer>
-                <HeaderImage />
-                <ContentContainer>
-                        
-                        
-                        <div className="row">
-                            <div className="col-12">
-                                <div className="element-wrapper">
-                                    {
-                                        Object.keys(config).map(section => {
-                                            return (
-                                                <div>
-                                                    <SectionHeader>{section}</SectionHeader>
-                                                    {
-                                                        config[section].map(requirement => {
-                                                            return this.renderElement(requirement)
-                                                        })
-                                                    }
-                                                </div>
-                                            )
-                                        })
-                                    }
+                            <PageHeader>Planning Process</PageHeader>
+                            {
+                                /*
+                                <span style={{float:'right'}}>
+                                    {geoDropdown.geoDropdown(geoInfo,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
+                                </span>
+                                */
+                            }
+                            
+                            <div className="row">
+                                <div className="col-12">
+                                    <StatementText>
+                                        The planning process is integral to understanding the approach to mitigation results.
+                                    </StatementText>
                                 </div>
                             </div>
-                        </div>
-                    
-                </ContentContainer>
+                    </HeaderContainer>
+                    <HeaderImage />
+                    <ContentContainer>
+                            
+                            
+                            <div className="row">
+                                <div className="col-12">
+                                    <div className="element-wrapper">
+                                        {
+                                            Object.keys(config).map(section => {
+                                                return (
+                                                    <div>
+                                                        <SectionHeader>{section}</SectionHeader>
+                                                        {
+                                                            config[section].map(requirement => {
+                                                                return this.renderElement(requirement)
+                                                            })
+                                                        }
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </ContentContainer>
+                </div>
             </PageContainer>
         )
     }
@@ -140,6 +152,7 @@ const mapStateToProps = (state,ownProps) => {
         router: state.router,
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
+        graph: state.graph
     };
 };
 

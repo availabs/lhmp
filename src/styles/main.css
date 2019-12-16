@@ -10628,6 +10628,12 @@ span.loginMenu {
     .menu-mobile.color-scheme-dark .mobile-menu-magic {
       background-image: linear-gradient(-154deg, #6d16a3 8%, #5211e6 90%); }
 
+ul.main-menu > li > a.selected {
+  color: #047bf8; }
+
+ul.main-menu > li > a.selected > .icon-w {
+  color: #047bf8; }
+
 /* 9. Styles for all element blocks */
 /* 
 

@@ -30,83 +30,75 @@ import {
 } from 'pages/Public/theme/components'
 
 
-let sideMenuConfig = [
-    {
-        label: 'Planning Context',
-        items:  [
+let sideMenuConfig = {    
+    'Planning Context' : [
             {
-                name:'Introduction',
+                title:'Introduction',
                 component:Introduction,
                 icon: 'os-icon-layout'
             },
             {
-                name:'Local Context',
+                title:'Local Context',
                 component:LocalContext,
                 icon: 'os-icon-fingerprint'
             },
             {
-                name:'Planning Team',
+                title:'Planning Team',
                 component:PlanningTeam,
                 icon: 'os-icon-users'
             },
-        ]
-    },
-    {
-        label: 'Risk',
-        items: [
+    ],
+    'Risk' : [
             {
-                name:'Analysis',
+                title:'Analysis',
                 component:Analysis,
                 icon: 'os-icon-layers'
             },
             {
-                name:'HazardEvents',
+                title:'HazardEvents',
                 component:HazardEvents,
                 icon: 'os-icon-others-43'
             },
             {
-                name:'NFIP',
+                title:'NFIP',
                 component:NFIP,
                 icon: 'os-icon-phone-21'
             },
             {
-                name:'Assets',
+                title:'Assets',
                 component:Assets,
                 icon: 'os-icon-home'
             }
-        ]
-    },
-    {
-        label: 'Strategies', 
-        items: [
+    ],
+    'Strategies' : [
             {
-                name:'Overview',
+                title:'Overview',
                 component:Narrative,
                 icon:'os-icon-newspaper'
             },
             {
-                name:'Goals & Objectives',
+                title:'Goals & Objectives',
                 component:Goals,
                 icon:'os-icon-tasks-checked'
             },
             {
-                name:'Capabilities',
+                title:'Capabilities',
                 component:Capabilities,
                 icon:'os-icon-donut-chart-1'
             },
             {
-                name:'Actions',
+                title:'Actions',
                 component:Actions,
                 icon:'os-icon-grid-circles'
             },
             {
-                name:'Participation',
+                title:'Participation',
                 component:Participation,
                 icon:'os-icon-cv-2'
             }
         ]
-    }
-]
+}
+
 
 class Public extends React.Component {
 
@@ -125,11 +117,11 @@ class Public extends React.Component {
                 </div>
                 <div style={{marginLeft: 220}}>
                     {
-                        sideMenuConfig.map(section => {
-                            return section.items.map(item=>{
+                        Object.keys(sideMenuConfig).map(section => {
+                            return sideMenuConfig[section].map(item=>{
                                 let Comp = item.component
                                 return (
-                                    <Element name={item.name}>
+                                    <Element name={item.title}>
                                         <Comp />
                                     </Element>
                                 )
@@ -141,14 +133,8 @@ class Public extends React.Component {
         )
     }
 }
-
-    //  
-    // 
-    // 
-    // 
-                    
+       
                
-
 const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph.plans || {},

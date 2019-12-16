@@ -9,7 +9,10 @@ let themes = [
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
-        mainFontFamily: `'Roboto', sans-serif`
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'dark',
+        sidebarStyle: 'dark',
+        sidebarLayout: 'compact'
     },
     {
         backgroundColor:   '#293148', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
@@ -18,7 +21,10 @@ let themes = [
         mainFontSize: '1.2em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
-        mainFontFamily: `'Roboto', sans-serif`
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'dark',
+        sidebarStyle: 'dark',
+        sidebarLayout: 'compact'
     },
     {
         backgroundColor:   '#efefef', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
@@ -27,7 +33,10 @@ let themes = [
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
-        mainFontFamily: `'Roboto', sans-serif`
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'dark',
+        sidebarStyle: 'dark',
+        sidebarLayout: 'compact'
     },
     {
         backgroundColor:   '#fff', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
@@ -36,7 +45,10 @@ let themes = [
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
-        mainFontFamily: `'Roboto', sans-serif`
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'default', //light or dark
+        sidebarStyle: 'default', //bright or light
+        sidebarLayout: 'compact' //
     }
 ]
 
@@ -50,6 +62,9 @@ export const mainFontSize = themes[selectedTheme].mainFontSize
 export const mainFontWeight = themes[selectedTheme].mainFontWeight 
 export const mainFontLineHeight = themes[selectedTheme].mainFontLineHeight 
 export const mainFontFamily = themes[selectedTheme].mainFontFamily 
+export const sidebarScheme = themes[selectedTheme].sidebarScheme
+export const sidebarStyle = themes[selectedTheme].sidebarStyle
+export const sidebarLayout = themes[selectedTheme].sidebarLayout
 
 export const ImageContainer = styled.div`
     background: #fafafa;
