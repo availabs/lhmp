@@ -5,7 +5,7 @@ import {falcorGraph} from "store/falcorGraph";
 import {connect} from "react-redux";
 import get from "lodash.get"
 import styled from "styled-components";
-
+import HMGPTable from "./HMGPTable";
 // const Section = styled.div
 
 import {
@@ -67,6 +67,20 @@ class PlanningTeam extends Component {
                                      <FeatureName>Municipal Capabilities Table</FeatureName>
                                         <div className='table-responsive'>
                                         {this.renderMainTable()}
+                                    </div>
+                            </FeatureDescription>
+                            </Feature>
+                    </div>
+
+                    <div className = 'd-flex justify-content-center' style={{paddingTop:50}}>
+                            <Feature className={`col-sm-6 no-gutters`} highlight={true}>
+                                <FeatureDescription>
+                                     <FeatureName>HMGP</FeatureName>
+                                        <div className='table-responsive'>
+                                        <HMGPTable
+                                        geoid={this.props.activeCousubid}
+                                        hazard={'all'}
+                                        />
                                     </div>
                             </FeatureDescription>
                             </Feature>
