@@ -76,10 +76,15 @@ class PlanningTeam extends Component {
                             <Feature className={`col-sm-6 no-gutters`} highlight={true}>
                                 <FeatureDescription>
                                      <FeatureName>HMGP</FeatureName>
-                                        <div className='table-responsive'>
+                                        <div className='table-responsive' style={{maxHeight: '300px',overflow:'scroll'}}>
                                         <HMGPTable
-                                        geoid={this.props.activeCousubid}
+                                        geoid={
+                                            !this.props.activeCousubid || this.props.activeCousubid === "undefined" ? this.props.activeGeoid
+                                                : this.props.activeCousubid
+                                        }
                                         hazard={'all'}
+                                        pageSize={3}
+                                        tableScroll={false}
                                         />
                                     </div>
                             </FeatureDescription>
@@ -96,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         activePlan: get(state, `user.activePlan`, null),
         activeCousubid: get(state, `user.activeCousubid`, null),
+        activeGeoid: get(state, `user.activeGeoid`, null),
         roles: get(state, `graph.roles.byId`, {}),
         rolesMeta: get(state, `graph.rolesMeta`, {}),
         graph: state.graph,

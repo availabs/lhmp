@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+import get from 'lodash.get'
 import ElementBox from 'components/light-admin/containers/ElementBox'
 import TableBox from 'components/light-admin/tables/TableBoxHistoric'
 
@@ -13,78 +13,10 @@ import {
 class HMAP_Table extends React.Component {
 
     fetchFalcorDeps() {
-        const { geoid, geoLevel, hazard } = this.props;
         return this.props.falcor.get(
-            ["hmap", "yearsOfData"],
-            ['riskIndex', 'hazards']
-        )
-            .then(response => [response.json.hmap.yearsOfData, response.json.riskIndex.hazards])
-            .then(([years, hazards]) => {
-// `hmap[{keys:geoids}][{keys:hazardids}][{integers:years}].length`
-                hazards = hazard === 'all' ? hazards : [hazard];
-                let requests = [
-                    ['hmap', geoid, hazards, years, 'length']
-                ]
-                if (hazard !== 'none') {
-                    requests.push(["riskIndex", "meta", hazards, "name"])
-                }
-                return this.props.falcor.get(...requests)
-                    .then(response => {
-// console.log("????????????",response)
-                        let max = 0;
-                        hazards.forEach(hazard => {
-                            const data = response.json.hmap[geoid][hazard];
-                            years.forEach(year => {
-                                max = Math.max(max, data[year].length)
-                            })
-                        })
-                        return max;
-                    })
-                    .then(max => {
-// console.log("max:",max);
-                        if (!max) return;
-// 'hmap[{keys:geoids}][{keys:hazardids}][{integers:years}].byIndex[{integers:indices}].project_id'
-                        return this.props.falcor.get(
-                            ['hmap', geoid, hazards, years, 'byIndex', { from: 0, to: max - 1 }, 'project_id']
-                        )
-                            .then(response => {
-                                const project_ids = [];
-                                hazards.forEach(hazard => {
-                                    const data = response.json.hmap[geoid][hazard];
-                                    years.forEach(year => {
-                                        for (let i = 0; i < max; ++i) {
-                                            if (data[year].byIndex[i]) {
-                                                project_ids.push(data[year].byIndex[i].project_id)
-                                            }
-                                        }
-                                    })
-                                })
-                                return project_ids;
-                            })
-                    })
-            })
-            .then(project_ids => {
-// console.log("project_ids:",project_ids)
-                if (!project_ids || project_ids.length === 0) return;
-                return this.props.falcor.get(
-                    ['hmap', 'byId', project_ids,
-                        [
-                            "year",
-                            "status",
-                            "county",
-                            "subgrantee",
-                            "projecttype",
-                            "projectamount",
-                            "hazardid",
-                            "disasternumber",
-                            "projectcounties",
-                            "projecttitle",
-                            "federalshareobligated",
-                            "programarea"
-                        ]
-                    ]
-                )//.then(res => console.log(this.props.hazard, res))
-            })
+            ['hmap', 'byGeoId', [this.props.geoid]
+            ]
+        )//.then(res => console.log('hmgp data', this.props, res))
     }
 
     getHazardName(hazard) {
@@ -96,35 +28,32 @@ class HMAP_Table extends React.Component {
         }
     }
 
-    createRow(data) {
+    createRow(jurisdiction, data) {
         const row = {};
-        row["year"] = data.year;
-        row["disaster #"] = data.disasternumber;
-        row["status"] = data.status;
-        row["program area"] = data.programarea;
-        row["project amount"] = fnum(data.projectamount);
-        row["federal share obligated"] = fnum(data.federalshareobligated);
-        row["county"] = data.county;
-        row["subgrantee"] = data.subgrantee;
-        row["project type"] = data.projecttype;
-
-        row["narrative"] = data.projecttitle;
-        row["hazard"] = this.getHazardName(data.hazardid);
+        row['Jurisdiction'] = jurisdiction;
+        row['Approved'] = get( data, 'Approved',0);
+        row['Finished'] = get( data, 'Finished',0);
+        row['Completed'] = get( data, 'Completed',0);
         return row;
     }
 
     processData() {
-        const graph = this.props.hmap.byId,
-            data = Object.keys(graph)
-                .filter(k => {
-                    if (this.props.hazard === 'none') return true;
-                    const d = graph[k];
-                    if (this.props.hazard === 'all') return this.props.riskIndex.hazards.value.includes(d.hazardid);
-                    return d.hazardid === this.props.hazard
-                })
-                .map(key => this.createRow(graph[key]));
-        if (!data.length) throw new Error("No Data.");
-        return { data, columns: Object.keys(data[0]) };
+        const graph = get(this.props.hmap.byGeoId, `${this.props.geoid}.value`, null);
+        if (!graph) return ;
+        let data = {};
+        let tableData = [];
+        graph.forEach(g => {
+            !data[g['subgrantee']] || data[g['subgrantee']][g['status']] ?
+                data[g['subgrantee']] = {[g['status']]: g['count']} :
+                data[g['subgrantee']][g['status']] = g['count']
+        });
+
+        if (!Object.keys(data).length) throw new Error("No Data.");
+
+        tableData = Object.keys(data)
+            .map(d => this.createRow(d, data[d]))
+            .sort((a,b) => (b.Approved-a.Approved));
+        return { data:tableData, columns: ['Jurisdiction', 'Approved', 'Finished', 'Completed'] };
     }
 
     render() {
@@ -133,7 +62,9 @@ class HMAP_Table extends React.Component {
                 <TableBox { ...this.processData() }
                           filterKey="year"
                           filterColumns={ this.props.filterColumns }
-                          tableScroll={ this.props.tableScroll } />
+                          tableScroll={ this.props.tableScroll }
+                          pageSize={this.props.pageSize || 4}
+                />
             )
         }
         catch (e) {
