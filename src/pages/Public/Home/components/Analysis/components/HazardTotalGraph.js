@@ -8,6 +8,19 @@ import {fnum} from "utils/sheldusUtils"
 import COLOR_RANGES from "constants/color-ranges"
 import hazardcolors from "../../../../../../constants/hazardColors";
 
+import {
+    VerticalAlign,
+    ContentHeader,
+    PageContainer,
+    HeaderContainer,
+    NameLabel,
+    NumberLabel,
+    backgroundColor
+} from 'pages/Public/theme/components'
+
+
+
+
 
 // <i class="os-icon os-icon-phone-21"></i>
 
@@ -69,25 +82,6 @@ let GraphLabel = styled.div`
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
-`;
-let NameLabel = styled.span`
-	font-size: .6667em;
-    font-weight: 900;
-    line-height: 1.25;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    font-weight: 500;
-`;
-
-let NumberLabel = styled.span`
-	font-feature-settings: "tnum";
-    text-align: right;
-    font-size: .6667em;
-    font-weight: 900;
-    line-height: 1.25;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    font-weight: 500;
 `;
 
 let Bar = styled.div`

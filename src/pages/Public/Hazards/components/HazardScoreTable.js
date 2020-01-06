@@ -22,7 +22,7 @@ const TABLE = styled.div`
 class HazardScoreTable extends Component {
 
     fetchFalcorDeps() {
-        const { geoid, geoLevel, dataType, hazard } = this.props;
+        const { geoid, geoLevel, dataType, hazard, hazards } = this.props;
         return this.props.falcor.get(
             ['geo', geoid, geoLevel]
         ).then(data => {
@@ -36,11 +36,17 @@ class HazardScoreTable extends Component {
                 'daily_event_prob',
                 'daily_severe_event_prob'
             ]
-            return this.props.falcor.get(
-                ['riskIndex','meta', hazard , ['id', 'name']]
-            )
-                .then(d => falcorChunkerNice(['geo', geoids, ['name']]))
-                .then(d => falcorChunkerNice([dataType, geoids, hazard, "allTime", cols]))
+            let haz = hazard ? hazard :
+                hazards && hazards.length > 0 ?
+                    hazards : null;
+            if (haz){
+                return this.props.falcor.get(
+                    ['riskIndex','meta', haz , ['id', 'name']]
+                )
+                    .then(d => falcorChunkerNice(['geo', geoids, ['name']]))
+                    .then(d => falcorChunkerNice([dataType, geoids, haz, "allTime", cols]))
+            }else return Promise.resolve()
+
         })
     }
 
@@ -94,10 +100,13 @@ class HazardScoreTable extends Component {
         try {
 
             Object.keys(this.props[dataType][geoid])
-                .filter(hazard => get(this.props[dataType], `${geoid}.${hazard}.allTime.total_damage`, 0) !== 0)
+                .filter(hazard =>
+                    ((this.props.hazard && this.props.hazard === hazard) ||
+                        (!this.props.hazard && this.props.hazards && this.props.hazards.length > 0 && this.props.hazards.includes(hazard)))
+                    && get(this.props[dataType], `${geoid}.${hazard}.allTime.total_damage`, 0) !== 0)
                 .forEach(hazard => {
                     keys.push(hazard); //columns
-            })
+            });
             tableData = Object.keys(rows)
                 .map((k,i) => {
                     let tmpObj = {};
@@ -112,7 +121,6 @@ class HazardScoreTable extends Component {
                 })
         }
         catch (e) {
-// console.log(e);
             return <ElementBox>Loading...</ElementBox>
         }
         return (
@@ -153,7 +161,6 @@ class HazardScoreTable extends Component {
 
         }
         catch (e) {
-// console.log(e);
             return <ElementBox>Loading...</ElementBox>
         }
 
@@ -176,7 +183,8 @@ HazardScoreTable.defaultProps = {
     //geoid: '36001',
     geoLevel: 'cousubs',
     dataType: 'severeWeather',
-    hazard: 'riverine',
+    hazard: null,
+    hazards: [],
     sumTime: 10,
     pageSize: 6,
     tableType: "events" // or "prob"

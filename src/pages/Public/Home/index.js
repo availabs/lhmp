@@ -37,6 +37,7 @@ class Public extends React.Component {
     }
 }
 
+
 const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph.plans || {},

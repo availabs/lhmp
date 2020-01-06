@@ -1,25 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from "styled-components";
 import { reduxFalcor } from 'utils/redux-falcor'
-import { createMatchSelector } from 'react-router-redux'
-import Element from 'components/light-admin/containers/Element'
 import {authGeoid} from "store/modules/user";
-import GeographyScoreBarChart from "pages/auth/Historic/components/GeographyScoreBarChart";
-import CousubTotalLossTable from "./components/CousubTotalLossTable";
-import MunicipalityStats from "pages/auth/Historic/components/MunicipalityStats";
-import CountyHeroStats from "./components/CountyHeroStats";
-import HMGPTable from "pages/auth/Historic/components/HMGPTable";
-import HazardEvents from '../Hazards/components/hazardEvents/'
-import HazardScoreTable from "./components/HazardScoreTable";
-import FemaDisasterDeclarationsTable from "pages/auth/Historic/components/FemaDisasterDeclarationsTable";
-import HazardEventsTable from "./components/HazardEventsTable";
-import {EARLIEST_YEAR, LATEST_YEAR} from "pages/auth/Historic/components/yearsOfSevereWeatherData";
-import Content from "components/cms/Content"
 import {getColorScale} from 'utils/sheldusUtils'
 import {falcorChunkerNice} from "store/falcorGraph"
+import ElementBox from "components/light-admin/containers/ElementBox";
+import GraphFactory from "components/displayComponents/graphFactory";
+import Content from "components/cms/Content"
+import Element from 'components/light-admin/containers/Element'
+
+import config from "pages/auth/Plan/config/hazards-config";
+import {SectionBoxMain} from 'pages/Public/theme/components'
+
+import GeographyScoreBarChart from "./components/GeographyScoreBarChart";
+import CousubTotalLossTable from "./components/CousubTotalLossTable";
+import MunicipalityStats from "./components/MunicipalityStats";
+import CountyHeroStats from "./components/CountyHeroStats";
+import HazardEvents from '../Hazards/components/hazardEvents/'
+import HazardScoreTable from "./components/HazardScoreTable";
+import FemaDisasterDeclarationsTable from "./components/FemaDisasterDeclarationsTable";
+import HazardEventsTable from "./components/HazardEventsTable";
+import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
 import NumberOfHazardsMonthStackedBarGraph from "./components/NumberOfHazardsMonthStackedBarGraph";
-import ElementBox from "../../../components/light-admin/containers/ElementBox";
-import styled from "styled-components";
+
 const STICKYDROPDOWN = styled.div`
                        select {
                        height: 5vh;
@@ -29,7 +33,6 @@ const STICKYDROPDOWN = styled.div`
                        position:fixed;
                        background: rgba(0,0,0,0.3);
                        }
-         
                         `;
 class Hazards extends React.Component {
 
@@ -41,7 +44,8 @@ class Hazards extends React.Component {
             geoLevel: this.setGeoLevel(this.props.geoid.length),
             dataType: 'severeWeather',
             colorScale: getColorScale([1, 2]),
-            hazards: ['riverine']
+            hazards: [],
+            hazard: undefined
         }
     }
 
@@ -110,16 +114,33 @@ class Hazards extends React.Component {
                         id='hazard'
                         data-error="Please select county"
                         onChange={(e) => {
-                            console.log('setting value to ', e.target.value)
-                            this.setState({hazard: e.target.value})
+                            if (e.target.value !== 'none'){
+                                e.target.value === 'all' ?
+                                    this.setState({hazard: undefined}) :
+                                    this.setState({hazard: e.target.value})
+                            }
                         }}
                         value={this.state.hazard}
                     >
                         <option key={0} value={'none'}>--Select Hazard--</option>
-                        {this.state.hazards.map((h,h_i) => <option key={h_i+1} value={h}>{h}</option>)}
+                        <option key={1} value={'all'}> All Hazards </option>
+                        {this.state.hazards.map((h,h_i) => <option key={h_i+2} value={h}>{h}</option>)}
                     </select>
                 </STICKYDROPDOWN>
             ) : null
+    }
+    renderElement (element) {
+        return (
+            <ElementBox>
+                <SectionBoxMain>
+                    <strong>{element.title}</strong>
+                    <GraphFactory
+                        graph={{type: element.type + 'Viewer'}}
+                        {...element}
+                        user={this.props.user}/>
+                </SectionBoxMain>
+            </ElementBox>
+        )
     }
     render() {
         return (
@@ -187,8 +208,8 @@ class Hazards extends React.Component {
                                 </div>
 
                                 <HazardScoreTable
-                                    hazard={this.state.hazards}
-                                    //hazard={'riverine'}
+                                    hazards={this.state.hazards}
+                                    hazard={this.state.hazard}
                                     geoid={this.state.geoid}
                                     geoLevel={'cousubs'}
                                     dataType={this.state.dataType}
@@ -211,7 +232,9 @@ class Hazards extends React.Component {
                                             <h5>Presidential Disaster Declarations</h5>
                                             <Content content_id={'hazards-presidential-disaster-declarations'}/>
                                             <FemaDisasterDeclarationsTable
-                                                hazard={this.state.hazards}
+                                                hazard={this.state.hazard}
+                                                hazards={this.state.hazards}
+                                               // geoid={'36'} // only works on state
                                             />
                                             <i style={{color: '#afafaf'}}>Source: <a href="https://www.fema.gov/disasters"
                                                                                      target="_blank">FEMA Disaster
@@ -235,7 +258,8 @@ class Hazards extends React.Component {
                                                 Click on a row to view the event description.
                                             </div>
                                             <HazardEventsTable
-                                                hazard={this.state.hazards}
+                                                hazards={this.state.hazards}
+                                                hazard={this.state.hazard}
                                                 geoid={this.state.geoid}
                                             />
                                             <i style={{color: '#afafaf'}}>Source: <a
@@ -254,7 +278,10 @@ class Hazards extends React.Component {
                                     <strong>1996-2017</strong>
                                     <div> Total number of events and Damage caused.
                                     </div>
-                                    <HazardEvents />
+                                    <HazardEvents
+                                        hazards={this.state.hazards}
+                                        hazard={this.state.hazard}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -274,11 +301,38 @@ class Hazards extends React.Component {
                                             geoLevel={this.setGeoLevel(this.props.geoid.length)}
                                             dataType='severeWeather'
                                             colorScale={getColorScale([1, 2])}
-                                            hazards={['hurricane', 'hail']}
-                                            //hazard = {'hurricane'}
+                                            hazards={this.state.hazards}
+                                            hazard={this.state.hazard}
                                         />
                                     </ElementBox>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-12">
+                                {
+                                    Object.keys(config).map(section => {
+                                        return (
+                                            <ElementBox>
+                                                <strong>{section}</strong>
+                                                {
+                                                    config[section]
+                                                        .filter(r =>
+                                                            this.state.hazard ?
+                                                                this.state.hazard.toLowerCase() === r.title.toLowerCase() :
+                                                                this.state.hazards.length > 0 ?
+                                                                    this.state.hazards.map(f => f.toLowerCase()).includes(r.title.toLowerCase()) :
+                                                                    true
+                                                        )
+                                                        .map(requirement => {
+                                                        return this.renderElement(requirement)
+                                                    })
+                                                }
+                                            </ElementBox>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
 
@@ -295,7 +349,9 @@ const mapStateToProps = (state,ownProps) => {
         router: state.router,
         geoid: ownProps.computedMatch.params.geoid ?
             ownProps.computedMatch.params.geoid
-            : state.user.activeGeoid ?
+            : state.user.activeCousubid && state.user.activeCousubid !== 'undefined' ?
+                state.user.activeCousubid :
+                state.user.activeGeoid ?
                 state.user.activeGeoid :
                 localStorage.getItem('geoId')
     };

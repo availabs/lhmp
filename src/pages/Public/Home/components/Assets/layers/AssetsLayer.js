@@ -1,11 +1,10 @@
 import React from "react"
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
+import { fnum } from "utils/sheldusUtils"
 import get from 'lodash.get'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
-import {falcorChunkerNiceWithUpdate, falcorChunker} from "../../../../../../store/falcorGraph";
-import {update} from "utils/redux-falcor/components/duck"
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -54,7 +53,7 @@ class TractLayer extends MapLayer {
             ["geo", [store.getState().user.activeGeoid], "boundingBox"]
         )
             .then(d => {
-                let graph = d.json
+                let graph = d.json;
                 let countiesOrCousubs = get(graph,
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
                     null);
@@ -67,7 +66,7 @@ class TractLayer extends MapLayer {
             })
             .then(data => {
                 // set map bounds
-                let graph = falcorGraph.getCache()
+                let graph = falcorGraph.getCache();
                 let initalBbox =
                     get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
                         .slice(4, -1).split(",");
@@ -102,7 +101,7 @@ class TractLayer extends MapLayer {
     fetchData(graph) {
         if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
         if (!store.getState().user.activeGeoid) return Promise.resolve();
-        if (!graph) graph = falcorGraph.getCache()
+        if (!graph) graph = falcorGraph.getCache();
         let countiesOrCousubs = get(graph,
             `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
             null);
@@ -111,70 +110,121 @@ class TractLayer extends MapLayer {
             null);
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
         return falcorGraph.get(
-            ['building','byGeoid', store.getState().user.activeGeoid, 'flood_zone',
-                ['flood_100'],'owner_type',['3','4','5','6','7'],'critical',['true', 'false']] //, ["id",  "owner_type", "critical", "flood_zone"]
-        )/*.then(d => {
-            console.log('all hail my new query', d)
-        })*/
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
+                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']] //, ["id",  "owner_type", "critical", "flood_zone"]
+        ).then(d => {
+            let allIds = [],
+                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {});
+
+            ['3', '4', '5', '6', '7'].map(owner => {
+                allIds.push(...get(data, `${owner}.critical.true`), ...get(data, `${owner}.critical.false`))
+            });
+            allIds = allIds.map(f => f.id);
+            if (allIds.length === 0) return Promise.resolve();
+            return falcorGraph.get(
+                ['building', 'geom', 'byBuildingId', allIds, 'centroid']
+            ).then(d => console.log('centroid res', d))
+        })
     }
 
     receiveData(map, data) {
-        let graph = get(falcorGraph.getCache(), `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
+        let rawGraph = falcorGraph.getCache(),
+            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
+            centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
             countyOwned = [],
             municipalityOwned = [],
             critical = [],
             buildingColors = {};
-        //'owner_type',['3','4','5','6','7'],'critical',['true', 'false']
+        let geojson = {
+            "type": "FeatureCollection",
+            "features": []
+        };
+        console.log('came here', rawGraph, graph);
 
         if (!graph) return Promise.resolve();
-
         Object.keys(graph)
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
 
-                if (owner_type === '3'){
-                    [...allBuildings.true.value.map(f => f.id),...allBuildings.false.value.map(f => f.id)]
+                if (owner_type === '3') {
+                    [...allBuildings.true.value.map(f => f.id), ...allBuildings.false.value.map(f => f.id)]
                         .forEach(buildingId => {
-                        countyOwned.push(buildingId)
-                        buildingColors[buildingId] = '#0fcc1b'
-                    })
-                }else if(['4','5','6','7'].includes(owner_type)){
-                    [...allBuildings.true.value.map(f => f.id),...allBuildings.false.value.map(f => f.id)]
+                            countyOwned.push(buildingId);
+                            buildingColors[buildingId] = '#0fcc1b';
+                            geojson.features.push({
+                                "type": "Feature",
+                                "properties":{id:buildingId, color:'#0fcc1b'},
+                                "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
+                            })
+                        })
+                } else if (['4', '5', '6', '7'].includes(owner_type)) {
+                    [...allBuildings.true.value.map(f => f.id), ...allBuildings.false.value.map(f => f.id)]
                         .forEach(buildingId => {
-                        municipalityOwned.push(buildingId)
-                        buildingColors[buildingId] = '#0d1acc'
-                    })
+                            municipalityOwned.push(buildingId);
+                            buildingColors[buildingId] = '#0d1acc';
+                            geojson.features.push({
+                                "type": "Feature",
+                                "properties":{id:buildingId, color:'#0d1acc'},
+                                "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
+                            })
+                        })
 
                 }
 
                 allBuildings.true.value
                     .map(f => f.id)
                     .forEach(buildingId => {
-                        critical.push(buildingId)
-                        buildingColors[buildingId] = '#cc1e0a'
+                        critical.push(buildingId);
+                        buildingColors[buildingId] = '#cc1e0a';
+                        geojson.features.push({
+                            "type": "Feature",
+                            "properties":{id:buildingId, color:'#cc1e0a'},
+                            "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
+                        })
                     });
 
             });
+        this.legend.domain = ['County', 'Municipality', 'Critical'];
+        this.legend.range = ['#0fcc1b', '#0d1acc', '#cc1e0a'];
+        this.legend.title = `Buildings`.toUpperCase()
+        this.legend.active = true;
+        if(map.getSource('buildings')) {
+            map.removeSource('buildings');
+            map.removeLayer('buildings-layer');
+        }
+        map.addSource('buildings', {
+            type: 'geojson',
+            data: geojson
+        });
+        map.addLayer({
+            'id': 'buildings-layer',
+            'source': 'buildings',
+            'type': 'circle',
+            'paint': {
+                'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
+                'circle-opacity': 0.5
+            }
+        })
 
-        map.setFilter("ebr-line", ["in", "id",
-            ...countyOwned.map(id => +id),
-            ...municipalityOwned.map(id => +id),
-            ...critical.map(id => +id)]);
-        map.setFilter("ebr", ["in", "id",
-            ...countyOwned.map(id => +id),
-            ...municipalityOwned.map(id => +id),
-            ...critical.map(id => +id)]);
+        /*        map.setFilter("ebr-line", ["in", "id",
+                    ...countyOwned.map(id => +id),
+                    ...municipalityOwned.map(id => +id),
+                    ...critical.map(id => +id)]);
+                map.setFilter("ebr", ["in", "id",
+                    ...countyOwned.map(id => +id),
+                    ...municipalityOwned.map(id => +id),
+                    ...critical.map(id => +id)]);*/
 
-        map.setPaintProperty(
-            'ebr',
-            'fill-color',
-            ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
-        )
-        map.setPaintProperty(
-            'ebr-line',
-            'line-color',
-            ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
-        )
+        /*        map.setPaintProperty(
+                    'ebr',
+                    'fill-color',
+                    ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
+                )
+                map.setPaintProperty(
+                    'ebr-line',
+                    'line-color',
+                    ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
+                )*/
     }
 }
 
@@ -203,12 +253,12 @@ const tractLayer = new TractLayer("Assets Layer", {
                 'url': 'mapbox://am3081.1ggw4eku'
             }
         },
-        { id: "nys_buildings_avail",
-            source: {
-                'type': "vector",
-                'url': 'mapbox://am3081.dpm2lod3'
-            }
-        }
+        /*        { id: "nys_buildings_avail",
+                    source: {
+                        'type': "vector",
+                        'url': 'mapbox://am3081.dpm2lod3'
+                    }
+                }*/
     ],
     layers: [
         {
@@ -231,7 +281,7 @@ const tractLayer = new TractLayer("Assets Layer", {
                 'fill-outline-color': '#000'
             }
         },
-        { 'id': 'ebr',
+        /*{ 'id': 'ebr',
             'source': 'nys_buildings_avail',
             'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
             'type': 'fill',
@@ -251,9 +301,22 @@ const tractLayer = new TractLayer("Assets Layer", {
                 'line-offset': -1
             },
             filter: ["in", "id", "none"]
-        }
+        }*/
     ],
     displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
+    legend: {
+        active: false,
+
+        type: "ordinal",
+
+        types: ["threshold", "linear", "quantile", "quantize"],
+
+        domain: [],
+        range: [],
+        title: ``,
+        format: fnum,
+        vertical: true
+    },
     filters: {
         hazard: {
             name: "hazard",
@@ -263,7 +326,7 @@ const tractLayer = new TractLayer("Assets Layer", {
         }
     },
     popover: {
-        layers: ['ebr'],
+        layers: ['buildings-layer'],
         dataFunc: feature => {
             return feature.layer.id === 'tracts-layer-line' ?
                 ["tract",

@@ -5,10 +5,14 @@ import HttpDataSource from 'falcor-http-datasource'
 import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
 
-export let host = 'http://localhost:4444/'
+
+export let host = 'https://graph.availabs.org/'
+
 if (process.env.NODE_ENV === 'production') {
-  host = 'https://graph.availabs.org/'
+  host = 'http://localhost:4444/'
 }
+
+host = 'http://localhost:4444/'; //env blank obj
 // export const host = 'https://mitigateny.availabs.org/api/'
 class CustomSource extends HttpDataSource {
   onBeforeRequest (config) {

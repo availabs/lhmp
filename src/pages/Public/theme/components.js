@@ -1,11 +1,70 @@
 import styled from "styled-components"
 
-export const backgroundColor =   '#d1dbe9' // '#b3c3db' //'#6787b7';
-export const mainFontColor  = '#3E4B5B'
-export const mainFontSize = '1.4em';
-export const mainFontWeight = '400';
-export const mainFontLineHeight = '2'
-export const mainFontFamily = `'Roboto', sans-serif`//'"Avenir Next W01", "Proxima Nova W01", "Rubik", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+
+let themes = [
+    {
+        backgroundColor:   '#d1dbe9', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'dark',
+        sidebarStyle: 'dark',
+        sidebarLayout: 'compact'
+    },
+    {
+        backgroundColor:   '#293148', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#fff',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.2em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'dark',
+        sidebarStyle: 'dark',
+        sidebarLayout: 'compact'
+    },
+    {
+        backgroundColor:   '#efefef', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'dark',
+        sidebarStyle: 'dark',
+        sidebarLayout: 'compact'
+    },
+    {
+        backgroundColor:   '#fff', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
+        mainFontColor : '#3E4B5B',
+        DarkFontColor: '#3E4B5B',
+        mainFontSize: '1.4em',
+        mainFontWeight: '400',
+        mainFontLineHeight: '2',
+        mainFontFamily: `'Roboto', sans-serif`,
+        sidebarScheme: 'default', //light or dark
+        sidebarStyle: 'default', //bright or light
+        sidebarLayout: 'compact' //
+    }
+]
+
+let selectedTheme = 2  
+
+
+export const backgroundColor = themes[selectedTheme].backgroundColor 
+export const mainFontColor  = themes[selectedTheme].mainFontColor  
+export const DarkFontColor  = themes[selectedTheme].DarkFontColor  
+export const mainFontSize = themes[selectedTheme].mainFontSize 
+export const mainFontWeight = themes[selectedTheme].mainFontWeight 
+export const mainFontLineHeight = themes[selectedTheme].mainFontLineHeight 
+export const mainFontFamily = themes[selectedTheme].mainFontFamily 
+export const sidebarScheme = themes[selectedTheme].sidebarScheme
+export const sidebarStyle = themes[selectedTheme].sidebarStyle
+export const sidebarLayout = themes[selectedTheme].sidebarLayout
 
 export const ImageContainer = styled.div`
     background: #fafafa;
@@ -24,9 +83,10 @@ export const ImageContainer = styled.div`
 `
 
 export const StatementText = styled.div`
-	font-size: 3em;
+	font-size: 3rem;
 	font-weight: 500;
 	padding: 120px;
+    color: ${mainFontColor};
 `
 
 export const HeaderImage = styled.div`
@@ -71,11 +131,12 @@ export const PageContainer = styled.div`
 export const PageHeader = styled.h4`
 	padding-top: 50px;
 	text-transform: uppercase;
+    color: ${mainFontColor};
 `
 
 export const SectionHeader = styled.h2`
 	padding-top: 50px;
-
+    color: ${mainFontColor};
 	text-transform: uppercase;
 `
 export const ContentContainer = styled.div`
@@ -90,6 +151,7 @@ export const HeaderContainer = styled.div`
 
 export const ContentHeader = styled.h3`
 	padding-top: 50px;
+    color: ${mainFontColor};
 `
 
 export const SectionBox = styled.div`
@@ -134,4 +196,98 @@ export const FeatureBox = styled.div`
     padding-bottom: 20px;
     background-color: #f9f9f9;
     transition: all 0.2s ease;
+`
+
+export const Feature = styled.div`
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding-bottom: 20px;
+    background-color: #f9f9f9;
+    transition: all 0.2s ease;
+    margin-top: ${props => props.highlight ? '-20px' :  '0px'}
+    margin-bottom:  ${props => props.highlight ? '-20px' :  '0px'}
+    position:  ${props => props.highlight ? 'relative' :  ''}
+    z-index: 2;
+    box-shadow:  ${props => props.highlight ? '0 2px 30px 0 rgba(54, 88, 206, 0.2);' :  'none'}
+`
+
+export const FeatureDescription = styled.div`
+    text-align: left;
+    padding: 30px 15%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+`
+export const FeatureName = styled.div`
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    color: ${DarkFontColor};
+    font-weight: 500;
+    padding-bottom: 40px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`
+
+export const FeatureName2 = styled.div`
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    color: ${mainFontColor};
+    font-weight: 500;
+    padding-bottom: 40px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`
+
+export const FeatureImage = styled.div`
+    
+    img {
+        width: 80px;
+        vertical-align: middle;
+        border-style: none;
+    }
+`
+export const FeatureHeader = styled.div`    
+    background-color: ${backgroundColor};
+    padding-top: 40px;
+    
+    
+`
+export const TwoPaneContainer = styled.div`
+    display: flex;
+`
+
+export const VerticalAlign = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+
+`
+export const NameLabel = styled.div`
+    font-size: .6667em;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: ${mainFontColor};
+`
+
+export const NumberLabel = styled.div`
+    font-feature-settings: "tnum";
+    text-align: right;
+    font-size: .6667em;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: ${mainFontColor};
+`
+
+export const NumberLabelBig = styled.h3`
+    color: ${mainFontColor};
 `

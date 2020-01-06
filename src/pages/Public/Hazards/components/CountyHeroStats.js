@@ -29,9 +29,16 @@ class CountyHeroStats extends React.Component {
         )
             .then(response => response.json.riskIndex.hazards)
             .then(hazards =>
-                this.props.falcor.get(
-                    ['riskIndex', 'meta', hazards, 'name']
-                ).then(d => falcorChunkerNice([dataType, geoid, hazards, 'allTime', cols]))
+                {
+                    hazards = this.props.hazard ?
+                        this.props.hazard :
+                        this.props.hazards && this.props.hazards.length > 0 ?
+                            this.props.hazards : hazards;
+
+                    return this.props.falcor.get(
+                        ['riskIndex', 'meta', hazards, 'name']).
+                    then(d => falcorChunkerNice([dataType, geoid, hazards, 'allTime', cols]))
+                }
             )
     }
 
@@ -49,16 +56,21 @@ class CountyHeroStats extends React.Component {
         let data = [];
         try {
             for (const hazard in this.props[dataType][geoid]) {
-                const value = +this.props[dataType][geoid][hazard].allTime.annualized_damage;
-                const dailyProb = +this.props[dataType][geoid][hazard].allTime.daily_event_prob;
-                const annualNumEvents = +this.props[dataType][geoid][hazard].allTime.annualized_num_events;
-                if (value) {
-                    data.push({
-                        label: this.getHazardName(hazard),
-                        value: {main:FORMAT(value),
-                            sub:{'Daily Probability': dailyProb, 'Annual Avg Number of Events': annualNumEvents}},
-                        sort: value
-                    })
+                if (
+                    (this.props.hazard && this.props.hazard === hazard) ||
+                    (!this.props.hazard && this.props.hazards && this.props.hazards.length > 0 && this.props.hazards.includes(hazard))
+                ){
+                    const value = +this.props[dataType][geoid][hazard].allTime.annualized_damage;
+                    const dailyProb = +this.props[dataType][geoid][hazard].allTime.daily_event_prob;
+                    const annualNumEvents = +this.props[dataType][geoid][hazard].allTime.annualized_num_events;
+                    if (value) {
+                        data.push({
+                            label: this.getHazardName(hazard),
+                            value: {main:FORMAT(value),
+                                sub:{'Daily Probability': (dailyProb*100).toFixed(2) + '%', 'Annual Avg Number of Events': annualNumEvents}},
+                            sort: value
+                        })
+                    }
                 }
             }
         }
@@ -80,7 +92,8 @@ class CountyHeroStats extends React.Component {
 }
 
 CountyHeroStats.defaultProps = {
-    dataType: "severeWeather"
+    dataType: "severeWeather",
+    hazards: []
 }
 
 const mapStateToProps = state => ({

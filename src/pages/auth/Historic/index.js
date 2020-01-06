@@ -4,13 +4,13 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
 import {authGeoid} from "../../../store/modules/user";
 import CountyHeroStats from "./components/CountyHeroStats"
-import GeographyScoreBarChart from "./components/GeographyScoreBarChart"
-import MunicipalityStats from "./components/MunicipalityStats"
+import GeographyScoreBarChart from "../../Public/Hazards/components/GeographyScoreBarChart"
+import MunicipalityStats from "../../Public/Hazards/components/MunicipalityStats"
 import HazardScoreTable from "./components/HazardScoreTable"
 import CousubTotalLossTable from "./components/CousubTotalLossTable"
-import FemaDisasterDeclarationsTable from "./components/FemaDisasterDeclarationsTable"
+import FemaDisasterDeclarationsTable from "../../Public/Hazards/components/FemaDisasterDeclarationsTable"
 import HazardEventsTable from "./components/HazardEventsTable"
-import HMGPTable from "./components/HMGPTable"
+import HMGPTable from "../../Public/Hazards/components/HMGPTable"
 import Content from "components/cms/Content"
 import {getColorScale} from 'utils/sheldusUtils'
 import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";

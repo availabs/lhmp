@@ -4,12 +4,7 @@ import {Link} from 'react-router-dom'
 class Logo extends Component {
     render() {
         return (
-            <div className="logo-w">
-                <Link className="logo" to="/">
-
-                    <div className="logo-label">Mitigation Planner</div>
-                </Link>
-            </div>
+            'Mitigation Planner'
         )
     }
 }
@@ -110,6 +105,19 @@ class LoginMenu extends Component {
     }
 }
 
+class LoginMenuMobile extends Component {
+    render() {
+        return (
+            <Link to={'/login'} style={{color:'#fff'}}>
+                <div className="icon-w">
+                    <div className='pre-icon os-icon os-icon-user-male-circle'/>
+                </div>
+                <span>LOGIN </span>
+            </Link>
+        )
+    }
+}
+
 class TopSearch extends Component {
     render() {
         return (
@@ -138,5 +146,6 @@ export {
     Logo,
     TopSearch,
     LoginMenu,
+    LoginMenuMobile,
     AvatarUser
 }

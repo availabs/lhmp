@@ -1,26 +1,30 @@
 import React, {Component} from 'react';
 import AvlMap from 'components/AvlMap'
 
+import { reduxFalcor } from 'utils/redux-falcor'
+import {connect} from "react-redux";
+import get from "lodash.get";
+
 import TractsLayer from './layers/TractsLayer'
 import HazardTotalGraph from './components/HazardTotalGraph'
 
-let backgroundCss = {
-    //backgroundColor: '#fafafa',
-    backgroundSize: '100vw 100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems:'center',
-    position: 'relative',
-    //marginTop: '100vh',
-    //paddingTop: '50px',
-    zIndex: '4'
-};
+
+import {
+    VerticalAlign,
+    ContentHeader,
+    PageContainer,
+    HeaderContainer,
+    backgroundColor
+} from 'pages/Public/theme/components'
+
+
+TractsLayer.backgroundColor = backgroundColor;
 
 const PlaceComponent = (props) => (
     <div>
         <div style={{padding: 20, position: 'relative'}}>
-            <h5> Hazard Risk <span style={{fontSize: '14px'}}> Annual Average Loss by Hazard Type (1996-2017)</span>
-            </h5>
+            <ContentHeader> Hazard Risk <span style={{fontSize: '14px'}}> Annual Average Loss by Hazard Type (1996-2017)</span>
+            </ContentHeader>
             <HazardTotalGraph setHazard={props.setHazard}/>
         </div>
     </div>
@@ -35,7 +39,7 @@ class Analysis extends Component {
             update: {
                 layer: 'Tracts Layer',
                 filter: 'hazard',
-                value: 'hurricane'
+                value: 'riverine'
             }
         };
         this.setHazard = this.setHazard.bind(this);
@@ -53,52 +57,71 @@ class Analysis extends Component {
 
     render() {
         return (
-            <div style={backgroundCss}>
-                <div className='col-sm-6' style={{float: 'left'}}>
-                    <div className="element-wrapper">
-                        <div className="element-box">
-                            <div style={{minHeight: '100vh', height:'fit-content', width: '100%'}}>
+            <PageContainer >
+                <HeaderContainer>
+                    <div className='row'>
+                        <div className='col-12' style={{textAlign:'center'}}>
+                            <ContentHeader>
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Loss By Hazard
+                            </ContentHeader>
+                        </div>
+                    </div>
+                <div className='row'>
+                    <div className='col-lg-6'>
+                        <VerticalAlign>
+                            
                                 <PlaceComponent setHazard={this.setHazard}/>
-                            </div>
+                           
+                        </VerticalAlign>
+                       
+                    </div>
+                    <div className='col-lg-6' >
+                        
+                        <div style={{height: '80vh', width: '100%'}}>
+                            <AvlMap
+                                sidebar={false}
+                                mapactions={false}
+                                scrollZoom={false}
+                                zoom={6}
+                                update={[this.state.update]}
+                                style='Clear'
+                                styles={[{ name: "Clear",
+                                    style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia" }]}
+                                fitBounds={[
+                                    [
+                                        -79.8046875,
+                                        40.538851525354666
+                                    ],
+                                    [
+                                        -71.7626953125,
+                                        45.042478050891546
+                                    ]]}
+                                layers={[TractsLayer]}
+                                layerProps={ {
+                                    [TractsLayer.name]: {
+                                        hazard: this.state.update.value
+                                    }
+                                } }
+                            />
                         </div>
+
                     </div>
                 </div>
-                <div className='col-sm-6' style={{float: 'right'}}>
-                    <div className="element-wrapper">
-                        <div className="element-box">
-                            <div style={{height: '100vh', width: '100%'}}>
-                                <AvlMap
-                                    sidebar={false}
-                                    mapactions={false}
-                                    scrollZoom={false}
-                                    zoom={6}
-                                    update={[this.state.update]}
-                                    style='Clear'
-                                    styles={[{ name: "Clear",
-                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia" }]}
-                                    fitBounds={[
-                                        [
-                                            -79.8046875,
-                                            40.538851525354666
-                                        ],
-                                        [
-                                            -71.7626953125,
-                                            45.042478050891546
-                                        ]]}
-                                    layers={[TractsLayer]}
-                                    layerProps={ {
-                                        [TractsLayer.name]: {
-                                            hazard: this.state.update.value
-                                        }
-                                    } }
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </HeaderContainer>
+            </PageContainer >
         )
     }
 }
 
-export default Analysis
+const mapStateToProps = (state,ownProps) => {
+    return {
+        activePlan: state.user.activePlan || null,
+        activeCousubid: state.user.activeCousubid || null,
+        router: state.router,
+        graph: state.graph
+    };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Analysis))

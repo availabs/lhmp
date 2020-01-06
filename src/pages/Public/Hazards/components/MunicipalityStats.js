@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
 
-import SideInfoProjectBox from "./SideInfoProjectBox"
+import SideInfoProjectBox from "../../../auth/Historic/components/SideInfoProjectBox"
 
 class MunicipalityStats extends React.Component {
     constructor(props) {
@@ -23,7 +23,6 @@ class MunicipalityStats extends React.Component {
             ['geo', geoid, [2016], ['population']],
             ['geo', geoid, 'cousubs']
         ).then(d => {
-            console.log('resFetchFalcorDepsMS',d);
             return d
         })
     }

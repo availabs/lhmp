@@ -360,23 +360,23 @@ a.el-tablo {
     transition: all 0.25s ease;
   }
   &:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: $element-box-shadow-hover;
+    //transform: translateY(-5px) scale(1.02);
+    //box-shadow: $element-box-shadow-hover;
     .value {
-      transform: translateY(-3px);
+      //transform: translateY(-3px);
       color: $primary;
     }
     .label {
       color: lighten($primary, 10%);
     }
     &.centered .value{
-      transform: scale(1.1) translateY(-3px);
+      //transform: scale(1.1) translateY(-3px);
     }
     .label {
       
     }
     .label {
-      transform: translateY(-2px);
+      //transform: translateY(-2px);
     }
   }
 }

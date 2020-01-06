@@ -235,8 +235,9 @@ class TableBox extends React.Component {
         const tableLink = this.props.tableLink ? <a href={ this.props.tableLink }>{ this.props.tableLinkLabel }</a> : null;
 
         return (
-            <ElementBox title={this.props.title}
-                        desc={ this.props.desc || tableLink }>
+            <div>
+                <h4>{this.props.title}</h4>
+                <div>{this.props.desc}</div>
                 { !this.props.showControls ? null :
                     <div className="controls-above-table">
                         <div className="row">
@@ -258,11 +259,7 @@ class TableBox extends React.Component {
                         </div>
                     </div>
                 }
-                <div className="table-responsive"
-                     style={ {
-                         // minHeight: `${ this.props.pageSize * 46 + 39 }px`,
-                         // maxHeight: this.props.tableScroll ? `${ this.props.pageSize * 46 + 39 }px` : 'auto',
-                     } }>
+                <div>
                     <DataTable tableData={ tableData }
                                columns={ this.props.columns.filter(c => !this.props.expandColumns.includes(c)) }
                                links={ this.props.links }
@@ -277,10 +274,11 @@ class TableBox extends React.Component {
                                sortOrder={ this.state.sortOrder }
                                maxHeight = {this.props.maxHeight || 'none'}
                                tableScroll = { this.props.tableScroll}
+                               widths={this.props.widths}
                                />
                 </div>
                 { !this.props.tableScroll ? paginate : null }
-            </ElementBox>
+            </div>
         )
     }
 }
