@@ -1,16 +1,25 @@
 import React, {Component} from 'react'
 import MainMenu from './MainMenu'
+import MobileMenu from "./MobileMenu";
 import {falcorGraph} from "store/falcorGraph";
 import geoDropdown from 'pages/auth/Plan/functions'
-import {AvatarUser, LoginMenu, Logo} from './TopMenu'
+import {AvatarUser, LoginMenu, LoginMenuMobile, Logo} from './TopMenu'
 import {connect} from "react-redux";
 import { reduxFalcor } from 'utils/redux-falcor'
 import {setActiveCousubid} from 'store/modules/user'
 import get from 'lodash.get'
 import styled from "styled-components";
+import {Link} from "react-router-dom";
+
 // import './menu.css'
 
 class Menu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuDisplay: 'none'
+        }
+    }
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
         return this.props.falcor.get(
@@ -92,19 +101,61 @@ class Menu extends Component {
             : <LoginMenu/>;
 
         return (
+            <React.Fragment>
+                <div className={displayOptions} style={dynamicStyle}>
+                    <div className="logo-w">
+                        <Link className="logo" to="/">
 
-            <div className={displayOptions} style={dynamicStyle}>
-                <Logo/>
-				{userMenu}
-				<h1 className="menu-page-header">{this.props.title}</h1>
-                <MainMenu {...this.props} />
-                {!this.props.auth ?
-                    <DROPDOWN>
-                        {geoDropdown.geoDropdown(this.props.geoGraph,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
-                    </DROPDOWN>
-                : ''}
-            </div>
-
+                            <div className="logo-label"><Logo/></div>
+                        </Link>
+                    </div>
+                    {userMenu}
+                    <h1 className="menu-page-header">{this.props.title}</h1>
+                    <MainMenu {...this.props} />
+                    {!this.props.auth ?
+                        <DROPDOWN>
+                            {geoDropdown.geoDropdown(this.props.geoGraph,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
+                        </DROPDOWN>
+                        : ''}
+                </div>
+                <div className='menu-mobile menu-activated-on-click color-scheme-dark'>
+                    {/*mobile menu*/}
+                    <div className="mm-logo-buttons-w">
+                        <a className="mm-logo" href="/">
+                            <span>
+                                <Logo/>
+                            </span>
+                        </a>
+                        <div className="mm-buttons">
+                            <div className="mobile-menu-trigger" onClick={() => {
+                                this.state.menuDisplay === 'none' ?
+                                    this.setState({menuDisplay: 'block'}) :
+                                    this.setState({menuDisplay: 'none'})
+                            }}>
+                                <div className="os-icon os-icon-hamburger-menu-1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul className="main-menu" style={{display: this.state.menuDisplay}}>
+                        <MobileMenu {...this.props}/>
+                        {
+                            this.props.user && !!this.props.user.authed
+                                ? <li>
+                                    <Link to="/logout">
+                                        <div className="icon-w">
+                                            <div className="os-icon os-icon-signs-11"></div>
+                                        </div>
+                                        <span>Logout</span>
+                                    </Link>
+                                </li>
+                                : <li>
+                                    <LoginMenuMobile/>
+                                </li>
+                        }
+                    </ul>
+                </div>
+            </React.Fragment>
         )
     }
 }
