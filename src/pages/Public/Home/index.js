@@ -9,6 +9,7 @@ import Introduction from './components/introduction'
 import LocalContext from './components/localContext/'
 import HazardLoss from './components/hazardLoss/'
 import NFIP from './components/NFIP'
+import CapabilityStrategy from "./components/Strategy/Capabilities";
 import Assets from './components/Assets/'
 
 class Public extends React.Component {
@@ -24,13 +25,12 @@ class Public extends React.Component {
         return (
             <div>
                 <Introduction/>
-                
                     <LocalContext/>
                     <PlanningTeam/>
                     <Analysis/>
                     <NFIP/>
                     <HazardLoss/>
-                    
+                    <CapabilityStrategy/>
                     
             </div>
         )
