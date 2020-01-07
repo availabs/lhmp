@@ -3,7 +3,7 @@ import MainMenu from './MainMenu'
 import MobileMenu from "./MobileMenu";
 import {falcorGraph} from "store/falcorGraph";
 import geoDropdown from 'pages/auth/Plan/functions'
-import {AvatarUser, LoginMenu, LoginMenuMobile, Logo} from './TopMenu'
+import {AvatarUser, AvatarUserMobile, LoginMenu, LoginMenuMobile, Logo} from './TopMenu'
 import {connect} from "react-redux";
 import { reduxFalcor } from 'utils/redux-falcor'
 import {setActiveCousubid} from 'store/modules/user'
@@ -100,12 +100,16 @@ class Menu extends Component {
             ? <AvatarUser user={this.props.user}/>
             : <LoginMenu/>;
 
+        let userMenuMobile = this.props.user && !!this.props.user.authed
+            ? <AvatarUserMobile user={this.props.user}/>
+            : <LoginMenuMobile/>;
+
         return (
             <React.Fragment>
                 <div className={displayOptions} style={dynamicStyle}>
+                    {/*web menu*/}
                     <div className="logo-w">
                         <Link className="logo" to="/">
-
                             <div className="logo-label"><Logo/></div>
                         </Link>
                     </div>
@@ -118,14 +122,14 @@ class Menu extends Component {
                         </DROPDOWN>
                         : ''}
                 </div>
-                <div className='menu-mobile menu-activated-on-click color-scheme-dark'>
+                <div className='menu-mobile menu-activated-on-click color-scheme-dark' style={{zIndex:100}}>
                     {/*mobile menu*/}
                     <div className="mm-logo-buttons-w">
-                        <a className="mm-logo" href="/">
+                        <Link className="mm-logo" to="/">
                             <span>
                                 <Logo/>
                             </span>
-                        </a>
+                        </Link>
                         <div className="mm-buttons">
                             <div className="mobile-menu-trigger" onClick={() => {
                                 this.state.menuDisplay === 'none' ?
@@ -138,21 +142,8 @@ class Menu extends Component {
                         </div>
                     </div>
                     <ul className="main-menu" style={{display: this.state.menuDisplay}}>
+                        {userMenuMobile}
                         <MobileMenu {...this.props}/>
-                        {
-                            this.props.user && !!this.props.user.authed
-                                ? <li>
-                                    <Link to="/logout">
-                                        <div className="icon-w">
-                                            <div className="os-icon os-icon-signs-11"></div>
-                                        </div>
-                                        <span>Logout</span>
-                                    </Link>
-                                </li>
-                                : <li>
-                                    <LoginMenuMobile/>
-                                </li>
-                        }
                     </ul>
                 </div>
             </React.Fragment>

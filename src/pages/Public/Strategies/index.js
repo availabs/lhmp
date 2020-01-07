@@ -158,7 +158,7 @@ const mapStateToProps = (state,ownProps) => {
 
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
-    icon: '',
+    icon: 'os-icon-pencil-2',
     path: '/strategies',
     exact: true,
     name: 'Strategies',

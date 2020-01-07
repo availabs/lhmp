@@ -13,7 +13,7 @@ class MobileMenu extends Component {
 			.filter(menu => menu.mainNav)
 			.filter(menu => !menu.auth || this.props.authed)
 			.map((menu, index) => {
-				//console.log('MobileMenu',menu.path.split('/'), this.props.path.split('/'), menus)
+				console.log('MobileMenu',menu.path.split('/'), this.props.path.split('/'), menus)
 				let topMenu = menu.path ? menu.path.split('/')[1] : ''
 				let currentTop = this.props.path ? this.props.path.split('/')[1] : ' '
 				let isActive = topMenu === currentTop
@@ -46,7 +46,7 @@ class MobileMenu extends Component {
 				return (
 					<li
 						key={'menuItem_' + index}
-						//className={`top-menu-tab has-sub-menu ${isActive}`}
+						className={`top-menu-tab has-sub-menu ${isActive}`}
 						//id={'menuItem_' + index}
 						onClick={this.menuClick}
 						//onMouseOut={this.menuMouseOut}
@@ -58,10 +58,6 @@ class MobileMenu extends Component {
 							<span>{menu.name}</span>
 						</Link>
 						<div className="sub-menu-w">
-							<div className="sub-menu-header">{menu.name}</div>
-							<div className="sub-menu-icon">
-								<i className="os-icon os-icon-window-content" />
-							</div>
 							<div
 								className="sub-menu-i"
 								onClick={this.menuClick}
@@ -92,6 +88,7 @@ class MobileMenu extends Component {
 	}
 
 	menuClick (event) {
+		if (!(event.target && event.target.closest('.top-menu-tab'))) return;
 		if (event.target.closest('.top-menu-tab').classList.value.indexOf('active') === -1) {
 			event.target.closest('.top-menu-tab').classList.add('active');
 		}else{
