@@ -11,6 +11,8 @@ export let host = 'http://localhost:4444/'
 if (process.env.NODE_ENV === 'production') {
   host = 'https://graph.availabs.org/'
 }
+
+host = 'http://localhost:4444/'; //env blank obj
 // export const host = 'https://mitigateny.availabs.org/api/'
 class CustomSource extends HttpDataSource {
   onBeforeRequest (config) {

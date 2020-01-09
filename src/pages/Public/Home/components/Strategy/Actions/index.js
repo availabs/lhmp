@@ -5,7 +5,7 @@ import {falcorGraph} from "store/falcorGraph";
 import {connect} from "react-redux";
 import get from "lodash.get"
 import styled from "styled-components";
-
+import HMGPTable from "./HMGPTable";
 // const Section = styled.div
 
 import {
@@ -71,6 +71,25 @@ class PlanningTeam extends Component {
                             </FeatureDescription>
                             </Feature>
                     </div>
+
+                    <div className = 'd-flex justify-content-center' style={{paddingTop:50}}>
+                            <Feature className={`col-sm-6 no-gutters`} highlight={true}>
+                                <FeatureDescription>
+                                     <FeatureName>HMGP</FeatureName>
+                                        <div className='table-responsive' style={{maxHeight: '300px',overflow:'scroll'}}>
+                                        <HMGPTable
+                                        geoid={
+                                            !this.props.activeCousubid || this.props.activeCousubid === "undefined" ? this.props.activeGeoid
+                                                : this.props.activeCousubid
+                                        }
+                                        hazard={'all'}
+                                        pageSize={3}
+                                        tableScroll={false}
+                                        />
+                                    </div>
+                            </FeatureDescription>
+                            </Feature>
+                    </div>
                 </VerticalAlign>
                 
             </PageContainer>
@@ -82,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         activePlan: get(state, `user.activePlan`, null),
         activeCousubid: get(state, `user.activeCousubid`, null),
+        activeGeoid: get(state, `user.activeGeoid`, null),
         roles: get(state, `graph.roles.byId`, {}),
         rolesMeta: get(state, `graph.rolesMeta`, {}),
         graph: state.graph,

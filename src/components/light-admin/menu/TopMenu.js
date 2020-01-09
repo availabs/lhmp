@@ -4,12 +4,7 @@ import {Link} from 'react-router-dom'
 class Logo extends Component {
     render() {
         return (
-            <div className="logo-w">
-                <Link className="logo" to="/">
-
-                    <div className="logo-label">Mitigation Planner</div>
-                </Link>
-            </div>
+            'Mitigation Planner'
         )
     }
 }
@@ -94,6 +89,88 @@ class AvatarUser extends Component {
         )
     }
 }
+class AvatarUserMobile extends Component {
+    render() {
+        //console.log('TopMenu', this.props.user)
+        return (
+            <li className='has-sub-menu'>
+
+                <a onClick={(event) => {
+                    if (!event.target.closest('.has-sub-menu')) return;
+                    if (event.target.closest('.has-sub-menu').classList.value.indexOf('active') === -1) {
+                        event.target.closest('.has-sub-menu').classList.add('active');
+                    }else{
+                        event.target.closest('.has-sub-menu').classList.remove('active');
+                    }
+                }}>
+                    <div className="icon-w">
+                        <div className="pre-icon os-icon os-icon-user-male-circle"></div>
+                    </div>
+                    <span>
+                        <div className="logged-user-info-w">
+                            <div className="logged-user-name">
+                                {
+                                    this.props.user.email ?
+                                        this.props.user.email.length > 18 ?
+                                            this.props.user.email.slice(0,15) + '...'
+                                            : this.props.user.email
+                                        : ''}</div>
+                            <div className="logged-user-role"
+                                 style={{color: '#cdcdcd'}}>{this.props.user.activeGroup ?
+                                this.props.user.activeGroup.length > 18 ?
+                                    this.props.user.activeGroup.slice(0,15) + '...' :
+                                    this.props.user.activeGroup
+                                : ''}</div>
+                        </div>
+                    </span>
+                </a>
+                <div className='sub-menu-w'>
+                    <div className='sub-menu-i'>
+                        <ul className='sub-menu'>
+                            <li>
+                                <Link to={'/user/'}>
+                                    <div className="logged-user-info-w">
+                                        <div className="logged-user-name">{this.props.user.email ? this.props.user.email : ''}</div>
+                                    </div>
+                                </Link>
+                            </li>
+                            {
+                                (this.props.user.authedPlans && this.props.user.authedPlans.length > 1) ||
+                                (this.props.user.authed && this.props.user.authedPlans.indexOf(this.props.activePlan) === -1)?
+                                    <li>
+                                        <a href='/plans'>
+                                            Plans
+                                        </a>
+                                    </li>
+                                    : null
+                            }
+
+                            {this.props.user.authLevel >= 5 ?
+                                <li>
+                                    <a href='/user/admin'>
+                                        User Admin
+                                    </a>
+                                </li>
+                                : null
+                            }
+                            {this.props.user.authLevel >= 1 ? // check for current plan and not in general
+                                <li>
+                                    <a href='/admin'>
+                                        Admin
+                                    </a>
+                                </li>
+                                : null
+                            }
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        )
+    }
+}
 
 class LoginMenu extends Component {
     render() {
@@ -106,6 +183,21 @@ class LoginMenu extends Component {
                     </div>
                 </Link>
             </div>
+        )
+    }
+}
+
+class LoginMenuMobile extends Component {
+    render() {
+        return (
+            <li>
+                <Link to={'/login'} style={{color:'#fff'}}>
+                    <div className="icon-w">
+                        <div className='pre-icon os-icon os-icon-user-male-circle'/>
+                    </div>
+                    <span>LOGIN </span>
+                </Link>
+            </li>
         )
     }
 }
@@ -138,5 +230,7 @@ export {
     Logo,
     TopSearch,
     LoginMenu,
-    AvatarUser
+    LoginMenuMobile,
+    AvatarUser,
+    AvatarUserMobile
 }

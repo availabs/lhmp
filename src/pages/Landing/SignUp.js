@@ -58,8 +58,13 @@ class Signup extends React.Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.contact_county !== this.state.contact_county){
-            let tmpGroup = this.state.countyList.filter(f => f.id === this.state.contact_county)[0].name + ' HMP Public';
-            this.setState({'group': tmpGroup})
+            if(this.state.contact_county.length <=2){
+                let tmpGroup = 'New York State HMP Public'
+                this.setState({'group': tmpGroup})
+            }else{
+                let tmpGroup = this.state.countyList.filter(f => f.id === this.state.contact_county)[0].name + ' HMP Public';
+                this.setState({'group': tmpGroup})
+            }
         }
     }
 

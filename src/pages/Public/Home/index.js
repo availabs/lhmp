@@ -30,7 +30,7 @@ import {
 } from 'pages/Public/theme/components'
 
 
-let sideMenuConfig = {    
+let sideMenuConfig = {
     'Planning Context' : [
             {
                 title:'Introduction',
@@ -120,7 +120,7 @@ class Public extends React.Component {
                                         <Comp />
                                     </Element>
                                 )
-                            })         
+                            })
                         })
                     }
                 </div>
@@ -128,8 +128,8 @@ class Public extends React.Component {
         )
     }
 }
-       
-               
+
+
 const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph.plans || {},
