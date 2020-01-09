@@ -50,12 +50,12 @@ let sideMenuConfig = {
     ],
     'Risk' : [
             {
-                title:'Analysis',
+                title:'Hazard Loss',
                 component:Analysis,
                 icon: 'os-icon-layers'
             },
             {
-                title:'HazardEvents',
+                title:'Hazard Events',
                 component:HazardEvents,
                 icon: 'os-icon-others-43'
             },
@@ -90,11 +90,6 @@ let sideMenuConfig = {
                 title:'Actions',
                 component:Actions,
                 icon:'os-icon-grid-circles'
-            },
-            {
-                title:'Participation',
-                component:Participation,
-                icon:'os-icon-cv-2'
             }
         ]
 }

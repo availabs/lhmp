@@ -52,7 +52,7 @@ let themes = [
     }
 ]
 
-let selectedTheme = 2  
+let selectedTheme = 3
 
 
 export const backgroundColor = themes[selectedTheme].backgroundColor 

@@ -102,7 +102,7 @@ class PlanningTeam extends Component {
                 <div className='row'>
                     <div className='col-12' style={{textAlign:'center'}}>
                         <ContentHeader>
-                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Planning Team
+                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Mitigation Representative
                         </ContentHeader>
                     </div>
                 </div>

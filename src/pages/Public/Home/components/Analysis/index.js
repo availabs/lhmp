@@ -62,7 +62,7 @@ class Analysis extends Component {
                     <div className='row'>
                         <div className='col-12' style={{textAlign:'center'}}>
                             <ContentHeader>
-                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Loss By Hazard
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Loss
                             </ContentHeader>
                         </div>
                     </div>
