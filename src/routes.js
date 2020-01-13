@@ -11,6 +11,7 @@ import Strategies from './pages/Public/Strategies/'
 
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
+import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import Home from 'pages/auth/Home';
 import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
@@ -137,6 +138,7 @@ const routes = [
 
   PlanIndex,
   RiskMap,
+  ScenarioMap2,
   Logout,
   NoMatch
 
