@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import AvlMap from 'components/AvlMap'
-import Element from 'components/light-admin/containers/Element'
 import { reduxFalcor } from 'utils/redux-falcor'
-import get from "lodash.get";
 import {connect} from "react-redux";
 import styled from "styled-components";
 import TractsLayer from './layers/TractsLayer'
-import {falcorGraph} from "store/falcorGraph";
 import CensusStatBox from './components/CensusStatBox'
 
 
+
+import get from "lodash.get";
 
 import {
     VerticalAlign,
@@ -33,6 +32,7 @@ class LocalContext extends Component {
 
     fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
+        console.log('activeCousubid', this.props.activeCousubid)
         return this.props.falcor.get(
             ['acs', parseInt(this.props.activeCousubid), ['2017'],['B19013_001E','B01003_001E','B17001_002E']],
             ['geo', parseInt(this.props.activeCousubid), 'name']
@@ -62,9 +62,9 @@ class LocalContext extends Component {
             }
         ]
 
-        return statsMeta.map(d => {
+        return statsMeta.map((d,i) => {
             return (
-                <div className="row mb-xl-2 mb-xxl-3">
+                <div className="row mb-xl-2 mb-xxl-3" key={i}>
                     <div className="col-sm-6" style={{margin: '0 auto'}}>
                         <CensusStatBox
                             {...d}

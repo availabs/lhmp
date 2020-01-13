@@ -9,32 +9,6 @@ import COLOR_RANGES from "constants/color-ranges"
 
 const getColor = (name) => COLOR_RANGES[9].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
-const hazardMeta = [
-    {value: 'wind', name: 'Wind', description: '', sheldus: "Wind", colors: getColor('Greys')},
-    {value: 'wildfire', name: 'Wildfire', description: '', sheldus: "Wildfire", colors: getColor('Blues')},
-    {value: 'tsunami', name: 'Tsunami/Seiche', description: '', sheldus: "Tsunami/Seiche", colors: getColor('Blues')},
-    {value: 'tornado', name: 'Tornado', description: '', sheldus: "Tornado", colors: getColor('Blues')},
-    {value: 'riverine', name: 'Flooding', description: '', sheldus: "Flooding", colors: getColor('PuBuGn')},
-    {value: 'lightning', name: 'Lightning', description: '', sheldus: "Lightning", colors: getColor('Blues')},
-    {value: 'landslide', name: 'Landslide', description: '', sheldus: "Landslide", colors: getColor('Blues')},
-    {value: 'icestorm', name: 'Ice Storm', description: '', sheldus: "", colors: getColor('Blues')},
-    {
-        value: 'hurricane',
-        name: 'Hurricane',
-        description: '',
-        sheldus: "Hurricane/Tropical Storm",
-        colors: getColor('Purples')
-    },
-    {value: 'heatwave', name: 'Heat Wave', description: '', sheldus: "Heat", colors: getColor('Blues')},
-    {value: 'hail', name: 'Hail', description: '', sheldus: "Hail", colors: getColor('Blues')},
-    {value: 'earthquake', name: 'Earthquake', description: '', sheldus: "Earthquake", colors: getColor('Blues')},
-    {value: 'drought', name: 'Drought', description: '', sheldus: "Drought", colors: getColor('Blues')},
-    {value: 'avalanche', name: 'Avalanche', description: '', sheldus: "Avalanche", colors: getColor('Blues')},
-    {value: 'coldwave', name: 'Coldwave', description: '', colors: getColor('Blues')},
-    {value: 'winterweat', name: 'Snow Storm', description: '', sheldus: "Winter Weather", colors: getColor('Blues')},
-    {value: 'volcano', name: 'Volcano', description: '', colors: getColor('Blues')},
-    {value: 'coastal', name: 'Coastal Hazards', description: '', sheldus: "Coastal Hazards", colors: getColor('Blues')}
-];
 
 
 class TractLayer extends MapLayer {
@@ -113,24 +87,27 @@ class TractLayer extends MapLayer {
                 }
 
                 // get data and paint map
+                console.log('Tracts Layer gonna fetch')
                 this.fetchData(graph).then(data => this.receiveData(map, data))
             })
 
     }
 
     fetchData(graph) {
+        console.log('fetch data tracts layer')
+        
         if (!graph) graph = falcorGraph.getCache()
+        console.log('fetch data tracts layer')
         let geos = get(graph,
             `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
             null);
 
         if (!(geos && geos.value && geos.value.length > 0)) return Promise.resolve();
 
+        console.log('test 123', geos.value)
         return falcorChunkerNiceWithUpdate(['acs', geos.value, ['2017'], ['B01003_001E']])
             .then(d => falcorChunkerNiceWithUpdate(['geo', geos.value, 'name']))
-            .then(fullData => {
-                return Promise.resolve()
-            })
+            
     }
 
     receiveData(map, data) {
@@ -177,8 +154,6 @@ class TractLayer extends MapLayer {
     }
 
     polyMask(mask, bounds) {
-        /*let bboxPoly = turf.bboxPolygon(bounds);
-        return turf.difference(bboxPoly, mask);*/
         return turf.mask(mask)
     }
 }
@@ -231,14 +206,7 @@ const tractLayer = new TractLayer("Local Context Layer", {
         }
     ],
     displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
-    filters: {
-        hazard: {
-            name: "hazard",
-            type: "hidden",
-            domain: hazardMeta,
-            value: "hurricane"
-        }
-    },
+    
    
     onHover: {
         layers: ['tracts-layer-line'],

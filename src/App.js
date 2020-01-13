@@ -31,6 +31,9 @@ class App extends Component {
     this.state = {
       isAuthenticating: true
     };
+    this.props.auth();
+    //console.log('update',prevProps, this.props.user.attempts)
+    
     this.getUrlVars = this.getUrlVars.bind(this)
   }
 
@@ -42,14 +45,10 @@ class App extends Component {
     }
   }
 
-  componentWillMount(prevProps) {
-    //alert('getItem: ' + localStorage.getItem('userToken'));
-    this.props.auth();
-    //console.log('update',prevProps, this.props.user.attempts)
-    if (this.state.isAuthenticating && this.props.user.attempts ) {
-      this.setState({ isAuthenticating: false });
-    }
-  }
+  // componentWillMount(prevProps) {
+  //   //alert('getItem: ' + localStorage.getItem('userToken'));
+    
+  // }
   getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {

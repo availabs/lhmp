@@ -7,7 +7,6 @@ import get from "lodash.get"
 
 import {ResponsiveBar} from "@nivo/bar"
 import * as d3format from "d3-format"
-import ElementBox from 'components/light-admin/containers/ElementBox'
 
 import {getHazardName, processDataForBarChart} from 'utils/sheldusUtils'
 

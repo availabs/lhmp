@@ -116,7 +116,7 @@ class Public extends React.Component {
                             return sideMenuConfig[section].map(item=>{
                                 let Comp = item.component
                                 return (
-                                    <Element name={item.title}>
+                                    <Element name={item.title} key={item.title}>
                                         <Comp />
                                     </Element>
                                 )
@@ -133,7 +133,8 @@ class Public extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph.plans || {},
-        router: state.router
+        router: state.router,
+        activePlan:state.user.activePlan
     };
 };
 
