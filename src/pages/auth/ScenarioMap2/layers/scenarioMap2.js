@@ -66,7 +66,6 @@ class CountiesLayer extends MapLayer{
             return buildingIds
         }).then(buildingIds =>{
             if(buildingIds){
-                console.log('length',buildingIds.length)
                 return falcorGraph.get(
                     ['building', 'geom', 'byBuildingId',buildingIds, 'centroid']
                 ).then(d => {
