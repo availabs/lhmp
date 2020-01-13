@@ -5,23 +5,20 @@ import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
 import { connect } from 'react-redux';
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-
 import get from "lodash.get"
 import styled from "styled-components"
-
 import {
     scaleQuantile,
     scaleQuantize
 } from "d3-scale"
 import { extent } from "d3-array"
 import { format as d3format } from "d3-format"
-
 import { fnum } from "utils/sheldusUtils"
-
 import MapLayer from "components/AvlMap/MapLayer.js"
 //import { register, unregister } from "../ReduxMiddleware"
 
 import { getColorRange } from "constants/color-ranges";
+import AssetsByOwnerTypeInfoBox from "./infobox/AssetsByOwnerTypeInfoBox";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -73,11 +70,7 @@ class CountiesLayer extends MapLayer{
                 return falcorGraph.get(
                     ['building', 'geom', 'byBuildingId',buildingIds, 'centroid']
                 ).then(d => {
-                    return falcorGraph.get(['building','byGeoid',store.getState().user.activeGeoid,
-                        ['ownerType'],owner_types,['flood_100','flood_500'],'sum',['count','replacement_value']])
-                        .then(response =>{
-                            return response
-                        })
+                    return d
                 })
             }
 
@@ -267,105 +260,7 @@ export default (options = {}) =>
         infoBoxes:{
             Overview: {
                 title: "Assets By Owner Type",
-                comp: (props={}) =>{
-                    let flood_100_count_muni = 0,
-                        flood_100_value_muni = 0,
-                        flood_500_count_muni = 0,
-                        flood_500_value_muni = 0;
-                    let graph = falcorGraph.getCache();
-                    let resultData = []
-                    if(graph.building){
-                        let buildingDataByOwnerTypeByFloodType = graph.building.byGeoid[store.getState().user.activeGeoid].ownerType
-                        Object.keys(buildingDataByOwnerTypeByFloodType).forEach(owner =>{
-                            if(owner === '2'){
-                                resultData.push({
-                                    'owner': 'State',
-                                    'pin_color':'#0d1acc',
-                                    'flood_100_count':buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.count.value || 0,
-                                    'flood_100_value':buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.replacement_value.value || 0,
-                                    'flood_500_count':buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.count.value || 0,
-                                    'flood_500_value':buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.replacement_value.value || 0
-                                })
-                            }
-                            if(owner === '3'){
-                                resultData.push({
-                                    'owner': 'County',
-                                    'pin_color':'#0fcc1b',
-                                    'flood_100_count':buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.count.value || 0,
-                                    'flood_100_value':buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.replacement_value.value || 0,
-                                    'flood_500_count':buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.count.value || 0,
-                                    'flood_500_value':buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.replacement_value.value || 0
-                                })
-                            }
-                            if(['4', '5', '6', '7'].includes(owner)){
-                                flood_100_count_muni += parseInt(buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.count.value)
-                                flood_100_value_muni += parseFloat(buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.replacement_value.value)
-                                flood_500_count_muni += parseInt(buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.count.value)
-                                flood_500_value_muni += parseFloat(buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.replacement_value.value)
-
-                            }
-                            if(owner === '8'){
-                                resultData.push({
-                                    'owner': 'Private',
-                                    'pin_color':'#F3EC16',
-                                    'flood_100_count':buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.count.value || 0,
-                                    'flood_100_value':buildingDataByOwnerTypeByFloodType[owner]['flood_100'].sum.replacement_value.value || 0,
-                                    'flood_500_count':buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.count.value || 0,
-                                    'flood_500_value':buildingDataByOwnerTypeByFloodType[owner]['flood_500'].sum.replacement_value.value || 0
-                                })
-                            }
-
-                        })
-                        resultData.push({
-                            'owner': 'Municipality',
-                            'pin_color':'#cc1e0a',
-                            'flood_100_count':flood_100_count_muni || 0,
-                            'flood_100_value':flood_100_value_muni || 0,
-                            'flood_500_count':flood_500_count_muni || 0,
-                            'flood_500_value':flood_500_value_muni || 0
-                        })
-                    }
-                    return (
-                        <div>
-                            <table className='table table-sm table-hover'>
-                                <thead>
-                                <tr>
-                                    <th>Owner Type</th>
-                                    <th># Flood 100</th>
-                                    <th>Est. Replacement $</th>
-                                    <th># Flood 500</th>
-                                    <th>Est. Replacement $</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    resultData ?
-                                        (resultData).map(item =>{
-                                            return (
-                                                <tr>
-                                                    <td>
-                                                    <div className='el-legend'>
-                                                        <div className='legend-value-w'>
-                                                            <div className='legend-pin' style={{'background-color': item.pin_color}}/>{item.owner}
-                                                        </div>
-                                                    </div>
-                                                    </td>
-                                                    <td>{item.flood_100_count}</td>
-                                                    <td>{fnum(item.flood_100_value)}</td>
-                                                    <td>{item.flood_500_count}</td>
-                                                    <td>{fnum(item.flood_500_value)}</td>
-                                                </tr>
-                                            )
-                                        })
-                                        :
-                                        null
-
-                                }
-                                </tbody>
-                                {/*<tfoot><tr style={{fontWeight: 600}}><td>Total</td><td>{totalNum}</td><td>{fnum(totalEst)}</td><td>{fnum(totalFEMA)}</td></tr></tfoot>*/}
-                            </table>
-                        </div>
-                    )},
+                comp: AssetsByOwnerTypeInfoBox,
                 show: true
             }
         }
