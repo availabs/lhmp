@@ -260,22 +260,23 @@ class TableBox extends React.Component {
                     </div>
                 }
                 <div>
-                    <DataTable tableData={ tableData }
-                               columns={ this.props.columns.filter(c => !this.props.expandColumns.includes(c)) }
-                               links={ this.props.links }
-                               onClick={ this.props.onClick }
-                               filterColumns={ filterColumns }
-                               toggleFilterColumn={ this.toggleFilterColumn.bind(this) }
-                               filteredColumns={ this.state.filteredColumns }
-                               expandColumns={ this.props.expandColumns }
-                               urlColumn={ this.props.urlColumn }
-                               toggleSortColumn={ this.toggleSortColumn.bind(this) }
-                               sortColumn={ this.state.sortColumn }
-                               sortOrder={ this.state.sortOrder }
-                               maxHeight = {this.props.maxHeight || 'none'}
-                               tableScroll = { this.props.tableScroll}
-                               widths={this.props.widths}
-                               />
+                    <DataTable 
+                        tableData={ tableData }
+                        columns={ this.props.columns.filter(c => !this.props.expandColumns.includes(c)) }
+                        links={ this.props.links }
+                        onClick={ this.props.onClick }
+                        filterColumns={ filterColumns }
+                        toggleFilterColumn={ this.toggleFilterColumn.bind(this) }
+                        filteredColumns={ this.state.filteredColumns }
+                        expandColumns={ this.props.expandColumns }
+                        urlColumn={ this.props.urlColumn }
+                        toggleSortColumn={ this.toggleSortColumn.bind(this) }
+                        sortColumn={ this.state.sortColumn }
+                        sortOrder={ this.state.sortOrder }
+                        maxHeight = {this.props.maxHeight || 'none'}
+                        tableScroll = { this.props.tableScroll}
+                        widths={this.props.widths}
+                    />
                 </div>
                 { !this.props.tableScroll ? paginate : null }
             </div>

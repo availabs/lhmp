@@ -9,7 +9,7 @@ const config =  {
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.'
 		},
 		{
-			title: 'Multi-Jurisdictional Mitigation Plan Meetings and Participation',
+			title: 'Plan Meetings and Participation',
 			requirement: 'Req-A-1D',
 			type: 'table',
 			prompt: '',
@@ -55,7 +55,7 @@ const config =  {
 	],
 	'Resource Review and Integration' : [
 		{
-			title: 'Review of Existing Planning Documents and Resources',
+			title: 'Review of Existing Planning Resources',
 			requirement: 'Req-A-4A',
 			type: 'planningDocuments',
 			align: 'full',
@@ -65,7 +65,7 @@ const config =  {
 				' mechanisms to implement the mitigation strategy.'
 		},
 		{
-			title: 'Review and Integration of Existing Planning Documents and Resources',
+			title: 'Integration of Existing Planning Resources',
 			requirement: 'Req-A-4B',
 			type: 'content',
 			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',

@@ -35,14 +35,14 @@ class SideMenu extends React.Component {
             */}
             <ul className="main-menu">
                 {
-                    Object.keys(this.props.config).map(section => {
+                    Object.keys(this.props.config).map((section,i) => {
                         return (
-                            <React.Fragment>
+                            <React.Fragment key={i}>
                                 <li className="sub-header"><span>{section}</span></li>
                                 {
                                     this.props.config[section].map(item=>{
                                         return (
-                                            <li >
+                                            <li key={item.title}>
                                                 <Link activeClass='selected' to={item.title} spy={true} offset={-50} >
                                                     {item.icon ? (
                                                         <div className="icon-w">

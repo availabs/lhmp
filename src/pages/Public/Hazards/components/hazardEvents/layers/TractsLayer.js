@@ -93,7 +93,7 @@ class TractLayer extends MapLayer {
         });
         colors.push('#000');
         if (map.getSource('events')){
-            console.log('gets source', map.getSource('events'))
+            // console.log('gets source', map.getSource('events'))
             map.removeLayer('events-layer')
             map.removeSource('events')
         }

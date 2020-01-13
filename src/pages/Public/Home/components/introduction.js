@@ -87,10 +87,10 @@ class Introduction extends Component {
         let content = info.map((sect,i) => {
             let highlight =   i === 1;
             return (
-                <Feature className={`col-sm-4`} highlight={highlight}>
+                <Feature className={`col-sm-4`} highlight={highlight} key={i}>
                     <FeatureHeader highlight={highlight}>
                       <FeatureImage>
-                        <img alt src={sect.image} />
+                        <img alt={'Heading Image'} src={sect.image} />
                       </FeatureImage>
                       <FeatureName2>{sect.title}</FeatureName2>
                     </FeatureHeader>
@@ -102,7 +102,7 @@ class Introduction extends Component {
                       </p>
                       <h6>Features</h6>
                       <ul>
-                        {sect.features.map(feat => (<li>{feat}</li>))}
+                        {sect.features.map((feat,ii) => (<li key={ii}>{feat}</li>))}
                       </ul>
                     </FeatureDescription>
               </Feature>

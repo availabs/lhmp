@@ -65,11 +65,10 @@ class PlanningTeam extends Component {
             <table className="table">
                 <tbody style={{fontSize: '1.5em'}}>
                 {roles.map((data,i) => {
-                    console.log('data', data)
                     return (
                         <Fragment key={i}>
                             <tr>
-                                <td colspan='2'>{get(data, `contact_name.value`, 'Demo contact name')}</td>
+                                <td colSpan='2'>{get(data, `contact_name.value`, 'Demo contact name')}</td>
                             </tr>
                             <tr>
                                 <td>
@@ -84,7 +83,7 @@ class PlanningTeam extends Component {
                                 <td>{get(data, `contact_department.value`, 'Demo Department')}</td>
                             </tr>
                             <tr>
-                                <td colspan='2'>{get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}</td>
+                                <td colSpan='2'>{get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}</td>
                                 
                             </tr>
                         </Fragment>
@@ -102,7 +101,7 @@ class PlanningTeam extends Component {
                 <div className='row'>
                     <div className='col-12' style={{textAlign:'center'}}>
                         <ContentHeader>
-                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Planning Team
+                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Mitigation Representative
                         </ContentHeader>
                     </div>
                 </div>

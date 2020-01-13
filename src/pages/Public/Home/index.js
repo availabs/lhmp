@@ -50,12 +50,12 @@ let sideMenuConfig = {
     ],
     'Risk' : [
             {
-                title:'Analysis',
+                title:'Hazard Loss',
                 component:Analysis,
                 icon: 'os-icon-layers'
             },
             {
-                title:'HazardEvents',
+                title:'Hazard Events',
                 component:HazardEvents,
                 icon: 'os-icon-others-43'
             },
@@ -90,11 +90,6 @@ let sideMenuConfig = {
                 title:'Actions',
                 component:Actions,
                 icon:'os-icon-grid-circles'
-            },
-            {
-                title:'Participation',
-                component:Participation,
-                icon:'os-icon-cv-2'
             }
         ]
 }
@@ -121,7 +116,7 @@ class Public extends React.Component {
                             return sideMenuConfig[section].map(item=>{
                                 let Comp = item.component
                                 return (
-                                    <Element name={item.title}>
+                                    <Element name={item.title} key={item.title}>
                                         <Comp />
                                     </Element>
                                 )
@@ -138,7 +133,8 @@ class Public extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph.plans || {},
-        router: state.router
+        router: state.router,
+        activePlan:state.user.activePlan
     };
 };
 

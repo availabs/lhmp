@@ -191,7 +191,7 @@ class TractLayer extends MapLayer {
         this.legend.active = true;
         let mapColors = Object.keys(keyDomain).reduce((out, curr) => {
             if (keyDomain[curr]) {
-                console.log('testing', curr, keyDomain[curr],colorScale(keyDomain[curr]) )
+                // console.log('testing', curr, keyDomain[curr],colorScale(keyDomain[curr]) )
                 out[curr] = colorScale(keyDomain[curr]);
             }
             return out;

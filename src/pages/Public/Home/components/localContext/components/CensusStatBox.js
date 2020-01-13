@@ -15,6 +15,10 @@ const YearDiv = styled.div`
 
 class CensusStatBox extends React.Component {
     fetchFalcorDeps(){
+        console.log('getting stuff', this.props.geoids, this.props.years,)
+        if( this.props.geoids.includes(NaN)) {
+          return Promise.resolve({})
+        }
         return this.props.falcor.get(
           ['acs', this.props.geoids, this.props.years,
             [...this.props.censusKeys, ...this.props.divisorKeys]
@@ -133,7 +137,7 @@ class CensusStatBox extends React.Component {
     static defaultProps = {
         censusKeys: [],
         geoids: [],
-        years: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
+        years: [2017],
         year:'2017',
         compareYear: null,
         maximumFractionDigits: 0,

@@ -9,7 +9,15 @@ import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
 import {push} from "react-router-redux";
 import {filter} from "fuzzy";
+
+import styled from 'styled-components';
+
 var _ = require('lodash')
+
+const ScrollBody = styled.tbody`
+   ${props => props.theme.panelDropdownScrollBar}
+`
+
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
     "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
@@ -209,53 +217,47 @@ class AvlFormsListTableHMP extends React.Component{
             }
         })
         return (
-            <div className='container'>
-                <Element>
-                    {
-                        listViewData.length > 0 ?
-                            <div className="element-box">
-                                <div className="table-responsive" style={{'overflow': 'scroll', 'maxHeight': '80vh'}}>
-                                    <table className="table table lightBorder">
-                                        <thead>
+            
+                <div className="table-responsive" style={{'overflow': 'scroll', 'maxHeight': '80vh'}}>
+                    <table className="table table lightBorder">
+                        <thead>
+                        <tr>
+                            {
+                                formAttributes ? formAttributes.map((item) => {
+                                        return (
+                                            <th>{item}</th>
+                                        )
+                                    })
+                                    :
+                                    null
+                            }
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            listViewData.map(item =>{
+                                if(Object.keys(item).length > 0){
+                                    return (
                                         <tr>
-                                            {
-                                                formAttributes ? formAttributes.map((item) => {
-                                                        return (
-                                                            <th>{item}</th>
-                                                        )
-                                                    })
-                                                    :
-                                                    null
-                                            }
+                                            {formAttributes ? formAttributes.map(attribute =>{
+                                                return (
+                                                    <td>{item[attribute]}</td>
+                                                )
+                                            }):null}
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        {
-                                            listViewData.map(item =>{
-                                                if(Object.keys(item).length > 0){
-                                                    return (
-                                                        <tr>
-                                                            {formAttributes ? formAttributes.map(attribute =>{
-                                                                return (
-                                                                    <td>{item[attribute]}</td>
-                                                                )
-                                                            }):null}
-                                                        </tr>
-                                                    )
-                                                }
+                                    )
+                                }
 
-                                            })
-                                        }
-                                        </tbody>
+                            })
+                        }
+                        </tbody>
 
-                                    </table>
-                                </div>
-                            </div>
-                            :
-                            <div className="element-box">No data found...</div>
-                    }
-                </Element>
-            </div>
+                    </table>
+                </div>
+            
+                           
+                    
+          
 
         )
     }

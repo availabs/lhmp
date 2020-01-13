@@ -30,6 +30,9 @@ class CapabilityStrategy extends React.Component{
 
     fetchFalcorDeps(){
         let ids = []
+        console.log('CapabilityStrategy', this.props.activePlan)
+
+        if(!this.props.activePlan) return Promise.resolve({}) ;
         return this.props.falcor.get(['forms',['capabilities'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
                 let length = response.json.forms['capabilities'].byPlanId[this.props.activePlan].length;
