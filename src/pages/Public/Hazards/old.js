@@ -8,9 +8,10 @@ import {falcorChunkerNice} from "store/falcorGraph"
 import ElementBox from "components/light-admin/containers/ElementBox";
 import GraphFactory from "components/displayComponents/graphFactory";
 import Content from "components/cms/Content"
+import Element from 'components/light-admin/containers/Element'
 
 import config from "pages/auth/Plan/config/hazards-config";
-
+import {SectionBoxMain} from 'pages/Public/theme/components'
 
 import GeographyScoreBarChart from "./components/GeographyScoreBarChart";
 import CousubTotalLossTable from "./components/CousubTotalLossTable";
@@ -22,38 +23,17 @@ import FemaDisasterDeclarationsTable from "./components/FemaDisasterDeclarations
 import HazardEventsTable from "./components/HazardEventsTable";
 import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
 import NumberOfHazardsMonthStackedBarGraph from "./components/NumberOfHazardsMonthStackedBarGraph";
-import SideMenu from 'pages/Public/theme/SideMenu'
-
-
-import {
-    PageContainer,
-    PageHeader,
-    StatementText, 
-    HeaderImage,
-    HeaderContainer,
-    SectionBox,
-    SectionHeader,
-    ContentHeader,
-    ContentContainer,
-    SectionBoxMain,
-    SectionBoxSidebar,
-    SidebarCallout
-    
-} 
-from 'pages/Public/theme/components'
-
 
 const STICKYDROPDOWN = styled.div`
-   margin-top: 30px
-   select {
-   
-   height: 5vh;
-   width: 100%;
-   z-index:100;
-   
-   }
-`;
-
+                       select {
+                       height: 5vh;
+                       width: 250px;
+                       float: right;
+                       z-index:100;
+                       position:fixed;
+                       background: rgba(0,0,0,0.3);
+                       }
+                        `;
 class Hazards extends React.Component {
 
     constructor(props) {
@@ -165,18 +145,15 @@ class Hazards extends React.Component {
     }
 
     render() {
-        if(!this.props.geoid) {
+        if(!this.props.geoed) {
             return <React.Fragment />
         }
         return (
-                <PageContainer>
-                    <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
-                     {this.stickyHazards()}
-                        <SideMenu config={config}/>
-                    </div>
-                    <ContentContainer>
-                        <CountyHeroStats {...this.state}/>
-                       
+                <div className='container'>
+                    <Element>
+                        {
+                           this.stickyHazards()
+                        }
                         <h4 className="element-header">{this.getGeoidName()}</h4>
                         <div className="row">
                             <div className="col-8">
@@ -362,10 +339,11 @@ class Hazards extends React.Component {
                                 }
                             </div>
                         </div>
-                    </ContentContainer>
-                </PageContainer>
+
+                    </Element>
+                </div>
             ) 
-        
+        )
     }
 }
 

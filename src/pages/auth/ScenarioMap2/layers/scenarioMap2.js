@@ -258,9 +258,10 @@ export default (options = {}) =>
                 'source': 'nys_1811_parcels',
                 'source-layer': 'nys_1811_parcels',
                 'type': 'fill',
-                'minzoom': 15,
+                'minzoom': 13,
                 'paint': {
-                    'fill-color': '#000000'
+                    'fill-color': 'rgba(0,0,0,0.5)'
+                    //'fill-opacity': '0.5'
                 }
             }
         ],
