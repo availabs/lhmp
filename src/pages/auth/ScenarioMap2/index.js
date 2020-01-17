@@ -1,22 +1,34 @@
 import React from 'react';
 import AvlMap from 'components/AvlMap';
 import CountiesLayerFactory from 'pages/auth/ScenarioMap2/layers/scenarioMap2.js'
+import ControlLayersFactory from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
+// import ScenarioLayerFactory from 'pages/auth/ScenarioMap2/layers/scenarioLayer.js'
+//import ZoneLayerFactory from 'pages/auth/ScenarioMap2/layers/zoneLayer.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 class Home extends React.Component {
-    CountiesLayer = CountiesLayerFactory();
+    //CountiesLayer = CountiesLayerFactory();
+    ControlLayers = ControlLayersFactory();
+    // scenario = ScenarioLayerFactory();
+    //zone = ZoneLayerFactory();
 
     render() {
         return (
             <div style={ { width: '100%', height: '100vh' } }>
                 <AvlMap
-                    layers={ [this.CountiesLayer] }
+                    layers={ [this.ControlLayers,
+                        //this.zone,
+                        //this.scenario
+                    ] }
                     zoom={ 13 }
-                    center={ [-73.7749, 42.6583] }/>
+                    center={ [-73.7749, 42.6583] }
+                />
             </div>
         )
     }
+
 }
+
 
 const mapStateToProps = state => (
     {

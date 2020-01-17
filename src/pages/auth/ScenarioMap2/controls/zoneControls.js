@@ -8,7 +8,7 @@ import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 
-class AssetsByOwnerTypeInfoBox extends React.Component{
+class ZoneControls extends React.Component{
     constructor(props){
         super(props);
     }
@@ -143,4 +143,4 @@ const mapDispatchToProps = {
     sendSystemMessage
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsByOwnerTypeInfoBox))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ZoneControls))
