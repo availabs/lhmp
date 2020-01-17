@@ -24,7 +24,7 @@ const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
 const IDENTITY = i => i;
 
-class CountiesLayer extends MapLayer{
+export class ScenarioLayer extends MapLayer{
     onAdd(map) {
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
@@ -76,7 +76,7 @@ class CountiesLayer extends MapLayer{
         })
     }
 
-    receiveData(map,data){
+    receiveData(map,data) {
         /*
         owner types :
             2 - state
@@ -85,31 +85,32 @@ class CountiesLayer extends MapLayer{
             8 - Private
 
          */
+
         let rawGraph = falcorGraph.getCache(),
-        graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone`, null),
-        centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
-        geojson = {
-            "type": "FeatureCollection",
-            "features": []
-        },
-        buildingColors = {};
-        Object.keys(graph['flood_100'].owner_type).forEach(owner =>{
+            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone`, null),
+            centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
+            geojson = {
+                "type": "FeatureCollection",
+                "features": []
+            },
+            buildingColors = {};
+        Object.keys(graph['flood_100'].owner_type).forEach(owner => {
 
             //state owned
-            if(owner === '2'){
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item =>{
+            if (owner === '2') {
+                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#0d1acc'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#0d1acc'},
+                        "properties": {id: item.id, color: '#0d1acc'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item =>{
+                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#0d1acc'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#0d1acc'},
+                        "properties": {id: item.id, color: '#0d1acc'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
@@ -117,101 +118,107 @@ class CountiesLayer extends MapLayer{
 
             // County Owned
             if (owner === '3') {
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item =>{
+                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#0fcc1b'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#0fcc1b'},
+                        "properties": {id: item.id, color: '#0fcc1b'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item =>{
+                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#0fcc1b'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#0fcc1b'},
+                        "properties": {id: item.id, color: '#0fcc1b'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
             }
 
             // municipality Owned
-            if(['4', '5', '6', '7'].includes(owner)){
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item =>{
+            if (['4', '5', '6', '7'].includes(owner)) {
+                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#cc1e0a'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#cc1e0a'},
+                        "properties": {id: item.id, color: '#cc1e0a'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item =>{
+                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#cc1e0a'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#cc1e0a'},
+                        "properties": {id: item.id, color: '#cc1e0a'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
             }
 
             //Private Owned
-            if(owner === '8'){
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item =>{
+            if (owner === '8') {
+                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#F3EC16'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#F3EC16'},
+                        "properties": {id: item.id, color: '#F3EC16'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item =>{
+                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
                     buildingColors[item.id] = '#F3EC16'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties":{id:item.id, color:'#F3EC16'},
+                        "properties": {id: item.id, color: '#F3EC16'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
             }
 
         })
+
         if(map.getSource('buildings')) {
-            map.removeSource('buildings');
-            map.removeLayer('buildings-layer');
+            map.getSource("buildings").setData(geojson)
         }
-        map.addSource('buildings', {
-            type: 'geojson',
-            data: geojson
-        });
-        map.addLayer({
-            'id': 'buildings-layer',
-            'source': 'buildings',
-            'type': 'circle',
-            'paint': {
-                'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
-                'circle-radius':3,
-                'circle-opacity': 0.5
-            }
-        })
+
+        map.setPaintProperty(
+            'buildings-layer',
+            'circle-color',
+            ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
+
+        )
+
+
     }
 
 }
 
 
-export default (options = {}) =>
-    new CountiesLayer("Counties", {
+export const ScenarioOptions =  (options = {}) => {
+    return {
         active: true,
         ...options,
         sources: [
-            { id: "counties",
+            { id:"buildings",
                 source: {
-                    'type': "vector",
+                    type: "geojson",
+                    //generateId: true,
+                    data: {
+                        type: "FeatureCollection",
+                        features: []
+                    }
+                }
+            },
+            {
+                id:"counties",
+                source: {
+                    'type':"vector",
                     'url': 'mapbox://am3081.1ggw4eku'
                 }
             },
             {
-                id: "nys_buildings_avail",
+                id:"nys_buildings_avail",
                 source: {
                     'type': "vector",
                     'url': 'mapbox://am3081.dpm2lod3'
@@ -219,24 +226,15 @@ export default (options = {}) =>
             },
             {
                 id:"nys_1811_parcels",
-                source:{
-                    'type':"vector",
-                    'url':"mapbox://am3081.6o6ny609"
+                source: {
+                    'type': "vector",
+                    'url': "mapbox://am3081.6o6ny609"
                 }
             }
         ],
         layers: [
-            { 'id': 'counties',
-                'source': 'counties',
-                'source-layer': 'counties',
-                'type': 'line',
-                'paint': {
-                    'line-color': '#F31616',
-                    //'line-opacity': 0.5
-                },
-                filter : ['all',['in','geoid',store.getState().user.activeGeoid]]
-            },
-            { 'id': 'ebr',
+            {
+                'id': 'ebr',
                 'source': 'nys_buildings_avail',
                 'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
                 'type': 'fill',
@@ -250,25 +248,22 @@ export default (options = {}) =>
                 'source': 'nys_1811_parcels',
                 'source-layer': 'nys_1811_parcels',
                 'type': 'fill',
-                'minzoom': 13,
+                'minzoom': 15,
                 'paint': {
-                    'fill-color': 'rgba(0,0,0,0.5)'
-                    //'fill-opacity': '0.5'
+                    'fill-color': '#000000'
+                }
+            },
+            {
+                'id': 'buildings-layer',
+                'source': 'buildings',
+                'type': 'circle',
+                'paint': {
+                    'circle-radius': 3,
+                    'circle-opacity': 0.5
                 }
             }
-        ],
-        infoBoxes:{
-            Overview: {
-                title: "Assets By Owner Type",
-                comp: ZoneControls,
-                show: true
-            }
-        }
 
-    })
+        ]
+    }
+}
 
-
-const mapStateToProps = (state, { id }) => ({
-
-});
-const mapDispatchToProps = {};
