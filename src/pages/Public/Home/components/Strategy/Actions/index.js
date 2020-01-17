@@ -59,36 +59,20 @@ class PlanningTeam extends Component {
                     <PageHeader>Actions</PageHeader>
                 </HeaderContainer>
                 <VerticalAlign>
-                    <div className = 'd-flex justify-content-center'>
-                            <Feature className={`col-sm-6 no-gutters`} highlight={true}>
-                                
-                        
-                                <FeatureDescription>
-                                     <FeatureName>Municipal Capabilities Table</FeatureName>
-                                        <div className='table-responsive'>
-                                        {this.renderMainTable()}
-                                    </div>
-                            </FeatureDescription>
-                            </Feature>
-                    </div>
-
-                    <div className = 'd-flex justify-content-center' style={{paddingTop:50}}>
-                            <Feature className={`col-sm-6 no-gutters`} highlight={true}>
-                                <FeatureDescription>
-                                     <FeatureName>HMGP</FeatureName>
-                                        <div className='table-responsive' style={{maxHeight: '300px',overflow:'scroll'}}>
-                                        <HMGPTable
-                                        geoid={
-                                            !this.props.activeCousubid || this.props.activeCousubid === "undefined" ? this.props.activeGeoid
-                                                : this.props.activeCousubid
-                                        }
-                                        hazard={'all'}
-                                        pageSize={3}
-                                        tableScroll={false}
-                                        />
-                                    </div>
-                            </FeatureDescription>
-                            </Feature>
+                    
+                    <div className = 'd-flex justify-content-center' style={{paddingTop:50, }}>
+                            
+                       
+                            <HMGPTable
+                            geoid={
+                                !this.props.activeCousubid || this.props.activeCousubid === "undefined" ? this.props.activeGeoid
+                                    : this.props.activeCousubid
+                            }
+                            hazard={'all'}
+                            pageSize={100}
+                            
+                        />
+                       
                     </div>
                 </VerticalAlign>
                 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from 'lodash.get'
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBoxHistoric'
+import TableBox from 'components/light-admin/tables/TableBox3'
 
 import {
     getHazardName,
@@ -62,8 +62,12 @@ class HMAP_Table extends React.Component {
                 <TableBox { ...this.processData() }
                           filterKey="year"
                           filterColumns={ this.props.filterColumns }
-                          tableScroll={ this.props.tableScroll }
-                          pageSize={this.props.pageSize || 4}
+                          pageSize={ 100 }
+                          title={'HMGP Projects by Jurisdiction'}
+                          showControls={false}
+                          maxHeight={'60vh'}
+                          widths={['25%','25%', '25%', '25%']}
+                          minWidth={'70%'}
                 />
             )
         }

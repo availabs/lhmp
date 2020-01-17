@@ -8,8 +8,22 @@ import capability_config from "pages/Public/Home/components/Strategy/Capabilitie
 import test_config from 'pages/Public/Home/components/Strategy/Capabilities/testConfig.js'
 import get from "lodash.get";
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBoxOriginal'
+import TableBox from 'components/light-admin/tables/TableBox3'
+import {
+    VerticalAlign,
+    ContentHeader,
+    PageContainer,
+    HeaderContainer,
+    backgroundColor,
+    Feature,
+    FeatureDescription,
+    FeatureHeader,
+    FeatureName,
+    PageHeader
+} from 'pages/Public/theme/components'
 var _ = require('lodash')
+
+
 
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
@@ -119,23 +133,27 @@ class CapabilityStrategy extends React.Component{
 
 
     render(){
-        try {
-            return (
-                <TableBox { ...this.processData() }
-                          pageSize={ 10 }
-                          title={ this.props.title }
-                          columnFormats= { {
-                              "total losses": ",d",
-                              "closed losses": ",d",
-                              "open losses": ",d",
-                              "cwop losses": ",d",
-                              "total payments": "a"
-                          } }/>
-            )
-        }
-        catch (e) {
-            return <ElementBox>Loading...</ElementBox>;
-        }
+        
+        return (
+            <PageContainer style={{Height: '80vh'}}>
+                <HeaderContainer>
+                    <PageHeader>Capabilities</PageHeader>
+                </HeaderContainer>
+                <VerticalAlign>
+                    <div className = 'd-flex justify-content-center' style={{fontSize: '1.5em'}}>
+                        <TableBox { ...this.processData() }
+                          pageSize={ 100 }
+                          title={ '' }
+                          showControls={false}
+                          minWidth={'60%'}
+                          />
+                    </div>
+                </VerticalAlign>
+            </PageContainer>
+            
+        )
+        
+        
 
     }
 }

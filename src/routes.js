@@ -4,7 +4,7 @@ import Landing from './pages/Landing'
 
 // -- Public Pages
 import Public from './pages/Public/Home/'
-import About from './pages/Public/About/'
+import About from './pages/Public/PlanningProcess/'
 import Hazards from './pages/Public/Hazards/'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
 import Strategies from './pages/Public/Strategies/'

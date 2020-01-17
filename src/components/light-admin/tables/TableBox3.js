@@ -235,7 +235,7 @@ class TableBox extends React.Component {
         const tableLink = this.props.tableLink ? <a href={ this.props.tableLink }>{ this.props.tableLinkLabel }</a> : null;
 
         return (
-            <div>
+            <div style={{minWidth: this.props.minWidth ? this.props.minWidth : 0}}>
                 <h4>{this.props.title}</h4>
                 <div>{this.props.desc}</div>
                 { !this.props.showControls ? null :
@@ -259,7 +259,7 @@ class TableBox extends React.Component {
                         </div>
                     </div>
                 }
-                <div>
+                <div >
                     <DataTable 
                         tableData={ tableData }
                         columns={ this.props.columns.filter(c => !this.props.expandColumns.includes(c)) }

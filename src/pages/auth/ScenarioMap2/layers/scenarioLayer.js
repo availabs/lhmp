@@ -66,11 +66,12 @@ export class ScenarioLayer extends MapLayer{
             return buildingIds
         }).then(buildingIds =>{
             if(buildingIds){
-                return falcorGraph.get(
+                return falcorChunkerNice(
                     ['building', 'geom', 'byBuildingId',buildingIds, 'centroid']
-                ).then(d => {
-                    return d
-                })
+                )
+                // .then(d => {
+                //     return d
+                // })
             }
 
         })

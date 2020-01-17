@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import styled from "styled-components";
 import TractsLayer from './layers/TractsLayer'
 import CensusStatBox from './components/CensusStatBox'
+import Content from "components/cms/Content"
 
 
 
@@ -15,7 +16,9 @@ import {
     ContentHeader,
     PageContainer,
     HeaderContainer,
-    backgroundColor
+    backgroundColor,
+    ContentContainer,
+    SectionBox
 } from 'pages/Public/theme/components'
 
 
@@ -86,9 +89,16 @@ class LocalContext extends Component {
                             </ContentHeader>
                         </div>
                     </div>
-                    
+                        <div className='row'>
+                            <div className='col'>
+                                 <SectionBox> 
+                                    <Content content_id={`${this.props.activeCousubid}-about`} />
+                                </SectionBox>
+                            </div>
+                        </div>
                         <div className='row' >
                             <div className='col-md-6' >
+                               
                                 <VerticalAlign>
                                 {this.renderStats()}
                                 </VerticalAlign>

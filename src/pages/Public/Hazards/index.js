@@ -183,10 +183,7 @@ class Hazards extends React.Component {
                                 <div className="element-wrapper">
                                     <div className="element-box">
 
-                                        <div className="element-box-content">
-                                            <Content content_id={`${this.state.geoid}-about`}
-                                                     top={-20} right={0}/>
-                                        </div>
+                                        
 
                                         <div className="el-chart-w">
                                             <GeographyScoreBarChart
