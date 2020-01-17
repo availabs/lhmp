@@ -67,7 +67,8 @@ export const ZoneOptions =  (options = {}) => {
                     'type': 'line',
                     'paint': {
                         'line-color': '#F31616',
-                        'line-opacity': 0.5
+                        'line-opacity': 0.5,
+                        'line-width': 4
                     },
                     filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
                 },
