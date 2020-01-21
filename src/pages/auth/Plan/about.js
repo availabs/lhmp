@@ -6,6 +6,7 @@ import config from './config/about-config'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import functions from './functions'
 import {setActiveCousubid} from 'store/modules/user'
+import get from "lodash.get";
 class AdminAbout extends React.Component {
 
     constructor(props) {
@@ -18,32 +19,20 @@ class AdminAbout extends React.Component {
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
         return this.props.falcor.get(
-            ['geo', this.props.activeGeoid, 'cousubs']
+            //['geo', this.props.activeGeoid, 'cousubs'],
+            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
         )
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value], ['name']],
+                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].counties.municipalities.value], ['name']],
                 )
             })
-            /*.then(response => {
-                console.log('res geo', response, falcorGraph.getCache().geo[this.props.activeGeoid] ?
-                    falcorGraph.getCache().geo[this.props.activeGeoid].name :
-                    'n/a');
-            });*/
-
     }
 
     render() {
-        let geoInfo = falcorGraph.getCache().geo
-        && falcorGraph.getCache().geo[this.props.activeGeoid] ?
-            falcorGraph.getCache().geo :
-            null
-        let allowedGeos = falcorGraph.getCache().geo &&
-        falcorGraph.getCache().geo[this.props.activeGeoid] &&
-        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs &&
-        falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value ?
-            [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value] :
-            [this.props.activeGeoid]
+        let geoInfo = get(falcorGraph.getCache(), `geo`, null);
+        let allowedGeos = [this.props.activeGeoid, ...get(geoInfo,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
+
         return functions.render(config,
             this.props.user,
             geoInfo,

@@ -23,18 +23,20 @@ class Menu extends Component {
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
         return this.props.falcor.get(
-            ['geo', this.props.activeGeoid, 'cousubs']
+            //['geo', this.props.activeGeoid, 'cousubs'],
+            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
         )
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value], ['name']],
+                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].counties.municipalities.value], ['name']],
                 )
             })
     }
     render() {
         if (this.props.menuSettings.hide) return null;
-        let geoInfo = get(falcorGraph.getCache(), `geo`, null)
-        let allowedGeos = [this.props.activeGeoid, ...get(geoInfo,`${this.props.activeGeoid}.cousubs.value`, [])];
+        let geoInfo = get(falcorGraph.getCache(), `geo`, null);
+        let allowedGeos = [this.props.activeGeoid, ...get(geoInfo,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
+        console.log('current cousubs', geoInfo, allowedGeos)
         let currentPath = this.props.menus.filter(p => p.path === this.props.path)[0];
 
 
