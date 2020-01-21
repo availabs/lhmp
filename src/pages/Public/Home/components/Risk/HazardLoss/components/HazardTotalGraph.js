@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import {fnum} from "utils/sheldusUtils"
 import COLOR_RANGES from "constants/color-ranges"
-import hazardcolors from "../../../../../../constants/hazardColors";
+import hazardcolors from "constants/hazardColors";
 
 import {
     VerticalAlign,
