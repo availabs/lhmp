@@ -36,7 +36,6 @@ class Menu extends Component {
         if (this.props.menuSettings.hide) return null;
         let geoInfo = get(falcorGraph.getCache(), `geo`, null);
         let allowedGeos = [this.props.activeGeoid, ...get(geoInfo,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
-        console.log('current cousubs', geoInfo, allowedGeos)
         let currentPath = this.props.menus.filter(p => p.path === this.props.path)[0];
 
 

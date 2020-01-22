@@ -6,6 +6,8 @@ import get from 'lodash.get'
 import {falcorChunkerNiceWithUpdate, falcorGraph} from "store/falcorGraph"
 import * as turf from '@turf/turf'
 import COLOR_RANGES from "constants/color-ranges"
+import { fnum } from "utils/sheldusUtils"
+import hazardcolors from "constants/hazardColors";
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -110,9 +112,11 @@ class TractLayer extends MapLayer {
             .filter(f => f.length === 10)
             .map(f => keyDomain[f]));
         let domain = [0, 1, 2, 3, 4].map(i => ((maxDamage) * (i / 4)));
+        domain = [10000,100000,1e6,1e7,1e8]
+
 
         // console.log('keyDomain', keyDomain);
-        let range = getColor('Reds');
+        let range = getColor('Reds') // hazardcolors['wind' + '_range']
         // console.log('range', maxDamage, range, domain);
 
         let colorScale = d3scale.scaleThreshold()
@@ -124,7 +128,10 @@ class TractLayer extends MapLayer {
             return out;
         }, {});
         // console.log('map colors', mapColors);
-
+        this.legend.domain = domain;
+        this.legend.range = range;
+        this.legend.title = `NFIP Total Payments`.toUpperCase()
+        this.legend.active = true;
         map.setPaintProperty(
             'tracts-layer-line',
             'fill-color',
@@ -134,9 +141,23 @@ class TractLayer extends MapLayer {
         map.setPaintProperty(
             'tracts-layer-line',
             'fill-opacity',
-            0.5
+            1
         );
 
+    }
+
+    formatName(name, geoid){
+        let jurisdiction = geoid.length === 2 ? 'State' :
+            geoid.length === 5 ? 'County' :
+                geoid.length === 10 ? 'Town' :
+                    geoid.length === 11 ? 'Tract' : '';
+        if (name.toLowerCase().includes(jurisdiction.toLowerCase())){
+            name = name.replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
+        }else{
+            name  += ' (' + jurisdiction + ')';
+        }
+
+        return name
     }
 }
 
@@ -179,15 +200,28 @@ const tractLayer = new TractLayer("Local Context Layer", {
         }
     ],
     displayFeatures: 'cousubs',
+    legend: {
+        active: false,
+
+        type: "threshold",
+
+        types: ["threshold", "linear", "quantile", "quantize"],
+
+        domain: [1.1, 1.25, 1.5, 1.75, 2],
+        range: [],
+
+        title: ``,
+        format: fnum,
+        vertical: false
+    },
     popover: {
         layers: ['tracts-layer-line'],
         dataFunc: feature => {
             let graph = falcorGraph.getCache()
-            return ["tract",
-                ["Name", get(graph, `geo.${feature.properties.geoid}.name`, 0)],
-                ["Total", get(graph,
+            return [tractLayer.formatName(get(graph, `geo.${feature.properties.geoid}.name`, 0), feature.properties.geoid),
+                ["Total",fnum(get(graph,
                     `nfip.losses.byGeoid.${feature.properties.geoid}.allTime.total_payments`,
-                    0)],
+                    0))],
             ]
         }
     }
