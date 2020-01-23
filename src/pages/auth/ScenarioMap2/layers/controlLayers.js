@@ -62,6 +62,61 @@ class ControlLayers extends MapLayer{
 
     }
 
+    visibilityToggleModeOn(source,layerName){
+        if(source){
+            if(this.map.getSource('riverine')) {
+                this.map.removeLayer('riverine_layer');
+                this.map.removeSource('riverine')
+            }
+            this.map.addSource("riverine",{
+                'type': "vector",
+                'url': source
+            })
+            this.map.addLayer({ 'id': 'riverine_layer',
+                'source': 'riverine',
+                'source-layer': layerName,
+                'type': 'fill',
+                'minzoom': 8,
+                'paint': {
+                    'fill-color': ["interpolate",
+                        ["linear"],
+                        ["get", "depth_m"],
+                        0,
+                        "hsl(211, 0%, 100%)",
+                        10,
+                        "hsl(211, 75%, 53%)",
+                        20,
+                        "hsl(211, 83%, 39%)",
+                        30,
+                        "hsl(211, 64%, 44%)",
+                        40,
+                        "hsl(211, 91%, 33%)",
+                        50,
+                        "hsl(211, 83%, 31%)",
+                        60,
+                        "hsl(211, 35%, 33%)",
+                        70,
+                        "hsl(211, 89%, 38%)",
+                        80,
+                        "hsl(211, 83%, 31%)",
+                        83,
+                        "hsl(211, 83%, 31%)"
+                    ]
+                },
+
+            })
+            }
+    }
+
+    visibilityToggleModeOff(source){
+        if(source){
+            if(this.map.getSource('riverine')) {
+                this.map.removeLayer('riverine_layer');
+                this.map.removeSource('riverine')
+            }
+        }
+    }
+
     toggleModesOff(layerName) {
         if (this.modes.includes(layerName)) {
             this.doAction([

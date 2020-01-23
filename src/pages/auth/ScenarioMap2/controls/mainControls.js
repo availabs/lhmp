@@ -7,11 +7,12 @@ import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
-import ControlLayers from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
+import ScenarioControl from "./scenarioControl";
 
 
 const AllModes =[{id:'scenario',title:'Risk Scenarios'},{id:'zone',title:'Zones'},{id:'projects',title:'Project'}];
 const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'projects_block',title:'Projects'}]
+let currentInfoBox = []
 class MainControls extends React.Component {
     constructor(props) {
         super(props);
@@ -35,6 +36,10 @@ class MainControls extends React.Component {
                                                 if(x.style.display === 'none') {
                                                     x.style.display = "block"
                                                     this.props.layer.toggleModesOn(mode.id)
+                                                    currentInfoBox.push({
+                                                        block:mode.id,
+                                                        on:true
+                                                    })
                                                 }
                                             }else{
                                                 document.getElementById(mode.id).className = "os-toggler-w"
@@ -69,8 +74,15 @@ class MainControls extends React.Component {
                                     this.props.layer.toggleModesOff(block.id.split('_')[0])
                                 }
 
-                            }}>
-                                <span aria-hidden="true"> ×</span></button>
+                            }}><span aria-hidden="true"> ×</span>
+                            </button>
+                            {currentInfoBox.map(info =>{
+                                if(info.block === 'scenario' && info.on){
+                                    return (
+                                        <ScenarioControl layer = {this.props}/>
+                                    )
+                                }
+                            })}
                         </div>
                     )
                 })}
