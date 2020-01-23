@@ -24,7 +24,7 @@ class NfipTable extends React.Component {
 
     processData() {
         const { geoid, geoLevel } = this.props,
-            label = geoLevel === 'counties' ? 'county' : 'county sub. div.',
+            label = geoLevel === 'counties' ? 'county' : 'Municipality',
             geoids = this.props.geoGraph[geoid][geoLevel].value,
             data = [];
 
@@ -33,18 +33,32 @@ class NfipTable extends React.Component {
                 name = this.props.geoGraph[geoid].name;
 
             data.push({
-                [label]: name,
-                "total losses": graph.total_losses,
-                "closed losses": graph.closed_losses,
-                "open losses": graph.open_losses,
-                "cwop losses": graph.cwop_losses,
+                [label]: this.formatName(name, geoid),
+                "total claims": graph.total_losses,
+                //"closed losses": graph.closed_losses,
+                //"open losses": graph.open_losses,
+                "cwop claims": graph.cwop_losses,
                 "total payments": graph.total_payments
             })
         })
         return {
             data: data.sort((a, b) => b["total payments"] - a["total payments"]),
-            columns: [label, "total losses", "closed losses", "open losses", "cwop losses", "total payments"]
+            columns: [label, "total claims",/* "closed losses", "open losses", */"cwop claims", "total payments"]
         };
+    }
+
+    formatName(name, geoid){
+        let jurisdiction = geoid.length === 2 ? 'State' :
+            geoid.length === 5 ? 'County' :
+                geoid.length === 10 ? 'Town' :
+                    geoid.length === 11 ? 'Tract' : '';
+        if (name.toLowerCase().includes(jurisdiction.toLowerCase())){
+            name = name.replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
+        }else{
+            name  += ' (' + jurisdiction + ')';
+        }
+
+        return name
     }
 
 // //
@@ -56,12 +70,12 @@ class NfipTable extends React.Component {
                           tableScroll={true}
                           maxHeight={'60vh'}
                           showControls={false}
-                          widths={['25%','15%','15%','15%','15%','15%','15%']}
+                          widths={['41%','19%','19%','18%']}
                           columnFormats= { {
-                              "total losses": ",d",
-                              "closed losses": ",d",
-                              "open losses": ",d",
-                              "cwop losses": ",d",
+                              "total claims": ",d",
+                             // "closed losses": ",d",
+                              //"open losses": ",d",
+                              "cwop claims": ",d",
                               "total payments": fnum
                           } }/>
             )

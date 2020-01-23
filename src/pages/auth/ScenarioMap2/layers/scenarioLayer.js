@@ -235,6 +235,16 @@ export const ScenarioOptions =  (options = {}) => {
         ],
         layers: [
             {
+                'id': 'parcels',
+                'source': 'nys_1811_parcels',
+                'source-layer': 'nys_1811_parcels',
+                'type': 'fill',
+                'minzoom': 13,
+                'paint': {
+                    'fill-color': 'rgba(255,255,255, 0.2)'
+                }
+            },
+            {
                 'id': 'ebr',
                 'source': 'nys_buildings_avail',
                 'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
@@ -244,16 +254,7 @@ export const ScenarioOptions =  (options = {}) => {
                     'fill-color': '#000000'
                 }
             },
-            {
-                'id': 'parcels',
-                'source': 'nys_1811_parcels',
-                'source-layer': 'nys_1811_parcels',
-                'type': 'fill',
-                'minzoom': 15,
-                'paint': {
-                    'fill-color': '#000000'
-                }
-            },
+           
             {
                 'id': 'buildings-layer',
                 'source': 'buildings',
@@ -262,7 +263,8 @@ export const ScenarioOptions =  (options = {}) => {
                     'circle-radius': 3,
                     'circle-opacity': 0.5
                 }
-            }
+            },
+             
 
         ]
     }

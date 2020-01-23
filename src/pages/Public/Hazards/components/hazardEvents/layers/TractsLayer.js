@@ -50,7 +50,6 @@ class TractLayer extends MapLayer {
             type: "FeatureCollection",
             features: []
         };
-        //console.log('events borked',events)
         if (events) {
             let radiusScale = d3scale.scaleThreshold()
                 .domain(
@@ -63,6 +62,9 @@ class TractLayer extends MapLayer {
                     [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] :
                     [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.8, 2, 2.2]
                 );
+
+            if (!this.filters.hazard.value && this.hazardsFromFalcor)  this.filters.hazard.value = this.hazardsFromFalcor;
+
             Object.keys(events).forEach(geo => {
                 Object.keys(events[geo])
                     .filter(f => this.filters.hazard.value && this.filters.hazard.value.includes(f))
@@ -93,7 +95,6 @@ class TractLayer extends MapLayer {
         });
         colors.push('#000');
         if (map.getSource('events')){
-            // console.log('gets source', map.getSource('events'))
             map.removeLayer('events-layer')
             map.removeSource('events')
         }
@@ -119,26 +120,34 @@ class TractLayer extends MapLayer {
     }
 
     receiveProps(oldProps, newProps){
-        if (this.filters.hazard.value !== newProps.hazard)
+        if ((newProps.hazard || newProps.hazards) && this.filters.hazard.value !== newProps.hazard) {
             this.filters.hazard.value = newProps.hazard ?
-                newProps.hazard : newProps.hazards ? newProps.hazards : null
+                [newProps.hazard] : newProps.hazards ? newProps.hazards : null;
+
+        }
     }
     onPropsChange(oldProps, newProps){
-        if (this.filters.hazard.value !== newProps.hazard)
+        if ((newProps.hazard || newProps.hazards) && this.filters.hazard.value !== newProps.hazard) {
             this.filters.hazard.value = newProps.hazard ?
-                newProps.hazard : newProps.hazards ? newProps.hazards : null
-        this.doAction(["fetchLayerData"]);
+                [newProps.hazard] : newProps.hazards ? newProps.hazards : null;
+            this.doAction(["fetchLayerData"]);
+            }
     }
     onAdd(map) {
         super.onAdd(map);
         if (!store.getState().user.activeGeoid) return Promise.resolve();
 
         return falcorGraph.get(
+            ['riskIndex', 'hazards'],
             ['geo', store.getState().user.activeGeoid, 'tracts'],
             ['geo', store.getState().user.activeGeoid, this.displayFeatures],
             ["geo", [store.getState().user.activeGeoid], "boundingBox"]
         )
             .then(d => {
+                // set hazards if not passed
+                this.hazardsFromFalcor = get(d, `json.riskIndex.hazards`, hazardMeta);
+
+
                 let countiesOrCousubs = get(falcorGraph.getCache(),
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
                     null);
@@ -147,6 +156,7 @@ class TractLayer extends MapLayer {
                         ['geo', countiesOrCousubs.value, 'tracts']
                     )
                 }
+
                 return d
             })
             .then(d => {
@@ -288,7 +298,7 @@ const tractLayer = new TractLayer("Hazard Events Layer", {
             name: "hazard",
             type: "hidden",
             domain: hazardMeta,
-            value: ["hurricane"]
+            value: undefined
         }
     },
     popover: {

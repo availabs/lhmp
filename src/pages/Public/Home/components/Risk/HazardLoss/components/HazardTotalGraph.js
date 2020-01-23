@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import {fnum} from "utils/sheldusUtils"
 import COLOR_RANGES from "constants/color-ranges"
-import hazardcolors from "../../../../../../constants/hazardColors";
+import hazardcolors from "constants/hazardColors";
 
 import {
     VerticalAlign,
@@ -154,10 +154,23 @@ class HazardList extends React.Component {
                 return sum
             }, 0);
             totalLoss = this.props.severeWeather[this.props.geoid][sortedHazards[0]].allTime.annualized_damage;
+            let maxLoss = null;
             return sortedHazards
                 .filter(d => this.props.severeWeather[this.props.geoid][d].allTime.annualized_damage > 1)
                 .map(hazard => {
                     const name = this.props.riskIndex.meta[hazard].name;
+                    let lossVal = ((this.props.severeWeather[this.props.geoid][hazard].allTime.annualized_damage / totalLoss) * 100);
+                    //maxLoss = !maxLoss ? lossVal : maxLoss < lossVal ? lossVal : maxLoss;
+
+                    if (this.props.initialLoad){
+                        if (!maxLoss){
+                            maxLoss = lossVal;
+                            this.props.setHazard(hazard);
+                        }else if (maxLoss < lossVal){
+                            maxLoss = lossVal;
+                            this.props.setHazard(hazard);
+                        }
+                    }
                     return (
                         <GraphListItem onClick={this.props.setHazard.bind(this, hazard)}>
                             <GraphIcon color={hazardMeta[hazard].color}
@@ -173,7 +186,7 @@ class HazardList extends React.Component {
                                 </GraphLabel>
                                 <Bar>
                                     <BarValue
-                                        width={((this.props.severeWeather[this.props.geoid][hazard].allTime.annualized_damage / totalLoss) * 100)}
+                                        width={lossVal}
                                         color={hazardMeta[hazard].color}
                                     />
                                 </Bar>
@@ -202,8 +215,8 @@ HazardList.defaultProps = {
     hazard: 'riverine',
     threeD: true,
     standardScale: true,
-    setHazard: () => {
-    }
+    setHazard: () => {},
+    initialLoad: false
 };
 
 const mapStateToProps = state => ({

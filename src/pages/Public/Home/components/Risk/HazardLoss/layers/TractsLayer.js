@@ -123,7 +123,7 @@ class TractLayer extends MapLayer {
 
         if (this.displayFeatures === 'counties'){
             return falcorGraph.get(
-                ['geo', countiesOrCousubs.value, 'name'],
+                ['geo', [...countiesOrCousubs.value,...this.tracts], 'name'],
                 ['severeWeather', [...countiesOrCousubs.value,...this.tracts], this.filters.hazard.value, 'tract_totals', 'total_damage']
             ).then(d => {
                 this.data = _.mapValues(get(d,
@@ -133,7 +133,7 @@ class TractLayer extends MapLayer {
             })
         }else {
             return falcorGraph.get(
-                ['geo', countiesOrCousubs.value, 'name'],
+                ['geo', [...countiesOrCousubs.value,...this.tracts], 'name'],
                 ['severeWeather', this.tracts, this.filters.hazard.value, 'tract_totals', 'total_damage'])
                 .then(fullData => {
                     this.data = {};
@@ -170,7 +170,6 @@ class TractLayer extends MapLayer {
             .filter(f => f.length === 11)
             .map(f => keyDomain[f]));
         let domain = [0,1,2,3,4].map(i => ((maxDamage)*(i/4)));
-        domain = [10000,50000,100000,500000,1000000]
         domain = [10000,100000,1e6,1e7,1e8]
         // console.log('keyDomain', keyDomain);
         let range = hazardcolors[this.filters.hazard.value + '_range'];
@@ -187,7 +186,7 @@ class TractLayer extends MapLayer {
 
         this.legend.domain = domain;
         this.legend.range = range;
-        this.legend.title = `${this.filters.hazard.value} Loss`.toUpperCase()
+        this.legend.title = `${hazardMeta.filter(f => f.value === this.filters.hazard.value)[0].name} Loss`.toUpperCase()
         this.legend.active = true;
         let mapColors = Object.keys(keyDomain).reduce((out, curr) => {
             if (keyDomain[curr]) {
@@ -206,7 +205,7 @@ class TractLayer extends MapLayer {
         map.setPaintProperty(
             'tracts-layer',
             'fill-opacity',
-            0.7
+            1
         );
         map.setPaintProperty(
             'tracts-layer',
@@ -214,6 +213,20 @@ class TractLayer extends MapLayer {
             'rgba(9, 98, 186, 0.5)'
         );
 
+    }
+
+    formatName(name, geoid){
+        let jurisdiction = geoid.length === 2 ? 'State' :
+            geoid.length === 5 ? 'County' :
+                geoid.length === 10 ? 'Town' :
+                    geoid.length === 11 ? 'Tract' : '';
+        if (name.toLowerCase().includes(jurisdiction.toLowerCase())){
+            name = name.replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
+        }else{
+            name  += ' (' + jurisdiction + ')';
+        }
+
+        return name
     }
 }
 
@@ -289,14 +302,21 @@ const tractLayer = new TractLayer("Analysis Layer", {
         vertical: false
     },
     popover: {
-        layers: ['tracts-layer-line'],
-        dataFunc: feature =>
+        layers: ['tracts-layer-line', 'tracts-layer'],
+        dataFunc: (feature, features, layer, map, e) =>
             {
-                return ["tract",
-                    ["Name", get(falcorGraph.getCache(), `geo.${feature.properties.geoid}.name`, 0)],
-                    ["Event", get(tractLayer, `filters.hazard.value`, 0)],
-                    ["Damage", fnum(get(tractLayer, `data.${feature.properties.geoid}`, 0))],
-                ]
+                if (!map) return []
+                let cache = falcorGraph.getCache();
+                let allFeats = map.queryRenderedFeatures(e.point, { layers: ['tracts-layer-line', 'tracts-layer'] });
+                let cousubs = allFeats.filter(f => f.layer.id === 'tracts-layer-line');
+                let tracts = allFeats.filter(f => f.layer.id === 'tracts-layer');
+
+                return [
+                    tractLayer.formatName(get(cache, `geo.${cousubs[0].properties.geoid}.name`, 0), cousubs[0].properties.geoid),
+                    ["Tract", get(cache, `geo.${tracts[0].properties.geoid}.name`, 0)],
+                    ["Damage", fnum(get(tractLayer, `data.${cousubs[0].properties.geoid}`, 0))],
+                ];
+
             }
     }
 });

@@ -25,7 +25,8 @@ const PlaceComponent = (props) => (
         <div style={{padding: 20, position: 'relative'}}>
             <ContentHeader> Hazard Risk <span style={{fontSize: '14px'}}> Annual Average Loss by Hazard Type (1996-2017)</span>
             </ContentHeader>
-            <HazardTotalGraph setHazard={props.setHazard}/>
+            <HazardTotalGraph setHazard={props.setHazard} initialLoad={props.initialLoad}
+            />
         </div>
     </div>
 );
@@ -39,7 +40,8 @@ class Analysis extends Component {
             update: {
                 layer: 'Tracts Layer',
                 filter: 'hazard',
-                value: 'riverine'
+                value: 'riverine',
+                initialLoad: true
             }
         };
         this.setHazard = this.setHazard.bind(this);
@@ -49,6 +51,7 @@ class Analysis extends Component {
         if (this.state.update.value !== hazard) {
             let update = Object.assign({}, this.state.update);    //creating copy of object
             update.value = hazard;  //updating value
+            update.initialLoad = false;
             this.setState({update})
         }
 
@@ -70,7 +73,7 @@ class Analysis extends Component {
                     <div className='col-lg-6'>
                         <VerticalAlign>
                             
-                                <PlaceComponent setHazard={this.setHazard}/>
+                                <PlaceComponent setHazard={this.setHazard} initialLoad={this.state.update.initialLoad}/>
                            
                         </VerticalAlign>
                        

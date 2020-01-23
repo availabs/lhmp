@@ -11,6 +11,8 @@ import {push} from "react-router-redux";
 import {filter} from "fuzzy";
 
 import styled from 'styled-components';
+import TableBox from 'components/light-admin/tables/TableBox3'
+import {Tab} from "../../AvlStuff/TabSelector";
 
 var _ = require('lodash')
 
@@ -216,16 +218,38 @@ class AvlFormsListTableHMP extends React.Component{
                 sub_type = this.props.config[0].attributes[d].sub_type
             }
         })
+        listViewData = listViewData.map(row => {
+            let newRow = {}
+            formAttributes.forEach(attr => newRow[attr] = row[attr]);
+            return newRow
+        })
+
+/*        console.log(listViewData, formAttributes)
+        return listViewData && listViewData.length > 0 && Object.keys(listViewData[0]) ?
+            <TableBox
+            data={listViewData}
+            columns={formAttributes}
+            tableScroll={true}
+            maxHeight={'60vh'}
+            showControls={false}
+            /> : null*/
+        console.log(listViewData, formAttributes)
         return (
-            
-                <div className="table-responsive" style={{'overflow': 'scroll', 'maxHeight': '80vh'}}>
-                    <table className="table table lightBorder">
-                        <thead>
-                        <tr>
+            <div className="table table-lightborder table-hover" style={{'maxHeight': '80vh', /*width: '100%'*/}}>
+                    <table className="table table lightBorder" style={{ /*width: '100%'*/}}>
+                        <thead style={{
+                            tableLayout: 'fixed',
+                            borderCollapse: 'collapse',
+                            /*width: '100%'*/
+                        }}>
+                        <tr style={{display: 'block', /*width: '100%'*/}}>
                             {
-                                formAttributes ? formAttributes.map((item) => {
+                                formAttributes ? formAttributes.map((item, item_i) => {
                                         return (
-                                            <th>{item}</th>
+                                            <th style={{
+                                                minWidth: `calc((75vw/(${formAttributes.length})))`,
+                                                maxWidth: `calc((75vw/(${formAttributes.length})))`
+                                            }} key={item_i}>{item}</th>
                                         )
                                     })
                                     :
@@ -233,32 +257,34 @@ class AvlFormsListTableHMP extends React.Component{
                             }
                         </tr>
                         </thead>
-                        <tbody>
-                        {
-                            listViewData.map(item =>{
-                                if(Object.keys(item).length > 0){
-                                    return (
-                                        <tr>
-                                            {formAttributes ? formAttributes.map(attribute =>{
-                                                return (
-                                                    <td>{item[attribute]}</td>
-                                                )
-                                            }):null}
-                                        </tr>
-                                    )
-                                }
+                        <ScrollBody style={{
+                            maxHeight: '30vh',
+                            overflowY: 'auto',
+                            display: 'block',
+                            /*width: '100%'*/
+                        }}>
+                            {
+                                listViewData.map((item, item_i) =>{
+                                    if(Object.keys(item).length > 0){
+                                        return (
+                                            <tr style={{display: 'block', /*width: '100%'*/}} key={item_i}>
+                                                {formAttributes ? formAttributes.map((attribute,attribute_i) =>{
+                                                    return (
+                                                        <td style={{
+                                                            minWidth: `calc((75vw/(${formAttributes.length})))`,
+                                                            maxWidth: `calc((75vw/(${formAttributes.length})))`
+                                                        }} key={`${item_i}-${attribute_i}` }>{item[attribute]}</td>
+                                                    )
+                                                }):null}
+                                            </tr>
+                                        )
+                                    }
 
-                            })
-                        }
-                        </tbody>
-
+                                })
+                            }
+                        </ScrollBody>
                     </table>
                 </div>
-            
-                           
-                    
-          
-
         )
     }
 }
