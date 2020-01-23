@@ -28,7 +28,7 @@ class Menu extends Component {
         )
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].counties.municipalities.value], ['name']],
+                    ['geo', [this.props.activeGeoid, ...get(falcorGraph.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
                 )
             })
     }

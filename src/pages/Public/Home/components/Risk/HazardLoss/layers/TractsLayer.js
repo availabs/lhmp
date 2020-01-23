@@ -305,6 +305,7 @@ const tractLayer = new TractLayer("Analysis Layer", {
         layers: ['tracts-layer-line', 'tracts-layer'],
         dataFunc: (feature, features, layer, map, e) =>
             {
+                if (!map) return []
                 let cache = falcorGraph.getCache();
                 let allFeats = map.queryRenderedFeatures(e.point, { layers: ['tracts-layer-line', 'tracts-layer'] });
                 let cousubs = allFeats.filter(f => f.layer.id === 'tracts-layer-line');

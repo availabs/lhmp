@@ -25,12 +25,27 @@ const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGe
                     .filter(f => allowedGeos.includes(f))
                     .map((county, county_i) =>
                         <option className="ae-side-menu" key={county_i + 1}
-                                value={county}> {geoInfo[county].name}
+                                value={county}> {this.formatName(geoInfo[county].name, county)}
                         </option>
                 )}
             </select>
         </div>
     ) : <div></div>
+}
+
+const formatName = function(name= 'no name', geoid){
+    let jurisdiction =
+        geoid.length === 2 ? 'State' :
+            geoid.length === 5 ? 'County' :
+                geoid.length === 7 ? 'Village' :
+                    geoid.length === 10 ? 'Town' :
+                        geoid.length === 11 ? 'Tract' : '';
+    if (name.toLowerCase().includes(jurisdiction.toLowerCase())){
+        name = name.toLowerCase().replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
+    }else{
+        name  += ' (' + jurisdiction + ')';
+    }
+    return name.toUpperCase()
 }
 const renderReqNav = function(allRequirenments, pageIndex){
     return (
@@ -184,6 +199,7 @@ export default {
     renderReqNav: renderReqNav,
     renderElement: renderElement,
     render : render,
-    geoDropdown: geoDropdown
+    geoDropdown: geoDropdown,
+    formatName: formatName
 }
 
