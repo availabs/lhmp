@@ -17,6 +17,31 @@ class ScenarioTable extends React.Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
+    fetchFalcorDeps(){
+        return this.props.falcor.get(['scenarios','byId',this.props.scenario_id,'risk_zones','length'])
+            .then(response =>{
+                let length = response.json.scenarios.byId[this.props.scenario_id].risk_zones.length
+                this.props.falcor.get(['scenarios','byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id']])
+                    .then(response =>{
+                        let graph = response.json.scenarios.byId[this.props.scenario_id].byIndex;
+                        let risk_zone_ids = []
+                        if(graph){
+                            Object.keys(graph).filter(d => d!== '$__path').forEach(item =>{
+                                risk_zone_ids.push(graph[item].risk_zones.risk_zone_id)
+                            })
+                            return risk_zone_ids
+                        }
+                    })
+                    .then(ids =>{
+                        this.props.falcor.get(['risk_zones','byId',ids,'sum',['num_buildings','total_loss']])
+                            .then(response =>{
+                                return response
+                            })
+                    })
+                return response
+            })
+    }
+
     handleChange(e) {
         // if you switch on the toggle
         if(e.target.parentNode.parentNode.className === 'os-toggler-w'){
@@ -50,32 +75,6 @@ class ScenarioTable extends React.Component {
         }));
 
     };
-
-
-    fetchFalcorDeps(){
-        return this.props.falcor.get(['scenarios','byId',this.props.scenario_id,'risk_zones','length'])
-            .then(response =>{
-                let length = response.json.scenarios.byId[this.props.scenario_id].risk_zones.length
-                this.props.falcor.get(['scenarios','byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id']])
-                    .then(response =>{
-                        let graph = response.json.scenarios.byId[this.props.scenario_id].byIndex;
-                        let risk_zone_ids = []
-                        if(graph){
-                            Object.keys(graph).filter(d => d!== '$__path').forEach(item =>{
-                                risk_zone_ids.push(graph[item].risk_zones.risk_zone_id)
-                            })
-                            return risk_zone_ids
-                        }
-                    })
-                    .then(ids =>{
-                        this.props.falcor.get(['risk_zones','byId',ids,'sum',['num_buildings','total_loss']])
-                            .then(response =>{
-                                return response
-                            })
-                    })
-                return response
-            })
-    }
 
     processTableData(){
         if(this.props.scenarioData && this.props.riskData){

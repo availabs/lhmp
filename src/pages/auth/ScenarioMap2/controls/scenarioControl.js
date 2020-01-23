@@ -34,11 +34,12 @@ class ScenarioControl extends React.Component {
             let scenarios_list  = []
             let graph = this.props.scenariosList[this.props.activePlan].scenarios
             if(graph){
-                Object.keys(graph).filter(d => d !== '$type').forEach(item =>{
+                Object.keys(graph.value).filter(d => d !== '$type').forEach(item =>{
                     scenarios_list.push({
-                        'name':graph[item] ? graph[item].name : 'None' ,
-                        'id':graph[item] ? graph[item].id : ''
+                        'name':graph.value[item] ? graph.value[item].name : 'None' ,
+                        'id':graph.value[item] ? graph.value[item].id : ''
                     })
+
                 })
 
                 return scenarios_list
