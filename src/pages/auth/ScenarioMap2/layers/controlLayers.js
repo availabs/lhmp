@@ -1,24 +1,12 @@
 import React from "react"
 import store from "store"
-import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
-import { connect } from 'react-redux';
-import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
 import get from "lodash.get"
-import styled from "styled-components"
-import {
-    scaleQuantile,
-    scaleQuantize
-} from "d3-scale"
-import { extent } from "d3-array"
-import { format as d3format } from "d3-format"
-import { fnum } from "utils/sheldusUtils"
 import MainControls from 'pages/auth/ScenarioMap2/controls/mainControls.js'
 import MapLayer from "components/AvlMap/MapLayer.js"
 import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
-//import { register, unregister } from "../ReduxMiddleware"
 import { getColorRange } from "constants/color-ranges";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
@@ -46,13 +34,13 @@ const DynamicLayerFactory = (callingLayer, ...args) => {
 }
 
 
-class ControlLayers extends MapLayer{
+class ControlLayers extends MapLayer {
     onAdd(map) {
         super.onAdd(map);
-        if(store.getState().user.activeGeoid){
+        if (store.getState().user.activeGeoid) {
             let activeGeoid = store.getState().user.activeGeoid
-            return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
-                .then(response =>{
+            return falcorGraph.get(['geo', activeGeoid, 'boundingBox'])
+                .then(response => {
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                     map.resize();
@@ -62,17 +50,18 @@ class ControlLayers extends MapLayer{
 
     }
 
-    visibilityToggleModeOn(source,layerName){
-        if(source){
-            if(this.map.getSource('riverine')) {
+    visibilityToggleModeOn(source, layerName) {
+        if (source && layerName.includes("riverine")) {
+            if (this.map.getSource('riverine')) {
                 this.map.removeLayer('riverine_layer');
                 this.map.removeSource('riverine')
             }
-            this.map.addSource("riverine",{
+            this.map.addSource("riverine", {
                 'type': "vector",
                 'url': source
             })
-            this.map.addLayer({ 'id': 'riverine_layer',
+            this.map.addLayer({
+                'id': 'riverine_layer',
                 'source': 'riverine',
                 'source-layer': layerName,
                 'type': 'fill',
@@ -105,14 +94,42 @@ class ControlLayers extends MapLayer{
                 },
 
             })
+        }
+        if (source && layerName.includes("dfirm")) {
+            if (this.map.getSource('dfirm')) {
+                this.map.removeLayer('dfirm_layer');
+                this.map.removeSource('dfirm')
             }
+            this.map.addSource("dfirm", {
+                'type': "vector",
+                'url': source
+            })
+            this.map.addLayer({
+                'id': 'dfirm_layer',
+                'source': 'dfirm',
+                'source-layer': layerName,
+                'type': 'fill',
+                'minzoom': 8,
+                'paint': {
+                    'fill-color': "#DAF7A6"
+                },
+
+            })
+        }
     }
 
-    visibilityToggleModeOff(source){
-        if(source){
+
+    visibilityToggleModeOff(source,layerName){
+        if(source && layerName.includes("riverine")){
             if(this.map.getSource('riverine')) {
                 this.map.removeLayer('riverine_layer');
                 this.map.removeSource('riverine')
+            }
+        }
+        if(source && layerName.includes("dfirm")){
+            if(this.map.getSource('dfirm')) {
+                this.map.removeLayer('dfirm_layer');
+                this.map.removeSource('dfirm')
             }
         }
     }

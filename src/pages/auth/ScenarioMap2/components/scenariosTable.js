@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
-import Toggle from 'react-toggle'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 
@@ -12,7 +11,8 @@ class ScenarioTable extends React.Component {
         super(props);
 
         this.state = {
-            visibility:false
+            visibility:false,
+            risk_zone_ids : []
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -28,6 +28,9 @@ class ScenarioTable extends React.Component {
                         if(graph){
                             Object.keys(graph).filter(d => d!== '$__path').forEach(item =>{
                                 risk_zone_ids.push(graph[item].risk_zones.risk_zone_id)
+                                this.setState({
+                                    risk_zone_ids : risk_zone_ids
+                                })
                             })
                             return risk_zone_ids
                         }
@@ -40,6 +43,12 @@ class ScenarioTable extends React.Component {
                     })
                 return response
             })
+    }
+
+    componentDidUpdate(oldProps){
+        if(oldProps.scenario_id !== this.props.scenario_id){
+            this.fetchFalcorDeps()
+        }
     }
 
     handleChange(e) {
@@ -80,16 +89,25 @@ class ScenarioTable extends React.Component {
         if(this.props.scenarioData && this.props.riskData){
             let graph = this.props.scenarioData;
             let data = [];
+            let resultData = []
             Object.keys(graph).forEach(item=>{
-                data.push({
-                    'id':graph[item].risk_zone_id || '',
-                    'scenario':graph[item].table_name || '',
-                    'visibility':graph[item].map_source || '',
-                    'total_loss':fnum(this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value) || '',
-                    'annual_loss':fnum(((graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value).toString()) || ''
-                })
+                if(graph[item].risk_zone_id){
+                    data.push({
+                        'id':graph[item].risk_zone_id || '',
+                        'scenario':graph[item].table_name || '',
+                        'visibility':graph[item].map_source || '',
+                        'total_loss':fnum(this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value) || '',
+                        'annual_loss':fnum(((graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value).toString()) || ''
+                    })
+                }
+            });
+            data.map(d =>{
+                if(this.state.risk_zone_ids.includes(d.id)){
+                    resultData.push(d)
+                }
             })
-            return data
+
+            return resultData
         }
     }
 
@@ -99,8 +117,11 @@ class ScenarioTable extends React.Component {
             let total_loss = 0;
             let annual_loss = 0
             Object.keys(graph).forEach(item=>{
-                total_loss += parseFloat(this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value)
-                annual_loss += (graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value
+                if(graph[item].risk_zone_id && this.state.risk_zone_ids.includes(graph[item].risk_zone_id)){
+                    total_loss += parseFloat(this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value)
+                    annual_loss += (graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value
+                }
+
             })
             return total_loss
         }
@@ -111,7 +132,10 @@ class ScenarioTable extends React.Component {
             let graph = this.props.scenarioData;
             let annual_loss = 0
             Object.keys(graph).forEach(item=>{
-                annual_loss += (graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value
+                if(graph[item].risk_zone_id && this.state.risk_zone_ids.includes(graph[item].risk_zone_id)){
+                    annual_loss += (graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value
+                }
+
             })
             return annual_loss
         }
@@ -156,7 +180,7 @@ class ScenarioTable extends React.Component {
                                                                 this.state.visibility === true?
                                                                     this.props.check_visibility.visibilityToggleModeOn(item.visibility,item.scenario)
                                                                     :
-                                                                    this.props.check_visibility.visibilityToggleModeOff(item.visibility)
+                                                                    this.props.check_visibility.visibilityToggleModeOff(item.visibility,item.scenario)
                                                             }
                                                         </div>
                                                     </div>

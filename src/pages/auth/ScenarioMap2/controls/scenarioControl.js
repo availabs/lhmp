@@ -29,6 +29,12 @@ class ScenarioControl extends React.Component {
             })
     }
 
+    componentDidUpdate(oldProps,oldState){
+        if(oldState.scenario_id !== this.state.scenario_id){
+            this.renderScenarioTable()
+        }
+    }
+
     scenarioDropDown(){
         if(this.props.scenariosList[this.props.activePlan]){
             let scenarios_list  = []
@@ -49,9 +55,25 @@ class ScenarioControl extends React.Component {
         }
     }
 
+    renderScenarioTable(){
+        return (
+            <div>
+                {this.state.scenario_id !== '' ?
+                    <ScenarioTable
+                        scenario_id={[this.state.scenario_id]}
+                        check_visibility = {this.props.layer.layer}
+                    />
+                    :
+                    null
+                }
+            </div>
+        )
+    }
+
     handleChange(e) {
         console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
+
     };
 
 
@@ -70,14 +92,7 @@ class ScenarioControl extends React.Component {
                         })}
                     </select>
                     <div>
-                        {this.state.scenario_id !== '' ?
-                            <ScenarioTable
-                                scenario_id={[this.state.scenario_id]}
-                                check_visibility = {this.props.layer.layer}
-                            />
-                            :
-                            null
-                        }
+                        {this.renderScenarioTable()}
                     </div>
 
                 </div>
