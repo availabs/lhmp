@@ -1,18 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
+import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
+import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
+import {setActiveRiskZoneId} from 'store/modules/scenario'
 
 class ScenarioTable extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             visibility:false,
-            risk_zone_ids : []
+            risk_zone_ids : [],
+            riskZoneId : ''
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -51,8 +53,10 @@ class ScenarioTable extends React.Component {
         }
     }
 
+
     handleChange(e) {
         // if you switch on the toggle
+        this.props.setActiveRiskZoneId(e.target.id)
         if(e.target.parentNode.parentNode.className === 'os-toggler-w'){
             e.target.parentNode.parentNode.className = 'os-toggler-w on'
             document.getElementById('visibility_column').parentNode.parentNode.childNodes.forEach(tr_node =>{
@@ -82,6 +86,7 @@ class ScenarioTable extends React.Component {
         this.setState((currentState) => ({
             visibility: !currentState.visibility,
         }));
+
 
     };
 
@@ -146,7 +151,7 @@ class ScenarioTable extends React.Component {
     render(){
         let resultData = this.processTableData();
         let total_loss = this.processTotalLoss()
-        let annual_loss = this.processAnnualLoss()
+        let annual_loss = this.processAnnualLoss();
         return (
             <div>
                 <table className='table table-sm table-hover'>
@@ -168,26 +173,25 @@ class ScenarioTable extends React.Component {
                                         <td id ='visibility_column'>
                                             <button className="btn btn-rounded"
                                                     type="button"
-                                                    disbaled
                                                     style={{padding:'0px'}}>
                                                 <div id = 'visibility'
                                                      className="os-toggler-w">
                                                     <div className="os-toggler-i" >
                                                         <div className="os-toggler-pill"
+                                                             id = {item.id}
                                                              onClick={this.handleChange}
                                                              value = {this.state.visibility}>
                                                             {
-                                                                this.state.visibility === true?
+                                                                this.state.visibility === true ?
                                                                     this.props.check_visibility.visibilityToggleModeOn(item.visibility,item.scenario)
                                                                     :
                                                                     this.props.check_visibility.visibilityToggleModeOff(item.visibility,item.scenario)
                                                             }
                                                         </div>
+
                                                     </div>
                                                 </div>
-
                                             </button>
-
                                         </td>
                                         <td>{item.total_loss}</td>
                                         <td>{item.annual_loss}</td>
@@ -220,11 +224,13 @@ const mapStateToProps = state => (
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         scenarioData : get(state.graph,['scenarios','byId'],{}),
-        riskData : get(state.graph,['risk_zones','byId'])
+        riskData : get(state.graph,['risk_zones','byId']),
+        riskZoneId: state.scenario.activeRiskZoneId
     });
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage,
+    setActiveRiskZoneId,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ScenarioTable))

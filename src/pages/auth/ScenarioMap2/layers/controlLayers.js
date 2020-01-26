@@ -8,6 +8,7 @@ import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import { getColorRange } from "constants/color-ranges";
+import GetRiskZoneID from 'pages/auth/ScenarioMap2/layers/scenarioLayer.js'
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -187,6 +188,7 @@ export default (options = {}) =>
                     return(
                         <div>
                             <MainControls layer={layer}/>
+                            <GetRiskZoneID/>
                         </div>
                     )
                 },
@@ -196,7 +198,4 @@ export default (options = {}) =>
 
     })
 
-const mapStateToProps = (state, { id }) => ({
 
-});
-const mapDispatchToProps = {};

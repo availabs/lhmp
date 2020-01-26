@@ -16,7 +16,8 @@ class ScenarioControl extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            scenario_id : ''
+            scenario_id : '',
+            risk_zone_id : ''
         }
         //this.onClickScenario = this.onClickScenario.bind(this)
         this.handleChange = this.handleChange.bind(this);
@@ -25,6 +26,7 @@ class ScenarioControl extends React.Component {
     fetchFalcorDeps(){
         return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
             .then(response =>{
+                //console.log('response',response)
                 return response
             })
     }
@@ -34,6 +36,7 @@ class ScenarioControl extends React.Component {
             this.renderScenarioTable()
         }
     }
+
 
     scenarioDropDown(){
         if(this.props.scenariosList[this.props.activePlan]){

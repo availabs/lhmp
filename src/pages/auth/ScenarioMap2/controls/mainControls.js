@@ -16,8 +16,12 @@ let currentInfoBox = []
 class MainControls extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            risk_zone_id : ''
+        }
 
     }
+
 
     render(){
         return (
@@ -79,7 +83,9 @@ class MainControls extends React.Component {
                             {currentInfoBox.map(info =>{
                                 if(info.block === 'scenario' && info.on){
                                     return (
-                                        <ScenarioControl layer = {this.props}/>
+                                        <ScenarioControl
+                                            layer = {this.props}
+                                        />
                                     )
                                 }
                             })}
