@@ -10,7 +10,12 @@ import GraphFactory from "components/displayComponents/graphFactory";
 import Content from "components/cms/Content"
 
 import config from "pages/auth/Plan/config/hazards-config";
+import hazardConfig from './hazard-config'
 
+import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
+
+
+import ElementFactory, {RenderConfig}  from 'pages/Public/theme/ElementFactory'
 
 import GeographyScoreBarChart from "./components/GeographyScoreBarChart";
 import CousubTotalLossTable from "./components/CousubTotalLossTable";
@@ -20,25 +25,13 @@ import HazardEvents from '../Hazards/components/hazardEvents/'
 import HazardScoreTable from "./components/HazardScoreTable";
 import FemaDisasterDeclarationsTable from "./components/FemaDisasterDeclarationsTable";
 import HazardEventsTable from "./components/HazardEventsTable";
-import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
 import NumberOfHazardsMonthStackedBarGraph from "./components/NumberOfHazardsMonthStackedBarGraph";
 import SideMenu from 'pages/Public/theme/SideMenu'
 
 
 import {
     PageContainer,
-    PageHeader,
-    StatementText, 
-    HeaderImage,
-    HeaderContainer,
-    SectionBox,
-    SectionHeader,
-    ContentHeader,
-    ContentContainer,
-    SectionBoxMain,
-    SectionBoxSidebar,
-    SidebarCallout
-    
+    ContentContainer    
 } 
 from 'pages/Public/theme/components'
 
@@ -150,21 +143,24 @@ class Hazards extends React.Component {
             ) : null
     }
 
-    renderElement (element) {
+    render() {
+        if(!this.props.geoid) {
+            return <React.Fragment />
+        }
         return (
-            <ElementBox>
-                <SectionBoxMain>
-                    <strong>{element.title}</strong>
-                    <GraphFactory
-                        graph={{type: element.type + 'Viewer'}}
-                        {...element}
-                        user={this.props.user}/>
-                </SectionBoxMain>
-            </ElementBox>
+            <PageContainer>
+                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
+                 {this.stickyHazards()}
+                    <SideMenu config={config}/>
+                </div>
+                <div style={{marginLeft: 220}}>
+                    <RenderConfig config={hazardConfig} user={this.props.user} {...this.state}/>
+                </div>
+            </PageContainer>
         )
     }
 
-    render() {
+    render_old() {
         if(!this.props.geoid) {
             return <React.Fragment />
         }
@@ -174,7 +170,7 @@ class Hazards extends React.Component {
                      {this.stickyHazards()}
                         <SideMenu config={config}/>
                     </div>
-                    <ContentContainer>
+                    <ContentContainer >
                         <CountyHeroStats {...this.state}/>
                        
                         <h4 className="element-header">{this.getGeoidName()}</h4>
