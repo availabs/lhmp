@@ -10,6 +10,8 @@ import {setActiveCousubid} from 'store/modules/user'
 import { Element } from 'react-scroll'
 import SideMenu from 'pages/Public/theme/SideMenu'
 
+import ElementFactory from 'pages/Public/theme/ElementFactory'
+
 import {
     PageContainer,
     PageHeader,
@@ -47,34 +49,7 @@ class About extends React.Component {
                 )
             })
     }
-    renderElement (element) {
-        return (
-            <Element name={element.title}>
-                <SectionBox>
-                    {['right'].includes(element.align) ? 
-                        <SectionBoxSidebar >
-                            {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
-                        </SectionBoxSidebar>
-                        : React.fragment
-                    }
-                    <SectionBoxMain>
-                        <ContentHeader>{element.title}</ContentHeader>
-                        <GraphFactory
-                            graph={{type: element.type + 'Viewer'}}
-                            {...element}
-                            user={this.props.user}/>
-                    </SectionBoxMain>
-                    {['right', 'full'].includes(element.align) ? 
-                        React.fragment :
-                        <SectionBoxSidebar >
-                            {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
-                        </SectionBoxSidebar>
-                    }
-                </SectionBox>
-            </Element>
-        )
-    }
-
+    
     render() {
         let graph = this.props.graph
         let geoInfo = graph.geo
@@ -128,7 +103,12 @@ class About extends React.Component {
                                                         <SectionHeader>{section}</SectionHeader>
                                                         {
                                                             config[section].map(requirement => {
-                                                                return this.renderElement(requirement)
+                                                                return (
+                                                                    <ElementFactory 
+                                                                        element={requirement} 
+                                                                        user={this.props.user}
+                                                                    />
+                                                                )
                                                             })
                                                         }
                                                     </div>
