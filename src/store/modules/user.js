@@ -82,6 +82,7 @@ function setCousubid(id){
   }
 }
 
+
 // function TODO_AuthServerVerifiesToken(user) {
 // return {
 // type: USER_LOGIN,
@@ -266,6 +267,10 @@ export const setActiveCousubid = (id) =>{
   }
 }
 
+
+
+
+
 export const login = ({ email, password }) => dispatch =>
   fetch(`${AUTH_HOST}/login`, {
     method: 'POST',
@@ -389,7 +394,8 @@ export const actions = {
   logout,
   setActivePlan,
   setActiveGeoid,
-    setActiveCousubid
+  setActiveCousubid,
+
 };
 
 // -------------------------------------
@@ -493,13 +499,13 @@ const ACTION_HANDLERS = {
       localStorage.setItem('cousubId', newState.activeCousubid);
     }
     return newState
-  },
+    },
 
   [SIGNUP_SUCCESS]: (state =initialState, action) => {
     const newState = Object.assign({}, state)
     newState.signupComplete = true
     return newState
-  }
+  },
 };
 
 export default function userReducer(state = initialState, action) {

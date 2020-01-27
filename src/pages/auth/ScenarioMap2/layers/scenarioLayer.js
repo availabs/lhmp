@@ -15,10 +15,8 @@ import { extent } from "d3-array"
 import { format as d3format } from "d3-format"
 import { fnum } from "utils/sheldusUtils"
 import MapLayer from "components/AvlMap/MapLayer.js"
-//import { register, unregister } from "../ReduxMiddleware"
-
 import { getColorRange } from "constants/color-ranges";
-import ZoneControls from "../controls/zoneControls";
+import {register} from "../../../../components/AvlMap/ReduxMiddleware";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -26,10 +24,11 @@ const IDENTITY = i => i;
 
 export class ScenarioLayer extends MapLayer{
     onAdd(map) {
+        //register(this, REDUX_UPDATE, ["graph"]);
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
-            let graph = ''
+            let graph = '';
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
@@ -44,7 +43,8 @@ export class ScenarioLayer extends MapLayer{
     }
     fetchData(graph){
         let owner_types = ['2','3', '4', '5', '6', '7','8'];
-        let buildingIds = []
+        let buildingIds = [];
+        console.log('this',this)
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['flood_100','flood_500'], 'owner_type',owner_types, 'critical', ['true', 'false']]
@@ -62,6 +62,7 @@ export class ScenarioLayer extends MapLayer{
                     })
                 })
             }
+
             buildingIds = filteredBuildings.map(f => f.id);
             return buildingIds
         }).then(buildingIds =>{
@@ -84,7 +85,6 @@ export class ScenarioLayer extends MapLayer{
             3 - county
             4,5,6,7- Municipality
             8 - Private
-
          */
 
         let rawGraph = falcorGraph.getCache(),
@@ -254,7 +254,7 @@ export const ScenarioOptions =  (options = {}) => {
                     'fill-color': '#000000'
                 }
             },
-           
+
             {
                 'id': 'buildings-layer',
                 'source': 'buildings',
@@ -264,9 +264,29 @@ export const ScenarioOptions =  (options = {}) => {
                     'circle-opacity': 0.5
                 }
             },
-             
+
 
         ]
     }
+};
+
+class GetRiskZoneId extends React.Component {
+    render() {
+        this.riskZoneId = this.props.riskZoneId
+        return null
+    }
 }
+
+const mapStateToProps = (state, { id }) => ({
+    riskZoneId : state.scenario.activeRiskZoneId
+});
+const mapDispatchToProps = {};
+
+const GetRiskZoneID = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(GetRiskZoneId))
+
+export default GetRiskZoneID
+
+
+
+
 
