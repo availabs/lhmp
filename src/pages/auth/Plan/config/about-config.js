@@ -7,45 +7,17 @@ const config =  {
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.', 
-			icon: 'os-icon-align-left'
+			icon: 'os-icon-globe'
 		},
 		{
-			title: 'Meetings and Participation',
+			title: 'Meetings',
 			requirement: 'Req-A-1D',
 			type: 'table',
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
-			icon: 'os-icon-grid'
+			icon: 'os-icon-user-check'
 		},
-		{
-			title: 'Regional Participation',
-			requirement: 'Req-A-2',
-			type: 'content',
-			prompt: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard' +
-				' mitigation activities, agencies that have the authority to regulate development as well as other interests' +
-				' to be involved in the planning process.',
-			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise' +
-				' needed to develop the plan, with responsibility or authority to implement hazard mitigation activities,' +
-				' and who will be most affected by the plan’s outcomes.',
-			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
-			icon: 'os-icon-align-left'
-		},
-		{
-			title: 'Jurisdictional Representatives',
-			requirement: 'Req-A-1C',
-			type: 'rolesTable',
-			align: 'full',
-			prompt: 'Identify who represented each jurisdiction.',
-			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
-			icon: 'os-icon-grid'
-		},
-		// {
-		// 	title: 'Jurisdictional Participation',
-		// 	requirement: 'Req-A-1E',
-		// 	type: 'table',
-		// 	prompt: '',
-		// 	intent: 'Plan updates must include documentation of the current planning process undertaken to update the plan.'
-		// },
+
 		{
 			title: 'Public Participation',
 			requirement: 'Req-A-3',
@@ -55,12 +27,45 @@ const config =  {
 				' for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
 				' Public involvement is also an opportunity to educate the public about hazards and risks in the community,' +
 				' types of activities to mitigate those risks, and how these impact them.',
-				icon: 'os-icon-align-left'
+				icon: 'os-icon-users'
 		},
+
+		{
+			title: 'Jurisdictional Part.',
+			requirement: 'Req-A-1C',
+			type: 'rolesTable',
+			align: 'full',
+			prompt: 'Identify who represented each jurisdiction.',
+			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
+			icon: 'os-icon-user'
+		},
+
+		{
+			title: 'Regional Part.',
+			requirement: 'Req-A-2',
+			type: 'content',
+			prompt: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard' +
+				' mitigation activities, agencies that have the authority to regulate development as well as other interests' +
+				' to be involved in the planning process.',
+			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise' +
+				' needed to develop the plan, with responsibility or authority to implement hazard mitigation activities,' +
+				' and who will be most affected by the plan’s outcomes.',
+			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
+			icon: 'os-icon-user-plus'
+		},
+
+		// {
+		// 	title: 'Jurisdictional Participation',
+		// 	requirement: 'Req-A-1E',
+		// 	type: 'table',
+		// 	prompt: '',
+		// 	intent: 'Plan updates must include documentation of the current planning process undertaken to update the plan.'
+		// },
+
 	],
 	'Integration' : [
 		{
-			title: 'Review of Existing Resources',
+			title: 'Existing Resources',
 			requirement: 'Req-A-4A',
 			type: 'planningDocuments',
 			align: 'full',
@@ -68,38 +73,38 @@ const config =  {
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-grid'
+			icon: 'os-icon-tasks-checked'
 		},
 		{
-			title: 'Resource Integration',
+			title: 'Resources Integration',
 			requirement: 'Req-A-4B',
 			type: 'content',
 			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-align-left'
+			icon: 'os-icon-rotate-cw'
 		},
 		{
-			title: 'Plan Integration',
+			title: 'Plans Integration',
 			requirement: 'Req-C-6',
 			type: 'content',
 			prompt: 'Describe the community’s process to integrate the data, information, and hazard mitigation goals' +
 				' and actions into other planning mechanisms.',
 			intent: 'To assist communities in capitalizing on all available mechanisms that they have at their disposal' +
 				' to accomplish hazard mitigation and reduce risk.',
-			icon: 'os-icon-align-left'
+			icon: 'os-icon-layers'
 		},
 	],
 	'Maintenance' : [
 		{
-			title: 'Public Participation',
+			title: 'Public Maint.',
 			requirement: 'Req-A-5A',
 			type: 'content',
 			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
 			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s' +
 				' maintenance and implementation over time.',
-			icon: 'os-icon-align-left'
+			icon: 'os-icon-command'
 		},
 		// {
 		// 	title: 'Public Participation in Plan Maintenance Survey',
@@ -124,12 +129,12 @@ const config =  {
 `,
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.',
-			icon: 'os-icon-align-left'
+			icon: 'os-icon-battery-charging'
 		}
 	],
 	Adoption: [
 		{
-			title: 'Plan Adoption Documentation',
+			title: 'Documentation',
 			requirement: 'Req-E-1',
 			type: 'capabilitiesTableHMP',
 			prompt: `The plan must include documentation of plan adoption, usually a resolution by the governing body or other authority.
@@ -140,14 +145,13 @@ const config =  {
 			`,
 			intent: 'To demonstrate the jurisdiction’s commitment to fulfilling the hazard mitigation goals outlined in' +
 				' the plan, and to authorize responsible agencies to execute their responsibilities. ',
-			icon: 'os-icon-grid'
+			icon: 'os-icon-check-circle'
 		},
 /*		{
 			title: 'Multi-Jurisdictional Mitigation Plan Milestones',
 			requirement: 'Req-A-1B',
 			type: 'date',
 			prompt: '',
-			intent: ''
 		},
 		
 		{
