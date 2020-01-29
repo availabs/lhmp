@@ -7,7 +7,7 @@ const config =  {
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.', 
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-align-left'
 		},
 		{
 			title: 'Meetings and Participation',
@@ -15,7 +15,7 @@ const config =  {
 			type: 'table',
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-grid'
 		},
 		{
 			title: 'Regional Participation',
@@ -28,7 +28,7 @@ const config =  {
 				' needed to develop the plan, with responsibility or authority to implement hazard mitigation activities,' +
 				' and who will be most affected by the plan’s outcomes.',
 			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-align-left'
 		},
 		{
 			title: 'Jurisdictional Representatives',
@@ -37,7 +37,7 @@ const config =  {
 			align: 'full',
 			prompt: 'Identify who represented each jurisdiction.',
 			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-grid'
 		},
 		// {
 		// 	title: 'Jurisdictional Participation',
@@ -55,7 +55,7 @@ const config =  {
 				' for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
 				' Public involvement is also an opportunity to educate the public about hazards and risks in the community,' +
 				' types of activities to mitigate those risks, and how these impact them.',
-				icon: 'os-icon-arrow-right2'
+				icon: 'os-icon-align-left'
 		},
 	],
 	'Integration' : [
@@ -68,7 +68,7 @@ const config =  {
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-grid'
 		},
 		{
 			title: 'Resource Integration',
@@ -78,7 +78,7 @@ const config =  {
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-align-left'
 		},
 		{
 			title: 'Plan Integration',
@@ -88,18 +88,18 @@ const config =  {
 				' and actions into other planning mechanisms.',
 			intent: 'To assist communities in capitalizing on all available mechanisms that they have at their disposal' +
 				' to accomplish hazard mitigation and reduce risk.',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-align-left'
 		},
 	],
 	'Maintenance' : [
 		{
-			title: 'Maintenance: Public Participation',
+			title: 'Public Participation',
 			requirement: 'Req-A-5A',
 			type: 'content',
 			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
 			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s' +
 				' maintenance and implementation over time.',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-align-left'
 		},
 		// {
 		// 	title: 'Public Participation in Plan Maintenance Survey',
@@ -113,7 +113,7 @@ const config =  {
 		// 		' annual questionnaires or surveys, public meetings, postings on social media and interactive websites.'
 		// },
 		{
-			title: 'Maintenance: Updating',
+			title: 'Updating',
 			requirement: 'Req-A-6',
 			type: 'content',
 			prompt: `Describe the method and schedule for keeping the plan current 
@@ -124,7 +124,7 @@ const config =  {
 `,
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-align-left'
 		}
 	],
 	Adoption: [
@@ -140,7 +140,7 @@ const config =  {
 			`,
 			intent: 'To demonstrate the jurisdiction’s commitment to fulfilling the hazard mitigation goals outlined in' +
 				' the plan, and to authorize responsible agencies to execute their responsibilities. ',
-			icon: 'os-icon-arrow-right2'
+			icon: 'os-icon-grid'
 		},
 /*		{
 			title: 'Multi-Jurisdictional Mitigation Plan Milestones',

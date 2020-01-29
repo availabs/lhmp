@@ -1,7 +1,7 @@
 const config = {
     Capabilities : [
         {
-            title: ' Existing Capabilities',
+            title: ' Overview',
             requirement: 'Req-C-1A',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -14,7 +14,7 @@ const config = {
             icon: 'os-icon-arrow-right2'
         },
         {
-            title: 'Existing Capabilities Table',
+            title: 'Capabilities Table',
             requirement: 'Req-C-1A-1',
             type: 'table',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -28,7 +28,7 @@ const config = {
             icon: 'os-icon-arrow-right2'
         },
         {
-            title: 'Existing Capabilities Evaluation',
+            title: 'Evaluation',
             requirement: 'Req-C-1B',
             type: 'table',
             prompt: '',
