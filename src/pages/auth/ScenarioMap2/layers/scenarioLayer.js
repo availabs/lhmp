@@ -8,43 +8,58 @@ import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
 import get from "lodash.get"
 import styled from "styled-components"
 import {
+    scaleLinear,
     scaleQuantile,
-    scaleQuantize
+    scaleQuantize, scaleThreshold
 } from "d3-scale"
 import { extent } from "d3-array"
 import { format as d3format } from "d3-format"
 import { fnum } from "utils/sheldusUtils"
 import MapLayer from "components/AvlMap/MapLayer.js"
 import { getColorRange } from "constants/color-ranges";
-import {register} from "../../../../components/AvlMap/ReduxMiddleware";
+import {register, unregister} from "components/AvlMap/ReduxMiddleware";
+import COLOR_RANGES from "constants/color-ranges"
 var _ = require('lodash')
-const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
-
-const IDENTITY = i => i;
+const LEGEND_COLOR_RANGE = getColorRange(8, "YlGn");
 
 export class ScenarioLayer extends MapLayer{
     onAdd(map) {
-        //register(this, REDUX_UPDATE, ["graph"]);
+        register(this, 'USER::SET_RISK_ZONE_ID', ["scenario"]);
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
             let graph = '';
+            this.map.on('render',()=>{
+                const features =  map.querySourceFeatures('nys_buildings_avail', {
+                    sourceLayer: 'nys_buildings_osm_ms_parcelid_pk',
+                })
+                this.selection = features.map(d => d.properties.id);
+                this.fetchData().then(data => this.receiveData(map, data))
+
+            })
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                    map.resize();
-                    map.fitBounds(bbox);
+                    this.map.resize();
+                    this.map.fitBounds(bbox);
                     //map.setZoom(9)
 
-                    return this.fetchData(graph).then(data => this.receiveData(map, data))
+                    return this.fetchData().then(data => this.receiveData(this.map, data))
                 })
         }
     }
-    fetchData(graph){
+    onRemove(map) {
+        unregister(this);
+    }
+    receiveMessage(action, data) {
+        this.activeScenarioId = data.activeRiskZoneId
+        //console.log('this.activeScenarioId',this.activeScenarioId)
+        return this.fetchData().then(data => this.receiveData(data,this.map))
+    }
+    fetchData(){
         let owner_types = ['2','3', '4', '5', '6', '7','8'];
         let buildingIds = [];
-        console.log('this',this)
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['flood_100','flood_500'], 'owner_type',owner_types, 'critical', ['true', 'false']]
@@ -70,12 +85,26 @@ export class ScenarioLayer extends MapLayer{
                 return falcorChunkerNice(
                     ['building', 'geom', 'byBuildingId',buildingIds, 'centroid']
                 )
-                // .then(d => {
-                //     return d
-                // })
+            }
+        })
+        .then(() =>{
+            if (!this.selection || this.selection.length === 0) {
+                return Promise.resolve([])
+            }else{
+                if(this.activeScenarioId !== null){
+                    falcorGraph.get(
+                        ['risk_zones',[this.activeScenarioId],'buildings',this.selection,'total_loss']
+                    )
+                        .then(data => {
+                            return data
+                        })
+
+                }
+
             }
 
         })
+
     }
 
     receiveData(map,data) {
@@ -86,6 +115,36 @@ export class ScenarioLayer extends MapLayer{
             4,5,6,7- Municipality
             8 - Private
          */
+        let resultedRiskZonesData = [];
+        let coloredBuildingIds = [];
+        let coloredBuildings = {};
+        let riskZonesData = falcorGraph.getCache();
+
+        if(riskZonesData.risk_zones && riskZonesData.risk_zones[this.activeScenarioId] && this.activeScenarioId){
+                if(riskZonesData.risk_zones[this.activeScenarioId]){
+                    if(Object.keys(riskZonesData.risk_zones[this.activeScenarioId].buildings).length > 0){
+                        Object.keys(riskZonesData.risk_zones[this.activeScenarioId].buildings).forEach(building_id =>{
+                            if(building_id){
+                                resultedRiskZonesData.push({
+                                    'id':building_id,
+                                    'value':riskZonesData.risk_zones[this.activeScenarioId].buildings[building_id].total_loss.value ? riskZonesData.risk_zones[this.activeScenarioId].buildings[building_id].total_loss.value : 0
+                                })
+                            }
+                        })
+
+                    }
+
+                }
+        }
+        if(resultedRiskZonesData.length > 0){
+            const colorScale = this.getColorScale(resultedRiskZonesData),
+                colors = resultedRiskZonesData.reduce((a, c) => {
+                a[c.id] = colorScale(c.value);
+                coloredBuildingIds.push(c.id.toString());
+                return a;
+            }, {});
+            coloredBuildings = colors
+        }
 
         let rawGraph = falcorGraph.getCache(),
             graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone`, null),
@@ -179,19 +238,61 @@ export class ScenarioLayer extends MapLayer{
 
         })
 
-        if(map.getSource('buildings')) {
-            map.getSource("buildings").setData(geojson)
+        if(this.map.getSource('buildings')) {
+            this.map.getSource("buildings").setData(geojson)
         }
 
-        map.setPaintProperty(
+
+        this.map.setPaintProperty(
             'buildings-layer',
             'circle-color',
             ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
 
         )
+        if(Object.keys(coloredBuildings).length > 0){
+            this.map.setPaintProperty(
+                'ebr',
+                'fill-color',
+                ["get",
+                    ["to-string", ["get", "id"]],
+                    ["literal",coloredBuildings]
+                ],
+            )
+        }
 
 
     }
+
+    getColorScale(data) {
+        const { type, range, domain } = this.legend;
+        switch (type) {
+            case "quantile": {
+                const domain = data.map(d => d.value).filter(d => d).sort();
+                this.legend.domain = domain;
+                return scaleQuantile()
+                    .domain(domain)
+                    .range(range);
+            }
+            case "quantize": {
+                const domain = extent(data, d => d.value);
+                this.legend.domain = domain;
+                return scaleQuantize()
+                    .domain(domain)
+                    .range(range);
+            }
+            case "threshold": {
+                return scaleThreshold()
+                    .domain(domain)
+                    .range(range)
+            }
+            case "linear":{
+                return scaleLinear()
+                    .domain(domain)
+                    .range(range)
+            }
+        }
+    }
+
 
 }
 
@@ -200,6 +301,7 @@ export const ScenarioOptions =  (options = {}) => {
     return {
         active: true,
         ...options,
+        activeScenarioId: null,
         sources: [
             { id:"buildings",
                 source: {
@@ -266,25 +368,33 @@ export const ScenarioOptions =  (options = {}) => {
             },
 
 
-        ]
+        ],
+        legend: {
+            title: 'Total Hazard Loss',
+            type: "linear",
+            types: ["threshold", "quantile", "quantize","linear"],
+            vertical: false,
+            range: LEGEND_COLOR_RANGE,
+            active: true,
+            domain: [0,10000,50000,100000, 250000, 500000, 1000000], //10k, 50k, 100k, 250k, 500k, 1m+
+            format: fnum
+        },
+        popover: {
+            layers: ["ebr"],
+            dataFunc: function(topFeature, features) {
+                /*
+                const {id} = topFeature.properties
+                let graph = falcorGraph.getCache()
+                if(graph.risk_zones){
+                    console.log('id',id)
+                    console.log('graph',graph.risk_zones[this.activeScenarioId].buildings[id].total_loss)
+                }
+                 */
+            },
+        }
     }
 };
 
-class GetRiskZoneId extends React.Component {
-    render() {
-        this.riskZoneId = this.props.riskZoneId
-        return null
-    }
-}
-
-const mapStateToProps = (state, { id }) => ({
-    riskZoneId : state.scenario.activeRiskZoneId
-});
-const mapDispatchToProps = {};
-
-const GetRiskZoneID = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(GetRiskZoneId))
-
-export default GetRiskZoneID
 
 
 

@@ -8,7 +8,6 @@ import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import { getColorRange } from "constants/color-ranges";
-import GetRiskZoneID from 'pages/auth/ScenarioMap2/layers/scenarioLayer.js'
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -65,10 +64,10 @@ class ControlLayers extends MapLayer {
                 'id': 'riverine_layer',
                 'source': 'riverine',
                 'source-layer': layerName,
-                'type': 'fill',
+                'type': 'line',
                 'minzoom': 8,
                 'paint': {
-                    'fill-color': ["interpolate",
+                    'line-color': ["interpolate",
                         ["linear"],
                         ["get", "depth_m"],
                         0,
@@ -188,7 +187,6 @@ export default (options = {}) =>
                     return(
                         <div>
                             <MainControls layer={layer}/>
-                            <GetRiskZoneID/>
                         </div>
                     )
                 },

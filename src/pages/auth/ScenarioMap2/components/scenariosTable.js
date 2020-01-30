@@ -14,7 +14,10 @@ class ScenarioTable extends React.Component {
         this.state = {
             visibility:false,
             risk_zone_ids : [],
-            riskZoneId : ''
+            riskZoneId : '',
+            scenario:'',
+            map_source:'',
+            activeToggle:''
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -55,40 +58,23 @@ class ScenarioTable extends React.Component {
 
 
     handleChange(e) {
-        // if you switch on the toggle
-        this.props.setActiveRiskZoneId(e.target.id)
-        if(e.target.parentNode.parentNode.className === 'os-toggler-w'){
-            e.target.parentNode.parentNode.className = 'os-toggler-w on'
-            document.getElementById('visibility_column').parentNode.parentNode.childNodes.forEach(tr_node =>{
-                tr_node.childNodes.forEach(inside_tr =>{
-                    if(inside_tr.firstChild.className === 'btn btn-rounded'){
-                        if(inside_tr.firstChild.firstChild.className === 'os-toggler-w'){
-                            inside_tr.parentNode.setAttribute("style","pointer-events:none")
-                        }
-                    }
-                })
-            })
+        let id = e.target.id
 
-        }
-        // if you switch off the toggle
-        else{
-            e.target.parentNode.parentNode.className = 'os-toggler-w'
-            document.getElementById('visibility_column').parentNode.parentNode.childNodes.forEach(tr_node =>{
-                tr_node.childNodes.forEach(inside_tr =>{
-                    if(inside_tr.firstChild.className === 'btn btn-rounded'){
-                        if(inside_tr.firstChild.firstChild.className === 'os-toggler-w'){
-                            inside_tr.parentNode.setAttribute("style","pointer-events:auto")
-                        }
-                    }
-                })
-            })
-        }
-        this.setState((currentState) => ({
-            visibility: !currentState.visibility,
-        }));
+        let data = this.processTableData()
+        data.map(d =>{
+            if(id.toString() === d.id.toString()){
+                this.props.setActiveRiskZoneId(d.id)
+                this.setState((currentState) =>({
+                    visibility: !currentState.visibility,
+                    scenario : d.scenario,
+                    map_source:d.visibility
+                }))
 
+            }
+        })
 
     };
+
 
     processTableData(){
         if(this.props.scenarioData && this.props.riskData){
@@ -175,20 +161,26 @@ class ScenarioTable extends React.Component {
                                                     type="button"
                                                     style={{padding:'0px'}}>
                                                 <div id = 'visibility'
-                                                     className="os-toggler-w">
+                                                     className={this.state.activeToggle === item.id ? "os-toggler-w on" : "os-toggler-w"}
+                                                     style={this.state.activeToggle === item.id || this.state.activeToggle === '' ? {}:{pointerEvents:'none'}}
+                                                >
                                                     <div className="os-toggler-i" >
                                                         <div className="os-toggler-pill"
                                                              id = {item.id}
-                                                             onClick={this.handleChange}
-                                                             value = {this.state.visibility}>
+                                                             onClick={(e) =>{
+                                                                 this.setState({
+                                                                     activeToggle:this.state.activeToggle === item.id ? '':item.id
+                                                                 })
+                                                                 this.handleChange(e)
+                                                             }}
+                                                             >
                                                             {
-                                                                this.state.visibility === true ?
-                                                                    this.props.check_visibility.visibilityToggleModeOn(item.visibility,item.scenario)
+                                                                this.state.visibility === true?
+                                                                    this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
                                                                     :
-                                                                    this.props.check_visibility.visibilityToggleModeOff(item.visibility,item.scenario)
+                                                                    this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,this.state.scenario)
                                                             }
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </button>
@@ -196,6 +188,7 @@ class ScenarioTable extends React.Component {
                                         <td>{item.total_loss}</td>
                                         <td>{item.annual_loss}</td>
                                     </tr>
+
                                 )
                             })
                         :

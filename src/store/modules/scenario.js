@@ -34,7 +34,6 @@ let initialState = {
 const ACTION_HANDLERS = {
 
     [SET_RISK_ZONE_ID]: (state =initialState, action) => {
-        //console.log('cousubId setting', action.id)
         const newState = Object.assign({}, state)
         if(action.id) {
             newState.activeRiskZoneId = action.id
