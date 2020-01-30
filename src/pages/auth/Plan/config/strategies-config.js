@@ -1,7 +1,7 @@
 const config = {
     Capabilities : [
         {
-            title: ' Existing Capabilities 1A',
+            title: ' Overview',
             requirement: 'Req-C-1A',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -10,10 +10,11 @@ const config = {
                 ' taxing authority and annual budgets, regulatory authorities for comp. Planning building codes and ordinances',
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                 ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
-                ' capability varies widely.'
+                ' capability varies widely.',
+            icon: 'os-icon-globe'
         },
         {
-            title: 'Existing Capabilities 1A-1',
+            title: 'Capabilities Table',
             requirement: 'Req-C-1A-1',
             type: 'table',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -23,14 +24,16 @@ const config = {
                 ' for comp. Planning building codes and ordinances',
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                 ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
-                ' capability varies widely.'
+                ' capability varies widely.',
+            icon: 'os-icon-tasks-checked'
         },
         {
-            title: 'Existing Capabilities Evaluation',
+            title: 'Evaluation',
             requirement: 'Req-C-1B',
             type: 'table',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-pie-chart-3'
         },
         {
             title: 'NFIP Participation',
@@ -43,7 +46,8 @@ const config = {
                 ' b. If jurisdiction is not taking part in NFIP describe why',
             intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA' +
                 ' is the official administering Federal agency of the NFIP, participation in the program is a basic community' +
-                ' capability and resource for flood hazard mitigation activities.'
+                ' capability and resource for flood hazard mitigation activities.',
+            icon: 'os-icon-bar-chart-up'
         },
         {
             title: 'NFIP Properties',
@@ -51,10 +55,11 @@ const config = {
             type: 'Visualizations - NFIP',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
-                ' numbers of repetitive loss properties located in identified flood hazard areas.'
+                ' numbers of repetitive loss properties located in identified flood hazard areas.',
+            icon: 'os-icon-home'
         },
         {
-            title: 'NFIP Insured Structures and Problem Areas',
+            title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
             type: 'content',
             prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
@@ -62,12 +67,13 @@ const config = {
                 ' on floodplain maps. How does this relate to mitigation actions/the overall mitigation strategy?',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas. Information on repetitive' +
-                ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.'
+                ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
+            icon: 'os-icon-alert-circle'
         },
     ],
     Actions: [
         {
-            title: 'Proposed Action Form',
+            title: 'Proposed Actions',
             requirement: 'Req-C-4',
             type: 'form',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
@@ -85,7 +91,8 @@ const config = {
                 ' a. Mitigation actions and projects means a hazard mitigation action, activity or process (for example,' +
                 '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
                 ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
-                ' b. Integrate elements of Req-C-5 and Req-C-6'
+                ' b. Integrate elements of Req-C-5 and Req-C-6',
+            icon: 'os-icon-activity'
         },
         {
             title: 'Action Form',
@@ -95,7 +102,8 @@ const config = {
                 ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
                 ' whether the action is no longer relevant or be included as part of the updated action plan.',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing' +
-                ' actions outlined in their mitigation strategy.'
+                ' actions outlined in their mitigation strategy.',
+            icon: 'os-icon-tasks-checked'
         },
         {
             title: 'Prioritization Criteria',
@@ -110,35 +118,39 @@ const config = {
                 ' in how actions will be prioritized.',
             intent: 'To identify how the plan will directly lead to implementation of the hazard mitigation actions.' +
                 '  As opportunities arise for actions or projects to be  implemented, the responsible entity will be able' +
-                ' to take action towards completion of the activities.'
+                ' to take action towards completion of the activities.',
+            icon: 'os-icon-edit-1'
         },
     ],
     Objectives: [
         {
-            title: 'Goals 3A',
+            title: 'Goals',
             requirement: 'Req-C-3-A',
             type: 'content',
             prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
                 ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
             intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
-                '  Goals are statements of the community’s visions for the future.'
+                '  Goals are statements of the community’s visions for the future.',
+            icon: 'os-icon-target'
         },
-        {
-            title: 'Goals 3A-1',
-            requirement: 'Req-C-3-A-1',
-            type: 'form',
-            prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
-                ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
-            intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
-                '  Goals are statements of the community’s visions'
-        },
+        // {
+        //     title: 'Goals 3A-1',
+        //     requirement: 'Req-C-3-A-1',
+        //     type: 'form',
+        //     prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
+        //         ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
+        //     intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
+        //         '  Goals are statements of the community’s visions',
+        //     icon: 'os-icon-arrow-right2'
+        // },
         {
             title: 'Changes in Priorities',
             requirement: 'Req-D-3',
             type: 'content',
             prompt: ' If applicable, describe changes to goals and objectives.',
             intent: 'To ensure the plan reflects current conditions, including financial, legal, and political realities' +
-                ' as well as post‐disaster conditions.'
+                ' as well as post‐disaster conditions.',
+            icon: 'os-icon-mail-19'
         },
     ]
 }

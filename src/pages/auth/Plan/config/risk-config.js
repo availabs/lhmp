@@ -9,10 +9,11 @@ const config = {
             intent: 'For participating jurisdictions in a multi‐jurisdictional plan, the plan must describe any hazards' +
                 ' that are unique and/or varied from those affecting the overall planning area to understand the hazards' +
                 ' affecting the planning area in order to identify which hazard risks are most significant/which' +
-                ' jurisdictions or locations are most adversely affected.'
+                ' jurisdictions or locations are most adversely affected.',
+            icon: 'os-icon-alert-triangle'
         },
         {
-            title: 'Hazard Impact Narrative (based on Hazard Risk Data/Visualizations)',
+            title: 'Hazard Impact',
             requirement: 'Req-B-3A',
             type: 'content',
             prompt: 'Narrative to Contextualize Hazard Data (related to visualizations in previous sub-element)',
@@ -21,10 +22,11 @@ const config = {
                 ' community and its assets.  Assets are determined by the community and include, for example, people,' +
                 ' structures, facilities, systems, capabilities, and/or activities that have value to the community.' +
                 ' For example, impacts could be described by referencing historical disaster impacts and/or an estimate' +
-                ' of potential future losses (such as percent damage of total exposure).'
+                ' of potential future losses (such as percent damage of total exposure).',
+            icon: 'os-icon-fire'
         },
         {
-            title: 'Jurisdictional Vulnerability Narrative (based on Hazard Risk and Capabilities Data/Visualizations)',
+            title: 'Vulnerability',
             requirement: 'Req-B-3B-1',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
@@ -34,10 +36,11 @@ const config = {
                 ' a. *Vulnerable assets and potential losses is more than a list of the total exposure of population,' +
                 ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
                 ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
-                ' and that will be addressed in the mitigation strategy.'
+                ' and that will be addressed in the mitigation strategy.',
+            icon: 'os-icon-alert-circle'
         },
         {
-            title: 'Jurisdictional Vulnerability Inventory',
+            title: 'Inventory',
             requirement: 'Req-B-3B-2',
             type: 'table',
             prompt: 'structures, systems, populations, or other community assets that are susceptible to damage or hazard events.',
@@ -47,49 +50,55 @@ const config = {
                 'a. *Vulnerable assets and potential losses is more than a list of the total exposure of population, ' +
                 'structures, and critical facilities in the planning area. An example of an overall summary is a list of' +
                 ' key issues or problem statements that clearly describes the community’s greatest vulnerabilities and that' +
-                ' will be addressed in the mitigation strategy.'
+                ' will be addressed in the mitigation strategy.',
+            icon: 'os-icon-home'
         }
         ],
     Assets: [
         {
-            title: 'Critical Facilities 500 year flood event',
+            title: 'Critical Facilities',
             requirement: 'Req-NYS-F-2',
             type: 'table',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-loader'
         },
         {
-            title: 'Potential Sites for Temporary Housing Units',
+            title: 'Temporary Housing',
             requirement: 'Req-NYS-F-3A',
             type: '',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-email-forward'
         },
         {
-            title: 'Potential Relocation Zones',
+            title: 'Relocation Zones',
             requirement: 'Req-NYS-F-3B',
             type: '',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-documents-07'
         },
         {
-            title: 'Evacuation Routes and Procedures',
+            title: 'Evacuation',
             requirement: 'Req-NYS-F-4A',
             type: '',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-alert-octagon'
         },
         {
-            title: 'Shelters for evacuated citizens with a range of medical needs, plan for pets, and compliance with ADA',
+            title: 'Shelters',
             requirement: 'Req-NYS-F-4B',
             type: '',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-share-2'
         }
     ],
     'Changes in Development' : [
         {
-            title: 'Changes in Development A',
+            title: 'Changes Text',
             requirement: 'Req-D-1A',
             type: 'content',
             prompt: 'The plan must describe changes in development that have occurred in hazard prone areas and increased' +
@@ -98,21 +107,24 @@ const config = {
                 ' in the previously approved plan. Was the plan revised to reflect changes in development?',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing' +
                 ' and potential development, and takes into consideration possible future conditions that can impact the' +
-                ' vulnerability of the community.'
+                ' vulnerability of the community.',
+            icon: 'os-icon-repeat'
         },
         {
-            title: 'Changes in Development B',
+            title: 'Changes Table',
             requirement: 'Req-D-1B',
             type: 'form',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-grid-squares-2'
         },
         {
-            title: 'Changes in Development C',
+            title: 'Changes Map',
             requirement: 'Req-D-1C',
             type: 'map?',
             prompt: '',
-            intent: ''
+            intent: '',
+            icon: 'os-icon-globe'
         }
     ]
 }

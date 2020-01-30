@@ -1,0 +1,17 @@
+table.hazard-events-legend {
+    display: inline-block;
+    table-layout: fixed;
+}
+table.hazard-events-legend tr td {
+    width: calc(100% / 6);
+    border-bottom: solid 1px rgb(200, 200, 200);
+}
+table.hazard-events-legend tr:last-child td {
+    border-bottom: none;
+}
+table.hazard-events-legend td {
+    border-right: solid 1px rgb(200, 200, 200);
+}
+table.hazard-events-legend td:last-child {
+    border-right: none;
+}
