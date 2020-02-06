@@ -59,6 +59,7 @@ let themes = [
 let selectedTheme = 3
 
 
+
 export const backgroundColor = themes[selectedTheme].backgroundColor 
 export const mainFontColor  = themes[selectedTheme].mainFontColor  
 export const DarkFontColor  = themes[selectedTheme].DarkFontColor

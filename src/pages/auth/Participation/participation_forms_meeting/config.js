@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','sub_type'],
+        list_attributes : ['id','title','sub_type'],
         sections:[],
         attributes:{
             meetings:{
@@ -11,6 +11,14 @@ module.exports = [
                 edit_type:'meeting_roles',
                 display_type:'text',
                 //hidden:'true', // if you don`t want to show it in view data
+                section:''
+            },
+            title:{
+                sub_type:'meeting',
+                label:'Title',
+                prompt:'',
+                edit_type:'text',
+                display_type:'text',
                 section:''
             },
             owner_type:{

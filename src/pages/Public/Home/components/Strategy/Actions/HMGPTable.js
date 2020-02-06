@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from 'lodash.get'
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBox3'
+import Table from 'components/light-admin/tables/Table'
 
 import {
     getHazardName,
@@ -53,22 +53,45 @@ class HMAP_Table extends React.Component {
         tableData = Object.keys(data)
             .map(d => this.createRow(d, data[d]))
             .sort((a,b) => (b.Approved-a.Approved));
-        return { data:tableData, columns: ['Jurisdiction', 'Approved', 'Finished', 'Completed'] };
+        return { data:tableData, columns: [ 
+                   
+                    {
+                        Header: 'Jurisdiction', 
+                        accessor: 'Jurisdiction',
+                        align: 'left',
+                        width: 400
+                    },
+                    {
+                        Header: 'Approved', 
+                        accessor: 'Approved',
+                        align: 'center'
+                    },
+                    {
+                        Header: 'Finished', 
+                        accessor: 'Finished',
+                        align: 'center'
+                    },
+                    {
+                        Header: 'Completed', 
+                        accessor: 'Completed',
+                        align: 'center'
+                    }
+                ]
+
+            };
     }
 
     render() {
         try {
             return (
-                <TableBox { ...this.processData() }
-                          filterKey="year"
-                          filterColumns={ this.props.filterColumns }
-                          pageSize={ 100 }
-                          title={'HMGP Projects by Jurisdiction'}
-                          showControls={false}
-                          maxHeight={'60vh'}
-                          widths={['25%','25%', '25%', '25%']}
-                          minWidth={'70%'}
-                />
+                <div>
+                { 
+                    this.processData() ? 
+                    (<Table { ...this.processData() } />)
+                        : (<h4>Loading Capability Data ...</h4>)
+                }
+                </div>
+               
             )
         }
         catch (e) {

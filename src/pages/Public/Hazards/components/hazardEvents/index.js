@@ -90,7 +90,7 @@ class HazardLoss extends Component {
                                     style='Clear'
                                     styles={[{
                                         name: "Clear",
-                                        style: "mapbox://styles/am3081/cjvih8vrm0bgu1cmey0vem4ia"
+                                        style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii"
                                     }]}
                                     fitBounds={[
                                         [

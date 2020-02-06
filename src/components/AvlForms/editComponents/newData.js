@@ -65,7 +65,7 @@ class AvlFormsNewData extends React.Component{
                 .then(response =>{
                     let graph = response.json.forms.byId[this.props.id];
                     let tmp_state = {}
-                    if(graph){
+                    if(graph && attributes[0]){
                         attributes[0].forEach(attribute =>{
                             if(attribute.includes('date')){
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''

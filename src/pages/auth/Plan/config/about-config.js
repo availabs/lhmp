@@ -12,7 +12,29 @@ const config =  {
 		{
 			title: 'Meetings',
 			requirement: 'Req-A-1D',
-			type: 'table',
+			type: 'formTable',
+			fontSize: '0.70em',
+			height: 'auto',
+			align: 'full',
+			config: {
+				type:'participation',
+        		columns : [
+        			{
+        				Header: 'Name',
+        				accessor: 'title'
+        			},
+        			
+        			{
+        				Header: 'Date',
+        				accessor: 'start_date'
+        			},
+        			{
+        				Header: 'Hours',
+        				accessor: 'hours'
+        			}
+        		]
+        
+			},
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
 			icon: 'os-icon-user-check'
@@ -31,17 +53,46 @@ const config =  {
 		},
 
 		{
-			title: 'Jurisdictional Part.',
+			title: 'Jurisdictional Participation',
 			requirement: 'Req-A-1C',
-			type: 'rolesTable',
+			type: 'formTable',
+			fontSize: '0.70em',
+			height: '600px',
 			align: 'full',
+			config: {
+				type:'roles',
+        		columns : [
+        			{
+        				Header: 'Name',
+        				accessor: 'contact_name'
+        			},
+        			// {
+        			// 	Header: 'County',
+        			// 	accessor: 'contact_county'
+        			// },
+        			// {
+        			// 	Header: 'County',
+        			// 	accessor: 'contact_municipality'
+        			// },
+        			{
+        				Header: 'Agency',
+        				accessor: 'contact_agency'
+        			},
+        			{
+        				Header: 'Role',
+        				accessor: 'contact_title_role'
+        			}
+        		]
+        
+			},
+			//align: 'full',
 			prompt: 'Identify who represented each jurisdiction.',
 			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
 			icon: 'os-icon-user'
 		},
 
 		{
-			title: 'Regional Part.',
+			title: 'Regional Participation',
 			requirement: 'Req-A-2',
 			type: 'content',
 			prompt: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard' +
@@ -67,8 +118,43 @@ const config =  {
 		{
 			title: 'Existing Resources',
 			requirement: 'Req-A-4A',
-			type: 'planningDocuments',
+			//type: 'planningDocuments',
+
+			//align: 'full',
+			type: 'formTable',
+			fontSize: '0.70em',
+			height: '600px',
 			align: 'full',
+			config: {
+				type: 'capabilities',
+				filters:[{column:'capability_category',value:'planning and regulatory'}],
+        		columns : [
+        			{
+        				Header: 'Name',
+        				accessor: 'capability_name'
+        			},
+        			{
+        				Header: 'capability type',
+        				accessor: 'capability_type'
+        			},
+        			
+        			{
+        				Header: 'adopting authority',
+        				accessor: 'adopting_authority'
+        			},
+        			{
+        				Header: 'responsible authority',
+        				accessor: 'responsible_authority'
+        			},
+        			{
+        				Header: 'Link',
+        				accessor: 'upload',
+        				width: 50
+        			},
+        			
+        		]
+        
+			},
 			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
@@ -98,7 +184,7 @@ const config =  {
 	],
 	'Maintenance' : [
 		{
-			title: 'Public Maint.',
+			title: 'Public Maintenance',
 			requirement: 'Req-A-5A',
 			type: 'content',
 			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
@@ -136,7 +222,48 @@ const config =  {
 		{
 			title: 'Documentation',
 			requirement: 'Req-E-1',
-			type: 'capabilitiesTableHMP',
+			type: 'formTable',
+			align: 'full',
+			fontSize: '.7em',
+			config: {
+				type:'capabilities', // type is same as the route path for now
+				filters:[{column:'capability_type',value:'Hazard mitigation plan'}],
+				columns : [
+        			{
+        				Header: 'Name',
+        				accessor: 'capability_name'
+        			},
+        			{
+        				Header: 'capability type',
+        				accessor: 'capability_type'
+        			},
+        			
+        			{
+        				Header: 'adopting authority',
+        				accessor: 'adopting_authority'
+        			},
+        			{
+        				Header: 'responsible authority',
+        				accessor: 'responsible_authority'
+        			},
+        			{
+        				Header: 'Adoption Date',
+        				accessor: 'adoption_date',
+        				width: 90
+        			},
+        			{
+        				Header: 'expiration Date',
+        				accessor: 'expiration_date',
+        				width: 70
+        			},
+        			{
+        				Header: 'Link',
+        				accessor: 'link_url',
+        				width: 50
+        			}
+        			
+        		]      		 
+			},
 			prompt: `The plan must include documentation of plan adoption, usually a resolution by the governing body or other authority.
 			a.   Upload Prompts: 
 				i.	Meeting minutes

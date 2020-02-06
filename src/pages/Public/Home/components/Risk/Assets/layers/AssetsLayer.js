@@ -202,7 +202,8 @@ class TractLayer extends MapLayer {
             'type': 'circle',
             'paint': {
                 'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
-                'circle-opacity': 0.5
+                'circle-opacity': 0.5,
+                'circle-radius': 5, 
             }
         })
 
@@ -267,8 +268,8 @@ const tractLayer = new TractLayer("Assets Layer", {
             'source-layer': 'tracts',
             'type': 'fill',
             'paint': {
-                'fill-color': 'rgba(9, 98, 186, 0.5)',
-                'fill-opacity': 0.5
+                'fill-color': 'rgba(9, 98, 186, 0.0)',
+                'fill-opacity': 0.0
             }
         },
         {
