@@ -20,17 +20,23 @@ const config =  {
 				type:'participation',
         		columns : [
         			{
-        				Header: 'Name',
-        				accessor: 'title'
-        			},
-        			
-        			{
         				Header: 'Date',
-        				accessor: 'start_date'
+        				accessor: 'start_date',
+        				width: 60
+        			},
+        			{
+        				Header: 'Name',
+        				accessor: 'title',
         			},
         			{
         				Header: 'Hours',
-        				accessor: 'hours'
+        				accessor: 'hours',
+        				width: 40
+        			},
+        			{
+        				Header: 'Narrative',
+        				accessor: 'narrative',
+        				width: 400
         			}
         		]
         
@@ -251,16 +257,16 @@ const config =  {
         				accessor: 'adoption_date',
         				width: 90
         			},
-        			{
-        				Header: 'expiration Date',
-        				accessor: 'expiration_date',
-        				width: 70
-        			},
-        			{
-        				Header: 'Link',
-        				accessor: 'link_url',
-        				width: 50
-        			}
+        			// {
+        			// 	Header: 'expiration Date',
+        			// 	accessor: 'expiration_date',
+        			// 	width: 70
+        			// },
+        			// {
+        			// 	Header: 'Link',
+        			// 	accessor: 'link_url',
+        			// 	width: 50
+        			// }
         			
         		]      		 
 			},

@@ -128,7 +128,7 @@ class Introduction extends Component {
                         <div className="row">
                             <div className="col-12">
                                 <StatementText>
-                                    We should do mitigation because we have $12,312,312 and 2,001 people at risk in the floodplain.
+                                    Hazard Mitigation saves lives and dollars.  With XXX people and $XXX of assets, we must protect our future by investing in resiliency now.
                                 </StatementText>
                             </div>
                         </div>
