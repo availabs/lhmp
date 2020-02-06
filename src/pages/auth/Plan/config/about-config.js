@@ -235,13 +235,18 @@ const config =  {
 				type:'capabilities', // type is same as the route path for now
 				filters:[{column:'capability_type',value:'Hazard mitigation plan'}],
 				columns : [
+        			// {
+        			// 	Header: 'Name',
+        			// 	accessor: 'capability_name'
+        			// },
+        			// {
+        			// 	Header: 'capability type',
+        			// 	accessor: 'capability_type'
+        			// },
+
         			{
-        				Header: 'Name',
-        				accessor: 'capability_name'
-        			},
-        			{
-        				Header: 'capability type',
-        				accessor: 'capability_type'
+        				Header: 'Municipality',
+        				accessor: 'minicipality'
         			},
         			
         			{
