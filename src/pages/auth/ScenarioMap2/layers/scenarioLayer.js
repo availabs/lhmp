@@ -492,7 +492,6 @@ export const ScenarioOptions =  (options = {}) => {
         popover: {
             layers: ["ebr"],
             dataFunc: function(topFeature, features) {
-                console.log('in popover',topFeature.properties)
                 const { id } = topFeature.properties;
                 let result = [];
                 let data = [];
