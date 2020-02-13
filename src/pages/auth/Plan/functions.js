@@ -7,6 +7,8 @@ import {Pagers} from "@stickyroll/pagers";
 import CSS_CONFIG from 'pages/auth/css-config'
 import Element from "components/light-admin/containers/Element";
 import ElementBox from "components/light-admin/containers/ElementBox";
+import SideMenu from 'pages/Public/theme/SideMenu'
+
 
 const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGeos){
     return geoInfo ? (
@@ -137,28 +139,33 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
 
                         return (
                             <div>
-                                <div
-                                    className='ae-side-menu'
-                                    style={{
-                                        height: '5vh',
-                                        width: CSS_CONFIG.reqNavWidth,
-                                        position: 'fixed',
-                                        display: 'block',
-                                    }}>
-                                    {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
-                                </div>
-                                <div
-                                    className='ae-side-menu'
-                                    style={{
-                                        height: '93vh',
-                                        width: CSS_CONFIG.reqNavWidth,
-                                        position: 'absolute',
-                                        display: 'block',
-                                        overflow: 'scroll',
-                                        marginTop: '6vh'
-                                    }}>
-                                    {this.renderReqNav(allRequirenments, pageIndex)}
-                                </div>
+                                <div style={{position: 'fixed', left: 50, top: 0, paddingTop: 0,width:  CSS_CONFIG.reqNavWidth, height: '100%'}}>
+                                    <div
+                                        className='ae-side-menu'
+                                        style={{
+                                            height: '5vh',
+                                            width: CSS_CONFIG.reqNavWidth,
+                                            position: 'fixed',
+                                            display: 'block',
+                                        }}>
+                                        {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
+                                    </div>
+                                    <SideMenu config={config} style={{marginTop: '6vh'}}/>
+                                    {/*
+                                        <div
+                                        className='ae-side-menu'
+                                        style={{
+                                            height: '93vh',
+                                            width: CSS_CONFIG.reqNavWidth,
+                                            position: 'absolute',
+                                            display: 'block',
+                                            overflow: 'scroll',
+                                            marginTop: '6vh'
+                                        }}>
+                                        {this.renderReqNav(allRequirenments, pageIndex)}
+                                    </div>
+                                    */}
+                                 </div>
                                  <div
                                         style={{
                                             width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
@@ -170,13 +177,6 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
                                         }}>
                                         <Pagers useContext={true}/>
 
-                                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow={page / pages}
-                                             className="progress-bar bg-success" role="progressbar"
-                                             style={{
-                                                 width: page / pages * 100 + '%',
-                                                 height: '15px'
-                                             }}>{(page / pages * 100).toFixed(2)} %
-                                        </div>
 
                                         <div style={{
                                             height: '100vh',

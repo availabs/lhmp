@@ -1,32 +1,7 @@
 const config = {
-    'Elevated Risk Profiles' : [
+    'Vulnerability' : [
         {
-            title: 'Elevated Risk Profiles',
-            requirement: 'Req-B-1D',
-            type: 'unknown',
-            prompt: 'Identify which hazard risks are most significant and which jurisdictions or locations are most' +
-                ' adversely affected.',
-            intent: 'For participating jurisdictions in a multi‐jurisdictional plan, the plan must describe any hazards' +
-                ' that are unique and/or varied from those affecting the overall planning area to understand the hazards' +
-                ' affecting the planning area in order to identify which hazard risks are most significant/which' +
-                ' jurisdictions or locations are most adversely affected.',
-            icon: 'os-icon-alert-triangle'
-        },
-        {
-            title: 'Hazard Impact',
-            requirement: 'Req-B-3A',
-            type: 'content',
-            prompt: 'Narrative to Contextualize Hazard Data (related to visualizations in previous sub-element)',
-            intent: 'For each participating jurisdiction, the plan must describe the potential impacts of each of the' +
-                ' identified hazards on the community. Impact means the consequence or effect of the hazard on the' +
-                ' community and its assets.  Assets are determined by the community and include, for example, people,' +
-                ' structures, facilities, systems, capabilities, and/or activities that have value to the community.' +
-                ' For example, impacts could be described by referencing historical disaster impacts and/or an estimate' +
-                ' of potential future losses (such as percent damage of total exposure).',
-            icon: 'os-icon-fire'
-        },
-        {
-            title: 'Vulnerability',
+            title: 'Narrative',
             requirement: 'Req-B-3B-1',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
@@ -37,24 +12,16 @@ const config = {
                 ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
                 ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
                 ' and that will be addressed in the mitigation strategy.',
-            icon: 'os-icon-alert-circle'
+            icon: 'os-icon-alert-triangle'
         },
         {
             title: 'Inventory',
-            requirement: 'Req-B-3B-2',
+            requirement: 'Req-B-3B-1B',
             type: 'table',
-            prompt: 'structures, systems, populations, or other community assets that are susceptible to damage or hazard events.',
-            intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.' +
-                ' The overall summary of vulnerability identifies structures, systems, populations or other community assets' +
-                ' as defined by the community that are susceptible to damage and loss from hazard events. ' +
-                'a. *Vulnerable assets and potential losses is more than a list of the total exposure of population, ' +
-                'structures, and critical facilities in the planning area. An example of an overall summary is a list of' +
-                ' key issues or problem statements that clearly describes the community’s greatest vulnerabilities and that' +
-                ' will be addressed in the mitigation strategy.',
-            icon: 'os-icon-home'
-        }
-        ],
-    Assets: [
+            intent: 'Overview of loss by asset type by scenario',
+            icon: 'os-icon-alert-circle'
+        },
+        
         {
             title: 'Critical Facilities',
             requirement: 'Req-NYS-F-2',
@@ -62,7 +29,9 @@ const config = {
             prompt: '',
             intent: '',
             icon: 'os-icon-loader'
-        },
+        }
+    ],
+    'Response' : [
         {
             title: 'Temporary Housing',
             requirement: 'Req-NYS-F-3A',
@@ -88,6 +57,14 @@ const config = {
             icon: 'os-icon-alert-octagon'
         },
         {
+            title: 'Evacuation Procedues',
+            requirement: 'Req-NYS-F-4A-1',
+            type: 'content',
+            prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
+            intent: '',
+            icon: 'os-icon-alert-triangle'
+        },
+        {
             title: 'Shelters',
             requirement: 'Req-NYS-F-4B',
             type: '',
@@ -98,7 +75,7 @@ const config = {
     ],
     'Changes in Development' : [
         {
-            title: 'Changes Text',
+            title: 'Overview',
             requirement: 'Req-D-1A',
             type: 'content',
             prompt: 'The plan must describe changes in development that have occurred in hazard prone areas and increased' +
@@ -111,7 +88,7 @@ const config = {
             icon: 'os-icon-repeat'
         },
         {
-            title: 'Changes Table',
+            title: 'Development Zones',
             requirement: 'Req-D-1B',
             type: 'form',
             prompt: '',
@@ -119,7 +96,23 @@ const config = {
             icon: 'os-icon-grid-squares-2'
         },
         {
-            title: 'Changes Map',
+            title: 'Development Map',
+            requirement: 'Req-D-1C',
+            type: 'map?',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-globe'
+        },
+        {
+            title: 'Open Space ',
+            requirement: 'Req-D-1C',
+            type: 'map?',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-globe'
+        },
+        {
+            title: 'Open Space Statistics',
             requirement: 'Req-D-1C',
             type: 'map?',
             prompt: '',

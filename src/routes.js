@@ -6,6 +6,7 @@ import Landing from './pages/Landing'
 import Public from './pages/Public/Home/'
 import About from './pages/Public/PlanningProcess/'
 import Hazards from './pages/Public/Hazards/'
+import Hazards2 from './pages/Public/Hazards/new'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
 import Strategies from './pages/Public/Strategies/'
 
@@ -123,6 +124,7 @@ const routes = [
    ...Public,
    ...About,
    ...Hazards,
+   ...Hazards2,
    ...Risk,
    ...Strategies,
    ...User,

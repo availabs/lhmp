@@ -8,7 +8,7 @@ import capability_config from "pages/Public/Home/components/Strategy/Capabilitie
 import test_config from 'pages/Public/Home/components/Strategy/Capabilities/testConfig.js'
 import get from "lodash.get";
 import ElementBox from 'components/light-admin/containers/ElementBox'
-import TableBox from 'components/light-admin/tables/TableBox3'
+import Table from 'components/light-admin/tables/Table'
 import {
     VerticalAlign,
     ContentHeader,
@@ -96,7 +96,10 @@ class CapabilityStrategy extends React.Component{
     }
 
     processData(){
-        if(this.props.capabilityData && this.props.geoData){
+        if(!(this.props.capabilityData && this.props.geoData)) {
+            return null
+        }
+        
             let data = [];
             let required = 0;
             let result = {
@@ -126,9 +129,23 @@ class CapabilityStrategy extends React.Component{
             });
             return {
                 data : data,
-                columns : ['Capability Category','Required Capability Percentage']
+                columns: [ 
+                   
+                    {
+                        Header: 'Capability Category', 
+                        accessor: 'Capability Category',
+                        align: 'left',
+                        width: 400
+                    },
+                    {
+                        Header: 'Required Capability Percentage', 
+                        accessor: 'Required Capability Percentage',
+                        align: 'center',
+                        width: 200
+                    }
+                ]
             }
-        }
+        
     }
 
 
@@ -141,12 +158,11 @@ class CapabilityStrategy extends React.Component{
                 </HeaderContainer>
                 <VerticalAlign>
                     <div className = 'd-flex justify-content-center' style={{fontSize: '1.5em'}}>
-                        <TableBox { ...this.processData() }
-                          pageSize={ 100 }
-                          title={ '' }
-                          showControls={false}
-                          minWidth={'60%'}
-                          />
+                        { this.processData() ? 
+                            (<Table { ...this.processData() } />)
+                            : (<h4>Loading Capability Data ...</h4>)
+                        }
+                        
                     </div>
                 </VerticalAlign>
             </PageContainer>

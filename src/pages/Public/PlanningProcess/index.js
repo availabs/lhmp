@@ -24,8 +24,8 @@ import {
     ContentContainer,
     SectionBoxMain,
     SectionBoxSidebar,
-    SidebarCallout
-    
+    SidebarCallout,
+    HeaderImageContainer
 } 
 from 'pages/Public/theme/components'
 
@@ -70,8 +70,8 @@ class About extends React.Component {
                     <SideMenu config={config}/>
                 </div>
                 <div style={{marginLeft: 220}}>
-                    <HeaderContainer>
-                        
+                    <HeaderImageContainer>
+                        <div style={{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.4)', padding: 50}}>
                             <PageHeader>Planning Process</PageHeader>
                             {
                                 /*
@@ -88,8 +88,8 @@ class About extends React.Component {
                                     </StatementText>
                                 </div>
                             </div>
-                    </HeaderContainer>
-                    <HeaderImage />
+                        </div>
+                    </HeaderImageContainer>
                     <ContentContainer>
                             
                             

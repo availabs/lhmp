@@ -6,6 +6,7 @@ let themes = [
         backgroundColor:   '#d1dbe9', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
         mainFontColor : '#3E4B5B',
         DarkFontColor: '#3E4B5B',
+        LightFontColor: '#fefefe',
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
@@ -18,6 +19,7 @@ let themes = [
         backgroundColor:   '#293148', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
         mainFontColor : '#fff',
         DarkFontColor: '#3E4B5B',
+        LightFontColor: '#fefefe',
         mainFontSize: '1.2em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
@@ -30,6 +32,7 @@ let themes = [
         backgroundColor:   '#efefef', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
         mainFontColor : '#3E4B5B',
         DarkFontColor: '#3E4B5B',
+        LightFontColor: '#fefefe',
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
@@ -42,6 +45,7 @@ let themes = [
         backgroundColor:   '#fff', //'#efefef';// '#d1dbe9' // '#b3c3db' //'#6787b7',
         mainFontColor : '#3E4B5B',
         DarkFontColor: '#3E4B5B',
+        LightFontColor: '#fefefe',
         mainFontSize: '1.4em',
         mainFontWeight: '400',
         mainFontLineHeight: '2',
@@ -55,9 +59,11 @@ let themes = [
 let selectedTheme = 3
 
 
+
 export const backgroundColor = themes[selectedTheme].backgroundColor 
 export const mainFontColor  = themes[selectedTheme].mainFontColor  
-export const DarkFontColor  = themes[selectedTheme].DarkFontColor  
+export const DarkFontColor  = themes[selectedTheme].DarkFontColor
+export const LightFontColor  = themes[selectedTheme].LightFontColor  
 export const mainFontSize = themes[selectedTheme].mainFontSize 
 export const mainFontWeight = themes[selectedTheme].mainFontWeight 
 export const mainFontLineHeight = themes[selectedTheme].mainFontLineHeight 
@@ -86,7 +92,7 @@ export const StatementText = styled.div`
 	font-size: 3rem;
 	font-weight: 500;
 	padding: 120px;
-    color: ${mainFontColor};
+    color: ${LightFontColor};
 `
 
 export const HeaderImage = styled.div`
@@ -123,7 +129,6 @@ export const PageContainer = styled.div`
 	width: 100%;
 	height: 100%;
 	background: ${backgroundColor};
-	padding-top: 75px;
 	color: ${mainFontColor};
 	padding-bottom: 50px;
 	
@@ -131,7 +136,7 @@ export const PageContainer = styled.div`
 export const PageHeader = styled.h4`
 	padding-top: 50px;
 	text-transform: uppercase;
-    color: ${mainFontColor};
+    color: ${LightFontColor};
 `
 
 export const SectionHeader = styled.h2`
@@ -147,6 +152,12 @@ export const ContentContainer = styled.div`
 export const HeaderContainer = styled.div`
 	margin: 0 auto;
     max-width: 1340px;
+`
+
+export const HeaderImageContainer = styled.div`
+    background-image: url(${props => props.img ? props.img : "/img/planning.jpg"});
+    background-size: cover;
+    height: 90vh;
 `
 
 export const ContentHeader = styled.h3`

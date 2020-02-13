@@ -7,6 +7,9 @@ import capabilitiesTableHMPEditor from "./capabilitiesTableHMPEditor";
 import capabilitiesTableHMPViewer from "./capabiltiesTableHMP/capabilitiesTableHMPViewer";
 import planningDocumentsEditor from "./planningDocumentsEditor";
 import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer";
+import formTableViewer from './FormTableViewer'
+
+
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -28,6 +31,8 @@ export default {
     capabilitiesTableHMPEditor,
     capabilitiesTableHMPViewer,
     planningDocumentsEditor,
-    planningDocumentsViewer
+    planningDocumentsViewer,
+    formTableViewer,
+    formTableEditor: formTableViewer
 }
 

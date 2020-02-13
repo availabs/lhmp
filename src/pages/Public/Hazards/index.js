@@ -8,14 +8,10 @@ import {falcorChunkerNice} from "store/falcorGraph"
 import ElementBox from "components/light-admin/containers/ElementBox";
 import GraphFactory from "components/displayComponents/graphFactory";
 import Content from "components/cms/Content"
+import Element from 'components/light-admin/containers/Element'
 
 import config from "pages/auth/Plan/config/hazards-config";
-import hazardConfig from './hazard-config'
-
-import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
-
-
-import ElementFactory, {RenderConfig}  from 'pages/Public/theme/ElementFactory'
+import {SectionBoxMain} from 'pages/Public/theme/components'
 
 import GeographyScoreBarChart from "./components/GeographyScoreBarChart";
 import CousubTotalLossTable from "./components/CousubTotalLossTable";
@@ -25,28 +21,19 @@ import HazardEvents from '../Hazards/components/hazardEvents/'
 import HazardScoreTable from "./components/HazardScoreTable";
 import FemaDisasterDeclarationsTable from "./components/FemaDisasterDeclarationsTable";
 import HazardEventsTable from "./components/HazardEventsTable";
+import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
 import NumberOfHazardsMonthStackedBarGraph from "./components/NumberOfHazardsMonthStackedBarGraph";
-import SideMenu from 'pages/Public/theme/SideMenu'
-
-
-import {
-    PageContainer,
-    ContentContainer    
-} 
-from 'pages/Public/theme/components'
-
 
 const STICKYDROPDOWN = styled.div`
-   margin-top: 30px
-   select {
-   
-   height: 5vh;
-   width: 100%;
-   z-index:100;
-   
-   }
-`;
-
+                       select {
+                       height: 5vh;
+                       width: 250px;
+                       float: right;
+                       z-index:100;
+                       position:fixed;
+                       background: rgba(0,0,0,0.3);
+                       }
+                        `;
 class Hazards extends React.Component {
 
     constructor(props) {
@@ -143,43 +130,40 @@ class Hazards extends React.Component {
             ) : null
     }
 
+    renderElement (element) {
+        return (
+            <ElementBox>
+                <SectionBoxMain>
+                    <strong>{element.title}</strong>
+                    <GraphFactory
+                        graph={{type: element.type + 'Viewer'}}
+                        {...element}
+                        user={this.props.user}/>
+                </SectionBoxMain>
+            </ElementBox>
+        )
+    }
+
     render() {
         if(!this.props.geoid) {
             return <React.Fragment />
         }
         return (
-            <PageContainer>
-                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
-                 {this.stickyHazards()}
-                    <SideMenu config={config}/>
-                </div>
-                <div style={{marginLeft: 220}}>
-                    <RenderConfig config={hazardConfig} user={this.props.user} {...this.state}/>
-                </div>
-            </PageContainer>
-        )
-    }
-
-    render_old() {
-        if(!this.props.geoid) {
-            return <React.Fragment />
-        }
-        return (
-                <PageContainer>
-                    <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
-                     {this.stickyHazards()}
-                        <SideMenu config={config}/>
-                    </div>
-                    <ContentContainer >
-                        <CountyHeroStats {...this.state}/>
-                       
+                <div className='container'>
+                    <Element>
+                        {
+                           this.stickyHazards()
+                        }
                         <h4 className="element-header">{this.getGeoidName()}</h4>
                         <div className="row">
                             <div className="col-8">
                                 <div className="element-wrapper">
                                     <div className="element-box">
 
-                                        
+                                        <div className="element-box-content">
+                                            <Content content_id={`${this.state.geoid}-about`}
+                                                     top={-20} right={0}/>
+                                        </div>
 
                                         <div className="el-chart-w">
                                             <GeographyScoreBarChart
@@ -355,8 +339,9 @@ class Hazards extends React.Component {
                                 }
                             </div>
                         </div>
-                    </ContentContainer>
-                </PageContainer>
+
+                    </Element>
+                </div>
             ) 
         
     }

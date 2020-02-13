@@ -8,6 +8,7 @@ import { fnum } from "utils/sheldusUtils"
 import get from "lodash.get";
 
 import TableBox from 'components/light-admin/tables/TableBox3'
+import Table from 'components/light-admin/tables/Table'
 
 class NfipTable extends React.Component {
 
@@ -37,14 +38,34 @@ class NfipTable extends React.Component {
                 "total claims": graph.total_losses,
                 //"closed losses": graph.closed_losses,
                 //"open losses": graph.open_losses,
-                "cwop claims": graph.cwop_losses,
-                "total payments": graph.total_payments
+                "paid claims": (+graph.total_losses - +graph.cwop_losses),
+                "total payments": fnum(graph.total_payments)
             })
         })
         return {
             data: data.sort((a, b) => b["total payments"] - a["total payments"]),
-            columns: [label, "total claims",/* "closed losses", "open losses", */"cwop claims", "total payments"]
-        };
+            columns: [ 
+                {
+                    Header: label, 
+                    accessor: label
+                },
+                {
+                    Header: 'total claims', 
+                    accessor: 'total claims',
+                    align: 'center'
+                },
+                {
+                    Header: 'paid claims', 
+                    accessor: 'paid claims',
+                    align: 'center'
+                },
+                {
+                    Header: 'total payments', 
+                    accessor: 'total payments',
+                    align: 'center'
+                }
+            ]
+        }
     }
 
     formatName(name, geoid){
@@ -52,7 +73,7 @@ class NfipTable extends React.Component {
             geoid.length === 5 ? 'County' :
                 geoid.length === 10 ? 'Town' :
                     geoid.length === 11 ? 'Tract' : '';
-        if (name.toLowerCase().includes(jurisdiction.toLowerCase())){
+        if (name && name.toLowerCase().includes(jurisdiction.toLowerCase())){
             name = name.replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
         }else{
             name  += ' (' + jurisdiction + ')';
@@ -65,6 +86,8 @@ class NfipTable extends React.Component {
     render() {
         try {
             return (
+                <div>
+                {/* 
                 <TableBox { ...this.processData() }
                           pageSize={ 100 }
                           tableScroll={true}
@@ -78,6 +101,12 @@ class NfipTable extends React.Component {
                               "cwop claims": ",d",
                               "total payments": fnum
                           } }/>
+                */}
+                <Table  { ...this.processData() } 
+                    height={'60vh'}
+                />
+                
+                </div>
             )
         }
         catch (e) {

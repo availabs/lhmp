@@ -165,6 +165,7 @@ class TractLayer extends MapLayer {
 
     receiveData(map, data) {
         // console.log('in recData: analysis')
+        if(!this.data) {return }
         let keyDomain = this.data;
         let maxDamage = Math.max(...Object.keys(keyDomain)
             .filter(f => f.length === 11)

@@ -277,8 +277,8 @@ const tractLayer = new TractLayer("Hazard Events Layer", {
             'source-layer': 'tracts',
             'type': 'fill',
             'paint': {
-                'fill-color': 'rgba(9, 98, 186, 0.2)',
-                'fill-outline-color': 'rgba(9, 98, 186, 0.5)'
+                'fill-color': 'rgba(9, 98, 186, 0.0)',
+                'fill-outline-color': 'rgba(9, 98, 186, 0.0)'
             }
         },
         {

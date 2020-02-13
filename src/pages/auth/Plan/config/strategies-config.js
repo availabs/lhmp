@@ -1,7 +1,7 @@
 const config = {
     Capabilities : [
         {
-            title: ' Overview',
+            title: 'Overview',
             requirement: 'Req-C-1A',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -16,7 +16,43 @@ const config = {
         {
             title: 'Capabilities Table',
             requirement: 'Req-C-1A-1',
-            type: 'table',
+            type: 'formTable',
+            fontSize: '0.70em',
+            height: '600px',
+            align: 'full',
+            config: {
+                type: 'capabilities',
+                //filters:[{column:'capability_category',value:'planning and regulatory'}],
+                columns : [
+                    {
+                        Header: 'Name',
+                        accessor: 'capability_name'
+                    },
+                    {
+                        Header: 'category',
+                        accessor: 'capability_category'
+                    },
+                    {
+                        Header: 'type',
+                        accessor: 'capability_type'
+                    },
+                    
+                    {
+                        Header: 'adopting authority',
+                        accessor: 'adopting_authority'
+                    },
+                    {
+                        Header: 'responsible authority',
+                        accessor: 'responsible_authority'
+                    },
+                    {
+                        Header: 'Link',
+                        accessor: 'upload',
+                        width: 50
+                    },
+                    
+                ]
+            },
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
                 ' to expand on and improve these existing policies and program ' +
                 ' a. Examples: Staff involved local planning activities,' +
