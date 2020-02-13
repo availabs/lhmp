@@ -17,7 +17,8 @@ class ScenarioTable extends React.Component {
             riskZoneId : '',
             scenario:'',
             map_source:'',
-            activeToggle:''
+            activeToggle:'',
+            showTotalLoss:''
         }
         this.handleChange = this.handleChange.bind(this)
     }
@@ -67,7 +68,7 @@ class ScenarioTable extends React.Component {
                 this.setState((currentState) =>({
                     visibility: !currentState.visibility,
                     scenario : d.scenario,
-                    map_source:d.visibility
+                    map_source:d.visibility,
                 }))
 
             }
@@ -138,6 +139,12 @@ class ScenarioTable extends React.Component {
         let resultData = this.processTableData();
         let total_loss = this.processTotalLoss()
         let annual_loss = this.processAnnualLoss();
+        let loss_scenario= ''
+        if(this.state.scenario === '2'){
+            loss_scenario = this.props.activePlan + "_riverine_500"
+        }else if(this.state.scenario === '3'){
+            loss_scenario = this.props.activePlan + "_dfirm_500"
+        }
         return (
             <div>
                 <table className='table table-sm table-hover'>
@@ -157,52 +164,58 @@ class ScenarioTable extends React.Component {
                                     <tr>
                                         <td>{item.scenario}</td>
                                         <td id ='visibility_column'>
-                                            <button className="btn btn-rounded"
-                                                    type="button"
-                                                    style={{padding:'0px'}}>
-                                                <div id = 'visibility'
-                                                     className={this.state.activeToggle === item.id ? "os-toggler-w on" : "os-toggler-w"}
-                                                     style={this.state.activeToggle === item.id || this.state.activeToggle === '' ? {}:{pointerEvents:'none'}}
-                                                >
-                                                    <div className="os-toggler-i" >
-                                                        <div className="os-toggler-pill"
-                                                             id = {item.id}
-                                                             onClick={(e) =>{
-                                                                 this.setState({
-                                                                     activeToggle:this.state.activeToggle === item.id ? '':item.id
-                                                                 })
-                                                                 this.handleChange(e)
-                                                             }}
-                                                             >
-                                                            {
-                                                                this.state.visibility === true?
-                                                                    this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
-                                                                    :
-                                                                    this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,this.state.scenario)
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </button>
+                                        <input
+                                            style={{padding:'0px'}}
+                                            id={item.id}
+                                            checked={this.state.activeToggle === item.id}
+                                            type="radio"
+                                            value={item.scenario}
+                                            onChange={(e) =>{
+                                                this.setState({
+                                                    activeToggle:this.state.activeToggle === item.id ? '':item.id
+                                                })
+                                                this.handleChange(e)}
+                                            }/>
                                         </td>
                                         <td>{item.total_loss}</td>
                                         <td>{item.annual_loss}</td>
                                     </tr>
-
                                 )
                             })
+
                         :
                             null
                     }
+                    {
+                        this.state.activeToggle !== ''?
+                            this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
+                            :
+                            this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,this.state.scenario)
+                    }
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <td><h6>Total Loss:</h6></td>
-                        <td></td>
-                        <td><h6>{fnum(total_loss)}</h6></td>
-                        <td><h6>{fnum(annual_loss)}</h6></td>
-                    </tr>
-                    </tfoot>
+                    {this.state.activeToggle !== '' ?
+                            <tfoot>
+                            <tr>
+                                <td><h6>Total Loss:</h6></td>
+                                <td>
+                                    <input
+                                        style={{padding:'0px'}}
+                                        id='on'
+                                        checked={this.state.activeToggle === '1'}
+                                        type="radio"
+                                        value='loss'
+                                        onChange={(e) =>{
+                                            this.setState({
+                                                activeToggle:this.state.activeToggle === '1' ? '':'1'
+                                            })
+                                            this.handleChange(e)}
+                                        }/>
+                                </td>
+                                <td><h6>{fnum(total_loss)}</h6></td>
+                                <td><h6>{fnum(annual_loss)}</h6></td>
+                            </tr>
+                            </tfoot>
+                        :null}
                 </table>
             </div>
         )
@@ -227,3 +240,61 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ScenarioTable))
+
+/*
+<button className="btn btn-rounded"
+                                                    type="button"
+                                                    style={{padding:'0px'}}>
+                                                <div id = 'visibility'
+                                                     className={this.state.activeToggle === item.id ? "os-toggler-w on" : "os-toggler-w"}
+                                                     style={this.state.activeToggle === item.id || this.state.activeToggle === '' ? {}:{pointerEvents:'none'}}
+                                                >
+                                                    <div className="os-toggler-i" >
+                                                        <div className="os-toggler-pill"
+                                                             id = {item.id}
+                                                             onClick={(e) =>{
+                                                                 this.setState({
+                                                                     activeToggle:this.state.activeToggle === item.id ? '':item.id,
+                                                                     showTotalLoss : this.state.activeToggle === item.id ? '' : 'on'
+                                                                 })
+                                                                 this.handleChange(e)
+                                                             }}
+                                                             >
+                                                            {
+                                                                this.state.visibility === true?
+                                                                    this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
+                                                                    :
+                                                                    this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,this.state.scenario)
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </button>
+ */
+
+/*
+<button className="btn btn-rounded"
+                                            type="button"
+                                            style={{padding:'0px'}}>
+                                        <div id = 'visibility'
+                                             className={this.state.showTotalLoss === 'on' ? "os-toggler-w on" : "os-toggler-w"}>
+                                            <div className="os-toggler-i" >
+                                                <div className="os-toggler-pill"
+                                                     id = 'on'
+                                                     onClick={(e) =>{
+                                                         this.setState({
+                                                             showTotalLoss:this.state.showTotalLoss === 'on' ? '':'on'
+                                                         })
+                                                         this.handleChange(e)
+                                                     }}>
+                                                    {
+                                                        this.state.visibility === true?
+                                                            this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,loss_scenario)
+                                                            :
+                                                            this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,loss_scenario)
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </button>
+ */

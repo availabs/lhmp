@@ -31,6 +31,14 @@ class ScenarioControl extends React.Component {
             })
     }
 
+    componentDidMount(){
+        this.setState({
+            scenario_id: '2'
+        })
+    }
+
+
+
     componentDidUpdate(oldProps,oldState){
         if(oldState.scenario_id !== this.state.scenario_id){
             this.renderScenarioTable()
@@ -87,11 +95,21 @@ class ScenarioControl extends React.Component {
                 <div>
                     <select className="form-control justify-content-sm-end"
                             id="scenario_id"
-                            value = {this.state.scenario_id}
+                            value = {this.state.scenario_id || ''}
                             onChange={this.handleChange}>
                         <option value="None">---Select Value---</option>
                         {scenarios_list.map(list =>{
-                            return (<option value={list.id}>{list.name}</option>)
+                            if(list.id === '2'){
+                                return (<option
+                                    value={list.id}
+                                    selected = "selected">{list.name}
+                                </option>)
+                            }else{
+                                return (<option
+                                    value={list.id}>{list.name}
+                                </option>)
+                            }
+
                         })}
                     </select>
                     <div>

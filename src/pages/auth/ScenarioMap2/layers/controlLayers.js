@@ -8,6 +8,7 @@ import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import { getColorRange } from "constants/color-ranges";
+import activeLayerConfig from 'pages/auth/ScenarioMap2/layers/activeLayerConfig.js'
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -17,19 +18,21 @@ const COLORS = getColorRange(12, "Set3");
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
 let layerToShow = ''
+let activeLayers = []
 const DynamicLayerFactory = (callingLayer, ...args) => {
     const lineColor = COLORS[UNIQUE % 12],
         sourceId = getUniqueId(),
         layerId = getUniqueId();
-    if(layerToShow === 'scenario'){
-        return new ScenarioLayer('scenario', ScenarioOptions())
-    }
-    else if(layerToShow === 'zone'){
-        return new ZoneLayer('zone',ZoneOptions())
-    }
-    else if(layerToShow === 'projects'){
-        return new ProjectLayer('projects',ProjectOptions())
-    }
+        if(layerToShow === 'scenario'){
+            return new ScenarioLayer('scenario', ScenarioOptions())
+        }
+        else if(layerToShow === 'zone'){
+            return new ZoneLayer('zone',ZoneOptions())
+        }
+        else if(layerToShow === 'projects'){
+            return new ProjectLayer('projects',ProjectOptions())
+        }
+
 
 }
 
@@ -90,10 +93,12 @@ class ControlLayers extends MapLayer {
                         "hsl(211, 83%, 31%)",
                         83,
                         "hsl(211, 83%, 31%)"
-                    ]
+                    ],
+                    'line-opacity':0.6
                 },
 
             })
+            this.map.moveLayer('riverine_layer','parcels')
         }
         if (source && layerName.includes("dfirm")) {
             if (this.map.getSource('dfirm')) {
@@ -115,6 +120,8 @@ class ControlLayers extends MapLayer {
                 },
 
             })
+            this.map.moveLayer('parcels','dfirm_layer')
+
         }
     }
 
@@ -156,7 +163,6 @@ class ControlLayers extends MapLayer {
                 DynamicLayerFactory
             ]);
         }else {
-
             layerToShow = layerName
             this.doAction([
                 "addDynamicLayer",
@@ -164,10 +170,24 @@ class ControlLayers extends MapLayer {
                 // callingLayer => DynamicLayerFactory(callingLayer, "ARG 1", "ARG 2", "ARG 3")
                 // this form of adding a dynamic layer passes arguments from the calling component
             ]);
+
             this.modes.push(layerName)
         }
 
     }
+
+    /*
+    onLoadActiveLayers(layerNames){
+        activeLayers = layerNames
+
+        this.doAction([
+            "addDynamicLayer",
+            DynamicLayerFactory,
+            // callingLayer => DynamicLayerFactory(callingLayer, "ARG 1", "ARG 2", "ARG 3")
+            // this form of adding a dynamic layer passes arguments from the calling component
+        ]);
+    }
+     */
 
 
 }
