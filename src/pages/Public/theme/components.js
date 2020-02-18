@@ -136,7 +136,7 @@ export const PageContainer = styled.div`
 export const PageHeader = styled.h4`
 	padding-top: 50px;
 	text-transform: uppercase;
-    color: ${LightFontColor};
+    color: ${mainFontColor};
 `
 
 export const SectionHeader = styled.h2`

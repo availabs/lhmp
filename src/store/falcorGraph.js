@@ -4,6 +4,10 @@ import HttpDataSource from 'falcor-http-datasource'
 
 import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
+import throttle from "lodash.throttle"
+
+
+const Promise = require('bluebird')
 
 
 export let host =  'http://localhost:4444/'
@@ -66,10 +70,13 @@ export const falcorGraph = (function () {
   return model
 })()
 
+
+const NO_OP = () => {}
+
 export const chunker = (values, request, options = {}) => {
   const {
     placeholder = "replace_me",
-    chunkSize = 50
+    chunkSize = 200
   } = options;
 
   const requests = [];
@@ -77,44 +84,110 @@ export const chunker = (values, request, options = {}) => {
   for (let n = 0; n < values.length; n += chunkSize) {
     requests.push(request.map(r => r === placeholder ? values.slice(n, n + chunkSize) : r));
   }
-
-  return requests;
+  return requests.length ? requests : [request];
 }
+
 export const falcorChunker = (values, request, options = {}) => {
+  if (request !== null) {
+    values = [values, request];
+  }
   const {
     falcor = falcorGraph,
+    callback = NO_OP,
+    concurrency = 8,
     ...rest
   } = options;
 
-  return chunker(values, request, rest).reduce((a, c) => a.then(() => falcor.get(c)), Promise.resolve());
+  let curr = 0, total = 0;
+
+  const chunks = [];
+
+  const throttledCB = throttle(callback, 50);
+
+  values.forEach(([v, r]) => {
+    const temp = chunker(v, r, rest);
+    total += temp.length;
+    chunks.push(...temp);
+  })
+
+  throttledCB(curr, total);
+
+  return Promise
+    .map(chunks, c =>
+       falcor.get(c)
+        // .then(() => new Promise(r => setTimeout(r, 250)))
+        .then(() => {
+          ++curr;
+          throttledCB(curr, total);
+        })
+    , { concurrency })
+
+  // return chunks
+  //   .reduce((a, c) =>
+  //     a.then(() => falcor.get(c))
+  //       .then(() => callback(++curr, total))
+  //   , Promise.resolve());
 }
 
-export const falcorChunkerWithUpdate = (...args) =>
-  falcorChunker(...args)
-    .then(() => store.dispatch(update(falcorGraph.getCache())));
+export const falcorChunkerWithUpdate = (values, request, options = {}) =>
+  falcorChunker(values, request, options)
+    .then(() => {
+      const {
+        falcor = falcorGraph
+      } = options;
+      store.dispatch(update(falcor.getCache()));
+    });
 
-export const falcorChunkerNice = (request, options = {}) => {
+const getArgs = args =>
+  args.reduce((a, c) => {
+    if (Array.isArray(c)) {
+      a[0].push(c);
+    }
+    else {
+      a[1] = c;
+    }
+    return a;
+  }, [[], {}])
+
+export const falcorChunkerNice = (...args) => {
+  const [requests, options] = getArgs(args);
   const {
     index = null,
     placeholder = "replace_me",
     ...rest
   } = options;
 
-  let values = [], found = false;
+  // let values = [], found = false;
 
-  const replace = request.map((r, i) => {
-    if (Array.isArray(r) && !found && (index === null || index === i)) {
-      found = true;
-      values = r;
-      return placeholder;
-    }
-    return r;
-  })
-  return falcorChunker(values, replace, { ...rest, placeholder });
+  const reduced = requests.reduce((a, c) => {
+    let values = [], found = false;
+
+    const replace = c.map((r, i) => {
+      if (Array.isArray(r) && !found && (index === null || index === i)) {
+        found = true;
+        values = r;
+        return placeholder;
+      }
+      return r;
+    })
+    a.push([values, replace])
+    return a;
+  }, [])
+
+  return falcorChunker(reduced, null, { ...rest, placeholder });
 }
-export const falcorChunkerNiceWithUpdate = (...args) =>
-  falcorChunkerNice(...args)
-    .then(() => store.dispatch(update(falcorGraph.getCache())));
+
+export const falcorChunkerNiceWithUpdate = (...args) =>{
+  console.log('args', args)
+  return falcorChunkerNice(...args)
+    .then(() => {
+      const [, options] = getArgs(args);
+      const {
+        falcor = falcorGraph
+      } = options;
+      store.dispatch(update(falcor.getCache()));
+    });
+}
 
 window.addEventListener('beforeunload', function (e) {
   var getCache = falcorGraph.getCache()

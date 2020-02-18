@@ -72,7 +72,7 @@ class About extends React.Component {
                 <div style={{marginLeft: 220}}>
                     <HeaderImageContainer>
                         <div style={{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.4)', padding: 50}}>
-                            <PageHeader>Planning Process</PageHeader>
+                            <PageHeader style={{color: '#efefef'}}>Planning Process</PageHeader>
                             {
                                 /*
                                 <span style={{float:'right'}}>

@@ -48,7 +48,7 @@ class PlanningTeam extends Component {
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
         
         return this.props.falcor.get(
-            ['roles', 'byId', [93], COLS],
+            ['roles', 'byId', [112, 111], COLS],
             ['rolesmeta', 'roles', ['field']],
             ['geo', parseInt(this.props.activeCousubid), 'name']
         )
@@ -61,38 +61,48 @@ class PlanningTeam extends Component {
     renderMainTable() {
         let roles = Object.values(this.props.roles)
         console.log('renderMainTable', this.props.rolesMeta)
-        return  (
-            <table className="table">
-                <tbody style={{fontSize: '1.5em'}}>
-                {roles.map((data,i) => {
-                    return (
-                        <Fragment key={i}>
-                            <tr>
-                                <td colSpan='2'>{get(data, `contact_name.value`, 'Demo contact name')}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                 {/*get(data, `contact_title_role.value`, 'Demo role title')
-                                    get role name from role meta
-                                */}
-                                 Planner
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{get(data, `contact_agency.value`, 'Demo agency')}</td>
-                                <td>{get(data, `contact_department.value`, 'Demo Department')}</td>
-                            </tr>
-                            <tr>
-                                <td colSpan='2'>{get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}</td>
+         
+        return roles.map((data,i) => {
+            return (
+                 <Feature className={`col-sm-4 no-gutters`} highlight={true} style={{margin: 20}}>
                                 
-                            </tr>
-                        </Fragment>
-                    )
-                })
-                }
-                </tbody>
-            </table>
-        )
+                        
+                                <FeatureDescription>
+                                     <FeatureName>Mitigation Planner</FeatureName>
+                                        <div className='table-responsive'>
+                <table className="table">
+                <tbody style={{fontSize: '1.5em'}}>
+                <Fragment key={i}>
+                    <tr>
+                        <td colSpan='2'>{get(data, `contact_name.value`, 'Demo contact name')}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                         {/*get(data, `contact_title_role.value`, 'Demo role title')
+                            get role name from role meta
+                        */}
+                         Planner
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{get(data, `contact_agency.value`, 'Demo agency')}</td>
+                        <td>{get(data, `contact_department.value`, 'Demo Department')}</td>
+                    </tr>
+                    <tr>
+                        <td colSpan='2'>{get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}</td>
+                        
+                    </tr>
+                    </Fragment>
+                     </tbody>
+                </table>
+                   </div>
+                            </FeatureDescription>
+                            </Feature>
+            )
+        })
+                
+           
+        
     }
 
     render() {
@@ -107,16 +117,9 @@ class PlanningTeam extends Component {
                 </div>
                 <VerticalAlign>
                     <div className = 'd-flex justify-content-center'>
-                            <Feature className={`col-sm-4 no-gutters`} highlight={true}>
-                                
-                        
-                                <FeatureDescription>
-                                     <FeatureName>Mitigation Planner</FeatureName>
-                                        <div className='table-responsive'>
+                           
                                     {this.renderMainTable()}
-                                    </div>
-                            </FeatureDescription>
-                            </Feature>
+                                 
                     </div>
                 </VerticalAlign>
                 

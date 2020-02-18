@@ -501,10 +501,10 @@ export const ScenarioOptions =  (options = {}) => {
                         ["Owner Type", ["owner_type"],d => getOwnerTypeName(falcorGraph.getCache(), d)],
                         ["Land Use", ["prop_class"], d => getPropClassName(falcorGraph.getCache(), d)],
                         ["500 year Loss Value",['hazard_loss_dollars']],
-                       ["100 year Loss Value",['hazard_loss_dollars']],
-                       ["50 year Loss Value",['hazard_loss_dollars']],
-                       ["25 year Loss Value",['hazard_loss_dollars']],
-                       ["Expected Annual Flood Loss",['hazard_loss_dollars']]
+                        ["100 year Loss Value",['hazard_loss_dollars']],
+                        ["50 year Loss Value",['hazard_loss_dollars']],
+                        ["25 year Loss Value",['hazard_loss_dollars']],
+                        ["Expected Annual Flood Loss",['hazard_loss_dollars']]
                     ];
 
                 scenario_graph.value.forEach(building =>{

@@ -68,7 +68,7 @@ class ScenarioTable extends React.Component {
                 this.setState((currentState) =>({
                     visibility: !currentState.visibility,
                     scenario : d.scenario,
-                    map_source:d.visibility,
+                    map_source: d.visibility,
                 }))
 
             }
@@ -88,8 +88,8 @@ class ScenarioTable extends React.Component {
                         'id':graph[item].risk_zone_id || '',
                         'scenario':graph[item].table_name || '',
                         'visibility':graph[item].map_source || '',
-                        'total_loss':fnum(this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value) || '',
-                        'annual_loss':fnum(((graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value).toString()) || ''
+                        'total_loss':fnum(get(this.props.riskData,`[${graph[item].risk_zone_id}].sum.total_loss.value`, '')),
+                        'annual_loss':fnum(((graph[item].annual_occurance/100) * get(this.props.riskData, `[${graph[item].risk_zone_id}].sum.total_loss.value`, 0)).toString()) || ''
                     })
                 }
             });
@@ -110,8 +110,8 @@ class ScenarioTable extends React.Component {
             let annual_loss = 0
             Object.keys(graph).forEach(item=>{
                 if(graph[item].risk_zone_id && this.state.risk_zone_ids.includes(graph[item].risk_zone_id)){
-                    total_loss += parseFloat(this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value)
-                    annual_loss += (graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value
+                    total_loss += parseFloat(get(this.props.riskData, `[${graph[item].risk_zone_id}].sum.total_loss.value`,0))
+                    annual_loss += (graph[item].annual_occurance/100) * get(this.props.riskData, `[${graph[item].risk_zone_id}].sum.total_loss.value`,0)
                 }
 
             })
@@ -125,7 +125,7 @@ class ScenarioTable extends React.Component {
             let annual_loss = 0
             Object.keys(graph).forEach(item=>{
                 if(graph[item].risk_zone_id && this.state.risk_zone_ids.includes(graph[item].risk_zone_id)){
-                    annual_loss += (graph[item].annual_occurance/100) * this.props.riskData[graph[item].risk_zone_id].sum.total_loss.value
+                    annual_loss += (graph[item].annual_occurance/100) * get(this.props.riskData, `[${graph[item].risk_zone_id}].sum.total_loss.value`,0)
                 }
 
             })

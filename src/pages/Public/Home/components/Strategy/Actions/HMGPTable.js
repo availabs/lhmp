@@ -85,11 +85,12 @@ class HMAP_Table extends React.Component {
         try {
             return (
                 <div>
-                { 
-                    this.processData() ? 
-                    (<Table { ...this.processData() } />)
-                        : (<h4>Loading Capability Data ...</h4>)
-                }
+                    <h4> FEMA Funded Hazard Mitigation Assistance Projects</h4>
+                    { 
+                        this.processData() ? 
+                        (<Table { ...this.processData() } />)
+                            : (<h4>Loading Capability Data ...</h4>)
+                    }
                 </div>
                
             )
