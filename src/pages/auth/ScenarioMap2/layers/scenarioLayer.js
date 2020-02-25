@@ -524,18 +524,35 @@ export const ScenarioOptions =  (options = {}) => {
                     }
                 })
                 if (data.length) {
+                    let value_500 = '',
+                        value_100 = '',
+                        value_50='',
+                        value_25= '';
                     data.push(["Building ID", id]);
                     data.forEach(d =>{
                         if(d[0] === '500 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 0.2/100).toString())
+                            value_500 = d[1]
+                            d[1] = fnum(d[1])
                         }if(d[0] === '100 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 1/100).toString())
+                            value_100 = d[1]
+                            d[1] = fnum(d[1])
                         }if(d[0] === '50 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 2/100).toString())
+                            value_50 = d[1]
+                            d[1] = fnum(d[1])
                         }if(d[0] === '25 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 4/100).toString())
+                            value_25 = d[1]
+                            d[1] = fnum(d[1])
+
+                        }if(d[0] === 'Expected Annual Flood Loss'){
+                            d[1] = fnum(
+                                ((parseFloat(value_500) * (0.2/100))
+                                + (parseFloat(value_100) * (1/100))
+                                + (parseFloat(value_50) * (2/100))
+                                + (parseFloat(value_25) * (4/100))).toString()
+                            )
+
                         }
-                    })
+                    });
                     return data;
                 }else{
                     data.push(["Building ID", id]);
