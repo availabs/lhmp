@@ -145,6 +145,22 @@ function Table({ columns, data, tableClass, height }) {
     
   )
 
+    console.log('usetable',
+        'params', columns,
+        data,
+        defaultColumn,
+        'res',
+        useTable(
+        {
+            columns,
+            data,
+            defaultColumn,
+        },
+        useResizeColumns,
+        useFlexLayout,
+        useRowSelect,
+
+    ))
   return (
     <div {...getTableProps()} className={tableClass ? tableClass : 'table table-lightborder table-hover'}>
       <div>
@@ -172,13 +188,15 @@ function Table({ columns, data, tableClass, height }) {
           </div>
         ))}
       </div>
-      <div {...getTableBodyProps()} className="tbody" style={{height: height ? height : 'auto'}}>
+      <div {...getTableBodyProps()} className="tbody" style={{height: height ? height : 'auto', display: 'inline-block'}}>
         {rows.map((row, i) => {
           prepareRow(row)
+            console.log('prepareRow(row)',prepareRow(row), row.getRowProps(), getTableBodyProps())
           return (
             <div {...row.getRowProps()} className="tr">
               {row.cells.map(cell => {
-                return (
+                  console.log('cell.getCellProps(cellProps)',cell.getCellProps(cellProps))
+                  return (
                   <div {...cell.getCellProps(cellProps)} className="td">
                     {cell.render('Cell')}
                   </div>
