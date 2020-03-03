@@ -79,7 +79,7 @@ class BuildingByLandUseTable extends React.Component{
             BuildingByLandUseConfig.map((config)=>{
                 Object.keys(buildingLandUseData).forEach((data)=>{
                     if(data === config.value){
-                        buildingLandUseNames.push(config.name)
+                        buildingLandUseNames.push(config)
                     }
                 })
             })
@@ -101,7 +101,13 @@ class BuildingByLandUseTable extends React.Component{
                                         Object.keys(buildingLandUseData).map((item,i) =>{
                                             return (
                                                 <tr>
-                                                    <td>{buildingLandUseNames[i]}</td>
+                                                    {
+                                                        buildingLandUseNames[i].value % 100 === 0 ?
+                                                            <td onClick={() => {this.props.updateFilter([buildingLandUseNames[i].value])}}>
+                                                                <a href={'#'}>{buildingLandUseNames[i].name}</a>
+                                                            </td> :
+                                                            <td>{buildingLandUseNames[i].name}</td>
+                                                    }
                                                     <td>{buildingLandUseData[item].sum.count.value || 0}</td>
                                                     <td>${numeral(buildingLandUseData[item].sum.replacement_value.value).format('0,0.a') || 0}</td>
                                                 </tr>

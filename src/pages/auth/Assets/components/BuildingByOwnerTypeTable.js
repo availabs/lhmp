@@ -29,6 +29,8 @@ class BuildingByOwnerTypeTable extends React.Component{
 
     buildingTable(){
         let BuildingTypeData = [];
+        totalBuildings = 0;
+        totalBuildingsValue = 0;
         let geoid = this.props.geoid.map((geoid) => geoid);
         if(this.props.data !== undefined && this.props.data[geoid] !== undefined && this.props.buildingType)
         {
@@ -40,8 +42,8 @@ class BuildingByOwnerTypeTable extends React.Component{
                         'replacement_value':numeral(parseInt(graph[item].sum.replacement_value.value)).format('0,0.a') ||0,
                         'count':numeral(parseInt(graph[item].sum.count.value)).format('0,0.a') || 0
                     })
-                    totalBuildings += parseInt(graph[item].sum.replacement_value.value) || 0;
-                    totalBuildingsValue += parseInt(graph[item].sum.count.value) || 0;
+                    totalBuildings += parseInt(graph[item].sum.count.value) || 0;
+                    totalBuildingsValue += parseInt(graph[item].sum.replacement_value.value) || 0;
                 })
             }
         }
@@ -75,8 +77,10 @@ class BuildingByOwnerTypeTable extends React.Component{
                                             <td>
                                                 <div className='el-legend'>
                                                     <div className='legend-value-w'>
-                                                        <div className='legend-pin' style={{'background-color': colors[i]}}/>
-                                                        <div className='legend-value'>&nbsp;{data.owner}</div>
+                                                        <div className='legend-pin' style={{'background-color': colors[i]}}/>&nbsp;
+                                                        <a href={'#'} className='legend-value' onClick={() => this.props.updateOwner({target:{id:'ownerType', value:data.owner}})}>
+                                                            {data.owner}
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </td>

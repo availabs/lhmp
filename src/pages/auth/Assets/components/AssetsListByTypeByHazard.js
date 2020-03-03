@@ -81,7 +81,7 @@ class AssetsListByTypeByHazard extends React.Component{
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types][this.props.match.params.hazardIds].byIndex;
                     Object.keys(graph).forEach(item =>{
-                        if (graph[item]['$__path']){
+                        if (graph[item] && graph[item]['$__path']){
                             data.push({
                                 'address':graph[item].address,
                                 'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),

@@ -104,11 +104,12 @@ class AssetsByTypeIndex extends React.Component {
     }
 
     handleChange(e) {
-        console.log('---',e.target.id,e.target.value)
+        console.log('---',e, e.target.id,e.target.value)
         this.setState({...this.state,[e.target.id]: e.target.value});
     };
 
     handleMultiSelectFilterChange(e){
+        console.log('setting in state', e)
         let newFilter = this.state.filter
         newFilter.value = e;
         this.setState({filter:newFilter})
@@ -169,7 +170,7 @@ class AssetsByTypeIndex extends React.Component {
     renderOwnerTypeMenu(){
         return(
             <div>
-                <select id='owner' onChange={this.handleChange} value={this.state.ownerType}>
+                <select id='ownerType' onChange={this.handleChange} value={this.state.ownerType}>
                     <option default>--Select Owner Type--</option>
                     {
                         buildingOwnerType.map((owner) =>{
@@ -218,13 +219,14 @@ class AssetsByTypeIndex extends React.Component {
                             <div className='element-wrapper'>
                                 <div className='element-box'>
                                     <h4>Buildings By Owner Type</h4>
+                                    {console.log('owner type', this.state)}
                                     {this.renderOwnerTypeMenu()}
                                     {this.state.geoid ?
                                         <AssetsPieChart geoid={[this.state.geoid]} replacement_value={true}/>
                                         :''
                                     }
                                     {this.state.geoid ?
-                                        <BuildingByOwnerTypeTable geoid={[this.state.geoid]} buildingType={true}/>
+                                        <BuildingByOwnerTypeTable geoid={[this.state.geoid]} updateOwner={this.handleChange} buildingType={true}/>
                                         : ''
                                     }
                                 </div>
@@ -238,9 +240,11 @@ class AssetsByTypeIndex extends React.Component {
                                             <BuildingByLandUsePieChart geoid={[this.state.geoid]}/>
                                             : ''
                                     }
+                                    {console.log('this.state.filter', this.state.filter)}
                                     {
                                         this.state.geoid ?
-                                            <BuildingByLandUseTable geoid={[this.state.geoid]} filters={this.state.filter.value}/>
+                                            <BuildingByLandUseTable geoid={[this.state.geoid]} filters={this.state.filter.value}
+                                                                    updateFilter={this.handleMultiSelectFilterChange}/>
                                             : ''
                                     }
                                 </div>
