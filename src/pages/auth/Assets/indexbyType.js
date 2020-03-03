@@ -204,10 +204,8 @@ class AssetsByTypeIndex extends React.Component {
                 <Element>
                     <div>
                         <ul className="nav nav-tabs upper">
-                            <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                        href="/assets">Overview</a></li>
-                            <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                        href="/assets/byType">By Type</a></li>
+                            <li className="nav-item"><a aria-expanded="false" className="nav-link active" data-toggle="tab"
+                                                        href="/assets">By Type</a></li>
                             <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
                                                         href="/assets/search">Search</a></li>
                         </ul>
@@ -219,12 +217,11 @@ class AssetsByTypeIndex extends React.Component {
                             <div className='element-wrapper'>
                                 <div className='element-box'>
                                     <h4>Buildings By Owner Type</h4>
-                                    {console.log('owner type', this.state)}
                                     {this.renderOwnerTypeMenu()}
-                                    {this.state.geoid ?
+                                    {/*{this.state.geoid ?
                                         <AssetsPieChart geoid={[this.state.geoid]} replacement_value={true}/>
                                         :''
-                                    }
+                                    }*/}
                                     {this.state.geoid ?
                                         <BuildingByOwnerTypeTable geoid={[this.state.geoid]} updateOwner={this.handleChange} buildingType={true}/>
                                         : ''
@@ -235,12 +232,11 @@ class AssetsByTypeIndex extends React.Component {
                                 <div className='element-box'>
                                     <h4>Buildings By Land Use</h4>
                                     {this.renderLandUseMenu()}
-                                    {
+                                    {/*{
                                         this.state.geoid ?
                                             <BuildingByLandUsePieChart geoid={[this.state.geoid]}/>
                                             : ''
-                                    }
-                                    {console.log('this.state.filter', this.state.filter)}
+                                    }*/}
                                     {
                                         this.state.geoid ?
                                             <BuildingByLandUseTable geoid={[this.state.geoid]} filters={this.state.filter.value}
@@ -292,11 +288,11 @@ const mapDispatchToProps = ({
 
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/assets/byType',
+    path: '/assets/',
     exact: true,
     mainNav: false,
     breadcrumbs: [
-        { name: 'Home', path: '/' },
+        { name: 'Home', path: '/admin' },
         { name: 'Assets', path: '/assets' }
     ],
     menuSettings: {

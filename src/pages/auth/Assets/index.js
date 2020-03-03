@@ -109,9 +109,7 @@ class AssetsIndex extends React.Component {
             <div>
             <ul className="nav nav-tabs upper">
               <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                          href="/assets">Overview</a></li>
-              <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                          href="/assets/byType">By Type</a></li>
+                                          href="/assets/">By Type</a></li>
               <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
                                           href="/assets/search">Search</a></li>
             </ul>
@@ -167,7 +165,7 @@ const mapDispatchToProps = ({
 
 export default [{
   icon: 'os-icon-pencil-2',
-  path: '/assets',
+  path: '/assets/Overview',
   exact: true,
   mainNav: false,
   breadcrumbs: [

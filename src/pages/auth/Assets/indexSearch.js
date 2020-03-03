@@ -239,10 +239,8 @@ class AssetsBySearch extends React.Component {
                             <div>
                                 <ul className="nav nav-tabs upper">
                                     <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                                href="/assets">Overview</a></li>
-                                    <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                                href="/assets/byType">By Type</a></li>
-                                    <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
+                                                                href="/assets">Assets</a></li>
+                                    <li className="nav-item"><a aria-expanded="false" className="nav-link active" data-toggle="tab"
                                                                 href="/assets/search">Search</a></li>
                                 </ul>
                             </div>
@@ -295,7 +293,7 @@ export default [{
     exact: true,
     mainNav: false,
     breadcrumbs: [
-        { name: 'Home', path: '/' },
+        { name: 'Home', path: '/admin' },
         { name: 'Assets', path: '/assets' }
     ],
     menuSettings: {
