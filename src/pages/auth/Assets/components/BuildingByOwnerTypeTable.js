@@ -247,7 +247,6 @@ class BuildingByOwnerTypeTable extends React.Component{
 }
 
 const mapStateToProps = (state,ownProps) => {
-    //console.log('state',state)
     return {
         isAuthenticated: !!state.user.authed,
         activePlan: state.user.activePlan,

@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom'
 import { reduxFalcor } from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
 import {connect} from "react-redux";
+import {setActiveCousubid} from 'store/modules/user'
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
 import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
+import {header} from "./components/header"
 import BuildingByOwnerTypeTable from 'pages/auth/Assets/components/BuildingByOwnerTypeTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
@@ -85,7 +87,7 @@ class AssetsByTypeIndex extends React.Component {
         super(props)
         this.state = {
             page: '',
-            geoid: this.props.activeGeoid,
+            geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid,
             ownerType: null,
             buildingByLandUse: null,
             filter: {
@@ -103,13 +105,17 @@ class AssetsByTypeIndex extends React.Component {
         this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.activeCousubid !== prevProps.activeCousubid){
+            this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
+        }
+    }
+
     handleChange(e) {
-        console.log('---',e, e.target.id,e.target.value)
         this.setState({...this.state,[e.target.id]: e.target.value});
     };
 
     handleMultiSelectFilterChange(e){
-        console.log('setting in state', e)
         let newFilter = this.state.filter
         newFilter.value = e;
         this.setState({filter:newFilter})
@@ -118,53 +124,18 @@ class AssetsByTypeIndex extends React.Component {
     fetchFalcorDeps(){
         return this.props.falcor.get(
             ['geo',this.props.activeGeoid,['name']],
-            ['geo',this.props.activeGeoid,'cousubs'],
+            //['geo',this.props.activeGeoid,'cousubs'],
+            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
         )
             .then(response  => {
-                return this.props.falcor.get(["geo",response.json.geo[this.props.activeGeoid].cousubs,["name"]])
+                return this.props.falcor.get(
+                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
+                )
             })
-
-
     }
-    renderMenu() {
-        let county = [];
-        let cousubs = [];
-        if(this.props.geoidData !== undefined){
-            Object.keys(this.props.geoidData).forEach((item,i)=>
-            {
-                if (i === 0){
-                    county.push({
-                        name : this.props.geoidData[this.props.activeGeoid].name,
-                        value : item
-                    })
-                }else{
-                    cousubs.push({
-                        name : this.props.geoidData[item].name,
-                        value : item
-                    })
-                }
-
-            })
-
-        }
-        return (
-            <HeaderSelect
-                id='geoid' onChange={this.handleChange}
-                value={this.state.geoid}>
-                {county.map((d,i) =>{
-                    return(
-                        <option key={i} value={d.value}>{d.name}</option>
-                    )
-                })}
-
-                {cousubs.map((ac,ac_i) => {
-                    return (
-                        <option key={ac_i+2} value={ac.value}>{ac.name}</option>
-                    )
-                })}
-            </HeaderSelect>
-        )
-
+    renderMenu(caller) {
+        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoidData,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
+        return header(caller, this.props.geoidData,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)
     }
 
     renderOwnerTypeMenu(){
@@ -202,16 +173,8 @@ class AssetsByTypeIndex extends React.Component {
         return (
             <div className='container'>
                 <Element>
-                    <div>
-                        <ul className="nav nav-tabs upper">
-                            <li className="nav-item"><a aria-expanded="false" className="nav-link active" data-toggle="tab"
-                                                        href="/assets">By Type</a></li>
-                            <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                        href="/assets/search">Search</a></li>
-                        </ul>
-                    </div>
+                    {this.renderMenu('assets')}
                     <br/>
-                    <h4 className="element-header">Assets For {this.renderMenu()}</h4>
                     <div className="row">
                         <div className="col-12">
                             <div className='element-wrapper'>
@@ -277,12 +240,14 @@ const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
     geoidData: get(state.graph,'geo'),
-    activeGeoid: state.user.activeGeoid
+    activeGeoid: state.user.activeGeoid,
+    activeCousubid: state.user.activeCousubid,
 });
 
 const mapDispatchToProps = ({
     //sendSystemMessage
-    authProjects
+    authProjects,
+    setActiveCousubid
 });
 
 
