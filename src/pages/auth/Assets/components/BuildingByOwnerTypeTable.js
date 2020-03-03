@@ -4,11 +4,16 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "../../../../store/falcorGraph";
+import BuildingByOwnerTypeConfig from "./BuildingByOwnerTypeConfig"
 var numeral = require('numeral');
 const buildingOwners = [1,2,3,4,5,6,7,8,9,10,-999];
 const buildingOwnersType = ['Federal','State','County','City','Town','Village','Mixed Government','Private','Public School District or BOCES','Road right of way','Unknown']
 let totalBuildings = 0;
 let totalBuildingsValue = 0;
+let flood_100_totalBuildings = 0;
+let flood_100_totalBuildingsValue = 0;
+let flood_500_totalBuildings = 0;
+let flood_500_totalBuildingsValue = 0;
 class BuildingByOwnerTypeTable extends React.Component{
     constructor(props){
         super(props)
@@ -21,7 +26,10 @@ class BuildingByOwnerTypeTable extends React.Component{
         }
     }
     fetchFalcorDeps(){
-        return this.props.falcor.get(['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,'sum',['count','replacement_value']])
+        return this.props.falcor.get(
+            ['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,'sum',['count','replacement_value']],
+            ['building','byGeoid',this.props.geoid,'ownerType',buildingOwners,['flood_100', 'flood_500'],'sum',['count','replacement_value']]
+        )
             .then(response => {
                 return response
         })
@@ -31,6 +39,10 @@ class BuildingByOwnerTypeTable extends React.Component{
         let BuildingTypeData = [];
         totalBuildings = 0;
         totalBuildingsValue = 0;
+        flood_100_totalBuildings = 0;
+        flood_100_totalBuildingsValue = 0;
+        flood_500_totalBuildings = 0;
+        flood_500_totalBuildingsValue = 0;
         let geoid = this.props.geoid.map((geoid) => geoid);
         if(this.props.data !== undefined && this.props.data[geoid] !== undefined && this.props.buildingType)
         {
@@ -40,10 +52,25 @@ class BuildingByOwnerTypeTable extends React.Component{
                     BuildingTypeData.push({
                         'owner':buildingOwnersType[i],
                         'replacement_value':numeral(parseInt(graph[item].sum.replacement_value.value)).format('0,0.a') ||0,
-                        'count':numeral(parseInt(graph[item].sum.count.value)).format('0,0.a') || 0
+                        'count':numeral(parseInt(graph[item].sum.count.value)).format('0,0.a') || 0,
+
+                        'flood_100_replacement_value':numeral(parseInt(graph[item].flood_100.sum.replacement_value.value)).format('0,0.a') ||0,
+                        'flood_100_count':numeral(parseInt(graph[item].flood_100.sum.count.value)).format('0,0.a') || 0,
+
+                        'flood_500_replacement_value':numeral(parseInt(graph[item].flood_500.sum.replacement_value.value)).format('0,0.a') ||0,
+                        'flood_500_count':numeral(parseInt(graph[item].flood_500.sum.count.value)).format('0,0.a') || 0,
+
+                        link: 'list/ownerType/' +
+                            get(BuildingByOwnerTypeConfig.filter(ownertypeconfig => ownertypeconfig.name === buildingOwnersType[i]).pop(), `value`, null)
                     })
                     totalBuildings += parseInt(graph[item].sum.count.value) || 0;
                     totalBuildingsValue += parseInt(graph[item].sum.replacement_value.value) || 0;
+
+                    flood_100_totalBuildings += parseInt(graph[item].flood_100.sum.count.value) || 0;
+                    flood_100_totalBuildingsValue += parseInt(graph[item].flood_100.sum.replacement_value.value) || 0;
+
+                    flood_500_totalBuildings += parseInt(graph[item].flood_500.sum.count.value) || 0;
+                    flood_500_totalBuildingsValue += parseInt(graph[item].flood_500.sum.replacement_value.value) || 0;
                 })
             }
         }
@@ -64,8 +91,12 @@ class BuildingByOwnerTypeTable extends React.Component{
                             <thead>
                             <tr>
                                 <th>BUILDING TYPE</th>
-                                <th># BUILDING TYPE</th>
-                                <th>$ REPLACEMENT VALUE</th>
+                                <th>TOTAL # BUILDING TYPE</th>
+                                <th>TOTAL $ REPLACEMENT VALUE</th>
+                                <th>100 YEAR DFERM # BUILDING TYPE</th>
+                                <th>100 YEAR DFERM $ REPLACEMENT VALUE</th>
+                                <th>500 YEAR DFERM # BUILDING TYPE</th>
+                                <th>500 YEAR DFERM $ REPLACEMENT VALUE</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -84,8 +115,38 @@ class BuildingByOwnerTypeTable extends React.Component{
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{data.count || 0}</td>
-                                            <td>${data.replacement_value || 0}</td>
+                                            <td>
+                                                <a href={data.link} className='legend-value'>
+                                                    {data.count || 0}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href={data.link} className='legend-value'>
+                                                    ${data.replacement_value || 0}
+                                                </a>
+                                            </td>
+
+                                            <td>
+                                                <a href={data.link + '/hazard/flood_100'} className='legend-value'>
+                                                    {data.flood_100_count || 0}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href={data.link + '/hazard/flood_100'} className='legend-value'>
+                                                    ${data.flood_100_replacement_value || 0}
+                                                </a>
+                                            </td>
+
+                                            <td>
+                                                <a href={data.link + '/hazard/flood_500'} className='legend-value'>
+                                                    {data.flood_500_count || 0}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href={data.link + '/hazard/flood_500'} className='legend-value'>
+                                                    ${data.flood_500_replacement_value || 0}
+                                                </a>
+                                            </td>
                                         </tr>
                                     )
                                 })
@@ -94,8 +155,50 @@ class BuildingByOwnerTypeTable extends React.Component{
                             <tfoot>
                             <tr>
                                 <td><h6>Total :</h6></td>
-                                <td><h6>{numeral(totalBuildings).format('0,0.a')}</h6></td>
-                                <td><h6>${numeral(totalBuildingsValue).format('0,0.a')}</h6></td>
+                                <td>
+                                    <h6>
+                                        <a href={'list/ownerType/' + BuildingByOwnerTypeConfig.map(f => f.value).join('-')} className='legend-value'>
+                                            {numeral(totalBuildings).format('0,0.a')}
+                                        </a>
+                                    </h6>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href={'list/ownerType/' + BuildingByOwnerTypeConfig.map(f => f.value).join('-')} className='legend-value'>
+                                            ${numeral(totalBuildingsValue).format('0,0.a')}
+                                        </a>
+                                    </h6>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href={'list/ownerType/' + BuildingByOwnerTypeConfig.map(f => f.value).join('-') + '/hazard/flood_100'} className='legend-value'>
+                                            {numeral(flood_100_totalBuildings).format('0,0.a')}
+                                        </a>
+                                    </h6>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href={'list/ownerType/' + BuildingByOwnerTypeConfig.map(f => f.value).join('-') + '/hazard/flood_100'} className='legend-value'>
+                                            ${numeral(flood_100_totalBuildingsValue).format('0,0.a')}
+                                        </a>
+                                    </h6>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href={'list/ownerType/' + BuildingByOwnerTypeConfig.map(f => f.value).join('-') + '/hazard/flood_500'} className='legend-value'>
+                                            {numeral(flood_500_totalBuildings).format('0,0.a')}
+                                        </a>
+                                    </h6>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href={'list/ownerType/' + BuildingByOwnerTypeConfig.map(f => f.value).join('-') + '/hazard/flood_500'} className='legend-value'>
+                                            ${numeral(flood_500_totalBuildingsValue).format('0,0.a')}
+                                        </a>
+                                    </h6>
+                                </td>
                             </tr>
                             </tfoot>
                         </table>
