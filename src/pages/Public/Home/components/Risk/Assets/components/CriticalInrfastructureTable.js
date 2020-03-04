@@ -6,9 +6,7 @@ import store from "store"
 import { fnum } from "utils/sheldusUtils"
 
 import get from "lodash.get";
-
-import TableBox from 'components/light-admin/tables/TableBox3'
-import Table from 'components/light-admin/tables/Table'
+import TableSelector from 'components/light-admin/tables/tableSelector'
 
 class NfipTable extends React.Component {
 
@@ -45,12 +43,12 @@ class NfipTable extends React.Component {
 
             data.push({
                 [label]: this.formatName(name, geoid),
-                'Total Count': get(graph, `critical.all.sum.count.value`, null),
-                'Total Replacement Value': get(graph, `critical.all.sum.replacement_value.value`, null),
-                'Flood 100 Count': get(graph, `critical.all.flood_100.sum.count.value`, null),
-                'Flood 100 Replacement Value': get(graph, `critical.all.flood_100.sum.replacement_value.value`, null),
-                'Flood 500 Count': get(graph, `critical.all.flood_500.sum.count.value`, null),
-                'Flood 500 Replacement Value': get(graph, `critical.all.flood_500.sum.replacement_value.value`, null),
+                'Total #': get(graph, `critical.all.sum.count.value`, null),
+                'Total Replacement $': get(graph, `critical.all.sum.replacement_value.value`, null),
+                'Flood 100 #': get(graph, `critical.all.flood_100.sum.count.value`, null),
+                'Flood 100 Replacement $': get(graph, `critical.all.flood_100.sum.replacement_value.value`, null),
+                'Flood 500 #': get(graph, `critical.all.flood_500.sum.count.value`, null),
+                'Flood 500 Replacement $': get(graph, `critical.all.flood_500.sum.replacement_value.value`, null),
             })
         })
         return {
@@ -58,39 +56,50 @@ class NfipTable extends React.Component {
             columns: [
                 {
                     Header: label,
-                    accessor: label
+                    accessor: label,
+                    filter: 'default',
+                    sort: true
                 },
                 {
-                    Header: 'Total Count',
-                    accessor: 'Total Count',
-                    align: 'center'
+                    Header: 'Total #',
+                    accessor: 'Total #',
+                    align: 'center',
+                    sort: true
                 },
                 {
-                    Header: 'Total Replacement Value',
-                    accessor: 'Total Replacement Value',
-                    align: 'center'
-                },
-
-                {
-                    Header: 'Flood 100 Count',
-                    accessor: 'Flood 100 Count',
-                    align: 'center'
-                },
-                {
-                    Header: 'Flood 100 Replacement Value',
-                    accessor: 'Flood 100 Replacement Value',
-                    align: 'center'
+                    Header: 'Total Replacement $',
+                    accessor: 'Total Replacement $',
+                    align: 'center',
+                    sort: true,
+                    formatValue: fnum
                 },
 
                 {
-                    Header: 'Flood 500 Count',
-                    accessor: 'Flood 500 Count',
-                    align: 'center'
+                    Header: 'Flood 100 #',
+                    accessor: 'Flood 100 #',
+                    align: 'center',
+                    sort: true
                 },
                 {
-                    Header: 'Flood 500 Replacement Value',
-                    accessor: 'Flood 500 Replacement Value',
-                    align: 'center'
+                    Header: 'Flood 100 Replacement $',
+                    accessor: 'Flood 100 Replacement $',
+                    align: 'center',
+                    sort: true,
+                    formatValue: fnum
+                },
+
+                {
+                    Header: 'Flood 500 #',
+                    accessor: 'Flood 500 #',
+                    align: 'center',
+                    sort: true
+                },
+                {
+                    Header: 'Flood 500 Replacement $',
+                    accessor: 'Flood 500 Replacement $',
+                    align: 'center',
+                    sort: true,
+                    formatValue: fnum
                 },
             ]
         }
@@ -115,8 +124,10 @@ class NfipTable extends React.Component {
         try {
             return (
                 <div>
-                    <Table  { ...this.processData() }
-                            height={'60vh'}
+                    <TableSelector
+                        { ...this.processData() }
+                        height={'80vh'}
+                        flex={false}
                     />
 
                 </div>
