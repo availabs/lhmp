@@ -6,7 +6,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-import {setActiveRiskZoneId} from 'store/modules/scenario'
+import { setActiveRiskZoneId } from 'store/modules/scenario'
 
 class ScenarioTable extends React.Component {
     constructor(props) {
@@ -240,61 +240,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ScenarioTable))
-
-/*
-<button className="btn btn-rounded"
-                                                    type="button"
-                                                    style={{padding:'0px'}}>
-                                                <div id = 'visibility'
-                                                     className={this.state.activeToggle === item.id ? "os-toggler-w on" : "os-toggler-w"}
-                                                     style={this.state.activeToggle === item.id || this.state.activeToggle === '' ? {}:{pointerEvents:'none'}}
-                                                >
-                                                    <div className="os-toggler-i" >
-                                                        <div className="os-toggler-pill"
-                                                             id = {item.id}
-                                                             onClick={(e) =>{
-                                                                 this.setState({
-                                                                     activeToggle:this.state.activeToggle === item.id ? '':item.id,
-                                                                     showTotalLoss : this.state.activeToggle === item.id ? '' : 'on'
-                                                                 })
-                                                                 this.handleChange(e)
-                                                             }}
-                                                             >
-                                                            {
-                                                                this.state.visibility === true?
-                                                                    this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
-                                                                    :
-                                                                    this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,this.state.scenario)
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </button>
- */
-
-/*
-<button className="btn btn-rounded"
-                                            type="button"
-                                            style={{padding:'0px'}}>
-                                        <div id = 'visibility'
-                                             className={this.state.showTotalLoss === 'on' ? "os-toggler-w on" : "os-toggler-w"}>
-                                            <div className="os-toggler-i" >
-                                                <div className="os-toggler-pill"
-                                                     id = 'on'
-                                                     onClick={(e) =>{
-                                                         this.setState({
-                                                             showTotalLoss:this.state.showTotalLoss === 'on' ? '':'on'
-                                                         })
-                                                         this.handleChange(e)
-                                                     }}>
-                                                    {
-                                                        this.state.visibility === true?
-                                                            this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,loss_scenario)
-                                                            :
-                                                            this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,loss_scenario)
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </button>
- */

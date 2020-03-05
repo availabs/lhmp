@@ -25,7 +25,7 @@ class NfipTable extends React.Component {
 
     processData() {
         const { geoid, geoLevel } = this.props,
-            label = geoLevel === 'counties' ? 'county' : 'Municipality',
+            label = geoLevel === 'counties' ? 'county' : 'Jurisdiction',
             geoids = this.props.geoGraph[geoid][geoLevel].value,
             data = [];
 

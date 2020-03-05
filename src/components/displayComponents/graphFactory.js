@@ -7,7 +7,7 @@ export default ({ graph, ...rest }) => {
         Graph = DisplayComponents[graphType] || DisplayComponents['NA'];
     return (
         <TrackVisibility offset={100} style={{height: '100%'}}>
-            <ElementHider Graph={Graph} { ...rest } graph ={graph}/>
+            <ElementHider Graph={Graph} { ...rest } graph={graph}/>
         </TrackVisibility>
     )
 }

@@ -123,6 +123,14 @@ const config =  {
 	'Integration' : [
 		{
 			title: 'Existing Resources',
+			requirement: 'revision-1',
+			type: 'content',
+			prompt: '',
+			intent: '',
+			icon: 'os-icon-rotate-cw'
+		},
+		{
+			title: 'Existing Resources',
 			requirement: 'Req-A-4A',
 			//type: 'planningDocuments',
 
