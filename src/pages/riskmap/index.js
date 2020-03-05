@@ -21,7 +21,7 @@ export default {
 	path: '/scenario',
   icon: 'os-icon-map',
 	exact: true,
-	mainNav: true,
+	mainNav: false,
     menuSettings: {
         image: 'none',
         scheme: 'color-scheme-light',
@@ -29,7 +29,7 @@ export default {
         layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
-  name: 'Scenarios',
+  name: 'Scenarios (depracted)',
 	auth: true,
 	component: Home
 }

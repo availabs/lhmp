@@ -1,6 +1,7 @@
  import React, {Component} from 'react';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+ import config from "pages/auth/Plan/config/landing-config";
+ import {RenderConfig} from 'pages/Public/theme/ElementFactory'
 // import { Link } from 'react-router-dom'
 import AvlMap from 'components/AvlMap'
 import { connect } from 'react-redux';
@@ -136,7 +137,12 @@ considered.`,
                         <div className="row">
                             <div className="col-12">
                                 <StatementText>
-                                    Hazard Mitigation saves lives and dollars.  With XXX people and $XXX of assets, we must protect our future by investing in resiliency now.
+                                    <RenderConfig
+                                        config={{'Landing Quote':config['Landing Quote']}}
+                                        user={this.props.user}
+                                        showTitle={false}
+                                        showHeader={false}
+                                    />
                                 </StatementText>
                             </div>
                         </div>
@@ -156,7 +162,8 @@ const mapStateToProps = (state, ownProps) => {
         activePlan: get(state, `user.activePlan`, null),
         activeCousubid: get(state, `user.activeCousubid`, null),
         graph: state.graph,
-        router: state.router
+        router: state.router,
+        user: state.user
     };
 };
 

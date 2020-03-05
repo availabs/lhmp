@@ -65,11 +65,12 @@ const renderReqNav = function(allRequirenments, pageIndex){
 
 const renderElement = function(element, section, index, user) {
     return (
-        <div style={{
+        <div
+             style={{
             width: '100%',
             height: '100%',
         }}>
-            <Element>
+            <Element >
             <label style={{'width': '100%'}} className='element-header'> <h4>{section} |
                 <smaall className='text-muted'> {element.title}
                     <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
@@ -131,27 +132,26 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
         })
     });
     return (
-        <div>
-            {
-                <Stickyroll pages={PageList} anchors="">
-                    {({page, pageIndex, pages, progress}) => {
-                        let Content = PageList[pageIndex];
+        <Stickyroll pages={PageList} anchors="">
+            {({page, pageIndex, pages, progress}) => {
+                let Content = PageList[pageIndex];
 
-                        return (
-                            <div>
-                                <div style={{position: 'fixed', left: 50, top: 0, paddingTop: 0,width:  CSS_CONFIG.reqNavWidth, height: '100%'}}>
-                                    <div
-                                        className='ae-side-menu'
-                                        style={{
-                                            height: '5vh',
-                                            width: CSS_CONFIG.reqNavWidth,
-                                            position: 'fixed',
-                                            display: 'block',
-                                        }}>
-                                        {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
-                                    </div>
-                                    <SideMenu config={config} style={{marginTop: '6vh'}}/>
-                                    {/*
+                return (
+                    <div key={pageIndex+1} name={pageIndex+1} id={pageIndex+1}>
+                        <div style={{position: 'fixed', left: 50, top: 0, paddingTop: 0,width:  CSS_CONFIG.reqNavWidth, height: '100%'}}>
+                            <div
+                                className='ae-side-menu'
+                                style={{
+                                    height: '5vh',
+                                    width: CSS_CONFIG.reqNavWidth,
+                                    position: 'fixed',
+                                    display: 'block',
+                                    zIndex:100
+                                }}>
+                                {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
+                            </div>
+                            <SideMenu config={config} style={{marginTop: '6vh !important'}} linkToIndex={true}/>
+                            {/*
                                         <div
                                         className='ae-side-menu'
                                         style={{
@@ -165,33 +165,31 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
                                         {this.renderReqNav(allRequirenments, pageIndex)}
                                     </div>
                                     */}
-                                 </div>
-                                 <div
-                                        style={{
-                                            width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
-                                            height: '100%',
-                                            marginLeft: `calc(${CSS_CONFIG.reqNavWidth})`,
-                                            display: 'absolute',
-                                            alignContent: 'stretch',
-                                            alignItems: 'stretch',
-                                        }}>
-                                        <Pagers useContext={true}/>
+                        </div>
+                        <div
+                             style={{
+                                 width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
+                                 height: '100%',
+                                 marginLeft: `calc(${CSS_CONFIG.reqNavWidth})`,
+                                 display: 'absolute',
+                                 alignContent: 'stretch',
+                                 alignItems: 'stretch',
+                             }}>
+                            <Pagers useContext={true}/>
 
 
-                                        <div style={{
-                                            height: '100vh',
-                                            width: '100%',
-                                        }}>
+                            <div style={{
+                                height: '100vh',
+                                width: '100%',
+                            }}>
 
-                                            {Content}
-                                        </div>
-                                    </div>
+                                {Content}
                             </div>
-                        );
-                    }}
-                </Stickyroll>
-            }
-        </div>
+                        </div>
+                    </div>
+                );
+            }}
+        </Stickyroll>
     )
 
 }

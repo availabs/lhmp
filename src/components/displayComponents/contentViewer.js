@@ -44,10 +44,7 @@ class ContentViewer extends Component {
         let {editorState} = this.state;
         return (
             //this.props.type === 'contentEditor' ? (
-            <div>
                 <div dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB : '<i>Content not available.</i>'}} />
-            </div>
-
             //) : ''
         )
     }

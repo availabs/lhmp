@@ -56,7 +56,7 @@ export default [{
     icon: 'os-icon-pencil-2',
     path: '/plan/about',
     exact: true,
-    name: 'AdminAbout',
+    name: 'About',
     auth: true,
     authLevel: 1,
     mainNav: false,

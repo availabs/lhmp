@@ -46,7 +46,7 @@ const mapDispatchToProps = {
 };
 
 export default {
-    path: '/scenario_map_2',
+    path: '/scenario_map',
     icon: 'os-icon-map',
     exact: true,
     mainNav: true,
@@ -57,7 +57,7 @@ export default {
         layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
-    name: 'Scenario Map 2',
+    name: 'Scenario Map',
     auth: true,
     component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(Home))
 }
