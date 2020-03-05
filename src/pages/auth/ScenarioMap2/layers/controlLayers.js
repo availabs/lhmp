@@ -113,10 +113,11 @@ class ControlLayers extends MapLayer {
                 'id': 'dfirm_layer',
                 'source': 'dfirm',
                 'source-layer': layerName,
-                'type': 'fill',
+                'type': 'line',
                 'minzoom': 8,
                 'paint': {
-                    'fill-color': "#DAF7A6"
+                    'line-color': "hsl(211, 83%, 31%)",
+                    'line-opacity':0.6
                 },
 
             })
@@ -167,8 +168,7 @@ class ControlLayers extends MapLayer {
             this.doAction([
                 "addDynamicLayer",
                 DynamicLayerFactory,
-                // callingLayer => DynamicLayerFactory(callingLayer, "ARG 1", "ARG 2", "ARG 3")
-                // this form of adding a dynamic layer passes arguments from the calling component
+
             ]);
 
             this.modes.push(layerName)
@@ -176,18 +176,6 @@ class ControlLayers extends MapLayer {
 
     }
 
-    /*
-    onLoadActiveLayers(layerNames){
-        activeLayers = layerNames
-
-        this.doAction([
-            "addDynamicLayer",
-            DynamicLayerFactory,
-            // callingLayer => DynamicLayerFactory(callingLayer, "ARG 1", "ARG 2", "ARG 3")
-            // this form of adding a dynamic layer passes arguments from the calling component
-        ]);
-    }
-     */
 
 
 }

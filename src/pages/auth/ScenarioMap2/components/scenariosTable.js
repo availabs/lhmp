@@ -12,7 +12,7 @@ class ScenarioTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visibility:false,
+            visibility:{},
             risk_zone_ids : [],
             riskZoneId : '',
             scenario:'',
@@ -66,13 +66,12 @@ class ScenarioTable extends React.Component {
             if(id.toString() === d.id.toString()){
                 this.props.setActiveRiskZoneId(d.id)
                 this.setState((currentState) =>({
-                    visibility: !currentState.visibility,
                     scenario : d.scenario,
                     map_source: d.visibility,
                 }))
-
             }
-        })
+        });
+
 
     };
 
@@ -139,11 +138,8 @@ class ScenarioTable extends React.Component {
         let resultData = this.processTableData();
         let total_loss = this.processTotalLoss()
         let annual_loss = this.processAnnualLoss();
-        let loss_scenario= ''
-        if(this.state.scenario === '2'){
-            loss_scenario = this.props.activePlan + "_riverine_500"
-        }else if(this.state.scenario === '3'){
-            loss_scenario = this.props.activePlan + "_dfirm_500"
+        if(this.state.visibility['map_source'] && this.state.visibility['scenario'] && this.state.visibility['map_source'] !== '' && this.state.visibility['scenario']){
+            this.props.check_visibility.visibilityToggleModeOff(this.state.visibility['map_source'],this.state.visibility['scenario'])
         }
         return (
             <div>
@@ -171,9 +167,12 @@ class ScenarioTable extends React.Component {
                                             type="radio"
                                             value={item.scenario}
                                             onChange={(e) =>{
-                                                this.setState({
-                                                    activeToggle:this.state.activeToggle === item.id ? '':item.id
-                                                })
+                                                this.setState((currentState) => (
+                                                    {
+                                                    activeToggle:this.state.activeToggle === item.id ? '':item.id,
+                                                    visibility: {map_source:currentState.map_source,scenario:currentState.scenario}
+                                                    }
+                                                ));
                                                 this.handleChange(e)}
                                             }/>
                                         </td>
@@ -187,10 +186,10 @@ class ScenarioTable extends React.Component {
                             null
                     }
                     {
-                        this.state.activeToggle !== ''?
+                        this.state.activeToggle !== '' ?
                             this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
-                            :
-                            this.props.check_visibility.visibilityToggleModeOff(this.state.map_source,this.state.scenario)
+                            : null
+
                     }
                     </tbody>
                     {this.state.activeToggle !== '' ?

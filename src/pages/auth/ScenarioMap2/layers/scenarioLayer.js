@@ -500,42 +500,98 @@ export const ScenarioOptions =  (options = {}) => {
                         [null, ["address"]],
                         ["Owner Type", ["owner_type"],d => getOwnerTypeName(falcorGraph.getCache(), d)],
                         ["Land Use", ["prop_class"], d => getPropClassName(falcorGraph.getCache(), d)],
-                        ["500 year Loss Value",['hazard_loss_dollars']],
-                        ["100 year Loss Value",['hazard_loss_dollars']],
-                        ["50 year Loss Value",['hazard_loss_dollars']],
-                        ["25 year Loss Value",['hazard_loss_dollars']],
+                        ["500 year Loss Value",null],
+                        ["100 year Loss Value",null],
+                        ["50 year Loss Value",null],
+                        ["25 year Loss Value",null],
+                        ["500 year Building Depth",null],
+                        ["100 year Building Depth",null],
+                        ["50 year Building Depth",null],
+                        ["25 year Building Depth",null],
                         ["Expected Annual Flood Loss",['hazard_loss_dollars']]
-                    ];
 
+                    ];
                 scenario_graph.value.forEach(building =>{
                     if(building.building_id.toString() === id.toString()){
                         data = attributes.reduce((a, [name, key, format = IDENTITY]) => {
                             const data = get(building, key, false);
+                            let result = {}
                             if (data && (name === null)) {
                                 a.push(format(data));
                             }
-                            if (data && (name !== null)) {
+                            if(name !== null && name.includes('500 year') && key === null){
+                                result = scenario_graph.value.find(obj => {
+                                    return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '0.2'
+                                });
+                                if(Object.keys(result).length > 0){
+                                    a.push(["500 year Loss Value",result['hazard_loss_dollars']])
+                                    a.push(["500 year Building Depth",result["risk_value"] + "ft"])
+                                }
+
+                            }
+                            if(name !== null && name.includes('100 year') && key === null){
+                                result = scenario_graph.value.find(obj => {
+                                    return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '1'
+                                });
+                                if(Object.keys(result).length > 0) {
+                                    a.push(["100 year Loss Value", result['hazard_loss_dollars']])
+                                    a.push(["100 year Building Depth", result["risk_value"] + "ft"])
+                                }
+                            }
+                            if(name !== null && name.includes('50 year') && key === null){
+                                result = scenario_graph.value.find(obj => {
+                                    return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '2'
+                                });
+                                if(Object.keys(result).length > 0) {
+                                    a.push(["50 year Loss Value", result['hazard_loss_dollars']])
+                                    a.push(["50 year Building Depth", result["risk_value"] + "ft"])
+                                }
+                            }
+                            if(name !== null && name.includes('25 year') && key === null){
+                                result = scenario_graph.value.find(obj => {
+                                    return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '4'
+                                });
+                                if(Object.keys(result).length > 0) {
+                                    a.push(["25 year Loss Value", result['hazard_loss_dollars']])
+                                    a.push(["25 year Building Depth", result["risk_value"] + "ft"])
+                                }
+                            }if(data && (name !== null)){
                                 a.push([name, format(data)]);
                             }
-
-                            return a;
+                            return _.uniqWith(a,_.isEqual);
                         }, [])
 
                     }
-                })
+                });
                 if (data.length) {
+                    let value_500 = '',
+                        value_100 = '',
+                        value_50='',
+                        value_25= '';
                     data.push(["Building ID", id]);
                     data.forEach(d =>{
                         if(d[0] === '500 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 0.2/100).toString())
+                            value_500 = d[1]
+                            d[1] = fnum(d[1])
                         }if(d[0] === '100 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 1/100).toString())
+                            value_100 = d[1]
+                            d[1] = fnum(d[1])
                         }if(d[0] === '50 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 2/100).toString())
+                            value_50 = d[1]
+                            d[1] = fnum(d[1])
                         }if(d[0] === '25 year Loss Value'){
-                            d[1] = fnum((parseFloat(d[1]) * 4/100).toString())
+                            value_25 = d[1]
+                            d[1] = fnum(d[1])
+                        }if(d[0] === 'Expected Annual Flood Loss'){
+                            d[1] = fnum(
+                                ((parseFloat(value_500) * (0.2/100))
+                                + (parseFloat(value_100) * (1/100))
+                                + (parseFloat(value_50) * (2/100))
+                                + (parseFloat(value_25) * (4/100))).toString()
+                            )
+
                         }
-                    })
+                    });
                     return data;
                 }else{
                     data.push(["Building ID", id]);
