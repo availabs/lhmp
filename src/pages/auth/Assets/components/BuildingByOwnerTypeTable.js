@@ -93,10 +93,10 @@ class BuildingByOwnerTypeTable extends React.Component{
                                 <th>BUILDING TYPE</th>
                                 <th>TOTAL # BUILDING TYPE</th>
                                 <th>TOTAL $ REPLACEMENT VALUE</th>
-                                <th>100 YEAR DFERM # BUILDING TYPE</th>
-                                <th>100 YEAR DFERM $ REPLACEMENT VALUE</th>
-                                <th>500 YEAR DFERM # BUILDING TYPE</th>
-                                <th>500 YEAR DFERM $ REPLACEMENT VALUE</th>
+                                <th>100 YEAR DFIRM # BUILDING TYPE</th>
+                                <th>100 YEAR DFIRM $ REPLACEMENT VALUE</th>
+                                <th>500 YEAR DFIRM # BUILDING TYPE</th>
+                                <th>500 YEAR DFIRM $ REPLACEMENT VALUE</th>
                             </tr>
                             </thead>
                             <tbody>

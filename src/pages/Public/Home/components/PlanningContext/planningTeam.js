@@ -111,8 +111,8 @@ class PlanningTeam extends Component {
                 <div className='row'>
                     <div className='col-12' style={{textAlign:'center'}}>
                         <ContentHeader>
-                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Mitigation Representative
-
+                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}
+                            Hazard Mitigation Representative  <a href={'/roles'} className="btn btn-sm btn-primary" type="button"> Roles</a>
                         </ContentHeader>
                     </div>
                 </div>

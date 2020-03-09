@@ -10,6 +10,7 @@ import {
     useTable
 } from 'react-table'
 import matchSorter from "match-sorter";
+import {Link} from "react-router-dom";
 
 
 const Styles = styled.div`
@@ -110,8 +111,6 @@ const headerProps = (props, {column}) => getStyles(props, column.align);
 const cellProps = (props, {cell}) => getStyles(props, cell.column.align);
 
 const getStyles = (props, align = 'left') => {
-    console.log('props getStyles', props);
-
     return [
         props,
         {
@@ -216,7 +215,7 @@ function Table({columns, data, tableClass, height, width}) {
         <div {...getTableProps()}
              style={{overflow: 'auto',/* width: width ? width : 'fit-content'*/}}
              className={tableClass ? tableClass : 'table table-lightborder table-hover'}>
-            <div >
+            <div>
                 {headerGroups.map(headerGroup => (
                     <div
                         {...headerGroup.getHeaderGroupProps({
@@ -270,9 +269,20 @@ function Table({columns, data, tableClass, height, width}) {
                             {row.cells.map(cell => {
                                 return (
                                     <div {...cell.getCellProps(cellProps)} className="td">
-                                        {cell.column.formatValue ?
-                                            cell.column.formatValue(cell.value) :
-                                            cell.render('Cell')
+                                        {
+                                            cell.column.link ?
+                                                <Link
+                                                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                                                    {
+                                                        cell.column.formatValue ?
+                                                            cell.column.formatValue(cell.value) :
+                                                            cell.render('Cell')
+                                                    }
+                                                </Link> :
+                                                cell.column.formatValue ?
+                                                    cell.column.formatValue(cell.value) :
+                                                    cell.render('Cell')
+
                                         }
                                     </div>
                                 )

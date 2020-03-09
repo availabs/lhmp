@@ -75,8 +75,9 @@ import ResetPassword from './pages/Landing/ResetPassword'
 import Logout from './pages/Logout'
 import NoMatch from './pages/404.js'
 
+import test from './pages/Test'
 const routes = [
-
+    test,
   Landing,
   Home,
   Login,
