@@ -41,6 +41,20 @@ export class ZoneLayer extends MapLayer{
         }
     }
 
+    toggleVisibilityOn() {
+        //console.log('in map layer toggle visibility',map,this.layers)
+        this._isVisible = !this._isVisible;
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
+        })
+    }
+
+    toggleVisibilityOff(){
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',"none");
+        })
+    }
+
 
 
 }
@@ -74,6 +88,7 @@ export const ZoneOptions =  (options = {}) => {
                 },
 
             ],
+            _isVisible: true
         }
 
 

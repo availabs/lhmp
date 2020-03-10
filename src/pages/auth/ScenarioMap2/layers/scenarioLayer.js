@@ -103,7 +103,8 @@ export class ScenarioLayer extends MapLayer{
             this.map.on('render',()=>{
                 const features =  map.querySourceFeatures('nys_buildings_avail', {
                     sourceLayer: 'nys_buildings_osm_ms_parcelid_pk',
-                })
+                });
+                //check for the legend
                 this.selection = features.map(d => d.properties.id);
                 this.fetchData().then(data => this.receiveData(map, data))
 
@@ -126,34 +127,28 @@ export class ScenarioLayer extends MapLayer{
     }
     receiveMessage(action, data) {
         this.activeScenarioId = data.activeRiskZoneId
-        //console.log('this.activeScenarioId',this.activeScenarioId)
+
         return this.fetchData().then(data => this.receiveData(data,this.map))
     }
-    /*
-    getBuildingIds() {
-        // console.log('in get building ids')
-        let geoids = store.getState().user.activeGeoid
 
-        return falcorGraph.get(["building", "byGeoid", geoids, "length"])
-            .then(res => {
-                const length = res.json.building.byGeoid[geoids].length;
-                return falcorChunkerNiceWithUpdate(["building", "byGeoid", geoids, "byIndex", { from: 0, to: length-1}, ["building_id"]])
-            }).then(requests => {
-                console.log('request',typeof requests,requests.payload)
-            })
+    toggleVisibilityOn() {
+        //console.log('in map layer toggle visibility',map,this.layers)
+        this._isVisible = !this._isVisible;
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility', "visible");
+        })
     }
-     */
+
+    toggleVisibilityOff(){
+        this._isVisible = !this._isVisible;
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',"none");
+        })
+    }
+
     fetchData(){
         let owner_types = ['2','3', '4', '5', '6', '7','8'];
         let buildingIds = [];
-        /*
-        this.getBuildingIds()
-            .then(buildingids => {
-                //if (!buildingids.length) return;
-                buildingids = []
-                return falcorChunkerNiceWithUpdate(["building", "byId", buildingids, ["address","owner_type", "prop_class"]])
-            })
-         */
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['flood_100','flood_500'], 'owner_type',owner_types, 'critical', ['true', 'false']],
@@ -240,8 +235,6 @@ export class ScenarioLayer extends MapLayer{
             }, {});
             coloredBuildings = colors
         }
-
-
 
         let rawGraph = falcorGraph.getCache(),
             graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone`, null),
@@ -338,14 +331,16 @@ export class ScenarioLayer extends MapLayer{
         if(this.map.getSource('buildings')) {
             this.map.getSource("buildings").setData(geojson)
         }
+        if(this.map.getSource("buildings")){
 
+            this.map.setPaintProperty(
+                'buildings-layer',
+                'circle-color',
+                ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
 
-        this.map.setPaintProperty(
-            'buildings-layer',
-            'circle-color',
-            ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
+            )
+        }
 
-        )
         if(Object.keys(coloredBuildings).length > 0){
             this.map.setPaintProperty(
                 'ebr',
@@ -625,6 +620,7 @@ export const ScenarioOptions =  (options = {}) => {
                 }
             }
         },
+        _isVisible: true
 
     }
 };
