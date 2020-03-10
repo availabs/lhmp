@@ -127,6 +127,7 @@ class NfipTable extends React.Component {
                     <TableSelector
                         { ...this.processData() }
                         height={'80vh'}
+                        //width={'100vw'}
                         flex={false}
                     />
 

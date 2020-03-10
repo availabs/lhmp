@@ -56,7 +56,7 @@ export default [{
     icon: 'os-icon-pencil-2',
     path: '/plan/risk',
     exact: true,
-    name: 'AdminRisk',
+    name: 'Risk',
     auth: true,
     authLevel: 1,
     mainNav: false,

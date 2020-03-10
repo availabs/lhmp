@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useTable, useFilters, useGlobalFilter, useSortBy } from 'react-table'
 // A great library for fuzzy filtering/sorting items
 import matchSorter from 'match-sorter'
+import {Link} from "react-router-dom";
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
@@ -88,7 +89,7 @@ function Table({ columns, data, height, tableClass }) {
 
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
-    const firstPageRows = rows.slice(0, 20)
+    const firstPageRows = rows// .slice(0, 20)
 
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}} className={tableClass ? tableClass : 'table table-lightborder table-hover dataTable'}>
@@ -133,9 +134,19 @@ function Table({ columns, data, height, tableClass }) {
                                 {row.cells.map(cell => {
                                     return (
                                         <td {...cell.getCellProps()}>
-                                            {cell.column.formatValue ?
-                                                cell.column.formatValue(cell.value) :
-                                                cell.render('Cell')
+                                            {
+                                                cell.column.link ?
+                                                    <Link to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                                                        {
+                                                            cell.column.formatValue ?
+                                                                cell.column.formatValue(cell.value) :
+                                                                cell.render('Cell')
+                                                        }
+                                                    </Link> :
+                                                    cell.column.formatValue ?
+                                                        cell.column.formatValue(cell.value) :
+                                                        cell.render('Cell')
+
                                             }
                                         </td>
                                     )

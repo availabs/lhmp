@@ -10,6 +10,7 @@ import {
     useTable
 } from 'react-table'
 import matchSorter from "match-sorter";
+import {Link} from "react-router-dom";
 
 
 const Styles = styled.div`
@@ -54,7 +55,7 @@ const Styles = styled.div`
         font-size: 0.75rem;
         text-transform: uppercase;
         border-top: none;
-        border-bottom: none; --1px solid #999;
+        border-bottom: none; #1px solid #999;
         margin: 0;
         padding: 0.75rem;
         font-weight: 500;
@@ -110,8 +111,6 @@ const headerProps = (props, {column}) => getStyles(props, column.align);
 const cellProps = (props, {cell}) => getStyles(props, cell.column.align);
 
 const getStyles = (props, align = 'left') => {
-    console.log('props getStyles', props);
-
     return [
         props,
         {
@@ -120,7 +119,7 @@ const getStyles = (props, align = 'left') => {
                 textAlign: align,
                 alignItems: 'flex-start',
                 display: 'flex',
-                //whiteSpace: 'nowrap'
+                flexWrap: 'wrap'
             },
         },
     ]
@@ -151,7 +150,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
 
-function Table({columns, data, tableClass, height}) {
+function Table({columns, data, tableClass, height, width}) {
     /*  const defaultColumn = React.useMemo(
         () => ({
           // When using the useFlexLayout:
@@ -185,6 +184,9 @@ function Table({columns, data, tableClass, height}) {
         () => ({
             // Let's set up our default Filter UI
             Filter: DefaultColumnFilter,
+            minWidth: 30, // minWidth is only used as a limit for resizing
+            width: 150, // width is used for both the flex-basis and flex-grow
+            maxWidth: 400, // maxWidth is only used as a limit for resizing
         }),
         []
     );
@@ -210,52 +212,56 @@ function Table({columns, data, tableClass, height}) {
     );
 
     return (
-        <div {...getTableProps()} style={{overflow: 'auto', height: height ? height : 'auto'}} className={tableClass ? tableClass : 'table table-lightborder table-hover'}>
+        <div {...getTableProps()}
+             style={{overflow: 'auto',/* width: width ? width : 'fit-content'*/}}
+             className={tableClass ? tableClass : 'table table-lightborder table-hover'}>
             <div>
                 {headerGroups.map(headerGroup => (
                     <div
                         {...headerGroup.getHeaderGroupProps({
-                            style: {paddingRight: '15px', borderBottom: '1px solid #999', width: 'fit-content'},
+                            style: {paddingRight: '15px', borderBottom: '1px solid #999', /*width: 'fit-content'*/},
                         })}
                         className="tr"
                     >
                         {headerGroup.headers.map(column => (
-                            <div style={{display: 'block',/* borderBottom: '1px solid #999'*/}}>
-                                <div {...column.getHeaderProps(headerProps)} className="th">
-                                    {column.sort ?
-                                        (
-                                            <div {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                                {column.render('Header')}
-                                                {/* Add a sort direction indicator */}
-                                                <span>
+                            <div {...column.getHeaderProps()} className="th">
+                                {column.sort ?
+                                    (
+                                        <div {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                            {column.render('Header')}
+                                            {/* Add a sort direction indicator */}
+                                            <span>
                                                     {column.isSorted
                                                         ? column.isSortedDesc
                                                             ? <i className="os-icon os-icon-arrow-up6"></i>
                                                             : <i className="os-icon os-icon-arrow-down6"></i>
                                                         : ''}
                                                 </span>
-                                            </div>
-                                        ) : column.render('Header')}
+                                        </div>
+                                    ) : column.render('Header')}
 
-                                    {/* Use column.getResizerProps to hook up the events correctly */}
-                                    {column.canResize && (
-                                        <div
-                                            {...column.getResizerProps()}
-                                            className={`resizer ${
-                                                column.isResizing ? 'isResizing' : ''
-                                            }`}
-                                        />
-                                    )}
-                                </div>
                                 {/* Render the columns filter UI */}
-                                <div {...column.getHeaderProps(headerProps)}>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
+                                <div {...column.getHeaderProps()}>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
+
+                                {/* Use column.getResizerProps to hook up the events correctly */}
+                                {column.canResize && (
+                                    <div
+                                        {...column.getResizerProps()}
+                                        className={`resizer ${
+                                            column.isResizing ? 'isResizing' : ''
+                                        }`}
+                                    />
+                                )}
+
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
             <div {...getTableBodyProps()} className="tbody"
-                 style={{display: 'inline-block'}}>
+                 style={{height: height ? height : 'auto'}}
+
+            >
                 {rows.map((row, i) => {
                     prepareRow(row);
                     return (
@@ -263,9 +269,20 @@ function Table({columns, data, tableClass, height}) {
                             {row.cells.map(cell => {
                                 return (
                                     <div {...cell.getCellProps(cellProps)} className="td">
-                                        {cell.column.formatValue ?
-                                            cell.column.formatValue(cell.value) :
-                                            cell.render('Cell')
+                                        {
+                                            cell.column.link ?
+                                                <Link
+                                                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                                                    {
+                                                        cell.column.formatValue ?
+                                                            cell.column.formatValue(cell.value) :
+                                                            cell.render('Cell')
+                                                    }
+                                                </Link> :
+                                                cell.column.formatValue ?
+                                                    cell.column.formatValue(cell.value) :
+                                                    cell.render('Cell')
+
                                         }
                                     </div>
                                 )
@@ -279,10 +296,10 @@ function Table({columns, data, tableClass, height}) {
 }
 
 
-function StyledTable({columns: columns, data: data, height}) {
+function StyledTable({columns: columns, data: data, height, width}) {
     return (
         <Styles>
-            <Table columns={columns} data={data} height={height}/>
+            <Table columns={columns} data={data} height={height} width={width}/>
         </Styles>
     )
 }

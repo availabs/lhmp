@@ -59,7 +59,7 @@ class NFIP extends Component {
                     <div className='row'>
                         <div className='col-12' style={{textAlign:'center'}}>
                             <ContentHeader>
-                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Assets in Flood Plain
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Critical Assets in Flood Plain
                             </ContentHeader>
                         </div>
                     </div>
