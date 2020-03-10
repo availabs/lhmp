@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
 
 import { fnum } from "utils/sheldusUtils"
+import functions from 'pages/auth/Plan/functions'
 const numeral = require('numeral');
 
 import BuildingByOwnerTypeConfig from "pages/auth/Assets/components/BuildingByOwnerTypeConfig";
@@ -13,6 +14,7 @@ import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLand
 
 import TableSelector from "components/light-admin/tables/tableSelector"
 import {sum} from "simple-statistics";
+import {greatCircle} from "@turf/turf";
 
 let totalBuildings = 0;
 let totalBuildingsValue = 0;
@@ -28,19 +30,28 @@ class Home extends Component {
             BuildingByLandUseConfig
             .filter(item => !this.props.groupByFilter.length || this.props.groupByFilter.map(f => f.toString().slice(0,1)).includes(item.value.slice(0,1)))
             .map(item => item.value);
-        let ids = this.props.groupBy === 'ownerType' ? BuildingByOwnerTypeConfig.map(f => f.value) : propTypes
+        let ids = this.props.groupBy === 'ownerType' ? BuildingByOwnerTypeConfig.map(f => f.value) :
+                    this.props.groupBy === 'propType' ? propTypes :
+                    this.props.groupBy === 'jurisdiction' ? [] :
+                        [];
         return this.props.falcor.get(
             ['geo', this.props.activeGeoid, ['name']],
-            ["geo", this.props.activeGeoid, 'counties', 'municipalities'],
+            //["geo", this.props.activeGeoid, 'counties', 'municipalities'],
+            ["geo", this.props.activeGeoid, 'cousubs'],
 
             ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'sum', ['count','replacement_value']],
 
             ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all']
         )
             .then(response => {
-                return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
-                )
+                //let allGeo = [this.props.activeGeoid,...get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.counties.municipalities.value`, [])];
+                let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.cousubs.value`, []);
+                return this.props.groupBy === 'jurisdiction' ?
+                    this.props.falcor.get(
+                        ['building', 'byGeoid', this.props.geoid, this.props.groupBy, allGeo, 'sum', ['count','replacement_value']],
+                        ['building', 'byGeoid', this.props.geoid, this.props.groupBy, allGeo, 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all'],
+                        ['geo', allGeo , ['name']],
+                ) : this.props.falcor.get(['geo', allGeo , ['name']])
             })
     }
 
@@ -57,6 +68,7 @@ class Home extends Component {
         if(graph && Object.keys(graph).length) {
             Object.keys(graph)
                 .forEach((item,i) =>{
+                    console.log('item', item)
                     if (this.props.groupBy === 'propType'){
                         if (parseInt(item) % 100 === 0){
                             //sum subcategories
@@ -172,8 +184,10 @@ class Home extends Component {
                         Object.keys(get(graph, `${item}.byRiskScenario`, {}))
                             .forEach(scenarioId => {
                                 if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
+                                    console.log('in else', get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null))
                                     get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
                                         .forEach(riskZoneIdData => {
+                                            console.log('riskZoneIdData',item, riskZoneIdData.count, riskZoneIdData.sum)
                                             scenarioToRiskZoneMapping[scenarioId] ?
                                                 scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
                                                 scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
@@ -195,9 +209,11 @@ class Home extends Component {
                                 }
 
                             })
-
+                        console.log('total graph', get(this.props.geoidData, `${this.props.activeGeoid}.cousubs.value`, []));
                         BuildingTypeData.push({
-                            [primeColName]: get(config.filter(f => f.value === item).pop(), `name`, null),
+                            [primeColName]: this.props.groupBy === 'jurisdiction' ?
+                            functions.formatName(get(this.props.geoidData, `${item}.name`, 'N/A'), item) :
+                                get(config.filter(f => f.value === item).pop(), `name`, null),
                             'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.sum.replacement_value.value`, 0)),
                             'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.count.value`, 0)),
                             ...Object.keys(riskZoneIdsAllValues)
@@ -219,7 +235,6 @@ class Home extends Component {
                             link: linkBase + item
                         });
 
-                        // add here what you used in the line above
                         totalBuildings += parseInt(get(graph, `${item}.sum.count.value`, 0));
                         totalBuildingsValue += parseInt(get(graph, `${item}.sum.replacement_value.value`, 0));
                     }
@@ -238,7 +253,9 @@ class Home extends Component {
                         return a
                     }, {}),
 
-                link: linkBase + config.map(f => f.value).join('-')
+                link: this.props.groupBy === 'jurisdiction' ?
+                    linkBase + get(this.props.geoidData, `${this.props.activeGeoid}.cousubs.value`, []).join('-') :
+                    linkBase + config.map(f => f.value).join('-')
             })
             console.log('BuildingTypeData', BuildingTypeData, riskZoneIdsAllValuesTotal)
         }
@@ -300,8 +317,8 @@ class Home extends Component {
 
 Home.defaultProps = {
     geoid: "36025",
-    groupBy: 'propType',
-    groupByFilter: [100,200],
+    groupBy: 'jurisdiction', // ownerType, propType, jurisdiction
+    groupByFilter: [],
     scenarioId: [2]
 };
 const mapStateToProps = state => ({
