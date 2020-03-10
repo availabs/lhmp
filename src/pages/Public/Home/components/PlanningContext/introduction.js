@@ -1,7 +1,7 @@
  import React, {Component} from 'react';
 import { reduxFalcor } from 'utils/redux-falcor'
 
-import { Link } from 'react-router-dom'
+import { Link, WithRouter } from 'react-router-dom'
 import AvlMap from 'components/AvlMap'
 import { connect } from 'react-redux';
 import get from "lodash.get";
@@ -99,7 +99,7 @@ considered.`,
         let content = info.map((sect,i) => {
             let highlight =   i === 1;
             return (
-                <Link to={sect.link}>
+               
                     <Feature className={`col-sm-4`} highlight={highlight} key={i}>
                         <FeatureHeader highlight={highlight}>
                           <FeatureImage>
@@ -119,7 +119,7 @@ considered.`,
                           </ul>
                         </FeatureDescription>
                   </Feature>
-                </Link>
+                
             )
         }
 

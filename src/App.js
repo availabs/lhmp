@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter,Switch } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 import { ThemeProvider } from 'styled-components';
 import theme from 'components/common/themes/light_new';
 
@@ -16,7 +15,6 @@ import ScrollToTop from 'utils/ScrollToTop'
 import './App.css';
 import Redirect from "react-router/Redirect";
 
-const history = createBrowserHistory();
 
 
 class App extends Component {
@@ -104,7 +102,7 @@ const mapStateToProps = state => {
   });
 }
 
-const mapDispatchToProps = { auth, createBrowserHistory };
+const mapDispatchToProps = { auth };
 
 export default connect(
   mapStateToProps,
