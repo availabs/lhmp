@@ -19,6 +19,7 @@ import Narrative from './components/Strategy/Narrative'
 import Goals from './components/Strategy/Goals'
 import Capabilities from './components/Strategy/Capabilities'
 import Actions from './components/Strategy/Actions'
+
 import Participation from './components/Strategy/Participation'
 
 import {
@@ -29,72 +30,69 @@ import {
     backgroundColor
 } from 'pages/Public/theme/components'
 
-
 let sideMenuConfig = {
     'Planning Context' : [
-            {
-                title:'Introduction',
-                component:Introduction,
-                icon: 'os-icon-layout'
-            },
-            {
-                title:'Local Context',
-                component:LocalContext,
-                icon: 'os-icon-fingerprint'
-            },
-            {
-                title:'Planning Team',
-                component:PlanningTeam,
-                icon: 'os-icon-users'
-            },
+        {
+            title:'Introduction',
+            component: Introduction,
+            icon: 'os-icon-layout'
+        },
+        {
+            title:'Local Context',
+            component:LocalContext,
+            icon: 'os-icon-fingerprint'
+        },
+        {
+            title:'Planning Team',
+            component:PlanningTeam,
+            icon: 'os-icon-users'
+        },
     ],
     'Risk' : [
-            {
-                title:'Hazard Loss',
-                component:Analysis,
-                icon: 'os-icon-layers'
-            },
-            {
-                title:'Hazard Events',
-                component:HazardEvents,
-                icon: 'os-icon-others-43'
-            },
-            {
-                title:'NFIP',
-                component:NFIP,
-                icon: 'os-icon-phone-21'
-            },
-            {
-                title:'Assets',
-                component:Assets,
-                icon: 'os-icon-home'
-            }
+        {
+            title:'Hazard Loss',
+            component:Analysis,
+            icon: 'os-icon-layers'
+        },
+        {
+            title:'Hazard Events',
+            component:HazardEvents,
+            icon: 'os-icon-others-43'
+        },
+        {
+            title:'NFIP',
+            component:NFIP,
+            icon: 'os-icon-phone-21'
+        },
+        {
+            title:'Assets',
+            component:Assets,
+            icon: 'os-icon-home'
+        }
     ],
     'Strategies' : [
-            {
-                title:'Overview',
-                component:Narrative,
-                icon:'os-icon-newspaper'
-            },
-            {
-                title:'Goals & Objectives',
-                component:Goals,
-                icon:'os-icon-tasks-checked'
-            },
-            {
-                title:'Capabilities',
-                component:Capabilities,
-                icon:'os-icon-donut-chart-1'
-            },
-            {
-                title:'Actions',
-                component:Actions,
-                icon:'os-icon-grid-circles'
-            }
-        ]
+        {
+            title:'Overview',
+            component:Narrative,
+            icon:'os-icon-newspaper'
+        },
+        {
+            title:'Goals & Objectives',
+            component:Goals,
+            icon:'os-icon-tasks-checked'
+        },
+        {
+            title:'Capabilities',
+            component:Capabilities,
+            icon:'os-icon-donut-chart-1'
+        },
+        {
+            title:'Actions',
+            component:Actions,
+            icon:'os-icon-grid-circles'
+        }
+    ]
 }
-
-
 class Public extends React.Component {
 
     constructor(props) {
@@ -105,6 +103,7 @@ class Public extends React.Component {
     }
 
     render() {
+
         return (
             <div style={{backgroundColor: backgroundColor}}>
                 <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>

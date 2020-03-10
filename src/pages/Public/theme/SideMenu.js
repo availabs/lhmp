@@ -18,6 +18,8 @@ import styled from "styled-components"
 class SideMenu extends React.Component {
    
     render(){
+        console.log('this.props', this.props)
+        let counter = 0;
         return(
          <div style={{height: '100%', paddingTop: 20}} 
             className={`menu-w 
@@ -41,9 +43,10 @@ class SideMenu extends React.Component {
                                 <li className="sub-header"><span>{section}</span></li>
                                 {
                                     this.props.config[section].map(item=>{
+                                        counter += 1;
                                         return (
                                             <li key={item.title}>
-                                                <Link activeClass='selected' to={item.title} spy={true} offset={-50} >
+                                                <Link activeClass='selected' to={this.props.linkToIndex ? counter : item.title} spy={true} offset={-50} >
                                                     {item.icon ? (
                                                         <div className="icon-w">
                                                             <div className={`os-icon ${item.icon}`}></div>

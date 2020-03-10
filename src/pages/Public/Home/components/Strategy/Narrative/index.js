@@ -25,7 +25,8 @@ import {
     HeroBox,
 
 } from 'pages/Public/theme/components'
-
+ import config from "pages/auth/Plan/config/landing-config";
+ import {RenderConfig} from 'pages/Public/theme/ElementFactory'
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
 class Narrative extends Component {
@@ -53,7 +54,12 @@ class Narrative extends Component {
                     </div>
                     <SectionBox>
                         <SectionBoxMain>
-                            {loremIpsum} {loremIpsum}
+                            <RenderConfig
+                                config={{'Strategy Text':config['Strategy Text']}}
+                                user={this.props.user}
+                                showTitle={false}
+                                showHeader={false}
+                            />
                         </SectionBoxMain>
                     </SectionBox>
 
@@ -69,7 +75,8 @@ const mapStateToProps = (state, ownProps) => {
         activePlan: get(state, `user.activePlan`, null),
         activeCousubid: get(state, `user.activeCousubid`, null),
         graph: state.graph,
-        router: state.router
+        router: state.router,
+        user: state.user
     };
 };
 

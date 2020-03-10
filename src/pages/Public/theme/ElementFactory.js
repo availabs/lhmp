@@ -18,20 +18,21 @@ import {
 } 
 from 'pages/Public/theme/components'
 
-const  ElementFactory =  ({ element: element, user: user,  ...rest }) => (
+const  ElementFactory =  ({ element: element, user: user, showTitle, showHeader, ...rest }) => (
     <Element name={element.title}>
         <SectionBox>
-            {['right'].includes(element.align) ? 
+            {['right'].includes(element.align) ?
                 <SectionBoxSidebar >
                     {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
                 </SectionBoxSidebar>
                 : React.fragment
             }
             <SectionBoxMain>
-                <ContentHeader>{element.title}</ContentHeader>
+                {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
                     user={user}
+                    showHeader={showHeader}
                     {...element}
                     {...rest}
                     />
@@ -48,7 +49,7 @@ const  ElementFactory =  ({ element: element, user: user,  ...rest }) => (
 export default ElementFactory    
 
 
-export const RenderConfig = ({ config: config, ...rest }) => (
+export const RenderConfig = ({ config: config, showHeader:showHeader, ...rest }) => (
     <ContentContainer>
         <div className="row">
             <div className="col-12">
@@ -57,7 +58,7 @@ export const RenderConfig = ({ config: config, ...rest }) => (
                     Object.keys(config).map(section => {
                         return (
                             <div>
-                                <SectionHeader>{section}</SectionHeader>
+                                {showHeader ? <SectionHeader>{section}</SectionHeader> : null}
                                 {
                                     config[section].map(requirement => {
                                         return (

@@ -146,7 +146,7 @@ class TractLayer extends MapLayer {
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
 
-                if (owner_type === '3') {
+                /*if (owner_type === '3') {
                     [...allBuildings.true.value.map(f => f.id), ...allBuildings.false.value.map(f => f.id)]
                         .forEach(buildingId => {
                             countyOwned.push(buildingId);
@@ -169,7 +169,7 @@ class TractLayer extends MapLayer {
                             })
                         })
 
-                }
+                }*/
 
                 allBuildings.true.value
                     .map(f => f.id)
@@ -184,10 +184,10 @@ class TractLayer extends MapLayer {
                     });
 
             });
-        this.legend.domain = ['County', 'Municipality', 'Critical'];
+        /*this.legend.domain = ['County', 'Municipality', 'Critical'];
         this.legend.range = ['#0fcc1b', '#0d1acc', '#cc1e0a'];
         this.legend.title = `Buildings`.toUpperCase()
-        this.legend.active = true;
+        this.legend.active = true;*/
         if(map.getSource('buildings')) {
             map.removeSource('buildings');
             map.removeLayer('buildings-layer');
@@ -305,7 +305,7 @@ const tractLayer = new TractLayer("Assets Layer", {
         }*/
     ],
     displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
-    legend: {
+/*    legend: {
         active: false,
 
         type: "ordinal",
@@ -317,7 +317,7 @@ const tractLayer = new TractLayer("Assets Layer", {
         title: ``,
         format: fnum,
         vertical: true
-    },
+    },*/
     filters: {
         hazard: {
             name: "hazard",

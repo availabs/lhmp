@@ -2,12 +2,14 @@ import AdminAbout from './about'
 import AdminRisk from './risk'
 import AdminStrategies from './strategies'
 import PlanHazards from './hazards'
+import LandingPage from "./LandingPage";
 
 let submenu = [
     ...AdminAbout,
     ...PlanHazards,
     ...AdminRisk,
-    ...AdminStrategies
+    ...AdminStrategies,
+    ...LandingPage
 ]
 export default [
     submenu.map(f => {

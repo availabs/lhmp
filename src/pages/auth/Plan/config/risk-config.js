@@ -1,7 +1,7 @@
 const config = {
     'Vulnerability' : [
         {
-            title: 'Narrative',
+            title: 'Statement',
             requirement: 'Req-B-3B-1',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
@@ -29,48 +29,6 @@ const config = {
             prompt: '',
             intent: '',
             icon: 'os-icon-loader'
-        }
-    ],
-    'Response' : [
-        {
-            title: 'Temporary Housing',
-            requirement: 'Req-NYS-F-3A',
-            type: '',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-email-forward'
-        },
-        {
-            title: 'Relocation Zones',
-            requirement: 'Req-NYS-F-3B',
-            type: '',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-documents-07'
-        },
-        {
-            title: 'Evacuation',
-            requirement: 'Req-NYS-F-4A',
-            type: '',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-alert-octagon'
-        },
-        {
-            title: 'Evacuation Procedues',
-            requirement: 'Req-NYS-F-4A-1',
-            type: 'content',
-            prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
-            intent: '',
-            icon: 'os-icon-alert-triangle'
-        },
-        {
-            title: 'Shelters',
-            requirement: 'Req-NYS-F-4B',
-            type: '',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-share-2'
         }
     ],
     'Changes in Development' : [
@@ -106,7 +64,7 @@ const config = {
         {
             title: 'Open Space ',
             requirement: 'Req-D-1C',
-            type: 'map?',
+            type: 'content',
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'

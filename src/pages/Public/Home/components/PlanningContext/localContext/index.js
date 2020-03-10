@@ -20,7 +20,8 @@ import {
     ContentContainer,
     SectionBox
 } from 'pages/Public/theme/components'
-
+import config from "pages/auth/Plan/config/landing-config";
+import {RenderConfig} from 'pages/Public/theme/ElementFactory'
 
 
 
@@ -91,8 +92,13 @@ class LocalContext extends Component {
                     </div>
                         <div className='row'>
                             <div className='col'>
-                                 <SectionBox> 
-                                    <Content content_id={`${this.props.activeCousubid}-about`} />
+                                 <SectionBox>
+                                     <RenderConfig
+                                         config={{'County Description':config['County Description']}}
+                                         user={this.props.user}
+                                         showTitle={false}
+                                         showHeader={false}
+                                     />
                                 </SectionBox>
                             </div>
                         </div>
@@ -144,7 +150,8 @@ const mapStateToProps = (state,ownProps) => {
         activePlan: state.user.activePlan || null,
         activeCousubid: state.user.activeCousubid || null,
         router: state.router,
-        graph: state.graph
+        graph: state.graph,
+        user: state.user
     };
 };
 

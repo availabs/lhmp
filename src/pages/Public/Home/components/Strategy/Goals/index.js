@@ -23,7 +23,8 @@ import {
     VerticalAlign
 
 } from 'pages/Public/theme/components'
-
+ import config from "pages/auth/Plan/config/landing-config";
+ import {RenderConfig} from 'pages/Public/theme/ElementFactory'
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
 class Goals extends Component {
@@ -46,21 +47,12 @@ class Goals extends Component {
                             <SectionBox>
                               
                                 <SectionBoxMain>
-                                    <p>The prime objective of setting hazard mitigation goals is to aid in the reduction and/or the elimination of losses from hazard events. In concentrating on the top five natural hazards of concern which include: flood, severe storm, winter storm (severe), earthquake, and ice storm; resources can be better focused on achieving progress towards minimizing impacts that could result from such hazards. It is important to create goals that are tangible. The following is a listing of the goals which would help towards diminishing the impacts of the five natural hazards of concern, in conjunction with the other natural and technological hazards assessed in this plan update. </p>
-                                    <p>
-                                    <h4>Goal 1 </h4>
-                                    Improve County-wide Transportation Infrastructure and Networks 
-                                    <h4>Goal 2 </h4>
-                                    Reduce Vulnerability of Residential and Commercial Properties to Flooding Events 
-                                    <h4>Goal 3</h4>
-                                    Preserve and Enhance the Natural Environment 
-                                    <h4>Goal 4</h4>
-                                    Increase Community Preparedness for Large-scale Hazard Events 
-                                    <h4>Goal 5</h4>
-                                    Reduce the Potential Impact of Disasters on the Critical Facilities Identified within the County 
-                                    <h4>Goal 6</h4>
-                                    Increase Public Understanding, Support, and Demand for Hazard Mitigation
-                                    </p>
+                                    <RenderConfig
+                                        config={{'Goals and Objectives Text':config['Goals and Objectives Text']}}
+                                        user={this.props.user}
+                                        showTitle={false}
+                                        showHeader={false}
+                                    />
                                 </SectionBoxMain>
                                   
                             </SectionBox>
@@ -79,7 +71,8 @@ const mapStateToProps = (state, ownProps) => {
         activePlan: get(state, `user.activePlan`, null),
         activeCousubid: get(state, `user.activeCousubid`, null),
         graph: state.graph,
-        router: state.router
+        router: state.router,
+        user: state.user
     };
 };
 

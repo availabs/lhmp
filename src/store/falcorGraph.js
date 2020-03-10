@@ -1,82 +1,85 @@
-// import { host } from '../constants'
-import { Model } from 'falcor'
-import HttpDataSource from 'falcor-http-datasource'
+import { Model } from 'falcor';
+import HttpDataSource from 'falcor-http-datasource';
+// import { '' } from 'config';
 
 import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
+
 import throttle from "lodash.throttle"
 
+var Promise = require("bluebird");
 
-const Promise = require('bluebird')
 
-
-export let host =  'http://localhost:4444/'
+// let url = 'https://graph.availabs.org/'
+let url = 'http://localhost:4444/'
 
 if (process.env.NODE_ENV === 'production') {
-  host = 'https://graph.availabs.org/'
+  url = 'https://graph.availabs.org/'
 }
 
-//host = 'http://localhost:4444/'; //env blank obj
-// export const host = 'https://mitigateny.availabs.org/api/'
+console.log('url', url,process.env.NODE_ENV)
 class CustomSource extends HttpDataSource {
-  onBeforeRequest (config) {
-    // var token = ''
-    // if (localStorage) {
-    //   token = localStorage.getItem('token')
-    // }
-    // config.headers['Authorization'] = `${token}`
-    // // console.log('header', config.headers)
-    // config.url = config.url.replace(/%22/g, '%27')
-    // // config.url = config.url.replace(/"/g, "'")
-    // var splitUrl = config.url.split('?')
-    // if (splitUrl[1] && config.method === 'GET') {
-    //   // config.url = splitUrl[0] + '?' + encodeURI(splitUrl[1])
-    //   delete config.headers
-    // } else if (config.method === 'POST') {
-    //   config.method = 'GET'
-    //   delete config.headers
-    //   config.url = config.url + '?' + config.data.replace(/%22/g, '%27')
-    //   // console.log(config.url)
-    // }
-    // console.log('FR:', config)
+  onBeforeRequest(config) {
+    if (localStorage) {
+      const userToken = localStorage.getItem('userToken');
+      config.headers['Authorization'] = userToken;
+    }
   }
 }
 
-// function graphFromCache () {
-//   let restoreGraph = {}
-//   if (localStorage && localStorage.getItem('falcorCache')) {
-//     let token = localStorage.getItem('token')
-//     let user = localStorage.getItem('currentUser')
-//     if (token && user) {
-//       restoreGraph = JSON.parse(localStorage.getItem('falcorCache'))
-//     }
-//   }
-//   return restoreGraph // {}
-// }
-
-export const falcorGraph = (function () {
-  var storedGraph = {} // graphFromCache() // {};//JSON.parse(localStorage.getItem('falcorCache'))
+export const falcorGraph = (function() {
+  var storedGraph = graphFromCache() // {};//JSON.parse(localStorage.getItem('falcorCache'))
   let model = new Model({
-    source: new CustomSource(host + 'graph', {
+    source: new CustomSource(url + 'graph/', {
       crossDomain: true,
-      withCredentials: false
+      withCredentials: false,
+      timeout: 0
     }),
-    errorSelector: function (path, error) {
-      console.log('errorSelector', path, error)
-      return error
+    errorSelector: function(path, error) {
+      console.log('errorSelector', path, error);
+      return error;
     },
     cache: storedGraph || {}
-  }).batch()
-  return model
-})()
+  })
+  //.batch();
+  return model;
+})();
 
+window.addEventListener('beforeunload', function(e) {
+  var getCache = falcorGraph.getCache();
+  console.log('windowUnload', getCache);
+  localStorage.setItem('falcorCache', JSON.stringify(getCache));
+  // debugger
+});
+
+// onBeforeRequest (config) {
+// var token = ''
+// if (localStorage) {
+// token = localStorage.getItem('token')
+// }
+// config.headers['Authorization'] = `${token}`
+// // console.log('header', config.headers)
+// config.url = config.url.replace(/%22/g, '%27')
+// // config.url = config.url.replace(/"/g, "'")
+// var splitUrl = config.url.split('?')
+// if (splitUrl[1] && config.method === 'GET') {
+// // config.url = splitUrl[0] + '?' + encodeURI(splitUrl[1])
+// delete config.headers
+// } else if (config.method === 'POST') {
+// config.method = 'GET'
+// delete config.headers
+// config.url = config.url + '?' + config.data.replace(/%22/g, '%27')
+// // console.log(config.url)
+// }
+// console.log('FR:', config)
+// }
 
 const NO_OP = () => {}
 
 export const chunker = (values, request, options = {}) => {
   const {
     placeholder = "replace_me",
-    chunkSize = 200
+    chunkSize = 100
   } = options;
 
   const requests = [];
@@ -94,7 +97,7 @@ export const falcorChunker = (values, request, options = {}) => {
   const {
     falcor = falcorGraph,
     callback = NO_OP,
-    concurrency = 8,
+    concurrency = 4,
     ...rest
   } = options;
 
@@ -189,8 +192,18 @@ export const falcorChunkerNiceWithUpdate = (...args) =>{
     });
 }
 
-window.addEventListener('beforeunload', function (e) {
-  var getCache = falcorGraph.getCache()
-  console.log('windowUnload', getCache)
-  localStorage.setItem('falcorCache', JSON.stringify(getCache))
-})
+function graphFromCache () {
+  console.time('restoreGraph')
+  let restoreGraph = {}
+  if (localStorage && localStorage.getItem('falcorCache')) {
+    let token = localStorage.getItem('token')
+    let user = localStorage.getItem('currentUser')
+    console.log(token, user, token && user)
+    //if (token && user) {
+      // restoreGraph = JSON.parse(localStorage.getItem('falcorCache'))
+    //}
+  }
+  console.timeEnd('restoreGraph')
+  console.log('restoreGraph', restoreGraph)
+  return restoreGraph // {}
+}

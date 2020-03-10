@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import {falcorGraph} from "store/falcorGraph";
-import config from './config/strategies-config'
+import config from './config/landing-config'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import functions from "./functions";
 import {setActiveCousubid} from 'store/modules/user'
 import get from "lodash.get";
-class AdminStrategies extends React.Component {
+
+class AdminLanding extends React.Component {
 
     constructor(props) {
         super(props);
@@ -54,9 +55,9 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan/strategies',
+    path: '/plan/landing',
     exact: true,
-    name: 'Strategies',
+    name: 'Landing Page CMS',
     auth: true,
     authLevel: 1,
     mainNav: false,
@@ -67,6 +68,6 @@ export default [{
         layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminStrategies))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminLanding))
 }];
 

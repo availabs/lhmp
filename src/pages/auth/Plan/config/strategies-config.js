@@ -107,6 +107,48 @@ const config = {
             icon: 'os-icon-alert-circle'
         },
     ],
+     'Response' : [
+        {
+            title: 'Temporary Housing',
+            requirement: 'Req-NYS-F-3A',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-email-forward'
+        },
+        {
+            title: 'Relocation Zones',
+            requirement: 'Req-NYS-F-3B',
+            type: '',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-documents-07'
+        },
+        {
+            title: 'Evacuation Routes',
+            requirement: 'Req-NYS-F-4A',
+            type: '',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-alert-octagon'
+        },
+        {
+            title: 'Evacuation Procedues',
+            requirement: 'Req-NYS-F-4A-1',
+            type: 'content',
+            prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
+            intent: '',
+            icon: 'os-icon-alert-triangle'
+        },
+        {
+            title: 'Shelters',
+            requirement: 'Req-NYS-F-4B',
+            type: '',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-share-2'
+        }
+    ],
     Actions: [
         {
             title: 'Proposed Actions',

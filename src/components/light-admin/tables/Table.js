@@ -1,11 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 import {
-  useTable,
-  useResizeColumns,
-  useFlexLayout,
-  useRowSelect,
+    useFilters,
+    useFlexLayout,
+    useGlobalFilter,
+    useResizeColumns,
+    useRowSelect,
+    useSortBy,
+    useTable
 } from 'react-table'
+import matchSorter from "match-sorter";
+import {Link} from "react-router-dom";
 
 
 const Styles = styled.div`
@@ -50,7 +55,7 @@ const Styles = styled.div`
         font-size: 0.75rem;
         text-transform: uppercase;
         border-top: none;
-        border-bottom: 1px solid #999
+        border-bottom: none; #1px solid #999;
         margin: 0;
         padding: 0.75rem;
         font-weight: 500;
@@ -100,106 +105,203 @@ const Styles = styled.div`
       }
     }
   }
-`
-const headerProps = (props, { column }) => getStyles(props, column.align)
+`;
+const headerProps = (props, {column}) => getStyles(props, column.align);
 
-const cellProps = (props, { cell }) => getStyles(props, cell.column.align)
+const cellProps = (props, {cell}) => getStyles(props, cell.column.align);
 
-const getStyles = (props, align = 'left') => [
-  props,
-  {
-    style: {
-      justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start',
-      textAlign: align,
-      alignItems: 'flex-start',
-      display: 'flex',
-    },
-  },
-]
-function Table({ columns, data, tableClass, height }) {
-  const defaultColumn = React.useMemo(
-    () => ({
-      // When using the useFlexLayout:
-      minWidth: 30, // minWidth is only used as a limit for resizing
-      width: 150, // width is used for both the flex-basis and flex-grow
-      maxWidth: 400, // maxWidth is only used as a limit for resizing
-    }),
-    []
-  )
+const getStyles = (props, align = 'left') => {
+    return [
+        props,
+        {
+            style: {
+                justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start',
+                textAlign: align,
+                alignItems: 'flex-start',
+                display: 'flex',
+                flexWrap: 'wrap'
+            },
+        },
+    ]
+};
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn,
-    },
-    useResizeColumns,
-    useFlexLayout,
-    useRowSelect,
-    
-  )
+// Define a default UI for filtering
+function DefaultColumnFilter({
+                                 column: {filterValue, preFilteredRows, setFilter},
+                             }) {
+    const count = preFilteredRows.length;
 
-  return (
-    <div {...getTableProps()} className={tableClass ? tableClass : 'table table-lightborder table-hover'}>
-      <div>
-        {headerGroups.map(headerGroup => (
-          <div
-            {...headerGroup.getHeaderGroupProps({
-              style: { paddingRight: '15px' },
-            })}
-            className="tr"
-          >
-            {headerGroup.headers.map(column => (
-              <div {...column.getHeaderProps(headerProps)} className="th">
-                {column.render('Header')}
-                {/* Use column.getResizerProps to hook up the events correctly */}
-                {column.canResize && (
-                  <div
-                    {...column.getResizerProps()}
-                    className={`resizer ${
-                      column.isResizing ? 'isResizing' : ''
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div {...getTableBodyProps()} className="tbody" style={{height: height ? height : 'auto'}}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <div {...row.getRowProps()} className="tr">
-              {row.cells.map(cell => {
-                return (
-                  <div {...cell.getCellProps(cellProps)} className="td">
-                    {cell.render('Cell')}
-                  </div>
-                )
-              })}
+    return (
+        <input
+            style={{width: 'inherit'}}
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+            }}
+            placeholder={`Search ${count} records...`}
+        />
+    )
+}
+
+function fuzzyTextFilterFn(rows, id, filterValue) {
+    return matchSorter(rows, filterValue, {keys: [row => row.values[id]]})
+}
+
+// Let the table remove the filter if the string is empty
+fuzzyTextFilterFn.autoRemove = val => !val;
+
+function Table({columns, data, tableClass, height, width}) {
+    /*  const defaultColumn = React.useMemo(
+        () => ({
+          // When using the useFlexLayout:
+          minWidth: 30, // minWidth is only used as a limit for resizing
+          width: 150, // width is used for both the flex-basis and flex-grow
+          maxWidth: 400, // maxWidth is only used as a limit for resizing
+        }),
+        []
+      )*/
+    const filterTypes = React.useMemo(
+        () => ({
+            // Add a new fuzzyTextFilterFn filter type.
+            fuzzyText: fuzzyTextFilterFn,
+            // Or, override the default text filter to use
+            // "startWith"
+            text: (rows, id, filterValue) => {
+                return rows.filter(row => {
+                    const rowValue = row.values[id];
+                    return rowValue !== undefined
+                        ? String(rowValue)
+                            .toLowerCase()
+                            .startsWith(String(filterValue).toLowerCase())
+                        : true
+                })
+            },
+        }),
+        []
+    );
+
+    const defaultColumn = React.useMemo(
+        () => ({
+            // Let's set up our default Filter UI
+            Filter: DefaultColumnFilter,
+            minWidth: 30, // minWidth is only used as a limit for resizing
+            width: 150, // width is used for both the flex-basis and flex-grow
+            maxWidth: 400, // maxWidth is only used as a limit for resizing
+        }),
+        []
+    );
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable(
+        {
+            columns,
+            data,
+            defaultColumn,
+            filterTypes
+        },
+        useResizeColumns,
+        useFlexLayout,
+        useFilters, // useFilters!
+        useGlobalFilter, // useGlobalFilter!
+        useSortBy,
+        useRowSelect
+    );
+
+    return (
+        <div {...getTableProps()}
+             style={{overflow: 'auto',/* width: width ? width : 'fit-content'*/}}
+             className={tableClass ? tableClass : 'table table-lightborder table-hover'}>
+            <div>
+                {headerGroups.map(headerGroup => (
+                    <div
+                        {...headerGroup.getHeaderGroupProps({
+                            style: {paddingRight: '15px', borderBottom: '1px solid #999', /*width: 'fit-content'*/},
+                        })}
+                        className="tr"
+                    >
+                        {headerGroup.headers.map(column => (
+                            <div {...column.getHeaderProps()} className="th">
+                                {column.sort ?
+                                    (
+                                        <div {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                            {column.render('Header')}
+                                            {/* Add a sort direction indicator */}
+                                            <span>
+                                                    {column.isSorted
+                                                        ? column.isSortedDesc
+                                                            ? <i className="os-icon os-icon-arrow-up6"></i>
+                                                            : <i className="os-icon os-icon-arrow-down6"></i>
+                                                        : ''}
+                                                </span>
+                                        </div>
+                                    ) : column.render('Header')}
+
+                                {/* Render the columns filter UI */}
+                                <div {...column.getHeaderProps()}>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
+
+                                {/* Use column.getResizerProps to hook up the events correctly */}
+                                {column.canResize && (
+                                    <div
+                                        {...column.getResizerProps()}
+                                        className={`resizer ${
+                                            column.isResizing ? 'isResizing' : ''
+                                        }`}
+                                    />
+                                )}
+
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
-          )
-        })}
-      </div>
-    </div>
-  )
+            <div {...getTableBodyProps()} className="tbody"
+                 style={{height: height ? height : 'auto'}}
+
+            >
+                {rows.map((row, i) => {
+                    prepareRow(row);
+                    return (
+                        <div {...row.getRowProps()} className="tr">
+                            {row.cells.map(cell => {
+                                return (
+                                    <div {...cell.getCellProps(cellProps)} className="td">
+                                        {
+                                            cell.column.link ?
+                                                <Link
+                                                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                                                    {
+                                                        cell.column.formatValue ?
+                                                            cell.column.formatValue(cell.value) :
+                                                            cell.render('Cell')
+                                                    }
+                                                </Link> :
+                                                cell.column.formatValue ?
+                                                    cell.column.formatValue(cell.value) :
+                                                    cell.render('Cell')
+
+                                        }
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
+    )
 }
 
 
-function StyledTable({columns: columns, data: data, height}) {  
-  console.log('table', columns, data)
-  return (
-    <Styles>
-      <Table columns={columns} data={data} height={height} />
-    </Styles>
-  )
+function StyledTable({columns: columns, data: data, height, width}) {
+    return (
+        <Styles>
+            <Table columns={columns} data={data} height={height} width={width}/>
+        </Styles>
+    )
 }
 
 export default StyledTable

@@ -54,12 +54,7 @@ class AssetsPieChart extends React.Component{
                         data={pieData}
                         width={200}
                         height={200}
-                        margin={{
-                            "top": 0,
-                            "right": 10,
-                            "bottom": 0,
-                            "left": 10
-                        }}
+                        margin={{top: 40, right: 20, bottom: 20, left: 20}}
                         pixelRatio={1.2999999523162842}
                         sortByValue={false}
                         innerRadius={0.5}

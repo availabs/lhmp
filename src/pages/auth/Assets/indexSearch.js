@@ -7,12 +7,15 @@ import ElementBox from 'components/light-admin/containers/ElementBox'
 import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
+import functions from 'pages/auth/Plan/functions'
+
 import styled from 'styled-components'
 import {asyncContainer, Typeahead} from 'react-bootstrap-typeahead';
 //import 'react-bootstrap-typeahead/css/Typeahead.css';
 import AssetsTable from 'pages/auth/Assets/components/AssetsTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
+import {header} from "./components/header";
 
 const AsyncTypeahead = asyncContainer(Typeahead);
 const buildingOwnerType = [
@@ -98,19 +101,18 @@ class AssetsBySearch extends React.Component {
         this.setState({filter:newFilter})
     }
 
-
     fetchFalcorDeps(){
         return this.props.falcor.get(
             ['geo',this.props.activeGeoid,['name']],
-            ['geo',this.props.activeGeoid,'cousubs'],
+            //['geo',this.props.activeGeoid,'cousubs'],
+            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
         )
             .then(response  => {
-                return this.props.falcor.get(["geo",response.json.geo[this.props.activeGeoid].cousubs,["name"]])
+                return this.props.falcor.get(
+                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
+                )
             })
-
     }
-
-
 
     renderLandUseTypeMenu(event){
         let land_use_category = event.target.value
@@ -134,12 +136,12 @@ class AssetsBySearch extends React.Component {
             {
                 if (i === 0){
                     county.push({
-                        name : this.props.geoidData[this.props.activeGeoid].name,
+                        name : functions.formatName(this.props.geoidData[this.props.activeGeoid].name, item),
                         value : item
                     })
                 }else{
                     cousubs.push({
-                        name : this.props.geoidData[item].name,
+                        name : functions.formatName(this.props.geoidData[item].name, item),
                         value : item
                     })
                 }
@@ -236,16 +238,7 @@ class AssetsBySearch extends React.Component {
                 <div className='container'>
                     <div className={'row'}>
                         <div className={'col-12'}>
-                            <div>
-                                <ul className="nav nav-tabs upper">
-                                    <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                                href="/assets">Overview</a></li>
-                                    <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                                href="/assets/byType">By Type</a></li>
-                                    <li className="nav-item"><a aria-expanded="false" className="nav-link" data-toggle="tab"
-                                                                href="/assets/search">Search</a></li>
-                                </ul>
-                            </div>
+                            {header('search')}
                         </div>
                     </div>
                     <div className={'row'}>
@@ -295,7 +288,7 @@ export default [{
     exact: true,
     mainNav: false,
     breadcrumbs: [
-        { name: 'Home', path: '/' },
+        { name: 'Home', path: '/admin' },
         { name: 'Assets', path: '/assets' }
     ],
     menuSettings: {

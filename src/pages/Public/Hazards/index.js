@@ -351,6 +351,7 @@ const mapStateToProps = (state,ownProps) => {
     return {
         geoGraph: state.graph.geo,
         router: state.router,
+        planId: state.user.activePlan,
         geoid: ownProps.computedMatch.params.geoid ?
             ownProps.computedMatch.params.geoid
             : state.user.activeCousubid && state.user.activeCousubid !== 'undefined' ?

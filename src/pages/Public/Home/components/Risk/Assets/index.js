@@ -20,6 +20,7 @@ import {
 } from 'pages/Public/theme/components'
 
 import StatBox from 'pages/Public/theme/statBox'
+import NfipLossesTable from "./components/CriticalInrfastructureTable";
 
 
 class NFIP extends Component {
@@ -33,8 +34,21 @@ class NFIP extends Component {
     fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
         return this.props.falcor.get(
-            ['nfip', 'losses', 'byGeoid', parseInt(this.props.activeCousubid), 'allTime', ['total_payments', 'total_losses']],
+            ['geo',this.props.activeGeoid,['name']],
+            //['geo',this.props.activeGeoid,'cousubs'],
+            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
         )
+            .then(response  => {
+                let allGeos = [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])]
+
+                return this.props.falcor.get(
+                    ['building','byGeoid',allGeos,
+                        'critical','all','sum',['count','replacement_value']],
+                    ['building','byGeoid',allGeos,
+                        'critical','all',['flood_100','flood_500'],'sum',['count','replacement_value']],
+                    ['geo', allGeos, ['name']],
+                )
+            })
     }
 /*`building.byGeoid[{keys:geoids}].critical[{keys:criticalType}][{keys:riskZones}].byIndex[{integers:indices}]`,
     flood_100, critical*/
@@ -45,39 +59,18 @@ class NFIP extends Component {
                     <div className='row'>
                         <div className='col-12' style={{textAlign:'center'}}>
                             <ContentHeader>
-                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Assets in Flood Plain
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Critical Assets in Flood Plain
                             </ContentHeader>
                         </div>
                     </div>
                 <div className='row'>
                     <div className='col-lg-6'>
                         <VerticalAlign>
-                                <ContentHeader>
-                                    County owned Assets
-                                </ContentHeader>
-                                <AssetsPageOwnerTypeEditor 
-                                    filter_type={'ownerType'} 
-                                    filter_value={['3']} 
-                                    geoid={[parseInt(this.props.activeCousubid)]} 
+                            <div  >
+                                <NfipLossesTable
+                                    title={ "Critical assets" }
                                 />
-                            
-                                <ContentHeader>
-                                    Municipality Owned Assets
-                                </ContentHeader>
-                                <AssetsPageOwnerTypeEditor 
-                                    filter_type={'ownerType'} 
-                                    filter_value={['4','5','6','7']} 
-                                    geoid={[parseInt(this.props.activeCousubid)]} 
-                                />
-                          
-                            <ContentHeader>
-                                Critical Infrastructure
-                            </ContentHeader>
-                            <AssetsPageCriticalTypeEditor 
-                                filter_type={'critical'} 
-                                filter_value={['all']} 
-                                geoid={[parseInt(this.props.activeCousubid)]} 
-                            />
+                            </div>
                         </VerticalAlign>
                     </div>
                 
@@ -118,6 +111,7 @@ const mapStateToProps = (state,ownProps) => {
     return {
         activePlan: state.user.activePlan || null,
         activeCousubid: state.user.activeCousubid || null,
+        activeGeoid: state.user.activeGeoid || null,
         router: state.router,
         graph: state.graph
     };
