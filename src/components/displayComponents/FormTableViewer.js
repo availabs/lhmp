@@ -4,7 +4,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import { Link } from "react-router-dom"
 
-import Table from 'components/light-admin/tables/Table'
+import Table from 'components/light-admin/tables/tableSelector'
 
 var _ = require('lodash')
 
@@ -60,6 +60,7 @@ class FormTableViewer extends React.Component{
                     data={tableData} 
                     columns={this.props.config.columns} 
                     height={this.props.height}
+                    flex={true}
                 />
             </div>
         )

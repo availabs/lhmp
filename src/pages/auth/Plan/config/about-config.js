@@ -22,7 +22,8 @@ const config =  {
         			{
         				Header: 'Date',
         				accessor: 'start_date',
-        				width: 60
+        				width: 60,
+						sort: true
         			},
         			{
         				Header: 'Name',
@@ -36,7 +37,8 @@ const config =  {
         			{
         				Header: 'Narrative',
         				accessor: 'narrative',
-        				width: 400
+        				width: 400,
+						filter: 'default'
         			}
         		]
         
@@ -70,7 +72,9 @@ const config =  {
         		columns : [
         			{
         				Header: 'Name',
-        				accessor: 'contact_name'
+        				accessor: 'contact_name',
+						sort: true,
+						filter: 'default'
         			},
         			// {
         			// 	Header: 'County',
@@ -82,11 +86,15 @@ const config =  {
         			// },
         			{
         				Header: 'Agency',
-        				accessor: 'contact_agency'
+        				accessor: 'contact_agency',
+						sort: true,
+						filter: 'default'
         			},
         			{
         				Header: 'Role',
-        				accessor: 'contact_title_role'
+        				accessor: 'contact_title_role',
+						sort: true,
+						filter: 'default'
         			}
         		]
         
@@ -145,25 +153,36 @@ const config =  {
         		columns : [
         			{
         				Header: 'Name',
-        				accessor: 'capability_name'
+        				accessor: 'capability_name',
+						sort: true,
+						filter: 'default'
         			},
         			{
         				Header: 'capability type',
-        				accessor: 'capability_type'
+        				accessor: 'capability_type',
+						sort: true,
+						filter: 'default'
         			},
         			
         			{
         				Header: 'adopting authority',
-        				accessor: 'adopting_authority'
+        				accessor: 'adopting_authority',
+						sort: true,
+						filter: 'default'
         			},
         			{
         				Header: 'responsible authority',
-        				accessor: 'responsible_authority'
+        				accessor: 'responsible_authority',
+						sort: true,
+						filter: 'default'
         			},
         			{
         				Header: 'Link',
         				accessor: 'upload',
-        				width: 50
+        				width: 50,
+						sort: true,
+						filter: 'default',
+						link: true
         			},
         			
         		]
