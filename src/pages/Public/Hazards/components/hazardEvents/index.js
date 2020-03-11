@@ -80,7 +80,7 @@ class HazardLoss extends Component {
                         </div>
                         <div className='col-lg-6' >
 
-                                    <div style={{height: '80vh', width: '100%'}}>
+                                <div style={{height: '80vh', width: '100%'}}>
                                 <AvlMap
                                     sidebar={false}
                                     mapactions={false}

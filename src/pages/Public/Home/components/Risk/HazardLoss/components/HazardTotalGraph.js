@@ -173,8 +173,10 @@ class HazardList extends React.Component {
                     }
                     return (
                         <GraphListItem onClick={this.props.setHazard.bind(this, hazard)}>
-                            <GraphIcon color={hazardMeta[hazard].color}
-                                       className={`fi fa-${hazardMeta[hazard].icon}`}/>
+                            <GraphIcon 
+                                color={hazardMeta[hazard].color}
+                                className={`fi fa-${hazardMeta[hazard].icon}`}
+                            />
                             <BarContainer>
                                 <GraphLabel>
                                     <NameLabel>
