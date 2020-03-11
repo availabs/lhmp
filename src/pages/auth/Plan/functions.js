@@ -150,7 +150,7 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
                                 }}>
                                 {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
                             </div>
-                            <SideMenu config={config} style={{marginTop: '6vh !important'}} linkToIndex={true}/>
+                            <SideMenu config={config} linkToIndex={true}/>
                             {/*
                                         <div
                                         className='ae-side-menu'

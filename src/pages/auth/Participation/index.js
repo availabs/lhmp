@@ -246,7 +246,7 @@ export default [
         exact: true,
         name: 'Participation',
         auth: true,
-        mainNav: false,
+        mainNav: true,
         icon: 'os-icon-tasks-checked',
         breadcrumbs: [
             { name: 'Participation', path: '/participation/' },

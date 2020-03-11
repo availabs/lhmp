@@ -31,39 +31,6 @@ class AssetsListByTypeByHazard extends React.Component{
         };
     }
 
-    fetchFalcorDeps(){
-        if(this.props.match.params.hazardIds){
-            let assetByTypeIds = [];
-            assetByTypeIds.push(...this.props.match.params.typeIds.split('-'));
-            return this.props.falcor.get(['building','byGeoid'
-                ,this.props.activeGeoid,
-                this.props.match.params.type,assetByTypeIds,this.props.match.params.hazardIds,
-                'sum',['count','replacement_value']])
-                .then(response => {
-                    let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type];
-                    Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
-                        length += parseInt(graph[item][this.props.match.params.hazardIds].sum.count)
-                    })
-
-                })
-
-        }else{
-            let assetByTypeIds = [];
-            assetByTypeIds.push(...this.props.match.params.typeIds.split('-'));
-            return this.props.falcor.get(['building','byGeoid'
-                ,this.props.activeGeoid,
-                this.props.match.params.type,assetByTypeIds,'sum',['count','replacement_value']])
-                .then(response => {
-                    let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type]
-                    Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
-                        length += parseInt(graph[item].sum.count)
-                    })
-
-                })
-        }
-
-    }
-
     componentDidMount(){
         let data = [];
         let types = this.props.match.params.typeIds.toString()
@@ -115,9 +82,7 @@ class AssetsListByTypeByHazard extends React.Component{
                     let graph = get(response,
                         `json.building.byGeoid.${this.props.activeGeoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
-                    console.log('res', get(response,
-                        `json.building.byGeoid.${this.props.activeGeoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
-                        null), graph);
+
                     Object.keys(graph).forEach(item =>{
                         if (graph[item] && graph[item]['$__path']){
                             data.push({
@@ -142,10 +107,11 @@ class AssetsListByTypeByHazard extends React.Component{
             this.setState({
                 loading : true
             });
+            let type = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type;
             return this.props.falcor.get(
                 ['building', 'byGeoid',
                     this.props.activeGeoid,
-                    this.props.match.params.type,
+                    type,
                     types,
                     'byIndex',{from:0, to:50},ATTRIBUTES],
 
@@ -153,9 +119,7 @@ class AssetsListByTypeByHazard extends React.Component{
                 .then(response => {
                     let meta = response.json.building.meta;
                     //console.log('res', response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types].byIndex)
-                    console.log('res', falcorGraph.getCache().building.byId, response)
-
-                    let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types].byIndex;
+                    let graph = response.json.building.byGeoid[this.props.activeGeoid][type][types].byIndex;
                     Object.keys(graph).forEach(item =>{
                         if (get(graph, `${item}.$__path`, null) !== null){
                             data.push({
@@ -227,9 +191,6 @@ class AssetsListByTypeByHazard extends React.Component{
                     let graph = get(response,
                         `json.building.byGeoid.${this.props.activeGeoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
-                    console.log('res', get(response,
-                        `json.building.byGeoid.${this.props.activeGeoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
-                        null), graph);
                     Object.keys(graph).forEach(item =>{
                         if (graph[item] && graph[item]['$__path']){
                             data.push({
@@ -254,16 +215,18 @@ class AssetsListByTypeByHazard extends React.Component{
             this.setState({
                 loading : true
             })
+            let type = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type;
+
             return this.props.falcor.get(
                 ['building', 'byGeoid',
                     this.props.activeGeoid,
-                    this.props.match.params.type,
+                    type,
                     types,
                     'byIndex',{from:from, to:to},ATTRIBUTES],
                 ['building','meta',['owner_type','prop_class'],'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
-                    let graph = response.json.building.byGeoid[this.props.activeGeoid][this.props.match.params.type][types].byIndex;
+                    let graph = response.json.building.byGeoid[this.props.activeGeoid][type][types].byIndex;
                     Object.keys(graph).forEach(item =>{
                         if (get(graph, `${item}.$__path`, null) !== null){
                             data.push({
@@ -348,6 +311,9 @@ class AssetsListByTypeByHazard extends React.Component{
 }
 
 const mapStateToProps = (state, ownProps) => {
+    console.log(
+        'ownerProps', ownProps
+    )
     return ({
         activeGeoid: state.user.activeGeoid,
         filter_type : ownProps.filter_type,
