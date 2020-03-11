@@ -19,21 +19,16 @@ let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
 let layerToShow = ''
 let activeLayers = []
-const DynamicLayerFactory = (callingLayer, ...args) => {
-    const lineColor = COLORS[UNIQUE % 12],
-        sourceId = getUniqueId(),
-        layerId = getUniqueId();
-        if(layerToShow === 'scenario'){
-            return new ScenarioLayer('scenario', ScenarioOptions())
-        }
-        else if(layerToShow === 'zone'){
-            return new ZoneLayer('zone',ZoneOptions())
-        }
-        else if(layerToShow === 'projects'){
-            return new ProjectLayer('projects',ProjectOptions())
-        }
+const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
+    return new ScenarioLayer('scenario', ScenarioOptions())
 
+};
+const DynamicZoneLayerFactory =(callingLayer,...args) =>{
+    return new ZoneLayer('zone',ZoneOptions())
+};
 
+const DynamicProjectLayerFactory = (callingLayer,...args) =>{
+    return new ProjectLayer('projects',ProjectOptions())
 }
 
 
@@ -41,7 +36,8 @@ class ControlLayers extends MapLayer {
     onAdd(map) {
         super.onAdd(map);
         if (store.getState().user.activeGeoid) {
-            let activeGeoid = store.getState().user.activeGeoid
+
+            let activeGeoid = store.getState().user.activeGeoid;
             return falcorGraph.get(['geo', activeGeoid, 'boundingBox'])
                 .then(response => {
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
@@ -142,41 +138,46 @@ class ControlLayers extends MapLayer {
         }
     }
 
-    toggleModesOff(layerName) {
-        if (this.modes.includes(layerName)) {
-            this.doAction([
-                "deleteDynamicLayer",
-                layerName
-            ])
 
-        }
+    loadLayers(){
+        this.doAction([
+            "addDynamicLayer",
+            DynamicScenarioLayerFactory
+        ]).then(sl => {
+            this.scenarioLayer = sl
+            this.doAction([
+                 "addDynamicLayer",
+                 DynamicZoneLayerFactory
+             ]).then(zl => {
+                this.zoneLayer = zl
+                this.doAction([
+                    "addDynamicLayer",
+                    DynamicProjectLayerFactory
+                ]).then(pl =>{
+                    this.projectLayer = pl
+                })
+            })
+        })
     }
 
-    toggleModesOn (layerName){
-        if(this.modes.includes(layerName)){
-            layerToShow = layerName
-            this.doAction([
-                "deleteDynamicLayer",
-                layerName
-            ])
-            this.doAction([
-                "addDynamicLayer",
-                DynamicLayerFactory
-            ]);
-        }else {
-            layerToShow = layerName
-            this.doAction([
-                "addDynamicLayer",
-                DynamicLayerFactory,
-
-            ]);
-
-            this.modes.push(layerName)
+    mainLayerToggleVisibilityOn(layerName){
+        if(layerName === 'scenario'){
+            this.scenarioLayer.toggleVisibilityOn()
+        }
+        if(layerName === 'zone'){
+            this.zoneLayer.toggleVisibilityOn()
         }
 
     }
 
-
+    mainLayerToggleVisibilityOff(layerName){
+        if(layerName === 'scenario'){
+            this.scenarioLayer.toggleVisibilityOff()
+        }
+        if(layerName === 'zone'){
+            this.zoneLayer.toggleVisibilityOff()
+        }
+    }
 
 }
 
@@ -192,6 +193,7 @@ export default (options = {}) =>
             Overview: {
                 title: "",
                 comp: ({layer}) =>{
+
                     return(
                         <div>
                             <MainControls layer={layer}/>

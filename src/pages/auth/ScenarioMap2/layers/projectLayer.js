@@ -70,6 +70,7 @@ export const ProjectOptions =  (options = {}) => {
                     'line-opacity': 0.5
                 },
                 filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
+
             },
 
         ],

@@ -69,7 +69,7 @@ class NFIP extends Component {
                                 </div>
                                 <div  >
                                     <NfipLossesTable
-                                        title={ "NFIP Losses by Municipality" }
+                                        title={ "NFIP Losses by Jurisdiction" }
                                     />
                                 </div>
                         </VerticalAlign>

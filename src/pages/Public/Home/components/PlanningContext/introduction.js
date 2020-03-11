@@ -1,8 +1,12 @@
- import React, {Component} from 'react';
+import React, {Component} from 'react';
 import { reduxFalcor } from 'utils/redux-falcor'
+
+
+import { Link, WithRouter } from 'react-router-dom'
+
  import config from "pages/auth/Plan/config/landing-config";
  import {RenderConfig} from 'pages/Public/theme/ElementFactory'
-// import { Link } from 'react-router-dom'
+
 import AvlMap from 'components/AvlMap'
 import { connect } from 'react-redux';
 import get from "lodash.get";
@@ -64,7 +68,8 @@ just to meet planning requirements, but to ensure transparency and foster contin
                     'Integration',
                     'Maintenance',
                     'Adoptions',
-                ]
+                ],
+                link: '/planning-process'
             },
             {
                 title: 'Risk',
@@ -79,7 +84,8 @@ considered.`,
                     'Critical Infrastructure',
                     'Changes in Development',
                     'Response'
-                ]
+                ],
+                link: '/risk'
             },
             {
                 title: 'Strategies',
@@ -89,7 +95,8 @@ considered.`,
                      'Goals',
                     'Capabilities',
                     'Actions'
-                ]
+                ],
+                link: '/strategies'
 
             }
         ]
@@ -97,25 +104,27 @@ considered.`,
         let content = info.map((sect,i) => {
             let highlight =   i === 1;
             return (
-                <Feature className={`col-sm-4`} highlight={highlight} key={i}>
-                    <FeatureHeader highlight={highlight}>
-                      <FeatureImage>
-                        <img alt={'Heading Image'} src={sect.image} />
-                      </FeatureImage>
-                      <FeatureName2>{sect.title}</FeatureName2>
-                    </FeatureHeader>
                
-                    <FeatureDescription>
-                      <h6>Description</h6>
-                      <p>
-                        {sect.description}
-                      </p>
-                      <h6>Features</h6>
-                      <ul>
-                        {sect.features.map((feat,ii) => (<li key={ii}>{feat}</li>))}
-                      </ul>
-                    </FeatureDescription>
-              </Feature>
+                    <Feature className={`col-sm-4`} highlight={highlight} key={i}>
+                        <FeatureHeader highlight={highlight}>
+                          <FeatureImage>
+                            <img alt={'Heading Image'} src={sect.image} />
+                          </FeatureImage>
+                          <FeatureName2>{sect.title}</FeatureName2>
+                        </FeatureHeader>
+                   
+                        <FeatureDescription>
+                          <h6>Description</h6>
+                          <p>
+                            {sect.description}
+                          </p>
+                          <h6>Features</h6>
+                          <ul>
+                            {sect.features.map((feat,ii) => (<li key={ii}>{feat}</li>))}
+                          </ul>
+                        </FeatureDescription>
+                  </Feature>
+                
             )
         }
 

@@ -6,7 +6,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-import {setActiveRiskZoneId} from 'store/modules/scenario'
+import { setActiveRiskZoneId } from 'store/modules/scenario'
 
 class ScenarioTable extends React.Component {
     constructor(props) {

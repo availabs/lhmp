@@ -105,8 +105,8 @@ class TractLayer extends MapLayer {
         if (!(geos && geos.value && geos.value.length > 0)) return Promise.resolve();
 
         console.log('test 123', geos.value)
-        return falcorChunkerNiceWithUpdate(['acs', geos.value, ['2017'], ['B01003_001E']])
-            .then(d => falcorChunkerNiceWithUpdate(['geo', geos.value, 'name']))
+        return falcorGraph.get(['acs', geos.value, ['2017'], ['B01003_001E']])
+            .then(d => falcorGraph.get(['geo', geos.value, 'name']))
             
     }
 
