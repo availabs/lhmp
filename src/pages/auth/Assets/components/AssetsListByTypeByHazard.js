@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
+import _ from 'lodash'
 import get from "lodash.get";
 import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
@@ -292,8 +293,15 @@ class AssetsListByTypeByHazard extends React.Component{
                                 loading={this.state.loading}
                                 onPage={this.onPageChange.bind(this)}
                                 filterData = {true}
-                                tableData = {this.state.data}
-                                columns = {this.state.columns}
+                                tableData = {this.props.match.url.split('/')[1] === 'risk' ?
+                                    this.state.data.map(f => {delete f.replacement_value; return f}) :
+                                    this.state.data}
+                                columns = {
+                                    this.props.match.url.split('/')[1] === 'risk' ?
+                                    this.state.columns.filter(f => f !== 'replacement_value') :
+                                    this.state.columns
+                                }
+                                isPublic={this.props.match.url.split('/')[1] === 'risk'}
                             />
                         </div>
                     </div>
@@ -311,9 +319,6 @@ class AssetsListByTypeByHazard extends React.Component{
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log(
-        'ownerProps', ownProps
-    )
     return ({
         activeGeoid: state.user.activeGeoid,
         filter_type : ownProps.filter_type,
@@ -326,7 +331,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {};
 
-export default [{
+let authRoutes = [
+    // Auth
+    {
         icon: 'os-icon',
         path: '/assets/list/:type/:typeIds',
         exact: true,
@@ -413,5 +420,19 @@ export default [{
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
     },
-    ]
+];
+let publicRoutes = authRoutes.map(r => {
+    let newR = _.cloneDeep(r);
+    newR.path = '/risk' + r.path;
+    newR.auth = false;
+    newR.menuSettings.position = 'menu-position-top';
+    newR.menuSettings.style = 'color-style-default';
+    newR.menuSettings.layout = 'menu-layout-full';
+    newR.menuSettings.scheme = 'color-scheme-dark';
+    return newR
+});
+
+authRoutes.push( ...publicRoutes);
+
+export default authRoutes
 

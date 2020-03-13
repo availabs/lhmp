@@ -17,6 +17,7 @@ class criticalFacilitiesTableViewer extends Component {
                     height={'fit-content'}
                     width={'100%'}
                     tableClass={`table table-sm table-lightborder table-hover`}
+                    public={true}
                 />
             </div>
         )

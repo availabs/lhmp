@@ -22,6 +22,7 @@ class inventoryTableViewer extends Component {
                         scenarioId={[3]}
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
+                        public={true}
                     />
                 </div>
                 <div>
@@ -33,6 +34,7 @@ class inventoryTableViewer extends Component {
                         scenarioId={[3]}
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
+                        public={true}
                     />
                 </div>
             </div>

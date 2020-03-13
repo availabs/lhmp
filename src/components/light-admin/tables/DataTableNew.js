@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
+export default ({ tableData=[], columns=[], links={}, onClick=null, isPublic }) => {
     if (!tableData || tableData.length === 0) {
         return ('No Data Sent to table')
     }
@@ -30,18 +30,22 @@ export default ({ tableData=[], columns=[], links={}, onClick=null }) => {
                             )
                         })
                         }
-                        <td>
-                            <Link className="btn btn-sm btn-outline-primary"
-                                  to={ `/assets/list/view/${row.building_id}` }>
-                                View
-                            </Link>
-                        </td>
-                        <td>
-                            <Link className="btn btn-sm btn-outline-primary"
-                                  to={ `/assets/list/edit/${row.building_id}` }>
-                                Edit
-                            </Link>
-                        </td>
+                        {isPublic ? null :
+                            <td>
+                                <Link className="btn btn-sm btn-outline-primary"
+                                      to={ `/assets/list/view/${row.building_id}` }>
+                                    View
+                                </Link>
+                            </td>
+                        }
+                        {isPublic ? null :
+                            <td>
+                                <Link className="btn btn-sm btn-outline-primary"
+                                      to={ `/assets/list/edit/${row.building_id}` }>
+                                    Edit
+                                </Link>
+                            </td>
+                        }
 
                     </tr>
                 ))

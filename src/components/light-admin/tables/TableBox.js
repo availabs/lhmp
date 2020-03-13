@@ -167,6 +167,7 @@ toggleFilterColumn(column, value) {
                                      sortOrder={ this.state.sortOrder }
                                      length = {this.props.length}
                                      onPageChange = {this.props.onPage.bind(this)}
+                                     isPublic = {this.props.isPublic}
                           />
                       </div>
                       { paginate}

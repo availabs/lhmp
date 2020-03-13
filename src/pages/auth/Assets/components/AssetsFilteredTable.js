@@ -64,7 +64,7 @@ class AssetsFilteredTable extends Component {
         totalBuildingsValue = 0;
         riskZoneIdsAllValuesTotal = {};
         let primeColName = this.props.groupBy.split('T').join(' T');
-        let linkBase = `/assets/list/${this.props.groupBy}/`;
+        let linkBase = `${this.props.public ? 'risk' : ``}/assets/list/${this.props.groupBy}/`;
         let graph = this.props.groupBy === 'critical' ?
             Object.keys(get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy + 'Grouped'}`, {}))
                 .reduce( (a,c) => {
@@ -297,7 +297,7 @@ class AssetsFilteredTable extends Component {
                     sort: true,
                     link: (d) => d // functional
                 },
-                {
+                this.props.public ? null : {
                     Header: 'TOTAL $ REPLACEMENT VALUE',
                     accessor: 'TOTAL $ REPLACEMENT VALUE',
                     sort: true,
@@ -306,6 +306,7 @@ class AssetsFilteredTable extends Component {
                 },
                 ...riskZoneColNames
                     .map((name) => {
+                        if (name.includes('$') && this.props.public) {return null}
                         let a = {};
                         let riskZone = riskZoneToNameMapping[name.slice(0, name.length-2)];
                         let scenarioId = Object.keys(scenarioToRiskZoneMapping).filter(f => scenarioToRiskZoneMapping[f].includes(riskZone)).pop();
@@ -316,7 +317,7 @@ class AssetsFilteredTable extends Component {
                         a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}`;
                         return a
                     }),
-            ]}
+            ].filter(f => f)}
     }
 
 
@@ -343,7 +344,8 @@ AssetsFilteredTable.defaultProps = {
     geoid: "36025",
     groupBy: 'critical', // ownerType, propType, jurisdiction, critical
     groupByFilter: [],
-    scenarioId: [3]
+    scenarioId: [3],
+    public: false
 };
 const mapStateToProps = state => ({
 
