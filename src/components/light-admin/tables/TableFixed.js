@@ -92,8 +92,8 @@ function Table({ columns, data, height, tableClass }) {
     const firstPageRows = rows// .slice(0, 20)
 
     return (
-        <DIV style={{overflow: 'auto', height: height ? height : 'auto'}} className={tableClass ? tableClass : 'table table-lightborder table-hover dataTable'}>
-            <table {...getTableProps()}>
+        <DIV style={{overflow: 'auto', height: height ? height : 'auto'}} className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
+            <table {...getTableProps()} style={{width: '100%'}}>
                 <thead >
                 {headerGroups.map(headerGroup => (
                     <tr {...headerGroup.getHeaderGroupProps()}>

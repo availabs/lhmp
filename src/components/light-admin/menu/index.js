@@ -111,7 +111,7 @@ class Menu extends Component {
                     {/*web menu*/}
                     <div className="logo-w">
                         <Link className="logo" to="/">
-                            <div className="logo-label"><Logo/></div>
+                            {this.props.menuSettings.layout === 'menu-layout-mini' ? <Logo miniLayout={true}/> : <div className="logo-label"><Logo/></div>}
                         </Link>
                     </div>
                     {userMenu}

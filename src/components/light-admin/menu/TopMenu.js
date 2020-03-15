@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom'
 
 class Logo extends Component {
     render() {
+        let title = this.props.title || 'Mitigation Planner'
         return (
-            'Mitigation Planner'
+            this.props.miniLayout ? title.slice(0,1) : title
         )
     }
 }
