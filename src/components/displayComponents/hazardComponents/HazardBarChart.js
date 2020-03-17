@@ -122,7 +122,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         "legendPosition": "middle",
                         "legendOffset": 40,
                         "tickRotation": this.props.showYlabel ? 0 : 45,
-                        format: (s) => s.slice(-2)
+                        format: (s) => `'${s.slice(-2)}`
                     }}
                     axisLeft={{
                         "orient": "left",

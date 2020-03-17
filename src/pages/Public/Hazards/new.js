@@ -66,6 +66,7 @@ class Hazards extends React.Component {
             hazards: [],
             hazard: undefined
         }
+        this.changeHazard = this.changeHazard.bind(this)
     }
 
 
@@ -151,6 +152,10 @@ class Hazards extends React.Component {
             ) : null
     }
 
+    changeHazard(e, a) {
+        console.log('test', e.target.value, e , a)
+        this.setState({hazard:e.target.value})
+    }
     render() {
         if(!this.props.geoid) {
             return <React.Fragment />
@@ -170,7 +175,7 @@ class Hazards extends React.Component {
                         </section>
                         <section>
                             <SectionHeader>Hazards of Concern</SectionHeader>
-                            <HazardHeroStats {...this.state}/>
+                            <HazardHeroStats {...this.state} changeHazard={this.changeHazard}/>
                             <Hazard 
                                 geoid={this.props.geoid} 
                                 hazard={this.state.hazard}

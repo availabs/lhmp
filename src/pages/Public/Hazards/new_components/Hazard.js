@@ -7,6 +7,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import HazardBarChart from 'components/displayComponents/hazardComponents/HazardBarChart'
 
 import NumberOfHazardsMonthStackedBarGraph from '../components/NumberOfHazardsMonthStackedBarGraph'
+import CousubTotalLossTable from "../components/CousubTotalLossTable";
 import get from "lodash.get"
 import fnum from 'utils/sheldusUtils'
 
@@ -95,6 +96,32 @@ class Hazards extends React.Component {
                             format={"~s"}
                             hazard={this.props.hazard}
                             height={300}
+                        />
+                    </div>
+                    <div className='col-md-6'>
+                        <h6>{HazardName} Events by Month</h6>
+                        <NumberOfHazardsMonthStackedBarGraph
+                            showYlabel={false}
+                            showXlabel={false}
+                            lossType={'num_events'}
+                            geoid={this.props.geoid}
+                            geoLevel={this.props.geoLevel}
+                            dataType='severeWeather'
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
+                            height={300}
+                        />
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className='col-md-6'>
+                        <h6>{HazardName} Loss by Month</h6>
+                        <CousubTotalLossTable
+                            geoid={this.props.geoid}
+                            geoLevel={this.props.geoLevel}
+                            dataType='severeWeather'
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
                         />
                     </div>
                     <div className='col-md-6'>

@@ -99,7 +99,7 @@ class CountyHeroStats extends React.Component {
         return (
             <SideInfoProjectBox 
                 rows={ rows }
-                title="Annualized Damages"
+                changeHazard={this.props.changeHazard}
             />
         )
     }
@@ -121,8 +121,8 @@ const mapDispatchToProps = {};
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(CountyHeroStats))
 
 
-const BoxRow = ({ value, label, hazard, onClick, i }) => (
-    <div className="col-sm"  key={ i } style={{textAlign:'center'}}>
+const BoxRow = ({ value, label, hazard, changeHazard, onClick, i }) => (
+    <div className="col-sm"  key={ i } style={{textAlign:'center'}} value={hazard} onClick={changeHazard.bind(hazard)}>
         <div className="el-tablo highlight">
             <div className="label" style={{'font-size': '1.2em', fontWeight: 400}}>{ label }</div>
             
@@ -141,11 +141,11 @@ const BoxRow = ({ value, label, hazard, onClick, i }) => (
     </div>
 )
 
-const SideInfoProjectBox =  ({ title, rows, onClick, content=null }) => (
+const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null }) => (
     <ProjectBox title={ title } style={ {  width:'100%' } }>
         <div className="row align-items-center">
             { rows.length ?
-                rows.map((r,i) => (<BoxRow {...r} onClick={onClick} i={i} />))
+                rows.map((r,i) => (<BoxRow {...r} changeHazard={changeHazard} i={i} />))
                 : content
             }            
         </div>
