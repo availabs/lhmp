@@ -19,7 +19,7 @@ class SideMenu extends React.Component {
    
     render(){
         console.log('this.props', this.props)
-        let counter = 0;
+        let counter = 1;
         return(
          <div style={{height: '100%', paddingTop: 20}} 
             className={`menu-w 

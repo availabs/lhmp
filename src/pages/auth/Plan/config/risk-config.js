@@ -17,7 +17,8 @@ const config = {
         {
             title: 'Inventory',
             requirement: 'Req-B-3B-1B',
-            type: 'table',
+            type: 'inventoryTable',
+            //align: '',
             intent: 'Overview of loss by asset type by scenario',
             icon: 'os-icon-alert-circle'
         },
@@ -25,7 +26,7 @@ const config = {
         {
             title: 'Critical Facilities',
             requirement: 'Req-NYS-F-2',
-            type: 'table',
+            type: 'criticalFacilitiesTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-loader'

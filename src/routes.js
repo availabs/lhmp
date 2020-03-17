@@ -39,8 +39,12 @@ import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - su
 import AdminLandingPage from 'pages/auth/Plan/LandingPage'
 
 import PlanningTools from 'pages/auth/PlanningTools/'
-import Assets from 'pages/auth/Assets/'
-import AssetsByType from 'pages/auth/Assets/indexbyType'
+import PlanningToolsRoles from 'pages/auth/Roles/index'
+import PlanningToolsParticipation from 'pages/auth/Participation/index'
+import PlanningToolsCapabilities from 'pages/auth/Capabilities/index'
+import PlanningToolsAssets from 'pages/auth/Assets/index'
+import PlanningToolsActions from 'pages/auth/actions/index'
+
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
@@ -104,9 +108,12 @@ const routes = [
    ...AdminStrategies,
     ...AdminLandingPage,
    ...PlanPage,
-   ...PlanningTools,
-   ...Assets,
-   ...AssetsByType,
+   //...PlanningTools,
+   ...PlanningToolsRoles,
+   ...PlanningToolsParticipation,
+   ...PlanningToolsCapabilities,
+   ...PlanningToolsAssets,
+   ...PlanningToolsActions,
    ...AssetsSearch,
    ...AssetsView,
    ...AssetsEdit,

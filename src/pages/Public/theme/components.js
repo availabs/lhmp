@@ -170,7 +170,10 @@ export const SectionBox = styled.div`
 	line-height: ${mainFontLineHeight};
 	font-weight: ${mainFontWeight};
 	font-family: ${mainFontFamily};
-	display: flex	
+	display: flex
+	table{
+	    font-size: .6em;
+	}
 `
 export const SectionBoxMain = styled.div`
 	flex-grow: 1;

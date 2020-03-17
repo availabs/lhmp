@@ -8,6 +8,8 @@ import capabilitiesTableHMPViewer from "./capabiltiesTableHMP/capabilitiesTableH
 import planningDocumentsEditor from "./planningDocumentsEditor";
 import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer";
 import formTableViewer from './FormTableViewer'
+import criticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
+import inventoryTableViewer from './inventoryTableViewer'
 
 
 const NA = ({ type, state, routes }) =>
@@ -33,6 +35,10 @@ export default {
     planningDocumentsEditor,
     planningDocumentsViewer,
     formTableViewer,
+    criticalFacilitiesTableViewer,
+    inventoryTableViewer,
+    criticalFacilitiesTableEditor: criticalFacilitiesTableViewer,
+    inventoryTableEditor: inventoryTableViewer,
     formTableEditor: formTableViewer
 }
 

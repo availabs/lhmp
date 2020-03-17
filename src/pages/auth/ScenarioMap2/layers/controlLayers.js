@@ -8,7 +8,7 @@ import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import { getColorRange } from "constants/color-ranges";
-import activeLayerConfig from 'pages/auth/ScenarioMap2/layers/activeLayerConfig.js'
+
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
