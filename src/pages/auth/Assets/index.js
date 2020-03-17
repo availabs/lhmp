@@ -1,23 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-import { reduxFalcor } from 'utils/redux-falcor'
+import {reduxFalcor} from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
 import {connect} from "react-redux";
 import {setActiveCousubid} from 'store/modules/user'
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
 import styled from 'styled-components'
-import AssetsPieChart from 'pages/auth/Assets/components/AssetsPieChart'
 import {header} from "./components/header"
-import BuildingByOwnerTypeTable from 'pages/auth/Assets/components/BuildingByOwnerTypeTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
-import MultiSelectFilter from 'components/filters/multi-select-filter.js'
-import BuildingByLandUsePieChart from 'pages/auth/Assets/components/BuildingByLandUsePieChart'
-import BuildingByLandUseTable from 'pages/auth/Assets/components/BuildingByLandUseTable'
 import BuildingByHazardRiskPieChart from "./components/BuildingByHazardRiskPieChart";
 import BuildingByHazardRiskTable from "./components/BuildingByHazardRiskTable";
 import AssetsFilteredTable from "./components/AssetsFilteredTable";
+
 const HeaderSelect = styled.select`
 {
     display: inline-block;
@@ -32,14 +27,14 @@ const HeaderSelect = styled.select`
     font-weight: 500;
     font-size: 1em;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}`
+}`;
 
 //http://albany.localhost:3000/assets/list/:type/:typeIds/hazard/:hazardIds
 
 class AssetsByTypeIndex extends React.Component {
 
-    constructor (props) {
-        super(props)
+    constructor(props) {
+        super(props);
         this.state = {
             page: '',
             geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid,
@@ -51,80 +46,48 @@ class AssetsByTypeIndex extends React.Component {
             },
             height: '2565px'
 
-        }
+        };
 
         this.handleChange = this.handleChange.bind(this);
         this.renderMenu = this.renderMenu.bind(this);
-        this.renderOwnerTypeMenu = this.renderOwnerTypeMenu.bind(this);
-        this.renderLandUseMenu = this.renderLandUseMenu.bind(this)
         this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.activeCousubid !== prevProps.activeCousubid){
+        if (this.props.activeCousubid !== prevProps.activeCousubid) {
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
         }
     }
 
     handleChange(e) {
-        this.setState({...this.state,[e.target.id]: e.target.value});
+        this.setState({...this.state, [e.target.id]: e.target.value});
     };
 
-    handleMultiSelectFilterChange(e){
-        let newFilter = this.state.filter
+    handleMultiSelectFilterChange(e) {
+        let newFilter = this.state.filter;
         newFilter.value = e;
-        this.setState({filter:newFilter})
+        this.setState({filter: newFilter})
     }
 
-    fetchFalcorDeps(){
+    fetchFalcorDeps() {
         return this.props.falcor.get(
-            ['geo',this.props.activeGeoid,['name']],
+            ['geo', this.props.activeGeoid, ['name']],
             //['geo',this.props.activeGeoid,'cousubs'],
             ["geo", this.props.activeGeoid, 'counties', 'municipalities']
         )
-            .then(response  => {
+            .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
+                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
                 )
             })
     }
+
     renderMenu(caller) {
-        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoidData,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
-        return header(caller, this.props.geoidData,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)
+        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoidData, `${this.props.activeGeoid}.counties.municipalities.value`, [])];
+        return header(caller, this.props.geoidData, this.props.setActiveCousubid, this.props.activeCousubid, allowedGeos)
     }
 
-    renderOwnerTypeMenu(){
-        return(
-            <div>
-                <select id='ownerType' onChange={this.handleChange} value={this.state.ownerType}>
-                    <option default>--Select Owner Type--</option>
-                    {
-                        buildingOwnerType.map((owner) =>{
-                            return(
-                                <option key={owner.id} value={owner.value}>{owner.value}</option>
-                            )
-                        })
-                    }
-                </select>
-            </div>
-        )
-
-    }
-
-    renderLandUseMenu(){
-        return (
-            <div>
-                {JSON.stringify(this.state.filter.value)}
-                <MultiSelectFilter
-                    filter = {this.state.filter}
-                    setFilter = {this.handleMultiSelectFilterChange}
-                />
-            </div>
-        )
-    }
-
-
-    render () {
+    render() {
         return (
             <div className='container'>
                 <Element>
@@ -172,7 +135,8 @@ class AssetsByTypeIndex extends React.Component {
                                     <h4>Buildings By Hazard Risk</h4>
                                     {
                                         this.state.geoid ?
-                                            <BuildingByHazardRiskPieChart geoid={[this.state.geoid]} replacement_value={true}/>
+                                            <BuildingByHazardRiskPieChart geoid={[this.state.geoid]}
+                                                                          replacement_value={true}/>
                                             : ''
                                     }
                                     {
@@ -198,7 +162,7 @@ const mapStateToProps = state => ({
 
     isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
-    geoidData: get(state.graph,'geo'),
+    geoidData: get(state.graph, 'geo'),
     activeGeoid: state.user.activeGeoid,
     activeCousubid: state.user.activeCousubid,
 });
@@ -216,8 +180,8 @@ export default [{
     exact: true,
     mainNav: true,
     breadcrumbs: [
-        { name: 'Home', path: '/admin' },
-        { name: 'Assets', path: '/assets' }
+        {name: 'Home', path: '/admin'},
+        {name: 'Assets', path: '/assets'}
     ],
     menuSettings: {
         image: 'none',
@@ -228,5 +192,5 @@ export default [{
     },
     name: 'Assets',
     auth: true,
-    component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsByTypeIndex))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsByTypeIndex))
 }];
