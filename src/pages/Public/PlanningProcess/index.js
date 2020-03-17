@@ -107,6 +107,7 @@ class About extends React.Component {
                                                                     <ElementFactory 
                                                                         element={requirement} 
                                                                         user={this.props.user}
+                                                                        autoLoad={true}
                                                                     />
                                                                 )
                                                             })

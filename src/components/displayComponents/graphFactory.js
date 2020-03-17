@@ -18,7 +18,7 @@ class ElementHider extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            show: props.isVisible
+            show: props.isVisible || props.autoLoad
         }
     }
 
