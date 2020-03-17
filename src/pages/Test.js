@@ -308,7 +308,9 @@ class AssetsFilteredTable extends Component {
                         a['Header'] = name;
                         a['accessor'] = name;
                         a['sort'] = true;
-                        name.includes('$') ? a['formatValue'] = fnum : '';
+                        if(name.includes('$') ){
+                          a['formatValue'] = fnum
+                        }
                         a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}`;
                         return a
                     }),
