@@ -10,10 +10,11 @@ import { fnum } from "utils/sheldusUtils"
 import ScenarioControl from "./scenarioControl";
 import ZoneControl from "./zoneControls";
 import ProjectControl from "./projectControl"
+import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 var _ = require('lodash');
 const AllModes =[{id:'scenario',title:'Risk Scenarios'},{id:'zone',title:'Zones'},{id:'projects',title:'Project'}];
 const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'projects_block',title:'Projects'}]
-let currentInfoBox = []
+
 class MainControls extends React.Component {
     constructor(props) {
         super(props);
@@ -35,21 +36,21 @@ class MainControls extends React.Component {
     }
 
     componentDidUpdate(oldProps,oldState){
-        if(this.state.activeMode.length === 0 && this.state.modeOff !== "") {
 
+        if(this.state.activeMode.length === 0 && this.state.modeOff !== "") {
             this.props.layer.mainLayerToggleVisibilityOff(this.state.modeOff)
         }
         if(!this.state.activeMode.includes(oldState.activeMode) && this.state.modeOff === ""){
             this.props.layer.mainLayerToggleVisibilityOn(this.state.activeMode)
         }
         if(this.state.modeOff !== ""){
+            this.props.setActiveRiskZoneIdOff(this.state.activeMode)
             this.props.layer.mainLayerToggleVisibilityOff(this.state.modeOff)
             this.props.layer.mainLayerToggleVisibilityOn(this.state.activeMode)
         }
         if(this.state.activeMode.length > oldState.activeMode.length){
             this.props.layer.mainLayerToggleVisibilityOn(this.state.activeMode[0])
         }
-
 
     }
 
@@ -58,9 +59,7 @@ class MainControls extends React.Component {
 
     }
 
-
     render(){
-        console.log('in render',this.state.activeMode)
         return (
             <div>
                 <table className='table table-sm table-hover'>
@@ -143,6 +142,7 @@ class MainControls extends React.Component {
                                     </button>
                                     <ZoneControl
                                         layer = {this.props}
+                                        activeMode = {this.state.activeMode}
                                     />
                                 </div>
                             )
@@ -188,7 +188,8 @@ const mapStateToProps = state => (
     });
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage,
+    setActiveRiskZoneIdOff
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(MainControls))

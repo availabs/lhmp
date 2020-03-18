@@ -9,9 +9,9 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import ControlLayers from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
 import ScenarioTable from "../components/scenariosTable";
+import {setActiveRiskZoneId} from "store/modules/scenario"
 
-const AllModes =[{id:'scenario',title:'Risk Scenarios'},{id:'zone',title:'Zones'},{id:'projects',title:'Project'}];
-const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'projects_block',title:'Projects'}]
+
 class ScenarioControl extends React.Component {
     constructor(props) {
         super(props);
@@ -35,12 +35,14 @@ class ScenarioControl extends React.Component {
         this.setState({
             scenario_id: '2'
         })
+
     }
 
 
 
     componentDidUpdate(oldProps,oldState){
         if(oldState.scenario_id !== this.state.scenario_id){
+            this.props.setActiveRiskZoneId(this.state.scenario_id)
             this.renderScenarioTable()
         }
     }
@@ -78,6 +80,7 @@ class ScenarioControl extends React.Component {
                     null
                 }
             </div>
+
         )
     }
 
@@ -115,7 +118,6 @@ class ScenarioControl extends React.Component {
                     <div>
                         {this.renderScenarioTable()}
                     </div>
-
                 </div>
             )
         }else{
@@ -139,7 +141,9 @@ const mapStateToProps = state => (
     });
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage,
+    setActiveRiskZoneId
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ScenarioControl))

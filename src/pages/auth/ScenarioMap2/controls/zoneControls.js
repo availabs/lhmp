@@ -20,7 +20,23 @@ class ZoneControl extends React.Component{
         this.state ={
             zone_id : [],
             geoid: '',
-            zone_name:''
+            zone_name:'',
+
+        }
+    }
+
+    componentDidUpdate(oldProps){
+        console.log('props',oldProps.activeMode.length,this.props.activeMode.length)
+        if(oldProps.activeMode.length !== this.props.activeMode.length){
+            if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
+                console.log('in if of component did update')
+                this.noSelectedZones()
+            }else{
+                if(this.props.zonesList[this.props.activePlan] && this.props.zonesList[this.props.activePlan].zones){
+                    console.log('in else of component did update')
+                    this.selectedZones()
+                }
+            }
         }
     }
 
@@ -66,7 +82,7 @@ class ZoneControl extends React.Component{
     noSelectedZones(){
         let zonesByGeoid = [];
         let currentZoneData = []
-
+        let scenario_id = localStorage.getItem("scenario_id")
         if(this.props.zonesList[this.props.activePlan] && this.props.zonesList[this.props.activePlan].zones){
             zonesByGeoid = this.props.zonesList[this.props.activePlan].zones.value
         }
@@ -87,7 +103,9 @@ class ZoneControl extends React.Component{
 
             return (
                 <ZoneTable
+                    activeMode = {this.props.activeMode}
                     zones = {currentZoneData}
+                    scenario_id={scenario_id}
                 />
             )
         }
@@ -99,6 +117,7 @@ class ZoneControl extends React.Component{
     selectedZones(){
         let zonesByGeoid = [];
         let selectedZonesData = [];
+        let scenario_id = localStorage.getItem("scenario_id")
         if(this.props.zonesList[this.props.activePlan] && this.props.zonesList[this.props.activePlan].zones){
             zonesByGeoid = this.props.zonesList[this.props.activePlan].zones.value
             let zone_ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0]
@@ -113,7 +132,9 @@ class ZoneControl extends React.Component{
             });
             return (
                 <ZoneTable
+                    activeMode = {this.props.activeMode}
                     zones = {selectedZonesData}
+                    scenario_id={scenario_id}
                 />
             )
 

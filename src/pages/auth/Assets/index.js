@@ -55,8 +55,8 @@ class AssetsByTypeIndex extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.renderMenu = this.renderMenu.bind(this);
-        this.renderOwnerTypeMenu = this.renderOwnerTypeMenu.bind(this);
-        this.renderLandUseMenu = this.renderLandUseMenu.bind(this)
+        //this.renderOwnerTypeMenu = this.renderOwnerTypeMenu.bind(this);
+        //this.renderLandUseMenu = this.renderLandUseMenu.bind(this)
         this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
     }
 
@@ -93,7 +93,7 @@ class AssetsByTypeIndex extends React.Component {
         return header(caller, this.props.geoidData,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)
     }
 
-    renderOwnerTypeMenu(){
+    /*renderOwnerTypeMenu(){
         return(
             <div>
                 <select id='ownerType' onChange={this.handleChange} value={this.state.ownerType}>
@@ -121,7 +121,7 @@ class AssetsByTypeIndex extends React.Component {
                 />
             </div>
         )
-    }
+    }*/
 
 
     render () {

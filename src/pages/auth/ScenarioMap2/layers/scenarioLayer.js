@@ -793,7 +793,9 @@ const mapStateToProps = (state, { id }) =>
     actionsData : get(state,["graph","actions","assets","byId"]),
     buildingsByIdData : get(state,['graph','building','byGeoid'])
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+
+};
 
 const BuildingModal = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(BuildingModalBase))
 

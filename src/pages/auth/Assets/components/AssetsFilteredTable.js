@@ -30,6 +30,7 @@ class AssetsFilteredTable extends Component {
             this.props.groupBy === 'propType' ? propTypes :
                 this.props.groupBy === 'jurisdiction' ? [] :
                     [];
+        console.log('props',this.props.groupBy)
         return this.props.falcor.get(
             ['geo', this.props.activeGeoid, ['name']],
             //["geo", this.props.activeGeoid, 'counties', 'municipalities'],
@@ -200,13 +201,13 @@ class AssetsFilteredTable extends Component {
                     }else{
                         // get risk zone data
                         let riskZoneIdsAllValues = {}
+                        console.log('graph',graph)
                         Object.keys(get(graph, `${item}.byRiskScenario`, {}))
                             .forEach(scenarioId => {
-
                                 if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
-
-                                    get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
-                                        .forEach(riskZoneIdData => {
+                                    let data = get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                        console.log('check',get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, []))
+                                        data.forEach(riskZoneIdData => {
 
                                             scenarioToRiskZoneMapping[scenarioId] ?
                                                 scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
@@ -313,7 +314,7 @@ class AssetsFilteredTable extends Component {
                         a['Header'] = name;
                         a['accessor'] = name;
                         a['sort'] = true;
-                        name.includes('$') ? a['formatValue'] = fnum : '';
+                        //name.includes('$') ? a['formatValue'] = fnum : '';
                         a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}`;
                         return a
                     }),

@@ -7,7 +7,6 @@ import {reduxFalcor} from 'utils/redux-falcor'
 
 import { fnum } from "utils/sheldusUtils"
 import functions from 'pages/auth/Plan/functions'
-const numeral = require('numeral');
 
 import BuildingByOwnerTypeConfig from "pages/auth/Assets/components/BuildingByOwnerTypeConfig";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
@@ -16,6 +15,7 @@ import TableSelector from "components/light-admin/tables/tableSelector"
 import {sum} from "simple-statistics";
 import {greatCircle} from "@turf/turf";
 import {falcorGraph} from "../store/falcorGraph";
+const numeral = require('numeral');
 
 let totalBuildings = 0;
 let totalBuildingsValue = 0;
@@ -312,7 +312,7 @@ class AssetsFilteredTable extends Component {
                         a['Header'] = name;
                         a['accessor'] = name;
                         a['sort'] = true;
-                        name.includes('$') ? a['formatValue'] = fnum : '';
+                        //name.includes('$') ? a['formatValue'] = fnum : '';
                         a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}`;
                         return a
                     }),
