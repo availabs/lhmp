@@ -42,6 +42,10 @@ const hazardMeta = [
 
 class TractLayer extends MapLayer {
     receiveProps(oldProps, newProps){
+        if (! this.filters.hazard.value){
+            this.filters.hazard.value = newProps.hazard;
+            this.onAdd(this.map)
+        }
         if (this.filters.hazard.value !== newProps.hazard) this.filters.hazard.value = newProps.hazard
     }
     onPropsChange(oldProps, newProps){
@@ -51,6 +55,7 @@ class TractLayer extends MapLayer {
     onAdd(map) {
         super.onAdd(map);
         if (!store.getState().user.activeGeoid) return Promise.resolve();
+        if (! this.filters.hazard.value) this.forceUpdate()
 
         return falcorGraph.get(
             ['geo', store.getState().user.activeGeoid, 'tracts'],
@@ -114,7 +119,7 @@ class TractLayer extends MapLayer {
     fetchData(graph) {
         // console.log('in ffd: analysis');
         if (!graph) graph = falcorGraph.getCache();
-        if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve({route: []});
+        if (!this.filters.hazard.value || this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve({route: []});
         let countiesOrCousubs = get(graph,
             `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
             null);
@@ -284,7 +289,7 @@ const tractLayer = new TractLayer("Analysis Layer", {
             name: "hazard",
             type: "hidden",
             domain: hazardMeta,
-            value: "hurricane",
+            value: null,
             onChange: (map, layer, value) => this.fetchData()
         }
     },

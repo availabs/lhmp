@@ -25,15 +25,16 @@ import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData"
 import NumberOfHazardsMonthStackedBarGraph from "./components/NumberOfHazardsMonthStackedBarGraph";
 
 const STICKYDROPDOWN = styled.div`
-                       select {
-                       height: 5vh;
-                       width: 250px;
-                       float: right;
-                       z-index:100;
-                       position:fixed;
-                       background: rgba(0,0,0,0.3);
-                       }
-                        `;
+   select {
+   height: 5vh;
+   width: 250px;
+   float: right;
+   z-index:100;
+   position:fixed;
+   background: rgba(0,0,0,0.3);
+   }
+`;
+
 class Hazards extends React.Component {
 
     constructor(props) {

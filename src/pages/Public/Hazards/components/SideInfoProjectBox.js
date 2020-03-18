@@ -18,7 +18,6 @@ export default ({ title, rows, content=null }) =>
     <ProjectBox title={ title } style={ {  width:'100%' } }>
         <div className="row align-items-center">
            
-
                 { rows.length ?
                     rows.map(BoxRow)
                     : content

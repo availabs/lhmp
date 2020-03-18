@@ -36,7 +36,7 @@ const TABS = [
             "replacement_value",
             "critical"
         ] },
-    { name: "Occupany",
+    { name: "Occupancy",
         props: [
             "num_residents",
             "num_employees",

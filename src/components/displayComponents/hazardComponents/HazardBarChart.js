@@ -112,7 +112,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         "top": 25,
                         "right": this.props.showYlabel ? 25 : 0,
                         "bottom": this.props.showXlabel ? 50 : 40,
-                        "left": this.props.showYlabel ? 90 : 50
+                        "left": this.props.showYlabel ? 50 : 30
                     }}
                     axisBottom={{
                         "orient": "bottom",
@@ -121,7 +121,8 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         "legend": this.props.showXlabel ? "Year" : undefined,
                         "legendPosition": "middle",
                         "legendOffset": 40,
-                        "tickRotation": this.props.showYlabel ? 0 : 45
+                        "tickRotation": this.props.showYlabel ? 0 : 45,
+                        format: (s) => `'${s.slice(-2)}`
                     }}
                     axisLeft={{
                         "orient": "left",
@@ -131,7 +132,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         "legend": this.props.showYlabel ? this.props.lossType : undefined,
                         "legendPosition": "middle",
                         "legendOffset": -100,
-                        //"format": fnum
+                        "format": format
                     }}
                     tooltip={
                         d => (

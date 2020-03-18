@@ -105,7 +105,7 @@ class CousubTotalLossTable extends React.Component {
         }
         catch (e) {
             return (
-                <ElementBox>Loading...</ElementBox>
+                <div>Loading...</div>
             )
         }
     }

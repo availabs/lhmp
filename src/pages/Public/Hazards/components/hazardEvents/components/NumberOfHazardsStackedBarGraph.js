@@ -131,7 +131,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         "legend": this.props.showYlabel ? this.props.lossType : undefined,
                         "legendPosition": "middle",
                         "legendOffset": -100,
-                        //"format": fnum
+                        "format": format
                     }}
                     tooltip={
                         d => (

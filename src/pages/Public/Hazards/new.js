@@ -17,7 +17,8 @@ import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData"
 import ElementFactory, {RenderConfig}  from 'pages/Public/theme/ElementFactory'
 
 import SideMenu from 'pages/Public/theme/SideMenu'
-import HazardsOfConcernContent from './new_components/HazardsOfConcernContent'
+import Hazard from './new_components/Hazard'
+import HazardHeroStats from './new_components/HazardHeroStats'
 
 
 import styled from "styled-components";
@@ -65,34 +66,37 @@ class Hazards extends React.Component {
             hazards: [],
             hazard: undefined
         }
+        this.changeHazard = this.changeHazard.bind(this)
     }
+
 
     fetchFalcorDeps(geoid, geoLevel, dataType) {
         if (!geoid) geoid = this.props.geoid;
-        if (!geoLevel) geoLevel = this.state.geoLevel;
         if (!dataType) dataType = this.state.dataType;
-        if (!geoid || !geoLevel || !dataType) return Promise.resolve();
         return this.props.falcor.get(
-            ['geo', geoid, 'name'],
-            ['geo', geoid, 'cousubs'],
             ['riskIndex', 'hazards'],
         )
-            .then(response => {
-                const geoids = response.json.geo[geoid]['cousubs'],
-                    hazards = response.json.riskIndex.hazards,
-                    requests = [];
-                this.setState({colorScale: getColorScale(hazards)});
-                this.setState({hazards: hazards});
-                return this.props.falcor.get(
-                    ['riskIndex', 'meta', hazards, ['id', 'name']],
-                    [dataType, geoid, hazards, {
-                        from: EARLIEST_YEAR,
-                        to: LATEST_YEAR
-                    }, ['property_damage', 'total_damage']],
-                ).then(d => {
-                    return falcorChunkerNice(['geo', geoids, ['name']])
-                })
+        .then(response => {
+           
+            let hazards = response.json.riskIndex.hazards
+            let contentIds = hazards.map(req => {
+                return `req-B1-${req}-${this.props.planId}-${this.props.geoid}`
             })
+            
+            return this.props.falcor.get(
+                ['riskIndex', 'meta', hazards, ['id', 'name']],
+                ['content', 'byId', contentIds, ['body']],
+                [dataType, geoid, hazards, 'allTime', 'total_damage']
+            ).then(response => {
+                let data = response.json[dataType][geoid]
+                let hazards = Object.keys(data)
+                    .filter(k => k !== '$__path')
+                    .filter(k => data[k].allTime.total_damage > 0)
+                    .sort((a,b) => data[b].allTime.total_damage - data[a].allTime.total_damage)
+                this.setState({hazards, hazard:hazards[0]})
+
+            })
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -148,20 +152,37 @@ class Hazards extends React.Component {
             ) : null
     }
 
+    changeHazard(e, a) {
+        console.log('test', e.target.value, e , a)
+        this.setState({hazard:e.target.value})
+    }
     render() {
         if(!this.props.geoid) {
             return <React.Fragment />
         }
         return (
             <PageContainer>
+                {/*
                 <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
                     {this.stickyHazards()}
                     <SideMenu config={hazardConfig}/>
                 </div>
-                <div style={{marginLeft: 220}}>
+                */}
+                <div >
                     <ContentContainer>
-                        <SectionHeader>Hazards of Concern</SectionHeader>
-                        <HazardsOfConcernContent geoid={this.props.geoid} hazard={this.state.hazard}/>
+                        <section>
+                            
+                        </section>
+                        <section>
+                            <SectionHeader>Hazards of Concern</SectionHeader>
+                            <HazardHeroStats {...this.state} changeHazard={this.changeHazard}/>
+                            <Hazard 
+                                geoid={this.props.geoid} 
+                                hazard={this.state.hazard}
+                                geoLevel={this.state.geoLevel}
+                                hazards={this.state.hazards}
+                            />
+                        </section>
                     </ContentContainer>
                 </div>
             </PageContainer>
