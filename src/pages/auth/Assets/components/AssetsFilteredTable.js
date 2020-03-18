@@ -20,6 +20,12 @@ class AssetsFilteredTable extends Component {
         super(props);
         this.state = {}
     }
+    componentDidUpdate(prevProps) {
+        if (!_.isEqual(prevProps.groupByFilter, this.props.groupByFilter)){
+            console.log('updating', prevProps.groupByFilter, this.props.groupByFilter)
+            return this.fetchFalcorDeps();
+        }
+    }
 
     fetchFalcorDeps() {
         let propTypes =
@@ -85,6 +91,16 @@ class AssetsFilteredTable extends Component {
         let riskZoneToNameMapping = {};
         if(graph && Object.keys(graph).length) {
             Object.keys(graph)
+                .filter(item => {
+                    if (this.props.groupBy === 'propType'){
+                        return !this.props.groupByFilter.length || this.props.groupByFilter.map(f => f.toString().slice(0,1)).includes(item.toString().slice(0,1))
+                    }else if (this.props.groupBy === 'ownerType'){
+                        return !this.props.groupByFilter.length || this.props.groupByFilter.includes(item)
+                    }else {
+                        return true
+                    }
+
+                })
                 .forEach((item,i) =>{
                     if (this.props.groupBy === 'propType'){
                         if (parseInt(item) % 100 === 0){
@@ -324,6 +340,7 @@ class AssetsFilteredTable extends Component {
 
 
     render() {
+        console.log('asset props', this.props)
         return (
             <div style={{width: this.props.width ? this.props.width : '', height: this.props.height ? this.props.height : ''}}>
                 <TableSelector
