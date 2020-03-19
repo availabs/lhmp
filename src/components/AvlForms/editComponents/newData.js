@@ -58,7 +58,6 @@ class AvlFormsNewData extends React.Component{
     }
 
     componentDidMount(){
-
         if(this.props.id[0]){
             let attributes = this.props.config.map(d => Object.keys(d.attributes));
             return this.props.falcor.get(['forms','byId',this.props.id])
@@ -81,7 +80,18 @@ class AvlFormsNewData extends React.Component{
                         )
                     }
                 })
+        }else if(!this.props.id[0]){
+            if(this.props.data){
+                let tmp_state = {}
+                Object.keys(this.props.data).forEach(d =>{
+                    tmp_state[d] = this.props.data[d]
+                })
+                this.setState(
+                    tmp_state
+                )
+            }
         }
+
     }
 
     displayPrompt(id){
@@ -150,7 +160,6 @@ class AvlFormsNewData extends React.Component{
             let sub_type = '';
             let user_email = this.props.userEmail;
             let owner_ids = []
-
             // to find role ids for the logged in user to be inserted in participation time
             Object.keys(this.props.forms_roles_data).forEach(d =>{
                 if(this.props.forms_roles_data[d].value && this.props.forms_roles_data[d].value.attributes.contact_email === user_email){
@@ -241,7 +250,11 @@ class AvlFormsNewData extends React.Component{
         }
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
-                if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined){
+                if(item.attributes[attribute].area === 'true' &&
+                    item.attributes[attribute].edit_type === 'dropdown' &&
+                    item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined
+                    && item.attributes[attribute].hidden ==='false'
+                ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
@@ -256,7 +269,11 @@ class AvlFormsNewData extends React.Component{
                         prompt: this.displayPrompt.bind(this),
                         onClick : this.cousubDropDown.bind(this)
                     })
-                }else if(item.attributes[attribute].area === 'true' && item.attributes[attribute].depend_on && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta === 'true'){
+                }else if(item.attributes[attribute].area === 'true' &&
+                    item.attributes[attribute].depend_on &&
+                    item.attributes[attribute].edit_type === 'dropdown' &&
+                    item.attributes[attribute].meta === 'true'
+                    && item.attributes[attribute].hidden ==='false'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
@@ -283,7 +300,9 @@ class AvlFormsNewData extends React.Component{
                         depend_on : item.attributes[attribute].depend_on
 
                     })
-                }else if(item.attributes[attribute].edit_type === 'radio'){
+                }else if(item.attributes[attribute].edit_type === 'radio'
+                    && item.attributes[attribute].hidden ==='false'
+                ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
@@ -295,7 +314,9 @@ class AvlFormsNewData extends React.Component{
                         values:item.attributes[attribute].edit_type_values
                     })
                 }
-                else if(!item.attributes[attribute].hidden && item.attributes[attribute].hidden !== 'true'){
+                else if(
+                    item.attributes[attribute].hidden ==='false'
+                ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
@@ -329,6 +350,7 @@ class AvlFormsNewData extends React.Component{
 
 
     render(){
+        console.log('in render state',this.state)
         let test = this.implementData();
         let data = [];
         test.forEach((d,i) =>{
