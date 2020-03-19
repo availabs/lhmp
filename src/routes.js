@@ -49,10 +49,7 @@ import AssetsSearch from 'pages/auth/Assets/indexSearch'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
-import Capabilities from 'pages/auth/Capabilities'
-import CapabilitiesNew from 'pages/auth/Capabilities/capability/new'
-import CapabilitiesView from 'pages/auth/Capabilities/capability/view'
-import CapabilitiesFormsList from 'pages/auth/Capabilities/capability_forms'
+import CapabilitiesFormsIndex from 'pages/auth/Capabilities/'
 import CapabilitiesFormsView from 'pages/auth/Capabilities/capability_forms/view'
 import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
 //import RolesIndex from 'pages/auth/Roles/'
@@ -118,15 +115,9 @@ const routes = [
    ...AssetsView,
    ...AssetsEdit,
    ...AssetsListByTypeByHazard,
-   ...CapabilitiesFormsList,
+   //...CapabilitiesFormsIndex,
    ...CapabilitiesFormsView,
    ...CapabilitiesFormsNew,
-   /*
-   OLD CAPABILITIES FORMS
-   //...Capabilities,
-   //...CapabilitiesNew,
-   //...CapabilitiesView,
-    */
    //...RolesIndex,
    ...RolesFormsList,
    ...RolesFormView,

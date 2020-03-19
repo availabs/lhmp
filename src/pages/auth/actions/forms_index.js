@@ -17,6 +17,10 @@ class ActionsFormsIndex extends React.Component {
         return(
             <AvlFormsListTable
             json = {ProjectConfig}
+            createButtons = {true}
+            editButton = {true}
+            viewButton = {true}
+            deleteButton = {true}
             />
         )
     }
