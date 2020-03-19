@@ -12,6 +12,7 @@ import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLand
 import BuildingByHazardRiskPieChart from "./components/BuildingByHazardRiskPieChart";
 import BuildingByHazardRiskTable from "./components/BuildingByHazardRiskTable";
 import AssetsFilteredTable from "./components/AssetsFilteredTable";
+import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 
 const HeaderSelect = styled.select`
 {
@@ -87,6 +88,17 @@ class AssetsByTypeIndex extends React.Component {
         return header(caller, this.props.geoidData, this.props.setActiveCousubid, this.props.activeCousubid, allowedGeos)
     }
 
+    renderLandUseMenu(){
+        return (
+            <div>
+                {JSON.stringify(this.state.filter.value)}
+                <MultiSelectFilter
+                    filter = {this.state.filter}
+                    setFilter = {this.handleMultiSelectFilterChange}
+                />
+            </div>
+        )
+    }
     render() {
         return (
             <div className='container'>
@@ -114,13 +126,14 @@ class AssetsByTypeIndex extends React.Component {
                             </div>
                             <div className='element-wrapper'>
                                 <div className='element-box'>
+                                    {this.renderLandUseMenu()}
                                     <h4>Buildings By Land Use</h4>
                                     {
                                         this.state.geoid ?
                                             <AssetsFilteredTable
                                                 geoid={[this.state.geoid]}
                                                 groupBy={'propType'}
-                                                groupByFilter={[]}
+                                                groupByFilter={this.state.filter.value}
                                                 scenarioId={[3]}
                                                 height={'fit-content'}
                                                 width={'100%'}
