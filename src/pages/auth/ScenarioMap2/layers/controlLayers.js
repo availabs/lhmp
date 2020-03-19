@@ -63,10 +63,10 @@ class ControlLayers extends MapLayer {
                 'id': 'riverine_layer',
                 'source': 'riverine',
                 'source-layer': layerName,
-                'type': 'line',
+                'type': 'fill',
                 'minzoom': 8,
                 'paint': {
-                    'line-color': ["interpolate",
+                    'fill-color': ["interpolate",
                         ["linear"],
                         ["get", "depth_m"],
                         0,
@@ -90,7 +90,7 @@ class ControlLayers extends MapLayer {
                         83,
                         "hsl(211, 83%, 31%)"
                     ],
-                    'line-opacity':0.6
+                    'fill-opacity':0.3
                 },
 
             })
@@ -109,11 +109,11 @@ class ControlLayers extends MapLayer {
                 'id': 'dfirm_layer',
                 'source': 'dfirm',
                 'source-layer': layerName,
-                'type': 'line',
+                'type': 'fill',
                 'minzoom': 8,
                 'paint': {
-                    'line-color': "hsl(211, 83%, 31%)",
-                    'line-opacity':0.6
+                    'fill-color': "hsl(211, 83%, 31%)",
+                    'fill-opacity':0.3
                 },
 
             })

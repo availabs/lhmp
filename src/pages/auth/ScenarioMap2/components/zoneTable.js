@@ -50,13 +50,16 @@ class ZoneTable extends React.Component {
             let count_buildings_scenarios_cousub = 0;
             let sum_buildings_value_cousub = 0
             let data = []
+            let graph_zones = {}
             this.props.zones.forEach(item =>{
                 zone_geoids.push(item.geoid)
                 zone_ids.push(item.zone_id)
             });
+            //console.log('check',this.props.scenario_id)
             return this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byId',zone_ids,'byGeoid',zone_geoids,'sum',['num_buildings','replacement_value']])
                 .then(response =>{
-                    if(zone_geoids.length > 0 && this.props.activeScenarioId){
+                    graph_zones = response.json.zones.byPlanId[this.props.activePlan].byId
+                    if(zone_geoids.length > 0){
                         zone_geoids.forEach(geoid =>{
                             if(geoid.length === 5){
                                 this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'county', [geoid], 'byRiskScenario',this.props.activeScenarioId, 'byRiskZone', 'all'])
@@ -71,10 +74,9 @@ class ZoneTable extends React.Component {
                             }
                         })
                     }
-                    let graph_zones = response.json.zones.byPlanId[this.props.activePlan].byId;
-                    if(graph_zones && this.props.scenarioByZonesData && this.props.scenarioByZonesData.county && this.props.scenarioByZonesData.jurisdiction){
+                    if(graph_zones && this.props.scenarioByZonesData){
                         let graph_scenario_county = this.props.scenarioByZonesData.county
-                        let graph_scenario_jurisdiction = this.props.scenarioByZonesData.jurisdiction
+                        let graph_scenario_jurisdiction = this.props.scenarioByZonesData.jurisdiction;
                         this.props.zones.forEach(zone =>{
                             Object.keys(graph_zones).forEach(zone_id =>{
                                 if(graph_zones[zone_id].byGeoid){
@@ -90,43 +92,52 @@ class ZoneTable extends React.Component {
                                                 })
                                             }
 
+
                                         }
                                     })
                                 }
 
                             })
                         });
-                        Object.keys(graph_scenario_county).forEach(county =>{
-                            if(graph_scenario_county[county].byRiskScenario[this.props.activeScenarioId]){
-                                graph_scenario_county[county].byRiskScenario[this.props.activeScenarioId].byRiskZone.all.value.forEach(item =>{
-                                    data.forEach(d =>{
-                                        if(d.zone_geoid === item.geoid){
-                                            count_buildings_scenarios_county += parseInt(item.count)
-                                            sum_buildings_value_county += parseFloat(item.sum)
-                                            d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_county)
-                                            d['sum_buildings_value'] = fmt(sum_buildings_value_county)
-                                        }
-                                    })
-                                })
-                            }
+                        if(this.props.scenarioByZonesData && this.props.scenarioByZonesData.county){
 
-                        })
-                        Object.keys(graph_scenario_jurisdiction).forEach(jurisdiction =>{
-                            if(graph_scenario_jurisdiction[jurisdiction].byRiskScenario[this.props.activeScenarioId]){
-                                graph_scenario_jurisdiction[jurisdiction].byRiskScenario[this.props.activeScenarioId].byRiskZone.all.value.forEach(item =>{
-                                    data.forEach(d =>{
-                                        if(d.zone_geoid === item.cousub_geoid){
-                                            count_buildings_scenarios_cousub += parseInt(item.count)
-                                            sum_buildings_value_cousub += parseFloat(item.sum)
-                                            d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_cousub)
-                                            d['sum_buildings_value'] = fmt(sum_buildings_value_cousub)
-                                        }
+                            Object.keys(graph_scenario_county).forEach(county =>{
+                                if(graph_scenario_county[county].byRiskScenario[this.props.activeScenarioId] && graph_scenario_county[county].byRiskScenario[this.props.activeScenarioId].byRiskZone.all){
+                                    graph_scenario_county[county].byRiskScenario[this.props.activeScenarioId].byRiskZone.all.value.forEach(item =>{
+                                        data.forEach(d =>{
+                                            if(d.zone_geoid === item.geoid){
+                                                count_buildings_scenarios_county += parseInt(item.count)
+                                                sum_buildings_value_county += parseFloat(item.sum)
+                                                d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_county)
+                                                d['sum_buildings_value'] = fmt(sum_buildings_value_county)
+                                            }
+                                        })
                                     })
-                                })
-                            }
+                                }
+                            });
+                        }
+                        if( this.props.scenarioByZonesData && this.props.scenarioByZonesData.jurisdiction){
 
-                        })
+                            Object.keys(graph_scenario_jurisdiction).forEach(jurisdiction =>{
+                                if(graph_scenario_jurisdiction[jurisdiction].byRiskScenario[this.props.activeScenarioId] && graph_scenario_jurisdiction[jurisdiction].byRiskScenario[this.props.activeScenarioId].byRiskZone.all){
+                                    graph_scenario_jurisdiction[jurisdiction].byRiskScenario[this.props.activeScenarioId].byRiskZone.all.value.forEach(item =>{
+                                        data.forEach(d =>{
+                                            if(d.zone_geoid === item.cousub_geoid){
+                                                count_buildings_scenarios_cousub += parseInt(item.count)
+                                                sum_buildings_value_cousub += parseFloat(item.sum)
+                                                d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_cousub)
+                                                d['sum_buildings_value'] = fmt(sum_buildings_value_cousub)
+                                            }
+                                        })
+                                    })
+                                }
+
+                            })
+                        }
+
+
                     }
+
                     this.setState({
                         data : data
                     })
@@ -139,8 +150,8 @@ class ZoneTable extends React.Component {
 
     removeZone(e){
         let ids = [];
-        ids = JSON.parse(localStorage.getItem('zone')) || []
-        ids = ids.filter( id => id.toString() !== e.target.id);
+        ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0] || []
+        ids = ids.filter( id => id.id.toString() !== e.target.id);
         localStorage.setItem('zone', JSON.stringify(ids));
         let data = this.state.data
         this.setState({
@@ -154,7 +165,7 @@ class ZoneTable extends React.Component {
                 <table className='table table-sm table-hover'>
                     <thead>
                     <tr>
-                        <th/><th colSpan='2'>Total</th><th colSpan='2'>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : this.props.activeScenarioId === '2' ?'HAZUS' :'DFIRM'}</th>
+                        <th/><th colSpan='2'>Total</th><th colSpan='2'>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : !this.props.offRiskZoneId.includes("scenario") ?'HAZUS' :'DFIRM'}</th>
                     </tr>
                     <tr>
                         <th>Zone</th><th>#</th><th>$</th>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : <><th>#</th><th>$</th></>}

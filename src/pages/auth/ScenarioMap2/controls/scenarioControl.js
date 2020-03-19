@@ -26,15 +26,25 @@ class ScenarioControl extends React.Component {
     fetchFalcorDeps(){
         return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
             .then(response =>{
-                //console.log('response',response)
                 return response
             })
     }
 
     componentDidMount(){
-        this.setState({
-            scenario_id: '2'
-        })
+        this.fetchFalcorDeps()
+            .then(response =>{
+                let graph = response.json.plan[this.props.activePlan].scenarios
+                if(graph){
+                    graph.forEach(item =>{
+                        if(item.name.includes('hazus')){
+                            this.setState({
+                                scenario_id : item.id
+                            })
+                        }
+                    })
+
+                }
+            })
 
     }
 

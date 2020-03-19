@@ -43,11 +43,6 @@ class ZoneControl extends React.Component{
     fetchFalcorDeps(){
         return this.props.falcor.get(['plan',this.props.activePlan,'zones'])
             .then(response =>{
-                response.json.plan[this.props.activePlan].zones.forEach(zone =>{
-                    if(zone['geoid'] === this.props.activeGeoid){
-                        //console.log('zone',zone)
-                    }
-                })
                 return response
             })
     }
@@ -86,8 +81,8 @@ class ZoneControl extends React.Component{
         if(this.props.zonesList[this.props.activePlan] && this.props.zonesList[this.props.activePlan].zones){
             zonesByGeoid = this.props.zonesList[this.props.activePlan].zones.value
         }
-
         if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
+            console.log('in no selected zone',localStorage.getItem("zone"))
             zonesByGeoid.forEach(zone =>{
                 if(zone['geoid'] === this.props.activeGeoid){
                     currentZoneData.push({
@@ -96,14 +91,15 @@ class ZoneControl extends React.Component{
                         name: zone.name
                     })
                     let ids = JSON.parse(localStorage.getItem('zone')) || [];
-                    ids.push(zone.id);
+                    ids.push({id:zone.id,geoid:this.props.activeGeoid});
+                    console.log('ids',ids)
                     localStorage.setItem('zone', JSON.stringify(ids));
                 }
-            })
-
+            });
+            console.log('currentZoneData',currentZoneData)
             return (
                 <ZoneTable
-                    activeMode = {this.props.activeMode}
+                    //activeMode = {this.props.activeMode}
                     zones = {currentZoneData}
                     scenario_id={scenario_id}
                 />
@@ -117,22 +113,34 @@ class ZoneControl extends React.Component{
     selectedZones(){
         let zonesByGeoid = [];
         let selectedZonesData = [];
-        let scenario_id = localStorage.getItem("scenario_id")
+        let scenario_id = localStorage.getItem("scenario_id");
         if(this.props.zonesList[this.props.activePlan] && this.props.zonesList[this.props.activePlan].zones){
-            zonesByGeoid = this.props.zonesList[this.props.activePlan].zones.value
-            let zone_ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0]
-            zonesByGeoid.forEach(zone =>{
-                if(zone_ids.includes(parseInt(zone.id))){
-                    selectedZonesData.push({
-                        zone_id : zone.id,
-                        geoid : zone.geoid,
-                        name: zone.name
-                    })
-                }
+            zonesByGeoid = this.props.zonesList[this.props.activePlan].zones.value;
+            let zone_ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
+            zone_ids.forEach(zone_id =>{
+                zonesByGeoid.forEach(zone =>{
+                    if(zone_id['id'] === zone.id){
+                        selectedZonesData.push({
+                            zone_id : zone.id,
+                            geoid : zone.geoid,
+                            name: zone.name
+                        })
+                    }else{
+                        if(zone_id['id'] !==zone.id && zone.geoid === this.props.activeGeoid && JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
+                            selectedZonesData.push({
+                                zone_id : zone.id,
+                                geoid : zone.geoid,
+                                name: zone.name
+                            })
+                        }
+
+                    }
+
+                });
             });
             return (
                 <ZoneTable
-                    activeMode = {this.props.activeMode}
+                    //activeMode = {this.props.activeMode}
                     zones = {selectedZonesData}
                     scenario_id={scenario_id}
                 />
@@ -158,7 +166,7 @@ class ZoneControl extends React.Component{
                         onChange={(value) => {
                             this.setState({zone_id:value})
                             ids = JSON.parse(localStorage.getItem('zone')) || [];
-                            ids.push(value);
+                            ids.push({id:value, geoid:this.props.activeGeoid});
                             localStorage.setItem('zone', JSON.stringify(ids));
                             this.selectedZones()
                         }}
