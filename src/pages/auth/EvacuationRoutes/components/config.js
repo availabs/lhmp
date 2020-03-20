@@ -12,7 +12,8 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta: 'false',
-                section: ''
+                section: '',
+                hidden: 'false'
             },
             geom:{
                 label:'Geometry',

@@ -7,5 +7,5 @@ viewConfig[0].list_attributes = viewConfig[0].list_attributes.filter(f => !exclu
 export default
 {
     config : routeConfig,
-    view : viewConfig
+    view : routeConfig
 }

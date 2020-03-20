@@ -114,7 +114,6 @@ class RouteInfoBox extends React.Component {
                     .then(() => layer.selectUserRoute(res.json.routes.recentlySaved))
             );
     }
-
     render() {
         const {layer, nameArray} = this.props;
         let somethingToRemove = false;
@@ -134,33 +133,44 @@ class RouteInfoBox extends React.Component {
                     </div>
                 }
 
-                <div style={{position: "relative", paddingTop: "10px"}}>
-                    <Button style={{width: "calc(50% - 5px)"}}
+                <div style={{position: "relative", paddingTop: "10px", display: 'flex', justifyContent: 'space-between'}}>
+                    <Button style={{width: "calc(33% - 5px)"}}
                             onClick={e => layer.removeLast()}
                             disabled={!somethingToRemove}
                             secondary>
                         Remove Last
                     </Button>
-                    <Button style={{width: "calc(50% - 5px)", position: "absolute", right: 0}}
+                    <Button style={{width: "calc(33% - 5px)"}}
                             onClick={e => layer.clearRoute()}
                             disabled={!somethingToRemove}
                             secondary>
                         Clear Route
                     </Button>
-                </div>
-
-                <div style={{position: "relative", paddingTop: "10px"}}>
-                    <Button style={{width: "calc(50% - 5px)"}}
+                    <Button style={{width: "calc(33% - 5px)"}}
                             disabled={!nameArray.length}
                             onClick={e => this.setState({showSaveModal: true})}
                             primary>
                         Save Route
                     </Button>
                 </div>
+
+                <div style={{position: "relative", paddingTop: "10px"}}>
+
+                </div>
                 {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this)) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}
+                    deleteButton = {true}
+                    viewButton={true}
+                    onViewClick={(e) => this.props.paintRoute(
+                        {
+                            mode: 'markers',
+                            data: {
+                                routes: [{geometry: e}]
+                            }
+                        }
+                    )}
                 />
             </div>
         )

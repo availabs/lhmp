@@ -150,6 +150,7 @@ class AvlFormsListTable extends React.Component{
         let formAttributes = [];
         let listViewData = [];
         let data = this.formsListTable();
+        console.log('data', data)
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
         if(listViewData && listViewData.length > 0){
@@ -270,7 +271,9 @@ class AvlFormsListTable extends React.Component{
                             <thead>
                             <tr>
                             {
-                                formAttributes ? formAttributes.map((item) => {
+                                formAttributes ? formAttributes
+                                        .filter(f => get(this.props.config[0], `attributes[${f}].hidden`, "false") === "true" ? false : true)
+                                        .map((item) => {
                                         return (
                                             <th>{item}</th>
                                         )
@@ -286,7 +289,9 @@ class AvlFormsListTable extends React.Component{
                                     if(Object.keys(item).length > 0){
                                         return (
                                             <tr>
-                                                {formAttributes ? formAttributes.map(attribute =>{
+                                                {formAttributes ? formAttributes
+                                                    .filter(f => get(this.props.config[0], `attributes[${f}].hidden`, "false") === "true" ? false : true)
+                                                    .map(attribute =>{
                                                     return (
                                                         <td>{item[attribute]}</td>
                                                     )
@@ -316,6 +321,11 @@ class AvlFormsListTable extends React.Component{
                                                                 View
                                                             </Link>
                                                             :
+                                                            formType[0] === 'evacuation_route' ?
+                                                                <button className="btn btn-sm btn-outline-primary"
+                                                                     onClick={(e) => this.props.onViewClick(item['geom'])}>
+                                                                    View
+                                                                </button> :
                                                             <Link className="btn btn-sm btn-outline-primary"
                                                                   to={ `/${formType[0]}/view/${item['id']}` }>
                                                                 View

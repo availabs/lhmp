@@ -159,7 +159,6 @@ class RouteLayer extends MapLayer {
             .then(() => {
                 if (this.mode === "markers") {
                     const falcorCache = falcorGraph.getCache();
-                    console.log('this.data',this.data, this.data.markers.waypoints)
                     this.nameArray = get(this.data, `markers.waypoints`, [])
                         .reduce((a, c, cI) => {
                         a.push(`Leg - ${cI} ${c.name ? `- ${c.name}` : ''}`)
@@ -228,10 +227,14 @@ class RouteLayer extends MapLayer {
     receiveRoute({ mode, data }) {
         this.data[mode] = data;
         data = get(data, `routes`, []).pop();
-        this.geom = get(data, `geometry`, {coordinates: [], type: "LineString"})
-
+        // this.geom = get(data, `geometry`, {coordinates: [], type: "LineString"})
         if (this.map.getSource('execution-route-source')) {
             this.map.getSource('execution-route-source').setData(get(data, `geometry`, {coordinates: [], type: "LineString"}));
+        }
+    }
+    paintRoute(geom){
+        if (RouteLayer.map.getSource('execution-route-source')) {
+            RouteLayer.map.getSource('execution-route-source').setData(geom);
         }
     }
     removeLast() {
@@ -391,7 +394,7 @@ export default (props = {}) =>
         },
         year: 2019,
         doZoom: false,
-
+        geom: null,
         routeToLoad: null,
 
         onClick: {
@@ -434,14 +437,17 @@ export default (props = {}) =>
         infoBoxes: {
             router: {
                 title: ({ layer}) => layer.getRouteName(),
-                comp: ({ layer }) => (
-                    <RouteInfoBox layer={ layer }
-                                  userRoute={ layer.filters.userRoutes.value }
-                                  nameArray={ layer.nameArray }
-                                  data={ layer.data }
-                                  geom={ layer.geom }
-                    />
-                ),
+                comp: ({ layer }) => {
+                    return (
+                        <RouteInfoBox layer={ layer }
+                                      userRoute={ layer.filters.userRoutes.value }
+                                      nameArray={ layer.nameArray }
+                                      data={ layer.data }
+                                      geom={ layer.geom }
+                                      paintRoute={ layer.receiveRoute.bind(layer)}
+                        />
+                    )
+                },
                 show: true
             }
         },
