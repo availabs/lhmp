@@ -6,7 +6,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-import { setActiveRiskZoneId } from 'store/modules/scenario'
+
 
 class ScenarioTable extends React.Component {
     constructor(props) {
@@ -24,12 +24,12 @@ class ScenarioTable extends React.Component {
     }
 
     fetchFalcorDeps(){
-        return this.props.falcor.get(['scenarios','byId',this.props.scenario_id,'risk_zones','length'])
+        return this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'])
             .then(response =>{
-                let length = response.json.scenarios.byId[this.props.scenario_id].risk_zones.length
-                this.props.falcor.get(['scenarios','byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id']])
+                let length = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].length;
+                this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id']])
                     .then(response =>{
-                        let graph = response.json.scenarios.byId[this.props.scenario_id].byIndex;
+                        let graph = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].byIndex;
                         let risk_zone_ids = []
                         if(graph){
                             Object.keys(graph).filter(d => d!== '$__path').forEach(item =>{
@@ -64,7 +64,6 @@ class ScenarioTable extends React.Component {
         let data = this.processTableData()
         data.map(d =>{
             if(id.toString() === d.id.toString()){
-                this.props.setActiveRiskZoneId(d.id)
                 this.setState((currentState) =>({
                     scenario : d.scenario,
                     map_source: d.visibility,
@@ -82,6 +81,7 @@ class ScenarioTable extends React.Component {
             let data = [];
             let resultData = []
             Object.keys(graph).forEach(item=>{
+                //console.log('graph',graph[item])
                 if(graph[item].risk_zone_id){
                     data.push({
                         'id':graph[item].risk_zone_id || '',
@@ -135,6 +135,7 @@ class ScenarioTable extends React.Component {
 
 
     render(){
+        //console.log('map source and scenario',this.state.map_source,this.state.scenario)
         let resultData = this.processTableData();
         let total_loss = this.processTotalLoss()
         let annual_loss = this.processAnnualLoss();
@@ -235,7 +236,7 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = {
     sendSystemMessage,
-    setActiveRiskZoneId,
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ScenarioTable))

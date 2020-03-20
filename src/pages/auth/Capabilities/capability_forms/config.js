@@ -14,6 +14,7 @@ module.exports = [
                 display_type:'text',
                 area:'true',
                 meta: 'true',
+                hidden:'false',
                 section: ''
             },
             municipality:{
@@ -25,6 +26,7 @@ module.exports = [
                 meta: 'true',
                 area:'true',
                 depend_on:'county',
+                hidden:'false',
                 section: ''
             },
             capability_category: {
@@ -34,6 +36,7 @@ module.exports = [
                 edit_type:'dropdown',
                 display_type:'text',
                 meta: 'true',
+                hidden:'false',
                 section: ''
             },
             capability_type :{
@@ -44,6 +47,7 @@ module.exports = [
                 display_type:'text',
                 meta:'true',
                 depend_on : 'capability_category',
+                hidden:'false',
                 section:''
             },
             capability_name:{
@@ -56,7 +60,9 @@ module.exports = [
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
+                show:'true',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             regulatory_name:{
@@ -66,6 +72,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             adoption_date:{
@@ -75,6 +82,7 @@ module.exports = [
                 edit_type:'date',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             development_update:{
@@ -87,6 +95,7 @@ module.exports = [
                 display_condition:'',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             jurisdiction_utilization:{
@@ -96,6 +105,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             adopting_authority:{
@@ -106,6 +116,7 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 on_click:'false',
+                hidden:'false',
                 section:''
             },
             responsible_authority:{
@@ -118,6 +129,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             support_authority:{
@@ -127,6 +139,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             affiliated_agency:{
@@ -136,6 +149,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             link_url:{
@@ -145,6 +159,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
                 section:''
             },
             upload:{
@@ -154,6 +169,8 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
+                hidden:'false',
+                data:'true',
                 section:''
             }
         }

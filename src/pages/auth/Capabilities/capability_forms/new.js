@@ -13,12 +13,15 @@ class CapabilitiesFormsNew extends React.Component{
     }
 
     render(){
+        let geomData = 'blah'
         return(
             <Element>
                 <h6 className="element-header">New Capability</h6>
                 <AvlFormsNewData
                     json = {config}
                     id = {[this.props.match.params.id]}
+                    //data = {{upload: geomData}}
+
                 />
             </Element>
         )

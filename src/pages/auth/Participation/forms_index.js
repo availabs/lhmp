@@ -21,6 +21,10 @@ class ParticipationFormsIndex extends React.Component{
         return(
             <AvlFormsListTable
                 json = {config}
+                createButtons = {true}
+                editButton = {true}
+                viewButton = {true}
+                deleteButton = {true}
             />
         )
     }

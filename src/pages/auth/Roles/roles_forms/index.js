@@ -21,6 +21,10 @@ class RolesFormsIndex extends React.Component{
         return(
             <AvlFormsListTable
                 json = {config}
+                createButtons = {true}
+                editButton = {true}
+                viewButton = {true}
+                deleteButton = {true}
             />
         )
     }

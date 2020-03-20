@@ -2,7 +2,7 @@ import actions from '../actions'
 import actionsProject from '../actions/project'
 import assets from '../Assets/index'
 import roles from '../Roles'
-import capabilities from '../Capabilities'
+import capabilities from '../Capabilities/index'
 import participation from '../Participation'
 
 let submenu = [

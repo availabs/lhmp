@@ -165,70 +165,101 @@ class AvlFormsListTable extends React.Component{
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
                         {this.props.config.map(d =>{
-                            if(d.type === 'actions'){
-                                return(
-                                    <Link
-                                        className="btn btn-sm btn-primary"
-                                        to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
-                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                                    </Link>
-                                )
+                            if(d.type === 'actions' ){
+                                if(this.props.createButtons === true){
+                                    return(
+                                        <Link
+                                            className="btn btn-sm btn-primary"
+                                            to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
+                                            Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                        </Link>
+                                    )
+                                }else{
+                                    return null
+                                }
+
                             }else if(d.type === 'participation'){
-                                return (
-                                    <Link
-                                        className="btn btn-sm btn-primary"
-                                        to={ `/${this.props.config.map(d=> d.type)}/time/new` } >
-                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                                    </Link>
-                                )
+                                if(this.props.createButtons === true){
+                                    return (
+                                        <Link
+                                            className="btn btn-sm btn-primary"
+                                            to={ `/${this.props.config.map(d=> d.type)}/time/new` } >
+                                            Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                        </Link>
+                                    )
+                                }else{
+                                    return null
+                                }
                             }else{
-                                return (
-                                    <Link
-                                        className="btn btn-sm btn-primary"
-                                        to={ `/${this.props.config.map(d=> d.type)}/new` } >
-                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                                    </Link>
-                                )
+                                if(this.props.createButtons === true){
+                                    return (
+                                        <Link
+                                            className="btn btn-sm btn-primary"
+                                            to={ `/${this.props.config.map(d=> d.type)}/new` } >
+                                            Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                        </Link>
+                                    )
+                                }else{
+                                    return null
+                                }
+
                             }
                         })
                         }
 
                         {this.props.config.map(d => {
                             if(d.type === 'actions'){
-                                return (
-                                    <Link
-                                        className="btn btn-sm btn-primary"
-                                        to={ `/${this.props.config.map(d=> d.type)}/project/new` } >
-                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
-                                    </Link>
-                                )
+                                if(this.props.createButtons === true){
+                                    return (
+                                        <Link
+                                            className="btn btn-sm btn-primary"
+                                            to={ `/${this.props.config.map(d=> d.type)}/project/new` } >
+                                            Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                        </Link>
+                                    )
+                                }else{
+                                    return null
+                                }
+
                             }else if(d.type === 'participation'){
-                                return(
-                                    <Link
-                                        className="btn btn-sm btn-primary"
-                                        to={ `/${this.props.config.map(d=> d.type)}/meeting/new` } >
-                                        Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Meeting
-                                    </Link>
-                                )
+                                if(this.props.createButtons === true){
+                                    return(
+                                        <Link
+                                            className="btn btn-sm btn-primary"
+                                            to={ `/${this.props.config.map(d=> d.type)}/meeting/new` } >
+                                            Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Meeting
+                                        </Link>
+                                    )
+                                }else{
+                                    return null
+                                }
+
                             }
                             else{
-                                return (
+                                if(this.props.createButtons === true){
+                                    return (
+                                        <button
+                                            disabled
+                                            className="btn btn-sm btn-disabled"
+                                        >
+                                            Create {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                        </button>
+                                    )
+                                }else{
+                                    return null
+                                }
+
+                            }
+                        })}
+                                {this.props.createButtons === true ?
                                     <button
                                         disabled
                                         className="btn btn-sm btn-disabled"
                                     >
-                                        Create {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
+                                        Create HMGP {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                                     </button>
-                                )
-                            }
-                        })}
+                                    :null}
 
-                        <button
-                            disabled
-                            className="btn btn-sm btn-disabled"
-                        >
-                                Create HMGP {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                        </button>
                     </span>
                         </h4>
                         {
@@ -260,8 +291,9 @@ class AvlFormsListTable extends React.Component{
                                                         <td>{item[attribute]}</td>
                                                     )
                                                 }):null}
-                                                <td>
-                                                    {formType[0] === 'actions' || formType[0] === 'participation'?
+                                                {this.props.editButton === true ?
+                                                    <td>
+                                                    {(formType[0] === 'actions' || formType[0] === 'participation') ?
                                                         <Link className="btn btn-sm btn-outline-primary"
                                                               to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
                                                             Edit
@@ -272,29 +304,39 @@ class AvlFormsListTable extends React.Component{
                                                             Edit
                                                         </Link>
                                                     }
+                                                    </td>
+                                                    :
+                                                    null}
+                                                {this.props.viewButton === true ?
+                                                    <td>
+                                                        {formType[0] === 'actions' || formType[0] === 'participation' ?
 
-                                                </td>
-                                                <td>
-                                                    {formType[0] === 'actions' || formType[0] === 'participation' ?
+                                                            <Link className="btn btn-sm btn-outline-primary"
+                                                                  to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
+                                                                View
+                                                            </Link>
+                                                            :
+                                                            <Link className="btn btn-sm btn-outline-primary"
+                                                                  to={ `/${formType[0]}/view/${item['id']}` }>
+                                                                View
+                                                            </Link>
+                                                        }
 
-                                                        <Link className="btn btn-sm btn-outline-primary"
-                                                              to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
-                                                            View
-                                                        </Link>
-                                                        :
-                                                        <Link className="btn btn-sm btn-outline-primary"
-                                                              to={ `/${formType[0]}/view/${item['id']}` }>
-                                                            View
-                                                        </Link>
-                                                    }
+                                                    </td>
+                                                    :null}
+                                                {
+                                                    this.props.deleteButton === true ?
+                                                        <td>
+                                                            <button id= {item['id']} className="btn btn-sm btn-outline-danger"
+                                                                    onClick={this.deleteItem}>
+                                                                Delete
+                                                            </button>
+                                                        </td>
+                                                        : null
+                                                }
 
-                                                </td>
-                                                <td>
-                                                    <button id= {item['id']} className="btn btn-sm btn-outline-danger"
-                                                            onClick={this.deleteItem}>
-                                                        Delete
-                                                    </button>
-                                                </td>
+
+
                                             </tr>
                                         )
                                     }

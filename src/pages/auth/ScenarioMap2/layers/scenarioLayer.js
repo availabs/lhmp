@@ -518,7 +518,7 @@ export const ScenarioOptions =  (options = {}) => {
                                 result = scenario_graph.value.find(obj => {
                                     return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '0.2'
                                 });
-                                if(Object.keys(result).length > 0){
+                                if(result && Object.keys(result).length > 0){
                                     a.push(["500 year Loss Value",result['hazard_loss_dollars']])
                                     a.push(["500 year Building Depth",result["risk_value"] + "ft"])
                                 }
@@ -528,7 +528,7 @@ export const ScenarioOptions =  (options = {}) => {
                                 result = scenario_graph.value.find(obj => {
                                     return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '1'
                                 });
-                                if(Object.keys(result).length > 0) {
+                                if(result && Object.keys(result).length > 0) {
                                     a.push(["100 year Loss Value", result['hazard_loss_dollars']])
                                     a.push(["100 year Building Depth", result["risk_value"] + "ft"])
                                 }
@@ -537,7 +537,7 @@ export const ScenarioOptions =  (options = {}) => {
                                 result = scenario_graph.value.find(obj => {
                                     return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '2'
                                 });
-                                if(Object.keys(result).length > 0) {
+                                if(result && Object.keys(result).length > 0) {
                                     a.push(["50 year Loss Value", result['hazard_loss_dollars']])
                                     a.push(["50 year Building Depth", result["risk_value"] + "ft"])
                                 }
@@ -546,7 +546,7 @@ export const ScenarioOptions =  (options = {}) => {
                                 result = scenario_graph.value.find(obj => {
                                     return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '4'
                                 });
-                                if(Object.keys(result).length > 0) {
+                                if(result && Object.keys(result).length > 0) {
                                     a.push(["25 year Loss Value", result['hazard_loss_dollars']])
                                     a.push(["25 year Building Depth", result["risk_value"] + "ft"])
                                 }
