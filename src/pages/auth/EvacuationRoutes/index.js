@@ -6,7 +6,7 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import EvacuationRoutesFactory from "./layers/evacuationRoutesLayer";
 
 class Home extends React.Component {
-    evacuationRoutesLayer = EvacuationRoutesFactory({ active: true });
+    evacuationRoutesLayer = EvacuationRoutesFactory({ active: true, viewOnly: false});
     render() {
         return (
             <div style={{width: '100%', height: '100vh'}}>

@@ -323,7 +323,7 @@ class AvlFormsListTable extends React.Component{
                                                             :
                                                             formType[0] === 'evacuation_route' ?
                                                                 <button className="btn btn-sm btn-outline-primary"
-                                                                     onClick={(e) => this.props.onViewClick(item['geom'])}>
+                                                                     onClick={(e) => this.props.onViewClick(item)}>
                                                                     View
                                                                 </button> :
                                                             <Link className="btn btn-sm btn-outline-primary"

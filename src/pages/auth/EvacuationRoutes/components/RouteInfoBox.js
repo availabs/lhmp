@@ -4,7 +4,7 @@ import {reduxFalcor} from "utils/redux-falcor"
 import _ from 'lodash'
 import get from "lodash.get"
 import styled from "styled-components"
-import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js'
+import AvlFormsListTable from './ListTable'
 import ViewConfig from './view_config.js'
 import {Button} from "components/common/styled-components"
 import SaveRoute from "./saveRoute";
@@ -133,30 +133,30 @@ class RouteInfoBox extends React.Component {
                     </div>
                 }
 
-                <div style={{position: "relative", paddingTop: "10px", display: 'flex', justifyContent: 'space-between'}}>
-                    <Button style={{width: "calc(33% - 5px)"}}
-                            onClick={e => layer.removeLast()}
-                            disabled={!somethingToRemove}
-                            secondary>
-                        Remove Last
-                    </Button>
-                    <Button style={{width: "calc(33% - 5px)"}}
-                            onClick={e => layer.clearRoute()}
-                            disabled={!somethingToRemove}
-                            secondary>
-                        Clear Route
-                    </Button>
-                    <Button style={{width: "calc(33% - 5px)"}}
-                            disabled={!nameArray.length}
-                            onClick={e => this.setState({showSaveModal: true})}
-                            primary>
-                        Save Route
-                    </Button>
-                </div>
+                {!this.props.viewOnly ?
+                    <div style={{position: "relative", paddingTop: "10px", display: 'flex', justifyContent: 'space-between'}}>
+                        <Button style={{width: "calc(33% - 5px)"}}
+                                onClick={e => layer.removeLast()}
+                                disabled={!somethingToRemove}
+                                secondary>
+                            Remove Last
+                        </Button>
+                        <Button style={{width: "calc(33% - 5px)"}}
+                                onClick={e => layer.clearRoute()}
+                                disabled={!somethingToRemove}
+                                secondary>
+                            Clear Route
+                        </Button>
+                        <Button style={{width: "calc(33% - 5px)"}}
+                                disabled={!nameArray.length}
+                                onClick={e => this.setState({showSaveModal: true})}
+                                primary>
+                            Save Route
+                        </Button>
+                    </div>
+                    : null
+                }
 
-                <div style={{position: "relative", paddingTop: "10px"}}>
-
-                </div>
                 {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this)) : null}
 
                 <AvlFormsListTable
@@ -167,7 +167,7 @@ class RouteInfoBox extends React.Component {
                         {
                             mode: 'markers',
                             data: {
-                                routes: [{geometry: e}]
+                                routes: [{geometry: e.geom, name: e.route_name}]
                             }
                         }
                     )}
