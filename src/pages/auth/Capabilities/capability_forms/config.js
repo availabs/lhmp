@@ -14,7 +14,7 @@ module.exports = [
                 display_type:'text',
                 area:'true',
                 meta: 'true',
-                hidden:'false',
+                //hidden:'false',
                 section: ''
             },
             municipality:{

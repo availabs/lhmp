@@ -315,7 +315,7 @@ class AvlFormsNewData extends React.Component{
                     })
                 }
                 else if(
-                    item.attributes[attribute].hidden ==='false'
+                    item.attributes[attribute].hidden ==='false' || item.attributes[attribute].hidden === undefined
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),

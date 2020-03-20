@@ -157,6 +157,8 @@ class ZoneTable extends React.Component {
         this.setState({
             data : data.filter(d => d.zone_id.toString() !== e.target.id)
         })
+        console.log('props',this.props.noShowBoundary.noShowTownBoundary(localStorage.getItem("zone")))
+
     }
 
     render(){
