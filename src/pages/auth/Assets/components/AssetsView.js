@@ -2,10 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
-import pick from "lodash.pick"
+import AvlMap from 'components/AvlMap';
 import Element from 'components/light-admin/containers/Element'
 import {Link} from "react-router-dom";
 import {falcorGraph} from "../../../../store/falcorGraph";
+import AssetLayer from "./assetLayer";
+import TractsLayer from "../../../Public/Home/components/Risk/HazardLoss/layers/TractsLayer";
 const BASIC_INFO = [
     'prop_class',
     'replacement_value',
@@ -95,12 +97,34 @@ class AssetsView extends React.Component{
             ['actions', 'assets','byId',[this.props.match.params.assetId],ACTIONS_INFO]
         )
             .then(response =>{
-                console.log('asset info', falcorGraph.getCache().actions)
                 this.setState({
                     address : response.json.building.byId[this.props.match.params.assetId].address.toUpperCase()
                 });
                 return response
             })
+    }
+    loadMap(){
+        return (
+            <div style={{width: '100%', height: '50vh'}}>
+                <AvlMap
+                    zoom={18}
+                    mapactions={false}
+                    scrollZoom={false}
+                    center={[-73.7749, 42.6583]}
+                    styles={[
+                        {name: 'Dark Streets', style: 'mapbox://styles/am3081/ck3rtxo2116rr1dmoppdnrr3g'},
+                        {name: 'Light Streets', style: 'mapbox://styles/am3081/ck3t1g9a91vuy1crzp79ffuac'}
+                    ]}
+                    sidebar={false}
+                    layers={[AssetLayer]}
+                    layerProps={ {
+                        [AssetLayer.name]: {
+                            assetId: this.props.match.params.assetId
+                        }
+                    } }
+                />
+            </div>
+        )
     }
     basicInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
@@ -453,10 +477,8 @@ class AssetsView extends React.Component{
             falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId] &&
             Object.keys(falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId]).length > 0
         ){
-            console.log('asset actions info', falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId])
             tableData = falcorGraph.getCache().actions.assets.byId[this.props.match.params.assetId].value
         }
-        console.log('tabledata', tableData)
         return (
             <div>
                 <Element>
@@ -513,6 +535,7 @@ class AssetsView extends React.Component{
                         <div className="col-md-6 col-xxxl-16">
                             <div className='element-wrapper'>
                                 <div className='element-box'>
+                                    {this.loadMap()}
                                     {this.basicInfo()}
                                     {this.occupancyInfo()}
                                     {this.structuralInfo()}
