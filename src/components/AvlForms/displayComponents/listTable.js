@@ -167,7 +167,7 @@ class AvlFormsListTable extends React.Component{
                             <span style={{float:'right'}}>
                         {this.props.config.map(d =>{
                             if(d.type === 'actions' ){
-                                if(this.props.createButtons === true){
+                                if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return(
                                         <Link
                                             className="btn btn-sm btn-primary"
@@ -178,9 +178,8 @@ class AvlFormsListTable extends React.Component{
                                 }else{
                                     return null
                                 }
-
                             }else if(d.type === 'participation'){
-                                if(this.props.createButtons === true){
+                                if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <Link
                                             className="btn btn-sm btn-primary"
@@ -192,7 +191,7 @@ class AvlFormsListTable extends React.Component{
                                     return null
                                 }
                             }else{
-                                if(this.props.createButtons === true){
+                                if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <Link
                                             className="btn btn-sm btn-primary"
@@ -210,7 +209,7 @@ class AvlFormsListTable extends React.Component{
 
                         {this.props.config.map(d => {
                             if(d.type === 'actions'){
-                                if(this.props.createButtons === true){
+                                if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <Link
                                             className="btn btn-sm btn-primary"
@@ -223,7 +222,7 @@ class AvlFormsListTable extends React.Component{
                                 }
 
                             }else if(d.type === 'participation'){
-                                if(this.props.createButtons === true){
+                                if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return(
                                         <Link
                                             className="btn btn-sm btn-primary"
@@ -237,7 +236,7 @@ class AvlFormsListTable extends React.Component{
 
                             }
                             else{
-                                if(this.props.createButtons === true){
+                                if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <button
                                             disabled
@@ -252,7 +251,7 @@ class AvlFormsListTable extends React.Component{
 
                             }
                         })}
-                                {this.props.createButtons === true ?
+                                {this.props.createButtons === true || this.props.createButtons === undefined ?
                                     <button
                                         disabled
                                         className="btn btn-sm btn-disabled"
@@ -296,7 +295,7 @@ class AvlFormsListTable extends React.Component{
                                                         <td>{item[attribute]}</td>
                                                     )
                                                 }):null}
-                                                {this.props.editButton === true ?
+                                                {this.props.editButton === true || this.props.editButton === undefined?
                                                     <td>
                                                     {(formType[0] === 'actions' || formType[0] === 'participation') ?
                                                         <Link className="btn btn-sm btn-outline-primary"
@@ -312,7 +311,7 @@ class AvlFormsListTable extends React.Component{
                                                     </td>
                                                     :
                                                     null}
-                                                {this.props.viewButton === true ?
+                                                {this.props.viewButton === true || this.props.viewButton === undefined?
                                                     <td>
                                                         {formType[0] === 'actions' || formType[0] === 'participation' ?
 
@@ -335,7 +334,7 @@ class AvlFormsListTable extends React.Component{
                                                     </td>
                                                     :null}
                                                 {
-                                                    this.props.deleteButton === true ?
+                                                    this.props.deleteButton === true || this.props.deleteButton === undefined?
                                                         <td>
                                                             <button id= {item['id']} className="btn btn-sm btn-outline-danger"
                                                                     onClick={this.deleteItem}>

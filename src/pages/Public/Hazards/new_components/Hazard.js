@@ -114,7 +114,7 @@ class Hazards extends React.Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <div className='col-md-6'>
+                    <div className='col-md-12'>
                         <h6>{HazardName} Loss by Month</h6>
                         <CousubTotalLossTable
                             geoid={this.props.geoid}
@@ -122,20 +122,6 @@ class Hazards extends React.Component {
                             dataType='severeWeather'
                             hazards={this.props.hazards}
                             hazard={this.props.hazard}
-                        />
-                    </div>
-                    <div className='col-md-6'>
-                        <h6>{HazardName} Events by Month</h6>
-                        <NumberOfHazardsMonthStackedBarGraph
-                            showYlabel={false}
-                            showXlabel={false}
-                            lossType={'num_events'}
-                            geoid={this.props.geoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                            height={300}
                         />
                     </div>
                 </div>

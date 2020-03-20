@@ -30,7 +30,21 @@ export class ZoneLayer extends MapLayer{
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
-            let graph = ''
+            let geoids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
+            let cousubs = [];
+            if(geoids){
+                console.log('geoids',geoids)
+                geoids.forEach(geoid =>{
+                    if(geoid.geoid.length !== 5){
+                        cousubs.push(geoid.geoid)
+                    }
+                });
+            }
+            this.map.setFilter(
+                "cousubs",
+                ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
+            )
+
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
@@ -38,6 +52,7 @@ export class ZoneLayer extends MapLayer{
                     map.resize();
                     map.fitBounds(bbox);
                 })
+
         }
     }
 
@@ -55,6 +70,34 @@ export class ZoneLayer extends MapLayer{
         })
     }
 
+    showTownBoundary(data){
+        let geoids = JSON.parse("[" + data + "]")[0];
+        let cousubs = [];
+        geoids.forEach(geoid =>{
+            if(geoid.geoid.length !== 5){
+                cousubs.push(geoid.geoid)
+            }
+        });
+        this.map.setFilter(
+            "cousubs",
+            ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
+        )
+    }
+
+    noShowTownBoundary(data){
+        let geoids = JSON.parse("[" + data + "]")[0];
+        let cousubs = [];
+        geoids.forEach(geoid =>{
+            if(geoid.geoid.length !== 5){
+                cousubs.push(geoid.geoid)
+            }
+        });
+        this.map.setFilter(
+            "cousubs",
+            ['all', ['in', 'geoid',...cousubs]]
+        )
+    }
+
 
 
 }
@@ -70,8 +113,14 @@ export const ZoneOptions =  (options = {}) => {
                     source: {
                         'type': "vector",
                         'url': 'mapbox://am3081.1ggw4eku'
-                    }
+                    },
                 },
+                { id: "cousubs",
+                    source: {
+                        'type': "vector",
+                        'url': 'mapbox://am3081.dlnvkxdi'
+                    },
+                }
             ],
             layers: [
                 {
@@ -84,8 +133,22 @@ export const ZoneOptions =  (options = {}) => {
                         'line-opacity': 0.5,
                         'line-width': 4
                     },
-                    filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
+                    filter: ['all', ['in', 'geoid',store.getState().user.activeGeoid]]
+
                 },
+                {
+                    'id': 'cousubs',
+                    'source': 'cousubs',
+                    'source-layer': 'cousubs',
+                    'type': 'line',
+                    'paint': {
+                        'line-color': '#F31616',
+                        'line-opacity': 0.5,
+                        'line-width': 4
+                    },
+                    filter : ['in','geoid','']
+
+                }
 
             ],
             _isVisible: true
