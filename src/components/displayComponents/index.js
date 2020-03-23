@@ -10,6 +10,7 @@ import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer
 import formTableViewer from './FormTableViewer'
 import criticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
 import inventoryTableViewer from './inventoryTableViewer'
+import evacuationRoutesViewer from "./evacuationRoutesViewer";
 
 
 const NA = ({ type, state, routes }) =>
@@ -37,6 +38,8 @@ export default {
     formTableViewer,
     criticalFacilitiesTableViewer,
     inventoryTableViewer,
+    evacuationRoutesViewer,
+    evacuationRoutesEditor:evacuationRoutesViewer,
     criticalFacilitiesTableEditor: criticalFacilitiesTableViewer,
     inventoryTableEditor: inventoryTableViewer,
     formTableEditor: formTableViewer

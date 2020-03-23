@@ -4,8 +4,9 @@ import { reduxFalcor, UPDATE as REDUX_UPDATE } from "utils/redux-falcor"
 
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
 import { register, unregister } from "components/AvlMap/ReduxMiddleware"
-
+import store from 'store'
 import geoJsonExtent from "@mapbox/geojson-extent"
+import _ from 'lodash'
 import get from "lodash.get";
 import mapboxgl from "mapbox-gl"
 import styled from "styled-components"
@@ -28,12 +29,34 @@ const atts = ['id', 'name', 'type', 'owner', "updatedAt", "tmcArray", "points"];
 class RouteLayer extends MapLayer {
     onAdd(map) {
         // register(this, REDUX_UPDATE, ["graph"]);
-
+        if (this.viewOnly) this.mode = null
         this.markers.forEach(m => m.addTo(map));
 
         return this.loadUserRoutes(false)
-            .then(() => falcorGraph.get(["conflation", "latestVersion"]))
-            .then(() => this.calcRoute());
+            .then(() => falcorGraph.get(
+                ["conflation", "latestVersion"],
+                ["geo",[store.getState().user.activeGeoid],"boundingBox"],
+                ['geo', store.getState().user.activeGeoid, 'cousubs']
+            ))
+            .then(() => this.calcRoute())
+            .then(() => {
+                let graph = falcorGraph.getCache()
+                this.cousubs = get(graph, `geo.${store.getState().user.activeGeoid}.cousubs.value`, [])
+                map.setFilter('cousubs-layer', [
+                    'match',
+                    ['get', 'geoid'],
+                    get(graph, `geo.${store.getState().user.activeGeoid}.cousubs.value`, []),
+                    true,
+                    false
+                ]);
+
+                let initalBbox =
+                    get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
+                        .slice(4,-1).split(",");
+                let bbox = initalBbox ? [initalBbox[0].split(" "),initalBbox[1].split(" ")] : null;
+                map.resize();
+                map.fitBounds(bbox, {maxDuration: 0});
+            })
     }
     onRemove(map) {
         // unregister(this);
@@ -227,10 +250,30 @@ class RouteLayer extends MapLayer {
     receiveRoute({ mode, data }) {
         this.data[mode] = data;
         data = get(data, `routes`, []).pop();
-        // this.geom = get(data, `geometry`, {coordinates: [], type: "LineString"})
+
         if (this.map.getSource('execution-route-source')) {
-            this.map.getSource('execution-route-source').setData(get(data, `geometry`, {coordinates: [], type: "LineString"}));
+            this.geom = get(data, `geometry`, {coordinates: [], type: "LineString"});
+
+            let feature = {
+                type: 'Feature',
+                properties: {name: get(data, `name`, '')},
+                geometry: get(data, `geometry`, {coordinates: [], type: "LineString"})
+            };
+            let indexOfFeature = _.indexOf(this.features, this.features.filter(f => _.isEqual(f.geometry.coordinates, feature.geometry.coordinates))[0])
+            if (indexOfFeature === -1){
+                this.viewMode === 'multi' ? this.features.push(feature) : this.features = [feature]
+            }else{
+                this.features.splice(indexOfFeature, 1)
+            }
+            this.map.getSource('execution-route-source').setData(
+                {
+                    type: 'FeatureCollection',
+                    features: this.features
+                }
+            );
+
         }
+        console.log(this.viewMode, this.map.getSource('execution-route-source'))
     }
     paintRoute(geom){
         if (RouteLayer.map.getSource('execution-route-source')) {
@@ -247,6 +290,13 @@ class RouteLayer extends MapLayer {
                 this.data["click"].pop();
                 break;
         }
+        this.features.pop();
+        this.map.getSource('execution-route-source').setData(
+            {
+                type: 'FeatureCollection',
+                features: this.features
+            }
+        );
         this.calcRoute();
     }
     clearRoute() {
@@ -261,21 +311,29 @@ class RouteLayer extends MapLayer {
                 break;
         }
         this.filters.userRoutes.value = null;
+        this.features = [];
+        this.map.getSource('execution-route-source').setData(
+            {
+                type: 'FeatureCollection',
+                features: this.features
+            }
+        );
         // this.mapActions.modeToggle.disabled = false;
         this.calcRoute();
     }
     toggleCreationMode() {
-        switch (this.mode) {
-            case "markers":
-                this.mode = "click";
-                this.markers.forEach(m => m.remove());
+        switch (this.viewMode) {
+            case "single":
+                this.viewMode = "multi";
+                // this.markers.forEach(m => m.remove());
                 break;
-            case "click":
-                this.mode = "markers";
-                this.generateMapMarkers();
+            case "multi":
+                this.viewMode = "single";
+                // this.generateMapMarkers();
                 break;
         }
-        this.calcRoute();
+        this.forceUpdate()
+        // this.calcRoute();
     }
     loadUserRoute(route) {
         this.mapActions.modeToggle.disabled = true;
@@ -342,16 +400,27 @@ export default (props = {}) =>
                 source: {
                     type: 'geojson',
                     data: {
-                        type: 'Feature',
-                        properties: {},
-                        geometry: {
-                            type: 'LineString',
-                            coordinates: []
-                        }
+                        "type": "FeatureCollection",
+                        "features": []
                     }
                 }
 
-            }],
+            },
+            {
+                id: "counties",
+                source: {
+                    'type': "vector",
+                    'url': 'mapbox://am3081.1ggw4eku'
+                }
+            },
+            {
+                id: "cousubs",
+                source: {
+                    'type': "vector",
+                    'url': 'mapbox://am3081.dlnvkxdi'
+                }
+            },
+        ],
         layers: [{
             id: 'execution-route',
             source: 'execution-route-source',
@@ -366,7 +435,28 @@ export default (props = {}) =>
                 "line-opacity": 1.0,
                 "line-width": 6
             }
-        }],
+        },
+        {
+            'id': 'counties-layer',
+            'source': 'counties',
+            'source-layer': 'counties',
+            'type': 'line',
+            'paint': {
+                ...ConflationStyle.paint,
+                'line-color': 'rgb(16,255,53)',
+            },
+            filter: ['in', 'geoid', store.getState().user.activeGeoid]
+        },
+        {
+            'id': 'cousubs-layer',
+            'source': 'cousubs',
+            'source-layer': 'cousubs',
+            'type': 'line',
+            'paint': {
+                'line-color': 'rgba(16,255,53,0.37)',
+            }
+        },
+        ],
 
         onHover: {
             layers: ["execution-route"],
@@ -386,6 +476,8 @@ export default (props = {}) =>
         version: 2.0,
 
         mode: "markers",
+        viewMode: 'single',
+        features: [],
         markers: [],
         nameArray: [],
         data: {
@@ -413,13 +505,13 @@ export default (props = {}) =>
             }
         },
 
-       /* popover: {
-            layers: ["execution-route"],
+        popover: {
+            layers: ["cousubs-layer", 'counties-layer'],
             dataFunc: function(feature, features, layer) {
-                console.log(feature.properties, this.getNetworkId());
+                console.log(feature.properties);
                 return [];
             }
-        },*/
+        },
 
         filters: {
             userRoutes: {
@@ -445,6 +537,7 @@ export default (props = {}) =>
                                       data={ layer.data }
                                       geom={ layer.geom }
                                       paintRoute={ layer.receiveRoute.bind(layer)}
+                                      viewOnly={layer.viewOnly}
                         />
                     )
                 },
@@ -452,14 +545,14 @@ export default (props = {}) =>
             }
         },
 
-        /*mapActions: {
+        mapActions: {
             modeToggle: {
-                Icon: ({ layer }) => <span className={ `fa fa-2x fa-${ layer.mode === "markers" ? "map-marker" : "road" }` }/>,
-                tooltip: "Toggle Creation Mode",
+                Icon: ({ layer }) => <span className={ `fa fa-2x fa-${ layer.viewMode === "single" ? "minus" : "align-justify" }` }/>,
+                tooltip: "Toggle View Mode",
                 action: function() {
                     this.toggleCreationMode();
                 }
             }
-        }*/
+        }
 
     })

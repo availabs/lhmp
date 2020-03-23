@@ -127,7 +127,7 @@ const config = {
         {
             title: 'Evacuation Routes',
             requirement: 'Req-NYS-F-4A',
-            type: '',
+            type: 'evacuationRoutes',
             prompt: '',
             intent: '',
             icon: 'os-icon-alert-octagon'
