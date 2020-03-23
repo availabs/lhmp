@@ -38,6 +38,14 @@ let HazardConfig = Object.keys(HAZARD_META).map(key => {
 console.log('HazardConfig',)
 const config =  {
 	'Local Hazards' : [
+        {
+            title: 'Hazard Overview',
+            requirement: `req-B1-hazard-overview`,
+            type: 'content',
+            prompt: 'Talk about local context for hazard of concern for your area',
+            intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+        },
 		...HazardConfig
 	]
 }

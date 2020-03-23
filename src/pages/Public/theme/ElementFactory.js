@@ -18,7 +18,7 @@ import {
 } 
 from 'pages/Public/theme/components'
 
-const  ElementFactory =  ({ element: element, user: user, showTitle, showHeader, ...rest }) => (
+const  ElementFactory =  ({ element: element, user: user, showTitle=true, showHeader, ...rest }) => (
     <Element name={element.title}>
         <SectionBox>
             {['right'].includes(element.align) ?

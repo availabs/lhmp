@@ -143,22 +143,7 @@ class AssetsByTypeIndex extends React.Component {
                                     }
                                 </div>
                             </div>
-                            <div className='element-wrapper'>
-                                <div className='element-box'>
-                                    <h4>Buildings By Hazard Risk</h4>
-                                    {
-                                        this.state.geoid ?
-                                            <BuildingByHazardRiskPieChart geoid={[this.state.geoid]}
-                                                                          replacement_value={true}/>
-                                            : ''
-                                    }
-                                    {
-                                        this.state.geoid ?
-                                            <BuildingByHazardRiskTable geoid={[this.state.geoid]}/>
-                                            : ''
-                                    }
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                 </Element>
