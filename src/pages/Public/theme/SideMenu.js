@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {Link as Link2} from "react-router-dom";
 
 
 
@@ -20,6 +21,7 @@ class SideMenu extends React.Component {
     render(){
         console.log('this.props', this.props)
         let counter = 1;
+        let baseURL = this.props.linkPath ? this.props.linkPath : '';
         return(
          <div style={{height: '100%', paddingTop: 20}} 
             className={`menu-w 
@@ -30,11 +32,7 @@ class SideMenu extends React.Component {
                 menu-layout-${sidebarLayout} 
                 sub-menu-style-inside
             `}>
-            {/*
-            <div className="element-search autosuggest-search-activator">
-                <input placeholder="Start typing to search..." type="text" />
-            </div>
-            */}
+
             <ul className="main-menu">
                 {
                     Object.keys(this.props.config).map((section,i) => {
@@ -46,14 +44,26 @@ class SideMenu extends React.Component {
                                         counter += 1;
                                         return (
                                             <li key={item.title}>
-                                                <Link activeClass='selected' to={this.props.linkToIndex ? counter : item.title} spy={true} offset={-50} >
-                                                    {item.icon ? (
-                                                        <div className="icon-w">
-                                                            <div className={`os-icon ${item.icon}`}></div>
-                                                        </div>
-                                                    ) : ''}
-                                                    <span>{item.title}</span>
-                                                </Link>
+                                                {this.props.linkToReq ?
+                                                    <Link2 class={item.requirement === this.props.currReq ? 'selected' : ''} to={
+                                                        this.props.linkToReq ? baseURL + item.requirement : baseURL + item.title
+                                                    } spy={true} offset={-50} >
+                                                        {item.icon ? (
+                                                            <div className="icon-w">
+                                                                <div className={`os-icon ${item.icon}`}></div>
+                                                            </div>
+                                                        ) : ''}
+                                                        <span>{item.title}</span>
+                                                    </Link2>
+                                                :
+                                                    <Link activeClass='selected' to={baseURL + item.title} spy={true} offset={-50} >
+                                                        {item.icon ? (
+                                                            <div className="icon-w">
+                                                                <div className={`os-icon ${item.icon}`}></div>
+                                                            </div>
+                                                        ) : ''}
+                                                        <span>{item.title}</span>
+                                                    </Link>}
                                             </li>
                                         )
                                     })

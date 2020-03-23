@@ -38,7 +38,8 @@ class AdminStrategies extends React.Component {
             geoInfo,
             this.props.setActiveCousubid,
             this.props.activeCousubid,
-            allowedGeos)
+            allowedGeos,
+            this.props.match.params.reqId, '/plan/strategies/')
     }
 }
 
@@ -54,7 +55,7 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan/strategies',
+    path: '/plan/strategies/:reqId',
     exact: true,
     name: 'Strategies',
     auth: true,
@@ -68,5 +69,22 @@ export default [{
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminStrategies))
-}];
+},
+    {
+        icon: 'os-icon-pencil-2',
+        path: '/plan/strategies/:reqId',
+        exact: true,
+        name: 'Strategies',
+        auth: true,
+        authLevel: 1,
+        mainNav: false,
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-mini',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminStrategies))
+    }];
 
