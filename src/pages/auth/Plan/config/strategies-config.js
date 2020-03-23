@@ -118,6 +118,14 @@ const config = {
         },
         {
             title: 'Relocation Zones',
+            requirement: 'Req-NYS-F-3B-1',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-documents-07'
+        },
+        {
+            title: '',
             requirement: 'Req-NYS-F-3B',
             type: '',
             prompt: '',
@@ -142,12 +150,22 @@ const config = {
         },
         {
             title: 'Shelters',
+            requirement: 'Req-NYS-F-4B-2',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-share-2'
+        },
+        {
+            title: '',
             requirement: 'Req-NYS-F-4B',
             type: '',
             prompt: '',
             intent: '',
             icon: 'os-icon-share-2'
         }
+        
+
     ],
     Actions: [
         {

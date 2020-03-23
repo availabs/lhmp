@@ -25,7 +25,7 @@ class AdminRisk extends React.Component {
         )
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].counties.municipalities.value], ['name']],
+                    ['geo', [this.props.activeGeoid, ...get(response.json, `geo[${this.props.activeGeoid}].counties.municipalities.value`,[])], ['name']],
                 )
             })
     }
