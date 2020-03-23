@@ -161,16 +161,40 @@ class RouteInfoBox extends React.Component {
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}
-                    deleteButton = {true}
+                    deleteButton = {!this.props.viewOnly}
                     viewButton={true}
-                    onViewClick={(e) => this.props.paintRoute(
-                        {
-                            mode: 'markers',
-                            data: {
-                                routes: [{geometry: e.geom, name: e.route_name}]
+                    onViewClick={(e) => {
+                        if (e.initLoad){
+                            if(!this.state.initLoad){
+                                this.setState({initLoad: true})
+                                return  this.props.paintRoute(
+                                    {
+                                        mode: 'markers',
+                                        data: {
+                                            routes: [{hideAll: e.hideAll, viewAll: e.viewAll,
+                                                data: e.data ?
+                                                    e.data.map(f => ({geometry: f.geom, name: f.route_name})):
+                                                    []
+                                                , geometry: e.geom, name: e.route_name}]
+                                        }
+                                    }
+                                )
                             }
+                        }else{
+                            return  this.props.paintRoute(
+                                {
+                                    mode: 'markers',
+                                    data: {
+                                        routes: [{hideAll: e.hideAll, viewAll: e.viewAll,
+                                            data: e.data ?
+                                                e.data.map(f => ({geometry: f.geom, name: f.route_name})):
+                                                []
+                                            , geometry: e.geom, name: e.route_name}]
+                                    }
+                                }
+                            )
                         }
-                    )}
+                    }}
                 />
             </div>
         )

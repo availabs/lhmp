@@ -250,7 +250,28 @@ class RouteLayer extends MapLayer {
     receiveRoute({ mode, data }) {
         this.data[mode] = data;
         data = get(data, `routes`, []).pop();
-
+        if (!data) return;
+        if (data.hideAll){
+            this.clearRoute()
+        }if (data.viewAll){
+            console.log('view all', data)
+            this.viewMode = 'multi'
+            this.features = data.data.map(f => {
+                return {
+                    type: 'Feature',
+                    properties: {name: get(data, `name`, '')},
+                    geometry: get(f, `geometry`, {coordinates: [], type: "LineString"})
+                }
+            })
+            console.log('this.features', this.features)
+            this.map.getSource('execution-route-source').setData(
+                {
+                    type: 'FeatureCollection',
+                    features: this.features
+                }
+            );
+            this.forceUpdate()
+        }
         if (this.map.getSource('execution-route-source')) {
             this.geom = get(data, `geometry`, {coordinates: [], type: "LineString"});
 
