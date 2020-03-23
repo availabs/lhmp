@@ -122,8 +122,8 @@ class ZoneTable extends React.Component {
                                                     zone_geoid:geoid,
                                                     zone_id : zone.zone_id,
                                                     zone_name: zone.name,
-                                                    num_buildings: graph_zones[zone_id].byGeoid[zone.geoid].sum.num_buildings ? fmt(graph_zones[zone_id].byGeoid[zone.geoid].sum.num_buildings) : '',
-                                                    replacement_value : graph_zones[zone_id].byGeoid[zone.geoid].sum.replacement_value ? fmt(graph_zones[zone_id].byGeoid[zone.geoid].sum.replacement_value) :''
+                                                    num_buildings: graph_zones[zone_id].byGeoid[zone.geoid].sum.num_buildings ? fnum(graph_zones[zone_id].byGeoid[zone.geoid].sum.num_buildings) : '',
+                                                    replacement_value : graph_zones[zone_id].byGeoid[zone.geoid].sum.replacement_value ? fnum(graph_zones[zone_id].byGeoid[zone.geoid].sum.replacement_value) :''
                                                 })
                                             }
 
@@ -145,8 +145,8 @@ class ZoneTable extends React.Component {
                                                 count_buildings_scenarios_county += parseInt(item.count)
                                                 sum_buildings_value_county += parseFloat(item.sum)
                                                 d['zone_geoid']=item.geoid
-                                                d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_county)
-                                                d['sum_buildings_value'] = fmt(sum_buildings_value_county)
+                                                d['count_buildings_scenarios'] = fnum(count_buildings_scenarios_county)
+                                                d['sum_buildings_value'] = fnum(sum_buildings_value_county)
                                             }
                                         })
                                     })
@@ -163,8 +163,8 @@ class ZoneTable extends React.Component {
                                                 count_buildings_scenarios_cousub += parseInt(item.count)
                                                 sum_buildings_value_cousub += parseFloat(item.sum)
                                                 d['zone_geoid']=item.cousub_geoid
-                                                d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_cousub)
-                                                d['sum_buildings_value'] = fmt(sum_buildings_value_cousub)
+                                                d['count_buildings_scenarios'] = fnum(count_buildings_scenarios_cousub)
+                                                d['sum_buildings_value'] = fnum(sum_buildings_value_cousub)
                                             }
                                         })
                                     })

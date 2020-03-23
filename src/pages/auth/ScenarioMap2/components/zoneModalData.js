@@ -60,7 +60,6 @@ class ZoneModalData extends React.Component {
     }
 
     render() {
-        console.log('check',)
         return (
             <div className='element-wrapper'>
                 <div className='element-box'>
