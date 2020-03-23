@@ -10,8 +10,8 @@ import { fnum } from "utils/sheldusUtils"
 import ControlLayers from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
 import ScenarioTable from "../components/scenariosTable";
 import {setActiveRiskZoneId} from "store/modules/scenario"
-
-
+var _ = require("lodash")
+let scenarios_list  = []
 class ScenarioControl extends React.Component {
     constructor(props) {
         super(props);
@@ -40,6 +40,7 @@ class ScenarioControl extends React.Component {
                             this.setState({
                                 scenario_id : item.id
                             })
+                            this.props.setActiveRiskZoneId([item])
                         }
                     })
 
@@ -52,7 +53,16 @@ class ScenarioControl extends React.Component {
 
     componentDidUpdate(oldProps,oldState){
         if(oldState.scenario_id !== this.state.scenario_id){
-            this.props.setActiveRiskZoneId(this.state.scenario_id)
+            scenarios_list.forEach(item =>{
+                if(item.id === this.state.scenario_id){
+                    this.props.setActiveRiskZoneId([item])
+                }
+            })
+            //if(scenarios_list.length > 0){
+
+
+            //}
+
             this.renderScenarioTable()
         }
     }
@@ -60,8 +70,8 @@ class ScenarioControl extends React.Component {
 
     scenarioDropDown(){
         if(this.props.scenariosList[this.props.activePlan]){
-            let scenarios_list  = []
             let graph = this.props.scenariosList[this.props.activePlan].scenarios
+            scenarios_list = []
             if(graph){
                 Object.keys(graph.value).filter(d => d !== '$type').forEach(item =>{
                     scenarios_list.push({

@@ -22,7 +22,7 @@ class AssetsFilteredTable extends Component {
     }
     componentDidUpdate(prevProps) {
         if (!_.isEqual(prevProps.groupByFilter, this.props.groupByFilter)){
-            console.log('updating', prevProps.groupByFilter, this.props.groupByFilter)
+            //console.log('updating', prevProps.groupByFilter, this.props.groupByFilter)
             return this.fetchFalcorDeps();
         }
     }
@@ -340,7 +340,7 @@ class AssetsFilteredTable extends Component {
 
 
     render() {
-        console.log('asset props', this.props)
+        //console.log('asset props', this.props)
         return (
             <div style={{width: this.props.width ? this.props.width : '', height: this.props.height ? this.props.height : ''}}>
                 <TableSelector

@@ -36,7 +36,6 @@ class MainControls extends React.Component {
     }
 
     componentDidUpdate(oldProps,oldState){
-
         if(this.state.activeMode.length === 0 && this.state.modeOff !== "") {
             this.props.layer.mainLayerToggleVisibilityOff(this.state.modeOff)
         }
