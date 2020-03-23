@@ -42,7 +42,7 @@ export const actions = {
 
 let initialState = {
 
-    activeRiskZoneId:null,
+    activeRiskZoneId:[],
     offRiskZoneId:[]
 
 };
