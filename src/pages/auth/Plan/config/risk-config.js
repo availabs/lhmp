@@ -30,7 +30,15 @@ const config = {
             prompt: '',
             intent: '',
             icon: 'os-icon-loader'
-        }
+        },
+         {
+            title: 'Social Vulnerability',
+            requirement: 'Req-D-2C',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-grid-squares-2'
+        },
     ],
     'Changes in Development' : [
         {
@@ -46,6 +54,7 @@ const config = {
                 ' vulnerability of the community.',
             icon: 'os-icon-repeat'
         },
+       
         {
             title: 'Development Zones',
             requirement: 'Req-D-1B',

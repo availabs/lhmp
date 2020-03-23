@@ -68,7 +68,8 @@ class ContentEditor extends Component {
         });
     };
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault()
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
         let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
         let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
@@ -117,7 +118,6 @@ class ContentEditor extends Component {
                     onEditorStateChange={this.onEditorStateChange}
                 />
                 <a className='hoverable btn btn-primary step-trigger-btn'
-                   href='#'
                    onClick={this.handleSubmit}
                 >Submit</a>
             </div>
