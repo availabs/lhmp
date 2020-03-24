@@ -118,62 +118,79 @@ const renderElement = function(element, section, index, user) {
     )
 }
 
-const render = function(config, user, geoInfo, setActiveCousubid, activecousubId,allowedGeos, reqId, baseLink){
-    console.log('req id', reqId)
+const render = function(config, user, geoInfo, setActiveCousubid, activecousubId,allowedGeos){
     let PageList = [];
     let sections = {};
     let allRequirenments = [];
-    let initReqId = null
-    Object.keys(config).map((section,sectionI) => {
+    Object.keys(config).map(section => {
         sections[section] = [];
-        config[section]
-            .filter((f,fI) => {if (reqId){ return f.requirement === reqId }else if(sectionI === 0 && fI === 0) {initReqId = f.requirement; return true}})
-            .map((requirement, req_i) => {
+        config[section].map((requirement, req_i) => {
             allRequirenments.push(requirement.title);
             PageList.push(renderElement(requirement, section, req_i, user));
             sections[section].push(PageList.length - 1)
 
         })
     });
-    console.log('component rendered', PageList)
     return (
-        <div key={reqId} name={reqId} id={reqId}>
-            <div style={{position: 'fixed', left: 50, top: 0, paddingTop: 0,width:  CSS_CONFIG.reqNavWidth, height: '100%'}}>
-                <div
-                    className='ae-side-menu'
-                    style={{
-                        height: '5vh',
-                        width: CSS_CONFIG.reqNavWidth,
-                        position: 'fixed',
-                        display: 'block',
-                        zIndex:100
-                    }}>
-                    {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
-                </div>
-                <SideMenu config={config} linkToReq={true} linkPath={baseLink} currReq={reqId || initReqId}/>
-            </div>
-            <div
-                style={{
-                    width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
-                    height: '100%',
-                    marginLeft: `calc(${CSS_CONFIG.reqNavWidth})`,
-                    display: 'absolute',
-                    alignContent: 'stretch',
-                    alignItems: 'stretch',
-                }}>
-                <Pagers useContext={true}/>
+        <Stickyroll pages={PageList} anchors="">
+            {({page, pageIndex, pages, progress}) => {
+                let Content = PageList[pageIndex];
+
+                return (
+                    <div key={pageIndex+1} name={pageIndex+1} id={pageIndex+1}>
+                        <div style={{position: 'fixed', left: 50, top: 0, paddingTop: 0,width:  CSS_CONFIG.reqNavWidth, height: '100%'}}>
+                            <div
+                                className='ae-side-menu'
+                                style={{
+                                    height: '5vh',
+                                    width: CSS_CONFIG.reqNavWidth,
+                                    position: 'fixed',
+                                    display: 'block',
+                                    zIndex:100
+                                }}>
+                                {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
+                            </div>
+                            <SideMenu config={config} linkToIndex={true}/>
+                            {/*
+                                        <div
+                                        className='ae-side-menu'
+                                        style={{
+                                            height: '93vh',
+                                            width: CSS_CONFIG.reqNavWidth,
+                                            position: 'absolute',
+                                            display: 'block',
+                                            overflow: 'scroll',
+                                            marginTop: '6vh'
+                                        }}>
+                                        {this.renderReqNav(allRequirenments, pageIndex)}
+                                    </div>
+                                    */}
+                        </div>
+                        <div
+                             style={{
+                                 width: `calc(100% - ${CSS_CONFIG.reqNavWidth}))`,
+                                 height: '100%',
+                                 marginLeft: `calc(${CSS_CONFIG.reqNavWidth})`,
+                                 display: 'absolute',
+                                 alignContent: 'stretch',
+                                 alignItems: 'stretch',
+                             }}>
+                            <Pagers useContext={true}/>
 
 
-                <div style={{
-                    height: '100vh',
-                    width: '100%',
-                }}>
+                            <div style={{
+                                height: '100vh',
+                                width: '100%',
+                            }}>
 
-                    {PageList.pop()}
-                </div>
-            </div>
-        </div>
-    );
+                                {Content}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }}
+        </Stickyroll>
+    )
 
 }
 export default {

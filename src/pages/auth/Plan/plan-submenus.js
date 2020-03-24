@@ -5,11 +5,11 @@ import PlanHazards from './hazards'
 import LandingPage from "./LandingPage";
 
 let submenu = [
-    ...AdminAbout,
-    ...PlanHazards,
-    ...AdminRisk,
-    ...AdminStrategies,
-    ...LandingPage
+    AdminAbout[0],
+    PlanHazards[0],
+    AdminRisk[0],
+    AdminStrategies[0],
+    LandingPage[0]
 ]
 export default [
     submenu.map(f => {

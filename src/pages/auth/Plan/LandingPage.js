@@ -39,7 +39,8 @@ class AdminLanding extends React.Component {
             geoInfo,
             this.props.setActiveCousubid,
             this.props.activeCousubid,
-            allowedGeos)
+            allowedGeos,
+            this.props.match.params.reqId, '/plan/landing/')
     }
 }
 
@@ -55,7 +56,7 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan/landing',
+    path: '/plan/landing/',
     exact: true,
     name: 'Landing Page CMS',
     auth: true,
@@ -69,5 +70,22 @@ export default [{
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminLanding))
-}];
+},
+    {
+        icon: 'os-icon-pencil-2',
+        path: '/plan/landing/:reqId',
+        exact: true,
+        name: 'Landing Page CMS',
+        auth: true,
+        authLevel: 1,
+        mainNav: false,
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-mini',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminLanding))
+    }];
 

@@ -38,7 +38,9 @@ class AdminAbout extends React.Component {
             geoInfo,
             this.props.setActiveCousubid,
             this.props.activeCousubid,
-            allowedGeos)
+            allowedGeos,
+            this.props.match.params.reqId, '/plan/process/'
+            )
     }
 }
 
@@ -54,7 +56,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan/process',
+    path: '/plan/process/',
     exact: true,
     name: 'Planning Process',
     auth: true,
@@ -68,5 +70,22 @@ export default [{
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminAbout))
-}];
+},
+    {
+        icon: 'os-icon-pencil-2',
+        path: '/plan/process/:reqId',
+        exact: true,
+        name: 'Planning Process',
+        auth: true,
+        authLevel: 1,
+        mainNav: false,
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-mini',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminAbout))
+    }];
 

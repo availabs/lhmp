@@ -70,6 +70,7 @@ class AvlFormsListTable extends React.Component{
                         return response
                     })
             })
+
     }
 
     deleteItem (e){
@@ -150,7 +151,6 @@ class AvlFormsListTable extends React.Component{
         let formAttributes = [];
         let listViewData = [];
         let data = this.formsListTable();
-        console.log('data', data)
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
         if(listViewData && listViewData.length > 0){
@@ -159,7 +159,10 @@ class AvlFormsListTable extends React.Component{
             }else{
                 formAttributes = this.props.config[0].list_attributes
             }
+            this.props.onViewClick({viewAll: true, data:listViewData, initLoad: true});
+
         }
+
         return (
             <div>
                 {
@@ -182,6 +185,22 @@ class AvlFormsListTable extends React.Component{
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {formType[0] === 'evacuation_route' ?
+                                   <tr>
+                                       <td></td>
+                                       <td>
+                                           <button className="btn btn-sm btn-outline-primary"
+                                                   onClick={(e) => this.props.onViewClick({viewAll: true, data:listViewData})}>
+                                               View All
+                                           </button>
+                                       </td>
+                                       <td>
+                                           <button className="btn btn-sm btn-outline-danger"
+                                                   onClick={(e) => this.props.onViewClick({hideAll: true})}>
+                                               Hide All
+                                           </button>
+                                       </td>
+                                   </tr>: null}
                                 {
                                     listViewData.map(item =>{
                                         if(Object.keys(item).length > 0){
