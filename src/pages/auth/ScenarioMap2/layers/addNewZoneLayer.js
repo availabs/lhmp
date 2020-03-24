@@ -112,11 +112,34 @@ export class AddNewZoneLayer extends MapLayer{
             let canvas = map.getCanvasContainer();
             let points = [];
             let poly = null;
+
             document.addEventListener('click', onClick);
             document.addEventListener('dblclick', ondblclick);
             let draw = new MapboxDraw({
                 displayControlsDefault: false,
             });
+            this.map.setStyle("mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii")
+            if(this.map.getLayer("counties") === undefined){
+                if(this.map.isStyleLoaded()){
+                    this.map.addLayer(
+                        {
+                            'id': 'counties',
+                            'source': 'counties',
+                            'source-layer': 'counties',
+                            'type': 'line',
+                            'paint': {
+                                'line-color': '#F31616',
+                                'line-opacity': 0.5,
+                                'line-width': 4
+                            },
+                            filter: ['all', ['in', 'geoid',store.getState().user.activeGeoid]]
+
+                        }
+                    )
+                }
+
+            }
+            console.log('this.map',)
             this.map.addControl(draw);
             draw.changeMode('draw_polygon');
 
