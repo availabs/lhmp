@@ -1,6 +1,4 @@
 import React from 'react';
-import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
-import config from 'pages/auth/Roles/roles_forms/config.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
@@ -8,10 +6,8 @@ import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import {falcorGraph} from "../../../../store/falcorGraph";
-import ScenarioTable from "../components/scenariosTable";
 import SearchableDropDown from "../components/searchableDropDown";
 import ZoneTable from "../components/zoneTable"
-import {ZoneLayer,ZoneOptions} from "../layers/zoneLayer.js";
 
 class ZoneControl extends React.Component{
     constructor(props){
@@ -26,7 +22,7 @@ class ZoneControl extends React.Component{
     }
 
     componentDidUpdate(oldProps){
-        console.log('props',oldProps.activeMode.length,this.props.activeMode.length)
+        //console.log('props',oldProps.activeMode.length,this.props.activeMode.length)
         if(oldProps.activeMode.length !== this.props.activeMode.length){
             if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
                 console.log('in if of component did update')
@@ -157,23 +153,31 @@ class ZoneControl extends React.Component{
             let ids = []
             return (
                 <div>
-                    <SearchableDropDown
-                        data={zones_list}
-                        placeholder={'Select a Type'}
-                        value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
-                        onChange={(value) => {
-                            this.setState({zone_id:value})
-                            ids = JSON.parse(localStorage.getItem('zone')) || [];
-                            zones_list.forEach(zone =>{
-                                if(zone.value === value){
-                                    ids.push({id:value,geoid:zone.geoid});
-                                }
-                            })
-                            localStorage.setItem('zone', JSON.stringify(ids));
-                            this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
-                            this.selectedZones()
-                        }}
-                    />
+                    <div style={{display:'flex',justifyContent:'space-between'}}>
+                        <SearchableDropDown
+                            data={zones_list}
+                            placeholder={'Select a Type'}
+                            value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
+                            onChange={(value) => {
+                                this.setState({zone_id:value})
+                                ids = JSON.parse(localStorage.getItem('zone')) || [];
+                                zones_list.forEach(zone =>{
+                                    if(zone.value === value){
+                                        ids.push({id:value,geoid:zone.geoid});
+                                    }
+                                })
+                                localStorage.setItem('zone', JSON.stringify(ids));
+                                this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
+                                this.selectedZones()
+                            }}
+                        />
+                    <button className="mr-2 mb-2 btn btn-primary btn-sm"
+                            type="button"
+                            onClick = {(e) =>{
+                                this.props.layer.layer.addNewZoneOnClick(e)
+                            }}
+                    >Add New Zone</button>
+                    </div>
                     <div>
                         {
                             localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0?

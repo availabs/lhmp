@@ -309,18 +309,18 @@ export class ScenarioLayer extends MapLayer{
             //Private Owned
             if (owner === '8') {
                 graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#F3EC16'
+                    buildingColors[item.id] = '#AF7AC5'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#F3EC16'},
+                        "properties": {id: item.id, color: '#AF7AC5'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })
                 graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#F3EC16'
+                    buildingColors[item.id] = '#AF7AC5'
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#F3EC16'},
+                        "properties": {id: item.id, color: '#AF7AC5'},
                         "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
                     })
                 })

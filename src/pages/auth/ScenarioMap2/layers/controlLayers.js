@@ -7,6 +7,7 @@ import MapLayer from "components/AvlMap/MapLayer.js"
 import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
+import {AddNewZoneLayer,AddNewZoneOptions} from "./addNewZoneLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -31,8 +32,12 @@ const DynamicProjectLayerFactory = (callingLayer,...args) =>{
     return new ProjectLayer('projects',ProjectOptions())
 }
 
+const DynamicAddNewZoneLayerFactory =(callingLayer,...args) =>{
+    return new AddNewZoneLayer('addNewZone',AddNewZoneOptions())
+}
 
-class ControlLayers extends MapLayer {
+
+export class ControlLayers extends MapLayer {
     onAdd(map) {
         super.onAdd(map);
         if (store.getState().user.activeGeoid) {
@@ -177,6 +182,16 @@ class ControlLayers extends MapLayer {
         if(layerName === 'zone'){
             this.zoneLayer.toggleVisibilityOff()
         }
+    }
+
+    addNewZoneOnClick(e){
+        this.doAction([
+            "addDynamicLayer",
+            DynamicAddNewZoneLayerFactory
+        ])
+            .then(nzl =>{
+                this.addNewZoneLayer = nzl
+            })
     }
 
 }
