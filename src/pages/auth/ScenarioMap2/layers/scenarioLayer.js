@@ -149,6 +149,7 @@ export class ScenarioLayer extends MapLayer{
     fetchData(){
         let owner_types = ['2','3', '4', '5', '6', '7','8'];
         let buildingIds = [];
+
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['flood_100','flood_500'], 'owner_type',owner_types, 'critical', ['true', 'false']],
@@ -172,8 +173,8 @@ export class ScenarioLayer extends MapLayer{
             buildingIds = filteredBuildings.map(f => f.id);
             return buildingIds
         }).then(buildingIds =>{
-            if(buildingIds){
-                return falcorChunkerNice(
+            if(buildingIds.length > 0){
+                return falcorGraph.get(
                     ['building', 'geom', 'byBuildingId',buildingIds, 'centroid'],
                 )
 
@@ -184,7 +185,7 @@ export class ScenarioLayer extends MapLayer{
                 return Promise.resolve([])
             }else{
                 if(this.activeScenarioId !== null){
-                    return falcorChunkerNice(
+                    return falcorGraph.get(
                         ['risk_zones',[this.activeScenarioId],'buildings',this.selection,'total_loss']
                     )
                 }

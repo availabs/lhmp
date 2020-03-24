@@ -45,6 +45,53 @@ export class AddNewZoneLayer extends MapLayer{
         }
     }
 
+    // after drawing the polygon
+    /*onSelect(selection) {
+        if (['polygon'].includes(this.creationMode) ){
+            let tmpRoute = [];
+            selection = selection
+                .filter((id,id_i) => selection.indexOf(id) === id_i)
+                .map(f => f.properties.id);
+
+            let feats = this.map.querySourceFeatures('conflationSource', {
+                filter: ['in', 'id', ...selection.map(f => parseInt(f))],
+                sourceLayer: 'network_conflation'
+            });
+            selection
+                .forEach(f => {
+                    let isFeature = feats.filter(feat => feat.properties.id === f);
+                    if (isFeature.length > 0) tmpRoute.push(isFeature[0]);
+                });
+            //this.paintRoute('npmrds')
+            console.log('tmproute', tmpRoute, selection)
+            this.route = [tmpRoute];
+        }else if(['selection'].includes(this.creationMode) ){
+            let tmpRoute = [];
+            selection = selection
+                .filter((id,id_i) => selection.indexOf(id) === id_i);
+
+            let feats = this.map.querySourceFeatures('conflationSource', {
+                filter: ['in', 'npmrds', ...selection.filter(f => f)],
+                sourceLayer: 'network_conflation'
+            });
+            selection
+                .forEach(f => {
+                    let isFeature = feats.filter(feat => feat.properties.npmrds === f);
+                    if (isFeature.length > 0) tmpRoute.push(isFeature[0]);
+                });
+            //this.paintRoute('npmrds')
+            console.log('tmproute', tmpRoute, selection)
+            this.route = [tmpRoute];
+        }else{
+            this.map.setPaintProperty(
+                'conflation-route',
+                'line-color',
+                'rgba(0,0,0,0)');
+        }
+        return Promise.resolve(selection)
+
+    }*/
+
     toggleCreationMode(mode, map) {
         console.log('creation mode', mode)
         this.creationMode = mode;
@@ -72,10 +119,12 @@ export class AddNewZoneLayer extends MapLayer{
             });
             this.map.addControl(draw);
             draw.changeMode('draw_polygon');
-            this.map.on('draw.create', updateArea);
+
+            this.map.on('draw.create',updateArea);
             this.map.on('draw.delete', updateArea);
             this.map.on('draw.update', updateArea);
             this.map.on('toggleMode', clearDraw);
+
             function clearDraw(e){
                 if (map){
                     console.log('finally here')
@@ -87,7 +136,7 @@ export class AddNewZoneLayer extends MapLayer{
             }
             function updateArea(e) {
                 poly = draw.getAll();
-                console.log('e.target', e)
+                console.log('e.target', e,poly)
                 if (e.type === 'draw.delete'){
                     draw.trash();
                     draw.deleteAll();
@@ -206,6 +255,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                 show: true
             }
         },
+        creationMode: "click",
         mapActions: {
             selectionPolygon: {
                 Icon: IconPolygon,
