@@ -151,6 +151,7 @@ considered.`,
                                         user={this.props.user}
                                         showTitle={false}
                                         showHeader={false}
+                                        pureElement={true}
                                     />
                                 </StatementText>
                             </div>

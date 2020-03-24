@@ -6,7 +6,7 @@ let config = {
         type: 'content',
         prompt: '',
         intent: '',
-        callout: '',
+        callout: true,
         icon: 'os-icon-arrow-right7'
     }],
     'County Description': [{

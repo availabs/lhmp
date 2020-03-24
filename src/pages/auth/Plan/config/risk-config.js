@@ -1,4 +1,14 @@
 const config = {
+    'Header' : [{
+        title: 'Risk Quote',
+        requirement: 'risk-quote',
+        type: 'content',
+        prompt: '',
+        intent: '',
+        callout: '',
+        icon: 'os-icon-arrow-right7',
+        onlyAdmin: true
+    }],
     'Vulnerability' : [
         {
             title: 'Statement',

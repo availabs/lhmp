@@ -114,7 +114,7 @@ class ContentEditor extends Component {
                     editorState={editorState}
                     toolbarClassName="toolbar"
                     wrapperClassName="wrapper"
-                    editorClassName="editor"
+                    editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
                     onEditorStateChange={this.onEditorStateChange}
                 />
                 <a className='hoverable btn btn-primary step-trigger-btn'

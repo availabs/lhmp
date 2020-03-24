@@ -112,6 +112,16 @@ const renderElement = function(element, section, index, user) {
                     user={user}
                     index={index}
                 />
+                    {element.callout  ?
+                        (<React.Fragment>
+                            <h6>Callout</h6>
+                            <GraphFactory
+                                graph={{type: 'content' + 'Editor'}}
+                                {...{requirement: element.requirement + 'callout'}}
+                                user={user}
+                                index={index}
+                            />
+                        </React.Fragment>) : <React.Fragment/>}
                 </ElementBox>
             </Element>
         </div>
