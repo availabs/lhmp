@@ -329,10 +329,10 @@ export class ScenarioLayer extends MapLayer{
 
         })
 
-        if(this.map.getSource('buildings')) {
+        if(this.map.getSource('buildings') && this.map.getLayer("buildings-layer")) {
             this.map.getSource("buildings").setData(geojson)
         }
-        if(this.map.getSource("buildings")){
+        if(this.map.getSource("buildings") && this.map.getLayer("buildings-layer")){
 
             this.map.setPaintProperty(
                 'buildings-layer',

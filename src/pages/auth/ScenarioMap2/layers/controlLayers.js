@@ -192,6 +192,8 @@ export class ControlLayers extends MapLayer {
             .then(nzl =>{
                 this.addNewZoneLayer = nzl
             })
+
+        //map.addLayer(layer, 'gl-draw-polygon-fill-inactive.cold');
     }
 
 }

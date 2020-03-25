@@ -3,26 +3,13 @@ import React from "react"
 import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
-import { connect } from 'react-redux';
-import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-import get from "lodash.get"
-import styled from "styled-components"
-import {
-    scaleQuantile,
-    scaleQuantize
-} from "d3-scale"
-import { extent } from "d3-array"
-import { format as d3format } from "d3-format"
-import { fnum } from "utils/sheldusUtils"
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import MapLayer from "components/AvlMap/MapLayer.js"
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import 'styles/_mapbox-gl-draw.css'
+import * as turf from '@turf/turf'
 //import { register, unregister } from "../ReduxMiddleware"
-
-
 import { getColorRange } from "constants/color-ranges";
-import ZoneControls from "../controls/zoneControls";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -39,77 +26,20 @@ export class AddNewZoneLayer extends MapLayer{
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                     map.resize();
                     map.fitBounds(bbox);
-                    let data = []
+
                 })
 
         }
     }
 
-    // after drawing the polygon
-    /*onSelect(selection) {
-        if (['polygon'].includes(this.creationMode) ){
-            let tmpRoute = [];
-            selection = selection
-                .filter((id,id_i) => selection.indexOf(id) === id_i)
-                .map(f => f.properties.id);
-
-            let feats = this.map.querySourceFeatures('conflationSource', {
-                filter: ['in', 'id', ...selection.map(f => parseInt(f))],
-                sourceLayer: 'network_conflation'
-            });
-            selection
-                .forEach(f => {
-                    let isFeature = feats.filter(feat => feat.properties.id === f);
-                    if (isFeature.length > 0) tmpRoute.push(isFeature[0]);
-                });
-            //this.paintRoute('npmrds')
-            console.log('tmproute', tmpRoute, selection)
-            this.route = [tmpRoute];
-        }else if(['selection'].includes(this.creationMode) ){
-            let tmpRoute = [];
-            selection = selection
-                .filter((id,id_i) => selection.indexOf(id) === id_i);
-
-            let feats = this.map.querySourceFeatures('conflationSource', {
-                filter: ['in', 'npmrds', ...selection.filter(f => f)],
-                sourceLayer: 'network_conflation'
-            });
-            selection
-                .forEach(f => {
-                    let isFeature = feats.filter(feat => feat.properties.npmrds === f);
-                    if (isFeature.length > 0) tmpRoute.push(isFeature[0]);
-                });
-            //this.paintRoute('npmrds')
-            console.log('tmproute', tmpRoute, selection)
-            this.route = [tmpRoute];
-        }else{
-            this.map.setPaintProperty(
-                'conflation-route',
-                'line-color',
-                'rgba(0,0,0,0)');
-        }
-        return Promise.resolve(selection)
-
-    }*/
-
     toggleCreationMode(mode, map) {
         console.log('creation mode', mode)
         this.creationMode = mode;
-        if (this.creationMode !== 'polygon') {
-            this.map.fire('toggleMode');
-        }
-
-        if (mode === 'selection'){
-            this.select = {
-                fromLayers:['conflation-route'],
-                property: 'npmrds',
-                highlightLayers: [
-                    { id:'conflation-route', filter: ['all'] }
-                ],
-            }
-        }else if (mode === 'polygon')
+        if (mode === 'polygon')
         {
             let canvas = map.getCanvasContainer();
+            //console.log('check',document.getElementById("avl-map-1").childNodes)
+           // document.querySelectorAll(".sc-bnXvFD gWiRDt").style.zIndex = 2147483647
             let points = [];
             let poly = null;
 
@@ -118,30 +48,45 @@ export class AddNewZoneLayer extends MapLayer{
             let draw = new MapboxDraw({
                 displayControlsDefault: false,
             });
-            this.map.setStyle("mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii")
-            if(this.map.getLayer("counties") === undefined){
-                if(this.map.isStyleLoaded()){
-                    this.map.addLayer(
-                        {
-                            'id': 'counties',
-                            'source': 'counties',
-                            'source-layer': 'counties',
-                            'type': 'line',
-                            'paint': {
-                                'line-color': '#F31616',
-                                'line-opacity': 0.5,
-                                'line-width': 4
-                            },
-                            filter: ['all', ['in', 'geoid',store.getState().user.activeGeoid]]
 
-                        }
-                    )
-                }
-
+            if(this.map.getLayer("parcels") || this.map.getLayer("ebr") || this.map.getLayer("counties") || this.map.getLayer("cousubs") || this.map.getLayer("project")){
+                this.map.removeLayer("parcels")
+                this.map.removeLayer("ebr")
+                this.map.removeLayer("buildings-layer")
+                this.map.removeLayer("counties")
+                this.map.removeLayer("cousubs")
+                this.map.removeLayer("project")
             }
-            console.log('this.map',)
+
             this.map.addControl(draw);
             draw.changeMode('draw_polygon');
+
+            this.map.addLayer({
+                'id': 'counties',
+                'source': 'counties',
+                'source-layer': 'counties',
+                'type': 'line',
+                'paint': {
+                    'line-color': '#F31616',
+                    'line-opacity': 0.5,
+                    'line-width': 4
+                },
+                filter: ['all', ['in', 'geoid',store.getState().user.activeGeoid]]
+
+            })
+            this.map.addLayer({
+                'id': 'cousubs',
+                'source': 'cousubs',
+                'source-layer': 'cousubs',
+                'type': 'line',
+                'paint': {
+                    'line-color': '#F31616',
+                    'line-opacity': 0.5,
+                    'line-width': 4
+                },
+                filter : ['in','geoid','']
+
+            })
 
             this.map.on('draw.create',updateArea);
             this.map.on('draw.delete', updateArea);
@@ -150,7 +95,6 @@ export class AddNewZoneLayer extends MapLayer{
 
             function clearDraw(e){
                 if (map){
-                    console.log('finally here')
                     map.fire('draw.delete');
                     map.removeControl(draw);
                 }
@@ -165,9 +109,6 @@ export class AddNewZoneLayer extends MapLayer{
                     draw.deleteAll();
                     points = [];
                     poly = null;
-                    /*RouteLayer.osmColors = RouteLayer.originalColors;
-                    RouteLayer.paintOriginal();
-                    RouteLayer.component.onSelect(RouteLayer.name, []);*/
                     draw.changeMode('draw_polygon');
                 }
             }
@@ -194,31 +135,14 @@ export class AddNewZoneLayer extends MapLayer{
                     maxY = !maxY || maxY < p.y ? p.y :  maxY;
                 })
                 let bbox = [[minX, minY], [maxX, maxY]];
-                let features = map.queryRenderedFeatures(bbox, { layers: ['cousubs'] });
+                //let features = map.queryRenderedFeatures(bbox, { layers: ['cousubs'] });
                 if (poly){
-                    console.log('poly',poly.features[0]);
-                    /*RouteLayer.component.onSelect(RouteLayer.name,
-                        features.filter(f => turf.pointsWithinPolygon(turf.points(f.geometry.coordinates), poly.features[0]).features.length > 0));
-                    features
-                        .filter(f => turf.pointsWithinPolygon(turf.points(f.geometry.coordinates), poly.features[0]).features.length > 0)
-                        .map(f => f.properties.id)
-                        .filter(f => f)
-                        .forEach(f => RouteLayer.osmColors[f] = '#12cc23');
-                    RouteLayer.paintRoute('id');*/
+                    let feats = map.querySourceFeatures('cousubs');
+                    console.log('poly',poly.features[0].geometry.coordinates);
                 }
 
                 document.addEventListener('click', onClick);
                 document.addEventListener('dblclick', ondblclick);
-            }
-        }
-        else if (mode === 'custom'){
-            this.route = [[]]
-        }
-        else{
-            this.select = {
-                fromLayers:[],
-                property: '',
-                highlightLayers: [],
             }
         }
         this.forceUpdate();
@@ -249,14 +173,8 @@ export const AddNewZoneOptions =  (options = {}) => {
     return {
         active: true,
         ...options,
+
         sources: [
-            {
-                id: "counties",
-                source: {
-                    'type': "vector",
-                    'url': 'mapbox://am3081.1ggw4eku'
-                },
-            },
             { id: "cousubs",
                 source: {
                     'type': "vector",
@@ -264,21 +182,6 @@ export const AddNewZoneOptions =  (options = {}) => {
                 },
             }
         ],
-        infoBoxes:{
-            Overview: {
-                title: "Add New Zone",
-                comp: ({layer}) =>{
-
-                    return(
-                        <div>
-
-                        </div>
-                    )
-                },
-                show: true
-            }
-        },
-        creationMode: "click",
         mapActions: {
             selectionPolygon: {
                 Icon: IconPolygon,
@@ -294,6 +197,22 @@ export const AddNewZoneOptions =  (options = {}) => {
                 }
             },
         },
+        infoBoxes:{
+            Overview: {
+                title: "Add New Zone",
+                comp: ({layer}) =>{
+
+                    return(
+                        <div>
+
+                        </div>
+                    )
+                },
+                show: true
+            }
+        },
+        creationMode: "click",
+
         _isVisible: true
     }
 
