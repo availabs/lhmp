@@ -109,7 +109,7 @@ class Menu extends Component {
             <React.Fragment>
                 <div className={displayOptions} style={dynamicStyle}>
                     {/*web menu*/}
-                    <div className="logo-w">
+                    <div className="logo-w" style={{placeContent: 'center'}}>
                         <Link className="logo" to="/">
                             {this.props.menuSettings.layout === 'menu-layout-mini' ? <Logo miniLayout={true}/> : <div className="logo-label"><Logo/></div>}
                         </Link>

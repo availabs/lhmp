@@ -1,4 +1,14 @@
 const config = {
+    'Header' : [{
+        title: 'Strategies Quote',
+        requirement: 'strategies-quote',
+        type: 'content',
+        prompt: '',
+        intent: '',
+        callout: '',
+        icon: 'os-icon-arrow-right7',
+        onlyAdmin: true
+    }],
     Capabilities : [
         {
             title: 'Overview',

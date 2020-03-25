@@ -44,7 +44,9 @@ class ContentViewer extends Component {
         let {editorState} = this.state;
         return (
             //this.props.type === 'contentEditor' ? (
-                <div dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB : '<i>Content not available.</i>'}} />
+                <div dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB :
+                        this.props.requirement.includes('callout') ? null : '<i>Content not available.</i>'
+                }} />
             //) : ''
         )
     }
