@@ -6,6 +6,7 @@ import {login, logout, setActiveCousubid, setActiveGeoid, setActivePlan, setUser
 
 const SET_RISK_ZONE_ID = 'USER::SET_RISK_ZONE_ID';
 const SET_RISK_ZONE_ID_OFF = 'USER::SET_RISK_ZONE_ID_OFF';
+const SET_NEW_ZONE = 'USER::SET_NEW_ZONE';
 
 function setRiskZoneId(id) {
     return {
@@ -21,6 +22,13 @@ function setRiskZoneIdOff(offId) {
     }
 }
 
+function setNewZone(newZone){
+    return {
+        type :SET_NEW_ZONE,
+        newZone
+    }
+}
+
 export const setActiveRiskZoneId = (id) =>{
     return (dispatch) => {
         dispatch(setRiskZoneId(id))
@@ -33,18 +41,25 @@ export const setActiveRiskZoneIdOff = (id) =>{
     }
 };
 
+export const setActiveNewZone = (id) =>{
+    return (dispatch) => {
+        dispatch(setNewZone(id))
+    }
+};
+
 export const actions = {
 
     setActiveRiskZoneId,
-    setActiveRiskZoneIdOff
+    setActiveRiskZoneIdOff,
+    setActiveNewZone
 
 };
 
 let initialState = {
 
     activeRiskZoneId:[],
-    offRiskZoneId:[]
-
+    offRiskZoneId:[],
+    newZone:{}
 };
 
 const ACTION_HANDLERS = {
@@ -63,6 +78,15 @@ const ACTION_HANDLERS = {
         if(action.offId) {
             newState.offRiskZoneId = action.offId;
             localStorage.setItem('offRiskZoneId', newState.offRiskZoneId);
+        }
+        return newState
+    },
+
+    [SET_NEW_ZONE] :(state =initialState, action) => {
+        const newState = Object.assign({}, state);
+        if(action.newZone) {
+            newState.newZone = action.newZone;
+            localStorage.setItem('newZone', newState.newZone);
         }
         return newState
     }
