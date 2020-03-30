@@ -32,6 +32,12 @@ export class AddNewZoneLayer extends MapLayer{
 
         }
     }
+    fetchData(){
+        falcorGraph.get(['plan',this.props.activePlan,'zones'])
+            .then(response =>{
+                console.log('response',response)
+            })
+    }
 
     toggleCreationMode(mode, map) {
         console.log('creation mode', mode)
@@ -268,11 +274,18 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                     "features": []
                                                                 }
                                                                 new_zones.forEach(new_zone =>{
-                                                                    if(new_zone.geom){
-                                                                        geojson.features.push(new_zone.geom)
+                                                                    if(new_zone.geoid === null){
+                                                                        if(new_zone.geojson){
+                                                                            geojson.features.push({
+                                                                                type : "Feature",
+                                                                                properties:{},
+                                                                                geometry:new_zone.geojson
+                                                                            })
+                                                                        }else{
+                                                                            geojson.features.push(new_zone.geom)
+                                                                        }
                                                                     }
                                                                 })
-                                                                console.log('geojson',geojson)
                                                                 layer.map.getSource("polygon").setData(geojson)
                                                             }
 
@@ -335,7 +348,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                             "deleteDynamicLayer",
                                             "addNewZone"
                                         ])
-
+                                        layer.forceUpdate()
                                     }}
                                 >Cancel</button>
                             </div>

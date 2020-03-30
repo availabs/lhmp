@@ -33,6 +33,7 @@ class ZoneControl extends React.Component{
     }
 
     fetchFalcorDeps(){
+        console.log('in fetch',this.props.zonesList)
         return this.props.falcor.get(['plan',this.props.activePlan,'zones'])
             .then(response =>{
                 return response
