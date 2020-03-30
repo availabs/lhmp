@@ -182,9 +182,11 @@ export class ControlLayers extends MapLayer {
         if(layerName === 'zone'){
             this.zoneLayer.toggleVisibilityOff()
         }
+
     }
 
     addNewZoneOnClick(e){
+        document.getElementById("new_zone_button").disabled = true
         this.doAction([
             "addDynamicLayer",
             DynamicAddNewZoneLayerFactory
@@ -193,8 +195,8 @@ export class ControlLayers extends MapLayer {
                 this.addNewZoneLayer = nzl
             })
 
-        //map.addLayer(layer, 'gl-draw-polygon-fill-inactive.cold');
     }
+
 
 }
 
