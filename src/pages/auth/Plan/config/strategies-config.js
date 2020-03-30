@@ -76,7 +76,7 @@ const config = {
         {
             title: 'Evaluation',
             requirement: 'Req-C-1B',
-            type: 'table',
+            type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-pie-chart-3'
