@@ -153,9 +153,10 @@ class CapabilityStrategy extends React.Component{
         
         return (
             <PageContainer style={{Height: '80vh'}}>
-                <HeaderContainer>
-                    <PageHeader>Capabilities</PageHeader>
-                </HeaderContainer>
+                {this.props.showHeader ?
+                    <HeaderContainer>
+                        <PageHeader>Capabilities</PageHeader>
+                    </HeaderContainer> : null}
                 <VerticalAlign>
                     <div className = 'd-flex justify-content-center' style={{fontSize: '1.5em'}}>
                         { this.processData() ? 
@@ -177,7 +178,8 @@ class CapabilityStrategy extends React.Component{
 CapabilityStrategy.defaultProps = {
     geoid: '36',
     geoLevel: 'cousubs',
-    title: "Capability Strategy"
+    title: "Capability Strategy",
+    showHeader: true
 }
 
 const mapStateToProps = state => {

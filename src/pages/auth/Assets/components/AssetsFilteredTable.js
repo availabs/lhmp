@@ -21,7 +21,7 @@ class AssetsFilteredTable extends Component {
         this.state = {}
     }
     componentDidUpdate(prevProps) {
-        if (!_.isEqual(prevProps.groupByFilter, this.props.groupByFilter)){
+        if (!_.isEqual(prevProps.groupByFilter, this.props.groupByFilter) || prevProps.geoid !== this.props.geoid){
             //console.log('updating', prevProps.groupByFilter, this.props.groupByFilter)
             return this.fetchFalcorDeps();
         }
@@ -37,19 +37,19 @@ class AssetsFilteredTable extends Component {
                 this.props.groupBy === 'jurisdiction' ? [] :
                     [];
         return this.props.falcor.get(
-            ['geo', this.props.activeGeoid, ['name']],
-            //["geo", this.props.activeGeoid, 'counties', 'municipalities'],
-            ["geo", this.props.activeGeoid, 'cousubs'],
-            ['building', 'byGeoid', this.props.activeGeoid, 'critical', 'types', 'all'],
+            ['geo', this.props.geoid, ['name']],
+            //["geo", this.props.geoid, 'counties', 'municipalities'],
+            ["geo", this.props.geoid, 'cousubs'],
+            ['building', 'byGeoid', this.props.geoid, 'critical', 'types', 'all'],
             ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'sum', ['count','replacement_value']],
             ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all']
         )
             .then(response => {
-                //let allGeo = [this.props.activeGeoid,...get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.counties.municipalities.value`, [])];
+                //let allGeo = [this.props.geoid,...get(this.props.falcor.getCache(), `geo.${this.props.geoid}.counties.municipalities.value`, [])];
                 if(this.props.groupBy === 'critical') {
-                    ids =  get(this.props.falcor.getCache(), `building.byGeoid.${this.props.activeGeoid}.critical.types.all.value`, []);
+                    ids =  get(this.props.falcor.getCache(), `building.byGeoid.${this.props.geoid}.critical.types.all.value`, []);
                 }
-                let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.cousubs.value`, []);
+                let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.geoid}.cousubs.value`, []);
                 return this.props.groupBy === 'jurisdiction' ?
                     this.props.falcor.get(
                         ['building', 'byGeoid', this.props.geoid, this.props.groupBy, allGeo, 'sum', ['count','replacement_value']],
@@ -71,6 +71,7 @@ class AssetsFilteredTable extends Component {
         riskZoneIdsAllValuesTotal = {};
         let primeColName = this.props.groupBy.split('T').join(' T');
         let linkBase = `${this.props.public ? 'risk' : ``}/assets/list/${this.props.groupBy}/`;
+        let linkTrail = `/geo/${this.props.geoid}`
         let graph = this.props.groupBy === 'critical' ?
             Object.keys(get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy + 'Grouped'}`, {}))
                 .reduce( (a,c) => {
@@ -86,6 +87,7 @@ class AssetsFilteredTable extends Component {
             } */
             :
             get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy}`, null);
+            console.log('check graph', graph)
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
@@ -293,9 +295,9 @@ class AssetsFilteredTable extends Component {
                     }, {}),
 
                 link: this.props.groupBy === 'jurisdiction' ?
-                    linkBase + get(this.props.geoidData, `${this.props.activeGeoid}.cousubs.value`, []).join('-') :
+                    linkBase + get(this.props.geoidData, `${this.props.geoid}.cousubs.value`, []).join('-') :
                     this.props.groupBy === 'critical' ?
-                        linkBase + get(this.props.falcor.getCache(), `building.byGeoid.${this.props.activeGeoid}.critical.types.all.value`, []).join('-') :
+                        linkBase + get(this.props.falcor.getCache(), `building.byGeoid.${this.props.geoid}.critical.types.all.value`, []).join('-') :
                         linkBase + config.map(f => f.value).join('-')
             })
         }
@@ -311,14 +313,14 @@ class AssetsFilteredTable extends Component {
                     Header: 'TOTAL # BUILDING TYPE',
                     accessor: 'TOTAL # BUILDING TYPE',
                     sort: true,
-                    link: (d) => d // functional
+                    link: (d) => d + linkTrail // functional
                 },
                 this.props.public ? null : {
                     Header: 'TOTAL $ REPLACEMENT VALUE',
                     accessor: 'TOTAL $ REPLACEMENT VALUE',
                     sort: true,
                     formatValue: fnum,
-                    link: true // takes what is in data
+                    link: (d) => d + linkTrail // takes what is in data
                 },
                 ...riskZoneColNames
                     .map((name) => {
@@ -332,7 +334,7 @@ class AssetsFilteredTable extends Component {
                         if(name.includes('$')) {
                              a['formatValue'] = fnum
                         }
-                        a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}`;
+                        a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}` + linkTrail;
                         return a
                     }),
             ].filter(f => f)}
@@ -340,7 +342,7 @@ class AssetsFilteredTable extends Component {
 
 
     render() {
-        //console.log('asset props', this.props)
+        console.log('asset props', this.props)
         return (
             <div style={{width: this.props.width ? this.props.width : '', height: this.props.height ? this.props.height : ''}}>
                 <TableSelector
