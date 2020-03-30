@@ -231,6 +231,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                 return falcorGraph.call(['zones','insert'],args,[],[])
                                                     .then(response =>{
                                                         alert("Zone has been saved")
+                                                        layer.forceUpdate()
                                                         let new_zone = JSON.parse(localStorage.getItem("zone"))
                                                         new_zone.push({
                                                             'id':name,
@@ -239,7 +240,6 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                             'geoid' : null
                                                         })
                                                         localStorage.setItem("zone",JSON.stringify(new_zone))
-
                                                         layer.doAction([
                                                             "deleteDynamicLayer",
                                                             "addNewZone"
@@ -348,7 +348,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                             "deleteDynamicLayer",
                                             "addNewZone"
                                         ])
-                                        layer.forceUpdate()
+
                                     }}
                                 >Cancel</button>
                             </div>
