@@ -3,17 +3,6 @@ import React from "react"
 import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
-import { connect } from 'react-redux';
-import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-import get from "lodash.get"
-import styled from "styled-components"
-import {
-    scaleQuantile,
-    scaleQuantize
-} from "d3-scale"
-import { extent } from "d3-array"
-import { format as d3format } from "d3-format"
-import { fnum } from "utils/sheldusUtils"
 import MapLayer from "components/AvlMap/MapLayer.js"
 //import { register, unregister } from "../ReduxMiddleware"
 
@@ -33,9 +22,8 @@ export class ZoneLayer extends MapLayer{
             let geoids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
             let cousubs = [];
             if(geoids){
-                console.log('geoids',geoids)
                 geoids.forEach(geoid =>{
-                    if(geoid.geoid.length !== 5){
+                    if(geoid.geoid && geoid.geoid.length !== 5){
                         cousubs.push(geoid.geoid)
                     }
                 });
@@ -44,6 +32,30 @@ export class ZoneLayer extends MapLayer{
                 "cousubs",
                 ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
             )
+
+            if(localStorage.getItem("zone")){
+                let new_zones = JSON.parse(localStorage.getItem("zone"))
+
+                let geojson = {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+                new_zones.forEach(new_zone =>{
+                    if(new_zone.geoid === null){
+                        if(new_zone.geojson){
+                            geojson.features.push({
+                                type : "Feature",
+                                properties:{},
+                                geometry:new_zone.geojson
+                            })
+                        }else{
+                            geojson.features.push(new_zone.geom)
+                        }
+                    }
+                })
+
+                this.map.getSource("polygon").setData(geojson)
+            }
 
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
@@ -73,30 +85,39 @@ export class ZoneLayer extends MapLayer{
     showTownBoundary(data){
         let geoids = JSON.parse("[" + data + "]")[0];
         let cousubs = [];
+        let geojson = {
+            "type": "FeatureCollection",
+            "features": []
+        }
         geoids.forEach(geoid =>{
-            if(geoid.geoid.length !== 5){
+            if(geoid.geoid && geoid.geoid.length !== 5){
                 cousubs.push(geoid.geoid)
-            }
-        });
-        this.map.setFilter(
-            "cousubs",
-            ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
-        )
-    }
 
-    noShowTownBoundary(data){
-        let geoids = JSON.parse("[" + data + "]")[0];
-        let cousubs = [];
-        geoids.forEach(geoid =>{
-            if(geoid.geoid.length !== 5){
-                cousubs.push(geoid.geoid)
+            }else if(geoid.geoid === null){
+                let new_zones = JSON.parse(localStorage.getItem("zone"))
+                new_zones.forEach(new_zone =>{
+                    if(new_zone.geoid === null){
+                        if(new_zone.geojson){
+                            geojson.features.push({
+                                type : "Feature",
+                                properties:{},
+                                geometry:new_zone.geojson
+                            })
+                        }else{
+                            geojson.features.push(new_zone.geom)
+                        }
+                    }
+                })
+
             }
         });
         this.map.setFilter(
             "cousubs",
             ['all', ['in', 'geoid',...cousubs]]
         )
+        this.map.getSource("polygon").setData(geojson)
     }
+
 
 
 
@@ -108,6 +129,16 @@ export const ZoneOptions =  (options = {}) => {
             active: true,
             ...options,
             sources: [
+                { id:"polygon",
+                    source: {
+                        type: "geojson",
+                        //generateId: true,
+                        data: {
+                            type: "FeatureCollection",
+                            features: []
+                        }
+                    }
+                },
                 {
                     id: "counties",
                     source: {
@@ -148,6 +179,16 @@ export const ZoneOptions =  (options = {}) => {
                     },
                     filter : ['in','geoid','']
 
+                },
+                {
+                    'id': 'polygon-layer',
+                    'source': 'polygon',
+                    'type': 'line',
+                    'paint': {
+                        'line-color': '#F31616',
+                        'line-opacity': 0.5,
+                        'line-width': 4
+                    }
                 }
 
             ],

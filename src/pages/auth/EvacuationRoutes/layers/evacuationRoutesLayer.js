@@ -1,47 +1,39 @@
 import React from "react"
-import { connect } from "react-redux"
-import { reduxFalcor, UPDATE as REDUX_UPDATE } from "utils/redux-falcor"
 
-import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
-import { register, unregister } from "components/AvlMap/ReduxMiddleware"
+import {falcorGraph} from "store/falcorGraph"
 import store from 'store'
 import geoJsonExtent from "@mapbox/geojson-extent"
-import _ from 'lodash'
 import get from "lodash.get";
 import mapboxgl from "mapbox-gl"
-import styled from "styled-components"
 
 import MapLayer from "components/AvlMap/MapLayer"
 
-import {
-    ConflationSource,
-    ConflationStyle
-} from './conflation.style.js'
+import {ConflationStyle} from './conflation.style.js'
 
 import * as d3scale from "d3-scale"
-import { getColorRange } from "constants/color-ranges"
 
 import RouteInfoBox from "../components/RouteInfoBox"
 
 import {MAPBOX_TOKEN} from 'store/config'
+
 const atts = ['id', 'name', 'type', 'owner', "updatedAt", "tmcArray", "points"];
 
 class RouteLayer extends MapLayer {
     onAdd(map) {
         // register(this, REDUX_UPDATE, ["graph"]);
-        if (this.viewOnly) this.mode = null
+        if (this.viewOnly) this.mode = null;
         this.markers.forEach(m => m.addTo(map));
 
         return this.loadUserRoutes(false)
             .then(() => falcorGraph.get(
                 ["conflation", "latestVersion"],
-                ["geo",[store.getState().user.activeGeoid],"boundingBox"],
+                ["geo", [store.getState().user.activeGeoid], "boundingBox"],
                 ['geo', store.getState().user.activeGeoid, 'cousubs']
             ))
             .then(() => this.calcRoute())
             .then(() => {
-                let graph = falcorGraph.getCache()
-                this.cousubs = get(graph, `geo.${store.getState().user.activeGeoid}.cousubs.value`, [])
+                let graph = falcorGraph.getCache();
+                this.cousubs = get(graph, `geo.${store.getState().user.activeGeoid}.cousubs.value`, []);
                 map.setFilter('cousubs-layer', [
                     'match',
                     ['get', 'geoid'],
@@ -52,16 +44,18 @@ class RouteLayer extends MapLayer {
 
                 let initalBbox =
                     get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
-                        .slice(4,-1).split(",");
-                let bbox = initalBbox ? [initalBbox[0].split(" "),initalBbox[1].split(" ")] : null;
+                        .slice(4, -1).split(",");
+                let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                 map.resize();
                 map.fitBounds(bbox, {maxDuration: 0});
             })
     }
+
     onRemove(map) {
         // unregister(this);
         this.markers.forEach(m => m.remove());
     }
+
     loadUserRoutes(forceUpdate = true) {
 
         return falcorGraph.get(["routes", "length"])
@@ -71,7 +65,7 @@ class RouteLayer extends MapLayer {
                     return falcorGraph.get([
                         'routes',
                         'byIndex',
-                        { from: 0, to: num - 1 },
+                        {from: 0, to: num - 1},
                         atts
                     ])
                         .then(res => {
@@ -84,8 +78,7 @@ class RouteLayer extends MapLayer {
                             }
                             this.filters.userRoutes.domain = routes;
                         })
-                }
-                else {
+                } else {
                     this.filters.userRoutes.domain = [];
                 }
             })
@@ -97,6 +90,7 @@ class RouteLayer extends MapLayer {
             })
         // .then(() => forceUpdate && this.forceUpdate());
     }
+
     // receiveMessage(action, data) {
     // }
     // receiveLayerMessage(msg) {
@@ -109,6 +103,7 @@ class RouteLayer extends MapLayer {
         const year = this.year < 2019 ? 2017 : 2019;
         return "tmc" + year.toString().slice(2) + "id";
     }
+
     handleMapClick(data) {
         switch (this.mode) {
             case "markers":
@@ -120,11 +115,10 @@ class RouteLayer extends MapLayer {
                 newData.forEach(tmc => {
                     if (!set.has(tmc)) {
                         set.add(tmc);
-                    }
-                    else {
+                    } else {
                         set.delete(tmc);
                     }
-                })
+                });
                 this.data.click = [...set];
                 break;
         }
@@ -134,8 +128,7 @@ class RouteLayer extends MapLayer {
     getGeomRequest(selection) {
         if (this.mode === "click") {
             return ['tmc', selection, 'year', this.year, 'geometries'];
-        }
-        else if (this.mode === "markers") {
+        } else if (this.mode === "markers") {
             return ['conflation', 'con', selection, 'meta', 'geometries'];
         }
         return false;
@@ -145,10 +138,10 @@ class RouteLayer extends MapLayer {
         return Promise.resolve()
             .then(() => {
                 if (this.mode === "click") {
-                    return { mode: "click", data: [...this.data["click"]] };
+                    return {mode: "click", data: [...this.data["click"]]};
                 }
                 if (this.markers.length < 2) {
-                    return { mode: "markers", data: [] };
+                    return {mode: "markers", data: []};
                 }
 
                 const locations = this.markers.map(m => ({
@@ -157,14 +150,14 @@ class RouteLayer extends MapLayer {
                 }));
 
                 let url = `https://api.mapbox.com/directions/v5/mapbox/driving/` + locations.map(f => `${f.lon},${f.lat}`).join(';');
-                url += `?geometries=geojson&access_token=${MAPBOX_TOKEN}`
+                url += `?geometries=geojson&access_token=${MAPBOX_TOKEN}`;
                 return fetch(url)
                     .then((res, error) => {
-                        if (error) return { ways: [] };
+                        if (error) return {ways: []};
                         return res.json()
                     })
                     .then(res => {
-                        return { mode: "markers", data: res };
+                        return {mode: "markers", data: res};
                     })
             })
             .then(data => this.receiveRoute(data))
@@ -184,36 +177,38 @@ class RouteLayer extends MapLayer {
                     const falcorCache = falcorGraph.getCache();
                     this.nameArray = get(this.data, `markers.waypoints`, [])
                         .reduce((a, c, cI) => {
-                        a.push(`Leg - ${cI} ${c.name ? `- ${c.name}` : ''}`)
-                        return a;
-                    }, []);
-                }
-                else {
+                            a.push(`Leg - ${cI} ${c.name ? `- ${c.name}` : ''}`);
+                            return a;
+                        }, []);
+                } else {
                     this.nameArray = [...this.data.click];
                 }
             })
     }
+
     getMapFilter() {
-/*        switch (this.mode) {
-            case "markers":
-                return ["match",
-                    ["to-string", ["get", "id"]],
-                    [...new Set(this.data[this.mode]), "none"],
-                    true, false
-                ]
-            case "click":
-                return ["match",
-                    ["to-string", ["get", this.getNetworkId()]],
-                    [...new Set(this.data[this.mode]), "none"],
-                    true, false
-                ]
-        }*/
+        /*        switch (this.mode) {
+                    case "markers":
+                        return ["match",
+                            ["to-string", ["get", "id"]],
+                            [...new Set(this.data[this.mode]), "none"],
+                            true, false
+                        ]
+                    case "click":
+                        return ["match",
+                            ["to-string", ["get", this.getNetworkId()]],
+                            [...new Set(this.data[this.mode]), "none"],
+                            true, false
+                        ]
+                }*/
     }
+
     render(map) {
         this.map.setFilter("execution-route", this.getMapFilter());
 
         this.zoomToBounds();
     }
+
     generateMapMarkers(lngLat = null) {
         this.markers.forEach(m => m.remove());
 
@@ -222,17 +217,16 @@ class RouteLayer extends MapLayer {
         if (lngLat) {
             if (Array.isArray(lngLat)) {
                 points = lngLat;
-            }
-            else {
+            } else {
                 points.push(lngLat);
             }
         }
 
-        const num = Math.max(points.length - 1, 1)
+        const num = Math.max(points.length - 1, 1);
 
         const scale = d3scale.scaleLinear()
             .domain([0, num * 0.5, num])
-            .range(["#1a9641", "#ffffbf", "#d7191c"])
+            .range(["#1a9641", "#ffffbf", "#d7191c"]);
 
         this.markers = points.map((p, i) => {
             return new mapboxgl.Marker({
@@ -244,35 +238,43 @@ class RouteLayer extends MapLayer {
                 .on("dragend", e => this.calcRoute());
         })
     }
+
     calcRoute() {
         this.doAction(["fetchLayerData"]);
     }
-    receiveRoute({ mode, data }) {
+
+    receiveRoute({mode, data}) {
         this.data[mode] = data;
         data = get(data, `routes`, []).pop();
         if (!data) return;
-        if (data.hideAll){
+        if (data.hideAll) {
             this.clearRoute()
-        }if (data.viewAll){
-            console.log('view all', data)
-            this.viewMode = 'multi'
+        }
+
+        let bounds = new mapboxgl.LngLatBounds();
+
+        if (data.viewAll) {
+            this.viewMode = 'multi';
             this.features = data.data.map(f => {
+                bounds = bounds.extend(new mapboxgl.LngLatBounds(geoJsonExtent(
+                    get(f, `geometry`, {coordinates: [], type: "LineString"})
+                )));
                 return {
                     type: 'Feature',
                     properties: {name: get(data, `name`, '')},
                     geometry: get(f, `geometry`, {coordinates: [], type: "LineString"})
                 }
-            })
-            console.log('this.features', this.features)
+            });
             this.map.getSource('execution-route-source').setData(
                 {
                     type: 'FeatureCollection',
                     features: this.features
                 }
             );
+            this.map.fitBounds(bounds);
+
             this.forceUpdate()
-        }
-        if (this.map.getSource('execution-route-source')) {
+        } else if (this.map.getSource('execution-route-source')) {
             this.geom = get(data, `geometry`, {coordinates: [], type: "LineString"});
 
             let feature = {
@@ -280,27 +282,35 @@ class RouteLayer extends MapLayer {
                 properties: {name: get(data, `name`, '')},
                 geometry: get(data, `geometry`, {coordinates: [], type: "LineString"})
             };
-            let indexOfFeature = _.indexOf(this.features, this.features.filter(f => _.isEqual(f.geometry.coordinates, feature.geometry.coordinates))[0])
+
+            if (feature.geometry.coordinates.length > 0){
+                bounds = bounds.extend(new mapboxgl.LngLatBounds(geoJsonExtent(
+                    get(feature, `geometry`, {coordinates: [], type: "LineString"})
+                )));
+                this.map.fitBounds(bounds)
+            }
+            /*let indexOfFeature = _.indexOf(this.features, this.features.filter(f => _.isEqual(f.geometry.coordinates, feature.geometry.coordinates))[0])
             if (indexOfFeature === -1){
                 this.viewMode === 'multi' ? this.features.push(feature) : this.features = [feature]
             }else{
                 this.features.splice(indexOfFeature, 1)
-            }
-            this.map.getSource('execution-route-source').setData(
+            }*/
+            /*this.map.getSource('execution-route-source').setData(
                 {
                     type: 'FeatureCollection',
                     features: this.features
                 }
-            );
+            );*/
 
         }
-        console.log(this.viewMode, this.map.getSource('execution-route-source'))
     }
-    paintRoute(geom){
+
+    paintRoute(geom) {
         if (RouteLayer.map.getSource('execution-route-source')) {
             RouteLayer.map.getSource('execution-route-source').setData(geom);
         }
     }
+
     removeLast() {
         switch (this.mode) {
             case "markers":
@@ -320,6 +330,7 @@ class RouteLayer extends MapLayer {
         );
         this.calcRoute();
     }
+
     clearRoute() {
         switch (this.mode) {
             case "markers":
@@ -332,16 +343,16 @@ class RouteLayer extends MapLayer {
                 break;
         }
         this.filters.userRoutes.value = null;
-        this.features = [];
         this.map.getSource('execution-route-source').setData(
             {
                 type: 'FeatureCollection',
-                features: this.features
+                features: []
             }
         );
         // this.mapActions.modeToggle.disabled = false;
         this.calcRoute();
     }
+
     toggleCreationMode() {
         switch (this.viewMode) {
             case "single":
@@ -356,6 +367,7 @@ class RouteLayer extends MapLayer {
         this.forceUpdate()
         // this.calcRoute();
     }
+
     loadUserRoute(route) {
         this.mapActions.modeToggle.disabled = true;
         // this.year = new Date(route.updatedAt).getFullYear();
@@ -365,13 +377,13 @@ class RouteLayer extends MapLayer {
         if (get(route, "points", []).length) {
             this.mode = "markers";
             this.generateMapMarkers(route.points);
-        }
-        else {
+        } else {
             this.mode = "click";
             this.markers.forEach(m => m.remove());
             this.data.click = [...route.nameArray];
         }
     }
+
     selectUserRoute(routeId) {
         const data = get(falcorGraph.getCache(), ["routes", "byId", routeId], null);
         if (data) {
@@ -385,14 +397,14 @@ class RouteLayer extends MapLayer {
                         a[c] = get(data, c, null);
                 }
                 return a;
-            }, {})
+            }, {});
             this.routeToLoad = null;
             this.doAction(["updateFilter", "userRoutes", route]);
-        }
-        else {
+        } else {
             this.routeToLoad = routeId;
         }
     }
+
     zoomToBounds() {
         if (Boolean(this.map) && this.doZoom) {
             this.doZoom = false;
@@ -405,9 +417,10 @@ class RouteLayer extends MapLayer {
             }, new mapboxgl.LngLatBounds());
 
             !bounds.isEmpty() &&
-            this.map.fitBounds(bounds, { padding: { left: 375, top: 50, right: 425, bottom: 50 } });
+            this.map.fitBounds(bounds, {padding: {left: 375, top: 50, right: 425, bottom: 50}});
         }
     }
+
     getRouteName() {
         return get(this.filters, ["userRoutes", "value", "name"], "Route");
     }
@@ -457,31 +470,31 @@ export default (props = {}) =>
                 "line-width": 6
             }
         },
-        {
-            'id': 'counties-layer',
-            'source': 'counties',
-            'source-layer': 'counties',
-            'type': 'line',
-            'paint': {
-                ...ConflationStyle.paint,
-                'line-color': 'rgb(16,255,53)',
+            {
+                'id': 'counties-layer',
+                'source': 'counties',
+                'source-layer': 'counties',
+                'type': 'line',
+                'paint': {
+                    ...ConflationStyle.paint,
+                    'line-color': 'rgb(16,255,53)',
+                },
+                filter: ['in', 'geoid', store.getState().user.activeGeoid]
             },
-            filter: ['in', 'geoid', store.getState().user.activeGeoid]
-        },
-        {
-            'id': 'cousubs-layer',
-            'source': 'cousubs',
-            'source-layer': 'cousubs',
-            'type': 'line',
-            'paint': {
-                'line-color': 'rgba(16,255,53,0.37)',
-            }
-        },
+            {
+                'id': 'cousubs-layer',
+                'source': 'cousubs',
+                'source-layer': 'cousubs',
+                'type': 'line',
+                'paint': {
+                    'line-color': 'rgba(16,255,53,0.37)',
+                }
+            },
         ],
 
         onHover: {
             layers: ["execution-route"],
-            filterFunc: function(features) {
+            filterFunc: function (features) {
                 return [
                     "in",
                     this.getNetworkId(),
@@ -512,7 +525,7 @@ export default (props = {}) =>
 
         onClick: {
             layers: ["map", "conflation"],
-            dataFunc: function(features, point, lngLat, layer) {
+            dataFunc: function (features, point, lngLat, layer) {
                 switch (this.mode) {
                     case "markers":
                         layer === "map" && this.handleMapClick(lngLat);
@@ -528,8 +541,7 @@ export default (props = {}) =>
 
         popover: {
             layers: ["cousubs-layer", 'counties-layer'],
-            dataFunc: function(feature, features, layer) {
-                console.log(feature.properties);
+            dataFunc: function (feature, features, layer) {
                 return [];
             }
         },
@@ -541,7 +553,7 @@ export default (props = {}) =>
                 domain: [],
                 value: null,
                 searchable: true,
-                onChange: function(prev, route, domain) {
+                onChange: function (prev, route, domain) {
                     return this.loadUserRoute(route);
                 }
             }
@@ -549,15 +561,15 @@ export default (props = {}) =>
 
         infoBoxes: {
             router: {
-                title: ({ layer}) => layer.getRouteName(),
-                comp: ({ layer }) => {
+                title: ({layer}) => layer.getRouteName(),
+                comp: ({layer}) => {
                     return (
-                        <RouteInfoBox layer={ layer }
-                                      userRoute={ layer.filters.userRoutes.value }
-                                      nameArray={ layer.nameArray }
-                                      data={ layer.data }
-                                      geom={ layer.geom }
-                                      paintRoute={ layer.receiveRoute.bind(layer)}
+                        <RouteInfoBox layer={layer}
+                                      userRoute={layer.filters.userRoutes.value}
+                                      nameArray={layer.nameArray}
+                                      data={layer.data}
+                                      geom={layer.geom}
+                                      paintRoute={layer.receiveRoute.bind(layer)}
                                       viewOnly={layer.viewOnly}
                         />
                     )
@@ -568,9 +580,10 @@ export default (props = {}) =>
 
         mapActions: {
             modeToggle: {
-                Icon: ({ layer }) => <span className={ `fa fa-2x fa-${ layer.viewMode === "single" ? "minus" : "align-justify" }` }/>,
+                Icon: ({layer}) => <span
+                    className={`fa fa-2x fa-${layer.viewMode === "single" ? "minus" : "align-justify"}`}/>,
                 tooltip: "Toggle View Mode",
-                action: function() {
+                action: function () {
                     this.toggleCreationMode();
                 }
             }

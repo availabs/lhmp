@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import AssetsFilteredTable from 'pages/auth/Assets/components/AssetsFilteredTable'
+import Capabilities from 'pages/Public/Home/components/Strategy/Capabilities/index.js'
 import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
 
-class criticalFacilitiesTableViewer extends Component {
+class capabilityEvaluationTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,17 +19,8 @@ class criticalFacilitiesTableViewer extends Component {
 
         return(
             <div>
-                <h6> Critical Facilities </h6>
-                <AssetsFilteredTable
-                    geoid={[this.state.geoid]}
-                    groupBy={'critical'}
-                    groupByFilter={[]}
-                    scenarioId={[3]}
-                    height={'fit-content'}
-                    width={'100%'}
-                    tableClass={`table table-sm table-lightborder table-hover`}
-                    public={true}
-                />
+                <Capabilities
+                showHeader={false}/>
             </div>
         )
     }
@@ -41,4 +32,4 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = ({
 });
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(criticalFacilitiesTableViewer))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(capabilityEvaluationTable))

@@ -19,8 +19,6 @@ import {
 from 'pages/Public/theme/components'
 
 const  ElementFactory =  ({ element: element, user: user, showTitle=true, showHeader, pureElement, ...rest }) => {
-    console.log('pureElement?', pureElement, rest)
-
     return pureElement ?
         (
             <React.Fragment>

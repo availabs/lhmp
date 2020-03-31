@@ -7,14 +7,15 @@ import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import MapLayer from "components/AvlMap/MapLayer.js"
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import 'styles/_mapbox-gl-draw.css'
-import * as turf from '@turf/turf'
-//import { register, unregister } from "../ReduxMiddleware"
-import { getColorRange } from "constants/color-ranges";
-var _ = require('lodash')
-const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
+import {ControlLayers} from "./controlLayers";
+import AvlMap from "../../../../components/AvlMap";
+import ProjectControl from "../controls/projectControl";
 
-const IDENTITY = i => i;
+var _ = require('lodash')
 const IconPolygon = ({layer}) => <span className='fa fa-2x fa-connectdevelop'/>;
+let result_polygon = {}
+let zone_boundary = [];
+
 export class AddNewZoneLayer extends MapLayer{
     onAdd(map){
         super.onAdd(map);
@@ -31,12 +32,19 @@ export class AddNewZoneLayer extends MapLayer{
 
         }
     }
+    fetchData(){
+        falcorGraph.get(['plan',this.props.activePlan,'zones'])
+            .then(response =>{
+                console.log('response',response)
+            })
+    }
 
     toggleCreationMode(mode, map) {
         console.log('creation mode', mode)
         this.creationMode = mode;
         if (mode === 'polygon')
         {
+
             let canvas = map.getCanvasContainer();
             //console.log('check',document.getElementById("avl-map-1").childNodes)
            // document.querySelectorAll(".sc-bnXvFD gWiRDt").style.zIndex = 2147483647
@@ -49,13 +57,14 @@ export class AddNewZoneLayer extends MapLayer{
                 displayControlsDefault: false,
             });
 
-            if(this.map.getLayer("parcels") || this.map.getLayer("ebr") || this.map.getLayer("counties") || this.map.getLayer("cousubs") || this.map.getLayer("project")){
+            if(this.map.getLayer("parcels") || this.map.getLayer("ebr") || this.map.getLayer("counties") || this.map.getLayer("cousubs") || this.map.getLayer("project") || this.map.getLayer("polygon-layer")){
                 this.map.removeLayer("parcels")
                 this.map.removeLayer("ebr")
                 this.map.removeLayer("buildings-layer")
                 this.map.removeLayer("counties")
                 this.map.removeLayer("cousubs")
                 this.map.removeLayer("project")
+                this.map.removeLayer("polygon-layer")
             }
 
             this.map.addControl(draw);
@@ -88,6 +97,7 @@ export class AddNewZoneLayer extends MapLayer{
 
             })
 
+
             this.map.on('draw.create',updateArea);
             this.map.on('draw.delete', updateArea);
             this.map.on('draw.update', updateArea);
@@ -103,7 +113,6 @@ export class AddNewZoneLayer extends MapLayer{
             }
             function updateArea(e) {
                 poly = draw.getAll();
-                console.log('e.target', e,poly)
                 if (e.type === 'draw.delete'){
                     draw.trash();
                     draw.deleteAll();
@@ -120,13 +129,11 @@ export class AddNewZoneLayer extends MapLayer{
                 );
             }
             function onClick(e){
-                console.log('clicked', e, mousePos(e, canvas), points)
                 points.push(mousePos(e, canvas))
             }
             function ondblclick(e){
                 document.removeEventListener('click', onClick);
                 document.removeEventListener('dblclick', ondblclick);
-                console.log('dbl click', points)
                 let minX, minY, maxX, maxY;
                 points.forEach(p => {
                     minX = !minX || minX > p.x ? p.x :  minX;
@@ -134,36 +141,22 @@ export class AddNewZoneLayer extends MapLayer{
                     maxX = !maxX || maxX < p.x ? p.x :  maxX;
                     maxY = !maxY || maxY < p.y ? p.y :  maxY;
                 })
-                let bbox = [[minX, minY], [maxX, maxY]];
-                //let features = map.queryRenderedFeatures(bbox, { layers: ['cousubs'] });
                 if (poly){
-                    let feats = map.querySourceFeatures('cousubs');
-                    console.log('poly',poly.features[0].geometry.coordinates);
+                    result_polygon = poly.features[0];
+                    zone_boundary = [[minX, minY], [maxX, maxY]];
                 }
 
                 document.addEventListener('click', onClick);
                 document.addEventListener('dblclick', ondblclick);
+                clearDraw(e)
+                alert("Please add a name and Save the zone")
             }
+
+
         }
         this.forceUpdate();
     }
 
-
-
-
-    toggleVisibilityOn() {
-        //console.log('in map layer toggle visibility',map,this.layers)
-        this._isVisible = !this._isVisible;
-        this.layers.forEach(layer => {
-            this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
-        })
-    }
-
-    toggleVisibilityOff(){
-        this.layers.forEach(layer => {
-            this.map.setLayoutProperty(layer.id, 'visibility',"none");
-        })
-    }
 
 
 }
@@ -180,8 +173,19 @@ export const AddNewZoneOptions =  (options = {}) => {
                     'type': "vector",
                     'url': 'mapbox://am3081.dlnvkxdi'
                 },
-            }
+            },
+            { id:"polygon",
+                source: {
+                    type: "geojson",
+                    //generateId: true,
+                    data: {
+                        type: "FeatureCollection",
+                        features: []
+                    }
+                }
+            },
         ],
+
         mapActions: {
             selectionPolygon: {
                 Icon: IconPolygon,
@@ -199,12 +203,155 @@ export const AddNewZoneOptions =  (options = {}) => {
         },
         infoBoxes:{
             Overview: {
-                title: "Add New Zone",
-                comp: ({layer}) =>{
-
+                title:<h4 style ={{display: 'inline'}}>Add New Zone</h4>,
+                comp: ({layer,AvlMap}) =>{
                     return(
                         <div>
+                            <div className="col-sm-12">
+                                <div className="form-group">
+                                    <input id='new_zone_name' className="form-control"
+                                           placeholder="New Zone Title"
+                                           type="text"
 
+                                    /></div>
+                                <button className="mr-2 mb-2 btn btn-primary btn-sm"
+                                        type="button"
+                                        onClick = {(e) =>{
+                                            e.persist()
+
+                                            if(Object.keys(result_polygon).length === 0){
+                                                alert("Please draw a zone")
+                                            }else{
+                                                let args = [];
+                                                let name = document.getElementById("new_zone_name").value
+                                                let geom = result_polygon.geometry
+                                                geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
+                                                let plan_id = store.getState().user.activePlan
+                                                args.push(name,geom,plan_id,zone_boundary)
+                                                return falcorGraph.call(['zones','insert'],args,[],[])
+                                                    .then(response =>{
+                                                        alert("Zone has been saved")
+                                                        layer.forceUpdate()
+                                                        let new_zone = JSON.parse(localStorage.getItem("zone"))
+                                                        new_zone.push({
+                                                            'id':name,
+                                                            'name':name,
+                                                            'geom':result_polygon,
+                                                            'geoid' : null
+                                                        })
+                                                        localStorage.setItem("zone",JSON.stringify(new_zone))
+                                                        layer.doAction([
+                                                            "deleteDynamicLayer",
+                                                            "addNewZone"
+                                                        ])
+                                                        if(!layer.map.getLayer("parcels") || !layer.map.getLayer("ebr") || !layer.map.getLayer("project")){
+                                                            let geoids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
+                                                            let cousubs = [];
+                                                            geoids.forEach(geoid =>{
+                                                                if(geoid.geoid && geoid.geoid.length !== 5){
+                                                                    cousubs.push(geoid.geoid)
+                                                                }
+                                                            });
+                                                            layer.map.setFilter(
+                                                                "cousubs",
+                                                                ['all', ['in', 'geoid',...cousubs]]
+                                                            )
+                                                            layer.map.addLayer({
+                                                                'id': 'polygon-layer',
+                                                                'source': 'polygon',
+                                                                'type': 'line',
+                                                                'paint': {
+                                                                    'line-color': '#F31616',
+                                                                    'line-opacity': 0.5,
+                                                                    'line-width': 4
+                                                                }
+                                                            })
+
+                                                            if(localStorage.getItem("zone")){
+                                                                let new_zones = JSON.parse(localStorage.getItem("zone"))
+                                                                let geojson = {
+                                                                    "type": "FeatureCollection",
+                                                                    "features": []
+                                                                }
+                                                                new_zones.forEach(new_zone =>{
+                                                                    if(new_zone.geoid === null){
+                                                                        if(new_zone.geojson){
+                                                                            geojson.features.push({
+                                                                                type : "Feature",
+                                                                                properties:{},
+                                                                                geometry:new_zone.geojson
+                                                                            })
+                                                                        }else{
+                                                                            geojson.features.push(new_zone.geom)
+                                                                        }
+                                                                    }
+                                                                })
+                                                                layer.map.getSource("polygon").setData(geojson)
+                                                            }
+
+                                                            layer.map.addLayer({
+                                                                'id': 'parcels',
+                                                                'source': 'nys_1811_parcels',
+                                                                'source-layer': 'nys_1811_parcels',
+                                                                'type': 'fill',
+                                                                'minzoom': 13,
+                                                                'paint': {
+                                                                    'fill-opacity':0.1,
+                                                                    'fill-outline-color': '#ffffff'
+                                                                }
+
+                                                            })
+                                                            layer.map.addLayer({
+                                                                'id': 'ebr',
+                                                                'source': 'nys_buildings_avail',
+                                                                'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
+                                                                'type': 'fill',
+                                                                'minzoom': 13,
+                                                                'paint': {
+                                                                    'fill-color': '#000000'
+                                                                }
+                                                            })
+                                                            layer.map.addLayer({
+                                                                'id': 'buildings-layer',
+                                                                'source': 'buildings',
+                                                                'type': 'circle',
+                                                                'paint': {
+                                                                    'circle-radius': 3,
+                                                                    'circle-opacity': 0.5
+                                                                }
+                                                            })
+                                                            layer.map.addLayer({
+                                                                'id': 'project',
+                                                                'source': 'counties',
+                                                                'source-layer': 'counties',
+                                                                'type': 'line',
+                                                                'paint': {
+                                                                    'line-color': '#FFFFFF',
+                                                                    'line-opacity': 0.5
+                                                                },
+                                                                filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
+
+                                                            })
+                                                            document.getElementById("new_zone_button").disabled = false
+                                                        }
+                                                    })
+                                            }
+
+                                        }}
+                                >Save Zone</button>
+                                <button
+                                    className="mr-2 mb-2 btn btn-danger btn-sm"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        document.getElementById("new_zone_button").disabled = false
+                                        layer.doAction([
+                                            "deleteDynamicLayer",
+                                            "addNewZone"
+                                        ])
+
+                                    }}
+                                >Cancel</button>
+                            </div>
                         </div>
                     )
                 },
