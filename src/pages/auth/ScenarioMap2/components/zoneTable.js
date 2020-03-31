@@ -44,16 +44,21 @@ class ZoneTable extends React.Component {
         super(props);
         this.state = {
             zone_clicked:false,
-            data: []
+            data: [],
+            zone_id : ''
         }
         //this.populateZonesData = this.populateZonesData.bind(this)
     }
 
     componentDidUpdate(oldProps,oldState){
+
         if(oldProps.zones.length !== this.props.zones.length){
             this.fetchFalcorDeps()
         }
         if(oldProps.activeScenarioId !== this.props.activeScenarioId){
+            this.fetchFalcorDeps()
+        }
+        if(oldProps.zone_id !== this.props.zone_id){
             this.fetchFalcorDeps()
         }
     }
