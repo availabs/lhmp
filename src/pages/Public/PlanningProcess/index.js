@@ -85,6 +85,7 @@ class About extends React.Component {
                                             showTitle={false}
                                             showHeader={false}
                                             pureElement={true}
+                                            autoLoad={true}
                                         />
                                     </StatementText>
                                 </div>

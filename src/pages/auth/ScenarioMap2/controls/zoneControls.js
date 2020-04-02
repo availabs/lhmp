@@ -135,13 +135,14 @@ class ZoneControl extends React.Component{
                         selectedZonesData.push({
                             zone_id : zone_id.id,
                             geoid : zone_id.geoid,
-                            geom: JSON.stringify(zone_id.geom.geometry),
+                            geom: JSON.stringify(get(zone_id, `geom.geometry`, [])),
                             name: zone_id.name
                         })
                     }
                 })
             })
-            selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== undefined),'zone_id');
+            selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id');
+
             return (
                 <ZoneTable
                     zone_id = {this.state.zone_id}
@@ -172,6 +173,7 @@ class ZoneControl extends React.Component{
                                 ids = JSON.parse(localStorage.getItem('zone'));
                                 zones_list.forEach(zone =>{
                                     if(zone.value === value){
+                                        console.log('zone',zone)
                                         ids.push({
                                             id:value,
                                             geoid:zone.geoid,
@@ -181,6 +183,8 @@ class ZoneControl extends React.Component{
                                         });
                                     }
                                 })
+
+
                                 localStorage.setItem('zone', JSON.stringify(ids));
                                 this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
                                 this.selectedZones()

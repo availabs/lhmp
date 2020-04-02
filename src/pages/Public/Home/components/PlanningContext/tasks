@@ -1,15 +1,15 @@
- - for each text section allow for callout.
- - implement multi select drop down for meta data columns in table
- - remove scrolling from CMS make each section its own url
- - risk Critical facilities risk zones?
- - risk remove assets in flood plain by town when town is selected
- - risk filter assets by land use when town is selected
- - risk filter critical infrastructure when town is selected
- - risk add critical infrastructure by municipality, remove when municipality is selected
- - strategy - evacuatio routes by default should show all routes on map 
- - strategy - evacuation routes on public, remove view / delete. On click should zoom to fit. Add reset zoom button to top of table.
+ X for each text section allow for callout.
+ x implement multi select drop down for meta data columns in table
+ x remove scrolling from CMS make each section its own url
+ x risk Critical facilities risk zones?
+ x risk remove assets in flood plain by town when town is selected
+ x risk filter assets by land use when town is selected
+ X risk filter critical infrastructure when town is selected
+  risk add critical infrastructure by municipality, remove when municipality is selected
+ X strategy - evacuatio routes by default should show all routes on map 
+ X strategy - evacuation routes on public, remove view / delete. On click should zoom to fit. Add reset zoom button to top of table.
  - AVLMAP - add basemap control option (similar to reports map)
- - strategy - evaluation, implement capabilities overview table from landing page
+ x strategy - evaluation, implement capabilities overview table from landing page
 
 
 

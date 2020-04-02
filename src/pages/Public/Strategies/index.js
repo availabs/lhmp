@@ -110,6 +110,7 @@ class About extends React.Component {
                                             showTitle={false}
                                             showHeader={false}
                                             pureElement={true}
+                                            autoLoad={true}
                                         />
                                     </StatementText>
                                 </div>
@@ -122,33 +123,8 @@ class About extends React.Component {
                             config={config}
                             user={this.props.user}
                             filterAdmin={true}
+                            autoLoad={true}
                         />
-                            
-                           {/* <div className="row">
-                                <div className="col-12">
-                                    <div className="element-wrapper">
-                                        {
-                                            Object.keys(config)
-                                                .filter(section => config[section].filter(item => !item.onlyAdmin).length > 0)
-                                                .map(section => {
-                                                return (
-                                                    <div>
-                                                        <SectionHeader>{section}</SectionHeader>
-                                                        {
-                                                            config[section]
-                                                                .filter(item => !item.onlyAdmin)
-                                                                .map(requirement => {
-                                                                return this.renderElement(requirement)
-                                                            })
-                                                        }
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                            </div>*/}
-                        
                     </ContentContainer>
                 </div>
             </PageContainer>

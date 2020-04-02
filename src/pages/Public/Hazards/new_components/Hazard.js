@@ -6,10 +6,17 @@ import { reduxFalcor } from 'utils/redux-falcor'
 // import {getColorScale} from 'utils/sheldusUtils'
 import HazardBarChart from 'components/displayComponents/hazardComponents/HazardBarChart'
 
-import NumberOfHazardsMonthStackedBarGraph from '../components/NumberOfHazardsMonthStackedBarGraph'
+import NumberOfHazardsMonthStackedBarGraph from './NumberOfHazardsMonthStackedBarGraph'
+import HazardEventsTable from './HazardEventsTable'
+
 import CousubTotalLossTable from "../components/CousubTotalLossTable";
 import get from "lodash.get"
 import fnum from 'utils/sheldusUtils'
+
+import {
+    EARLIEST_YEAR,
+    LATEST_YEAR
+} from "./yearsOfSevereWeatherData"
 
 
 //import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
@@ -53,7 +60,7 @@ class Hazards extends React.Component {
             <div>
                 <div className='row'>
                     <div>
-                        <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')}</h5>
+                        <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Narrative</h5>
                         <div 
                             dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}} 
                         />
@@ -113,8 +120,27 @@ class Hazards extends React.Component {
                         />
                     </div>
                 </div>
+                 <div className='row'>
+                    <div className='col-md-12'>
+                        <h5>Events with Highest Reported Loss in Dollars</h5>
+                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                        <div>The table below lists individual events by loss in dollars.
+                            Click on a row to view the event description.
+                        </div>
+                        <HazardEventsTable
+                            hazards={this.state.hazards}
+                            hazard={this.state.hazard}
+                            geoid={this.state.geoid}
+                        />
+                        <i style={{color: '#afafaf'}}>Source: <a
+                            href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                            Storm Events Dataset</a></i>
+                    </div>
+                </div>
                 <div className='row'>
                     <div className='col-md-12'>
+                        <h5>Hazard Loss by Municipality</h5>
+                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                         <h6>{HazardName} Loss by Month</h6>
                         <CousubTotalLossTable
                             geoid={this.props.geoid}
@@ -125,6 +151,7 @@ class Hazards extends React.Component {
                         />
                     </div>
                 </div>
+               
             </div>
 
         )
