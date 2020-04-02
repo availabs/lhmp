@@ -217,7 +217,7 @@ class ZoneTable extends React.Component {
                                         if(this.props.newZonesData[item].byGeom &&
                                             this.props.newZonesData[item].byGeom[z_g['geom']] &&
                                             this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id]){
-                                            let graph = this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id].byRiskZone.all.value
+                                            let graph = get(this.props , `newZonesData[${item}].byGeom[${z_g['geom']}].none.none.byRiskScenario[${scenario_id}].byRiskZone.all.value`, [])
                                             graph.forEach(g =>{
                                                 data.forEach(d =>{
                                                     if(d.zone_name === g.zone_name){
