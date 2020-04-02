@@ -35,7 +35,7 @@ fuzzyTextFilterFn.autoRemove = val => !val
 
 
 
-function Table({ columns, data, height, tableClass }) {
+function Table({ columns, data, height, tableClass, actions }) {
     const filterTypes = React.useMemo(
         () => ({
             // Add a new fuzzyTextFilterFn filter type.
@@ -122,6 +122,10 @@ function Table({ columns, data, height, tableClass }) {
                                 <div>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
                             </th>
                         ))}
+                        {
+                            Object.keys(actions)
+                                .map(action => <th></th>)
+                        }
                     </tr>
                 ))}
                 </thead>
@@ -151,6 +155,17 @@ function Table({ columns, data, height, tableClass }) {
                                         </td>
                                     )
                                 })}
+                                    {actions ?
+                                        Object.keys(actions)
+                                            .map(action =>
+                                               <td>
+                                                   <Link className={action === 'delete' ? 'btn btn-sm btn-outline-danger' : "btn btn-sm btn-outline-primary"}
+                                                         to={ row.original[action] }>
+                                                       {action}
+                                                   </Link>
+                                               </td>
+                                            )
+                                        : null}
                             </tr>
                         )}
                 )}

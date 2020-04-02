@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
+import _ from 'lodash';
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
-import pick from "lodash.pick"
-import {push} from "react-router-redux";
-var _ = require('lodash')
+import TableSelector from "components/light-admin/tables/tableSelector"
+
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
     "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
@@ -93,6 +93,8 @@ class AvlFormsListTable extends React.Component{
         let formAttributes = this.props.config.map(d => d.list_attributes);
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
+        let formType = this.props.config.map(d => d.type);
+
         if(graph){
             if(combine_list_attributes[0] === undefined){
                 Object.keys(graph).forEach(item =>{
@@ -100,8 +102,17 @@ class AvlFormsListTable extends React.Component{
                     formAttributes[0].forEach(attribute =>{
                         if(graph[item].value && graph[item].value.attributes){
                             if(this.state.form_ids.includes(item)){
-                                data['id'] = item
-                                data[attribute] = graph[item].value.attributes[attribute] || ' '
+                                data['id'] = item;
+                                data[attribute] = graph[item].value.attributes[attribute] || ' ';
+                                ['view', 'edit']
+                                    .filter(f => this.props[f+'Button'] === true || this.props[f+'Button'] === undefined)
+                                    .forEach(f => {
+                                    data[f] = graph[item].value.attributes['sub_type'] ?
+                                        (f === 'view' ?
+                                            `/${formType[0]}/${f}/${graph[item].value.attributes['sub_type']}/${item}` :
+                                            `/${formType[0]}/${graph[item].value.attributes['sub_type']}/${f}/${item}`) :
+                                        `/${formType[0]}/${f}/${item}`;
+                                })
                             }
 
                         }
@@ -150,16 +161,17 @@ class AvlFormsListTable extends React.Component{
         let formAttributes = [];
         let listViewData = [];
         let data = this.formsListTable();
-        console.log('data', data)
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
         if(listViewData && listViewData.length > 0){
             if(!_.isEqual(Object.keys(...listViewData).sort(),this.props.config[0].list_attributes.sort())){
-                formAttributes = Object.keys(...listViewData).filter(d => d !== 'id')
+                formAttributes = Object.keys(...listViewData).filter(d => !['id', 'view', 'edit', 'delete'].includes(d))
             }else{
                 formAttributes = this.props.config[0].list_attributes
             }
         }
+        console.log('data', data, formAttributes)
+
         return (
                 <div className='container'>
                     <Element>
@@ -262,6 +274,21 @@ class AvlFormsListTable extends React.Component{
 
                     </span>
                         </h4>
+                        {formAttributes.length ?
+                            <TableSelector
+                                data={listViewData}
+                                columns={formAttributes.map(f => ({
+                                    Header: f,
+                                    accessor: f,
+                                    filter: 'default',
+                                    sort: true
+                                }))}
+                                flex={this.props.flex ? this.props.flex : false}
+                                height={this.props.height ? this.props.height : ''}
+                                width={this.props.width ? this.props.width : ''}
+                                tableClass={this.props.tableClass ? this.props.tableClass : null}
+                                actions={{edit:true, view:true, delete:true}}
+                            /> : null}
                         {
                             listViewData.length > 0 ?
                             <div className="element-box">
