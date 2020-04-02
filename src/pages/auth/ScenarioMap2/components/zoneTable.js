@@ -14,7 +14,7 @@ var _ = require("lodash")
 var format =  d3.format("~s")
 const fmt = (d) => d < 1000 ? d : format(d)
 
-const showZoneModal = (zone_geoid,name,activeScenarioId,setState) => {
+const showZoneModal = (zone_geoid,name,activeScenarioId,geom,setState) => {
     return (
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
@@ -29,8 +29,10 @@ const showZoneModal = (zone_geoid,name,activeScenarioId,setState) => {
                     </div>
                     <div className="modal-body">
                         <ZoneModalData
+                            name = {name}
                             geoid ={zone_geoid}
                             scenario_id = {activeScenarioId}
+                            geom = {geom}
                         />
                     </div>
                 </div>
@@ -123,7 +125,7 @@ class ZoneTable extends React.Component {
                         })
                         if(new_zones.length > 0){
                             new_zones.forEach((zone,i) =>{
-                                this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,'buildings','sum',['count','replacement_value']])
+                                this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'buildings','sum',['count','replacement_value']])
                                     .then(response =>{
                                         return response
                                     })
@@ -160,7 +162,6 @@ class ZoneTable extends React.Component {
                             })
                         });
                         if(this.props.scenarioByZonesData && this.props.scenarioByZonesData.county){
-
                             Object.keys(graph_scenario_county).forEach(county =>{
                                 if(graph_scenario_county[county].byRiskScenario[scenario_id] && graph_scenario_county[county].byRiskScenario[scenario_id].byRiskZone.all){
                                     graph_scenario_county[county].byRiskScenario[scenario_id].byRiskZone.all.value.forEach(item =>{
@@ -178,7 +179,6 @@ class ZoneTable extends React.Component {
                             });
                         }
                         if( this.props.scenarioByZonesData && this.props.scenarioByZonesData.jurisdiction){
-
                             Object.keys(graph_scenario_jurisdiction).forEach(jurisdiction =>{
                                 if(graph_scenario_jurisdiction[jurisdiction].byRiskScenario[scenario_id] && graph_scenario_jurisdiction[jurisdiction].byRiskScenario[scenario_id].byRiskZone.all){
                                     graph_scenario_jurisdiction[jurisdiction].byRiskScenario[scenario_id].byRiskZone.all.value.forEach(item =>{
@@ -199,19 +199,24 @@ class ZoneTable extends React.Component {
                         if(this.props.newZonesData && new_zones.length > 0){
                             Object.keys(this.props.newZonesData).forEach(item =>{
                                 new_zones.forEach(z_g =>{
-                                    if(z_g['name'] === item && _.isEqual(z_g['geom'],Object.keys(this.props.newZonesData[item].byGeom)[0]) && this.props.newZonesData[item].byGeom[z_g['geom']].buildings) {
+                                    if(z_g['name'] === item && _.isEqual(z_g['geom'],Object.keys(this.props.newZonesData[item].byGeom)[0]) && this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings) {
                                         data.push({
                                             zone_id: z_g['zone_id'],
                                             zone_name: item,
-                                            num_buildings: fmt(this.props.newZonesData[item].byGeom[z_g['geom']].buildings.sum.count.value || '0'),
-                                            replacement_value: fnum(this.props.newZonesData[item].byGeom[z_g['geom']].buildings.sum.replacement_value.value || '0'),
+                                            num_buildings: fmt(this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings.sum.count.value || '0'),
+                                            replacement_value: fnum(this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings.sum.replacement_value.value || '0'),
                                             zone_geom: z_g['geom']
                                         })
                                     }
-                                    if(z_g['name'] === item && this.props.newZonesData[item].byGeom[z_g['geom']] && this.props.newZonesData[item].byGeom[z_g['geom']].none){
+                                    if(z_g['name'] === item && this.props.newZonesData[item] &&
+                                        this.props.newZonesData[item].byGeom &&
+                                        this.props.newZonesData[item].byGeom[z_g['geom']] &&
+                                        this.props.newZonesData[item].byGeom[z_g['geom']].none){
                                         let count_buildings_scenarios_new_zone = 0;
                                         let sum_buildings_scenarios_new_zone = 0;
-                                        if(this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id]){
+                                        if(this.props.newZonesData[item].byGeom &&
+                                            this.props.newZonesData[item].byGeom[z_g['geom']] &&
+                                            this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id]){
                                             let graph = this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id].byRiskZone.all.value
                                             graph.forEach(g =>{
                                                 data.forEach(d =>{
@@ -281,11 +286,12 @@ class ZoneTable extends React.Component {
                                            onClick={e => this.setState({
                                                showZoneModal: true,
                                                geoid : e.target.id,
-                                               name: e.target.name
+                                               name: e.target.name,
+                                               geom : d.zone_name === e.target.name ? d.zone_geom : ''
                                            })}>
                                             {d.zone_name}
                                         </a>
-                                        {this.state.showZoneModal ? showZoneModal(this.state.geoid,this.state.name,this.props.activeScenarioId,this.setState.bind(this)) : null}
+                                        {this.state.showZoneModal ? showZoneModal(this.state.geoid,this.state.name,this.props.activeScenarioId,this.state.geom,this.setState.bind(this)) : null}
                                     </td>
 
                                     <td>{d.num_buildings}</td>

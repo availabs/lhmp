@@ -10,6 +10,7 @@ import * as d3 from "d3";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
+import NewZoneAssetsFilteredTable from "./NewZoneAssetsFilteredTable";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 var _ = require("lodash")
@@ -29,12 +30,18 @@ const ZoneContainer = styled.div`
 
 
 class ZoneModalData extends React.Component {
-    state = {
-        buildingByLandUse: null,
-        filter: {
-            domain: BuildingByLandUseConfig.filter((config) => parseInt(config.value) % 100 === 0 ? config : ''),
-            value: []
-        },
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            buildingByLandUse: null,
+            filter: {
+                domain: BuildingByLandUseConfig.filter((config) => parseInt(config.value) % 100 === 0 ? config : ''),
+                value: []
+            },
+        }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
     }
     fetchFalcorDeps() {
         return this.props.falcor.get(
@@ -46,8 +53,17 @@ class ZoneModalData extends React.Component {
 
     }
 
-    renderLandUseMenu(){
+    handleChange(e) {
+        this.setState({...this.state, [e.target.id]: e.target.value});
+    };
 
+    handleMultiSelectFilterChange(e) {
+        let newFilter = this.state.filter;
+        newFilter.value = e;
+        this.setState({filter: newFilter})
+    }
+
+    renderLandUseMenu(){
         return (
             <div>
                 {JSON.stringify(this.state.filter.value)}
@@ -66,7 +82,7 @@ class ZoneModalData extends React.Component {
                     {this.renderLandUseMenu()}
                     <h4>Buildings By Land Use</h4>
                     {
-                        this.props.geoid ?
+                        this.props.geoid !== "" ?
                             <AssetsFilteredTable
                                 geoid={[this.props.geoid]}
                                 groupBy={'propType'}
@@ -76,7 +92,18 @@ class ZoneModalData extends React.Component {
                                 width={'100%'}
                                 tableClass={`table table-sm table-lightborder table-hover`}
                             />
-                            : ''
+                            :
+                            <NewZoneAssetsFilteredTable
+                                name = {[this.props.name]}
+                                geom = {[this.props.geom]}
+                                geoid = {[this.props.geoid]}
+                                groupBy = {'propType'}
+                                groupByFilter = {this.state.filter.value}
+                                scenarioId={this.props.scenario_id.map(d => d.id)}
+                                height={'fit-content'}
+                                width={'100%'}
+                                tableClass={`table table-sm table-lightborder table-hover`}
+                            />
                     }
                 </div>
             </div>
