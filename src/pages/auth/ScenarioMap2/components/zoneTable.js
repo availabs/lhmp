@@ -275,7 +275,7 @@ class ZoneTable extends React.Component {
                         <th/><th colSpan='2'>Total</th><th colSpan='2'>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : this.props.activeScenarioId.map(d => d.name.includes('hazus') ? 'HAZUS' : 'DFIRM')}</th>
                     </tr>
                     <tr>
-                        <th>Zone</th><th>#</th><th>$</th>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : <><th>#</th><th>$</th></>}
+                        <th>Zone</th><th>#</th><th>$</th>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : <React.Fragment><th>#</th><th>$</th></React.Fragment>}
                     </tr>
                     </thead>
                     <tbody>
@@ -296,15 +296,14 @@ class ZoneTable extends React.Component {
                                         </a>
                                         {this.state.showZoneModal ? showZoneModal(this.state.geoid,this.state.name,this.props.activeScenarioId,this.state.geom,this.setState.bind(this)) : null}
                                     </td>
-
                                     <td>{d.num_buildings}</td>
                                     <td>{d.replacement_value}</td>
                                     {this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null
                                         :
-                                        <>
+                                        <React.Fragment>
                                             <td>{d.count_buildings_scenarios}</td>
                                             <td>{d.sum_buildings_value}</td>
-                                        </>
+                                        </React.Fragment>
                                     }
                                     <td>
                                         <div id={`closeMe`+ d.zone_id}>
@@ -329,7 +328,9 @@ class ZoneTable extends React.Component {
                                 </tr>
                             )
                     }):
-                        <>Loading ...</>
+                        <tr>
+                            <td>Loading ...</td>
+                        </tr>
                     }
                     </tbody>
                 </table>
