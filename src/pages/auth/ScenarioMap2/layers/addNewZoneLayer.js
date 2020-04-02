@@ -9,7 +9,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import 'styles/_mapbox-gl-draw.css'
 import {ControlLayers} from "./controlLayers";
 import AvlMap from "../../../../components/AvlMap";
-import ProjectControl from "../controls/projectControl";
+import ZoneControl from "../controls/zoneControls";
 
 var _ = require('lodash')
 const IconPolygon = ({layer}) => <span className='fa fa-2x fa-connectdevelop'/>;
@@ -32,12 +32,7 @@ export class AddNewZoneLayer extends MapLayer{
 
         }
     }
-    fetchData(){
-        falcorGraph.get(['plan',this.props.activePlan,'zones'])
-            .then(response =>{
-                console.log('response',response)
-            })
-    }
+
 
     toggleCreationMode(mode, map) {
         console.log('creation mode', mode)
@@ -214,7 +209,8 @@ export const AddNewZoneOptions =  (options = {}) => {
                                            type="text"
 
                                     /></div>
-                                <button className="mr-2 mb-2 btn btn-primary btn-sm"
+                                <button
+                                        className="mr-2 mb-2 btn btn-primary btn-sm"
                                         type="button"
                                         onClick = {(e) =>{
                                             e.persist()
@@ -231,7 +227,6 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                 return falcorGraph.call(['zones','insert'],args,[],[])
                                                     .then(response =>{
                                                         alert("Zone has been saved")
-                                                        layer.forceUpdate()
                                                         let new_zone = JSON.parse(localStorage.getItem("zone"))
                                                         new_zone.push({
                                                             'id':name,
@@ -334,6 +329,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                             })
                                                             document.getElementById("new_zone_button").disabled = false
                                                         }
+
                                                     })
                                             }
 

@@ -44,16 +44,21 @@ class ZoneTable extends React.Component {
         super(props);
         this.state = {
             zone_clicked:false,
-            data: []
+            data: [],
+            zone_id : ''
         }
         //this.populateZonesData = this.populateZonesData.bind(this)
     }
 
     componentDidUpdate(oldProps,oldState){
+
         if(oldProps.zones.length !== this.props.zones.length){
             this.fetchFalcorDeps()
         }
         if(oldProps.activeScenarioId !== this.props.activeScenarioId){
+            this.fetchFalcorDeps()
+        }
+        if(oldProps.zone_id !== this.props.zone_id){
             this.fetchFalcorDeps()
         }
     }
@@ -69,15 +74,14 @@ class ZoneTable extends React.Component {
             let new_zones = [];
             let zone_geoid = [];
             let zone_id = [];
-            let zone_geom =[];
             let count_buildings_scenarios_county = 0;
             let sum_buildings_value_county = 0
             let count_buildings_scenarios_cousub = 0;
             let sum_buildings_value_cousub = 0
+
             let data = []
             let graph_zones = {}
             let scenario_id = []
-
             this.props.zones.forEach(item =>{
                 if(item.geoid !== null){
                     zone_geoid.push(item.geoid)
@@ -123,6 +127,10 @@ class ZoneTable extends React.Component {
                                     .then(response =>{
                                         return response
                                     })
+                                this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'byRiskScenario',scenario_id,'byRiskZone','all'])
+                                    .then(response =>{
+                                        return response
+                                    })
                             })
                         }
                     }
@@ -158,7 +166,6 @@ class ZoneTable extends React.Component {
                                     graph_scenario_county[county].byRiskScenario[scenario_id].byRiskZone.all.value.forEach(item =>{
                                         data.forEach(d =>{
                                             if(d.zone_geoid === item.geoid){
-
                                                 count_buildings_scenarios_county += parseInt(item.count)
                                                 sum_buildings_value_county += parseFloat(item.sum)
                                                 d['zone_geoid']=item.geoid
@@ -192,21 +199,42 @@ class ZoneTable extends React.Component {
                         if(this.props.newZonesData && new_zones.length > 0){
                             Object.keys(this.props.newZonesData).forEach(item =>{
                                 new_zones.forEach(z_g =>{
-                                    if(z_g['name'] === item && _.isEqual(z_g['geom'],Object.keys(this.props.newZonesData[item].byGeom)[0])){
+                                    if(z_g['name'] === item && _.isEqual(z_g['geom'],Object.keys(this.props.newZonesData[item].byGeom)[0]) && this.props.newZonesData[item].byGeom[z_g['geom']].buildings) {
                                         data.push({
-                                            zone_id:z_g['zone_id'],
-                                            zone_name:item,
+                                            zone_id: z_g['zone_id'],
+                                            zone_name: item,
                                             num_buildings: fmt(this.props.newZonesData[item].byGeom[z_g['geom']].buildings.sum.count.value || '0'),
                                             replacement_value: fnum(this.props.newZonesData[item].byGeom[z_g['geom']].buildings.sum.replacement_value.value || '0'),
                                             zone_geom: z_g['geom']
                                         })
                                     }
+                                    if(z_g['name'] === item && this.props.newZonesData[item].byGeom[z_g['geom']] && this.props.newZonesData[item].byGeom[z_g['geom']].none){
+                                        let count_buildings_scenarios_new_zone = 0;
+                                        let sum_buildings_scenarios_new_zone = 0;
+                                        if(this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id]){
+                                            let graph = this.props.newZonesData[item].byGeom[z_g['geom']].none.none.byRiskScenario[scenario_id].byRiskZone.all.value
+                                            graph.forEach(g =>{
+                                                data.forEach(d =>{
+                                                    if(d.zone_name === g.zone_name){
+                                                        count_buildings_scenarios_new_zone += parseInt(g.count)
+                                                        sum_buildings_scenarios_new_zone += parseFloat(g.sum)
+                                                        d['zone_name'] = g.zone_name
+                                                        d['count_buildings_scenarios'] = fmt(count_buildings_scenarios_new_zone)
+                                                        d['sum_buildings_value'] = fnum(sum_buildings_scenarios_new_zone)
+                                                    }
+                                                })
+
+                                            })
+                                        }
+
+                                    }
+
                                 })
-
-
                             })
+
                         }
                     }
+
                     this.setState({
                         data : _.uniqBy(data,'zone_id')
                     })
