@@ -279,10 +279,9 @@ class ZoneTable extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    { this.state.data.length > 0 ? this.state.data.map(d =>{
-
+                    { this.state.data.length > 0 ? this.state.data.map((d,i) =>{
                             return (
-                                <tr>
+                                <tr key ={i}>
                                     <td>
                                         <a href={"#"}
                                            id={d.zone_geoid}
@@ -330,7 +329,7 @@ class ZoneTable extends React.Component {
                                 </tr>
                             )
                     }):
-                        <div>Loading ...</div>
+                        <>Loading ...</>
                     }
                     </tbody>
                 </table>

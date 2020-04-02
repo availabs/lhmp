@@ -156,9 +156,9 @@ class ScenarioTable extends React.Component {
                     <tbody>
                     {
                         resultData ?
-                            (resultData).map(item =>{
+                            (resultData).map((item,i) =>{
                                 return (
-                                    <tr>
+                                    <tr key = {i}>
                                         <td>{item.scenario}</td>
                                         <td id ='visibility_column'>
                                         <input
@@ -167,6 +167,7 @@ class ScenarioTable extends React.Component {
                                             checked={this.state.activeToggle === item.id}
                                             type="radio"
                                             value={item.scenario}
+                                            key = {i}
                                             onChange={(e) =>{
                                                 this.setState((currentState) => (
                                                     {
