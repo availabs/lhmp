@@ -275,7 +275,8 @@ class AvlFormsNewData extends React.Component{
                         meta : countyData,
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
-                        onClick : this.cousubDropDown.bind(this)
+                        onClick : this.cousubDropDown.bind(this),
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }else if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].depend_on &&
@@ -293,6 +294,7 @@ class AvlFormsNewData extends React.Component{
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         meta : cousubsData,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
                     data.push({
@@ -305,7 +307,8 @@ class AvlFormsNewData extends React.Component{
                         required: item.attributes[attribute].field_required,
                         meta: meta_data,
                         prompt: this.displayPrompt.bind(this),
-                        depend_on : item.attributes[attribute].depend_on
+                        depend_on : item.attributes[attribute].depend_on,
+                        defaultValue: item.attributes[attribute].defaultValue
 
                     })
                 }else if(item.attributes[attribute].edit_type === 'radio'
@@ -319,7 +322,8 @@ class AvlFormsNewData extends React.Component{
                         title : attribute,
                         type:item.attributes[attribute].edit_type,
                         prompt: this.displayPrompt.bind(this),
-                        values:item.attributes[attribute].edit_type_values
+                        values:item.attributes[attribute].edit_type_values,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
                 else if(
@@ -334,7 +338,8 @@ class AvlFormsNewData extends React.Component{
                         data_error : item.attributes[attribute].data_error,
                         required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
-                        type:item.attributes[attribute].edit_type
+                        type:item.attributes[attribute].edit_type,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
 

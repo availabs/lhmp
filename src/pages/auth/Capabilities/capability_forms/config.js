@@ -10,6 +10,7 @@ module.exports = [
                 prompt:'Choose the county the capability is located from the list of all counties.',
                 sub_type:'',
                 edit_type:'dropdown',
+                defaultValue: 'Countywide',
                 display_type:'text',
                 area:'true',
                 meta: 'true',
