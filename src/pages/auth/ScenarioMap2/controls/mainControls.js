@@ -64,17 +64,19 @@ class MainControls extends React.Component {
                 <table className='table table-sm table-hover'>
                     <thead>
                     <tr>
-                        {AllModes.map(mode =>{
+                        {AllModes.map((mode,i) =>{
                             return (
-                                <th>
+                                <th key = {i}>
                                     <button className="btn btn-rounded" type="button" style={{padding:'0px'}}>
                                         <div id = {mode.id}
                                              className={this.state.activeMode.includes(mode.id) ? "os-toggler-w on" : "os-toggler-w"}
+                                             key={i}
                                              >
                                             <div className="os-toggler-i">
                                                 <div
                                                     className="os-toggler-pill"
                                                     id = {mode.id}
+                                                    key={i}
                                                      onClick={(e) => {
                                                              this.setState(currentState =>(
                                                                  {
@@ -95,17 +97,18 @@ class MainControls extends React.Component {
                     </tr>
                     </thead>
                 </table>
-                {AllBlocks.map(block =>{
+                {AllBlocks.map((block,i) =>{
                     if(this.state.activeMode.length > 0){
                         if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'scenario'){
                             return (
-                                <div id={`closeMe`+block.id}>
+                                <div id={`closeMe`+block.id} key={i}>
                                     <h4 style ={{display: 'inline'}}>{block.title}</h4>
                                     <button
                                             aria-label="Close"
                                             className="close"
                                             data-dismiss="alert"
                                             type="button"
+                                            key={i}
                                             onClick={(e) =>{
                                                 e.target.closest(`#closeMe`+block.id).style.display = 'none'
                                                 this.setState({
@@ -123,7 +126,7 @@ class MainControls extends React.Component {
                         }
                         if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'zone'){
                             return (
-                                <div id={`closeMe`+block.id}>
+                                <div id={`closeMe`+block.id} key = {i}>
                                     <h4 style ={{display: 'inline'}}>{block.title}</h4>
                                     <button
                                         aria-label="Close"
@@ -148,7 +151,7 @@ class MainControls extends React.Component {
                         }
                         if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'projects'){
                             return (
-                                <div id={`closeMe`+block.id}>
+                                <div id={`closeMe`+block.id} key ={i}>
                                     <h4 style ={{display: 'inline'}}>{block.title}</h4>
                                     <button
                                         aria-label="Close"
