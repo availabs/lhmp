@@ -1,19 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable, useFilters, useGlobalFilter, useSortBy } from 'react-table'
+import {useFilters, useGlobalFilter, useSortBy, useTable} from 'react-table'
 // A great library for fuzzy filtering/sorting items
 import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
-`
+`;
 
 // Define a default UI for filtering
 function DefaultColumnFilter({
-                                 column: { filterValue, preFilteredRows, setFilter },
+                                 column: {filterValue, preFilteredRows, setFilter},
                              }) {
-    const count = preFilteredRows.length
+    const count = preFilteredRows.length;
 
     return (
         <input
@@ -27,15 +27,14 @@ function DefaultColumnFilter({
 }
 
 function fuzzyTextFilterFn(rows, id, filterValue) {
-    return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
+    return matchSorter(rows, filterValue, {keys: [row => row.values[id]]})
 }
 
 // Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = val => !val
+fuzzyTextFilterFn.autoRemove = val => !val;
 
 
-
-function Table({ columns, data, height, tableClass, actions }) {
+function Table({columns, data, height, tableClass, actions}) {
     const filterTypes = React.useMemo(
         () => ({
             // Add a new fuzzyTextFilterFn filter type.
@@ -44,7 +43,7 @@ function Table({ columns, data, height, tableClass, actions }) {
             // "startWith"
             text: (rows, id, filterValue) => {
                 return rows.filter(row => {
-                    const rowValue = row.values[id]
+                    const rowValue = row.values[id];
                     return rowValue !== undefined
                         ? String(rowValue)
                             .toLowerCase()
@@ -54,7 +53,7 @@ function Table({ columns, data, height, tableClass, actions }) {
             },
         }),
         []
-    )
+    );
 
     const defaultColumn = React.useMemo(
         () => ({
@@ -62,7 +61,7 @@ function Table({ columns, data, height, tableClass, actions }) {
             Filter: DefaultColumnFilter,
         }),
         []
-    )
+    );
 
     const {
         getTableProps,
@@ -84,17 +83,17 @@ function Table({ columns, data, height, tableClass, actions }) {
         useFilters, // useFilters!
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
-
-)
+    );
 
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
-    const firstPageRows = rows// .slice(0, 20)
+    const firstPageRows = rows;// .slice(0, 20)
 
     return (
-        <DIV style={{overflow: 'auto', height: height ? height : 'auto'}} className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
+        <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}
+             className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
             <table {...getTableProps()} style={{width: '100%'}}>
-                <thead >
+                <thead>
                 {headerGroups.map(headerGroup => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map(column => (
@@ -140,7 +139,8 @@ function Table({ columns, data, height, tableClass, actions }) {
                                         <td {...cell.getCellProps()}>
                                             {
                                                 cell.column.link ?
-                                                    <Link to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                                                    <Link
+                                                        to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
                                                         {
                                                             cell.column.formatValue ?
                                                                 cell.column.formatValue(cell.value) :
@@ -155,19 +155,31 @@ function Table({ columns, data, height, tableClass, actions }) {
                                         </td>
                                     )
                                 })}
-                                    {actions ?
-                                        Object.keys(actions)
-                                            .map(action =>
-                                               <td>
-                                                   <Link className={action === 'delete' ? 'btn btn-sm btn-outline-danger' : "btn btn-sm btn-outline-primary"}
-                                                         to={ row.original[action] }>
-                                                       {action}
-                                                   </Link>
-                                               </td>
-                                            )
-                                        : null}
+                                {actions ?
+                                    Object.keys(actions)
+                                        .map(action => {
+                                                return (
+                                                    <td>
+                                                        {
+                                                            typeof row.original[action] === 'string' ?
+                                                                <Link
+                                                                    className={action === 'delete' ?
+                                                                        'btn btn-sm btn-outline-danger' :
+                                                                        "btn btn-sm btn-outline-primary"}
+                                                                    style={{textTransform: 'capitalize'}}
+                                                                    to={row.original[action]}>
+                                                                    {action}
+                                                                </Link>
+                                                                :
+                                                                row.original[action]
+                                                        }
+                                                    </td>)
+                                            }
+                                        )
+                                    : null}
                             </tr>
-                        )}
+                        )
+                    }
                 )}
                 </tbody>
             </table>

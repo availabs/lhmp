@@ -30,7 +30,7 @@ class AvlFormsListTable extends React.Component{
 
     fetchFalcorDeps(){
         let formType = this.props.config.map(d => d.type)
-        let formAttributes = this.props.config.map(d => d.list_attributes);
+        let formAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
@@ -90,7 +90,7 @@ class AvlFormsListTable extends React.Component{
     formsListTable(){
         let geo = this.props.geoData
         let graph = this.props.formsListData;
-        let formAttributes = this.props.config.map(d => d.list_attributes);
+        let formAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
@@ -99,7 +99,7 @@ class AvlFormsListTable extends React.Component{
             if(combine_list_attributes[0] === undefined){
                 Object.keys(graph).forEach(item =>{
                     let data = {};
-                    formAttributes[0].forEach(attribute =>{
+                    formAttributes.forEach(attribute =>{
                         if(graph[item].value && graph[item].value.attributes){
                             if(this.state.form_ids.includes(item)){
                                 data['id'] = item;
@@ -113,6 +113,11 @@ class AvlFormsListTable extends React.Component{
                                             `/${formType[0]}/${graph[item].value.attributes['sub_type']}/${f}/${item}`) :
                                         `/${formType[0]}/${f}/${item}`;
                                 })
+                                if (this.props.deleteButton === true || this.props.deleteButton === undefined){
+                                    data['delete'] =
+                                        <button id= {item} className="btn btn-sm btn-outline-danger"
+                                                onClick={this.deleteItem}> Delete </button>
+                                }
                             }
 
                         }
@@ -128,13 +133,15 @@ class AvlFormsListTable extends React.Component{
                         Object.keys(geo).filter(d => d !== 'S__path').forEach(g =>{
                             if(this.state.form_ids.includes(item)){
                                 initial_data['id'] = item;
-                                initial_data[attribute] = geo[graph[item].value.attributes[attribute]] ? geo[graph[item].value.attributes[attribute]].name || '' : graph[item].value.attributes[attribute]
+                                initial_data[attribute] = geo[graph[item].value.attributes[attribute]] ?
+                                    geo[graph[item].value.attributes[attribute]].name || '' :
+                                    graph[item].value.attributes[attribute];
                             }
 
                         })
                     });
 
-                    formAttributes[0].filter(d=> !combine_list_attributes[0].attributes.includes(d)).forEach(attribute =>{
+                    formAttributes.filter(d=> !combine_list_attributes[0].attributes.includes(d)).forEach(attribute =>{
                         if(graph[item].value && graph[item].value.attributes){
                             if(this.state.form_ids.includes(item)){
                                 data['id'] = item
@@ -143,8 +150,22 @@ class AvlFormsListTable extends React.Component{
                                 {
                                     if(initial_data['id'] === item)
                                         return initial_data[k]
-                                })
-                                data[combine_list_attributes[0].result] = !value.includes("") ? value.join(",") : value
+                                });
+                                data[combine_list_attributes[0].result] = !value.includes("") ? value.join(",") : value;
+                                ['view', 'edit']
+                                .filter(f => this.props[f+'Button'] === true || this.props[f+'Button'] === undefined)
+                                .forEach(f => {
+                                    data[f] = graph[item].value.attributes['sub_type'] ?
+                                        (f === 'view' ?
+                                            `/${formType[0]}/${f}/${graph[item].value.attributes['sub_type']}/${item}` :
+                                            `/${formType[0]}/${graph[item].value.attributes['sub_type']}/${f}/${item}`) :
+                                        `/${formType[0]}/${f}/${item}`;
+                                });
+                                if (this.props.deleteButton === true || this.props.deleteButton === undefined){
+                                    data['delete'] =
+                                        <button id= {item} className="btn btn-sm btn-outline-danger"
+                                                onClick={this.deleteItem}> Delete </button>
+                                }
                             }
                         }
                     })
@@ -160,14 +181,15 @@ class AvlFormsListTable extends React.Component{
     render(){
         let formAttributes = [];
         let listViewData = [];
+        let listAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
         let data = this.formsListTable();
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
         if(listViewData && listViewData.length > 0){
-            if(!_.isEqual(Object.keys(...listViewData).sort(),this.props.config[0].list_attributes.sort())){
+            if(!_.isEqual(Object.keys(...listViewData).sort(), listAttributes.sort())){
                 formAttributes = Object.keys(...listViewData).filter(d => !['id', 'view', 'edit', 'delete'].includes(d))
             }else{
-                formAttributes = this.props.config[0].list_attributes
+                formAttributes = listAttributes
             }
         }
         console.log('data', data, formAttributes)
@@ -274,116 +296,27 @@ class AvlFormsListTable extends React.Component{
 
                     </span>
                         </h4>
-                        {formAttributes.length ?
-                            <TableSelector
-                                data={listViewData}
-                                columns={formAttributes.map(f => ({
-                                    Header: f,
-                                    accessor: f,
-                                    filter: 'default',
-                                    sort: true
-                                }))}
-                                flex={this.props.flex ? this.props.flex : false}
-                                height={this.props.height ? this.props.height : ''}
-                                width={this.props.width ? this.props.width : ''}
-                                tableClass={this.props.tableClass ? this.props.tableClass : null}
-                                actions={{edit:true, view:true, delete:true}}
-                            /> : null}
+
                         {
                             listViewData.length > 0 ?
-                            <div className="element-box">
-                            <div className="table-responsive" >
-                            <table className="table table lightBorder">
-                            <thead>
-                            <tr>
-                            {
-                                formAttributes ? formAttributes
-                                        .filter(f => get(this.props.config[0], `attributes[${f}].hidden`, "false") === "true" ? false : true)
-                                        .map((item) => {
-                                        return (
-                                            <th>{item}</th>
-                                        )
-                                    })
-                                    :
-                                    null
-                            }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                listViewData.map(item =>{
-                                    if(Object.keys(item).length > 0){
-                                        return (
-                                            <tr>
-                                                {formAttributes ? formAttributes
-                                                    .filter(f => get(this.props.config[0], `attributes[${f}].hidden`, "false") === "true" ? false : true)
-                                                    .map(attribute =>{
-                                                    return (
-                                                        <td>{item[attribute]}</td>
-                                                    )
-                                                }):null}
-                                                {this.props.editButton === true || this.props.editButton === undefined?
-                                                    <td>
-                                                    {(formType[0] === 'actions' || formType[0] === 'participation') ?
-                                                        <Link className="btn btn-sm btn-outline-primary"
-                                                              to={ `/${formType[0]}/${item['sub_type']}/edit/${item['id']}` }>
-                                                            Edit
-                                                        </Link>
-                                                        :
-                                                        <Link className="btn btn-sm btn-outline-primary"
-                                                              to={ `/${formType[0]}/edit/${item['id']}` } >
-                                                            Edit
-                                                        </Link>
-                                                    }
-                                                    </td>
-                                                    :
-                                                    null}
-                                                {this.props.viewButton === true || this.props.viewButton === undefined?
-                                                    <td>
-                                                        {formType[0] === 'actions' || formType[0] === 'participation' ?
-
-                                                            <Link className="btn btn-sm btn-outline-primary"
-                                                                  to={ `/${formType[0]}/view/${item['sub_type']}/${item['id']}` }>
-                                                                View
-                                                            </Link>
-                                                            :
-                                                            formType[0] === 'evacuation_route' ?
-                                                                <button className="btn btn-sm btn-outline-primary"
-                                                                     onClick={(e) => this.props.onViewClick(item)}>
-                                                                    View
-                                                                </button> :
-                                                            <Link className="btn btn-sm btn-outline-primary"
-                                                                  to={ `/${formType[0]}/view/${item['id']}` }>
-                                                                View
-                                                            </Link>
-                                                        }
-
-                                                    </td>
-                                                    :null}
-                                                {
-                                                    this.props.deleteButton === true || this.props.deleteButton === undefined?
-                                                        <td>
-                                                            <button id= {item['id']} className="btn btn-sm btn-outline-danger"
-                                                                    onClick={this.deleteItem}>
-                                                                Delete
-                                                            </button>
-                                                        </td>
-                                                        : null
-                                                }
-
-
-
-                                            </tr>
-                                        )
-                                    }
-
-                                })
-                            }
-                            </tbody>
-
-                            </table>
-                            </div>
-                            </div>
+                                <div className="element-box">
+                                    <div className="table-responsive" >
+                                        <TableSelector
+                                            data={listViewData}
+                                            columns={formAttributes.map(f => ({
+                                                Header: f,
+                                                accessor: f,
+                                                filter: 'default',
+                                                sort: true
+                                            }))}
+                                            flex={true}//{this.props.flex ? this.props.flex : false}
+                                            height={this.props.height ? this.props.height : ''}
+                                            width={this.props.width ? this.props.width : ''}
+                                            tableClass={this.props.tableClass ? this.props.tableClass : null}
+                                            actions={{edit:true, view:true, delete:true}}
+                                        />
+                                    </div>
+                                </div>
                             :
                                 <div className="element-box">No data found...</div>
                         }

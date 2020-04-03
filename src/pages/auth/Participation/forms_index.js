@@ -45,7 +45,7 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/participation/',
+        path: '/participationNew/',
         exact: true,
         name: 'Participation',
         auth: true,

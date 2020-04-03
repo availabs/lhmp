@@ -104,11 +104,19 @@ class AvlFormsNewData extends React.Component{
                         }
                         style={{'float': 'right'}}> ?
                 </button>
-                <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-sm show" role="dialog"
+                <div aria-labelledby="mySmallModalLabel"
+                     className="onboarding-modal modal fade animated show" role="dialog"
                      id={`closeMe`+id}
-                     tabIndex="1" style={{'display': 'none'}} aria-hidden="true">
-                    <div className="modal-dialog modal-sm" style={{'float': 'right'}}>
-                        <div className="modal-content">
+                     tabIndex="0"
+                     style={{display: 'none', margin: '20vh 20vw'}}
+                     onClick={(e) => {
+                         if (e.target.id === `closeMe`+id){
+                             e.target.closest(`#closeMe`+id).style.display = 'none'
+                         }
+                     }}
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-centered modal-bg" style={{width: '100%', height: '100%', padding: '5vh 5vw'}}>
+                        <div className="modal-content text-center" style={{width: '100%', height: '100%'}}>
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
@@ -116,7 +124,7 @@ class AvlFormsNewData extends React.Component{
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
                                     return (<div>{item.attributes[id].prompt}</div>)
                                 })}

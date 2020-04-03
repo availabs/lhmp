@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'actions', // type is same as the route path for now
-        list_attributes:['action_name','action_type','sub_type'], // to list the attributes on the main page
+        //list_attributes:['action_name','action_type','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [
             {title:'Step 1',sub_title:'Project Name',id:'1'},
@@ -41,7 +41,34 @@ module.exports = [
                 display_type:'text',
                 meta: 'false',
                 rename_column : { name: ['action_name'] }, // Here the key for eg action_name is the name in the database and the array of values are the new names given
-                section: '1'
+                section: '1',
+                list_attribute: 'true'
+            },
+            action_type:{
+                label:'Action Type',
+                sub_type:'worksheet',
+                prompt:'Choose the category that best describes the action from the dropdown menu .' +
+                    'The category you choose will limit the possible responses to question 4.' +
+                    'If you do not see the action type you are expecting in the dropdown for question 4 ' +
+                    'you may need to change the action category you’ve selected in question 3.',
+                edit_type:'dropdown',
+                disable_condition:'',
+                display_type:'text',
+                meta: 'true',
+                meta_filter:{filter_key:'actions_project',value:'type'},
+                depend_on:'action_category',
+                section: '2',
+                list_attribute: 'true'
+            },
+            sub_type:{
+                label:'Sub type',
+                sub_type:'worksheet',
+                prompt:'',
+                //edit_type:'integer',
+                display_type:'text',
+                hidden:'true', // if you don`t want to show it in view data
+                section:'',
+                list_attribute: 'true'
             },
             project_number:{
                 label:'Project Number',

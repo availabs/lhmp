@@ -1,7 +1,6 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-        list_attributes:['capability_category','capability_type','capability_name'], // to list the attributes on the main page
         sub_type:'',
         // if wizard
         sections: [],
@@ -37,7 +36,8 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 hidden:'false',
-                section: ''
+                section: '',
+                list_attribute: 'true'
             },
             capability_type :{
                 label:'Capability type',
@@ -48,7 +48,8 @@ module.exports = [
                 meta:'true',
                 depend_on : 'capability_category',
                 hidden:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
             capability_name:{
                 label:'Capability Name',
@@ -63,7 +64,8 @@ module.exports = [
                 show:'true',
                 meta:'false',
                 hidden:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
             regulatory_name:{
                 label:'Regulatory Name',
