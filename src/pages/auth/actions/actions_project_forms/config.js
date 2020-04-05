@@ -29,6 +29,7 @@ module.exports = [
                 meta_filter:{filter_key:'roles',value:'contact_name'}, // if populating from another form type
                 section: '1',
                 //defaultValue: ['Countywide'],
+                //example: 'Demo example.'
 
             },
             action_name:{

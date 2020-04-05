@@ -257,9 +257,9 @@ function Table({columns, data, tableClass, height, width, actions}) {
 
                             </div>
                         ))}
-                        {
+                        {actions ?
                             Object.keys(actions)
-                                .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle} className="th"></div>)
+                                .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle} className="th"></div>) : null
                         }
                     </div>
                 ))}

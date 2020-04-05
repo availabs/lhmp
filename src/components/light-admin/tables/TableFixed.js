@@ -121,9 +121,9 @@ function Table({columns, data, height, tableClass, actions}) {
                                 <div>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
                             </th>
                         ))}
-                        {
+                        {actions ?
                             Object.keys(actions)
-                                .map(action => <th></th>)
+                                .map(action => <th></th>) : null
                         }
                     </tr>
                 ))}
