@@ -29,7 +29,8 @@ module.exports = [
                 validation : "true",
                 area:'true',
                 meta: 'true',
-                section: ''
+                section: '',
+                list_attribute: 'true'
             },
             contact_municipality:{
                 label:'Jurisdiction(optional)',
@@ -40,7 +41,8 @@ module.exports = [
                 meta: 'true',
                 area:'true',
                 depend_on:'contact_county',
-                section: ''
+                section: '',
+                list_attribute: 'true'
             },
             contact_agency:{
                 label:'Agency(optional)',
@@ -49,7 +51,8 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
             contact_department:{
                 label:'Department(optional)',
@@ -58,7 +61,8 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
             contact_title_role:{
                 label:'Role',
@@ -70,7 +74,8 @@ module.exports = [
                 validation: "true",
                 meta: 'true',
                 meta_filter:{filter_key:'roles',value:'category'},
-                section: ''
+                section: '',
+                list_attribute: 'true'
             },
             contact_name:{
                 label:'Name',
@@ -81,7 +86,9 @@ module.exports = [
                 display_type:'text',
                 validation:"true",
                 meta:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
+
             },
             contact_phone:{
                 label:'Phone(optional)',

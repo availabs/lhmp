@@ -11,7 +11,7 @@ import {push} from "react-router-redux";
 import {filter} from "fuzzy";
 
 import styled from 'styled-components';
-import TableBox from 'components/light-admin/tables/TableBox3'
+import TableSelector from "components/light-admin/tables/tableSelector"
 import {Tab} from "../../AvlStuff/TabSelector";
 
 var _ = require('lodash')
@@ -224,68 +224,22 @@ class AvlFormsListTableHMP extends React.Component{
             return newRow
         })
 
-/*        console.log(listViewData, formAttributes)
-        return listViewData && listViewData.length > 0 && Object.keys(listViewData[0]) ?
-            <TableBox
-            data={listViewData}
-            columns={formAttributes}
-            tableScroll={true}
-            maxHeight={'60vh'}
-            showControls={false}
-            /> : null*/
         console.log(listViewData, formAttributes)
-        return (
-            <div className="table table-lightborder table-hover" style={{'maxHeight': '80vh', /*width: '100%'*/}}>
-                    <table className="table table lightBorder" style={{ /*width: '100%'*/}}>
-                        <thead style={{
-                            tableLayout: 'fixed',
-                            borderCollapse: 'collapse',
-                            /*width: '100%'*/
-                        }}>
-                        <tr style={{display: 'block', /*width: '100%'*/}}>
-                            {
-                                formAttributes ? formAttributes.map((item, item_i) => {
-                                        return (
-                                            <th style={{
-                                                minWidth: `calc((75vw/(${formAttributes.length})))`,
-                                                maxWidth: `calc((75vw/(${formAttributes.length})))`
-                                            }} key={item_i}>{item}</th>
-                                        )
-                                    })
-                                    :
-                                    null
-                            }
-                        </tr>
-                        </thead>
-                        <ScrollBody style={{
-                            maxHeight: '30vh',
-                            overflowY: 'auto',
-                            display: 'block',
-                            /*width: '100%'*/
-                        }}>
-                            {
-                                listViewData.map((item, item_i) =>{
-                                    if(Object.keys(item).length > 0){
-                                        return (
-                                            <tr style={{display: 'block', /*width: '100%'*/}} key={item_i}>
-                                                {formAttributes ? formAttributes.map((attribute,attribute_i) =>{
-                                                    return (
-                                                        <td style={{
-                                                            minWidth: `calc((75vw/(${formAttributes.length})))`,
-                                                            maxWidth: `calc((75vw/(${formAttributes.length})))`
-                                                        }} key={`${item_i}-${attribute_i}` }>{item[attribute]}</td>
-                                                    )
-                                                }):null}
-                                            </tr>
-                                        )
-                                    }
-
-                                })
-                            }
-                        </ScrollBody>
-                    </table>
-                </div>
-        )
+        return listViewData && listViewData.length > 0 && Object.keys(listViewData[0]) ?
+            <TableSelector
+                data={listViewData}
+                columns={formAttributes.map(f => ({
+                    Header: f,
+                    accessor: f,
+                    filter: 'default',
+                    sort: true
+                }))}
+                flex={this.props.flex ? this.props.flex : false}
+                height={this.props.height ? this.props.height : ''}
+                width={this.props.width ? this.props.width : ''}
+                tableClass={this.props.tableClass ? this.props.tableClass : null}
+                actions={{edit:true, view:true, delete:true}}
+            /> : null
     }
 }
 

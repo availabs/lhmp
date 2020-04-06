@@ -121,14 +121,16 @@ class ScenarioControl extends React.Component {
                             value = {this.state.scenario_id || ''}
                             onChange={this.handleChange}>
                         <option value="None">---Select Value---</option>
-                        {scenarios_list.map(list =>{
+                        {scenarios_list.map((list,i) =>{
                             if(list.id === '2'){
                                 return (<option
                                     value={list.id}
-                                    selected = "selected">{list.name}
+                                    key = {i}
+                                    defaultValue={"2"}>{list.name}
                                 </option>)
                             }else{
                                 return (<option
+                                    key={{i}}
                                     value={list.id}>{list.name}
                                 </option>)
                             }

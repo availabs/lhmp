@@ -227,7 +227,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                 return falcorGraph.call(['zones','insert'],args,[],[])
                                                     .then(response =>{
                                                         alert("Zone has been saved")
-                                                        let new_zone = JSON.parse(localStorage.getItem("zone"))
+                                                        let new_zone = localStorage.getItem("zone") ? JSON.parse(localStorage.getItem("zone")) : ''
                                                         new_zone.push({
                                                             'id':name,
                                                             'name':name,
@@ -239,7 +239,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                             "deleteDynamicLayer",
                                                             "addNewZone"
                                                         ])
-                                                        if(!layer.map.getLayer("parcels") || !layer.map.getLayer("ebr") || !layer.map.getLayer("project")){
+                                                        if(!layer.map.getLayer("parcels") || !layer.map.getLayer("ebr") || !layer.map.getLayer("project") || localStorage.getItem("zone")){
                                                             let geoids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
                                                             let cousubs = [];
                                                             geoids.forEach(geoid =>{
