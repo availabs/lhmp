@@ -49,7 +49,7 @@ export default [
         exact: true,
         name: 'Participation',
         auth: true,
-        mainNav: false,
+        mainNav: true,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             { name: 'participation', path: '/participation/' }
