@@ -10,7 +10,11 @@ class DropDownNoMetaComponent extends React.PureComponent{
                             value={this.props.state[this.props.title] || ''}
                             disabled={this.props.disable_condition ? this.props.state[this.props.disable_condition.attribute] !== this.props.disable_condition.check : null}
                             >
-                        <option className="form-control" key={0} value="None">None Selected</option>
+
+                        <option className="form-control" key={0} value={this.props.defaultValue || 'None'}>
+                            {this.props.defaultValue ? this.props.defaultValue : `None Selected`}
+                        </option>
+
                         {this.props.dropDownData ? this.props.dropDownData.map((item,i) =>{
                             return( <option className="form-control" key={i+1} value={item}>{item}</option>)
                         }):

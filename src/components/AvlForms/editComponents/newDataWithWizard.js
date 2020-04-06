@@ -7,6 +7,7 @@ import get from "lodash.get";
 import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
 import Wizard from "./wizardComponent";
 import {falcorGraph} from "../../../store/falcorGraph";
+import styled from "styled-components";
 var _ = require("lodash");
 
 const counties = [
@@ -17,7 +18,9 @@ const counties = [
     "36015","36121","36061","36021","36013","36033","36017", "36067","36035","36087","36051","36025",
     "36071","36093","36005"
 ];
-
+const DIV = styled.div`
+${props => props.theme.panelDropdownScrollBar};
+`;
 
 class AvlFormsNewDataWizard extends React.Component{
     constructor(props){
@@ -202,11 +205,19 @@ class AvlFormsNewDataWizard extends React.Component{
                         }
                         style={{'float': 'right'}}> ?
                 </button>
-                <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-sm show" role="dialog"
+                <div aria-labelledby="mySmallModalLabel"
+                     className="onboarding-modal modal fade animated show" role="dialog"
                      id={`closeMe`+id}
-                     tabIndex="1" style={{'display': 'none'}} aria-hidden="true">
-                    <div className="modal-dialog modal-sm" style={{'float': 'right'}}>
-                        <div className="modal-content">
+                     tabIndex="0"
+                     style={{display: 'none', margin: '0vh 0vw'}}
+                     onClick={(e) => {
+                         if (e.target.id === `closeMe`+id){
+                             e.target.closest(`#closeMe`+id).style.display = 'none'
+                         }
+                     }}
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-centered modal-bg" style={{width: '100%', height: '50%', padding: '5vh 5vw'}}>
+                        <DIV className="modal-content text-center" style={{width: '100%', height: '100%', overflow: 'auto'}}>
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
@@ -214,13 +225,27 @@ class AvlFormsNewDataWizard extends React.Component{
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
                                     return (<div>{item.attributes[id].prompt}</div>)
                                 })}
                             </div>
 
-                        </div>
+                            {
+                                this.props.config.map(item =>{
+                                    return item.attributes[id].example ?
+                                        <React.Fragment>
+                                            <div className="modal-header"><h6 className="modal-title">Example</h6></div>
+                                            <div className="modal-body" style={{textAlign: 'justify'}}>
+                                                {this.props.config.map(item =>{
+                                                    return (<div>{item.attributes[id].example}</div>)
+                                                })}
+                                            </div>
+                                        </React.Fragment> : null
+                                })
+                            }
+
+                        </DIV>
                     </div>
                 </div>
             </div>
@@ -247,7 +272,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             meta : countyData,
                             area:item.attributes[attribute].area,
                             prompt: this.displayPrompt.bind(this),
-                            onClick : this.cousubDropDown.bind(this)
+                            onClick : this.cousubDropDown.bind(this),
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }else if(item.attributes[attribute].area === 'true' && item.attributes[attribute].depend_on  && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
                         data.push({
@@ -262,6 +288,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             area:item.attributes[attribute].area,
                             prompt: this.displayPrompt.bind(this),
                             meta : cousubsData,
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }else if(!item.attributes[attribute].area && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta === 'true' && item.attributes[attribute].meta_filter){
                         let graph = this.props.meta_data;
@@ -287,6 +314,8 @@ class AvlFormsNewDataWizard extends React.Component{
                                 disable_condition:item.attributes[attribute].disable_condition,
                                 prompt: this.displayPrompt.bind(this),
                                 meta : filter_data ? filter_data : [],
+                                defaultValue: item.attributes[attribute].defaultValue
+
                             })
                         }else{
                             data.push({
@@ -301,6 +330,7 @@ class AvlFormsNewDataWizard extends React.Component{
                                 depend_on:item.attributes[attribute].depend_on,
                                 prompt: this.displayPrompt.bind(this),
                                 meta : filter_data ? filter_data : [],
+                                defaultValue: item.attributes[attribute].defaultValue
                             })
                         }
 
@@ -316,7 +346,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             type: item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
                             values: item.attributes[attribute].edit_type_values,
-                            display_condition : item.attributes[attribute].display_condition
+                            display_condition : item.attributes[attribute].display_condition,
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }else if(item.attributes[attribute].edit_type === 'multiselect'&& item.attributes[attribute].meta === 'true'){
                         let graph = this.props.meta_data;
@@ -339,7 +370,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             title : attribute,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
-                            filterData : filter ? filter : []
+                            filterData : filter ? filter : [],
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }else if(item.attributes[attribute].edit_type === 'multiselect' && item.attributes[attribute].meta === 'false'){
                         data.push({
@@ -351,7 +383,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             title : attribute,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
-                            filterData : item.attributes[attribute].meta_filter.value
+                            filterData : item.attributes[attribute].meta_filter.value,
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }
                     else if(item.attributes[attribute].edit_type === 'dropdown_no_meta' && item.attributes[attribute].disable_condition){
@@ -365,7 +398,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
                             disable_condition : item.attributes[attribute].disable_condition,
-                            dropDownData : item.attributes[attribute].edit_type_values
+                            dropDownData : item.attributes[attribute].edit_type_values,
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }
                     else if(item.attributes[attribute].edit_type === 'dropdown_no_meta'){
@@ -378,7 +412,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             title : attribute,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
-                            dropDownData : item.attributes[attribute].edit_type_values
+                            dropDownData : item.attributes[attribute].edit_type_values,
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }
                     else{
@@ -391,7 +426,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             title : attribute,
                             prompt: this.displayPrompt.bind(this),
                             type:item.attributes[attribute].edit_type,
-                            display_condition:item.attributes[attribute].display_condition
+                            display_condition:item.attributes[attribute].display_condition,
+                            defaultValue: item.attributes[attribute].defaultValue
                         })
                     }
                 })

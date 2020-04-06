@@ -27,7 +27,10 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 meta_filter:{filter_key:'roles',value:'contact_name'}, // if populating from another form type
-                section: '1'
+                section: '1',
+                //defaultValue: ['Countywide'],
+                //example: 'Demo example.'
+
             },
             action_name:{
                 label:'Action Name',
@@ -36,7 +39,8 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:'2'
+                section:'2',
+                list_attribute: 'true'
             },
             action_category:{
                 label:'Action Category',
@@ -65,7 +69,18 @@ module.exports = [
                 meta: 'true',
                 meta_filter:{filter_key:'actions_project',value:'type'},
                 depend_on:'action_category',
-                section: '2'
+                section: '2',
+                list_attribute: 'true'
+            },
+            sub_type:{
+                label:'Sub type',
+                sub_type:'project',
+                prompt:'',
+                //edit_type:'integer',
+                display_type:'text',
+                hidden:'true', // if you don`t want to show it in view data
+                section:'',
+                list_attribute: 'true'
             },
             action_number:{
                 label:'Action Number',
