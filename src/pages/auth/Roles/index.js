@@ -307,7 +307,7 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/roles/',
+        path: '/rolesOld/',
         exact: true,
         name: 'Roles',
         auth: true,
@@ -328,7 +328,7 @@ export default [
         component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(RolesIndex))
     },
     {
-        path: '/roles/:roleid',
+        path: '/rolesOld/:roleid',
         exact: true,
         name: 'Roles',
         auth: true,

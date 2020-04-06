@@ -309,7 +309,7 @@ class AvlFormsListTable extends React.Component{
                                                 filter: 'default',
                                                 sort: true
                                             }))}
-                                            flex={true}//{this.props.flex ? this.props.flex : false}
+                                            flex={this.props.flex ? this.props.flex : false}
                                             height={this.props.height ? this.props.height : ''}
                                             width={this.props.width ? this.props.width : ''}
                                             tableClass={this.props.tableClass ? this.props.tableClass : null}

@@ -11,7 +11,9 @@ class MultiSelectComponent extends React.PureComponent{
         console.log('multi?', this.props)
         return (
             <div className="col-sm-12">
-                <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt !== '' ? this.props.prompt(this.props.title) : ''}</span>
+                <div className="form-group"><label htmlFor>{this.props.label}
+                    <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
+                </label><span style={{'float': 'right'}}>{this.props.prompt !== '' ? this.props.prompt(this.props.title) : ''}</span>
                     <MultiSelectFilter
                         filter={{
                             domain: this.props.filterData || [],

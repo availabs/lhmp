@@ -297,7 +297,7 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/actions/',
+        path: '/actionsOld/',
         exact: true,
         name: 'Actions',
         auth: true,
