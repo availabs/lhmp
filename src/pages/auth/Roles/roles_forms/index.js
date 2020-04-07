@@ -44,11 +44,11 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/rolesNew/',
+        path: '/roles/',
         exact: true,
         name: 'Roles',
         auth: true,
-        mainNav: false,
+        mainNav: true,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             { name: 'Roles', path: '/roles/' }

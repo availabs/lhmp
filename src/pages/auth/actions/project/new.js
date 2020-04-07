@@ -2912,7 +2912,7 @@ const mapStateToProps = state => {
 export default [
     {
         icon: 'os-icon',
-        path: '/actions/project/new',
+        path: '/actionsOld/project/new',
         exact: true,
         mainNav: false,
         breadcrumbs: [
@@ -2931,14 +2931,14 @@ export default [
         component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(project))
     },
     {
-        path: '/actions/project/edit/:projectId',
+        path: '/actionsOld/project/edit/:projectId',
         name: 'editActionsProject',
         mainNav: false,
         auth: true,
         exact: true,
         breadcrumbs: [
-            {name: 'Edit Actions Project', path: '/actions/'},
-            {param: 'projectId', path: '/actions/project/edit/'}
+            {name: 'Edit Actions Project', path: '/actionsOld/'},
+            {param: 'projectId', path: '/actionsOld/project/edit/'}
         ],
         menuSettings: {
             image: 'none',

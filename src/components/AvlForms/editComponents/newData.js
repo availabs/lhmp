@@ -56,7 +56,6 @@ class AvlFormsNewData extends React.Component{
     }
 
     handleChange(e){
-        console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
 
@@ -266,6 +265,7 @@ class AvlFormsNewData extends React.Component{
         let cousubsData = this.geoData()[1];
         let meta_data = [];
         let form_type = this.props.config.map(d => d.type)[0];
+        if (!cousubsData.length || !cousubsData.length) return null;
         if(this.props.meta_data) {
             let graph = this.props.meta_data;
             if(graph[form_type]){
@@ -275,10 +275,11 @@ class AvlFormsNewData extends React.Component{
         }
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
+
                 if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
                     item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined
-                    && item.attributes[attribute].hidden ==='false'
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -299,13 +300,14 @@ class AvlFormsNewData extends React.Component{
                     item.attributes[attribute].depend_on &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
                     item.attributes[attribute].meta === 'true'
-                    && item.attributes[attribute].hidden ==='false'){
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        required: item.attributes[attribute].field_required,
                         type:item.attributes[attribute].edit_type,
                         depend_on : item.attributes[attribute].depend_on,
                         area:item.attributes[attribute].area,
@@ -329,7 +331,7 @@ class AvlFormsNewData extends React.Component{
 
                     })
                 }else if(item.attributes[attribute].edit_type === 'radio'
-                    && item.attributes[attribute].hidden ==='false'
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -337,6 +339,7 @@ class AvlFormsNewData extends React.Component{
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        required: item.attributes[attribute].field_required,
                         type:item.attributes[attribute].edit_type,
                         prompt: this.displayPrompt.bind(this),
                         values:item.attributes[attribute].edit_type_values,
@@ -344,7 +347,7 @@ class AvlFormsNewData extends React.Component{
                     })
                 }
                 else if(
-                    item.attributes[attribute].hidden ==='false' || item.attributes[attribute].hidden === undefined
+                    ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -380,8 +383,8 @@ class AvlFormsNewData extends React.Component{
 
 
     render(){
-        console.log('in render state',this.state)
         let test = this.implementData();
+        if (!test) return null
         let data = [];
         test.forEach((d,i) =>{
                 data.push(d)
@@ -430,7 +433,6 @@ class AvlFormsNewData extends React.Component{
 }
 
 const mapStateToProps = (state,ownProps) => {
-    //console.log('state',state.user.email)
     return {
         userEmail:state.user.email,
         activePlan: state.user.activePlan,

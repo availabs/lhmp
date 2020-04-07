@@ -423,12 +423,12 @@ const mapStateToProps = state => {
 export default [
     {
         icon: 'os-icon',
-        path: '/capabilities/new',
+        path: '/capabilitiesOld/new',
         exact: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/' },
-            { name: 'New Capability', path: '/capabilities/new' }
+            { name: 'Capabilities', path: '/capabilitiesOld/' },
+            { name: 'New Capability', path: '/capabilitiesOld/new' }
         ],
         menuSettings: {
             image: 'none',
@@ -442,14 +442,14 @@ export default [
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilityNew))
     },
     {
-        path: '/capabilities/edit/:capabilityId',
+        path: '/capabilitiesOld/edit/:capabilityId',
         name: 'Edit Capabilities',
         mainNav: false,
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/' },
-            { param: 'capabilityId', path: '/capabilities/edit/' }
+            { name: 'Capabilities', path: '/capabilitiesOld/' },
+            { param: 'capabilityId', path: '/capabilitiesOld/edit/' }
         ],
         menuSettings: {
             image: 'none',

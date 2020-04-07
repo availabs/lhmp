@@ -122,7 +122,7 @@ class ParticipationIndex extends React.Component {
                                     <span style={{float:'right'}}>
                                 <Link
                                     className="btn btn-sm btn-primary"
-                                    to={ `/participation/new` } >
+                                    to={ `/participationOld/new` } >
                                         Create New Participation
                                 </Link>
                                     </span>
@@ -158,7 +158,7 @@ class ParticipationIndex extends React.Component {
                          
                                                                   <td>
                                                                     <Link className="btn btn-sm btn-outline-primary"
-                                                                          to={ `/participation/edit/${item.id.value}` } >
+                                                                          to={ `/participationOld/edit/${item.id.value}` } >
                                                                         Edit
                                                                     </Link>
                                                                 </td>
@@ -172,7 +172,7 @@ class ParticipationIndex extends React.Component {
                                                                                       
                                                                 : 
                                                                         <Link className="btn btn-sm btn-outline-primary"
-                                                                              to={ `/participation/view/${item.id.value}` }>
+                                                                              to={ `/participationOld/view/${item.id.value}` }>
                                                                             View
                                                                         </Link>
                                                                  } 
@@ -242,15 +242,15 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/participation/',
+        path: '/participationOld/',
         exact: true,
         name: 'Participation',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-tasks-checked',
         breadcrumbs: [
-            { name: 'Participation', path: '/participation/' },
-             { param: 'Id', path: '/participation/view/' }
+            { name: 'Participation', path: '/participationOld/' },
+             { param: 'Id', path: '/participationOld/view/' }
         ],
         menuSettings: {
             image: 'none',
