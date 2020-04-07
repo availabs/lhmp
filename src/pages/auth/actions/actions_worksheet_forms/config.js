@@ -20,7 +20,8 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 area : 'true',
-                section: '1'
+                section: '1',
+                //field_required:"required",
             },
             municipality:{
                 label:'Municipality',

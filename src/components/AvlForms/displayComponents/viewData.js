@@ -62,18 +62,25 @@ class AvlFormsViewData extends React.Component{
         if(graph){
             Object.keys(graph).filter(d => d !== '$type').forEach(item =>{
                 Object.keys(graph[item].attributes).forEach((d,i) =>{
+                    let section = get(config[0][d], `section`, null),
+                        label = get(config[0][d], `label`, null);
+                    console.log(' section #', get(config[0][d], `section`, null));
                     if(config_attributes[0].includes(d)){
                         if(graph[item].attributes[d] === county || graph[item].attributes[d]=== cousub){
                             data.push({
                                 attribute : d,
-                                value: geoData[graph[item].attributes[d]] ? geoData[graph[item].attributes[d]].name : 'None'
+                                value: geoData[graph[item].attributes[d]] ? geoData[graph[item].attributes[d]].name : 'None',
+                                section,
+                                label
                             })
                         }
                         else{
                             if( !config[0][d].hidden && config[0][d].hidden !== 'true'){
                                 data.push({
                                     attribute:d,
-                                    value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : ''
+                                    value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : '',
+                                    section,
+                                    label
                                 })
                             }
 
@@ -84,18 +91,25 @@ class AvlFormsViewData extends React.Component{
                             missing_attributes = config_attributes[0].filter(i => Object.keys(graph[item].attributes).indexOf(i) < 0);
                             missing_attributes.forEach(ma =>{
                                 let renamed_column = config[0][ma].rename_column;
+                                let section = get(config[0][ma], `section`, null),
+                                    label = get(config[0][ma], `label`, null);
+                                console.log('rename section #', get(config[0][ma], `section`, null),config[0][ma]);
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
                                         if(graph[item].attributes[rc]){
                                             if(graph[item].attributes[rc] === county || graph[item].attributes[rc] === cousub){
                                                 data.push({
                                                     attribute : ma,
-                                                    value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None'
+                                                    value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None',
+                                                    section,
+                                                    label
                                                 })
                                             }else{
                                                 data.push({
                                                     attribute : ma,
-                                                    value : graph[item].attributes[rc]
+                                                    value : graph[item].attributes[rc],
+                                                    section,
+                                                    label
                                                 })
                                             }
                                         }else{
@@ -104,12 +118,16 @@ class AvlFormsViewData extends React.Component{
                                                     if(graph[item].attributes[rcc] === county || graph[item].attributes[rcc] === cousub){
                                                         data.push({
                                                             attribute : ma,
-                                                            value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None'
+                                                            value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None',
+                                                            section,
+                                                            label
                                                         })
                                                     }else{
                                                         data.push({
                                                             attribute : ma,
-                                                            value : graph[item].attributes[rcc]
+                                                            value : graph[item].attributes[rcc],
+                                                            section,
+                                                            label
                                                         })
                                                     }
                                                 }
@@ -138,7 +156,8 @@ class AvlFormsViewData extends React.Component{
                 <div className='element-box'>
                     <GraphFactory
                         graph={{type: 'text'}}
-                        {...data}
+                        data={data}
+                        config={this.props.config}
                         isVisible = {true}
                     >
                     </GraphFactory>

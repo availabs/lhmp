@@ -145,14 +145,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/actions/worksheet/view/:worksheetId',
+        path: '/actionsOld/worksheet/view/:worksheetId',
         exact: true,
         name: 'Actions',
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/worksheet/view/' },
-            { param: 'worksheetId', path: '/actions/worksheet/view/edit' }
+            { name: 'Actions', path: '/actionsOld/worksheet/view/' },
+            { param: 'worksheetId', path: '/actionsOld/worksheet/view/edit' }
         ],
         menuSettings: {
             image: 'none',
