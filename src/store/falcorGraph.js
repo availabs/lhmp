@@ -10,13 +10,10 @@ import throttle from "lodash.throttle"
 var Promise = require("bluebird");
 
 
-<<<<<<< HEAD
- let url = 'https://graph.availabs.org/'
-// let url = 'http://localhost:4444/'
-=======
+
 let url = 'https://graph.availabs.org/'
 //let url = 'http://localhost:4444/'
->>>>>>> 853b1fe1ad0271ca395ca6bf0a89bd9cad4157e0
+
 
 if (process.env.NODE_ENV === 'production') {
   url = 'https://graph.availabs.org/'

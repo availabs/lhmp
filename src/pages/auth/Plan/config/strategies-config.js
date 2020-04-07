@@ -9,10 +9,7 @@ const config = {
         icon: 'os-icon-arrow-right7',
         onlyAdmin: true
     }],
-<<<<<<< HEAD
-=======
-    
->>>>>>> 853b1fe1ad0271ca395ca6bf0a89bd9cad4157e0
+
     Objectives: [
         {
             title: 'Goals',
@@ -126,30 +123,6 @@ const config = {
             intent: '',
             icon: 'os-icon-home'
         },
-<<<<<<< HEAD
-
-=======
-        {
-            title: 'NFIP Problem Areas',
-            requirement: 'Req-B-4A',
-            type: 'content',
-            prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
-                ' that have suffered repetitive damage due to flooding, particularly problem areas that may not be apparent' +
-                ' on floodplain maps. How does this relate to mitigation actions/the overall mitigation strategy?',
-            intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
-                ' numbers of repetitive loss properties located in identified flood hazard areas. Information on repetitive' +
-                ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
-            icon: 'os-icon-alert-circle'
-        },
-        {
-            title: 'Environmental and Historic Preservation',
-            requirement: 'Req-B-4A',
-            type: 'content',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-home'
-        },
->>>>>>> 853b1fe1ad0271ca395ca6bf0a89bd9cad4157e0
     ],
      'Response' : [
         {
