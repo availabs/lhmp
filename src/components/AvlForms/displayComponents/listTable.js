@@ -8,7 +8,8 @@ import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import TableSelector from "components/light-admin/tables/tableSelector"
-
+import {RenderConfig} from 'pages/Public/theme/ElementFactory'
+import config from 'pages/auth/Plan/config/guidance-config'
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
     "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
@@ -296,7 +297,16 @@ class AvlFormsListTable extends React.Component{
 
                     </span>
                         </h4>
-
+                        {config[this.props.config[0].type] ?
+                            <div className="element-box">
+                                <RenderConfig
+                                    config={{[this.props.config[0].type]:config[this.props.config[0].type]}}
+                                    user={this.props.user}
+                                    showTitle={false}
+                                    showHeader={false}
+                                    pureElement={true}
+                                />
+                            </div> : null}
                         {
                             listViewData.length > 0 ?
                                 <div className="element-box">
@@ -334,7 +344,8 @@ const mapStateToProps = (state,ownProps) => {
         config: ownProps.json,
         formsListData : get(state.graph,['forms','byId'],{}),
         geoData : get(state.graph,['geo'],{}),
-        formsByIdData: get(state.graph,['forms'])
+        formsByIdData: get(state.graph,['forms']),
+        user: get(state, 'user', null)
 
     }
 };
