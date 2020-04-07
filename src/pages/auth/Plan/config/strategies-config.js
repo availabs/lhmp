@@ -9,6 +9,39 @@ const config = {
         icon: 'os-icon-arrow-right7',
         onlyAdmin: true
     }],
+    
+    Objectives: [
+        {
+            title: 'Goals',
+            requirement: 'Req-C-3-A',
+            type: 'content',
+            prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
+                ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
+            intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
+                '  Goals are statements of the community’s visions for the future.',
+            icon: 'os-icon-target'
+        },
+        // {
+        //     title: 'Goals 3A-1',
+        //     requirement: 'Req-C-3-A-1',
+        //     type: 'form',
+        //     prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
+        //         ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
+        //     intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
+        //         '  Goals are statements of the community’s visions',
+        //     icon: 'os-icon-arrow-right2'
+        // },
+        {
+            title: 'Changes in Priorities',
+            requirement: 'Req-D-3',
+            type: 'content',
+            prompt: ' If applicable, describe changes to goals and objectives.',
+            intent: 'To ensure the plan reflects current conditions, including financial, legal, and political realities' +
+                ' as well as post‐disaster conditions.',
+            icon: 'os-icon-mail-19'
+        },
+    ],
+
     Capabilities : [
         {
             title: 'Overview',
@@ -115,6 +148,14 @@ const config = {
                 ' numbers of repetitive loss properties located in identified flood hazard areas. Information on repetitive' +
                 ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
             icon: 'os-icon-alert-circle'
+        },
+        {
+            title: 'Environmental and Historic Preservation',
+            requirement: 'Req-B-4A',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-home'
         },
     ],
      'Response' : [
@@ -227,38 +268,8 @@ const config = {
                 ' to take action towards completion of the activities.',
             icon: 'os-icon-edit-1'
         },
-    ],
-    Objectives: [
-        {
-            title: 'Goals',
-            requirement: 'Req-C-3-A',
-            type: 'content',
-            prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
-                ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
-            intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
-                '  Goals are statements of the community’s visions for the future.',
-            icon: 'os-icon-target'
-        },
-        // {
-        //     title: 'Goals 3A-1',
-        //     requirement: 'Req-C-3-A-1',
-        //     type: 'form',
-        //     prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
-        //         ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
-        //     intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
-        //         '  Goals are statements of the community’s visions',
-        //     icon: 'os-icon-arrow-right2'
-        // },
-        {
-            title: 'Changes in Priorities',
-            requirement: 'Req-D-3',
-            type: 'content',
-            prompt: ' If applicable, describe changes to goals and objectives.',
-            intent: 'To ensure the plan reflects current conditions, including financial, legal, and political realities' +
-                ' as well as post‐disaster conditions.',
-            icon: 'os-icon-mail-19'
-        },
     ]
+    
 }
 
 export default config
