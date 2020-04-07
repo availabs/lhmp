@@ -50,6 +50,44 @@ const config = {
             icon: 'os-icon-grid-squares-2'
         },
     ],
+        'National Flood Insurance Program (NFIP)' : [
+        {
+            title: 'NFIP Participation',
+            requirement: 'Req-C-2',
+            type: 'content',
+            prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
+                ' a. Describe FPMP for continued compliance, Adoption and enforcement of floodplain management requirements, including regulating new construction in Special Flood Hazard Areas (SFHAs);\n' +
+                '   i.Floodplain identification and mapping, including any local requests for map updates; or' +
+                '   ii.Description of community assistance and monitoring activities.' +
+                ' b. If jurisdiction is not taking part in NFIP describe why',
+            intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA' +
+                ' is the official administering Federal agency of the NFIP, participation in the program is a basic community' +
+                ' capability and resource for flood hazard mitigation activities.',
+            icon: 'os-icon-bar-chart-up'
+        },
+        {
+            title: 'NFIP Properties',
+            requirement: 'Req-B-4',
+            type: 'Visualizations - NFIP',
+            prompt: '',
+            intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
+                ' numbers of repetitive loss properties located in identified flood hazard areas.',
+            icon: 'os-icon-home'
+        },
+        {
+            title: 'NFIP Problem Areas',
+            requirement: 'Req-B-4A',
+            type: 'content',
+            prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
+                ' that have suffered repetitive damage due to flooding, particularly problem areas that may not be apparent' +
+                ' on floodplain maps. How does this relate to mitigation actions/the overall mitigation strategy?',
+            intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
+                ' numbers of repetitive loss properties located in identified flood hazard areas. Information on repetitive' +
+                ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
+            icon: 'os-icon-alert-circle'
+        },
+    ], 
+    
     'Changes in Development' : [
         {
             title: 'Overview',
