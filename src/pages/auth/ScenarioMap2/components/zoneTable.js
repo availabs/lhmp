@@ -211,7 +211,7 @@ class ZoneTable extends React.Component {
                         if(this.props.newZonesData){
                             Object.keys(this.props.newZonesData).forEach(item =>{
                                 new_zones.forEach(z_g =>{
-                                    if(z_g['name'] === item && this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings) {
+                                    if(z_g['name'] === item && this.props.newZonesData[item].byGeom[z_g['geom']] && this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings) {
                                         data.push({
                                             zone_id: z_g['zone_id'],
                                             zone_name: item,
