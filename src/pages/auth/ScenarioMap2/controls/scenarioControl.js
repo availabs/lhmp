@@ -9,7 +9,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import ControlLayers from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
 import ScenarioTable from "../components/scenariosTable";
-import {setActiveRiskZoneId} from "store/modules/scenario"
+import {setActiveRiskScenarioId} from "store/modules/scenario"
 var _ = require("lodash")
 let scenarios_list  = []
 class ScenarioControl extends React.Component {
@@ -40,7 +40,7 @@ class ScenarioControl extends React.Component {
                             this.setState({
                                 scenario_id : item.id
                             })
-                            this.props.setActiveRiskZoneId([item])
+                            this.props.setActiveRiskScenarioId([item])
                         }
                     })
 
@@ -52,17 +52,13 @@ class ScenarioControl extends React.Component {
 
 
     componentDidUpdate(oldProps,oldState){
+
         if(oldState.scenario_id !== this.state.scenario_id){
             scenarios_list.forEach(item =>{
                 if(item.id === this.state.scenario_id){
-                    this.props.setActiveRiskZoneId([item])
+                    this.props.setActiveRiskScenarioId([item])
                 }
             })
-            //if(scenarios_list.length > 0){
-
-
-            //}
-
             this.renderScenarioTable()
         }
     }
@@ -107,8 +103,21 @@ class ScenarioControl extends React.Component {
     handleChange(e) {
         console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
+        let data = []
+        Object.keys(this.props.scenarioData).forEach((item,i) =>{
+            if(this.state.scenario_id === this.props.scenarioData[item].risk_scenario_id.toString()){
+                data.push(this.props.scenarioData[item])
+            }
+        })
+        data.forEach((item,i) =>{
+            if(i === 0){
+                this.props.layer.layer.visibilityToggleModeOff(item.map_source,item.table_name)
+            }
 
+        })
     };
+
+
 
 
     render(){
@@ -120,17 +129,17 @@ class ScenarioControl extends React.Component {
                             id="scenario_id"
                             value = {this.state.scenario_id || ''}
                             onChange={this.handleChange}>
-                        <option value="None">---Select Value---</option>
+                        <option value="None" key={0}>---Select Value---</option>
                         {scenarios_list.map((list,i) =>{
                             if(list.id === '2'){
                                 return (<option
                                     value={list.id}
-                                    key = {i}
+                                    key = {i+1}
                                     defaultValue={"2"}>{list.name}
                                 </option>)
                             }else{
                                 return (<option
-                                    key={{i}}
+                                    key={i+1}
                                     value={list.id}>{list.name}
                                 </option>)
                             }
@@ -155,16 +164,18 @@ class ScenarioControl extends React.Component {
 
 const mapStateToProps = state => (
     {
+        activeScenarioId:state.scenario.activeRiskZoneId,
         activePlan : state.user.activePlan,
         activeGeoid:state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-        scenariosList : get(state.graph,['plan'],{})
+        scenariosList : get(state.graph,['plan'],{}),
+        scenarioData : get(state.graph,['scenarios','byId'],{}),
     });
 
 const mapDispatchToProps = {
     sendSystemMessage,
-    setActiveRiskZoneId
+    setActiveRiskScenarioId
 
 };
 

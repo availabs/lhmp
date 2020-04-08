@@ -55,18 +55,18 @@ export class ControlLayers extends MapLayer {
     }
 
     visibilityToggleModeOn(source, layerName) {
-        if (source && layerName.includes("riverine")) {
-            if (this.map.getSource('riverine')) {
-                this.map.removeLayer('riverine_layer');
-                this.map.removeSource('riverine')
+        if(layerName.includes('_27') || layerName.includes('_26')){
+            if (this.map.getSource('andes_riverine')) {
+                this.map.removeLayer('andes_riverine_layer');
+                this.map.removeSource('andes_riverine')
             }
-            this.map.addSource("riverine", {
+            this.map.addSource("andes_riverine", {
                 'type': "vector",
                 'url': source
             })
             this.map.addLayer({
-                'id': 'riverine_layer',
-                'source': 'riverine',
+                'id': 'andes_riverine_layer',
+                'source': 'andes_riverine',
                 'source-layer': layerName,
                 'type': 'fill',
                 'minzoom': 8,
@@ -76,11 +76,11 @@ export class ControlLayers extends MapLayer {
                         ["get", "depth_m"],
                         0,
                         "hsl(211, 0%, 100%)",
-                        10,
+                        5,
                         "hsl(211, 75%, 53%)",
-                        20,
+                        10,
                         "hsl(211, 83%, 39%)",
-                        30,
+                        20,
                         "hsl(211, 64%, 44%)",
                         40,
                         "hsl(211, 91%, 33%)",
@@ -99,48 +99,107 @@ export class ControlLayers extends MapLayer {
                 },
 
             })
-            this.map.moveLayer('riverine_layer','parcels')
-        }
-        if (source && layerName.includes("dfirm")) {
-            if (this.map.getSource('dfirm')) {
-                this.map.removeLayer('dfirm_layer');
-                this.map.removeSource('dfirm')
+            this.map.moveLayer('andes_riverine_layer','parcels')
+        }else{
+            if (source && layerName.includes("riverine")) {
+                if (this.map.getSource('riverine')) {
+                    this.map.removeLayer('riverine_layer');
+                    this.map.removeSource('riverine')
+                }
+                this.map.addSource("riverine", {
+                    'type': "vector",
+                    'url': source
+                })
+                this.map.addLayer({
+                    'id': 'riverine_layer',
+                    'source': 'riverine',
+                    'source-layer': layerName,
+                    'type': 'fill',
+                    'minzoom': 8,
+                    'paint': {
+                        'fill-color': ["interpolate",
+                            ["linear"],
+                            ["get", "depth_m"],
+                            0,
+                            "hsl(211, 0%, 100%)",
+                            10,
+                            "hsl(211, 75%, 53%)",
+                            20,
+                            "hsl(211, 83%, 39%)",
+                            30,
+                            "hsl(211, 64%, 44%)",
+                            40,
+                            "hsl(211, 91%, 33%)",
+                            50,
+                            "hsl(211, 83%, 31%)",
+                            60,
+                            "hsl(211, 35%, 33%)",
+                            70,
+                            "hsl(211, 89%, 38%)",
+                            80,
+                            "hsl(211, 83%, 31%)",
+                            83,
+                            "hsl(211, 83%, 31%)"
+                        ],
+                        'fill-opacity':0.3
+                    },
+
+                })
+                this.map.moveLayer('riverine_layer','parcels')
             }
-            this.map.addSource("dfirm", {
-                'type': "vector",
-                'url': source
-            })
-            this.map.addLayer({
-                'id': 'dfirm_layer',
-                'source': 'dfirm',
-                'source-layer': layerName,
-                'type': 'fill',
-                'minzoom': 8,
-                'paint': {
-                    'fill-color': "hsl(211, 83%, 31%)",
-                    'fill-opacity':0.3
-                },
+            if (source && layerName.includes("dfirm")) {
+                if (this.map.getSource('dfirm')) {
+                    this.map.removeLayer('dfirm_layer');
+                    this.map.removeSource('dfirm')
+                }
+                this.map.addSource("dfirm", {
+                    'type': "vector",
+                    'url': source
+                })
+                this.map.addLayer({
+                    'id': 'dfirm_layer',
+                    'source': 'dfirm',
+                    'source-layer': layerName,
+                    'type': 'fill',
+                    'minzoom': 8,
+                    'paint': {
+                        'fill-color': "hsl(211, 83%, 31%)",
+                        'fill-opacity':0.3
+                    },
 
-            })
-            this.map.moveLayer('parcels','dfirm_layer')
+                })
+                this.map.moveLayer('parcels','dfirm_layer')
 
+            }
         }
+
     }
 
 
     visibilityToggleModeOff(source,layerName){
-        if(source && layerName.includes("riverine")){
-            if(this.map.getSource('riverine')) {
-                this.map.removeLayer('riverine_layer');
-                this.map.removeSource('riverine')
+        if(layerName.includes('_27') || layerName.includes('_26')){
+            if(source && layerName.includes("andes_riverine")){
+                if(this.map.getSource('andes_riverine')) {
+                    this.map.removeLayer('andes_riverine_layer');
+                    this.map.removeSource('andes_riverine')
+                }
+            }
+        }else{
+            if(source && layerName.includes("riverine")){
+                if(this.map.getSource('riverine')) {
+                    this.map.removeLayer('riverine_layer');
+                    this.map.removeSource('riverine')
+                }
+            }
+            if(source && layerName.includes("dfirm")){
+                if(this.map.getSource('dfirm')) {
+                    this.map.removeLayer('dfirm_layer');
+                    this.map.removeSource('dfirm')
+                }
             }
         }
-        if(source && layerName.includes("dfirm")){
-            if(this.map.getSource('dfirm')) {
-                this.map.removeLayer('dfirm_layer');
-                this.map.removeSource('dfirm')
-            }
-        }
+
+
     }
 
 

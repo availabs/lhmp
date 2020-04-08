@@ -135,14 +135,13 @@ class ZoneControl extends React.Component{
                         selectedZonesData.push({
                             zone_id : zone_id.id,
                             geoid : zone_id.geoid,
-                            geom: JSON.stringify(get(zone_id, `geom.geometry`, [])),
+                            geom: zone_id.geom && zone_id.geom.geometry ? JSON.stringify(get(zone_id, `geom.geometry`, [])): zone_id.geom,
                             name: zone_id.name
                         })
                     }
                 })
             })
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id');
-
             return (
                 <ZoneTable
                     zone_id = {this.state.zone_id}
@@ -222,7 +221,7 @@ class ZoneControl extends React.Component{
 const mapStateToProps = state => (
     {
         activePlan : state.user.activePlan,
-        activeGeoid:state.user.activeGeoid,
+        activeGeoid:state.user.activeGeoid, 
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         zonesList : get(state.graph,['zones','byId'],{}),

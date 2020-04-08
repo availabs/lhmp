@@ -53,13 +53,8 @@ export class AddNewZoneLayer extends MapLayer{
             });
 
             if(this.map.getLayer("parcels") || this.map.getLayer("ebr") || this.map.getLayer("counties") || this.map.getLayer("cousubs") || this.map.getLayer("project") || this.map.getLayer("polygon-layer")){
-                this.map.removeLayer("parcels")
-                this.map.removeLayer("ebr")
-                this.map.removeLayer("buildings-layer")
                 this.map.removeLayer("counties")
                 this.map.removeLayer("cousubs")
-                this.map.removeLayer("project")
-                this.map.removeLayer("polygon-layer")
             }
 
             this.map.addControl(draw);
@@ -251,16 +246,6 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                 "cousubs",
                                                                 ['all', ['in', 'geoid',...cousubs]]
                                                             )
-                                                            layer.map.addLayer({
-                                                                'id': 'polygon-layer',
-                                                                'source': 'polygon',
-                                                                'type': 'line',
-                                                                'paint': {
-                                                                    'line-color': '#F31616',
-                                                                    'line-opacity': 0.5,
-                                                                    'line-width': 4
-                                                                }
-                                                            })
 
                                                             if(localStorage.getItem("zone")){
                                                                 let new_zones = JSON.parse(localStorage.getItem("zone"))
@@ -283,50 +268,6 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                 })
                                                                 layer.map.getSource("polygon").setData(geojson)
                                                             }
-
-                                                            layer.map.addLayer({
-                                                                'id': 'parcels',
-                                                                'source': 'nys_1811_parcels',
-                                                                'source-layer': 'nys_1811_parcels',
-                                                                'type': 'fill',
-                                                                'minzoom': 13,
-                                                                'paint': {
-                                                                    'fill-opacity':0.1,
-                                                                    'fill-outline-color': '#ffffff'
-                                                                }
-
-                                                            })
-                                                            layer.map.addLayer({
-                                                                'id': 'ebr',
-                                                                'source': 'nys_buildings_avail',
-                                                                'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
-                                                                'type': 'fill',
-                                                                'minzoom': 13,
-                                                                'paint': {
-                                                                    'fill-color': '#000000'
-                                                                }
-                                                            })
-                                                            layer.map.addLayer({
-                                                                'id': 'buildings-layer',
-                                                                'source': 'buildings',
-                                                                'type': 'circle',
-                                                                'paint': {
-                                                                    'circle-radius': 3,
-                                                                    'circle-opacity': 0.5
-                                                                }
-                                                            })
-                                                            layer.map.addLayer({
-                                                                'id': 'project',
-                                                                'source': 'counties',
-                                                                'source-layer': 'counties',
-                                                                'type': 'line',
-                                                                'paint': {
-                                                                    'line-color': '#FFFFFF',
-                                                                    'line-opacity': 0.5
-                                                                },
-                                                                filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
-
-                                                            })
                                                             document.getElementById("new_zone_button").disabled = false
                                                         }
 
@@ -366,3 +307,61 @@ const mapStateToProps = (state, { id }) => ({
 
 });
 const mapDispatchToProps = {};
+
+/* layer.map.addLayer({
+'id': 'polygon-layer',
+'source': 'polygon',
+'type': 'line',
+'paint': {
+'line-color': '#F31616',
+'line-opacity': 0.5,
+'line-width': 4
+}
+})*/
+
+
+/*layer.map.addLayer({
+    'id': 'parcels',
+    'source': 'nys_1811_parcels',
+    'source-layer': 'nys_1811_parcels',
+    'type': 'fill',
+    'minzoom': 13,
+    'paint': {
+        'fill-opacity':0.1,
+        'fill-outline-color': '#ffffff'
+    }
+
+})
+layer.map.addLayer({
+    'id': 'ebr',
+    'source': 'nys_buildings_avail',
+    'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
+    'type': 'fill',
+    'minzoom': 13,
+    'paint': {
+        'fill-color': '#000000'
+    }
+})
+layer.map.addLayer({
+    'id': 'buildings-layer',
+    'source': 'buildings',
+    'type': 'circle',
+    'paint': {
+        //'circle-radius': 3,
+        'circle-opacity': 0.5,
+
+    }
+})
+layer.map.addLayer({
+    'id': 'project',
+    'source': 'counties',
+    'source-layer': 'counties',
+    'type': 'line',
+    'paint': {
+        'line-color': '#FFFFFF',
+        'line-opacity': 0.5
+    },
+    filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
+
+})*/
+

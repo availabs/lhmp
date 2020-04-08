@@ -42,7 +42,7 @@ class AvlFormsNewDataWizard extends React.Component{
         Object.keys(this.props.config[0].attributes).forEach(item =>{
             sub_type = this.props.config[0].attributes[item].sub_type
         });
-        if(sub_type.length > 0){
+        if(sub_type && sub_type.length > 0){
             form = form_type + '_' + sub_type
         }else{
             form = form_type
@@ -140,7 +140,7 @@ class AvlFormsNewDataWizard extends React.Component{
             let plan_id = parseInt(this.props.activePlan);
             this.props.config.forEach(config =>{
                 Object.keys(config.attributes).forEach(item =>{
-                    if(config.attributes[item].sub_type.length > 0){
+                    if(get(config, `attributes[${item}].sub_type`, '').length, _ > 0){
                         sub_type = config.attributes[item].sub_type
                     }
                 })
