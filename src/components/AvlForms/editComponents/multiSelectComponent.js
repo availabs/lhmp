@@ -10,7 +10,7 @@ class MultiSelectComponent extends React.PureComponent {
 
     render() {
         console.log('multi?', this.props)
-        let data = this.props.meta ? this.props.meta : this.props.filterData.map(fd => ({name: fd, value: fd}));
+        let data = this.props.meta ? this.props.meta : this.props.filterData ? this.props.filterData.map(fd => ({name: fd, value: fd})) : [];
         if(this.props.area === 'true' && this.props.depend_on === undefined){
             console.log('cond1')
             data = data.map((item,i) => item)
@@ -32,7 +32,7 @@ class MultiSelectComponent extends React.PureComponent {
         }else{
             data = this.props.meta ? this.props.meta : this.props.filterData;
         }
-        console.log('data after conditions', data, this.props)
+        //console.log('data after conditions', data, this.props)
         return (
             <div className="col-sm-12" onClick={this.props.onClick ? this.props.onClick : () => {
             }}>

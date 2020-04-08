@@ -97,8 +97,8 @@ class AvlFormsNewData extends React.Component{
 
     }
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(prevState.county, this.state.county)){
-            this.cousubDropDown({target:{value:this.state.county}})
+        if (!_.isEqual(prevState.county, this.state.county) || !_.isEqual(prevState.contact_county, this.state.contact_county)){
+            this.cousubDropDown({target:{value:this.state.county ? this.state.county : this.state.contact_county}})
         }
     }
 
@@ -231,11 +231,13 @@ class AvlFormsNewData extends React.Component{
         if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
+                    console.log('cousub dropdown 1', response)
                     let cousubs = [];
                     county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
                     if (cousubs){
                         this.props.falcor.get(['geo',cousubs,['name']])
                             .then(response =>{
+                                console.log('cousub dropdown 2', response, cousubs)
                                 return response
                             })
                     }
@@ -248,7 +250,9 @@ class AvlFormsNewData extends React.Component{
     geoData(){
         let countyData = [];
         let cousubsData = [];
-        let graph = this.props.geoData
+        let graph = this.props.geoData;
+        let filterOn = this.state.county ? this.state.county : this.state.contact_county
+        console.log('geodata called',graph, this.state)
         if(graph){
             // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
@@ -259,13 +263,16 @@ class AvlFormsNewData extends React.Component{
                     })
                 }
             })
-
+            console.log('check this', filterOn, Object.keys(graph).filter(item =>filterOn && filterOn.includes(item.toString())))
             Object.keys(graph)
-                .filter(item => this.state.county && this.state.county.includes(item.toString()))
+                .filter(item => filterOn && filterOn.includes(item.toString()))
                 .forEach(item =>{
+                    console.log('cousubs loop', item,get(graph, `${item}.cousubs.value`, []))
+
                     get(graph, `${item}.cousubs.value`, [])
                         .filter(cousub => get(graph, `${cousub}.name`, null))
                         .forEach(cousub => {
+                            console.log('pushing for cousub', cousub)
                         cousubsData.push({
                             value : cousub,
                             name : get(graph, `${cousub}.name`, '')
@@ -273,6 +280,7 @@ class AvlFormsNewData extends React.Component{
                     })
             })
         }
+        console.log('geodata returning', cousubsData)
         return [countyData,cousubsData]
     }
     handleMultiSelectFilterChange(e, id, domain=[]) {
@@ -301,6 +309,7 @@ class AvlFormsNewData extends React.Component{
             }
         }
         if (!countyData.length || !meta_data.length) return null;
+        console.log('county and cousubs', cousubsData)
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
 

@@ -22,7 +22,7 @@ module.exports = [
                 label:'Jurisdiction',
                 prompt:'Choose the jurisdiction where the capability is located. Jurisdictions that occur are based on the County selected in question 1',
                 sub_type:'',
-                edit_type:'multiselect',
+                edit_type:'dropdown',
                 display_type:'text',
                 meta: 'true',
                 area:'true',
