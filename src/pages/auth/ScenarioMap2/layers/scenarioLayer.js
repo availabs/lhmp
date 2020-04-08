@@ -185,7 +185,7 @@ export class ScenarioLayer extends MapLayer{
                     }else{
                         if(this.activeScenarioId !== null){
                             let activeScenarioId = this.activeScenarioId.map(d => d.id)
-                            let activeRiskZoneId = this.activeRiskZoneId
+                            let activeRiskZoneId = this.activeRiskZoneId === '' && this.activeRiskZoneId !== null ? 1 : this.activeRiskZoneId
                             return falcorGraph.get(
                                 ['scenarios',activeScenarioId,'byRiskZones',activeRiskZoneId,'buildings',this.selection,'total_loss']
                             ).then(response =>{
@@ -239,6 +239,7 @@ export class ScenarioLayer extends MapLayer{
             },
             buildingRadius = {},
             buildingColors = {};
+
         if(graph){
             graph.forEach(item => {
                 if(parseFloat(item['hazard_loss_dollars']) > 0 && parseFloat(item['hazard_loss_dollars']) <= 15000){
@@ -292,6 +293,9 @@ export class ScenarioLayer extends MapLayer{
                     })
                 }
             })
+            localStorage.setItem("building_colors",JSON.stringify(buildingColors))
+            localStorage.setItem("building_radius",JSON.stringify(buildingRadius))
+            localStorage.setItem("buildings_geojson",JSON.stringify(geojson))
         }
         if(this.map.getSource('buildings') && this.map.getLayer("buildings-layer")) {
             this.map.getSource("buildings").setData(geojson)
