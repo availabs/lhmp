@@ -157,14 +157,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/capabilities/view/:capabilityId',
+        path: '/capabilitiesOld/view/:capabilityId',
         exact: true,
         name: 'Capabilities',
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Capabilities', path: '/capabilities/' },
-            { param: 'capabilityId', path: '/capabilities/view/' }
+            { name: 'Capabilities', path: '/capabilitiesOld/' },
+            { param: 'capabilityId', path: '/capabilitiesOld/view/' }
         ],
         menuSettings: {
             image: 'none',

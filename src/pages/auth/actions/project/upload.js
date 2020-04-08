@@ -207,13 +207,13 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/actions/project/upload/',
+        path: '/actionsOld/project/upload/',
         exact: true,
         name: 'ActionsUpload',
         auth: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Actions Upload', path: '/actions/project/' },
+            { name: 'Actions Upload', path: '/actionsOld/project/' },
         ],
         menuSettings: {
             image: 'none',

@@ -295,12 +295,13 @@ class RouteLayer extends MapLayer {
             }else{
                 this.features.splice(indexOfFeature, 1)
             }*/
-            /*this.map.getSource('execution-route-source').setData(
+            this.viewMode === 'multi' ? this.features.push(feature) : this.features = [feature]
+            this.map.getSource('execution-route-source').setData(
                 {
                     type: 'FeatureCollection',
                     features: this.features
                 }
-            );*/
+            );
 
         }
     }
@@ -343,10 +344,11 @@ class RouteLayer extends MapLayer {
                 break;
         }
         this.filters.userRoutes.value = null;
+        this.features = []
         this.map.getSource('execution-route-source').setData(
             {
                 type: 'FeatureCollection',
-                features: []
+                features: this.features
             }
         );
         // this.mapActions.modeToggle.disabled = false;

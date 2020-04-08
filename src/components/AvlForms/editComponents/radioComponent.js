@@ -12,7 +12,9 @@ class RadioComponent extends React.PureComponent{
             return (
                 <div className="col-sm-12">
                     <div className="form-group" style ={{display : this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ? 'block' :'none' }}>
-                        <label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                        <label htmlFor>{this.props.label}
+                            <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
+                        </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                         {
                             this.props.values.map((value,i) =>{
                                 return (

@@ -17,7 +17,10 @@ class DropDownComponent extends React.Component{
         if(this.props.area === 'true' && this.props.depend_on === undefined){ // for county and cousubs
             return (
                 <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                    <div className="form-group"><label htmlFor>{this.props.label}
+                    <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
+                    </label>
+                        <span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                         <select className="form-control justify-content-sm-end"
                                 id={this.props.title}
                                 onChange={this.props.handleChange}
@@ -25,7 +28,11 @@ class DropDownComponent extends React.Component{
                                 data-error = {this.props.data_error ? this.props.data_error : ""}
                                 required = {this.props.required ? this.props.required : ""}
                                 onClick={this.props.onClick}>
-                            <option className="form-control" key={0} value={'None'}>--No {this.props.label} Selected--</option>
+
+                                <option className="form-control" key={0} value={this.props.defaultValue || 'None'}>
+                                {this.props.defaultValue ? this.props.defaultValue : `--No ${this.props.label} Selected--`}
+                                </option>
+
                             {
                                 this.props.meta ?
                                     this.props.meta.map((item,i) =>{
@@ -35,7 +42,6 @@ class DropDownComponent extends React.Component{
                                     null
                             }
                         </select>
-                        <div className="help-block form-text with-errors form-control-feedback">{this.props.required}</div>
                     </div>
                     <br/>
                 </div>
@@ -44,9 +50,17 @@ class DropDownComponent extends React.Component{
             if(this.props.state[this.props.depend_on] !== 'None'){
                 return (
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
-                            <select className="form-control justify-content-sm-end" id={this.props.title} onChange={this.props.handleChange} value={this.props.state[this.props.title] || ''}>
-                                <option className="form-control" key={0} value={'None'}>--No {this.props.label} Selected--</option>
+                        <div className="form-group"><label htmlFor>{this.props.label}
+                            <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
+                        </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                            <select className="form-control justify-content-sm-end"
+                                    id={this.props.title}
+                                    onChange={this.props.handleChange}
+                                    required = {this.props.required ? this.props.required : ""}
+                                    value={this.props.state[this.props.title] || ''}>
+                                <option className="form-control" key={0} value={this.props.defaultValue || 'None'}>
+                                    {this.props.defaultValue ? this.props.defaultValue : `--No ${this.props.label} Selected--`}
+                                </option>
                                 {
                                     this.props.meta ?
                                         this.props.meta.map((item,i) =>{
@@ -73,9 +87,17 @@ class DropDownComponent extends React.Component{
                 let meta = _.uniqBy(this.props.meta,'type');
                 return(
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
-                            <select className="form-control justify-content-sm-end" id={this.props.title} onChange={this.props.handleChange} value={this.props.state[this.props.title] || ''}>
-                                <option className="form-control" key={0} value={''}>--No {this.props.label} Selected--</option>
+                        <div className="form-group"><label htmlFor>{this.props.label}
+                            <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
+                        </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                            <select className="form-control justify-content-sm-end"
+                                    id={this.props.title}
+                                    onChange={this.props.handleChange}
+                                    required = {this.props.required ? this.props.required : ""}
+                                    value={this.props.state[this.props.title] || ''}>
+                                <option className="form-control" key={0} value={this.props.defaultValue || 'None'}>
+                                    {this.props.defaultValue ? this.props.defaultValue : `--No ${this.props.label} Selected--`}
+                                </option>
                                 {
                                     meta.map((item,i) =>{
                                         if(item.category === this.props.state[this.props.depend_on]){
@@ -96,14 +118,19 @@ class DropDownComponent extends React.Component{
             let meta = _.uniqBy(this.props.meta,'category');
             return (
                 <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                    <div className="form-group"><label htmlFor>{this.props.label}
+                        <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
+                    </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                         <select className="form-control justify-content-sm-end"
                                 id={this.props.title} onChange={this.props.handleChange}
                                 value={this.props.state[this.props.title] || ''}
                                 required={this.props.required ? this.props.required : ""}
                                 disabled = {this.props.disable_condition !== '' && this.props.disable_condition ? this.props.state[this.props.disable_condition.attribute] !== this.props.disable_condition.check : null}
                         >
-                            <option className="form-control" key={0} value='None'>--No {this.props.label} Selected--</option>
+                            <option className="form-control" key={0} value={this.props.defaultValue || 'None'}>
+                                {this.props.defaultValue ? this.props.defaultValue : `--No ${this.props.label} Selected--`}
+                            </option>
+
                             {this.props.title === 'name_of_associated_hazard_mitigation_plan' ?
                                 <option className="form-control" key={1} value={' '}>Add new plan</option>
                                 :
@@ -120,7 +147,6 @@ class DropDownComponent extends React.Component{
                                 })
                             }
                         </select>
-                        <div className="help-block form-text with-errors form-control-feedback">{this.props.required}</div>
                     </div>
                     <br/>
                 </div>

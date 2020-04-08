@@ -1,7 +1,6 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-        list_attributes:['capability_category','capability_type','capability_name'], // to list the attributes on the main page
         sub_type:'',
         // if wizard
         sections: [],
@@ -11,11 +10,13 @@ module.exports = [
                 prompt:'Choose the county the capability is located from the list of all counties.',
                 sub_type:'',
                 edit_type:'dropdown',
+                defaultValue: ['Countywide'],
                 display_type:'text',
                 area:'true',
                 meta: 'true',
                 //hidden:'false',
-                section: ''
+                section: '',
+                //field_required:"required",
             },
             municipality:{
                 label:'Jurisdiction',
@@ -37,7 +38,9 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 hidden:'false',
-                section: ''
+                section: '',
+                list_attribute: 'true',
+                example:'Demo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo Example',
             },
             capability_type :{
                 label:'Capability type',
@@ -48,7 +51,8 @@ module.exports = [
                 meta:'true',
                 depend_on : 'capability_category',
                 hidden:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
             capability_name:{
                 label:'Capability Name',
@@ -63,7 +67,8 @@ module.exports = [
                 show:'true',
                 meta:'false',
                 hidden:'false',
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
             regulatory_name:{
                 label:'Regulatory Name',
@@ -98,9 +103,29 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
-            jurisdiction_utilization:{
-                label:'Jurisdiction Utilization',
+            capability_description:{
+                label:'Capability Description',
+                prompt:'Describe this capability',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:''
+            },
+              jurisdiction_utilization:{
+                label:'How is this Capability utilized in Mitigation Work? How does it contribute to Mitigation?',
                 prompt:'Describe how or in what ways your jurisdiction is currently utilizing the capability. If it is an asset, describe in what capacity the asset is being used. If it is planning or regulatory based, describe the role it plays in your jurisdictional decision making. If it is educational, describe the method of outreach. If it is financial, for example; grants, local funds, state funds, tax agreements, etc. describe the distribution of the funds and their impacts on your jurisdiction. If it is administrative or technical, describe assistance offered to jurisdiction.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:''
+            },  
+            mitigation_contribution:{
+                label:'What capacity does Mitigation planning provide this Capability?',
+                prompt:'Describe how mitigation planning supports and contributes to building maintaining or enhancing capacity for this capability',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',

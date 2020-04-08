@@ -106,6 +106,8 @@ const Styles = styled.div`
     }
   }
 `;
+
+const actionBtnStyle = {width:'80px'}
 const headerProps = (props, {column}) => getStyles(props, column.align);
 
 const cellProps = (props, {cell}) => getStyles(props, cell.column.align);
@@ -150,7 +152,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
 
-function Table({columns, data, tableClass, height, width}) {
+function Table({columns, data, tableClass, height, width, actions}) {
     /*  const defaultColumn = React.useMemo(
         () => ({
           // When using the useFlexLayout:
@@ -255,6 +257,10 @@ function Table({columns, data, tableClass, height, width}) {
 
                             </div>
                         ))}
+                        {actions ?
+                            Object.keys(actions)
+                                .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle} className="th"></div>) : null
+                        }
                     </div>
                 ))}
             </div>
@@ -287,6 +293,28 @@ function Table({columns, data, tableClass, height, width}) {
                                     </div>
                                 )
                             })}
+                            {actions ?
+                                Object.keys(actions)
+                                    .map(action => {
+                                            return (
+                                                <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle} className="td">
+                                                    {
+                                                        typeof row.original[action] === 'string' ?
+                                                            <Link
+                                                                className={action === 'delete' ?
+                                                                    'btn btn-sm btn-outline-danger' :
+                                                                    "btn btn-sm btn-outline-primary"}
+                                                                style={{textTransform: 'capitalize'}}
+                                                                to={row.original[action]}>
+                                                                {action}
+                                                            </Link>
+                                                            :
+                                                            row.original[action]
+                                                    }
+                                                </div>)
+                                        }
+                                    )
+                                : null}
                         </div>
                     )
                 })}
@@ -296,10 +324,10 @@ function Table({columns, data, tableClass, height, width}) {
 }
 
 
-function StyledTable({columns: columns, data: data, height, width}) {
+function StyledTable({columns: columns, data: data, height, width, actions}) {
     return (
         <Styles>
-            <Table columns={columns} data={data} height={height} width={width}/>
+            <Table columns={columns} data={data} height={height} width={width} actions={actions}/>
         </Styles>
     )
 }

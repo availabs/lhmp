@@ -19,7 +19,17 @@ module.exports = [
                 prompt:'',
                 edit_type:'text',
                 display_type:'text',
-                section:''
+                section:'',
+                list_attribute: 'true'
+            },
+            sub_type:{
+                label:'Sub type',
+                prompt:'',
+                //edit_type:'integer',
+                display_type:'text',
+                hidden:'true', // if you don`t want to show it in view data
+                section:'',
+                list_attribute: 'true'
             },
             owner_type:{
                 sub_type:'meeting',

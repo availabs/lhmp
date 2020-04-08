@@ -5,6 +5,8 @@ import {connect} from "react-redux";
 import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get";
 import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
+import styled from "styled-components";
+import {falcorGraph} from "../../../store/falcorGraph";
 
 var _ = require("lodash");
 
@@ -16,7 +18,9 @@ const counties = [
     "36015","36121","36061","36021","36013","36033","36017", "36067","36035","36087","36051","36025",
     "36071","36093","36005"
 ];
-
+const DIV = styled.div`
+${props => props.theme.panelDropdownScrollBar};
+`;
 
 class AvlFormsNewData extends React.Component{
     constructor(props){
@@ -53,7 +57,6 @@ class AvlFormsNewData extends React.Component{
     }
 
     handleChange(e){
-        console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
 
@@ -93,6 +96,11 @@ class AvlFormsNewData extends React.Component{
         }
 
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (!_.isEqual(prevState.county, this.state.county) || !_.isEqual(prevState.contact_county, this.state.contact_county)){
+            this.cousubDropDown({target:{value:this.state.county ? this.state.county : this.state.contact_county}})
+        }
+    }
 
     displayPrompt(id){
         return (
@@ -104,11 +112,19 @@ class AvlFormsNewData extends React.Component{
                         }
                         style={{'float': 'right'}}> ?
                 </button>
-                <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-sm show" role="dialog"
+                <div aria-labelledby="mySmallModalLabel"
+                     className="onboarding-modal modal fade animated show" role="dialog"
                      id={`closeMe`+id}
-                     tabIndex="1" style={{'display': 'none'}} aria-hidden="true">
-                    <div className="modal-dialog modal-sm" style={{'float': 'right'}}>
-                        <div className="modal-content">
+                     tabIndex="0"
+                     style={{display: 'none', margin: '0vh 0vw'}}
+                     onClick={(e) => {
+                         if (e.target.id === `closeMe`+id){
+                             e.target.closest(`#closeMe`+id).style.display = 'none'
+                         }
+                     }}
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-centered modal-bg" style={{width: '100%', height: '50%', padding: '5vh 5vw'}}>
+                        <DIV className="modal-content text-center" style={{width: '100%', height: '100%', overflow: 'auto'}}>
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
@@ -116,13 +132,27 @@ class AvlFormsNewData extends React.Component{
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
                                     return (<div>{item.attributes[id].prompt}</div>)
                                 })}
                             </div>
 
-                        </div>
+                            {
+                                this.props.config.map(item =>{
+                                return item.attributes[id].example ?
+                                    <React.Fragment>
+                                        <div className="modal-header"><h6 className="modal-title">Example</h6></div>
+                                        <div className="modal-body" style={{textAlign: 'justify'}}>
+                                            {this.props.config.map(item =>{
+                                                return (<div>{item.attributes[id].example}</div>)
+                                            })}
+                                        </div>
+                                    </React.Fragment> : null
+                                })
+                            }
+
+                        </DIV>
                     </div>
                 </div>
             </div>
@@ -198,14 +228,19 @@ class AvlFormsNewData extends React.Component{
 
     cousubDropDown(event){
         let county = event.target.value;
-        if(county !== 'None'){
+        if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    let cousubs = response.json.geo[county].cousubs;
-                    this.props.falcor.get(['geo',cousubs,['name']])
-                        .then(response =>{
-                            return response
-                        })
+                    console.log('cousub dropdown 1', response)
+                    let cousubs = [];
+                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
+                    if (cousubs){
+                        this.props.falcor.get(['geo',cousubs,['name']])
+                            .then(response =>{
+                                console.log('cousub dropdown 2', response, cousubs)
+                                return response
+                            })
+                    }
                 })
         }else{
             return null
@@ -215,8 +250,11 @@ class AvlFormsNewData extends React.Component{
     geoData(){
         let countyData = [];
         let cousubsData = [];
-        if(this.props.geoData){
-            let graph = this.props.geoData;
+        let graph = this.props.geoData;
+        let filterOn = this.state.county ? this.state.county : this.state.contact_county
+        console.log('geodata called',graph, this.state)
+        if(graph){
+            // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
                 if(item.length === 5){
                     countyData.push({
@@ -224,15 +262,38 @@ class AvlFormsNewData extends React.Component{
                         name: graph[item].name
                     })
                 }
-                if(item.length > 5){
-                    cousubsData.push({
-                        value : item,
-                        name : graph[item].name
+            })
+            console.log('check this', filterOn, Object.keys(graph).filter(item =>filterOn && filterOn.includes(item.toString())))
+            Object.keys(graph)
+                .filter(item => filterOn && filterOn.includes(item.toString()))
+                .forEach(item =>{
+                    console.log('cousubs loop', item,get(graph, `${item}.cousubs.value`, []))
+
+                    get(graph, `${item}.cousubs.value`, [])
+                        .filter(cousub => get(graph, `${cousub}.name`, null))
+                        .forEach(cousub => {
+                            console.log('pushing for cousub', cousub)
+                        cousubsData.push({
+                            value : cousub,
+                            name : get(graph, `${cousub}.name`, '')
+                        })
                     })
-                }
             })
         }
+        console.log('geodata returning', cousubsData)
         return [countyData,cousubsData]
+    }
+    handleMultiSelectFilterChange(e, id, domain=[]) {
+
+        let tmpObj = {};
+        if (e.includes('Select All') && domain.length > 0){
+            tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
+        }else if (e.includes('Select None')){
+            tmpObj[id] = [];
+        }else{
+            tmpObj[id] = [...e];
+        }
+        this.setState(tmpObj);
     }
 
     implementData(){
@@ -246,62 +307,72 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type]){
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
             }
-
         }
+        if (!countyData.length || !meta_data.length) return null;
+        console.log('county and cousubs', cousubsData)
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
+
                 if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
-                    item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined
-                    && item.attributes[attribute].hidden ==='false'
+                    item.attributes[attribute].meta === 'true' && item.attributes[attribute].depend_on === undefined
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
                         data_error : item.attributes[attribute].data_error,
                         required: item.attributes[attribute].field_required,
-                        type:item.attributes[attribute].edit_type,
-                        meta : countyData,
+                        type: 'multiselect',//item.attributes[attribute].edit_type,
+                        meta : countyData || [],
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
-                        onClick : this.cousubDropDown.bind(this)
+                        onClick : this.cousubDropDown.bind(this),
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }else if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].depend_on &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
                     item.attributes[attribute].meta === 'true'
-                    && item.attributes[attribute].hidden ==='false'){
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
-                        type:item.attributes[attribute].edit_type,
+                        required: item.attributes[attribute].field_required,
+                        type: 'multiselect',//item.attributes[attribute].edit_type,
                         depend_on : item.attributes[attribute].depend_on,
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
-                        meta : cousubsData,
+                        meta : cousubsData || [],
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
-                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' &&
+                    item.attributes[attribute].meta === 'true'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
-                        type: item.attributes[attribute].edit_type,
+                        type: 'multiselect', //item.attributes[attribute].edit_type,
                         required: item.attributes[attribute].field_required,
                         meta: meta_data,
                         prompt: this.displayPrompt.bind(this),
-                        depend_on : item.attributes[attribute].depend_on
+                        depend_on : item.attributes[attribute].depend_on,
+                        defaultValue: item.attributes[attribute].defaultValue
 
                     })
                 }else if(item.attributes[attribute].edit_type === 'radio'
-                    && item.attributes[attribute].hidden ==='false'
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -309,13 +380,15 @@ class AvlFormsNewData extends React.Component{
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        required: item.attributes[attribute].field_required,
                         type:item.attributes[attribute].edit_type,
                         prompt: this.displayPrompt.bind(this),
-                        values:item.attributes[attribute].edit_type_values
+                        values:item.attributes[attribute].edit_type_values,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
                 else if(
-                    item.attributes[attribute].hidden ==='false' || item.attributes[attribute].hidden === undefined
+                    ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -326,7 +399,8 @@ class AvlFormsNewData extends React.Component{
                         data_error : item.attributes[attribute].data_error,
                         required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
-                        type:item.attributes[attribute].edit_type
+                        type:item.attributes[attribute].edit_type,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
 
@@ -350,8 +424,8 @@ class AvlFormsNewData extends React.Component{
 
 
     render(){
-        console.log('in render state',this.state)
         let test = this.implementData();
+        if (!test) return null
         let data = [];
         test.forEach((d,i) =>{
                 data.push(d)
@@ -400,7 +474,6 @@ class AvlFormsNewData extends React.Component{
 }
 
 const mapStateToProps = (state,ownProps) => {
-    //console.log('state',state.user.email)
     return {
         userEmail:state.user.email,
         activePlan: state.user.activePlan,

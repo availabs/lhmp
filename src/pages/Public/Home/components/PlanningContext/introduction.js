@@ -105,7 +105,7 @@ considered.`,
             let highlight =   i === 1;
             return (
                
-                    <Feature className={`col-sm-4`} highlight={highlight} key={i}>
+                    <Feature className={`col-sm-4`} highlight={highlight} key={i} onClick={() => window.location.href = sect.link}>
                         <FeatureHeader highlight={highlight}>
                           <FeatureImage>
                             <img alt={'Heading Image'} src={sect.image} />
