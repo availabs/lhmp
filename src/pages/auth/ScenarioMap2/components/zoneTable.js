@@ -6,7 +6,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
-import { setActiveRiskZoneId } from 'store/modules/scenario'
+
 import * as d3 from "d3";
 import ZoneModalData from "./zoneModalData";
 
@@ -89,7 +89,7 @@ class ZoneTable extends React.Component {
                     zone_geoid.push(item.geoid)
                     zone_id.push(item.zone_id)
                 }
-                if(item.geoid === null && item.geom){
+                if(item.geom){
                     new_zones.push({
                         zone_id:item.zone_id,
                         geoid: item.geoid,
@@ -98,6 +98,7 @@ class ZoneTable extends React.Component {
                     })
                 }
             });
+
             if(this.props.activeScenarioId){
                this.props.activeScenarioId.forEach(item =>{
                     if(scenario_id.length === 0){
@@ -106,6 +107,7 @@ class ZoneTable extends React.Component {
 
                 })
             }
+
             return this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byId',zone_id,'byGeoid',zone_geoid,'sum',['num_buildings','replacement_value']])
                 .then(response =>{
                     graph_zones = response.json.zones.byPlanId[this.props.activePlan].byId
@@ -125,14 +127,19 @@ class ZoneTable extends React.Component {
                         })
                         if(new_zones.length > 0){
                             new_zones.forEach((zone,i) =>{
-                                    this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'buildings','sum',['count','replacement_value']])
-                                        .then(response =>{
-                                            return response
-                                        })
-                                    this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'byRiskScenario',scenario_id,'byRiskZone','all'])
-                                        .then(response =>{
-                                            return response
-                                        })
+                                this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'buildings','sum',['count','replacement_value']])
+                                    .then(response =>{
+                                        return response
+                                    }).catch(function(err){
+                                    console.error(err); // This will print any error that was thrown in the previous error handler.
+                                });
+                                this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'byRiskScenario',scenario_id,'byRiskZone','all'])
+                                    .then(response =>{
+                                        //console.log('response',response)
+                                        return response
+                                    }).catch(function(err){
+                                    console.error(err); // This will print any error that was thrown in the previous error handler.
+                                });
                                 //}
 
                             })
@@ -343,7 +350,7 @@ class ZoneTable extends React.Component {
 const mapStateToProps = state => (
     {
         activePlan : state.user.activePlan,
-        activeScenarioId:state.scenario.activeRiskZoneId,
+        activeScenarioId:state.scenario.activeRiskScenarioId,
         offRiskZoneId:state.scenario.offRiskZoneId,
         activeGeoid:state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
@@ -351,12 +358,12 @@ const mapStateToProps = state => (
         zonesData : get(state.graph,['zones','byPlanId']),
         scenarioByZonesData : get(state.graph,['building','byGeoid',`${state.user.activeGeoid}`]),
         newZonesData : get(state.graph,['zones','byPlanId',`${state.user.activePlan}`,'byName']),
-        riskZoneId: state.scenario.activeRiskZoneId
+        riskZoneId: state.scenario.activeRiskScenarioId
     });
 
 const mapDispatchToProps = {
     sendSystemMessage,
-    setActiveRiskZoneId,
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ZoneTable))
