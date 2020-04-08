@@ -1,28 +1,25 @@
 import React from 'react';
 import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
-import ProjectConfig from 'pages/auth/actions/actions_project_forms/config.js'
+import ProjectConfig from './config'
 
 const ActionsFormsIndex = () => (
     <AvlFormsListTable
-    json = {ProjectConfig}
-    createButtons = {true}
-    editButton = {true}
-    viewButton = {true}
-    deleteButton = {true}
+        json = {ProjectConfig}
+        createButtons = {true}
+        editButton = {true}
+        viewButton = {true}
+        deleteButton = {true}
     />
 )
 
 export default [
     {
-        path: '/actions/',
-        name: 'Actions',
+        path: '/action_status_update/',
+        name: 'Actions Status Update',
         auth: true,
         exact: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-pencil-2',
-        breadcrumbs: [
-            { name: 'Actions', path: '/actions/' }
-        ],
         menuSettings: {
             image: 'none',
             scheme: 'color-scheme-light',
