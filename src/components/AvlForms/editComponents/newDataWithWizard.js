@@ -104,6 +104,12 @@ class AvlFormsNewDataWizard extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (!_.isEqual(prevState.county, this.state.county)){
+            this.cousubDropDown({target:{value:this.state.county}})
+        }
+    }
+
     onSubmit(e){
         e.preventDefault();
         let args = [];
@@ -158,14 +164,17 @@ class AvlFormsNewDataWizard extends React.Component{
 
     cousubDropDown(event){
         let county = event.target.value;
-        if(county !== 'None'){
+        if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    let cousubs = response.json.geo[county].cousubs;
-                    this.props.falcor.get(['geo',cousubs,['name']])
-                        .then(response =>{
-                            return response
-                        })
+                    let cousubs = [];
+                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
+                    if (cousubs){
+                        this.props.falcor.get(['geo',cousubs,['name']])
+                            .then(response =>{
+                                return response
+                            })
+                    }
                 })
         }else{
             return null
@@ -175,8 +184,9 @@ class AvlFormsNewDataWizard extends React.Component{
     geoData(){
         let countyData = [];
         let cousubsData = [];
-        if(this.props.geoData){
-            let graph = this.props.geoData;
+        let graph = this.props.geoData
+        if(graph){
+            // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
                 if(item.length === 5){
                     countyData.push({
@@ -184,17 +194,35 @@ class AvlFormsNewDataWizard extends React.Component{
                         name: graph[item].name
                     })
                 }
-                if(item.length > 5){
-                    cousubsData.push({
-                        value : item,
-                        name : graph[item].name
-                    })
-                }
             })
+
+            Object.keys(graph)
+                .filter(item => this.state.county && this.state.county.includes(item.toString()))
+                .forEach(item =>{
+                    get(graph, `${item}.cousubs.value`, [])
+                        .filter(cousub => get(graph, `${cousub}.name`, null))
+                        .forEach(cousub => {
+                            cousubsData.push({
+                                value : cousub,
+                                name : get(graph, `${cousub}.name`, '')
+                            })
+                        })
+                })
         }
         return [countyData,cousubsData]
     }
+    handleMultiSelectFilterChange(e, id, domain=[]) {
 
+        let tmpObj = {};
+        if (e.includes('Select All') && domain.length > 0){
+            tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
+        }else if (e.includes('Select None')){
+            tmpObj[id] = [];
+        }else{
+            tmpObj[id] = [...e];
+        }
+        this.setState(tmpObj);
+    }
     displayPrompt(id){
         return (
             <div>
@@ -260,16 +288,17 @@ class AvlFormsNewDataWizard extends React.Component{
         if(this.props.meta_data){
             this.props.config.forEach(item => {
                 Object.keys(item.attributes).forEach(attribute => {
-                    if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined){
+                    if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta === 'true' && item.attributes[attribute].depend_on === undefined){
                         data.push({
                             section_id : item.attributes[attribute].section,
                             label: item.attributes[attribute].label,
                             formType : this.props.config.map(d => d.type),
-                            handleChange : this.handleChange,
+                            //handleChange : this.handleChange,
+                            handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
                             required: item.attributes[attribute].field_required,
-                            type:item.attributes[attribute].edit_type,
+                            type: 'multiselect',//item.attributes[attribute].edit_type,
                             meta : countyData,
                             area:item.attributes[attribute].area,
                             prompt: this.displayPrompt.bind(this),
@@ -281,18 +310,20 @@ class AvlFormsNewDataWizard extends React.Component{
                             section_id : item.attributes[attribute].section,
                             label: item.attributes[attribute].label,
                             formType : this.props.config.map(d => d.type),
-                            handleChange : this.handleChange,
+                            //handleChange : this.handleChange,
+                            handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
                             required: item.attributes[attribute].field_required,
-                            type:item.attributes[attribute].edit_type,
+                            type: 'multiselect',//item.attributes[attribute].edit_type,
                             depend_on : item.attributes[attribute].depend_on,
                             area:item.attributes[attribute].area,
                             prompt: this.displayPrompt.bind(this),
                             meta : cousubsData,
                             defaultValue: item.attributes[attribute].defaultValue
                         })
-                    }else if(!item.attributes[attribute].area && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta === 'true' && item.attributes[attribute].meta_filter){
+                    }else if(!item.attributes[attribute].area && item.attributes[attribute].edit_type === 'dropdown' &&
+                        item.attributes[attribute].meta === 'true' && item.attributes[attribute].meta_filter){
                         let graph = this.props.meta_data;
 
                         if(graph && item.attributes[attribute]){
@@ -304,39 +335,21 @@ class AvlFormsNewDataWizard extends React.Component{
 
                         }
 
-                        if(item.attributes[attribute].depend_on === undefined){
-                            data.push({
-                                section_id : item.attributes[attribute].section,
-                                label: item.attributes[attribute].label,
-                                formType : this.props.config.map(d => d.type),
-                                handleChange : this.handleChange,
-                                state : this.state,
-                                title : attribute,
-                                required: item.attributes[attribute].field_required,
-                                type:item.attributes[attribute].edit_type,
-                                disable_condition:item.attributes[attribute].disable_condition,
-                                prompt: this.displayPrompt.bind(this),
-                                meta : filter_data ? filter_data : [],
-                                defaultValue: item.attributes[attribute].defaultValue
-
-                            })
-                        }else{
-                            data.push({
-                                section_id : item.attributes[attribute].section,
-                                label: item.attributes[attribute].label,
-                                formType : this.props.config.map(d => d.type),
-                                handleChange : this.handleChange,
-                                state : this.state,
-                                title : attribute,
-                                required: item.attributes[attribute].field_required,
-                                type:item.attributes[attribute].edit_type,
-                                disable_condition:item.attributes[attribute].disable_condition,
-                                depend_on:item.attributes[attribute].depend_on,
-                                prompt: this.displayPrompt.bind(this),
-                                meta : filter_data ? filter_data : [],
-                                defaultValue: item.attributes[attribute].defaultValue
-                            })
-                        }
+                        data.push({
+                            section_id : item.attributes[attribute].section,
+                            label: item.attributes[attribute].label,
+                            formType : this.props.config.map(d => d.type),
+                            handleChange : this.handleChange,
+                            state : this.state,
+                            title : attribute,
+                            required: item.attributes[attribute].field_required,
+                            type:item.attributes[attribute].edit_type,
+                            disable_condition:item.attributes[attribute].disable_condition,
+                            depend_on:item.attributes[attribute].depend_on,
+                            prompt: this.displayPrompt.bind(this),
+                            meta : filter_data ? filter_data : [],
+                            defaultValue: item.attributes[attribute].defaultValue,
+                        })
 
                     }
                     else if(item.attributes[attribute].edit_type === 'radio') {

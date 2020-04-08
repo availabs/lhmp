@@ -6,6 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get";
 import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
 import styled from "styled-components";
+import {falcorGraph} from "../../../store/falcorGraph";
 
 var _ = require("lodash");
 
@@ -94,6 +95,11 @@ class AvlFormsNewData extends React.Component{
             }
         }
 
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (!_.isEqual(prevState.county, this.state.county)){
+            this.cousubDropDown({target:{value:this.state.county}})
+        }
     }
 
     displayPrompt(id){
@@ -222,14 +228,17 @@ class AvlFormsNewData extends React.Component{
 
     cousubDropDown(event){
         let county = event.target.value;
-        if(county !== 'None'){
+        if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    let cousubs = response.json.geo[county].cousubs;
-                    this.props.falcor.get(['geo',cousubs,['name']])
-                        .then(response =>{
-                            return response
-                        })
+                    let cousubs = [];
+                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
+                    if (cousubs){
+                        this.props.falcor.get(['geo',cousubs,['name']])
+                            .then(response =>{
+                                return response
+                            })
+                    }
                 })
         }else{
             return null
@@ -239,8 +248,9 @@ class AvlFormsNewData extends React.Component{
     geoData(){
         let countyData = [];
         let cousubsData = [];
-        if(this.props.geoData){
-            let graph = this.props.geoData;
+        let graph = this.props.geoData
+        if(graph){
+            // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
                 if(item.length === 5){
                     countyData.push({
@@ -248,15 +258,34 @@ class AvlFormsNewData extends React.Component{
                         name: graph[item].name
                     })
                 }
-                if(item.length > 5){
-                    cousubsData.push({
-                        value : item,
-                        name : graph[item].name
+            })
+
+            Object.keys(graph)
+                .filter(item => this.state.county && this.state.county.includes(item.toString()))
+                .forEach(item =>{
+                    get(graph, `${item}.cousubs.value`, [])
+                        .filter(cousub => get(graph, `${cousub}.name`, null))
+                        .forEach(cousub => {
+                        cousubsData.push({
+                            value : cousub,
+                            name : get(graph, `${cousub}.name`, '')
+                        })
                     })
-                }
             })
         }
         return [countyData,cousubsData]
+    }
+    handleMultiSelectFilterChange(e, id, domain=[]) {
+
+        let tmpObj = {};
+        if (e.includes('Select All') && domain.length > 0){
+            tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
+        }else if (e.includes('Select None')){
+            tmpObj[id] = [];
+        }else{
+            tmpObj[id] = [...e];
+        }
+        this.setState(tmpObj);
     }
 
     implementData(){
@@ -265,32 +294,32 @@ class AvlFormsNewData extends React.Component{
         let cousubsData = this.geoData()[1];
         let meta_data = [];
         let form_type = this.props.config.map(d => d.type)[0];
-        if (!cousubsData.length || !cousubsData.length) return null;
         if(this.props.meta_data) {
             let graph = this.props.meta_data;
             if(graph[form_type]){
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
             }
-
         }
+        if (!countyData.length || !meta_data.length) return null;
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
 
                 if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
-                    item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined
+                    item.attributes[attribute].meta === 'true' && item.attributes[attribute].depend_on === undefined
                     && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
                         data_error : item.attributes[attribute].data_error,
                         required: item.attributes[attribute].field_required,
-                        type:item.attributes[attribute].edit_type,
-                        meta : countyData,
+                        type: 'multiselect',//item.attributes[attribute].edit_type,
+                        meta : countyData || [],
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         onClick : this.cousubDropDown.bind(this),
@@ -304,25 +333,28 @@ class AvlFormsNewData extends React.Component{
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
                         required: item.attributes[attribute].field_required,
-                        type:item.attributes[attribute].edit_type,
+                        type: 'multiselect',//item.attributes[attribute].edit_type,
                         depend_on : item.attributes[attribute].depend_on,
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
-                        meta : cousubsData,
+                        meta : cousubsData || [],
                         defaultValue: item.attributes[attribute].defaultValue
                     })
-                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' &&
+                    item.attributes[attribute].meta === 'true'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
-                        type: item.attributes[attribute].edit_type,
+                        type: 'multiselect', //item.attributes[attribute].edit_type,
                         required: item.attributes[attribute].field_required,
                         meta: meta_data,
                         prompt: this.displayPrompt.bind(this),
