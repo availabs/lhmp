@@ -15,18 +15,12 @@ import RiskMap from './pages/riskmap'
 import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import EvacuationRoutes from 'pages/auth/EvacuationRoutes/'
 import Home from 'pages/auth/Home';
+
+// -- Actions
 import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
 import ActionsWorksheetFormNew from 'pages/auth/actions/new'
-/*
-import ActionsIndex from 'pages/auth/actions'
-import ActionsView from 'pages/auth/actions/worksheet/view'
-import ActionsProjectView from 'pages/auth/actions/project/view'
-import ActionWorksheet from 'pages/auth/actions/worksheet/new'
-import ActionsProjectIndex from 'pages/auth/actions/project'
-import ActionsProjectUpload from 'pages/auth/actions/project/upload'
-import ActionProject from 'pages/auth/actions/project/new'
- */
+import ActionsStatusUpdateForms from 'pages/auth/actions/actions_statusupdate_forms'
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
@@ -39,12 +33,11 @@ import PlanHazards from 'pages/auth/Plan/hazards' // admin plan page - submenu
 import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
 import AdminLandingPage from 'pages/auth/Plan/LandingPage'
 
-import PlanningTools from 'pages/auth/PlanningTools/'
+
 import PlanningToolsRoles from 'pages/auth/Roles/index'
 import PlanningToolsParticipation from 'pages/auth/Participation/index'
 import PlanningToolsCapabilities from 'pages/auth/Capabilities/index'
 import PlanningToolsAssets from 'pages/auth/Assets/index'
-import PlanningToolsActions from 'pages/auth/actions/index'
 import Guidance from 'pages/auth/Plan/Guidance'
 
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
@@ -90,15 +83,8 @@ const routes = [
    ...ActionsFormIndex,
    ...ActionsFormView,
    ...ActionsWorksheetFormNew,
-   /*
-   ...ActionWorksheet,
-   ...ActionsIndex,
-   ...ActionsView,
-   ...ActionsProjectView,
-   ...ActionProject,
-   ...ActionsProjectIndex,
-   ...ActionsProjectUpload,
-    */
+   ...ActionsStatusUpdateForms,
+   
    ...Plans,
    ...Plan,
    ...AdminAbout,
@@ -107,12 +93,11 @@ const routes = [
    ...AdminStrategies,
     ...AdminLandingPage,
    ...PlanPage,
-   //...PlanningTools,
+
    ...PlanningToolsRoles,
    ...PlanningToolsParticipation,
    ...PlanningToolsCapabilities,
    ...PlanningToolsAssets,
-   ...PlanningToolsActions,
    ...Guidance,
    ...AssetsSearch,
    ...AssetsView,
