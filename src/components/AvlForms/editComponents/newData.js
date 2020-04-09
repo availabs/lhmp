@@ -227,11 +227,11 @@ class AvlFormsNewData extends React.Component{
     }
 
     cousubDropDown(event){
-        let county = event.target.value;
+        let county = typeof event.target.value === "object" ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    console.log('cousub dropdown 1', response)
+                    console.log('cousub dropdown 1', response, county)
                     let cousubs = [];
                     county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
                     if (cousubs){
