@@ -36,7 +36,7 @@ module.exports = [
                 sub_type:'project',
                 prompt:'Select the current status of the project: discontinued, completed, in-progress, unchanged, proposed.',
                 edit_type:'dropdown_no_meta',
-                edit_type_values : ['discontinued','Completed','In-progress','unchanged','Proposed'],
+                edit_type_values : ['Discontinued','Completed','In-progress','Unchanged','Proposed'],
                 // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
                 display_condition : '',
                 display_type:'text',
