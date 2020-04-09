@@ -136,7 +136,7 @@ class ZoneControl extends React.Component{
                             zone_id : zone_id.id,
                             geoid : zone_id.geoid,
                             geom: zone_id.geom && zone_id.geom.geometry ? JSON.stringify(get(zone_id, `geom.geometry`, [])): zone_id.geom,
-                            name: zone_id.name
+                            name: zone_id.name ? zone_id.name : zonesByGeoid[zone_id.id].name.value
                         })
                     }
                 })
