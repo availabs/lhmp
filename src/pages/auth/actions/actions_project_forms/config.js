@@ -7,7 +7,6 @@ module.exports = [
         sections: [
             {title:'Step 1',sub_title:'Point of Contact',id:'1'},
             {title:'Step 2',sub_title:'General Information',id:'2'},
-            {title:'Step 3',sub_title:'Status',id:'3'},
             {title:'Step 4',sub_title:'Location',id:'4'},
             {title:'Step 5',sub_title:'Budget and Funding',id:'5'},
             {title:'Step 6',sub_title:'BCA and Useful Life',id:'6'},

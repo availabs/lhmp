@@ -5,7 +5,7 @@ module.exports = [
         list_attributes:['action_name','action_type'], // to list the attributes on the main page
         // if wizard
         sections: [
-            {title:'Step 1',sub_title:'Point of Contact',id:'1'},
+            {title:'Step 1',sub_title:'Action Status Update Form',id:'1'},
             
         ],
         attributes: {
