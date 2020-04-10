@@ -15,7 +15,8 @@ module.exports = [
                 prompt:'Provide a name for the action. Be as concise and specific as possible.',
                 edit_type:'text',
                 display_type:'text',
-                meta:'false',
+                meta: 'true',
+                meta_filter:{filter_key:'actions',value:'action_number'},
                 section:'1',
                 list_attribute: 'true'
             },
