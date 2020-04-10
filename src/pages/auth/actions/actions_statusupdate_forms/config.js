@@ -5,7 +5,7 @@ module.exports = [
         list_attributes:['action_name','action_type'], // to list the attributes on the main page
         // if wizard
         sections: [
-            {title:'Step 1',sub_title:'Point of Contact',id:'1'},
+            {title:'Step 1',sub_title:'Action Status Update Form',id:'1'},
             
         ],
         attributes: {
@@ -36,7 +36,7 @@ module.exports = [
                 sub_type:'project',
                 prompt:'Select the current status of the project: discontinued, completed, in-progress, unchanged, proposed.',
                 edit_type:'dropdown_no_meta',
-                edit_type_values : ['discontinued','Completed','In-progress','unchanged','Proposed'],
+                edit_type_values : ['Discontinued','Completed','In-progress','Unchanged','Proposed'],
                 // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
                 display_condition : '',
                 display_type:'text',
