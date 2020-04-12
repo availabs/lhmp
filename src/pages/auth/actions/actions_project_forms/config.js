@@ -7,16 +7,14 @@ module.exports = [
         sections: [
             {title:'Step 1',sub_title:'Point of Contact',id:'1'},
             {title:'Step 2',sub_title:'General Information',id:'2'},
-            {title:'Step 3',sub_title:'Status',id:'3'},
-            {title:'Step 4',sub_title:'Location',id:'4'},
-            {title:'Step 5',sub_title:'Budget and Funding',id:'5'},
-            {title:'Step 6',sub_title:'BCA and Useful Life',id:'6'},
-            {title:'Step 7',sub_title:'Associated Goals/Capabilities',id:'7'},
-            {title:'Step 8',sub_title:'Alternatives',id:'8'},
-            {title:'Step 9',sub_title:'Prioritization',id:'9',visibility:{attribute:'new_or_update',check:['new'],hidden:'true'}}, // TODO visiility condition
-            {title:'Step 10',sub_title:'Supplemental Location Information',id:'10',visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 9'}}, // TODO this.state.new_or_update === 'new' ? 'Step 10' : 'Step 9'
-            {title:'Step 11',sub_title:'Other',id:'11',visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 10'}},
-            {title:'Step 12',sub_title:'Hazard Mitigation Plan Maintenance',id:'12',visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 11'}}
+            {title:'Step 3',sub_title:'Location',id:'3'},
+            {title:'Step 4',sub_title:'Budget and Funding',id:'4'},
+            {title:'Step 5',sub_title:'BCA and Useful Life',id:'5'},
+            {title:'Step 6',sub_title:'Associated Goals/Capabilities',id:'6'},
+            {title:'Step 7',sub_title:'Alternatives',id:'7'},
+            {title:'Step 8',sub_title:'Prioritization',id:'8'}, // TODO visiility condition visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 9'}
+            {title:'Step 9',sub_title:'Supplemental Location Information',id:'9'}, // TODO this.state.new_or_update === 'new' ? 'Step 10' : 'Step 9'
+            {title:'Step 10',sub_title:'Hazard Mitigation Plan Maintenance',id:'10'},
         ],
         attributes: {
             action_point_of_contact:{
@@ -27,6 +25,18 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 meta_filter:{filter_key:'roles',value:'contact_name'}, // if populating from another form type
+                section: '1',
+                field_required: 'required',
+                //defaultValue: ['Countywide'],
+                //example: 'Demo example.'
+
+            },
+            action_champion:{
+                label:'Action Champion',
+                sub_type:'project',
+                prompt:'Provide the name and/or office of the person who is most capable of implementing this action.',
+                edit_type:'text',
+                display_type:'text',
                 section: '1',
                 //defaultValue: ['Countywide'],
                 //example: 'Demo example.'
@@ -85,7 +95,7 @@ module.exports = [
             action_number:{
                 label:'Action Number',
                 sub_type:'project',
-                prompt:'',
+                prompt:'Provide county designated action number for this action',
                 edit_type:'number',
                 display_type:'text',
                 meta:'false',
@@ -153,77 +163,6 @@ module.exports = [
                 meta:'false',
                 section:'2'
             },
-            new_or_update:{
-                label:'New or Update',
-                sub_type:'project',
-                prompt:'Choose one. Select update if you are entering an action from a previous plan.' +
-                    ' Select new only if you are entering a new action during the hazard mitigation planning process.',
-                edit_type:'radio',
-                edit_type_values:['new','update'],
-                display_condition:'',
-                display_type:'text',
-                meta:'false',
-                section:'3'
-            },
-            status:{
-                label:'Update Status',
-                sub_type:'project',
-                prompt:'Select the current status of the project: discontinued, completed, in-progress, unchanged, proposed.',
-                edit_type:'dropdown_no_meta',
-                edit_type_values : ['discontinued','Completed','In-progress','unchanged','Proposed'],
-                disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
-                display_condition : '',
-                display_type:'text',
-                meta:'false',
-                section:'3'
-            },
-            status_justification:{
-                label:'Status Justification',
-                sub_type:'project',
-                prompt:'',
-                edit_type:'radio',
-                edit_type_values:['Lack of Funding','Funding Change','Env. / Hist. Preservation','Staffing','Public Support','Legal','Fixed or Otherwise Mitigated','Priority Change'],
-                disable_condition : '',
-                display_condition:{attribute:'status',check:['discontinued','unchanged']},
-                display_type:'text',
-                meta:'false',
-                section:'3'
-            },
-            plan_maintenance_update_evaluation_of_problem_solution:{
-                label:'Update Evaluation of the Problem and/or Solution',
-                sub_type:'project',
-                prompt:'Provide an updated description of the problem and solution, and what has' +
-                    ' happened since initial consideration/development.',
-                edit_type:'dropdown',
-                disable_condition:{attribute:'new_or_update',check:'update'},
-                display_type:'text',
-                meta_filter:{filter_key:'capabilities',value:'category'},
-                meta:'true',
-                section:'3'
-            },
-            phased_action:{ // TODO why is the state same as above and Status update radio is disabled
-                //disabled={this.state.new_or_update !== 'update'}
-                label:'Phased Action',
-                sub_type:'project',
-                prompt:'Will the action be implemented in phases? Types of phases include: planning, designing, and constructing..',
-                edit_type:'dropdown_no_meta',
-                edit_type_values:['Not a Phased Project','Phased_planning','Phased-Design','Phased-Construction'],
-                disable_condition:{attribute:'new_or_update',check:'update'},
-                display_type:'text',
-                meta:'true',
-                section:'3'
-            },
-            name_of_associated_hazard_mitigation_plan:{
-                label:'Name of Associated Hazard Mitigation Plan',
-                sub_type:'project',
-                prompt:'Provide the official name of the adopted hazard mitigation plan.',
-                edit_type:'dropdown',
-                disable_condition:'',
-                meta_filter:{filter_key:'capabilities',value:'category'},
-                display_type:'text',
-                meta:'true',
-                section:'3'
-            },
             action_county:{
                 label:' Action County',// which you would like to see on the form
                 sub_type:'project',
@@ -233,7 +172,8 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 area : 'true',
-                section: '4'
+                section: '3',
+                defaultValue: ['Countywide'],
             },
             action_jurisdiction:{
                 label:' Action Jurisdiction',// which you would like to see on the form
@@ -247,7 +187,8 @@ module.exports = [
                 meta: 'true',
                 depend_on:'action_county',
                 area : 'true',
-                section: '4'
+                section: '3',
+                defaultValue: ['Countywide'],
             },
             action_location:{
                 label:'Action Location',
@@ -257,7 +198,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:'4'
+                section:'3'
             },
             location_point:{
                 label:'Location Point',
@@ -266,7 +207,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:'4'
+                section:'3'
             },
             site_photographs:{
                 label:'Site Photographs (If applicable)',
@@ -276,7 +217,7 @@ module.exports = [
                 edit_type:'file',
                 display_type:'text',
                 meta:'false',
-                section:'4'
+                section:'3'
             },
             property_names_or_hist_dist:{
                 label:'List the property name(s) or historic district(s)',
@@ -285,7 +226,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:'4'
+                section:'3'
             },
             estimated_cost_range:{
                 label:'Estimated Cost Range',
@@ -296,7 +237,7 @@ module.exports = [
                 disable_condition:'',
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'4'
             },
             calculated_cost:{
                 label:'Calculated Cost',
@@ -305,7 +246,7 @@ module.exports = [
                 edit_type:'number',
                 display_type:'text',
                 meta:'true',
-                section:'5'
+                section:'4'
             },
             primary_or_potential_funding_sources_name:{
                 label:'Secured funding sources name',
@@ -316,7 +257,7 @@ module.exports = [
                 disable_condition:'',
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'4'
             },
             secondary_funding_source_name:{
                 label:'Potential funding sources name',
@@ -327,7 +268,7 @@ module.exports = [
                 disable_condition:'',
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'4'
             },
             funding_received_to_date:{
                 label:'Funding Received to Date',
@@ -336,7 +277,7 @@ module.exports = [
                 edit_type:'number',
                 display_type:'text',
                 meta:'true',
-                section:'5'
+                section:'4'
             },
             bca:{
                 label:'BCA and Useful life',
@@ -345,7 +286,7 @@ module.exports = [
                 edit_type:'file',
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             bca_to_bcr:{
                 label:'Does the BCA lead to BCR (Benefit Cost Ratio)?',
@@ -355,7 +296,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             bcr:{
                 label:'BCR Upload',
@@ -364,7 +305,7 @@ module.exports = [
                 edit_type:'file',
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             level_of_protection:{
                 label:'Level of Protection',
@@ -374,7 +315,7 @@ module.exports = [
                 display_type:'text',
                 display_condition:'',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             recurrence_interval:{
                 label:'Recurrence Interval',
@@ -384,7 +325,7 @@ module.exports = [
                 display_type:'text',
                // display_condition:'',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             useful_life:{
                 label:'Useful Life',
@@ -394,7 +335,7 @@ module.exports = [
                 display_type:'text',
                 display_condition:'',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             estimated_timeframe_for_action_implementation: {
                 label:'Estimated Timeframe for Action Implementation',
@@ -404,7 +345,7 @@ module.exports = [
                 display_type:'text',
                 display_condition:'',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             exact_timeframe_for_action_implementation: {
                 label:'Exact Timeframe for Action Implementation',
@@ -415,7 +356,7 @@ module.exports = [
                 display_type:'text',
                 display_condition:'',
                 meta:'false',
-                section:'6'
+                section:'5'
             },
             associated_mitigation_capability: {
                 label:'Associated Mitigation Capability Category',
@@ -427,19 +368,19 @@ module.exports = [
                 display_type:'text',
                 display_condition:'',
                 meta:'true',
-                section:'7'
+                section:'6'
             },
-            boolalternative:{
-                label:'Is there an alternative?',
-                sub_type:'project',
-                prompt:'',
-                edit_type:'radio',
-                edit_type_values:['yes','no'],
-                display_type:'text',
-                display_condition:'',
-                meta:'false',
-                section:'8'
-            },
+            // boolalternative:{
+            //     label:'Is there an alternative?',
+            //     sub_type:'project',
+            //     prompt:'',
+            //     edit_type:'radio',
+            //     edit_type_values:['yes','no'],
+            //     display_type:'text',
+            //     display_condition:'',
+            //     meta:'false',
+            //     section:'8'
+            // },
             alternative_action_1:{
                 // style={{display: ['yes', 'true', true].includes(this.state.boolalternative) ? 'block' : 'none'}}
                 label:'Alternative Action 1',
@@ -447,9 +388,10 @@ module.exports = [
                 prompt:'What alternatives were considered when identifying and developing this action?',
                 edit_type:'text',
                 display_type:'text',
-                display_condition:{attribute:'boolalternative',check:['yes','true',true]},
+                display_condition:'',
                 meta:'false',
-                section:'8'
+                section:'7',
+                field_required: 'required'
             },
             alternative_action_1_evaluation:{
                 label:'Alternative Action 1 Evaluation',
@@ -457,9 +399,11 @@ module.exports = [
                 prompt:'Explain why the alternative action was not selected; include the estimated cost and reasoning.',
                 edit_type:'text',
                 display_type:'text',
-                display_condition:{attribute:'boolalternative',check:['yes','true',true]},
+                display_condition:'',
+                // display_condition:{attribute:'boolalternative',check:['yes','true',true]},
                 meta:'false',
-                section:'8'
+                section:'7',
+                field_required: 'required'
             },
             alternative_action_2:{
                 label:'Alternative Action 2',
@@ -467,9 +411,9 @@ module.exports = [
                 prompt:'What alternatives were considered when identifying and developing this action?',
                 edit_type:'text',
                 display_type:'text',
-                display_condition:{attribute:'boolalternative',check:['yes','true',true]},
+                display_condition:'',
                 meta:'false',
-                section:'8'
+                section:'7'
             },
             alternative_action_2_evaluation:{
                 label:'Alternative Action 2 (if applicable)',
@@ -477,9 +421,9 @@ module.exports = [
                 prompt:'Explain why the alternative action was not selected; include the estimated cost and reasoning.',
                 edit_type:'text',
                 display_type:'text',
-                display_condition:{attribute:'boolalternative',check:['yes','true',true]},
+                display_condition:'',
                 meta:'false',
-                section:'8'
+                section:'7'
             },
 
             // TODO Step 9 is hidden
@@ -496,7 +440,7 @@ module.exports = [
                 ],
                 display_type:'text',
                 meta:'false',
-                section:'9'
+                section:'8'
             },
             priority_scoring_funding_availability:{
                 label:'Priority Scoring: Funding Availability',
@@ -510,7 +454,7 @@ module.exports = [
                 '(0) Potential funding source unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'9'
+                section:'8'
             },
             priority_scoring_probability_of_matching_funds:{
                 label:'Priority Scoring: Probability of Matching Funds',
@@ -522,7 +466,7 @@ module.exports = [
                 '(0) No funding match available or funding match unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'9'
+                section:'8'
             },
             priority_scoring_benefit_cost_review:{
                 label:'Priority Scoring: Benefit Cost Review',
@@ -534,7 +478,7 @@ module.exports = [
                     '(0) Benefit Cost Review unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'9'
+                section:'8'
             },
             priority_scoring_environmental_benefit:{
                 label:'Priority Scoring: Environmental Benefit',
@@ -544,7 +488,7 @@ module.exports = [
                 edit_type_values:['(4) Environmentally sound and relatively easy to implement; or no adverse impact on environment', '(3) Environmentally acceptable and not anticipated to be difficult to implement', '(2) Environmental concerns and somewhat difficult to implement because of complex requirements', '(1) Difficult to implement because of significantly complex requirements and environmental permitting', '(0) Very difficult to implement due to extremely complex requirements and environmental permitting problems'],
                 display_type:'text',
                 meta:'false',
-                section:'9'
+                section:'8'
             },
             relates_to_protects_critical_facility_infrastructure:{
                 label:'Relates to/ Protects Critical Facility/ Infrastructure',
@@ -556,7 +500,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             relates_to_protects_community_lifeline_by_fema:{
                 label:'Relates to / Protects Community Lifeline(s) as defined by FEMA',
@@ -567,7 +511,7 @@ module.exports = [
                 edit_type_values:[' '],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_pnp:{
                 label:'Is PNP (private non-profit)?',
@@ -577,7 +521,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_state_agency:{
                 label:'Is State Agency?',
@@ -587,7 +531,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_member_of_crs: {
                 label:'Is the community a member of CRS?',
@@ -597,7 +541,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_member_of_good_standing_with_nfip:{
                 label:'Is the community a member of good standing with the NFIP?',
@@ -607,7 +551,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_participate_in_climate_smart_communities:{
                 label:'Does the community participate in Climate Smart Communities?',
@@ -617,7 +561,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_have_local_adopted_hmp:{
                 label:'Does the community have a local adopted Hazard Mitigation Plan?',
@@ -627,7 +571,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_have_comprehensive_plan:{
                 label:'Does the community have a comprehensive plan?',
@@ -637,7 +581,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_have_land_use_zoning:{
                 label:'Does the community have land use zoning?',
@@ -647,7 +591,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_have_subdivision_ordinances:{
                 label:'Does the community have subdivision ordinances?',
@@ -657,7 +601,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_community_have_building_codes:{
                 label:'Does the community have building codes?',
@@ -667,7 +611,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             engineering_required:{
                 label:'Engineering Required?',
@@ -677,7 +621,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_final_engineering_design_completes:{
                 label:'Final Engineering Design Complete?',
@@ -687,7 +631,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_mitigation:{
                 label:'Is Mitigation?',
@@ -697,7 +641,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_preparedness: {
                 label:'Is Preparedness?',
@@ -707,7 +651,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_response:{
                 label:'Is Response?',
@@ -717,7 +661,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_recovery:{
                 label:'Is Recovery?',
@@ -727,7 +671,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_climate_adaptation:{
                 label:'Is Climate Adaptation?',
@@ -737,7 +681,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_proposed_project_located_in_sfha:{
                 label:'Is proposed project located in SFHA?',
@@ -747,7 +691,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_project_structure_located_in_sfha:{
                 label:'Is Project Structure (s) Located in SFHA?',
@@ -757,7 +701,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_protects_repetitive_loss_property:{
                 label:'Protects Repetitive Loss Property?',
@@ -769,7 +713,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_protects_severe_repetitive_loss_property:{
                 label:'Protects Repetitive Loss Property?',
@@ -788,7 +732,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             known_environmental_historic_preservation_protected_species_iss:{
                 label:'Known Environmental/Historic Preservation/Protected Species Issues?',
@@ -798,7 +742,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             ground_distributed_other_than_agriculture:{
                 label:'Has the ground at the project location been disturbed other than by agriculture?',
@@ -808,7 +752,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             indian_or_historic_artifacts_found_on_or_adjacent_project_area:{
                 label:'To your knowledge, have Indian or historic artifacts been found on or adjacent to the project area?',
@@ -818,17 +762,17 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             building_50_years_or_older_within_or_near:{
-                label:'Is there a building 50 years or older within or near the project area?',
+                label:'Does your project affect or is in close proximity to any buildings or structures 50 years or more in age?',
                 sub_type:'project',
                 prompt:'',
                 edit_type:'radio',
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             is_shpo_survey:{
                 label:'SHPO survey?',
@@ -839,7 +783,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             shpo_survey:{
                 label:'SHPO survey File',
@@ -849,7 +793,7 @@ module.exports = [
                 display_condition:{attribute:'is_shpo_survey',check:['yes', 'true', true]},
                 display_type:'text',
                 meta:'false',
-                section:'10'
+                section:'9'
             },
             climate_smart_communities_action_type:{
                 label:'Climate Smart Communities action type?',
@@ -859,7 +803,7 @@ module.exports = [
                 edit_type_values:[' '],
                 display_type:'text',
                 meta:'false',
-                section:'11'
+                section:'9'
             },
             plan_maintenance_date_of_status_report:{ // TODO value={this.state.plan_maintenance_date_of_status_report ? this.state.plan_maintenance_date_of_status_report.split('T')[0] : ''}
                 label:'Plan Maintenance - Date of Status Report',
@@ -868,7 +812,7 @@ module.exports = [
                 edit_type:'date',
                 display_type:'text',
                 meta:'false',
-                section:'12'
+                section:'10'
             },
             plan_maintenance_progress_report:{
                 label:'Plan Maintenance - Progress Report',
@@ -878,7 +822,7 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',
-                section:'12'
+                section:'10'
             }
 
         }

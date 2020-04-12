@@ -1,11 +1,8 @@
-import {connect} from "react-redux";
-import { reduxFalcor } from 'utils/redux-falcor'
-import {sendSystemMessage} from 'store/modules/messages';
-import Element from 'components/light-admin/containers/Element'
+
 import React from 'react';
+import Element from 'components/light-admin/containers/Element'
 import WorksheetConfig from 'pages/auth/actions/actions_worksheet_forms/config.js'
 import AvlFormsNewDataWizard from 'components/AvlForms/editComponents/newDataWithWizard.js'
-import get from "lodash.get";
 import ViewConfig from 'pages/auth/actions/view_config.js'
 
 class ActionsWorksheetFormsNew extends React.Component{
@@ -52,21 +49,6 @@ class ActionsWorksheetFormsNew extends React.Component{
     }
 }
 
-const mapDispatchToProps = {
-    sendSystemMessage
-};
-
-const mapStateToProps = state => {
-    return {
-        activePlan: state.user.activePlan,
-        isAuthenticated: !!state.user.authed,
-        attempts: state.user.attempts, // so componentWillReceiveProps will get called.
-        capabilitiesMeta : get(state.graph,'capabilitiesLHMP.meta',{}),
-        countyData: get(state.graph,'geo',{})
-
-    };
-};
-
 export default [
     {
         icon: 'os-icon',
@@ -87,7 +69,7 @@ export default [
         },
         name: 'Create Actions',
         auth: true,
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsWorksheetFormsNew))
+        component: ActionsWorksheetFormsNew
     },
     {
         path: '/actions/:sub_type/edit/:id',
@@ -107,7 +89,7 @@ export default [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsWorksheetFormsNew))
+        component: ActionsWorksheetFormsNew
     }
 
 ]

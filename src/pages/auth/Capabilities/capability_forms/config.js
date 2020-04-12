@@ -10,7 +10,7 @@ module.exports = [
                 prompt:'Choose the county the capability is located from the list of all counties.',
                 sub_type:'',
                 edit_type:'dropdown',
-                defaultValue: ['Countywide'],
+                
                 display_type:'text',
                 area:'true',
                 meta: 'true',
@@ -23,6 +23,7 @@ module.exports = [
                 prompt:'Choose the jurisdiction where the capability is located. Jurisdictions that occur are based on the County selected in question 1',
                 sub_type:'',
                 edit_type:'dropdown',
+                defaultValue: ['Countywide'],
                 display_type:'text',
                 meta: 'true',
                 area:'true',

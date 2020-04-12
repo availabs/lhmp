@@ -116,6 +116,7 @@ class ZoneTable extends React.Component {
                             if(geoid.length === 5){
                                 this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'county', geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'])
                                     .then(response =>{
+
                                         return response
                                     })
                             }else{
@@ -135,7 +136,6 @@ class ZoneTable extends React.Component {
                                 });
                                 this.props.falcor.get(['zones','byPlanId',this.props.activePlan,'byName',zone.name,'byGeom',zone.geom,['none'],['none'],'byRiskScenario',scenario_id,'byRiskZone','all'])
                                     .then(response =>{
-                                        //console.log('response',response)
                                         return response
                                     }).catch(function(err){
                                     console.error(err); // This will print any error that was thrown in the previous error handler.
@@ -211,7 +211,7 @@ class ZoneTable extends React.Component {
                         if(this.props.newZonesData){
                             Object.keys(this.props.newZonesData).forEach(item =>{
                                 new_zones.forEach(z_g =>{
-                                    if(z_g['name'] === item && this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings) {
+                                    if(z_g['name'] === item && this.props.newZonesData[item].byGeom[z_g['geom']] && this.props.newZonesData[item].byGeom[z_g['geom']].none.none.buildings) {
                                         data.push({
                                             zone_id: z_g['zone_id'],
                                             zone_name: item,
