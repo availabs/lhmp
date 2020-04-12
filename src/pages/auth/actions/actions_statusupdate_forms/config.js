@@ -13,9 +13,10 @@ module.exports = [
             action_name:{
                 label:'Action Name',
                 prompt:'Provide a name for the action. Be as concise and specific as possible.',
-                edit_type:'text',
+                edit_type:'multiselect',
                 display_type:'text',
-                meta:'false',
+                meta: 'true',
+                meta_filter:{filter_key:'capabilities', value:'capability_name'},
                 section:'1',
                 list_attribute: 'true'
             },
