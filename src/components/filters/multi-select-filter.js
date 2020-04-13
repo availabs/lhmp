@@ -24,18 +24,18 @@ import {PanelLabel,SidePanelSection} from '../common/styled-components';
 
 const MultiSelectFilter = ({filter, setFilter}) => (
   <SidePanelSection>
-    <PanelLabel htmlFor={`filter-${filter.id}`}>{filter.name}</PanelLabel>
-    <ItemSelector
-      selectedItems={filter.value}
-      placeholder="Select a Value"
-      options={filter.domain}
-      multiSelect={true}
-      searchable={ true }
-      displayOption={ d => d.name ? d.name : filter.domain.reduce((a, c) => c.value === d ? c.name : a, d) }
-      getOptionValue={d => d.value ? d.value : d}
-      onChange={setFilter}
-      inputTheme="secondary"
-    />
+      {filter.name ? <PanelLabel htmlFor={`filter-${filter.id}`}>{filter.name}</PanelLabel> : null}
+      <ItemSelector
+          selectedItems={filter.value}
+          placeholder="Select a Value"
+          options={filter.domain}
+          multiSelect={true}
+          searchable={ true }
+          displayOption={ d => d.name ? d.name : filter.domain.reduce((a, c) => c.value === d ? c.name : a, d) }
+          getOptionValue={d => d.value ? d.value : d}
+          onChange={setFilter}
+          inputTheme="secondary"
+      />
   </SidePanelSection>
 );
 

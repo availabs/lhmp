@@ -227,11 +227,11 @@ class AvlFormsNewData extends React.Component{
     }
 
     cousubDropDown(event){
-        let county = event.target.value;
+        let county = typeof event.target.value === "object" ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    console.log('cousub dropdown 1', response)
+                    console.log('cousub dropdown 1', response, county)
                     let cousubs = [];
                     county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
                     if (cousubs){
@@ -308,7 +308,7 @@ class AvlFormsNewData extends React.Component{
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
             }
         }
-        if (!countyData.length || !meta_data.length) return null;
+        if (!countyData.length) return null;
         console.log('county and cousubs', cousubsData)
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
@@ -365,7 +365,7 @@ class AvlFormsNewData extends React.Component{
                         title : attribute,
                         type: 'multiselect', //item.attributes[attribute].edit_type,
                         required: item.attributes[attribute].field_required,
-                        meta: meta_data,
+                        meta: meta_data ? meta_data : [],
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on,
                         defaultValue: item.attributes[attribute].defaultValue

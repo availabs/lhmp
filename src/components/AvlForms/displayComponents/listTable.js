@@ -215,13 +215,13 @@ class AvlFormsListTable extends React.Component{
                                 }
                             }else if(d.type === 'participation'){
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
-                                    return (
+                                    /*return (
                                         <Link
                                             className="btn btn-sm btn-primary"
                                             to={ `/${this.props.config.map(d=> d.type)}/time/new` } >
                                             Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                                         </Link>
-                                    )
+                                    )*/
                                 }else{
                                     return null
                                 }

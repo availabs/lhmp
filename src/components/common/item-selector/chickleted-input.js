@@ -39,22 +39,22 @@ const propTypes = {
 };
 
 const ChickletButton = styled.div`
-  background: ${props => props.theme.panelActiveBg};
   border-radius: 1px;
+  font-size: auto;
   color: ${props => props.theme.textColor};
-  font-size: 11px;
   line-height: 20px;
-  margin: 3px 10px 3px 3px;
-  padding: 4px 6px;
+  /*margin: 3px 10px 3px 3px;*/
+  /*padding: 4px 6px;*/
+  padding-left: 6px;
   display: flex;
   align-items: center;
   max-width: calc(100% - 8px);
-
   :hover {
     color: ${props => props.theme.textColorHl};
   }
 `;
-
+// font-size: 11px;
+// background: ${props => props.theme.panelActiveBg};
 const ChickletTag = styled.span`
   margin-right: 10px;
   text-overflow: ellipsis;
