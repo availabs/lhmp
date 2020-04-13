@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
 import MainMenu from './MainMenu'
 import MobileMenu from "./MobileMenu";
-import {falcorGraph} from "store/falcorGraph";
 import geoDropdown from 'pages/auth/Plan/functions'
 import {AvatarUser, AvatarUserMobile, LoginMenu, LoginMenuMobile, Logo} from './TopMenu'
 import {connect} from "react-redux";
-import { reduxFalcor } from 'utils/redux-falcor'
+import {reduxFalcor} from 'utils/redux-falcor'
 import {setActiveCousubid} from 'store/modules/user'
 import get from 'lodash.get'
 import styled from "styled-components";
@@ -20,22 +19,23 @@ class Menu extends Component {
             menuDisplay: 'none'
         }
     }
+
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
-        return this.props.falcor.get(
-            //['geo', this.props.activeGeoid, 'cousubs'],
-            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
-        )
+        return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...get(falcorGraph.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
+                    ['geo',
+                        [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
+                        ['name']],
                 )
             })
     }
+
     render() {
         if (this.props.menuSettings.hide) return null;
-        let geoInfo = get(falcorGraph.getCache(), `geo`, null);
-        let allowedGeos = [this.props.activeGeoid, ...get(geoInfo,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
+
+        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
         let currentPath = this.props.menus.filter(p => p.path === this.props.path)[0];
 
 
@@ -74,6 +74,7 @@ class Menu extends Component {
 
         const DROPDOWN = defaultOptions.scheme === 'color-scheme-dark' ? styled.div`
                         div > select {
+                        ${props => props.theme.panelDropdownScrollBar};
                         color: #fff;
                         border: none;
                         font-size: 0.81rem;
@@ -85,6 +86,7 @@ class Menu extends Component {
                         }
                     ` : styled.div`
                     div > select {
+                    ${props => props.theme.panelDropdownScrollBar};
                     color: #3E4B5B;
                     border: none;
                     background: none;
@@ -96,7 +98,7 @@ class Menu extends Component {
                     padding: 0px;
                     }
                     `;
-            // console.log('menuProps', currentPath, dynamicStyle)
+        // console.log('menuProps', currentPath, dynamicStyle)
         let userMenu = this.props.user && !!this.props.user.authed
             ? <AvatarUser user={this.props.user}/>
             : <LoginMenu/>;
@@ -111,7 +113,8 @@ class Menu extends Component {
                     {/*web menu*/}
                     <div className="logo-w" style={{placeContent: 'center'}}>
                         <Link className="logo" to="/">
-                            {this.props.menuSettings.layout === 'menu-layout-mini' ? <Logo miniLayout={true}/> : <div className="logo-label"><Logo/></div>}
+                            {this.props.menuSettings.layout === 'menu-layout-mini' ? <Logo miniLayout={true}/> :
+                                <div className="logo-label"><Logo/></div>}
                         </Link>
                     </div>
                     {userMenu}
@@ -119,11 +122,11 @@ class Menu extends Component {
                     <MainMenu {...this.props} />
                     {!this.props.auth ?
                         <DROPDOWN>
-                            {geoDropdown.geoDropdown(this.props.geoGraph,this.props.setActiveCousubid, this.props.activeCousubid,allowedGeos)}
+                            {geoDropdown.geoDropdown(this.props.geoGraph, this.props.setActiveCousubid, this.props.activeCousubid, allowedGeos)}
                         </DROPDOWN>
                         : ''}
                 </div>
-                <div className='menu-mobile menu-activated-on-click color-scheme-dark' style={{zIndex:100}}>
+                <div className='menu-mobile menu-activated-on-click color-scheme-dark' style={{zIndex: 100}}>
                     {/*mobile menu*/}
                     <div className="mm-logo-buttons-w">
                         <Link className="mm-logo" to="/">
@@ -151,7 +154,8 @@ class Menu extends Component {
         )
     }
 }
-const mapStateToProps = (state,ownProps) => {
+
+const mapStateToProps = (state, ownProps) => {
     return {
         geoGraph: state.graph.geo,
         router: state.router,
