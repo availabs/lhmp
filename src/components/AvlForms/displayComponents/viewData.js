@@ -152,18 +152,13 @@ class AvlFormsViewData extends React.Component{
         let data = this.formsViewData();
 
         return(
-            <div className='container'>
-                <div className='element-box'>
-                    <GraphFactory
-                        graph={{type: 'text'}}
-                        data={data}
-                        config={this.props.config}
-                        isVisible = {true}
-                    >
-                    </GraphFactory>
-                </div>
-            </div>
-
+            <GraphFactory
+                graph={{type: 'text'}}
+                data={data}
+                config={this.props.config}
+                isVisible = {true}
+            >
+            </GraphFactory>
         )
     }
 }
