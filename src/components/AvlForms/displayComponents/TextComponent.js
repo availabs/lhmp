@@ -1,49 +1,104 @@
 import React from 'react'
-
+import Element from "../../light-admin/containers/Element";
+const TDStyle = {wordBreak: 'break-word', width: '50%'};
 class TextComponent extends React.PureComponent{
+    renderSection(section,data){
+        return (
+            <Element>
+                <h4>{section.sub_title}</h4>
+                <div className='table-responsive'>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>ATTRIBUTE</th>
+                            <th>VALUE</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            Object.keys(data).filter( d => d!== 'type')
+                                .filter(d => data[d].section === section.id)
+                                .map(d =>{
+                                    return (
+                                        <tr>
+                                            <td style={TDStyle}>{`${data[d].label}`} :</td>
+                                            <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                        </tr>
+                                    )
+                                })
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </Element>
+        )
+    }
     render() {
         const data = this.props.data;
         if(!data.length) return null
-        console.log('data', data, this.props.config[0].sections)
         return (
-            <div className="container">
+            <React.Fragment>
                 {this.props.config[0].sections.length ?
-                    this.props.config[0].sections.map(section =>
-                        <div className='row'>
-                            <div className='col-sm-12'><h4>{section.sub_title}</h4></div>
-                            {
-                                Object.keys(data).filter( d => d!== 'type')
-                                    .filter(d => data[d].section === section.id)
-                                    .map(d =>{
-                                    return (
-                                        <React.Fragment>
-                                            <div className = 'col-sm-6'>
-                                                <h6>{`${data[d].label}`} :</h6>
-                                            </div>
-                                            <div className = 'col-sm-6'>
-                                                <label>{data[d].value || 'None'}</label>
-                                            </div>
-                                        </React.Fragment>
-                                    )
-                                })
-                            }
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap'
+                    }}>
+                        <div className="col-md-6" style={{paddingLeft: 0}}>
+                            <div className='element-wrapper'>
+                                <div className='element-box'>
+                                    {
+                                        this.props.config[0].sections.filter((s,sI) => sI % 2 === 0).map(section => this.renderSection(section, data))
+                                    }
+                                </div>
+                            </div>
+
                         </div>
-                    ) :
-                    (Object.keys(data).filter( d => d!== 'type').map(d =>{
-                        console.log('checkinh', d, data[d])
-                            return (
-                                <div className='row'>
-                                    <div className = 'col-sm-6'>
-                                        <h6>{`${data[d].label}`} :</h6>
-                                    </div>
-                                    <div className = 'col-sm-6'>
-                                        <label>{data[d].value || 'None'}</label>
+
+                        <div className="col-md-6" style={{paddingRight: 0}}>
+                            <div className='element-wrapper'>
+                                <div className='element-box'>
+                                    {
+                                        this.props.config[0].sections.filter((s,sI) => sI % 2 !== 0).map(section => this.renderSection(section, data))
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> :
+                    (
+                        <div className='row'>
+                            <div className='col-md-12'>
+                                <div className='element-wrapper'>
+                                    <div className='element-box'>
+                                        <div className='table-responsive'>
+                                            <table className="table table lightBorder">
+                                                <thead>
+                                                <tr>
+                                                    <th>ATTRIBUTE</th>
+                                                    <th>VALUE</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {
+                                                    Object.keys(data).filter(d => d !== 'type').map(d =>
+                                                        <tr>
+                                                            <td style={TDStyle}>{`${data[d].label}`} :</td>
+                                                            <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                                        </tr>
+                                                    )
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            )
-                        }))
+                            </div>
+                        </div>
+
+
+                    )
                 }
-            </div>
+            </React.Fragment>
         )
     }
 }

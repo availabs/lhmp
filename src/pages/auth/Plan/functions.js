@@ -8,8 +8,11 @@ import CSS_CONFIG from 'pages/auth/css-config'
 import Element from "components/light-admin/containers/Element";
 import ElementBox from "components/light-admin/containers/ElementBox";
 import SideMenu from 'pages/Public/theme/SideMenu'
+import styled from "styled-components";
 
-
+const DIV = styled.div`
+${props => props.theme.panelDropdownScrollBar};
+`;
 const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGeos){
     return geoInfo ? (
         <div>
@@ -72,37 +75,53 @@ const renderElement = function(element, section, index, user) {
         }}>
             <Element >
             <label style={{'width': '100%'}} className='element-header'> <h4>{section} |
-                <smaall className='text-muted'> {element.title}
-                    <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
-                            onClick={
-                                (e) => document.getElementById('closeMe').style.display =
-                                    document.getElementById('closeMe').style.display === 'block' ? 'none' : 'block'
-                            }
-                            style={{'float': 'right'}}> ?
+                <small className='text-muted'> {element.title}
+                    <span style={{padding: '5px'}}>
+                        <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
+                                onClick={
+                                    (e) => document.getElementById('closeMe').style.display =
+                                        document.getElementById('closeMe').style.display === 'block' ? 'none' : 'block'
+                                }
+                        > ?
                     </button>
-                </smaall>
+                    </span>
+                </small>
             </h4>
             </label>
-            <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-sm show" role="dialog"
+            <div aria-labelledby="mySmallModalLabel"
+                 className="onboarding-modal modal fade animated show" role="dialog"
                  id='closeMe'
-                 tabIndex="1" style={{'display': 'none'}} aria-hidden="true">
-                <div className="modal-dialog modal-sm" style={{'float': 'right'}}>
-                    <div className="modal-content">
+                 tabIndex="0"
+                 style={{display: 'none', margin: '0vh 0vw'}}
+                 onClick={(e) => {
+                     if (e.target.id === `closeMe`){
+                         e.target.closest(`#closeMe`).style.display = 'none'
+                     }
+                 }}
+                 aria-hidden="true">
+                <div className="modal-dialog modal-centered modal-bg" style={{width: '100%', height: '50%', padding: '5vh 5vw'}}>
+                    <DIV className="modal-content text-center" style={{width: '100%', height: '100%', overflow: 'auto'}}>
+
                         <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                             <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                     onClick={(e) => e.target.closest('#closeMe').style.display = 'none'}>
                                 <span aria-hidden="true"> ×</span></button>
                         </div>
-                        <div className="modal-body">
-                            {element.prompt}
-                        </div>
+                        <div className="modal-body" style={{textAlign: 'justify'}}>{element.prompt}</div>
 
-                        <div className="modal-header"><h6 className="modal-title">Intent</h6>
-                        </div>
-                        <div className="modal-body">
-                            {element.intent}
-                        </div>
-                    </div>
+                        <div className="modal-header"><h6 className="modal-title">Intent</h6></div>
+                        <div className="modal-body" style={{textAlign: 'justify'}}>{element.intent}</div>
+
+                        {
+                            element.example ?
+                                <React.Fragment>
+                                    <div className="modal-header"><h6 className="modal-title">Example</h6></div>
+                                    <div className="modal-body" style={{textAlign: 'justify'}}>
+                                        <div>{element.example}</div>
+                                    </div>
+                                </React.Fragment> : null
+                        }
+                    </DIV>
                 </div>
             </div>
                 <ElementBox>

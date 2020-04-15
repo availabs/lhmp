@@ -15,7 +15,9 @@ from 'pages/Public/theme/components'
 import get from 'lodash.get'
 import styled from "styled-components"
 
-
+const DIV = styled.div`
+    ${props => props.theme.sidePanelScrollBar}
+`
 class SideMenu extends React.Component {
    
     render(){
@@ -23,7 +25,7 @@ class SideMenu extends React.Component {
         let counter = 1;
         let baseURL = this.props.linkPath ? this.props.linkPath : '';
         return(
-         <div style={{height: '100%', paddingTop: 20}} 
+         <DIV style={{height: '100%', paddingTop: 20, overflow: 'auto'}}
             className={`menu-w 
                 color-scheme-${sidebarScheme} 
                 color-style-${sidebarStyle} 
@@ -79,7 +81,7 @@ class SideMenu extends React.Component {
                 } 
             </ul>
 
-        </div>
+        </DIV>
         )
 
     }

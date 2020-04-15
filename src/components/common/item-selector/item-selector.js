@@ -60,6 +60,10 @@ const StyledDropdownSelect = styled.div`
   .list__item__anchor {
     ${props => props.theme.dropdownListAnchor};
   }
+  .list__item__anchor:hover {
+    background-color: #037af7;
+    color: #ffffff;
+  }
 `;
 
 const DropdownSelectValue = styled.span`
@@ -76,18 +80,35 @@ const DropdownSelectErase = styled.div`
 `;
 
 const DropdownWrapper = styled.div`
-  background: ${props => props.theme.dropdownBgd};
+  background: ${props => props.theme.selectBackgroundLT};;
   border: 0;
   width: 100%;
   left: 0;
   z-index: 100;
   position: absolute;
-  bottom: ${props =>
-    props.placement === 'top' ? props.theme.inputBoxHeight : 'auto'};
+  bottom: ${props => props.placement === 'top' ? props.theme.inputBoxHeight : 'auto'};
   margin-top: ${props => (props.placement === 'bottom' ? '4px' : 'auto')};
   margin-bottom: ${props => (props.placement === 'top' ? '4px' : 'auto')};
-`;
+* {
+  background-color: #ffffff;
+  font: Arial;
+  font-size: inherit;
+  font-weight: inherit;
+  border: 2px; /*solid #dde2ec;*/
+  border-radius: 2px;
+}
 
+.list__item:hover {
+  background-color: #037af7;
+  color: #ffffff;
+  .list__item__anchor {
+    background-color: #037af7;
+    color: #ffffff;
+   }
+}
+
+`;
+//.list__item__anchor:hover
 class ItemSelector extends Component {
   static propTypes = {
     // required properties
@@ -269,7 +290,7 @@ class ItemSelector extends Component {
 
     return (
       <div className="item-selector">
-        <div style={{position: 'relative'}}>
+        <div style={{position: 'relative'}} id={'find this id'}>
           {/* this part is used to display the label */}
           {this.props.multiSelect ? (
             <ChickletedInput
