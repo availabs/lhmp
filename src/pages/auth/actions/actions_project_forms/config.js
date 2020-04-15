@@ -437,44 +437,7 @@ module.exports = [
                 meta:'false',
                 section:'4'
             },
-            bca:{
-                label:'BCA and Useful life',
-                sub_type:'project',
-                prompt:'Upload the Benefit Cost Analysis document performed for the action.',
-                edit_type:'file',
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
-            bca_to_bcr:{
-                label:'Does the BCA lead to BCR (Benefit Cost Ratio)?',
-                sub_type:'project',
-                prompt:'Was a Benefit Cost Report established as an outcome of the Benefit Cost Analysis?',
-                edit_type:'radio',
-                edit_type_values:['yes','no'],
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
-            bcr:{
-                label:'BCR Upload',
-                sub_type:'project',
-                prompt:'If you answered yes to question 28, provide an upload the Benefit Cost Report document',
-                edit_type:'file',
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
-            level_of_protection:{
-                label:'Level of Protection',
-                sub_type:'project',
-                prompt:'Identify the level of protection the proposed project will provide.  Ex. 100-year (1%) flood.',
-                edit_type:'text',
-                display_type:'text',
-                display_condition:'',
-                meta:'false',
-                section:'4'
-            },
+           
             // recurrence_interval:{
             //     label:'Recurrence Interval',
             //     sub_type:'project',
@@ -497,7 +460,7 @@ module.exports = [
             // },
             
             engineering_required:{
-                label:'Engineering Required?',
+                label:'Does this action require input or designs from engineering professionals?',
                 sub_type:'project',
                 prompt:'Does proposed action require input or designs from engineering professionals?',
                 edit_type:'radio',
@@ -524,6 +487,67 @@ module.exports = [
                 edit_type:'radio',
                 edit_type_values:['yes','no'],
                 display_type:'text',
+                meta:'false',
+                section:'5',
+                display_condition:{attribute:'engineering_required',check:['yes']},
+            },
+             is_engineering_design_studies:{
+                label:'Describe any studies, design or input that has already occurred and upload available information.',
+                sub_type:'project',
+                prompt:'Describe any studies, design or input that has already occurred and upload available information.',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                section:'5',
+                display_condition:{attribute:'engineering_required',check:['yes']},
+            },
+            is_engineering_design_requirements:{
+                label:'Describe any studies, design or input that will be required.',
+                sub_type:'project',
+                prompt:'Describe any studies, design or input that will be required',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                section:'5',
+                display_condition:{attribute:'engineering_required',check:['yes']},
+            },  
+             bca:{
+                label:'Has a Benefit Cost Analysis been completed for this action?',
+                sub_type:'project',
+                prompt:'Has a Benefit Cost Analysis been completed for this action.',
+                edit_type:'radio',
+                edit_type_values:['yes','no'],
+                display_type:'text',
+                meta:'false',
+                section:'5'
+            },
+            bca_to_bcr:{
+                label:'What is the BCR (Benefit Cost Ratio)?',
+                sub_type:'project',
+                prompt:'Was a Benefit Cost Report established as an outcome of the Benefit Cost Analysis?',
+                edit_type:'text',
+                display_condition:{attribute:'bca',check:['yes']},
+                display_type:'text',
+                meta:'false',
+                section:'5'
+            },
+            bcr:{
+                label:'BCR Upload',
+                sub_type:'project',
+                prompt:'Provide an upload the Benefit Cost Report document',
+                edit_type:'file',
+                display_condition:{attribute:'bca',check:['yes']},
+                display_type:'text',
+                meta:'false',
+                section:'5'
+            },
+            level_of_protection:{
+                label:'Level of Protection',
+                sub_type:'project',
+                prompt:'Identify the level of protection the proposed project will provide.  Ex. 100-year (1%) flood.',
+                edit_type:'text',
+                display_type:'text',
+                display_condition:'',
                 meta:'false',
                 section:'5'
             },
