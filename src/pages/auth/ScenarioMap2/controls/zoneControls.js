@@ -147,7 +147,7 @@ class ZoneControl extends React.Component{
                     zone_id = {this.state.zone_id}
                     zones = {_.uniqBy(selectedZonesData,'zone_id')}
                     scenario_id={scenario_id}
-                    noShowBoundary = {this.props.layer.layer.zoneLayer ? this.props.layer.layer.zoneLayer : ''}
+                    noShowBoundary = {this.props.layer.layer.zoneLayer}
                 />
             )
 
@@ -172,7 +172,6 @@ class ZoneControl extends React.Component{
                                 ids = JSON.parse(localStorage.getItem('zone'));
                                 zones_list.forEach(zone =>{
                                     if(zone.value === value){
-                                        console.log('zone',zone)
                                         ids.push({
                                             id:value,
                                             geoid:zone.geoid,
@@ -182,8 +181,6 @@ class ZoneControl extends React.Component{
                                         });
                                     }
                                 })
-
-
                                 localStorage.setItem('zone', JSON.stringify(ids));
                                 this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
                                 this.selectedZones()
