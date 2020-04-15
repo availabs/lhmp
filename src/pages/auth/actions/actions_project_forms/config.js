@@ -10,7 +10,7 @@ module.exports = [
             {title:'Step 3',sub_title:'Location',id:'3'},
             {title:'Step 4',sub_title:'Budget and Timeline',id:'4'},
             {title:'Step 5',sub_title:'Technical Information',id:'5'},
-            {title:'Step 6',sub_title:'Data Type Associations',id:'6'},
+            {title:'Step 6',sub_title:'Action Information - Supplemental',id:'6'},
             {title:'Step 7',sub_title:'Prioritization',id:'7'}, // TODO visiility condition visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 9'}
             // {title:'Step 9',sub_title:'Hazard Mitigation Plan Maintenance',id:'9'},
             // {title:'Step 5',sub_title:'Federal Requirements',id:'5'}, // TODO this.state.new_or_update === 'new' ? 'Step 10' : 'Step 9'
