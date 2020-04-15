@@ -55,6 +55,7 @@ export class ControlLayers extends MapLayer {
     }
 
     visibilityToggleModeOn(source, layerName) {
+        //console.log('in visibility toggle mode on',source,layerName)
         if(layerName.includes('_27') || layerName.includes('_26')){
             if (this.map.getSource('andes_riverine')) {
                 this.map.removeLayer('andes_riverine_layer');
@@ -99,7 +100,7 @@ export class ControlLayers extends MapLayer {
                 },
 
             })
-            this.map.moveLayer('andes_riverine_layer','parcels')
+            this.map.moveLayer('buildings-layer','andes_riverine_layer')
         }else{
             if (source && layerName.includes("riverine")) {
                 if (this.map.getSource('riverine')) {
@@ -145,7 +146,7 @@ export class ControlLayers extends MapLayer {
                     },
 
                 })
-                this.map.moveLayer('riverine_layer','parcels')
+                this.map.moveLayer('buildings-layer','riverine_layer')
             }
             if (source && layerName.includes("dfirm")) {
                 if (this.map.getSource('dfirm')) {
@@ -168,7 +169,7 @@ export class ControlLayers extends MapLayer {
                     },
 
                 })
-                this.map.moveLayer('parcels','dfirm_layer')
+                this.map.moveLayer('buildings-layer','dfirm_layer')
 
             }
         }
@@ -177,6 +178,7 @@ export class ControlLayers extends MapLayer {
 
 
     visibilityToggleModeOff(source,layerName){
+        //console.log('in visibility toggle mode off',source,layerName)
         if(layerName.includes('_27') || layerName.includes('_26')){
             if(source && layerName.includes("andes_riverine")){
                 if(this.map.getSource('andes_riverine')) {

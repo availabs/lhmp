@@ -88,6 +88,7 @@ class ZoneModalData extends React.Component {
                                 groupBy={'propType'}
                                 groupByFilter={this.state.filter.value}
                                 scenarioId={this.props.scenario_id.map(d => d.id)}
+                                riskZoneId = {[this.props.risk_zone_id]}
                                 height={'fit-content'}
                                 width={'100%'}
                                 tableClass={`table table-sm table-lightborder table-hover`}
@@ -100,6 +101,7 @@ class ZoneModalData extends React.Component {
                                 groupBy = {'propType'}
                                 groupByFilter = {this.state.filter.value}
                                 scenarioId={this.props.scenario_id.map(d => d.id)}
+                                riskZoneId = {[this.props.risk_zone_id]}
                                 height={'fit-content'}
                                 width={'100%'}
                                 tableClass={`table table-sm table-lightborder table-hover`}

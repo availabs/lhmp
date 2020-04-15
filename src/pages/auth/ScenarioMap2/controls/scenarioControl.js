@@ -16,18 +16,28 @@ class ScenarioControl extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            scenario_id : '',
-            risk_zone_id : ''
+            scenario_id : '2',
+            risk_zone_id : '',
+            scenarios_data : [],
+
         }
         //this.onClickScenario = this.onClickScenario.bind(this)
         this.handleChange = this.handleChange.bind(this);
     }
 
+    callbackFunction = (childData) => {
+        this.setState({message: childData})
+    }
+
     fetchFalcorDeps(){
-        return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
-            .then(response =>{
-                return response
-            })
+        if(this.state.scenario_id){
+            return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
+                .then(response =>{
+
+                    return response
+                })
+        }
+
     }
 
     componentDidMount(){
@@ -52,7 +62,6 @@ class ScenarioControl extends React.Component {
 
 
     componentDidUpdate(oldProps,oldState){
-
         if(oldState.scenario_id !== this.state.scenario_id){
             scenarios_list.forEach(item =>{
                 if(item.id === this.state.scenario_id){
@@ -60,6 +69,7 @@ class ScenarioControl extends React.Component {
                 }
             })
             this.renderScenarioTable()
+
         }
     }
 
@@ -89,6 +99,7 @@ class ScenarioControl extends React.Component {
             <div>
                 {this.state.scenario_id !== '' ?
                     <ScenarioTable
+                        parentCallback = {this.callbackFunction.bind(this)}
                         scenario_id={[this.state.scenario_id]}
                         check_visibility = {this.props.layer.layer}
                     />
@@ -104,17 +115,25 @@ class ScenarioControl extends React.Component {
         console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
         let data = []
+
         Object.keys(this.props.scenarioData).forEach((item,i) =>{
             if(this.state.scenario_id === this.props.scenarioData[item].risk_scenario_id.toString()){
                 data.push(this.props.scenarioData[item])
             }
         })
-        data.forEach((item,i) =>{
-            if(i === 0){
-                this.props.layer.layer.visibilityToggleModeOff(item.map_source,item.table_name)
-            }
+        if(this.state.message){
+            this.props.layer.layer.visibilityToggleModeOff(this.props.scenarioData[this.state.message].map_source,this.props.scenarioData[this.state.message].table_name)
+        }
+        else{
+            data.forEach((item,i) =>{
+                if(i === 0){
+                    this.props.layer.layer.visibilityToggleModeOff(item.map_source,item.table_name)
+                }
 
-        })
+            })
+        }
+
+
     };
 
 
@@ -129,7 +148,6 @@ class ScenarioControl extends React.Component {
                             id="scenario_id"
                             value = {this.state.scenario_id || ''}
                             onChange={this.handleChange}>
-                        <option value="None" key={0}>---Select Value---</option>
                         {scenarios_list.map((list,i) =>{
                             if(list.id === '2'){
                                 return (<option
