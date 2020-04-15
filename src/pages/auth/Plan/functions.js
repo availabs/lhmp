@@ -10,7 +10,9 @@ import ElementBox from "components/light-admin/containers/ElementBox";
 import SideMenu from 'pages/Public/theme/SideMenu'
 import styled from "styled-components";
 
-
+const DIV = styled.div`
+${props => props.theme.panelDropdownScrollBar};
+`;
 const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGeos){
     return geoInfo ? (
         <div>
@@ -63,9 +65,7 @@ const renderReqNav = function(allRequirenments, pageIndex){
         </ul>
     )
 }
-const DIV = styled.div`
-${props => props.theme.panelDropdownScrollBar};
-`;
+
 const renderElement = function(element, section, index, user) {
     return (
         <div

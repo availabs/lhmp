@@ -14,13 +14,15 @@ class RolesFormsView extends React.Component{
 
     render(){
         return(
-            <Element>
-                <h6 className="element-header">Roles</h6>
-                <AvlFormsViewData
-                    json = {config}
-                    id = {[this.props.match.params.id]}
-                />
-            </Element>
+            <div className='container'>
+                <Element>
+                    <h6 className="element-header">Roles</h6>
+                    <AvlFormsViewData
+                        json = {config}
+                        id = {[this.props.match.params.id]}
+                    />
+                </Element>
+            </div>
         )
     }
 }
