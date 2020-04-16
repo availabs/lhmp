@@ -2,15 +2,16 @@
 module.exports = [
     {
         type:'actions', // type is same as the route path for now
-        list_attributes:['action_name','action_type','sub_type'], // to list the attributes on the main page
+        list_attributes:['action_jurisdiction','action_category','action_type','action_name','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [
-            {title:'Step 1',sub_title:'Contact Information and Personnel',id:'1'},
-            {title:'Step 2',sub_title:'General Information',id:'2'},
+            {title:'Step 1',sub_title:'Contact Information',id:'1'},
+            {title:'Step 2',sub_title:'General Action Information',id:'2'},
             {title:'Step 3',sub_title:'Location',id:'3'},
-            {title:'Step 4',sub_title:'Costs, Funding, and Useful Life',id:'4'},
-            {title:'Step 5',sub_title:'Data Type Associations',id:'5'},
-            {title:'Step 6',sub_title:'Prioritization',id:'6'}, // TODO visiility condition visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 9'}
+            {title:'Step 4',sub_title:'Budget and Timeline',id:'4'},
+            {title:'Step 5',sub_title:'Technical Information',id:'5'},
+            {title:'Step 6',sub_title:'Action Information - Supplemental',id:'6'},
+            {title:'Step 7',sub_title:'Prioritization',id:'7'}, // TODO visiility condition visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 9'}
             // {title:'Step 9',sub_title:'Hazard Mitigation Plan Maintenance',id:'9'},
             // {title:'Step 5',sub_title:'Federal Requirements',id:'5'}, // TODO this.state.new_or_update === 'new' ? 'Step 10' : 'Step 9'
             // {title:'Step 6',sub_title:'State and Local Requirements',id:'6'},
@@ -31,10 +32,10 @@ module.exports = [
                 //example: 'Demo example.'
 
             },
-            action_champion:{
-                label:'Action Champion',
+            lead_agency_name_text:{
+                label:'Lead Agency/Department',
                 sub_type:'project',
-                prompt:'Provide the name and/or office of the person who is most capable of implementing this action.',
+                prompt:'Provide the name of the Agency or Department capable of implementing this action.',
                 edit_type:'text',
                 display_type:'text',
                 section: '1',
@@ -42,10 +43,10 @@ module.exports = [
                 //example: 'Demo example.'
 
             },
-            lead_agency_name_text:{
-                label:'Lead Agency',
+            action_lead_agency_contact:{
+                label:'Lead Agency/Department Point of Contact',
                 sub_type:'project',
-                prompt:'Provide the name of the Agency or Department capable of implementing this action.',
+                prompt:'Provide the name and/or office of the person who is most capable of implementing this action.',
                 edit_type:'text',
                 display_type:'text',
                 section: '1',
@@ -404,17 +405,6 @@ module.exports = [
                 meta:'true',
                 section:'4'
             },
-            primary_or_potential_funding_sources_name:{
-                label:'Secured funding sources name',
-                sub_type:'project',
-                prompt:'Identify the name of the secured funding source. Or enter a new funding source.',
-                edit_type:'dropdown_no_meta',
-                edit_type_values:[],
-                disable_condition:'',
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
             secondary_funding_source_name:{
                 label:'Potential funding sources name',
                 sub_type:'project',
@@ -426,70 +416,14 @@ module.exports = [
                 meta:'false',
                 section:'4'
             },
-            funding_received_to_date:{
-                label:'Funding Received to Date',
+            primary_or_potential_funding_sources_name:{
+                label:'Secured funding sources name',
                 sub_type:'project',
-                prompt:'Provide the exact dollar amount of secured funding.',
-                edit_type:'number',
+                prompt:'Identify the name of the secured funding source. Or enter a new funding source.',
+                edit_type:'dropdown_no_meta',
+                edit_type_values:[],
+                disable_condition:'',
                 display_type:'text',
-                meta:'true',
-                section:'4'
-            },
-            bca:{
-                label:'BCA and Useful life',
-                sub_type:'project',
-                prompt:'Upload the Benefit Cost Analysis document performed for the action.',
-                edit_type:'file',
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
-            bca_to_bcr:{
-                label:'Does the BCA lead to BCR (Benefit Cost Ratio)?',
-                sub_type:'project',
-                prompt:'Was a Benefit Cost Report established as an outcome of the Benefit Cost Analysis?',
-                edit_type:'radio',
-                edit_type_values:['yes','no'],
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
-            bcr:{
-                label:'BCR Upload',
-                sub_type:'project',
-                prompt:'If you answered yes to question 28, provide an upload the Benefit Cost Report document',
-                edit_type:'file',
-                display_type:'text',
-                meta:'false',
-                section:'4'
-            },
-            level_of_protection:{
-                label:'Level of Protection',
-                sub_type:'project',
-                prompt:'Identify the level of protection the proposed project will provide.  Ex. 100-year (1%) flood.',
-                edit_type:'text',
-                display_type:'text',
-                display_condition:'',
-                meta:'false',
-                section:'4'
-            },
-            recurrence_interval:{
-                label:'Recurrence Interval',
-                sub_type:'project',
-                prompt:'',
-                edit_type:'number',
-                display_type:'text',
-               // display_condition:'',
-                meta:'false',
-                section:'4'
-            },
-            useful_life:{
-                label:'Useful Life',
-                sub_type:'project',
-                prompt:'Identify the number of years the implemented action will provide protection against the hazard(s).',
-                edit_type:'number',
-                display_type:'text',
-                display_condition:'',
                 meta:'false',
                 section:'4'
             },
@@ -503,27 +437,49 @@ module.exports = [
                 meta:'false',
                 section:'4'
             },
-            exact_timeframe_for_action_implementation: {
-                label:'Exact Timeframe for Action Implementation',
-                sub_type:'project',
-                prompt:'Provided the specific timeline for action implementation as it exists.' +
-                    ' How long it takes from beginning of action implementation to end of action implementation.',
-                edit_type:'text',
-                display_type:'text',
-                display_condition:'',
-                meta:'false',
-                section:'4'
-            },
+           
+            // recurrence_interval:{
+            //     label:'Recurrence Interval',
+            //     sub_type:'project',
+            //     prompt:'',
+            //     edit_type:'number',
+            //     display_type:'text',
+            //    // display_condition:'',
+            //     meta:'false',
+            //     section:'4'
+            // },
+            // useful_life:{
+            //     label:'Useful Life',
+            //     sub_type:'project',
+            //     prompt:'Identify the number of years the implemented action will provide protection against the hazard(s).',
+            //     edit_type:'number',
+            //     display_type:'text',
+            //     display_condition:'',
+            //     meta:'false',
+            //     section:'4'
+            // },
+            
             engineering_required:{
-                label:'Engineering Required?',
+                label:'Does this action require input or designs from engineering professionals?',
                 sub_type:'project',
                 prompt:'Does proposed action require input or designs from engineering professionals?',
                 edit_type:'radio',
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'4'
+                section:'5'
             },
+            // engineering_required_text:{
+            //     label:'Engineering Required?',
+            //     sub_type:'project',
+            //     prompt:'Does proposed action require input or designs from engineering professionals?',
+            //     display_condition:{attribute:'engineering_required',check:['yes']},
+            //     edit_type:'text',
+            //     display_type:'text',
+            //     display_condition:'',
+            //     meta:'false',
+            //     section:'4'
+            // },
             is_final_engineering_design_completes:{
                 label:'Final Engineering Design Complete?',
                 sub_type:'project',
@@ -532,7 +488,68 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'4'
+                section:'5',
+                display_condition:{attribute:'engineering_required',check:['yes']},
+            },
+             is_engineering_design_studies:{
+                label:'Describe any studies, design or input that has already occurred and upload available information.',
+                sub_type:'project',
+                prompt:'Describe any studies, design or input that has already occurred and upload available information.',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                section:'5',
+                display_condition:{attribute:'engineering_required',check:['yes']},
+            },
+            is_engineering_design_requirements:{
+                label:'Describe any studies, design or input that will be required.',
+                sub_type:'project',
+                prompt:'Describe any studies, design or input that will be required',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                section:'5',
+                display_condition:{attribute:'engineering_required',check:['yes']},
+            },  
+             bca:{
+                label:'Has a Benefit Cost Analysis been completed for this action?',
+                sub_type:'project',
+                prompt:'Has a Benefit Cost Analysis been completed for this action.',
+                edit_type:'radio',
+                edit_type_values:['yes','no'],
+                display_type:'text',
+                meta:'false',
+                section:'5'
+            },
+            bca_to_bcr:{
+                label:'What is the BCR (Benefit Cost Ratio)?',
+                sub_type:'project',
+                prompt:'Was a Benefit Cost Report established as an outcome of the Benefit Cost Analysis?',
+                edit_type:'text',
+                display_condition:{attribute:'bca',check:['yes']},
+                display_type:'text',
+                meta:'false',
+                section:'5'
+            },
+            bcr:{
+                label:'BCR Upload',
+                sub_type:'project',
+                prompt:'Provide an upload the Benefit Cost Report document',
+                edit_type:'file',
+                display_condition:{attribute:'bca',check:['yes']},
+                display_type:'text',
+                meta:'false',
+                section:'5'
+            },
+            level_of_protection:{
+                label:'Level of Protection',
+                sub_type:'project',
+                prompt:'Identify the level of protection the proposed project will provide.  Ex. 100-year (1%) flood.',
+                edit_type:'text',
+                display_type:'text',
+                display_condition:'',
+                meta:'false',
+                section:'5'
             },
              is_protects_repetitive_loss_property:{
                 label:'Protects Repetitive Loss (RL) Property?',
@@ -544,7 +561,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             is_protects_severe_repetitive_loss_property:{
                 label:'Protects Severe Repetitive Loss (SRL) Property?',
@@ -563,17 +580,17 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             is_crs: {
                 label:'Does this action count toward CRS score?',
                 sub_type:'project',
                 prompt:'',
                 edit_type:'radio',
-                edit_type_values:['yes','no'],
+                edit_type_values:['yes','no','unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             is_climate_adaptation:{
                 label:'Is Climate Adaptation?',
@@ -583,7 +600,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             climate_smart_communities_action_type:{
                 label:'Climate Smart Communities action type?',
@@ -593,7 +610,7 @@ module.exports = [
                 edit_type_values:[' '],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             relates_to_protects_critical_facility_infrastructure:{
                 label:'Relates to/ Protects Critical Facility/ Infrastructure',
@@ -605,7 +622,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             relates_to_protects_community_lifeline_by_fema:{
                 label:'Select the Community Lifelines(s) associated with this action:',
@@ -616,7 +633,7 @@ module.exports = [
                 edit_type_values:['Safety & Security', 'Food/Water/Sheltering', 'Health & Medical', 'Energy', 'Communications', 'Transportation', 'Hazardous Material'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             relates_to_mitigation_sectors_by_fema:{
                 label:'Select the FEMA designated Mitigation Sector(s) associated with this action: ',
@@ -626,7 +643,7 @@ module.exports = [
                 edit_type_values:['Emergency Management', 'Economic Development', 'Land Use Development', 'Housing', 'Health and Social Services', 'Infrastructure', 'Natural & Cultural Resources'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             associated_mitigation_capability_2:{
                 label:'Select the Capability Type that this Action will be used and/or contribute to:',
@@ -636,7 +653,7 @@ module.exports = [
                 edit_type_values:['Planning & Regulatory' , 'Administrative & Technical' , 'Financial' , 'Education & Outreach'],
                 display_type:'text',
                 meta:'false',
-                section:'5'
+                section:'6'
             },
             // associated_mitigation_capability: {
             //     label:'Select the Capability Type that this Action will be used and/or contribute to:',
@@ -678,7 +695,7 @@ module.exports = [
                 ],
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'7'
             },
             priority_scoring_funding_availability:{
                 label:'Priority Scoring: Funding Availability',
@@ -692,7 +709,7 @@ module.exports = [
                 '(0) Potential funding source unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'7'
             },
             priority_scoring_probability_of_matching_funds:{
                 label:'Priority Scoring: Probability of Matching Funds',
@@ -704,7 +721,7 @@ module.exports = [
                 '(0) No funding match available or funding match unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'7'
             },
             priority_scoring_benefit_cost_review:{
                 label:'Priority Scoring: Benefit Cost Review',
@@ -716,7 +733,7 @@ module.exports = [
                     '(0) Benefit Cost Review unknown'],
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'7'
             },
             priority_scoring_environmental_benefit:{
                 label:'Priority Scoring: Environmental Benefit',
@@ -726,7 +743,16 @@ module.exports = [
                 edit_type_values:['(4) Environmentally sound and relatively easy to implement; or no adverse impact on environment', '(3) Environmentally acceptable and not anticipated to be difficult to implement', '(2) Environmental concerns and somewhat difficult to implement because of complex requirements', '(1) Difficult to implement because of significantly complex requirements and environmental permitting', '(0) Very difficult to implement due to extremely complex requirements and environmental permitting problems'],
                 display_type:'text',
                 meta:'false',
-                section:'6'
+                section:'7'
+            },
+            priority_score:{
+                label:'Priority Score - Add numbers associated with your above answers',
+                sub_type:'project',
+                prompt:'Add up the numbers from each of the priority scoring answers',
+                edit_type:'number',
+                display_type:'text',
+                meta:'false',
+                section:'7'
             },
           
             // is_community_member_of_crs: {
