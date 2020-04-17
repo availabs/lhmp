@@ -303,6 +303,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             is_project_structure_located_in_sfha:{

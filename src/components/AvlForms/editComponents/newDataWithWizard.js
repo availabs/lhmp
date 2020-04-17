@@ -368,6 +368,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             state: this.state,
                             title: attribute,
                             placeholder: item.attributes[attribute].placeholder,
+                            inline: item.attributes[attribute].inline,
                             required: item.attributes[attribute].field_required,
                             type: item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
