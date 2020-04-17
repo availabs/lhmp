@@ -105,8 +105,9 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(prevState.county, this.state.county)){
-            this.cousubDropDown({target:{value:this.state.county}})
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        if (countyAttrs.reduce((a,c) => a || !_.isEqual(prevState[c], this.state[c]), false)){
+            this.cousubDropDown({target:{value:this.state[countyAttrs.pop()]}})
         }
     }
 
@@ -185,6 +186,9 @@ class AvlFormsNewDataWizard extends React.Component{
         let countyData = [];
         let cousubsData = [];
         let graph = this.props.geoData
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'));
+        let filterOn = this.state[countyAttrs.pop()]
+
         if(graph){
             // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
@@ -197,7 +201,7 @@ class AvlFormsNewDataWizard extends React.Component{
             })
 
             Object.keys(graph)
-                .filter(item => this.state.county && this.state.county.includes(item.toString()))
+                .filter(item => filterOn && filterOn.includes(item.toString()))
                 .forEach(item =>{
                     get(graph, `${item}.cousubs.value`, [])
                         .filter(cousub => get(graph, `${cousub}.name`, null))

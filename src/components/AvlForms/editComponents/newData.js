@@ -97,8 +97,9 @@ class AvlFormsNewData extends React.Component{
 
     }
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(prevState.county, this.state.county) || !_.isEqual(prevState.contact_county, this.state.contact_county)){
-            this.cousubDropDown({target:{value:this.state.county ? this.state.county : this.state.contact_county}})
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        if (countyAttrs.reduce((a,c) => a || !_.isEqual(prevState[c], this.state[c]), false)){
+            this.cousubDropDown({target:{value:this.state[countyAttrs.pop()]}})
         }
     }
 
@@ -251,7 +252,8 @@ class AvlFormsNewData extends React.Component{
         let countyData = [];
         let cousubsData = [];
         let graph = this.props.geoData;
-        let filterOn = this.state.county ? this.state.county : this.state.contact_county
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        let filterOn = this.state[countyAttrs.pop()]
         console.log('geodata called',graph, this.state)
         if(graph){
             // let graph = this.props.geoData;

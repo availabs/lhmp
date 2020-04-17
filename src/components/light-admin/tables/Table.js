@@ -11,6 +11,7 @@ import {
 } from 'react-table'
 import matchSorter from "match-sorter";
 import {Link} from "react-router-dom";
+import MultiSelectFilter from "../../filters/multi-select-filter";
 
 
 const Styles = styled.div`
@@ -106,7 +107,33 @@ const Styles = styled.div`
     }
   }
 `;
+const _MultiSelectFilter = styled.div`
+    * {
+        font-weight: 0;
+    }
+    text-transform: capitalize;
+	margin: 0px !important;
+	display: flex;
 
+    .item-selector {
+        border: none;
+    }
+    .item-selector>div>div {
+        border: 0.5px solid ${props => props.theme.borderColorLight};
+            color: #b5b5b7;
+
+    }
+	:hover {
+		border-color: ${props => props.theme.textColorHl};
+	}
+
+	> div:first-child {
+		padding-right: 0px;
+	}
+	>div {
+		width: 100%;
+	}
+`
 const actionBtnStyle = {width:'80px'}
 const headerProps = (props, {column}) => getStyles(props, column.align);
 
@@ -145,6 +172,39 @@ function DefaultColumnFilter({
     )
 }
 
+// This is a custom filter UI for selecting
+// a unique option from a list
+
+function MultiSelectColumnFilter({
+                                column: { filterValue, setFilter, preFilteredRows, id },
+                            }) {
+    // Calculate the options for filtering
+    // using the preFilteredRows
+    const options = React.useMemo(() => {
+        const options = new Set()
+        preFilteredRows.forEach(row => {
+            options.add(row.values[id])
+        })
+        return [...options.values()]
+    }, [id, preFilteredRows])
+    const count = preFilteredRows.length;
+
+    // Render a multi-select box
+    return (
+        <_MultiSelectFilter>
+            <MultiSelectFilter
+                filter={{
+                    domain: options,
+                    value: filterValue ? filterValue : []//this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : []
+                }}
+                setFilter={(e) => {
+                    setFilter(e || undefined) // Set undefined to remove the filter entirely
+                }}
+                placeHolder={`Search ${count} records...`}
+            />
+        </_MultiSelectFilter>
+    )
+}
 function fuzzyTextFilterFn(rows, id, filterValue) {
     return matchSorter(rows, filterValue, {keys: [row => row.values[id]]})
 }
@@ -175,6 +235,14 @@ function Table({columns, data, tableClass, height, width, actions}) {
                         ? String(rowValue)
                             .toLowerCase()
                             .startsWith(String(filterValue).toLowerCase())
+                        : true
+                })
+            },
+            multi: (rows, id, filterValue) => {
+                return rows.filter(row => {
+                    const rowValue = row.values[id];
+                    return rowValue !== undefined && filterValue.length
+                        ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
                         : true
                 })
             },
@@ -243,7 +311,11 @@ function Table({columns, data, tableClass, height, width, actions}) {
                                     ) : column.render('Header')}
 
                                 {/* Render the columns filter UI */}
-                                <div {...column.getHeaderProps()}>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
+                                <div {...column.getHeaderProps()}>{
+                                    column.canFilter && column.filter ?
+                                        column.filter === 'multi' ?
+                                            column.render(MultiSelectColumnFilter) : column.render('Filter') : null
+                                }</div>
 
                                 {/* Use column.getResizerProps to hook up the events correctly */}
                                 {column.canResize && (
