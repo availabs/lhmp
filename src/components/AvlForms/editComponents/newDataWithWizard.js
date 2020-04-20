@@ -164,7 +164,7 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     cousubDropDown(event){
-        let county = event.target.value;
+        let county = typeof event.target.value === 'object' ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
@@ -551,7 +551,17 @@ class AvlFormsNewDataWizard extends React.Component{
 
         let sections = this.createWizardSections();
         return(
-            <div className="container">
+            <div className="container" >
+                {get(this.props.config[0], `page_title`, null) &&
+                this.state[this.props.config[0].page_title] ?
+                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {this.state[this.props.config[0].page_title]}
+                        {get(this.props.config[0], `sub_title`, null) ?
+                            <h6>{get(this.state, `${this.props.config[0].sub_title}`, null)}</h6> : null}
+                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {get(this.props.config[0], `default_title`,
+                            `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                    </h4>}
                 <Element>
                     <Wizard steps={sections} submit={this.onSubmit}/>
                 </Element>

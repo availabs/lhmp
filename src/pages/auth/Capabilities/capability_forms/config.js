@@ -4,6 +4,9 @@ module.exports = [
         sub_type:'',
         // if wizard
         sections: [],
+        default_title: 'Capability', // in the case when page_title is invalid
+        page_title: 'capability_name', // page title in edit and view
+        sub_title: '', // sub title in edit and view
         attributes: {
             county:{
                 label:'County', // Which you would like to see on the form
@@ -68,7 +71,7 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'false',
-                hidden:'false',
+                // hidden:'false',
                 section:'',
                 list_attribute: 'true'
             },

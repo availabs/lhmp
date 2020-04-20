@@ -34,7 +34,6 @@ class ParticipationFormsNew extends React.Component{
 
         return(
             <Element>
-                <h6 className="element-header">Participation {this.props.match.params.sub_type}</h6>
                 <AvlFormsNewData
                     json = {config}
                     id = {[this.props.match.params.id]}
