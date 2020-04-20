@@ -26,8 +26,8 @@ class ZoneControl extends React.Component{
             if (localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0) {
                 console.log('in if of component did update')
                 this.noSelectedZones()
-            } else if (this.props.zonesList[this.props.activePlan] && this.props.zonesList[this.props.activePlan].zones) {
-                console.log('in else of component did update')
+            } else{
+                this.fetchFalcorDeps()
                 this.selectedZones()
             }
         }
@@ -36,15 +36,13 @@ class ZoneControl extends React.Component{
     }
 
     fetchFalcorDeps(){
-        //console.log('in fetch',falcorGraph.getCache())
-        return this.props.falcor.get(['zones',this.props.activePlan,'length'])
-            .then(res =>{
-                let length = res.json.zones[this.props.activePlan].length
-                this.props.falcor.get(['zones',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['id','name','geoid','geom','geojson']])
+        return this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'length'])
+            .then(response =>{
+                let length = response.json.forms['zones'].byPlanId[this.props.activePlan].length
+                this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
                     .then(response =>{
                         return response
                     })
-
             })
     }
 
@@ -58,14 +56,14 @@ class ZoneControl extends React.Component{
         if(this.props.zonesList){
             let zones_list  = []
             let graph = this.props.zonesList
-            if(graph){
+            if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
                     zones_list.push({
-                        'label':graph[item].name ? graph[item].name.value : 'None' ,
-                        'value':graph[item].id ? graph[item].id.value : '',
-                        'geoid':graph[item].geoid ? graph[item].geoid.value : '',
-                        'geom':graph[item].geom ? graph[item].geom.value : '',
-                        'geojson':graph[item].geojson ? graph[item].geojson.value :''
+                        'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
+                        'value': graph[item].value ? graph[item].value.id : '',
+                        'geoid': graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
+                        'geom' : graph[item].value.attributes ? graph[item].value.attributes.geom : '',
+                        'geojson' : graph[item].value.attributes.geojson ? graph[item].value.attributes.geojson : ''
                     })
                 })
                 return zones_list
@@ -75,36 +73,28 @@ class ZoneControl extends React.Component{
 
 
     noSelectedZones(){
-        let zonesByGeoid = [];
         let currentZoneData = []
         let scenario_id = localStorage.getItem("scenario_id")
-        if(this.props.zonesList){
-            zonesByGeoid = this.props.zonesList
-        }
+        let graph = this.props.zonesList
+        let ids = JSON.parse(localStorage.getItem('zone')) || [];
+        if(Object.keys(graph).length > 0){
+            if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
+                Object.keys(graph).forEach(item =>{
+                    if(graph[item].value.attributes.geoid === this.props.activeGeoid){
+                        currentZoneData.push({
+                            zone_id:  graph[item].value ? graph[item].value.id : '',
+                            geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
+                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
+                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
+                        })
+                    }
 
-        if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
-            Object.keys(zonesByGeoid).forEach(zone =>{
-                if(zonesByGeoid[zone].geoid.value === this.props.activeGeoid){
-                    currentZoneData.push({
-                        zone_id: zonesByGeoid[zone].id.value,
-                        geoid : zonesByGeoid[zone].geoid.value,
-                        name: zonesByGeoid[zone].name.value,
-                        geom:zonesByGeoid[zone].geom.value
-                    })
-                    let ids = JSON.parse(localStorage.getItem('zone')) || [];
-                    ids.push({
-                        id:zonesByGeoid[zone].id.value,
-                        geoid:this.props.activeGeoid,
-                        geom:zonesByGeoid[zone].geom.value,
-                        name: zonesByGeoid[zone].name.value
-                    });
-                    localStorage.setItem('zone', JSON.stringify(ids));
-
-                }
-            })
+                })
+                ids = currentZoneData
+                localStorage.setItem('zone', JSON.stringify(ids));
+            }
             return (
                 <ZoneTable
-                    //activeMode = {this.props.activeMode}
                     zones = {currentZoneData}
                     scenario_id={scenario_id}
                 />
@@ -113,30 +103,31 @@ class ZoneControl extends React.Component{
 
     }
 
-
-
     selectedZones(){
-        let zonesByGeoid = [];
         let selectedZonesData = [];
+        let graph = this.props.zonesList
         let scenario_id = localStorage.getItem("scenario_id");
-        if(this.props.zonesList){
-            zonesByGeoid = this.props.zonesList;
-            let zone_ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
-            Object.keys(zonesByGeoid).forEach(zone =>{
-                zone_ids.forEach(zone_id =>{
-                    if(zone_id['id'] === zonesByGeoid[zone].id.value){
+        let ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
+        if(Object.keys(graph).length > 0){
+            Object.keys(graph).forEach(item =>{
+                ids.forEach(zone_id =>{
+                    //if already in database
+                    if(zone_id['zone_id'] === graph[item].value.id){
                         selectedZonesData.push({
-                            zone_id : zonesByGeoid[zone].id.value,
-                            geoid : zonesByGeoid[zone].geoid.value,
-                            geom: zonesByGeoid[zone].geom.value,
-                            name: zonesByGeoid[zone].name.value
+                            zone_id:  graph[item].value ? graph[item].value.id : '',
+                            geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
+                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
+                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
                         })
-                    }else{
+                    }
+                    //if a new zone is created
+                    else if(zone_id.zone_id === null && _.isEqual(JSON.stringify(zone_id.bbox.map(d => [d[0], d[1]])),graph[item].value.attributes.bbox)){
                         selectedZonesData.push({
-                            zone_id : zone_id.id,
-                            geoid : zone_id.geoid,
-                            geom: zone_id.geom && zone_id.geom.geometry ? JSON.stringify(get(zone_id, `geom.geometry`, [])): zone_id.geom,
-                            name: zone_id.name ? zone_id.name :  zonesByGeoid[zone_id.id] && zonesByGeoid[zone_id.id].name ? zonesByGeoid[zone_id.id].name.value : ''
+                            zone_id: graph[item].value ? graph[item].value.id : '',
+                            geoid: graph[item].value.attributes ? graph[item].value.attributes.geoid : null,
+                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
+                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
+                            bbox: graph[item].value.attributes ? graph[item].value.attributes.bbox : ''
                         })
                     }
                 })
@@ -173,11 +164,11 @@ class ZoneControl extends React.Component{
                                 zones_list.forEach(zone =>{
                                     if(zone.value === value){
                                         ids.push({
-                                            id:value,
-                                            geoid:zone.geoid,
+                                            zone_id:value,
+                                            geoid:zone.geoid || null,
                                             geom: zone.geom,
                                             name:zone.label,
-                                            geojson:JSON.parse(zone.geojson)
+                                            geojson: zone.geojson
                                         });
                                     }
                                 })
@@ -221,7 +212,7 @@ const mapStateToProps = state => (
         activeGeoid:state.user.activeGeoid, 
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-        zonesList : get(state.graph,['zones','byId'],{}),
+        zonesList : get(state.graph,['forms','byId'],{}),
         assetsData : get(state.graph,['building','byGeoid'],{})
     });
 

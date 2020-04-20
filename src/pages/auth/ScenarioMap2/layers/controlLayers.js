@@ -180,7 +180,7 @@ export class ControlLayers extends MapLayer {
     visibilityToggleModeOff(source,layerName){
         //console.log('in visibility toggle mode off',source,layerName)
         if(layerName.includes('_27') || layerName.includes('_26')){
-            if(source && layerName.includes("andes_riverine")){
+            if(source && (layerName.includes("_26") || layerName.includes("_27"))){
                 if(this.map.getSource('andes_riverine')) {
                     this.map.removeLayer('andes_riverine_layer');
                     this.map.removeSource('andes_riverine')
