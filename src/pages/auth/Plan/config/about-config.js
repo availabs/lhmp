@@ -171,7 +171,7 @@ const config =  {
         				Header: 'capability type',
         				accessor: 'capability_type',
 						sort: true,
-						filter: 'default'
+						filter: 'multi'
         			},
         			
         			{

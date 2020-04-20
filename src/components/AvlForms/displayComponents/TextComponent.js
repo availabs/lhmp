@@ -43,7 +43,7 @@ class TextComponent extends React.PureComponent{
                         display: 'flex',
                         flexWrap: 'wrap'
                     }}>
-                        <div className="col-md-6" style={{paddingLeft: 0}}>
+                        <div className={this.props.config[0].sections.length > 1 ? "col-md-6" : 'col-md-12'} style={{paddingLeft: 0}}>
                             <div className='element-wrapper'>
                                 <div className='element-box'>
                                     {
@@ -54,16 +54,19 @@ class TextComponent extends React.PureComponent{
 
                         </div>
 
-                        <div className="col-md-6" style={{paddingRight: 0}}>
-                            <div className='element-wrapper'>
-                                <div className='element-box'>
-                                    {
-                                        this.props.config[0].sections.filter((s,sI) => sI % 2 !== 0).map(section => this.renderSection(section, data))
-                                    }
-                                </div>
-                            </div>
+                        {
+                            this.props.config[0].sections.length > 1 ?
+                                <div className="col-md-6" style={{paddingRight: 0}}>
+                                    <div className='element-wrapper'>
+                                        <div className='element-box'>
+                                            {
+                                                this.props.config[0].sections.filter((s,sI) => sI % 2 !== 0).map(section => this.renderSection(section, data))
+                                            }
+                                        </div>
+                                    </div>
 
-                        </div>
+                                </div> : null
+                        }
                     </div> :
                     (
                         <div className='row'>

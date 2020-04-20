@@ -22,12 +22,12 @@ import React from 'react';
 import ItemSelector from '../common/item-selector/item-selector';
 import {PanelLabel,SidePanelSection} from '../common/styled-components';
 
-const MultiSelectFilter = ({filter, setFilter}) => (
+const MultiSelectFilter = ({filter, setFilter, placeHolder="Select a Value"}) => (
   <SidePanelSection>
       {filter.name ? <PanelLabel htmlFor={`filter-${filter.id}`}>{filter.name}</PanelLabel> : null}
       <ItemSelector
           selectedItems={filter.value}
-          placeholder="Select a Value"
+          placeholder={placeHolder}
           options={filter.domain}
           multiSelect={true}
           searchable={ true }
