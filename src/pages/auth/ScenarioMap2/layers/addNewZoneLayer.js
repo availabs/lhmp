@@ -209,24 +209,30 @@ export const AddNewZoneOptions =  (options = {}) => {
                                         type="button"
                                         onClick = {(e) =>{
                                             e.persist()
-
                                             if(Object.keys(result_polygon).length === 0){
                                                 alert("Please draw a zone")
                                             }else{
                                                 let args = [];
+                                                let attributes = {}
+                                                let plan_id = store.getState().user.activePlan
                                                 let name = document.getElementById("new_zone_name").value
                                                 let geom = result_polygon.geometry
                                                 geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
-                                                let plan_id = store.getState().user.activePlan
-                                                args.push(name,geom,plan_id,zone_boundary)
-                                                return falcorGraph.call(['zones','insert'],args,[],[])
+                                                attributes['geom'] = geom
+                                                attributes['bbox'] = zone_boundary
+                                                attributes['name'] = name
+                                                attributes['geojson'] = result_polygon
+                                                args.push('zones',plan_id,attributes);
+                                                return falcorGraph.call(['form_zones','insert'], args, [], [])
                                                     .then(response =>{
                                                         alert("Zone has been saved")
                                                         let new_zone = localStorage.getItem("zone") ? JSON.parse(localStorage.getItem("zone")) : ''
                                                         new_zone.push({
-                                                            'id':name,
+                                                            'zone_id':null,
                                                             'name':name,
                                                             'geom':result_polygon,
+                                                            'bbox':zone_boundary,
+                                                            'geojson':result_polygon,
                                                             'geoid' : null
                                                         })
                                                         localStorage.setItem("zone",JSON.stringify(new_zone))
@@ -259,7 +265,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                             geojson.features.push({
                                                                                 type : "Feature",
                                                                                 properties:{},
-                                                                                geometry:new_zone.geojson
+                                                                                geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
                                                                             })
                                                                         }else{
                                                                             geojson.features.push(new_zone.geom)

@@ -57,6 +57,7 @@ class ScenarioTable extends React.Component {
                                                 'scenario_id':this.props.scenarioData[item].risk_scenario_id,
                                                 'scenario':this.props.scenarioData[item].table_name || '',
                                                 'visibility':this.props.scenarioData[item].map_source || '',
+                                                'total_loss':fnum(graph[item].sum.total_loss) || 0,
                                                 'annual_loss': fnum((parseFloat(this.props.scenarioData[item].annual_occurance/100)) * parseFloat(graph[item].sum.total_loss)) || 0
                                             })
                                             total_loss += parseFloat(graph[item].sum.total_loss)
@@ -170,6 +171,7 @@ class ScenarioTable extends React.Component {
                     <tr>
                         <th>Scenario</th>
                         <th>Visibility</th>
+                        <th>Total Loss</th>
                         <th>Annual Loss</th>
                     </tr>
                     </thead>
@@ -200,7 +202,7 @@ class ScenarioTable extends React.Component {
                                             }
                                         />
                                         </td>
-                                        {/*<td>{item.total_loss}</td>*/}
+                                        <td>{item.total_loss}</td>
                                         <td>{item.annual_loss}</td>
                                     </tr>
                                 )

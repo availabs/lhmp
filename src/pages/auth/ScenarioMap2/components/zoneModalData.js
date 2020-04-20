@@ -85,6 +85,7 @@ class ZoneModalData extends React.Component {
                         this.props.geoid !== "" ?
                             <AssetsFilteredTable
                                 geoid={[this.props.geoid]}
+                                zone_id ={[this.props.zone_id]}
                                 groupBy={'propType'}
                                 groupByFilter={this.state.filter.value}
                                 scenarioId={this.props.scenario_id.map(d => d.id)}
@@ -98,6 +99,7 @@ class ZoneModalData extends React.Component {
                                 name = {[this.props.name]}
                                 geom = {[this.props.geom]}
                                 geoid = {[this.props.geoid]}
+                                zone_id ={[this.props.zone_id]}
                                 groupBy = {'propType'}
                                 groupByFilter = {this.state.filter.value}
                                 scenarioId={this.props.scenario_id.map(d => d.id)}

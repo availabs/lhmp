@@ -31,10 +31,10 @@ class NewZoneAssetsFilteredTable extends Component {
                     [];
 
         return this.props.falcor.get(
-            ['zones','byPlanId',this.props.activePlan,'byName',this.props.name,'byGeom',this.props.geom,
+            ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
             this.props.groupBy,ids.filter(f => f),
             'byRiskScenario',this.props.scenarioId,'byRiskZone','all'],
-            ['zones','byPlanId',this.props.activePlan,'byName',this.props.name,'byGeom',this.props.geom,this.props.groupBy,ids.filter(f => f),'buildings','sum',['count','replacement_value']]
+            ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,this.props.groupBy,ids.filter(f => f),'sum',['num_buildings','replacement_value']]
         )
             .then(response =>{
                 return response
@@ -61,7 +61,7 @@ class NewZoneAssetsFilteredTable extends Component {
                     return a;
                 }, {})
             :
-            this.props.buildingData[this.props.activePlan].byName[this.props.name].byGeom[this.props.geom[0]][this.props.groupBy]
+            get(this.props.buildingData,['byId',this.props.zone_id,this.props.groupBy],{})
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
@@ -87,7 +87,7 @@ class NewZoneAssetsFilteredTable extends Component {
                             .forEach((subItem,si) =>{
                                 //console.log('inside forEach', this.props.groupBy, subItem)
                                 subCats.push(subItem)
-                                tmpSumCount += parseInt(get(graph, `${subItem}.sum.count.value`, 0));
+                                tmpSumCount += parseInt(get(graph, `${subItem}.sum.num_buildings.value`, 0));
                                 tmpSumReplacementValue += parseInt(get(graph, `${subItem}.sum.replacement_value.value`, 0));
                                 // get risk zone data
                                 Object.keys(get(graph, `${subItem}.byRiskScenario`, {}))
@@ -155,7 +155,7 @@ class NewZoneAssetsFilteredTable extends Component {
                                         }
 
                                     })
-                                totalBuildings += parseInt(get(graph, `${subItem}.sum.count.value`, 0));
+                                totalBuildings += parseInt(get(graph, `${subItem}.sum.num_buildings.value`, 0));
                                 totalBuildingsValue += parseInt(get(graph, `${subItem}.sum.replacement_value.value`, 0));
                             });
 
@@ -226,7 +226,7 @@ class NewZoneAssetsFilteredTable extends Component {
                         BuildingTypeData.push({
                             [primeColName]: get(config.filter(f => f.value === item).pop(), `name`, null),
                             'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.sum.replacement_value.value`, 0)),
-                            'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.count.value`, 0)),
+                            'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.num_buildings.value`, 0)),
                             ...Object.keys(riskZoneIdsAllValues)
                                 .reduce((a, riskZone) => {
                                     a[riskZone + ' #'] = riskZoneIdsAllValues[riskZone].count;
@@ -299,7 +299,7 @@ class NewZoneAssetsFilteredTable extends Component {
                                 item :
                                 get(config.filter(f => f.value === item).pop(), `name`, null),
                         'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.sum.replacement_value.value`, 0)),
-                        'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.count.value`, 0)),
+                        'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.num_buildings.value`, 0)),
                         ...Object.keys(riskZoneIdsAllValues)
                             .reduce((a, riskZone) => {
                                 a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
@@ -318,7 +318,7 @@ class NewZoneAssetsFilteredTable extends Component {
                         link: linkBase + item
                     });
 
-                    totalBuildings += parseInt(get(graph, `${item}.sum.count.value`, 0));
+                    totalBuildings += parseInt(get(graph, `${item}.sum.num_buildings.value`, 0));
                     totalBuildingsValue += parseInt(get(graph, `${item}.sum.replacement_value.value`, 0));
                 }
             })
@@ -420,7 +420,7 @@ const mapStateToProps = state => ({
     activeGeoid: state.user.activeGeoid,
     activeCousubid: state.user.activeCousubid,
     geoidData: get(state.graph, 'geo'),
-    buildingData : get(state.graph,'zones.byPlanId'),
+    buildingData : get(state.graph,['form_zones','zones','byPlanId',`${state.user.activePlan}`,]),
     parcelMeta : get(state.graph,'parcel.meta'),
 });
 

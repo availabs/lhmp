@@ -94,12 +94,12 @@ function Table({columns, data, height, tableClass, actions}) {
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
             <table {...getTableProps()} style={{width: '100%'}}>
                 <thead>
-                {headerGroups.map(headerGroup => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
+                {headerGroups.map((headerGroup,i) => (
+                    <tr {...headerGroup.getHeaderGroupProps()} key ={i}>
+                        {headerGroup.headers.map((column,j) => (
                             // Add the sorting props to control sorting. For this example
                             // we can add them into the header props
-                            <th>
+                            <th key ={j}>
                                 {
                                     column.sort ?
                                         (
