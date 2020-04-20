@@ -27,7 +27,7 @@ class ScenarioTable extends React.Component {
         return this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'])
             .then(response =>{
                 let length = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].length;
-                this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id','risk_scenario_id']])
+                this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id','risk_scenario_id','name']])
                     .then(response =>{
                         //console.log('response',response)
                         let graph = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].byIndex;
@@ -54,6 +54,7 @@ class ScenarioTable extends React.Component {
                                         if(this.props.scenarioData[item]){
                                             data.push({
                                                 'id':item,
+                                                'name':this.props.scenarioData[item].name || 'None',
                                                 'scenario_id':this.props.scenarioData[item].risk_scenario_id,
                                                 'scenario':this.props.scenarioData[item].table_name || '',
                                                 'visibility':this.props.scenarioData[item].map_source || '',
@@ -181,7 +182,7 @@ class ScenarioTable extends React.Component {
                             this.state.data.map((item,i) =>{
                                 return (
                                     <tr key = {i}>
-                                        <td>{item.scenario}</td>
+                                        <td>{item.name}</td>
                                         <td id ='visibility_column'>
                                         <input
                                             style={{padding:'0px'}}
