@@ -93,7 +93,6 @@ fuzzyTextFilterFn.autoRemove = val => !val;
 
 
 function Table({columns, data, height, tableClass, actions}) {
-    console.log('data?', columns, data)
     const filterTypes = React.useMemo(
         () => ({
             // Add a new fuzzyTextFilterFn filter type.
@@ -151,11 +150,9 @@ function Table({columns, data, height, tableClass, actions}) {
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
     );
-
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
     const firstPageRows = rows;// .slice(0, 20)
-    console.log('all rows', rows, data, columns)
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
@@ -204,12 +201,8 @@ function Table({columns, data, height, tableClass, actions}) {
                         return (
                             <tr {...row.getRowProps()}>
                                 {row.cells.map(cell => {
-                                    if (cell.column.Header.includes('.')){
-                                        cell.value = cell.row.original[cell.column.Header]
-                                    }
                                     return (
                                         <td {...cell.getCellProps()}>
-                                            {console.log('cell?', cell.row.original, cell.column.Header)}
                                             {
                                                 cell.column.link ?
                                                     <Link

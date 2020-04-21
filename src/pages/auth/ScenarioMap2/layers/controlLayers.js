@@ -243,8 +243,9 @@ export class ControlLayers extends MapLayer {
         if(layerName === 'zone'){
             this.zoneLayer.toggleVisibilityOff()
         }
-
     }
+
+
 
     addNewZoneOnClick(e){
         document.getElementById("new_zone_button").disabled = true

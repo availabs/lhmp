@@ -46,7 +46,7 @@ class ScenarioControl extends React.Component {
                 let graph = response.json.plan[this.props.activePlan].scenarios
                 if(graph){
                     graph.forEach(item =>{
-                        if(item.name.includes('hazus')){
+                        if(item.name.includes('HAZUS')){
                             this.setState({
                                 scenario_id : item.id
                             })
