@@ -201,6 +201,9 @@ function Table({columns, data, height, tableClass, actions}) {
                         return (
                             <tr {...row.getRowProps()}>
                                 {row.cells.map(cell => {
+                                    if (cell.column.Header.includes('.')){
+                                        cell.value = cell.row.original[cell.column.Header]
+                                    }
                                     return (
                                         <td {...cell.getCellProps()}>
                                             {
