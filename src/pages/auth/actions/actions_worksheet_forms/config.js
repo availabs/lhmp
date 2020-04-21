@@ -1,6 +1,7 @@
 module.exports = [
     {
         type:'actions', // type is same as the route path for now
+        sub_type: 'worksheet',
         //list_attributes:['action_name','action_type','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [

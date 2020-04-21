@@ -39,7 +39,6 @@ class ActionsWorksheetFormsNew extends React.Component{
         })
         return(
             <Element>
-                <h6 className="element-header">Actions {sub_type}</h6>
                 <AvlFormsNewDataWizard
                 json = {config}
                 id = {[this.props.match.params.id]}

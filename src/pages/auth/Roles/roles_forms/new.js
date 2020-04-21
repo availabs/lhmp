@@ -15,7 +15,6 @@ class RolesFormsNew extends React.Component{
     render(){
         return(
             <Element>
-                <h6 className="element-header">New Role</h6>
                 <AvlFormsNewData
                     json = {config}
                     id = {[this.props.match.params.id]}

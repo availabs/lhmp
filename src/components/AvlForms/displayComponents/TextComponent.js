@@ -1,8 +1,11 @@
 import React from 'react'
 import Element from "../../light-admin/containers/Element";
+import get from 'lodash.get'
+
 const TDStyle = {wordBreak: 'break-word', width: '50%'};
-class TextComponent extends React.PureComponent{
-    renderSection(section,data){
+
+class TextComponent extends React.PureComponent {
+    renderSection(section, data) {
         return (
             <Element>
                 <h4>{section.sub_title}</h4>
@@ -16,9 +19,9 @@ class TextComponent extends React.PureComponent{
                         </thead>
                         <tbody>
                         {
-                            Object.keys(data).filter( d => d!== 'type')
+                            Object.keys(data).filter(d => d !== 'type')
                                 .filter(d => data[d].section === section.id)
-                                .map(d =>{
+                                .map(d => {
                                     return (
                                         <tr>
                                             <td style={TDStyle}>{`${data[d].label}`} :</td>
@@ -33,21 +36,35 @@ class TextComponent extends React.PureComponent{
             </Element>
         )
     }
+
     render() {
         const data = this.props.data;
-        if(!data.length) return null
+        if (!data.length) return null;
+
         return (
             <React.Fragment>
+                {get(this.props.config[0], `page_title`, null) &&
+                get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null) ?
+                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null)}
+                        {get(this.props.config[0], `sub_title`, null) ?
+                            <h6>{get(data.filter(f => f.attribute === this.props.config[0].sub_title), `[0].value`, null)}</h6> : null}
+                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {get(this.props.config[0], `default_title`,
+                            `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                    </h4>}
+
                 {this.props.config[0].sections.length ?
                     <div style={{
                         display: 'flex',
                         flexWrap: 'wrap'
                     }}>
-                        <div className={this.props.config[0].sections.length > 1 ? "col-md-6" : 'col-md-12'} style={{paddingLeft: 0}}>
+                        <div className={this.props.config[0].sections.length > 1 ? "col-md-6" : 'col-md-12'}
+                             style={{paddingLeft: 0}}>
                             <div className='element-wrapper'>
                                 <div className='element-box'>
                                     {
-                                        this.props.config[0].sections.filter((s,sI) => sI % 2 === 0).map(section => this.renderSection(section, data))
+                                        this.props.config[0].sections.filter((s, sI) => sI % 2 === 0).map(section => this.renderSection(section, data))
                                     }
                                 </div>
                             </div>
@@ -60,7 +77,7 @@ class TextComponent extends React.PureComponent{
                                     <div className='element-wrapper'>
                                         <div className='element-box'>
                                             {
-                                                this.props.config[0].sections.filter((s,sI) => sI % 2 !== 0).map(section => this.renderSection(section, data))
+                                                this.props.config[0].sections.filter((s, sI) => sI % 2 !== 0).map(section => this.renderSection(section, data))
                                             }
                                         </div>
                                     </div>
@@ -105,6 +122,7 @@ class TextComponent extends React.PureComponent{
         )
     }
 }
+
 /*{Object.keys(this.props.config[0].attributes)
     .filter(attr => this.props.config[0].attributes[attr].section === section.id)
     .map(attr =>{
