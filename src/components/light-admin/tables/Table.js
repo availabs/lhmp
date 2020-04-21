@@ -211,7 +211,22 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
-
+function renderCell(cell) {
+    return (
+        cell.column.link ?
+            <Link
+                to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                {
+                    cell.column.formatValue ?
+                        cell.column.formatValue(cell.value) :
+                        cell.render('Cell')
+                }
+            </Link> :
+            cell.column.formatValue ?
+                cell.column.formatValue(cell.value) :
+                cell.render('Cell')
+    )
+}
 function Table({columns, data, tableClass, height, width, actions}) {
     /*  const defaultColumn = React.useMemo(
         () => ({
@@ -293,7 +308,9 @@ function Table({columns, data, tableClass, height, width, actions}) {
                         })}
                         className="tr"
                     >
-                        {headerGroup.headers.map(column => (
+                        {headerGroup.headers
+                            .filter(cell => cell.expandable !== 'true')
+                            .map(column => (
                             <div {...column.getHeaderProps()} className="th">
                                 {column.sort ?
                                     (
@@ -343,51 +360,69 @@ function Table({columns, data, tableClass, height, width, actions}) {
                 {rows.map((row, i) => {
                     prepareRow(row);
                     return (
-                        <div {...row.getRowProps()} className="tr">
-                            {row.cells.map(cell => {
-                                return (
-                                    <div {...cell.getCellProps(cellProps)} className="td">
-                                        {
-                                            cell.column.link ?
-                                                <Link
-                                                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                                                    {
-                                                        cell.column.formatValue ?
-                                                            cell.column.formatValue(cell.value) :
-                                                            cell.render('Cell')
-                                                    }
-                                                </Link> :
-                                                cell.column.formatValue ?
-                                                    cell.column.formatValue(cell.value) :
-                                                    cell.render('Cell')
-
+                        <React.Fragment>
+                            <div {...row.getRowProps()}
+                                className="tr"
+                                onClick={(e) => {
+                                    if (document.getElementById(`expandable${i}`)){
+                                        document.getElementById(`expandable${i}`).style.display =
+                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'table-row' : 'none'
+                                    }
+                                }}
+                            >
+                                {row.cells
+                                    .filter(cell => cell.column.expandable !== 'true')
+                                    .map(cell => {
+                                        if (cell.column.Header.includes('.')){
+                                            cell.value = cell.row.original[cell.column.Header]
                                         }
-                                    </div>
-                                )
-                            })}
-                            {actions ?
-                                Object.keys(actions)
-                                    .map(action => {
-                                            return (
-                                                <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle} className="td">
-                                                    {
-                                                        typeof row.original[action] === 'string' ?
-                                                            <Link
-                                                                className={action === 'delete' ?
-                                                                    'btn btn-sm btn-outline-danger' :
-                                                                    "btn btn-sm btn-outline-primary"}
-                                                                style={{textTransform: 'capitalize'}}
-                                                                to={row.original[action]}>
-                                                                {action}
-                                                            </Link>
-                                                            :
-                                                            row.original[action]
-                                                    }
-                                                </div>)
-                                        }
+                                    return (
+                                        <div {...cell.getCellProps(cellProps)} className="td">
+                                            {renderCell(cell)}
+                                        </div>
                                     )
-                                : null}
-                        </div>
+                                })}
+                                {actions ?
+                                    Object.keys(actions)
+                                        .map(action => {
+                                                return (
+                                                    <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle} className="td">
+                                                        {
+                                                            typeof row.original[action] === 'string' ?
+                                                                <Link
+                                                                    className={action === 'delete' ?
+                                                                        'btn btn-sm btn-outline-danger' :
+                                                                        "btn btn-sm btn-outline-primary"}
+                                                                    style={{textTransform: 'capitalize'}}
+                                                                    to={row.original[action]}>
+                                                                    {action}
+                                                                </Link>
+                                                                :
+                                                                row.original[action]
+                                                        }
+                                                    </div>)
+                                            }
+                                        )
+                                    : null}
+                            </div>
+                            <tr className="tr"
+                                {...row.getRowProps()}
+                                 id={`expandable${i}`} style={{display: 'none', backgroundColor: 'rgba(0,0,0,0.06)', width:'700px'}}>
+                                {row.cells
+                                    .filter(cell => cell.column.expandable === 'true')
+                                    .map(cell => {
+                                        return (
+                                            <td
+                                                 className="td"
+                                                 {...cell.getCellProps(cellProps)}
+                                                 colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
+                                                {renderCell(cell)}
+                                            </td>
+                                        )
+                                    })
+                                }
+                            </tr>
+                        </React.Fragment>
                     )
                 })}
             </div>
