@@ -46,10 +46,11 @@ class AssetsFilteredTable extends Component {
             ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all']
         )
             .then(response => {
+                //console.log('response',response)
                 //let allGeo = [this.props.geoid,...get(this.props.falcor.getCache(), `geo.${this.props.geoid}.counties.municipalities.value`, [])];
                 if(this.props.groupBy === 'critical') {
                     ids =  get(this.props.falcor.getCache(), `parcel.meta.critical_infra.value`, []).map(f => f.value);
-                    console.log('critical ids', ids)
+                    //console.log('critical ids', ids)
                     // ids =  get(this.props.falcor.getCache(), `building.byGeoid.${this.props.geoid}.critical.types.all.value`, []);
                 }
                 let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.geoid}.cousubs.value`, []);
@@ -270,7 +271,6 @@ class AssetsFilteredTable extends Component {
                         let riskZoneIdsAllValues = {}
                         Object.keys(get(graph, `${item}.byRiskScenario`, {}))
                             .forEach(scenarioId => {
-
                                 if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
                                     if(this.props.riskZoneId && this.props.riskZoneId.length > 0){
                                         get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
@@ -350,7 +350,6 @@ class AssetsFilteredTable extends Component {
                         totalBuildingsValue += parseInt(get(graph, `${item}.sum.replacement_value.value`, 0));
                     }
                 });
-
             BuildingTypeData.push({
                 [primeColName]: 'TOTAL',
                 'TOTAL $ REPLACEMENT VALUE': totalBuildingsValue,

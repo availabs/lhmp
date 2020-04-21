@@ -19,18 +19,18 @@ let zone_boundary = [];
 export class AddNewZoneLayer extends MapLayer{
     onAdd(map){
         super.onAdd(map);
-        if(store.getState().user.activeGeoid){
+       /* if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                    map.resize();
-                    map.fitBounds(bbox);
+                    //map.resize();
+                    //map.fitBounds(bbox);
 
                 })
 
-        }
+        }*/
     }
 
 
@@ -138,7 +138,7 @@ export class AddNewZoneLayer extends MapLayer{
 
                 document.addEventListener('click', onClick);
                 document.addEventListener('dblclick', ondblclick);
-                clearDraw(e)
+                //clearDraw(e)
                 alert("Please add a name and Save the zone")
             }
 

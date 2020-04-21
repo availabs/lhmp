@@ -150,11 +150,9 @@ function Table({columns, data, height, tableClass, actions}) {
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
     );
-
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
     const firstPageRows = rows;// .slice(0, 20)
-
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
