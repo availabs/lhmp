@@ -15,23 +15,14 @@ var _ = require('lodash')
 const IconPolygon = ({layer}) => <span className='fa fa-2x fa-connectdevelop'/>;
 let result_polygon = {}
 let zone_boundary = [];
-
+let draw = new MapboxDraw({
+    displayControlsDefault: false,
+});
 export class AddNewZoneLayer extends MapLayer{
     onAdd(map){
         super.onAdd(map);
-       /* if(store.getState().user.activeGeoid){
-            let activeGeoid = store.getState().user.activeGeoid
-            return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
-                .then(response =>{
-                    let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
-                    let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                    //map.resize();
-                    //map.fitBounds(bbox);
-
-                })
-
-        }*/
     }
+
 
 
     toggleCreationMode(mode, map) {
@@ -48,9 +39,6 @@ export class AddNewZoneLayer extends MapLayer{
 
             document.addEventListener('click', onClick);
             document.addEventListener('dblclick', ondblclick);
-            let draw = new MapboxDraw({
-                displayControlsDefault: false,
-            });
 
             if(this.map.getLayer("parcels") || this.map.getLayer("ebr") || this.map.getLayer("counties") || this.map.getLayer("cousubs") || this.map.getLayer("project") || this.map.getLayer("polygon-layer")){
                 this.map.removeLayer("counties")
@@ -141,13 +129,9 @@ export class AddNewZoneLayer extends MapLayer{
                 //clearDraw(e)
                 alert("Please add a name and Save the zone")
             }
-
-
         }
         this.forceUpdate();
     }
-
-
 
 }
 
@@ -274,6 +258,9 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                 })
                                                                 layer.map.getSource("polygon").setData(geojson)
                                                             }
+                                                            layer.map.fire('draw.delete')
+                                                            layer.map.removeControl(draw);
+                                                            layer.forceUpdate()
                                                             document.getElementById("new_zone_button").disabled = false
                                                         }
 
@@ -314,60 +301,4 @@ const mapStateToProps = (state, { id }) => ({
 });
 const mapDispatchToProps = {};
 
-/* layer.map.addLayer({
-'id': 'polygon-layer',
-'source': 'polygon',
-'type': 'line',
-'paint': {
-'line-color': '#F31616',
-'line-opacity': 0.5,
-'line-width': 4
-}
-})*/
-
-
-/*layer.map.addLayer({
-    'id': 'parcels',
-    'source': 'nys_1811_parcels',
-    'source-layer': 'nys_1811_parcels',
-    'type': 'fill',
-    'minzoom': 13,
-    'paint': {
-        'fill-opacity':0.1,
-        'fill-outline-color': '#ffffff'
-    }
-
-})
-layer.map.addLayer({
-    'id': 'ebr',
-    'source': 'nys_buildings_avail',
-    'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
-    'type': 'fill',
-    'minzoom': 13,
-    'paint': {
-        'fill-color': '#000000'
-    }
-})
-layer.map.addLayer({
-    'id': 'buildings-layer',
-    'source': 'buildings',
-    'type': 'circle',
-    'paint': {
-        //'circle-radius': 3,
-        'circle-opacity': 0.5,
-
-    }
-})
-layer.map.addLayer({
-    'id': 'project',
-    'source': 'counties',
-    'source-layer': 'counties',
-    'type': 'line',
-    'paint': {
-        'line-color': '#FFFFFF',
-        'line-opacity': 0.5
-    },
-    filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
-
-})*/
 
