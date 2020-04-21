@@ -77,7 +77,7 @@ class ZoneTable extends React.Component {
                     this.props.zones.forEach(item =>{
                         if(item.geoid){
                             if(item.geoid.length === 5){
-                                this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'county',item.geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'],
+                                this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid,['county'],item.geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'],
                                     ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
                                     .then(response =>{
                                         return response
@@ -93,6 +93,7 @@ class ZoneTable extends React.Component {
                             let graph_scenario_jurisdiction= get(this.props.zonesByActiveScenarioData,['jurisdiction',`${item.geoid}`,'byRiskScenario',`${scenario_id}`,'byRiskZone','all','value'],[])
                             let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
                             let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
+                            //console.log('check',this.props.zonesByActiveScenarioData)
                             if((graph_scenario_county.length > 0 || graph_scenario_jurisdiction.length > 0) && Object.keys(forms_zone).length > 0 && Object.keys(zone_buildings_data).length > 0){
                                 data.push({
                                     zone_geoid : item.geoid,
@@ -109,6 +110,7 @@ class ZoneTable extends React.Component {
                                         graph_scenario_jurisdiction.length > 0 ?
                                             fnum(graph_scenario_jurisdiction.reduce((a, b) => a + (parseFloat(b['sum']) || 0), 0)) :0
                                 })
+
                             }
                         }else{
                             //if geoid is null,
