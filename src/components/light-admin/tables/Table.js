@@ -51,7 +51,9 @@ const Styles = styled.div`
       }
       
     }
-
+    .expandable {
+        cursor: pointer;
+    }
      .th {
         font-size: 0.75rem;
         text-transform: uppercase;
@@ -362,11 +364,12 @@ function Table({columns, data, tableClass, height, width, actions}) {
                     return (
                         <React.Fragment>
                             <div {...row.getRowProps()}
-                                className="tr"
+                                className={row.cells
+                                    .filter(cell => cell.column.expandable === 'true').length ? "tr expandable" : "tr"}
                                 onClick={(e) => {
                                     if (document.getElementById(`expandable${i}`)){
                                         document.getElementById(`expandable${i}`).style.display =
-                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'table-row' : 'none'
+                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'flex' : 'none'
                                     }
                                 }}
                             >
@@ -405,9 +408,10 @@ function Table({columns, data, tableClass, height, width, actions}) {
                                         )
                                     : null}
                             </div>
+
                             <tr className="tr"
-                                {...row.getRowProps()}
-                                 id={`expandable${i}`} style={{display: 'none', backgroundColor: 'rgba(0,0,0,0.06)', width:'700px'}}>
+                                 id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
+                                     display: 'none', flex: '0 1 auto', width:'100%', minWidth:'100%'}}>
                                 {row.cells
                                     .filter(cell => cell.column.expandable === 'true')
                                     .map(cell => {

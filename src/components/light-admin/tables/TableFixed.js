@@ -8,6 +8,9 @@ import MultiSelectFilter from "../../filters/multi-select-filter";
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
+.expandable {
+        cursor: pointer;
+    }
 `;
 const _MultiSelectFilter = styled.div`
     * {
@@ -91,6 +94,22 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
 
+function renderCell(cell) {
+    return (
+        cell.column.link ?
+            <Link
+                to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                {
+                    cell.column.formatValue ?
+                        cell.column.formatValue(cell.value) :
+                        cell.render('Cell')
+                }
+            </Link> :
+            cell.column.formatValue ?
+                cell.column.formatValue(cell.value) :
+                cell.render('Cell')
+    )
+}
 
 function Table({columns, data, height, tableClass, actions}) {
     const filterTypes = React.useMemo(
@@ -158,9 +177,12 @@ function Table({columns, data, height, tableClass, actions}) {
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
             <table {...getTableProps()} style={{width: '100%'}}>
                 <thead>
-                {headerGroups.map((headerGroup,i) => (
+                {headerGroups
+                    .map((headerGroup,i) => (
                     <tr {...headerGroup.getHeaderGroupProps()} key ={i}>
-                        {headerGroup.headers.map((column,j) => (
+                        {headerGroup.headers
+                            .filter(cell => cell.expandable !== 'true')
+                            .map((column,j) => (
                             // Add the sorting props to control sorting. For this example
                             // we can add them into the header props
                             <th key ={j}>
@@ -199,8 +221,20 @@ function Table({columns, data, height, tableClass, actions}) {
                     (row, i) => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => {
+                            <React.Fragment>
+                            <tr {...row.getRowProps()}
+                                className={row.cells
+                                    .filter(cell => cell.column.expandable === 'true').length ? "expandable" : ""}
+                                onClick={(e) => {
+                                    if (document.getElementById(`expandable${i}`)){
+                                        document.getElementById(`expandable${i}`).style.display =
+                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'table-row' : 'none'
+                                    }
+                                }}
+                            >
+                                {row.cells
+                                    .filter(cell => cell.column.expandable !== 'true')
+                                    .map(cell => {
                                     if (cell.column.Header.includes('.')){
                                         cell.value = cell.row.original[cell.column.Header]
                                     }
@@ -247,6 +281,22 @@ function Table({columns, data, height, tableClass, actions}) {
                                         )
                                     : null}
                             </tr>
+                                <tr {...row.getRowProps()}
+                                    id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
+                                    display: 'none'}}>
+                                    {row.cells
+                                        .filter(cell => cell.column.expandable === 'true')
+                                        .map(cell => {
+                                            return (
+                                                <td {...cell.getCellProps()}
+                                                    colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
+                                                    {renderCell(cell)}
+                                                </td>
+                                            )
+                                        })
+                                    }
+                                </tr>
+                            </React.Fragment>
                         )
                     }
                 )}
