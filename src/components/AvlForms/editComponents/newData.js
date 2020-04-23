@@ -97,8 +97,9 @@ class AvlFormsNewData extends React.Component{
 
     }
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(prevState.county, this.state.county) || !_.isEqual(prevState.contact_county, this.state.contact_county)){
-            this.cousubDropDown({target:{value:this.state.county ? this.state.county : this.state.contact_county}})
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        if (countyAttrs.reduce((a,c) => a || !_.isEqual(prevState[c], this.state[c]), false)){
+            this.cousubDropDown({target:{value:this.state[countyAttrs.pop()]}})
         }
     }
 
@@ -251,7 +252,8 @@ class AvlFormsNewData extends React.Component{
         let countyData = [];
         let cousubsData = [];
         let graph = this.props.geoData;
-        let filterOn = this.state.county ? this.state.county : this.state.contact_county
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        let filterOn = this.state[countyAttrs.pop()]
         console.log('geodata called',graph, this.state)
         if(graph){
             // let graph = this.props.geoData;
@@ -327,6 +329,7 @@ class AvlFormsNewData extends React.Component{
                         title : attribute,
                         data_error : item.attributes[attribute].data_error,
                         required: item.attributes[attribute].field_required,
+                        placeholder: item.attributes[attribute].placeholder,
                         type: 'multiselect',//item.attributes[attribute].edit_type,
                         meta : countyData || [],
                         area:item.attributes[attribute].area,
@@ -347,6 +350,7 @@ class AvlFormsNewData extends React.Component{
                         state : this.state,
                         title : attribute,
                         required: item.attributes[attribute].field_required,
+                        placeholder: item.attributes[attribute].placeholder,
                         type: 'multiselect',//item.attributes[attribute].edit_type,
                         depend_on : item.attributes[attribute].depend_on,
                         area:item.attributes[attribute].area,
@@ -363,6 +367,7 @@ class AvlFormsNewData extends React.Component{
                         handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
                         type: 'multiselect', //item.attributes[attribute].edit_type,
                         required: item.attributes[attribute].field_required,
                         meta: meta_data ? meta_data : [],
@@ -380,6 +385,8 @@ class AvlFormsNewData extends React.Component{
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
+                        inline: item.attributes[attribute].inline,
                         required: item.attributes[attribute].field_required,
                         type:item.attributes[attribute].edit_type,
                         prompt: this.displayPrompt.bind(this),
@@ -397,6 +404,7 @@ class AvlFormsNewData extends React.Component{
                         state : this.state,
                         title : attribute,
                         data_error : item.attributes[attribute].data_error,
+                        placeholder: item.attributes[attribute].placeholder,
                         required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
                         type:item.attributes[attribute].edit_type,
@@ -431,8 +439,19 @@ class AvlFormsNewData extends React.Component{
                 data.push(d)
 
         });
+        console.log('check??', this.props.config[0].page_title, this.state)
         return(
             <div className="container">
+                {get(this.props.config[0], `page_title`, null) &&
+                this.state[this.props.config[0].page_title] ?
+                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {this.state[this.props.config[0].page_title]}
+                        {get(this.props.config[0], `sub_title`, null) ?
+                            <h6>{get(this.state, `${this.props.config[0].sub_title}`, null)}</h6> : null}
+                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {get(this.props.config[0], `default_title`,
+                            `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                    </h4>}
                 <Element>
                     <div className="element-box">
                         <div className="form-group">

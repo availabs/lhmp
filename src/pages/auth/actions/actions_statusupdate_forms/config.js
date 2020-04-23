@@ -2,6 +2,7 @@
 module.exports = [
     {
         type:'action_status_update', // type is same as the route path for now
+        syb_type: 'status update',
         list_attributes:['action_name','action_type'], // to list the attributes on the main page
         // if wizard
         sections: [

@@ -9,6 +9,7 @@ import MapLayer from "components/AvlMap/MapLayer.js"
 
 import { getColorRange } from "constants/color-ranges";
 import ZoneControls from "../controls/zoneControls";
+import geo from "../../../../store/modules/geo";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -46,14 +47,13 @@ export class ZoneLayer extends MapLayer{
                             geojson.features.push({
                                 type : "Feature",
                                 properties:{},
-                                geometry:new_zone.geojson
+                                geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
                             })
                         }else{
                             geojson.features.push(new_zone.geom)
                         }
                     }
                 })
-
                 this.map.getSource("polygon").setData(geojson)
             }
 
@@ -82,7 +82,7 @@ export class ZoneLayer extends MapLayer{
         })
     }
 
-    showTownBoundary(data){
+    showTownBoundary(data,id){
         let geoids = JSON.parse("[" + data + "]")[0];
         let cousubs = [];
         let geojson = {
@@ -92,23 +92,29 @@ export class ZoneLayer extends MapLayer{
         geoids.forEach(geoid =>{
             if(geoid.geoid && geoid.geoid.length !== 5){
                 cousubs.push(geoid.geoid)
-
             }else if(geoid.geoid === null){
                 let new_zones = JSON.parse(localStorage.getItem("zone"))
                 new_zones.forEach(new_zone =>{
                     if(new_zone.geoid === null){
                         if(new_zone.geojson){
-                            geojson.features.push({
-                                type : "Feature",
-                                properties:{},
-                                geometry:new_zone.geojson
-                            })
+                            if(new_zone.geojson.geometry){
+                                geojson.features.push({
+                                    type : "Feature",
+                                    properties:{},
+                                    geometry:new_zone.geojson.geometry
+                                })
+                            }else{
+                                geojson.features.push({
+                                    type : "Feature",
+                                    properties:{},
+                                    geometry:new_zone.geojson
+                                })
+                            }
                         }else{
                             geojson.features.push(new_zone.geom)
                         }
                     }
                 })
-
             }
         });
         this.map.setFilter(

@@ -2,6 +2,7 @@
 module.exports = [
     {
         type:'actions', // type is same as the route path for now
+        sub_type:'project',
         list_attributes:['action_jurisdiction','action_category','action_type','action_name','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [
@@ -302,6 +303,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             is_project_structure_located_in_sfha:{

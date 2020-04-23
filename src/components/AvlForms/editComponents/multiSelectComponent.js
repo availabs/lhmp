@@ -51,6 +51,7 @@ class MultiSelectComponent extends React.PureComponent {
                                 this.props.onClick({target: {value: e}})
                             }
                         }}
+                        placeHolder={this.props.placeholder}
                     />
                 </div>
                 <br/>

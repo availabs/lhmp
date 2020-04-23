@@ -64,7 +64,6 @@ class AvlFormsViewData extends React.Component{
                 Object.keys(graph[item].attributes).forEach((d,i) =>{
                     let section = get(config[0][d], `section`, null),
                         label = get(config[0][d], `label`, null);
-                    console.log(' section #', get(config[0][d], `section`, null));
                     if(config_attributes[0].includes(d)){
                         if(graph[item].attributes[d] === county || graph[item].attributes[d]=== cousub){
                             data.push({
@@ -75,7 +74,7 @@ class AvlFormsViewData extends React.Component{
                             })
                         }
                         else{
-                            if( !config[0][d].hidden && config[0][d].hidden !== 'true'){
+                            if( !config[0][d].hidden || config[0][d].hidden !== 'true'){
                                 data.push({
                                     attribute:d,
                                     value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : '',
@@ -93,7 +92,6 @@ class AvlFormsViewData extends React.Component{
                                 let renamed_column = config[0][ma].rename_column;
                                 let section = get(config[0][ma], `section`, null),
                                     label = get(config[0][ma], `label`, null);
-                                console.log('rename section #', get(config[0][ma], `section`, null),config[0][ma]);
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
                                         if(graph[item].attributes[rc]){

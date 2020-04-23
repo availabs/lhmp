@@ -105,8 +105,9 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(prevState.county, this.state.county)){
-            this.cousubDropDown({target:{value:this.state.county}})
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        if (countyAttrs.reduce((a,c) => a || !_.isEqual(prevState[c], this.state[c]), false)){
+            this.cousubDropDown({target:{value:this.state[countyAttrs.pop()]}})
         }
     }
 
@@ -163,7 +164,7 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     cousubDropDown(event){
-        let county = event.target.value;
+        let county = typeof event.target.value === 'object' ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
@@ -185,6 +186,9 @@ class AvlFormsNewDataWizard extends React.Component{
         let countyData = [];
         let cousubsData = [];
         let graph = this.props.geoData
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'));
+        let filterOn = this.state[countyAttrs.pop()]
+
         if(graph){
             // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
@@ -197,7 +201,7 @@ class AvlFormsNewDataWizard extends React.Component{
             })
 
             Object.keys(graph)
-                .filter(item => this.state.county && this.state.county.includes(item.toString()))
+                .filter(item => filterOn && filterOn.includes(item.toString()))
                 .forEach(item =>{
                     get(graph, `${item}.cousubs.value`, [])
                         .filter(cousub => get(graph, `${cousub}.name`, null))
@@ -297,6 +301,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type: 'multiselect',//item.attributes[attribute].edit_type,
                             meta : countyData,
@@ -314,6 +319,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type: 'multiselect',//item.attributes[attribute].edit_type,
                             depend_on : item.attributes[attribute].depend_on,
@@ -342,6 +348,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleChange : this.handleChange,
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type:item.attributes[attribute].edit_type,
                             disable_condition:item.attributes[attribute].disable_condition,
@@ -360,6 +367,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleChange: this.handleChange,
                             state: this.state,
                             title: attribute,
+                            placeholder: item.attributes[attribute].placeholder,
+                            inline: item.attributes[attribute].inline,
                             required: item.attributes[attribute].field_required,
                             type: item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
@@ -386,6 +395,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
@@ -400,6 +410,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
@@ -415,6 +426,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleChange : this.handleChange,
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
@@ -431,6 +443,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleChange : this.handleChange,
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
@@ -446,6 +459,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             handleChange : this.handleChange,
                             state : this.state,
                             title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
                             required: item.attributes[attribute].field_required,
                             prompt: this.displayPrompt.bind(this),
                             type:item.attributes[attribute].edit_type,
@@ -537,7 +551,17 @@ class AvlFormsNewDataWizard extends React.Component{
 
         let sections = this.createWizardSections();
         return(
-            <div className="container">
+            <div className="container" >
+                {get(this.props.config[0], `page_title`, null) &&
+                this.state[this.props.config[0].page_title] ?
+                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {this.state[this.props.config[0].page_title]}
+                        {get(this.props.config[0], `sub_title`, null) ?
+                            <h6>{get(this.state, `${this.props.config[0].sub_title}`, null)}</h6> : null}
+                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {get(this.props.config[0], `default_title`,
+                            `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                    </h4>}
                 <Element>
                     <Wizard steps={sections} submit={this.onSubmit}/>
                 </Element>

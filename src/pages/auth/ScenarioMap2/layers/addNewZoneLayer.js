@@ -15,23 +15,14 @@ var _ = require('lodash')
 const IconPolygon = ({layer}) => <span className='fa fa-2x fa-connectdevelop'/>;
 let result_polygon = {}
 let zone_boundary = [];
-
+let draw = new MapboxDraw({
+    displayControlsDefault: false,
+});
 export class AddNewZoneLayer extends MapLayer{
     onAdd(map){
         super.onAdd(map);
-        if(store.getState().user.activeGeoid){
-            let activeGeoid = store.getState().user.activeGeoid
-            return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
-                .then(response =>{
-                    let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
-                    let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                    map.resize();
-                    map.fitBounds(bbox);
-
-                })
-
-        }
     }
+
 
 
     toggleCreationMode(mode, map) {
@@ -48,9 +39,6 @@ export class AddNewZoneLayer extends MapLayer{
 
             document.addEventListener('click', onClick);
             document.addEventListener('dblclick', ondblclick);
-            let draw = new MapboxDraw({
-                displayControlsDefault: false,
-            });
 
             if(this.map.getLayer("parcels") || this.map.getLayer("ebr") || this.map.getLayer("counties") || this.map.getLayer("cousubs") || this.map.getLayer("project") || this.map.getLayer("polygon-layer")){
                 this.map.removeLayer("counties")
@@ -138,16 +126,12 @@ export class AddNewZoneLayer extends MapLayer{
 
                 document.addEventListener('click', onClick);
                 document.addEventListener('dblclick', ondblclick);
-                clearDraw(e)
+                //clearDraw(e)
                 alert("Please add a name and Save the zone")
             }
-
-
         }
         this.forceUpdate();
     }
-
-
 
 }
 
@@ -209,24 +193,30 @@ export const AddNewZoneOptions =  (options = {}) => {
                                         type="button"
                                         onClick = {(e) =>{
                                             e.persist()
-
                                             if(Object.keys(result_polygon).length === 0){
                                                 alert("Please draw a zone")
                                             }else{
                                                 let args = [];
+                                                let attributes = {}
+                                                let plan_id = store.getState().user.activePlan
                                                 let name = document.getElementById("new_zone_name").value
                                                 let geom = result_polygon.geometry
                                                 geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
-                                                let plan_id = store.getState().user.activePlan
-                                                args.push(name,geom,plan_id,zone_boundary)
-                                                return falcorGraph.call(['zones','insert'],args,[],[])
+                                                attributes['geom'] = geom
+                                                attributes['bbox'] = zone_boundary
+                                                attributes['name'] = name
+                                                attributes['geojson'] = result_polygon
+                                                args.push('zones',plan_id,attributes);
+                                                return falcorGraph.call(['form_zones','insert'], args, [], [])
                                                     .then(response =>{
                                                         alert("Zone has been saved")
                                                         let new_zone = localStorage.getItem("zone") ? JSON.parse(localStorage.getItem("zone")) : ''
                                                         new_zone.push({
-                                                            'id':name,
+                                                            'zone_id':null,
                                                             'name':name,
                                                             'geom':result_polygon,
+                                                            'bbox':zone_boundary,
+                                                            'geojson':result_polygon,
                                                             'geoid' : null
                                                         })
                                                         localStorage.setItem("zone",JSON.stringify(new_zone))
@@ -259,7 +249,7 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                             geojson.features.push({
                                                                                 type : "Feature",
                                                                                 properties:{},
-                                                                                geometry:new_zone.geojson
+                                                                                geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
                                                                             })
                                                                         }else{
                                                                             geojson.features.push(new_zone.geom)
@@ -268,6 +258,9 @@ export const AddNewZoneOptions =  (options = {}) => {
                                                                 })
                                                                 layer.map.getSource("polygon").setData(geojson)
                                                             }
+                                                            layer.map.fire('draw.delete')
+                                                            layer.map.removeControl(draw);
+                                                            layer.forceUpdate()
                                                             document.getElementById("new_zone_button").disabled = false
                                                         }
 
@@ -308,60 +301,4 @@ const mapStateToProps = (state, { id }) => ({
 });
 const mapDispatchToProps = {};
 
-/* layer.map.addLayer({
-'id': 'polygon-layer',
-'source': 'polygon',
-'type': 'line',
-'paint': {
-'line-color': '#F31616',
-'line-opacity': 0.5,
-'line-width': 4
-}
-})*/
-
-
-/*layer.map.addLayer({
-    'id': 'parcels',
-    'source': 'nys_1811_parcels',
-    'source-layer': 'nys_1811_parcels',
-    'type': 'fill',
-    'minzoom': 13,
-    'paint': {
-        'fill-opacity':0.1,
-        'fill-outline-color': '#ffffff'
-    }
-
-})
-layer.map.addLayer({
-    'id': 'ebr',
-    'source': 'nys_buildings_avail',
-    'source-layer': 'nys_buildings_osm_ms_parcelid_pk',
-    'type': 'fill',
-    'minzoom': 13,
-    'paint': {
-        'fill-color': '#000000'
-    }
-})
-layer.map.addLayer({
-    'id': 'buildings-layer',
-    'source': 'buildings',
-    'type': 'circle',
-    'paint': {
-        //'circle-radius': 3,
-        'circle-opacity': 0.5,
-
-    }
-})
-layer.map.addLayer({
-    'id': 'project',
-    'source': 'counties',
-    'source-layer': 'counties',
-    'type': 'line',
-    'paint': {
-        'line-color': '#FFFFFF',
-        'line-opacity': 0.5
-    },
-    filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
-
-})*/
 

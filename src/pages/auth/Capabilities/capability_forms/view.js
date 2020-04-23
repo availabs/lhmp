@@ -20,7 +20,6 @@ class CapabilitiesFormsView extends React.Component{
         return(
             <div className='container'>
                 <Element>
-                    <h6 className="element-header">Capability</h6>
                     <AvlFormsViewData
                         json = {config}
                         id = {[this.props.match.params.id]}
