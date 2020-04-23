@@ -249,7 +249,6 @@ module.exports = [
                 meta: 'true',
                 area : 'true',
                 section: '3',
-                defaultValue: ['Countywide'],
             },
             action_jurisdiction:{
                 label:' Action Jurisdiction',// which you would like to see on the form
