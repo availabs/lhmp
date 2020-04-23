@@ -7,6 +7,7 @@ module.exports = [
         default_title: 'Capability', // in the case when page_title is invalid
         page_title: 'capability_name', // page title in edit and view
         sub_title: '', // sub title in edit and view
+        csv_download: ['capability_category', 'capability_type', 'capability_name'], // columns to download (if present on screen)
         attributes: {
             county:{
                 label:'County', // Which you would like to see on the form

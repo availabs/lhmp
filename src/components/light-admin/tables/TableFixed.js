@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import {useFilters, useGlobalFilter, useSortBy, useTable} from 'react-table'
+import {CSVLink, CSVDownload} from 'react-csv';
 // A great library for fuzzy filtering/sorting items
 import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
+import _ from 'lodash'
 import MultiSelectFilter from "../../filters/multi-select-filter";
 
 const DIV = styled.div`
@@ -111,7 +113,7 @@ function renderCell(cell) {
     )
 }
 
-function Table({columns, data, height, tableClass, actions}) {
+function Table({columns, data, height, tableClass, actions, csvDownload}) {
     const filterTypes = React.useMemo(
         () => ({
             // Add a new fuzzyTextFilterFn filter type.
@@ -172,6 +174,14 @@ function Table({columns, data, height, tableClass, actions}) {
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
     const firstPageRows = rows;// .slice(0, 20)
+    let downloadData = _.cloneDeep(rows.map(r => r.original))
+    downloadData = downloadData.map(row => {
+        Object.keys(row).forEach(key => {
+            if (!csvDownload.includes(key)) delete row[key]
+        })
+        return row
+    })
+
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
@@ -209,9 +219,13 @@ function Table({columns, data, height, tableClass, actions}) {
                                         column.render(MultiSelectColumnFilter) : column.render('Filter') : null}</div>
                             </th>
                         ))}
-                        {actions ?
-                            Object.keys(actions)
-                                .map(action => <th></th>) : null
+                        {csvDownload.length ?
+                            <th colSpan={3}>
+                                <CSVLink className='btn btn-secondary btn-sm'
+                                         style={{width:'100%'}}
+                                         data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
+                            </th> :
+                            actions ? Object.keys(actions).map(action => <th></th>) : null
                         }
                     </tr>
                 ))}

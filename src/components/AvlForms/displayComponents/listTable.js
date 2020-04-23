@@ -324,6 +324,7 @@ class AvlFormsListTable extends React.Component{
                                             width={this.props.width ? this.props.width : ''}
                                             tableClass={this.props.tableClass ? this.props.tableClass : null}
                                             actions={{edit:true, view:true, delete:true}}
+                                            csvDownload={this.props.config[0].csv_download}
                                         />
                                     </div>
                                 </div>
