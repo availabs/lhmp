@@ -464,7 +464,7 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
 }
 
 
-function StyledTable({columns: columns, data: data, height, width, actions, csvDownload}) {
+function StyledTable({columns: columns, data: data, height, width, actions, csvDownload = []}) {
     return (
         <Styles>
             <Table columns={columns} data={data} height={height} width={width} actions={actions} csvDownload={csvDownload}/>

@@ -133,7 +133,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
             multi: (rows, id, filterValue) => {
                 return rows.filter(row => {
                     const rowValue = row.values[id];
-                    return rowValue !== undefined
+                    return rowValue !== undefined && filterValue.length
                         ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
                         : true
                 })
@@ -156,10 +156,6 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
         headerGroups,
         rows,
         prepareRow,
-        state,
-        visibleColumns,
-        preGlobalFilteredRows,
-        setGlobalFilter,
     } = useTable(
         {
             columns,
@@ -171,10 +167,6 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
     );
-    // We don't want to render all 2000 rows for this example, so cap
-    // it at 20 for this use case
-    const firstPageRows = rows;// .slice(0, 20)
-    console.log('rows?', rows)
     let downloadData;
     if (csvDownload.length){
         downloadData = _.cloneDeep(rows.map(r => r.original))
@@ -191,8 +183,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
             <table {...getTableProps()} style={{width: '100%'}}>
                 <thead>
-                {headerGroups
-                    .map((headerGroup,i) => (
+                {headerGroups.map((headerGroup,i) => (
                     <tr {...headerGroup.getHeaderGroupProps()} key ={i}>
                         {headerGroup.headers
                             .filter(cell => cell.expandable !== 'true')
@@ -235,7 +226,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                 ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                {firstPageRows.map(
+                {rows.map(
                     (row, i) => {
                         prepareRow(row);
                         return (
@@ -258,21 +249,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                     }
                                     return (
                                         <td {...cell.getCellProps()}>
-                                            {
-                                                cell.column.link ?
-                                                    <Link
-                                                        to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                                                        {
-                                                            cell.column.formatValue ?
-                                                                cell.column.formatValue(cell.value) :
-                                                                cell.render('Cell')
-                                                        }
-                                                    </Link> :
-                                                    cell.column.formatValue ?
-                                                        cell.column.formatValue(cell.value) :
-                                                        cell.render('Cell')
-
-                                            }
+                                            {renderCell(cell)}
                                         </td>
                                     )
                                 })}
@@ -299,7 +276,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                         )
                                     : null}
                             </tr>
-                                <tr {...row.getRowProps()}
+                                <tr
                                     id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
                                     display: 'none'}}>
                                     {row.cells
