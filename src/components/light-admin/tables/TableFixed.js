@@ -174,13 +174,17 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
     const firstPageRows = rows;// .slice(0, 20)
-    let downloadData = _.cloneDeep(rows.map(r => r.original))
-    downloadData = downloadData.map(row => {
-        Object.keys(row).forEach(key => {
-            if (!csvDownload.includes(key)) delete row[key]
+    console.log('rows?', rows)
+    let downloadData;
+    if (csvDownload.length){
+        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = downloadData.map(row => {
+            Object.keys(row).forEach(key => {
+                if (!csvDownload.includes(key)) delete row[key]
+            })
+            return row
         })
-        return row
-    })
+    }
 
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}

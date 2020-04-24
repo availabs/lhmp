@@ -299,13 +299,16 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
         useSortBy,
         useRowSelect
     );
-    let downloadData = _.cloneDeep(rows.map(r => r.original))
-    downloadData = downloadData.map(row => {
-        Object.keys(row).forEach(key => {
-            if (!csvDownload.includes(key)) delete row[key]
+    let downloadData;
+    if (csvDownload.length){
+        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = downloadData.map(row => {
+            Object.keys(row).forEach(key => {
+                if (!csvDownload.includes(key)) delete row[key]
+            })
+            return row
         })
-        return row
-    })
+    }
     return (
         <div {...getTableProps()}
              style={{overflow: 'auto',/* width: width ? width : 'fit-content'*/}}
