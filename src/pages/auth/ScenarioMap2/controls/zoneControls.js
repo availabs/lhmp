@@ -17,6 +17,7 @@ class ZoneControl extends React.Component{
             zone_id : '',
             geoid: '',
             zone_name:'',
+            zone_ids : [],
             new_zone:false
         }
     }
@@ -41,6 +42,16 @@ class ZoneControl extends React.Component{
                 let length = response.json.forms['zones'].byPlanId[this.props.activePlan].length
                 this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
                     .then(response =>{
+                        let graph = response.json.forms['zones'].byPlanId[this.props.activePlan].byIndex
+                        let ids = []
+                        if(graph){
+                            Object.keys(graph).forEach(item =>{
+                                ids.push(graph[item].id)
+                            })
+                        }
+                        this.setState({
+                            zone_ids : ids
+                        })
                         return response
                     })
             })
@@ -58,13 +69,15 @@ class ZoneControl extends React.Component{
             let graph = this.props.zonesList
             if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
-                    zones_list.push({
-                        'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                        'value': graph[item].value ? graph[item].value.id : '',
-                        'geoid': graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                        'geom' : graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                        'geojson' : graph[item].value.attributes.geojson ? graph[item].value.attributes.geojson : ''
-                    })
+                    if(this.state.zone_ids.includes(graph[item].value.id)){
+                        zones_list.push({
+                            'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
+                            'value': graph[item].value ? graph[item].value.id : '',
+                            'geoid': graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
+                            'geom' : graph[item].value.attributes ? graph[item].value.attributes.geom : '',
+                            'geojson' : graph[item].value.attributes.geojson ? graph[item].value.attributes.geojson : ''
+                        })
+                    }
                 })
                 return zones_list
             }

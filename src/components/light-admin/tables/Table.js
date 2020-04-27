@@ -12,6 +12,8 @@ import {
 import matchSorter from "match-sorter";
 import {Link} from "react-router-dom";
 import MultiSelectFilter from "../../filters/multi-select-filter";
+import _ from "lodash";
+import {CSVLink} from "react-csv";
 
 
 const Styles = styled.div`
@@ -229,7 +231,7 @@ function renderCell(cell) {
                 cell.render('Cell')
     )
 }
-function Table({columns, data, tableClass, height, width, actions}) {
+function Table({columns, data, tableClass, height, width, actions, csvDownload}) {
     /*  const defaultColumn = React.useMemo(
         () => ({
           // When using the useFlexLayout:
@@ -297,7 +299,16 @@ function Table({columns, data, tableClass, height, width, actions}) {
         useSortBy,
         useRowSelect
     );
-
+    let downloadData;
+    if (csvDownload.length){
+        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = downloadData.map(row => {
+            Object.keys(row).forEach(key => {
+                if (!csvDownload.includes(key)) delete row[key]
+            })
+            return row
+        })
+    }
     return (
         <div {...getTableProps()}
              style={{overflow: 'auto',/* width: width ? width : 'fit-content'*/}}
@@ -348,8 +359,26 @@ function Table({columns, data, tableClass, height, width, actions}) {
 
                             </div>
                         ))}
-                        {actions ?
-                            Object.keys(actions)
+
+                        {csvDownload.length ?
+                            <div
+                                {...Object.assign(
+                                    headerGroup.headers[0].getHeaderProps(),
+                                    {
+                                        style: Object.assign(headerGroup.headers[0].getHeaderProps().style, {
+                                            paddingTop: '30px',
+                                            paddingLeft: '40px',
+                                            display: 'flex',
+                                            justifyContent: 'center'
+                                        })
+                                    }
+                                )}
+                                 className='th'>
+                                <CSVLink className='btn btn-secondary btn-sm'
+                                         style={{height:'fit-content'}}
+                                         data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
+                            </div> :
+                            actions ? Object.keys(actions)
                                 .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle} className="th"></div>) : null
                         }
                     </div>
@@ -435,10 +464,10 @@ function Table({columns, data, tableClass, height, width, actions}) {
 }
 
 
-function StyledTable({columns: columns, data: data, height, width, actions}) {
+function StyledTable({columns: columns, data: data, height, width, actions, csvDownload = []}) {
     return (
         <Styles>
-            <Table columns={columns} data={data} height={height} width={width} actions={actions}/>
+            <Table columns={columns} data={data} height={height} width={width} actions={actions} csvDownload={csvDownload}/>
         </Styles>
     )
 }

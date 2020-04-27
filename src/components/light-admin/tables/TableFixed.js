@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import {useFilters, useGlobalFilter, useSortBy, useTable} from 'react-table'
+import {CSVLink, CSVDownload} from 'react-csv';
 // A great library for fuzzy filtering/sorting items
 import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
+import _ from 'lodash'
 import MultiSelectFilter from "../../filters/multi-select-filter";
 
 const DIV = styled.div`
@@ -111,7 +113,7 @@ function renderCell(cell) {
     )
 }
 
-function Table({columns, data, height, tableClass, actions}) {
+function Table({columns, data, height, tableClass, actions, csvDownload}) {
     const filterTypes = React.useMemo(
         () => ({
             // Add a new fuzzyTextFilterFn filter type.
@@ -131,7 +133,7 @@ function Table({columns, data, height, tableClass, actions}) {
             multi: (rows, id, filterValue) => {
                 return rows.filter(row => {
                     const rowValue = row.values[id];
-                    return rowValue !== undefined
+                    return rowValue !== undefined && filterValue.length
                         ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
                         : true
                 })
@@ -154,10 +156,6 @@ function Table({columns, data, height, tableClass, actions}) {
         headerGroups,
         rows,
         prepareRow,
-        state,
-        visibleColumns,
-        preGlobalFilteredRows,
-        setGlobalFilter,
     } = useTable(
         {
             columns,
@@ -169,16 +167,23 @@ function Table({columns, data, height, tableClass, actions}) {
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
     );
-    // We don't want to render all 2000 rows for this example, so cap
-    // it at 20 for this use case
-    const firstPageRows = rows;// .slice(0, 20)
+    let downloadData;
+    if (csvDownload.length){
+        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = downloadData.map(row => {
+            Object.keys(row).forEach(key => {
+                if (!csvDownload.includes(key)) delete row[key]
+            })
+            return row
+        })
+    }
+
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
             <table {...getTableProps()} style={{width: '100%'}}>
                 <thead>
-                {headerGroups
-                    .map((headerGroup,i) => (
+                {headerGroups.map((headerGroup,i) => (
                     <tr {...headerGroup.getHeaderGroupProps()} key ={i}>
                         {headerGroup.headers
                             .filter(cell => cell.expandable !== 'true')
@@ -209,15 +214,19 @@ function Table({columns, data, height, tableClass, actions}) {
                                         column.render(MultiSelectColumnFilter) : column.render('Filter') : null}</div>
                             </th>
                         ))}
-                        {actions ?
-                            Object.keys(actions)
-                                .map(action => <th></th>) : null
+                        {csvDownload.length ?
+                            <th colSpan={3}>
+                                <CSVLink className='btn btn-secondary btn-sm'
+                                         style={{width:'100%'}}
+                                         data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
+                            </th> :
+                            actions ? Object.keys(actions).map(action => <th></th>) : null
                         }
                     </tr>
                 ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                {firstPageRows.map(
+                {rows.map(
                     (row, i) => {
                         prepareRow(row);
                         return (
@@ -240,21 +249,7 @@ function Table({columns, data, height, tableClass, actions}) {
                                     }
                                     return (
                                         <td {...cell.getCellProps()}>
-                                            {
-                                                cell.column.link ?
-                                                    <Link
-                                                        to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                                                        {
-                                                            cell.column.formatValue ?
-                                                                cell.column.formatValue(cell.value) :
-                                                                cell.render('Cell')
-                                                        }
-                                                    </Link> :
-                                                    cell.column.formatValue ?
-                                                        cell.column.formatValue(cell.value) :
-                                                        cell.render('Cell')
-
-                                            }
+                                            {renderCell(cell)}
                                         </td>
                                     )
                                 })}
@@ -281,7 +276,7 @@ function Table({columns, data, height, tableClass, actions}) {
                                         )
                                     : null}
                             </tr>
-                                <tr {...row.getRowProps()}
+                                <tr
                                     id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
                                     display: 'none'}}>
                                     {row.cells
