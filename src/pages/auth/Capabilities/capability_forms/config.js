@@ -1,20 +1,16 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
+        list_attributes:['capability_type','capability_category'],
         sub_type:'',
         // if wizard
         sections: [],
-        default_title: 'Capability', // in the case when page_title is invalid
-        page_title: 'capability_name', // page title in edit and view
-        sub_title: '', // sub title in edit and view
-        list_attributes: [{'capability_category': {filter: 'true', sort:'true'}}, 'capability_type', 'capability_name'], // visible attributes on screen.
-        csv_download: ['capability_category', 'capability_type', 'capability_name'], // columns to download (if present on screen)
         attributes: {
             county:{
                 label:'County', // Which you would like to see on the form
                 prompt:'Choose the county the capability is located from the list of all counties.',
                 sub_type:'',
-                edit_type:'dropdown',
+                edit_type:'dropdown',  
                 display_type:'text',
                 area:'true',
                 meta: 'true',
@@ -27,8 +23,7 @@ module.exports = [
                 prompt:'Choose the jurisdiction where the capability is located. Jurisdictions that occur are based on the County selected in question 1',
                 sub_type:'',
                 edit_type:'dropdown',
-                //defaultValue: ['Countywide'],
-                placeholder: 'Countywide',
+                defaultValue: ['Countywide'],
                 display_type:'text',
                 meta: 'true',
                 area:'true',
@@ -45,6 +40,7 @@ module.exports = [
                 meta: 'true',
                 hidden:'false',
                 section: '',
+                list_attribute: 'true',
                 example:'Demo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo Example',
             },
             capability_type :{
@@ -57,6 +53,7 @@ module.exports = [
                 depend_on : 'capability_category',
                 hidden:'false',
                 section:'',
+                list_attribute: 'true'
             },
             capability_name:{
                 label:'Capability Name',
@@ -70,8 +67,9 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'false',
-                // hidden:'false',
+                hidden:'false',
                 section:'',
+                list_attribute: 'true'
             },
             regulatory_name:{
                 label:'Regulatory Name',

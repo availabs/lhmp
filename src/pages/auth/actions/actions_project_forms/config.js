@@ -3,7 +3,7 @@ module.exports = [
     {
         type:'actions', // type is same as the route path for now
         sub_type:'project',
-        list_attributes:['action_jurisdiction','action_category','action_type','action_name','sub_type'], // to list the attributes on the main page
+        list_attributes:['action_jurisdiction','action_point_of_contact','action_category','action_type','action_name','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [
             {title:'Step 1',sub_title:'Contact Information',id:'1'},
