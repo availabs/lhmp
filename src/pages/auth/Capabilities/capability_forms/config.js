@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-        list_attributes:['capability_type','capability_category','municipality'],
+        list_attributes:['capability_type','capability_category','municipality', 'jurisdiction_utilization'],
         csv_download: ['capability_category', 'capability_type', 'capability_name','municipality','capability_description','jurisdiction_utilization','mitigation_contribution','responsible_authority','affiliated_agency','link_url'],
         sub_type:'',
         // if wizard
@@ -123,8 +123,9 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
-                section:''
-            },  
+                section:'',
+                expandable:'true',
+            },
             mitigation_contribution:{
                 label:'What capacity does Mitigation planning provide this Capability?',
                 prompt:'Describe how mitigation planning supports and contributes to building maintaining or enhancing capacity for this capability',

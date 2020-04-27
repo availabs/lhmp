@@ -31,9 +31,7 @@ class AvlFormsListTable extends React.Component{
 
     fetchFalcorDeps(){
         let formType = this.props.config.map(d => d.type)
-        let formAttributes =
-            get(this.props.config, `[0].list_attributes`, [])
-            .map(la => typeof la === 'string' ? la : Object.keys(la).pop());
+        let formAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
@@ -93,9 +91,7 @@ class AvlFormsListTable extends React.Component{
     formsListTable(){
         let geo = this.props.geoData
         let graph = this.props.formsListData;
-        let formAttributes =
-            get(this.props.config, `[0].list_attributes`, [])
-                .map(la => typeof la === 'string' ? la : Object.keys(la).pop());
+        let formAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
@@ -186,9 +182,7 @@ class AvlFormsListTable extends React.Component{
     render(){
         let formAttributes = [];
         let listViewData = [];
-        let listAttributes =
-            get(this.props.config, `[0].list_attributes`, [])
-                .map(la => typeof la === 'string' ? la : Object.keys(la).pop());
+        let listAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let data = this.formsListTable();
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
@@ -319,16 +313,23 @@ class AvlFormsListTable extends React.Component{
                                     <div className="table-responsive" >
                                         <TableSelector
                                             data={listViewData}
-                                            columns={formAttributes.map(f => {
+                                            columns={formAttributes
+                                                .filter(f => get(this.props.config, `[0].list_attributes`, [])
+                                                    .map(la => typeof la === 'object' ? Object.keys(la)[0].toString : la)
+                                                    .includes(f)
+                                                )
+                                                .map(f => {
                                                 let tmpAttr =
                                                     get(this.props.config, `[0].list_attributes`, [])
                                                         .filter(la => typeof la === 'object')
                                                         .map(la => la[f])
+                                                    console.log('check?',f, get(this.props.config, `[0].attributes.${f}.expandable`, null))
                                                 return ({
                                                     Header: f,
                                                     accessor: f,
                                                     filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' : '',
                                                     sort: get(tmpAttr, `[0].sort`, 'true') === 'true',
+                                                    expandable: get(this.props.config, `[0].attributes.${f}.expandable`, null)
                                                 })
                                             })}
                                             flex={this.props.flex ? this.props.flex : false}

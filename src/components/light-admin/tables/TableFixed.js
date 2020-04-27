@@ -284,7 +284,10 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                         .map(cell => {
                                             return (
                                                 <td {...cell.getCellProps()}
-                                                    colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
+                                                    colSpan={
+                                                        row.cells.filter(cell => cell.column.expandable !== 'true').length +
+                                                        (actions ? Object.keys(actions).length : 0)
+                                                    }>
                                                     {renderCell(cell)}
                                                 </td>
                                             )

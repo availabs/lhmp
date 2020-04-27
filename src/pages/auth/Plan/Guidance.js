@@ -19,20 +19,19 @@ class AdminLanding extends React.Component {
 
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
-        return this.props.falcor.get(
-            //['geo', this.props.activeGeoid, 'cousubs'],
-            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
-        )
+        return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].counties.municipalities.value], ['name']],
+                    ['geo',
+                        [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
+                        ['name']],
                 )
             })
     }
 
     render() {
         let geoInfo = get(falcorGraph.getCache(), `geo`, null);
-        let allowedGeos = [this.props.activeGeoid, ...get(geoInfo,`${this.props.activeGeoid}.counties.municipalities.value`, [])];
+        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
 
         return functions.render(config,
             this.props.user,
