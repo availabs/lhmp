@@ -1,7 +1,8 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-        list_attributes:['capability_type','capability_category'],
+        list_attributes:['capability_type','capability_category','municipality'],
+        csv_download: ['capability_category', 'capability_type', 'capability_name','municipality','capability_description','jurisdiction_utilization','mitigation_contribution','responsible_authority','affiliated_agency','link_url'],
         sub_type:'',
         // if wizard
         sections: [],
