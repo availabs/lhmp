@@ -93,12 +93,12 @@ const config = {
                         accessor: 'upload',
                         width: 50
                     },
-                    /*{
+                    {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',
                         width: 50,
                         expandable: 'true'
-                    },*/
+                    },
                     
                 ]
             },

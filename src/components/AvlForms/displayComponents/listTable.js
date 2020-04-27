@@ -31,7 +31,9 @@ class AvlFormsListTable extends React.Component{
 
     fetchFalcorDeps(){
         let formType = this.props.config.map(d => d.type)
-        let formAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
+        let formAttributes =
+            get(this.props.config, `[0].list_attributes`, [])
+            .map(la => typeof la === 'string' ? la : Object.keys(la).pop());
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
@@ -91,7 +93,9 @@ class AvlFormsListTable extends React.Component{
     formsListTable(){
         let geo = this.props.geoData
         let graph = this.props.formsListData;
-        let formAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
+        let formAttributes =
+            get(this.props.config, `[0].list_attributes`, [])
+                .map(la => typeof la === 'string' ? la : Object.keys(la).pop());
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
@@ -182,7 +186,9 @@ class AvlFormsListTable extends React.Component{
     render(){
         let formAttributes = [];
         let listViewData = [];
-        let listAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
+        let listAttributes =
+            get(this.props.config, `[0].list_attributes`, [])
+                .map(la => typeof la === 'string' ? la : Object.keys(la).pop());
         let data = this.formsListTable();
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
@@ -313,17 +319,24 @@ class AvlFormsListTable extends React.Component{
                                     <div className="table-responsive" >
                                         <TableSelector
                                             data={listViewData}
-                                            columns={formAttributes.map(f => ({
-                                                Header: f,
-                                                accessor: f,
-                                                filter: 'default',
-                                                sort: true
-                                            }))}
+                                            columns={formAttributes.map(f => {
+                                                let tmpAttr =
+                                                    get(this.props.config, `[0].list_attributes`, [])
+                                                        .filter(la => typeof la === 'object')
+                                                        .map(la => la[f])
+                                                return ({
+                                                    Header: f,
+                                                    accessor: f,
+                                                    filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' : '',
+                                                    sort: get(tmpAttr, `[0].sort`, 'true') === 'true',
+                                                })
+                                            })}
                                             flex={this.props.flex ? this.props.flex : false}
                                             height={this.props.height ? this.props.height : ''}
                                             width={this.props.width ? this.props.width : ''}
                                             tableClass={this.props.tableClass ? this.props.tableClass : null}
                                             actions={{edit:true, view:true, delete:true}}
+                                            csvDownload={this.props.config[0].csv_download}
                                         />
                                     </div>
                                 </div>
