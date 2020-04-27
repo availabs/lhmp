@@ -314,6 +314,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             known_environmental_historic_preservation_protected_species_iss:{
@@ -324,6 +325,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             property_names_or_hist_dist:{
@@ -343,6 +345,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             indian_or_historic_artifacts_found_on_or_adjacent_project_area:{
@@ -353,6 +356,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             building_50_years_or_older_within_or_near:{
@@ -363,6 +367,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             is_shpo_survey:{
@@ -374,6 +379,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'3'
             },
             shpo_survey:{
