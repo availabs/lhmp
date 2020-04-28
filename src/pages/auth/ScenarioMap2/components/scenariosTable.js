@@ -102,7 +102,7 @@ class ScenarioTable extends React.Component {
                                 risk_zone_ids.push(graph[item].risk_zones.risk_zone_id)
                             })
 
-                            this.props.setActiveRiskZoneId(Math.min.apply(Math, risk_zone_ids))
+                            this.props.setActiveRiskZoneId([Math.min.apply(Math, risk_zone_ids)])
                         }
                     })
             })
@@ -134,7 +134,7 @@ class ScenarioTable extends React.Component {
                         else{
                             this.props.check_visibility.visibilityToggleModeOn(data[0].map_source,data[0].table_name)
                         }
-                        this.props.setActiveRiskZoneId(Math.min.apply(Math, risk_zone_ids))
+                        this.props.setActiveRiskZoneId([Math.min.apply(Math, risk_zone_ids)])
                     })
             })
         }
@@ -146,6 +146,7 @@ class ScenarioTable extends React.Component {
         let data = this.state.data
         data.map(d =>{
             if(id.toString() === d.id.toString()){
+                console.log('d',d.id)
                 this.props.setActiveRiskZoneId([d.id])
                 this.setState((currentState) =>({
                     scenario : d.scenario,
