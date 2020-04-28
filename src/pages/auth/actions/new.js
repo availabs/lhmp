@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Element from 'components/light-admin/containers/Element'
 import WorksheetConfig from 'pages/auth/actions/actions_worksheet_forms/config.js'
@@ -29,14 +28,6 @@ class ActionsWorksheetFormsNew extends React.Component{
 
     render(){
         let config = this.chooseConfig();
-        let sub_type = '';
-        config.forEach(item =>{
-            Object.keys(item.attributes).forEach(d =>{
-                if(item.attributes[d].sub_type.length > 0){
-                    sub_type = item.attributes[d].sub_type
-                }
-            })
-        })
         return(
             <Element>
                 <AvlFormsNewDataWizard

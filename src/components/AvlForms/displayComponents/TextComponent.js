@@ -1,38 +1,63 @@
 import React from 'react'
 import Element from "../../light-admin/containers/Element";
+import _ from 'lodash'
 import get from 'lodash.get'
+import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
+import listNewComp from 'components/AvlForms/editComponents/formTypeToConfig.js'
 
 const TDStyle = {wordBreak: 'break-word', width: '50%'};
 
 class TextComponent extends React.PureComponent {
     renderSection(section, data) {
+        let showTable = true;
         return (
             <Element>
                 <h4>{section.sub_title}</h4>
-                <div className='table-responsive'>
-                    <table className="table">
-                        <thead>
-                        <tr>
-                            <th>ATTRIBUTE</th>
-                            <th>VALUE</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            Object.keys(data).filter(d => d !== 'type')
-                                .filter(d => data[d].section === section.id)
-                                .map(d => {
-                                    return (
-                                        <tr>
-                                            <td style={TDStyle}>{`${data[d].label}`} :</td>
-                                            <td style={TDStyle}>{data[d].value || 'None'}</td>
-                                        </tr>
-                                    )
-                                })
-                        }
-                        </tbody>
-                    </table>
-                </div>
+                {
+                    Object.keys(data).filter(d => d !== 'type')
+                        .filter(d => data[d].section === section.id && data[d].displayType === 'form_view')
+                        .map(d => {
+                            showTable = false;
+                            return (
+                                get(data, `[${d}].value`, '').split(',')
+                                    .map(value =>
+                                        <AvlFormsViewData
+                                            json = {listNewComp[data[d].formType]}
+                                            id = {[value]}
+                                            showHeader={false}
+                                        />
+                                        )
+                            )
+                        })
+                }
+                {
+                    showTable ? (
+                        <div className='table-responsive'>
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    <th>ATTRIBUTE</th>
+                                    <th>VALUE</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    Object.keys(data).filter(d => d !== 'type')
+                                        .filter(d => data[d].section === section.id && data[d].displayType !== 'form_view')
+                                        .map(d => {
+                                            return (
+                                                <tr>
+                                                    <td style={TDStyle}>{`${data[d].label}`} :</td>
+                                                    <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                                </tr>
+                                            )
+                                        })
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : null
+                }
             </Element>
         )
     }
@@ -43,16 +68,19 @@ class TextComponent extends React.PureComponent {
 
         return (
             <React.Fragment>
-                {get(this.props.config[0], `page_title`, null) &&
-                get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null) ?
-                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
-                        {get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null)}
-                        {get(this.props.config[0], `sub_title`, null) ?
-                            <h6>{get(data.filter(f => f.attribute === this.props.config[0].sub_title), `[0].value`, null)}</h6> : null}
-                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
-                        {get(this.props.config[0], `default_title`,
-                            `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
-                    </h4>}
+                {
+                    this.props.showHeader ?
+                        get(this.props.config[0], `page_title`, null) &&
+                        get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null) ?
+                            <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                                {get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null)}
+                                {get(this.props.config[0], `sub_title`, null) ?
+                                    <h6>{get(data.filter(f => f.attribute === this.props.config[0].sub_title), `[0].value`, null)}</h6> : null}
+                            </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                                {get(this.props.config[0], `default_title`,
+                                    `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                            </h4> : null
+                }
 
                 {this.props.config[0].sections.length ?
                     <div style={{

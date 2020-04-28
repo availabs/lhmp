@@ -3,7 +3,7 @@ import React from 'react';
 import Element from 'components/light-admin/containers/Element'
 import AvlFormsNewDataWizard from 'components/AvlForms/editComponents/newDataWithWizard.js'
 import ViewConfig from './config.js'
-
+import get from 'lodash.get'
 class ActionsWorksheetFormsNew extends React.Component{
     constructor(props){
         super(props);
@@ -13,10 +13,9 @@ class ActionsWorksheetFormsNew extends React.Component{
         let config = ViewConfig
         return(
             <Element>
-                <h6 className="element-header">Actions </h6>
                 <AvlFormsNewDataWizard
                 json = {config}
-                id = {[this.props.match.params.id]}
+                id = {[get(this.props, `match.params.id`, null)]}
                 />
             </Element>
         )
