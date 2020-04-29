@@ -55,6 +55,7 @@ const InputBox = styled.div`
 
 const TypeaheadInput = styled.input`
   ${props => props.theme.secondaryInput}
+  background-color: #ffffff;
   :hover {
     cursor: pointer;
     background-color: ${props => props.theme.secondaryInputBgd};
@@ -65,7 +66,11 @@ const InputIcon = styled.div`
   position: absolute;
   right: 15px;
   top: 14px;
+  background-color: transparent !important;
   color: ${props => props.theme.inputPlaceholderColor};
+  * {
+    background-color: transparent !important;
+  }
 `;
 
 export default class Typeahead extends Component {

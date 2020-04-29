@@ -1,6 +1,7 @@
 module.exports = [
     {
         type:'actions', // type is same as the route path for now
+        sub_type: 'worksheet',
         //list_attributes:['action_name','action_type','sub_type'], // to list the attributes on the main page
         // if wizard
         sections: [
@@ -20,7 +21,8 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 area : 'true',
-                section: '1'
+                section: '1',
+                //field_required:"required",
             },
             municipality:{
                 label:'Municipality',

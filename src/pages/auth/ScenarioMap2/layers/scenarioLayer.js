@@ -95,18 +95,22 @@ const TABS = [
 
 export class ScenarioLayer extends MapLayer{
     onAdd(map) {
-        register(this, 'USER::SET_RISK_ZONE_ID', ["scenario"]);
+        register(this, 'USER::SET_RISK_SCENARIO_ID', ["scenario"]);
+        register(this,'USER::SET_RISK_ZONE_ID', ["scenario"])
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
             let graph = '';
-            this.map.on('render',()=>{
+            this.map.on('zoomstart',()=>{
                 const features =  map.querySourceFeatures('nys_buildings_avail', {
                     sourceLayer: 'nys_buildings_osm_ms_parcelid_pk',
                 });
                 //check for the legend
                 this.selection = features.map(d => d.properties.id);
-                this.fetchData().then(data => this.receiveData(map, data))
+                if(this.selection.length > 0){
+                    this.fetchData().then(data => this.receiveData(map, data))
+                }
+
 
             })
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'],
@@ -117,8 +121,10 @@ export class ScenarioLayer extends MapLayer{
                     this.map.resize();
                     this.map.fitBounds(bbox);
                     //map.setZoom(9)
+                    if(activeGeoid && this.activeRiskZoneId && this.activeRiskZoneId !== '' ){
+                        return this.fetchData().then(data => this.receiveData(this.map, data))
+                    }
 
-                    return this.fetchData().then(data => this.receiveData(this.map, data))
                 })
         }
     }
@@ -126,8 +132,8 @@ export class ScenarioLayer extends MapLayer{
         unregister(this);
     }
     receiveMessage(action, data) {
-        this.activeScenarioId = data.activeRiskZoneId
-
+        this.activeScenarioId = data.activeRiskScenarioId
+        this.activeRiskZoneId = data.activeRiskZoneId
         return this.fetchData().then(data => this.receiveData(data,this.map))
     }
 
@@ -149,86 +155,73 @@ export class ScenarioLayer extends MapLayer{
     fetchData(){
         let owner_types = ['2','3', '4', '5', '6', '7','8'];
         let buildingIds = [];
+        let activeRiskZoneId = this.activeRiskZoneId === '' && this.activeRiskZoneId !== null ? 1 : this.activeRiskZoneId
+        let geoid = store.getState().user.activeGeoid
+        if(activeRiskZoneId && activeRiskZoneId !== '' && geoid) {
+            return falcorGraph.get(['building','byGeoid',geoid,'byRiskZones',activeRiskZoneId,'data'])
+                .then(response =>{
+                    let graph = response.json.building.byGeoid[geoid].byRiskZones[activeRiskZoneId].data
+                    let filteredBuildings = [];
+                    if(graph){
+                        graph.forEach(item =>{
+                            if(parseFloat(item.hazard_loss_dollars) > 0) {
+                                filteredBuildings.push(item.building_id)
+                            }
+                        })
+                    }
+                    buildingIds = filteredBuildings.map(d => d)
+                    return buildingIds
+                }).then(buildingIds =>{
+                    if(buildingIds.length > 0){
+                        return falcorGraph.get(
+                            ['building', 'geom', 'byBuildingId',buildingIds, 'centroid'],
+                        )
 
-        return falcorGraph.get(
-            ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
-                ['flood_100','flood_500'], 'owner_type',owner_types, 'critical', ['true', 'false']],
-            ['building','byGeoid',store.getState().user.activeGeoid,'byRiskZones','data'],
-
-        ).then(d => {
-            let graph = d.json.building.byGeoid[store.getState().user.activeGeoid].flood_zone;
-            let filteredBuildings = [];
-            let data = {}
-            if(graph){
-                Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
-                    data[item] = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.${item}.owner_type`, {})
-                });
-                Object.keys(data).forEach(d =>{
-                    owner_types.map(owner =>{
-                        filteredBuildings.push(...get(data[d], `${owner}.critical.false`))
-                    })
+                    }
                 })
-            }
+                .then(() =>{
+                    if (!this.selection || this.selection.length === 0) {
+                        return Promise.resolve([])
+                    }else{
+                        if(this.activeScenarioId !== null){
+                            let activeScenarioId = this.activeScenarioId.map(d => d.id)
+                            let activeRiskZoneId = this.activeRiskZoneId === '' && this.activeRiskZoneId !== null ? 1 : this.activeRiskZoneId
+                            return falcorGraph.get(
+                                ['scenarios',activeScenarioId,'byRiskZones',activeRiskZoneId,'buildings',this.selection,'total_loss']
+                            ).then(response =>{
+                                return response
+                            })
+                        }
 
-            buildingIds = filteredBuildings.map(f => f.id);
-            return buildingIds
-        }).then(buildingIds =>{
-            if(buildingIds.length > 0){
-                return falcorGraph.get(
-                    ['building', 'geom', 'byBuildingId',buildingIds, 'centroid'],
-                )
+                    }
 
-            }
-        })
-        .then(() =>{
-            if (!this.selection || this.selection.length === 0) {
-                return Promise.resolve([])
-            }else{
-                if(this.activeScenarioId !== null){
-                    return falcorGraph.get(
-                        ['risk_zones',[this.activeScenarioId],'buildings',this.selection,'total_loss']
-                    )
-                }
+                })
+        }
 
-            }
-
-        })
 
     }
 
     receiveData(map,data) {
-        /*
-        owner types :
-            2 - state
-            3 - county
-            4,5,6,7- Municipality
-            8 - Private
-         */
         let resultedRiskZonesData = [];
         let coloredBuildingIds = [];
         let coloredBuildings = {};
-        let riskZonesData = falcorGraph.getCache();
-
-        if(riskZonesData.risk_zones && riskZonesData.risk_zones[this.activeScenarioId] && this.activeScenarioId){
-                if(riskZonesData.risk_zones[this.activeScenarioId]){
-                    if(Object.keys(riskZonesData.risk_zones[this.activeScenarioId].buildings).length > 0){
-                        Object.keys(riskZonesData.risk_zones[this.activeScenarioId].buildings).forEach(building_id =>{
-                            if(building_id){
-                                resultedRiskZonesData.push({
-                                    'id':building_id,
-                                    'value':riskZonesData.risk_zones[this.activeScenarioId].buildings[building_id].total_loss.value ? riskZonesData.risk_zones[this.activeScenarioId].buildings[building_id].total_loss.value : 0
-                                })
-                            }
-                        })
-
-                    }
-
-                }
+        let activeScenarioId = this.activeScenarioId.map(d => d.id)
+        let activeRiskZoneId = this.activeRiskZoneId
+        let riskZonesData = get(falcorGraph.getCache(),[`scenarios`],{})
+        let risk_zone_buildings_data = get(riskZonesData[activeScenarioId],['byRiskZones',activeRiskZoneId,'buildings'],null)
+        if(risk_zone_buildings_data){
+            Object.keys(risk_zone_buildings_data).forEach(building_id=>{
+                resultedRiskZonesData.push({
+                    'id':building_id,
+                    'value':risk_zone_buildings_data[building_id].total_loss.value ? risk_zone_buildings_data[building_id].total_loss.value : 0
+                })
+            })
         }
+
         if(resultedRiskZonesData.length > 0){
             const colorScale = this.getColorScale(resultedRiskZonesData),
                 colors = resultedRiskZonesData.reduce((a, c) => {
-                    if(c.value.toString() !== '0'){
+                    if(c.value !== 0){
                         a[c.id] = colorScale(c.value);
                         coloredBuildingIds.push(c.id.toString());
                     }
@@ -238,97 +231,72 @@ export class ScenarioLayer extends MapLayer{
         }
 
         let rawGraph = falcorGraph.getCache(),
-            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone`, null),
+            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.byRiskZones.${this.activeRiskZoneId}.data.value`, null),
             centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
             geojson = {
                 "type": "FeatureCollection",
                 "features": []
             },
+            buildingRadius = {},
             buildingColors = {};
-        Object.keys(graph['flood_100'].owner_type).forEach(owner => {
 
-            //state owned
-            if (owner === '2') {
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#0d1acc'
+        if(graph){
+            graph.forEach(item => {
+                if(parseFloat(item['hazard_loss_dollars']) > 0 && parseFloat(item['hazard_loss_dollars']) <= 15000){
+                    buildingColors[item.building_id] = "#fcffff"
+                    buildingRadius[item.building_id] = 2
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#0d1acc'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
+                        "properties": {id: item.building_id, color: "#fcffff"},
+                        "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
-                })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#0d1acc'
+                }
+                if(parseFloat(item['hazard_loss_dollars']) > 15000 && parseFloat(item['hazard_loss_dollars']) <= 50000){
+                    buildingColors[item.building_id] = "#fcbba1"
+                    buildingRadius[item.building_id] = 3
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#0d1acc'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
+                        "properties": {id: item.building_id, color: "#fcbba1"},
+                        "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
-                })
-            }
-
-            // County Owned
-            if (owner === '3') {
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#0fcc1b'
+                }if(parseFloat(item['hazard_loss_dollars']) > 50000 && parseFloat(item['hazard_loss_dollars']) <= 100000){
+                    buildingColors[item.building_id] = "#ef3b2c"
+                    buildingRadius[item.building_id] = 4
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#0fcc1b'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
+                        "properties": {id: item.building_id, color: "#ef3b2c"},
+                        "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
-                })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#0fcc1b'
+                }if(parseFloat(item['hazard_loss_dollars']) > 100000 && parseFloat(item['hazard_loss_dollars']) <= 500000){
+                    buildingColors[item.building_id] = "#cb181d"
+                    buildingRadius[item.building_id] = 6
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#0fcc1b'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
+                        "properties": {id: item.building_id, color: "#cb181d"},
+                        "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
-                })
-            }
-
-            // municipality Owned
-            if (['4', '5', '6', '7'].includes(owner)) {
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#cc1e0a'
+                }if(parseFloat(item['hazard_loss_dollars']) > 500000 && parseFloat(item['hazard_loss_dollars']) <= 1000000){
+                    buildingColors[item.building_id] =  "#a50f15"
+                    buildingRadius[item.building_id] = 8
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#cc1e0a'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
+                        "properties": {id: item.building_id, color:  "#a50f15"},
+                        "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
-                })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#cc1e0a'
+                }if(parseFloat(item['hazard_loss_dollars']) > 1000000){
+                    buildingColors[item.building_id] =  "#67000d"
+                    buildingRadius[item.building_id] = 10
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.id, color: '#cc1e0a'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
+                        "properties": {id: item.building_id, color: "#67000d"},
+                        "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
-                })
-            }
-
-            //Private Owned
-            if (owner === '8') {
-                graph['flood_100'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#AF7AC5'
-                    geojson.features.push({
-                        "type": "Feature",
-                        "properties": {id: item.id, color: '#AF7AC5'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
-                    })
-                })
-                graph['flood_500'].owner_type[owner].critical.false.value.forEach(item => {
-                    buildingColors[item.id] = '#AF7AC5'
-                    geojson.features.push({
-                        "type": "Feature",
-                        "properties": {id: item.id, color: '#AF7AC5'},
-                        "geometry": {...get(centroidGraph, `${item.id}.centroid.value`, null)}
-                    })
-                })
-            }
-
-        })
-
+                }
+            })
+            localStorage.setItem("building_colors",JSON.stringify(buildingColors))
+            localStorage.setItem("building_radius",JSON.stringify(buildingRadius))
+            localStorage.setItem("buildings_geojson",JSON.stringify(geojson))
+        }
         if(this.map.getSource('buildings') && this.map.getLayer("buildings-layer")) {
             this.map.getSource("buildings").setData(geojson)
         }
@@ -337,10 +305,15 @@ export class ScenarioLayer extends MapLayer{
                 'buildings-layer',
                 'circle-color',
                 ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]]
+            )
+            this.map.setPaintProperty(
+                'buildings-layer',
+                'circle-radius',
+                ["get", ["to-string", ["get", "id"]], ["literal", buildingRadius]]
+
 
             )
         }
-
         if(Object.keys(coloredBuildings).length > 0){
             this.map.setPaintProperty(
                 'ebr',
@@ -405,6 +378,7 @@ export const ScenarioOptions =  (options = {}) => {
         active: true,
         ...options,
         activeScenarioId: null,
+        activeRiskZoneId:null,
         sources: [
             { id:"buildings",
                 source: {
@@ -467,8 +441,9 @@ export const ScenarioOptions =  (options = {}) => {
                 'source': 'buildings',
                 'type': 'circle',
                 'paint': {
-                    'circle-radius': 3,
-                    'circle-opacity': 0.5
+                    //'circle-radius': 3,
+                    'circle-opacity': 0.5,
+
                 }
             },
 
@@ -490,7 +465,7 @@ export const ScenarioOptions =  (options = {}) => {
                 const { id } = topFeature.properties;
                 let result = [];
                 let data = [];
-                const scenario_graph = get(falcorGraph.getCache(), ["building", "byGeoid",store.getState().user.activeGeoid,'byRiskZones','data'], {}),
+                const scenario_graph = get(falcorGraph.getCache(), ["building", "byGeoid",store.getState().user.activeGeoid,'byRiskZones',store.getState().scenario.activeRiskZoneId,'data'], {}),
                    attributes = [
                         [null, ["address"]],
                         ["Owner Type", ["owner_type"],d => getOwnerTypeName(falcorGraph.getCache(), d)],
@@ -579,10 +554,11 @@ export const ScenarioOptions =  (options = {}) => {
                             d[1] = fnum(d[1])
                         }if(d[0] === 'Expected Annual Flood Loss'){
                             d[1] = fnum(
-                                ((parseFloat(value_500) * (0.2/100))
-                                + (parseFloat(value_100) * (1/100))
-                                + (parseFloat(value_50) * (2/100))
-                                + (parseFloat(value_25) * (4/100))).toString()
+                                (
+                                  (parseFloat(value_500) * (0.2/100)) || '0'
+                                + (parseFloat(value_100) * (1/100)) || '0'
+                                + (parseFloat(value_50) * (2/100)) || '0'
+                                + (parseFloat(value_25) * (4/100)) || '0').toString()
                             )
 
                         }

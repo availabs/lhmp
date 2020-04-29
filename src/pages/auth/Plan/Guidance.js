@@ -1,13 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {reduxFalcor} from 'utils/redux-falcor'
+import { connect } from 'react-redux';
+import { reduxFalcor } from 'utils/redux-falcor'
 import {falcorGraph} from "store/falcorGraph";
-import config from './config/about-config'
+import config from './config/guidance-config'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import functions from './functions'
+import functions from "./functions";
 import {setActiveCousubid} from 'store/modules/user'
 import get from "lodash.get";
-class AdminAbout extends React.Component {
+
+class AdminLanding extends React.Component {
 
     constructor(props) {
         super(props);
@@ -29,20 +30,20 @@ class AdminAbout extends React.Component {
     }
 
     render() {
+        let geoInfo = get(falcorGraph.getCache(), `geo`, null);
         let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
 
         return functions.render(config,
             this.props.user,
-            this.props.geoGraph,
+            geoInfo,
             this.props.setActiveCousubid,
             this.props.activeCousubid,
             allowedGeos,
-            this.props.match.params.reqId, '/plan/process/'
-            )
+            this.props.match.params.reqId, '/guidance/')
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state,ownProps) => {
     return {
         geoGraph: state.graph.geo,
         router: state.router,
@@ -54,9 +55,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan/process/',
+    path: '/guidance/',
     exact: true,
-    name: 'Planning Process',
+    name: 'Landing Page CMS',
     auth: true,
     authLevel: 1,
     mainNav: false,
@@ -67,13 +68,13 @@ export default [{
         layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminAbout))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminLanding))
 },
     {
         icon: 'os-icon-pencil-2',
-        path: '/plan/process/:reqId',
+        path: '/guidance/:reqId',
         exact: true,
-        name: 'Planning Process',
+        name: 'Landing Page CMS',
         auth: true,
         authLevel: 1,
         mainNav: false,
@@ -84,6 +85,6 @@ export default [{
             layout: 'menu-layout-mini',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminAbout))
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminLanding))
     }];
 

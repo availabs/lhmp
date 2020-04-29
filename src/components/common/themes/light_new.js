@@ -371,8 +371,15 @@ const chickletedInput = css`
   height: auto;
   justify-content: start;
   margin-bottom: 2px;
-  padding: 4px 7px 4px 4px;
+  padding: 4px 10px;
   white-space: normal;
+  
+  background-color: transparent;
+  font: Arial;
+  font-size: inherit;
+  font-weight: inherit;
+  border: 2px solid #dde2ec;
+  border-radius: 2px;
 `;
 
 const inlineInput = css`

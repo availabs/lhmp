@@ -1,6 +1,8 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
+        list_attributes:['capability_type','capability_category','municipality', 'capability_description'],
+        csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
         sub_type:'',
         // if wizard
         sections: [],
@@ -9,19 +11,20 @@ module.exports = [
                 label:'County', // Which you would like to see on the form
                 prompt:'Choose the county the capability is located from the list of all counties.',
                 sub_type:'',
-                edit_type:'dropdown',
-                defaultValue: 'Countywide',
+                edit_type:'dropdown',  
                 display_type:'text',
                 area:'true',
                 meta: 'true',
                 //hidden:'false',
-                section: ''
+                section: '',
+                //field_required:"required",
             },
             municipality:{
                 label:'Jurisdiction',
                 prompt:'Choose the jurisdiction where the capability is located. Jurisdictions that occur are based on the County selected in question 1',
                 sub_type:'',
                 edit_type:'dropdown',
+                defaultValue: ['Countywide'],
                 display_type:'text',
                 meta: 'true',
                 area:'true',
@@ -39,7 +42,7 @@ module.exports = [
                 hidden:'false',
                 section: '',
                 list_attribute: 'true',
-                example:'Demo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo Example'
+                example:'Demo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo Example',
             },
             capability_type :{
                 label:'Capability type',
@@ -102,9 +105,30 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
-            jurisdiction_utilization:{
-                label:'Jurisdiction Utilization',
+            capability_description:{
+                label:'Capability Description',
+                prompt:'Describe this capability',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                expandable:'true',
+                section:''
+            },
+              jurisdiction_utilization:{
+                label:'How is this Capability utilized in Mitigation Work? How does it contribute to Mitigation?',
                 prompt:'Describe how or in what ways your jurisdiction is currently utilizing the capability. If it is an asset, describe in what capacity the asset is being used. If it is planning or regulatory based, describe the role it plays in your jurisdictional decision making. If it is educational, describe the method of outreach. If it is financial, for example; grants, local funds, state funds, tax agreements, etc. describe the distribution of the funds and their impacts on your jurisdiction. If it is administrative or technical, describe assistance offered to jurisdiction.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:'',
+            },
+            mitigation_contribution:{
+                label:'What capacity does Mitigation planning provide this Capability?',
+                prompt:'Describe how mitigation planning supports and contributes to building maintaining or enhancing capacity for this capability',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',

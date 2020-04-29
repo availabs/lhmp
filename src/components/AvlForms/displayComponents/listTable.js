@@ -8,7 +8,8 @@ import {falcorGraph} from "store/falcorGraph";
 import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import TableSelector from "components/light-admin/tables/tableSelector"
-
+import {RenderConfig} from 'pages/Public/theme/ElementFactory'
+import config from 'pages/auth/Plan/config/guidance-config'
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
     "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
@@ -30,7 +31,7 @@ class AvlFormsListTable extends React.Component{
 
     fetchFalcorDeps(){
         let formType = this.props.config.map(d => d.type)
-        let formAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
+        let formAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
@@ -90,7 +91,7 @@ class AvlFormsListTable extends React.Component{
     formsListTable(){
         let geo = this.props.geoData
         let graph = this.props.formsListData;
-        let formAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
+        let formAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
@@ -181,7 +182,7 @@ class AvlFormsListTable extends React.Component{
     render(){
         let formAttributes = [];
         let listViewData = [];
-        let listAttributes = Object.keys(this.props.config[0].attributes).filter(attr => this.props.config[0].attributes[attr].list_attribute);
+        let listAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let data = this.formsListTable();
         listViewData = data.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
@@ -214,13 +215,13 @@ class AvlFormsListTable extends React.Component{
                                 }
                             }else if(d.type === 'participation'){
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
-                                    return (
+                                    /*return (
                                         <Link
                                             className="btn btn-sm btn-primary"
                                             to={ `/${this.props.config.map(d=> d.type)}/time/new` } >
                                             Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                                         </Link>
-                                    )
+                                    )*/
                                 }else{
                                     return null
                                 }
@@ -296,24 +297,47 @@ class AvlFormsListTable extends React.Component{
 
                     </span>
                         </h4>
-
+                        {config[this.props.config[0].type] ?
+                            <div className="element-box">
+                                <RenderConfig
+                                    config={{[this.props.config[0].type]:config[this.props.config[0].type]}}
+                                    user={this.props.user}
+                                    showTitle={false}
+                                    showHeader={false}
+                                    pureElement={true}
+                                />
+                            </div> : null}
                         {
                             listViewData.length > 0 ?
                                 <div className="element-box">
                                     <div className="table-responsive" >
                                         <TableSelector
                                             data={listViewData}
-                                            columns={formAttributes.map(f => ({
-                                                Header: f,
-                                                accessor: f,
-                                                filter: 'default',
-                                                sort: true
-                                            }))}
-                                            flex={true}//{this.props.flex ? this.props.flex : false}
+                                            columns={formAttributes
+                                                .filter(f => get(this.props.config, `[0].list_attributes`, [])
+                                                    .map(la => typeof la === 'object' ? Object.keys(la)[0].toString : la)
+                                                    .includes(f)
+                                                )
+                                                .map(f => {
+                                                let tmpAttr =
+                                                    get(this.props.config, `[0].list_attributes`, [])
+                                                        .filter(la => typeof la === 'object')
+                                                        .map(la => la[f])
+                                                    console.log('check?',f, get(this.props.config, `[0].attributes.${f}.expandable`, null))
+                                                return ({
+                                                    Header: f,
+                                                    accessor: f,
+                                                    filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' : '',
+                                                    sort: get(tmpAttr, `[0].sort`, 'true') === 'true',
+                                                    expandable: get(this.props.config, `[0].attributes.${f}.expandable`, null)
+                                                })
+                                            })}
+                                            flex={this.props.flex ? this.props.flex : false}
                                             height={this.props.height ? this.props.height : ''}
                                             width={this.props.width ? this.props.width : ''}
                                             tableClass={this.props.tableClass ? this.props.tableClass : null}
                                             actions={{edit:true, view:true, delete:true}}
+                                            csvDownload={this.props.config[0].csv_download}
                                         />
                                     </div>
                                 </div>
@@ -334,7 +358,8 @@ const mapStateToProps = (state,ownProps) => {
         config: ownProps.json,
         formsListData : get(state.graph,['forms','byId'],{}),
         geoData : get(state.graph,['geo'],{}),
-        formsByIdData: get(state.graph,['forms'])
+        formsByIdData: get(state.graph,['forms']),
+        user: get(state, 'user', null)
 
     }
 };

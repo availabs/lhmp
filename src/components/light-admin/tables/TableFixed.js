@@ -1,14 +1,46 @@
 import React from 'react'
 import styled from 'styled-components'
 import {useFilters, useGlobalFilter, useSortBy, useTable} from 'react-table'
+import {CSVLink, CSVDownload} from 'react-csv';
 // A great library for fuzzy filtering/sorting items
 import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
+import _ from 'lodash'
+import MultiSelectFilter from "../../filters/multi-select-filter";
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
+.expandable {
+        cursor: pointer;
+    }
 `;
+const _MultiSelectFilter = styled.div`
+    * {
+        font-weight: 0;
+    }
+    text-transform: capitalize;
+	margin: 0px !important;
+	display: flex;
 
+    .item-selector {
+        border: none;
+    }
+    .item-selector>div>div {
+        border: 0.5px solid ${props => props.theme.borderColorLight};
+            color: #b5b5b7;
+
+    }
+	:hover {
+		border-color: ${props => props.theme.textColorHl};
+	}
+
+	> div:first-child {
+		padding-right: 0px;
+	}
+	>div {
+		width: 100%;
+	}
+`
 // Define a default UI for filtering
 function DefaultColumnFilter({
                                  column: {filterValue, preFilteredRows, setFilter},
@@ -25,7 +57,38 @@ function DefaultColumnFilter({
         />
     )
 }
+// This is a custom filter UI for selecting
+// a unique option from a list
+function MultiSelectColumnFilter({
+                                     column: { filterValue, setFilter, preFilteredRows, id },
+                                 }) {
+    // Calculate the options for filtering
+    // using the preFilteredRows
+    const options = React.useMemo(() => {
+        const options = new Set()
+        preFilteredRows.forEach(row => {
+            options.add(row.values[id])
+        })
+        return [...options.values()]
+    }, [id, preFilteredRows])
+    const count = preFilteredRows.length;
 
+    // Render a multi-select box
+    return (
+        <_MultiSelectFilter>
+            <MultiSelectFilter
+                filter={{
+                    domain: options,
+                    value: filterValue ? filterValue : []//this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : []
+                }}
+                setFilter={(e) => {
+                    setFilter(e || undefined) // Set undefined to remove the filter entirely
+                }}
+                placeHolder={`Search ${count} records...`}
+            />
+        </_MultiSelectFilter>
+    )
+}
 function fuzzyTextFilterFn(rows, id, filterValue) {
     return matchSorter(rows, filterValue, {keys: [row => row.values[id]]})
 }
@@ -33,8 +96,24 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
 
+function renderCell(cell) {
+    return (
+        cell.column.link ?
+            <Link
+                to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                {
+                    cell.column.formatValue ?
+                        cell.column.formatValue(cell.value) :
+                        cell.render('Cell')
+                }
+            </Link> :
+            cell.column.formatValue ?
+                cell.column.formatValue(cell.value) :
+                cell.render('Cell')
+    )
+}
 
-function Table({columns, data, height, tableClass, actions}) {
+function Table({columns, data, height, tableClass, actions, csvDownload}) {
     const filterTypes = React.useMemo(
         () => ({
             // Add a new fuzzyTextFilterFn filter type.
@@ -48,6 +127,14 @@ function Table({columns, data, height, tableClass, actions}) {
                         ? String(rowValue)
                             .toLowerCase()
                             .startsWith(String(filterValue).toLowerCase())
+                        : true
+                })
+            },
+            multi: (rows, id, filterValue) => {
+                return rows.filter(row => {
+                    const rowValue = row.values[id];
+                    return rowValue !== undefined && filterValue.length
+                        ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
                         : true
                 })
             },
@@ -69,10 +156,6 @@ function Table({columns, data, height, tableClass, actions}) {
         headerGroups,
         rows,
         prepareRow,
-        state,
-        visibleColumns,
-        preGlobalFilteredRows,
-        setGlobalFilter,
     } = useTable(
         {
             columns,
@@ -84,22 +167,30 @@ function Table({columns, data, height, tableClass, actions}) {
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
     );
-
-    // We don't want to render all 2000 rows for this example, so cap
-    // it at 20 for this use case
-    const firstPageRows = rows;// .slice(0, 20)
+    let downloadData;
+    if (csvDownload.length){
+        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = downloadData.map(row => {
+            Object.keys(row).forEach(key => {
+                if (!csvDownload.includes(key)) delete row[key]
+            })
+            return row
+        })
+    }
 
     return (
         <DIV style={{overflow: 'auto', height: height ? height : 'auto'}}
              className={tableClass ? tableClass : 'table table-sm table-lightborder table-hover dataTable'}>
             <table {...getTableProps()} style={{width: '100%'}}>
                 <thead>
-                {headerGroups.map(headerGroup => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
+                {headerGroups.map((headerGroup,i) => (
+                    <tr {...headerGroup.getHeaderGroupProps()} key ={i}>
+                        {headerGroup.headers
+                            .filter(cell => cell.expandable !== 'true')
+                            .map((column,j) => (
                             // Add the sorting props to control sorting. For this example
                             // we can add them into the header props
-                            <th>
+                            <th key ={j}>
                                 {
                                     column.sort ?
                                         (
@@ -118,40 +209,47 @@ function Table({columns, data, height, tableClass, actions}) {
 
                                 }
                                 {/* Render the columns filter UI */}
-                                <div>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
+                                <div>{column.canFilter && column.filter ?
+                                    column.filter === 'multi' ?
+                                        column.render(MultiSelectColumnFilter) : column.render('Filter') : null}</div>
                             </th>
                         ))}
-                        {actions ?
-                            Object.keys(actions)
-                                .map(action => <th></th>) : null
+                        {csvDownload.length ?
+                            <th colSpan={3}>
+                                <CSVLink className='btn btn-secondary btn-sm'
+                                         style={{width:'100%'}}
+                                         data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
+                            </th> :
+                            actions ? Object.keys(actions).map(action => <th></th>) : null
                         }
                     </tr>
                 ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                {firstPageRows.map(
+                {rows.map(
                     (row, i) => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => {
+                            <React.Fragment>
+                            <tr {...row.getRowProps()}
+                                className={row.cells
+                                    .filter(cell => cell.column.expandable === 'true').length ? "expandable" : ""}
+                                onClick={(e) => {
+                                    if (document.getElementById(`expandable${i}`)){
+                                        document.getElementById(`expandable${i}`).style.display =
+                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'table-row' : 'none'
+                                    }
+                                }}
+                            >
+                                {row.cells
+                                    .filter(cell => cell.column.expandable !== 'true')
+                                    .map(cell => {
+                                    if (cell.column.Header.includes('.')){
+                                        cell.value = cell.row.original[cell.column.Header]
+                                    }
                                     return (
                                         <td {...cell.getCellProps()}>
-                                            {
-                                                cell.column.link ?
-                                                    <Link
-                                                        to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                                                        {
-                                                            cell.column.formatValue ?
-                                                                cell.column.formatValue(cell.value) :
-                                                                cell.render('Cell')
-                                                        }
-                                                    </Link> :
-                                                    cell.column.formatValue ?
-                                                        cell.column.formatValue(cell.value) :
-                                                        cell.render('Cell')
-
-                                            }
+                                            {renderCell(cell)}
                                         </td>
                                     )
                                 })}
@@ -178,6 +276,25 @@ function Table({columns, data, height, tableClass, actions}) {
                                         )
                                     : null}
                             </tr>
+                                <tr
+                                    id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
+                                    display: 'none'}}>
+                                    {row.cells
+                                        .filter(cell => cell.column.expandable === 'true')
+                                        .map(cell => {
+                                            return (
+                                                <td {...cell.getCellProps()}
+                                                    colSpan={
+                                                        row.cells.filter(cell => cell.column.expandable !== 'true').length +
+                                                        (actions ? Object.keys(actions).length : 0)
+                                                    }>
+                                                    {renderCell(cell)}
+                                                </td>
+                                            )
+                                        })
+                                    }
+                                </tr>
+                            </React.Fragment>
                         )
                     }
                 )}

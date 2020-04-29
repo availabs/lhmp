@@ -11,6 +11,9 @@ import {
 } from 'react-table'
 import matchSorter from "match-sorter";
 import {Link} from "react-router-dom";
+import MultiSelectFilter from "../../filters/multi-select-filter";
+import _ from "lodash";
+import {CSVLink} from "react-csv";
 
 
 const Styles = styled.div`
@@ -50,7 +53,9 @@ const Styles = styled.div`
       }
       
     }
-
+    .expandable {
+        cursor: pointer;
+    }
      .th {
         font-size: 0.75rem;
         text-transform: uppercase;
@@ -106,7 +111,33 @@ const Styles = styled.div`
     }
   }
 `;
+const _MultiSelectFilter = styled.div`
+    * {
+        font-weight: 0;
+    }
+    text-transform: capitalize;
+	margin: 0px !important;
+	display: flex;
 
+    .item-selector {
+        border: none;
+    }
+    .item-selector>div>div {
+        border: 0.5px solid ${props => props.theme.borderColorLight};
+            color: #b5b5b7;
+
+    }
+	:hover {
+		border-color: ${props => props.theme.textColorHl};
+	}
+
+	> div:first-child {
+		padding-right: 0px;
+	}
+	>div {
+		width: 100%;
+	}
+`
 const actionBtnStyle = {width:'80px'}
 const headerProps = (props, {column}) => getStyles(props, column.align);
 
@@ -145,14 +176,62 @@ function DefaultColumnFilter({
     )
 }
 
+// This is a custom filter UI for selecting
+// a unique option from a list
+
+function MultiSelectColumnFilter({
+                                column: { filterValue, setFilter, preFilteredRows, id },
+                            }) {
+    // Calculate the options for filtering
+    // using the preFilteredRows
+    const options = React.useMemo(() => {
+        const options = new Set()
+        preFilteredRows.forEach(row => {
+            options.add(row.values[id])
+        })
+        return [...options.values()]
+    }, [id, preFilteredRows])
+    const count = preFilteredRows.length;
+
+    // Render a multi-select box
+    return (
+        <_MultiSelectFilter>
+            <MultiSelectFilter
+                filter={{
+                    domain: options,
+                    value: filterValue ? filterValue : []//this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : []
+                }}
+                setFilter={(e) => {
+                    setFilter(e || undefined) // Set undefined to remove the filter entirely
+                }}
+                placeHolder={`Search ${count} records...`}
+            />
+        </_MultiSelectFilter>
+    )
+}
 function fuzzyTextFilterFn(rows, id, filterValue) {
     return matchSorter(rows, filterValue, {keys: [row => row.values[id]]})
 }
 
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
-
-function Table({columns, data, tableClass, height, width, actions}) {
+function renderCell(cell) {
+    return (
+        cell.column.link ?
+            <Link
+                to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                {
+                    cell.column.formatValue ?
+                        cell.column.formatValue(cell.value) :
+                        cell.render('Cell')
+                }
+            </Link> :
+            cell.column.formatValue ?
+                cell.column.formatValue(cell.value) :
+                cell.render('Cell')
+    )
+}
+function Table({columns, data, tableClass, height, width, actions, csvDownload}) {
     /*  const defaultColumn = React.useMemo(
         () => ({
           // When using the useFlexLayout:
@@ -175,6 +254,14 @@ function Table({columns, data, tableClass, height, width, actions}) {
                         ? String(rowValue)
                             .toLowerCase()
                             .startsWith(String(filterValue).toLowerCase())
+                        : true
+                })
+            },
+            multi: (rows, id, filterValue) => {
+                return rows.filter(row => {
+                    const rowValue = row.values[id];
+                    return rowValue !== undefined && filterValue.length
+                        ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
                         : true
                 })
             },
@@ -212,7 +299,16 @@ function Table({columns, data, tableClass, height, width, actions}) {
         useSortBy,
         useRowSelect
     );
-
+    let downloadData;
+    if (csvDownload.length){
+        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = downloadData.map(row => {
+            Object.keys(row).forEach(key => {
+                if (!csvDownload.includes(key)) delete row[key]
+            })
+            return row
+        })
+    }
     return (
         <div {...getTableProps()}
              style={{overflow: 'auto',/* width: width ? width : 'fit-content'*/}}
@@ -225,7 +321,9 @@ function Table({columns, data, tableClass, height, width, actions}) {
                         })}
                         className="tr"
                     >
-                        {headerGroup.headers.map(column => (
+                        {headerGroup.headers
+                            .filter(cell => cell.expandable !== 'true')
+                            .map(column => (
                             <div {...column.getHeaderProps()} className="th">
                                 {column.sort ?
                                     (
@@ -243,7 +341,11 @@ function Table({columns, data, tableClass, height, width, actions}) {
                                     ) : column.render('Header')}
 
                                 {/* Render the columns filter UI */}
-                                <div {...column.getHeaderProps()}>{column.canFilter && column.filter ? column.render('Filter') : null}</div>
+                                <div {...column.getHeaderProps()}>{
+                                    column.canFilter && column.filter ?
+                                        column.filter === 'multi' ?
+                                            column.render(MultiSelectColumnFilter) : column.render('Filter') : null
+                                }</div>
 
                                 {/* Use column.getResizerProps to hook up the events correctly */}
                                 {column.canResize && (
@@ -257,8 +359,26 @@ function Table({columns, data, tableClass, height, width, actions}) {
 
                             </div>
                         ))}
-                        {actions ?
-                            Object.keys(actions)
+
+                        {csvDownload.length ?
+                            <div
+                                {...Object.assign(
+                                    headerGroup.headers[0].getHeaderProps(),
+                                    {
+                                        style: Object.assign(headerGroup.headers[0].getHeaderProps().style, {
+                                            paddingTop: '30px',
+                                            paddingLeft: '40px',
+                                            display: 'flex',
+                                            justifyContent: 'center'
+                                        })
+                                    }
+                                )}
+                                 className='th'>
+                                <CSVLink className='btn btn-secondary btn-sm'
+                                         style={{height:'fit-content'}}
+                                         data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
+                            </div> :
+                            actions ? Object.keys(actions)
                                 .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle} className="th"></div>) : null
                         }
                     </div>
@@ -271,51 +391,71 @@ function Table({columns, data, tableClass, height, width, actions}) {
                 {rows.map((row, i) => {
                     prepareRow(row);
                     return (
-                        <div {...row.getRowProps()} className="tr">
-                            {row.cells.map(cell => {
-                                return (
-                                    <div {...cell.getCellProps(cellProps)} className="td">
-                                        {
-                                            cell.column.link ?
-                                                <Link
-                                                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                                                    {
-                                                        cell.column.formatValue ?
-                                                            cell.column.formatValue(cell.value) :
-                                                            cell.render('Cell')
-                                                    }
-                                                </Link> :
-                                                cell.column.formatValue ?
-                                                    cell.column.formatValue(cell.value) :
-                                                    cell.render('Cell')
-
+                        <React.Fragment>
+                            <div {...row.getRowProps()}
+                                className={row.cells
+                                    .filter(cell => cell.column.expandable === 'true').length ? "tr expandable" : "tr"}
+                                onClick={(e) => {
+                                    if (document.getElementById(`expandable${i}`)){
+                                        document.getElementById(`expandable${i}`).style.display =
+                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'flex' : 'none'
+                                    }
+                                }}
+                            >
+                                {row.cells
+                                    .filter(cell => cell.column.expandable !== 'true')
+                                    .map(cell => {
+                                        if (cell.column.Header.includes('.')){
+                                            cell.value = cell.row.original[cell.column.Header]
                                         }
-                                    </div>
-                                )
-                            })}
-                            {actions ?
-                                Object.keys(actions)
-                                    .map(action => {
-                                            return (
-                                                <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle} className="td">
-                                                    {
-                                                        typeof row.original[action] === 'string' ?
-                                                            <Link
-                                                                className={action === 'delete' ?
-                                                                    'btn btn-sm btn-outline-danger' :
-                                                                    "btn btn-sm btn-outline-primary"}
-                                                                style={{textTransform: 'capitalize'}}
-                                                                to={row.original[action]}>
-                                                                {action}
-                                                            </Link>
-                                                            :
-                                                            row.original[action]
-                                                    }
-                                                </div>)
-                                        }
+                                    return (
+                                        <div {...cell.getCellProps(cellProps)} className="td">
+                                            {renderCell(cell)}
+                                        </div>
                                     )
-                                : null}
-                        </div>
+                                })}
+                                {actions ?
+                                    Object.keys(actions)
+                                        .map(action => {
+                                                return (
+                                                    <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle} className="td">
+                                                        {
+                                                            typeof row.original[action] === 'string' ?
+                                                                <Link
+                                                                    className={action === 'delete' ?
+                                                                        'btn btn-sm btn-outline-danger' :
+                                                                        "btn btn-sm btn-outline-primary"}
+                                                                    style={{textTransform: 'capitalize'}}
+                                                                    to={row.original[action]}>
+                                                                    {action}
+                                                                </Link>
+                                                                :
+                                                                row.original[action]
+                                                        }
+                                                    </div>)
+                                            }
+                                        )
+                                    : null}
+                            </div>
+
+                            <tr className="tr"
+                                 id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
+                                     display: 'none', flex: '0 1 auto', width:'100%', minWidth:'100%'}}>
+                                {row.cells
+                                    .filter(cell => cell.column.expandable === 'true')
+                                    .map(cell => {
+                                        return (
+                                            <td
+                                                 className="td"
+                                                 {...cell.getCellProps(cellProps)}
+                                                 colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
+                                                {renderCell(cell)}
+                                            </td>
+                                        )
+                                    })
+                                }
+                            </tr>
+                        </React.Fragment>
                     )
                 })}
             </div>
@@ -324,10 +464,10 @@ function Table({columns, data, tableClass, height, width, actions}) {
 }
 
 
-function StyledTable({columns: columns, data: data, height, width, actions}) {
+function StyledTable({columns: columns, data: data, height, width, actions, csvDownload = []}) {
     return (
         <Styles>
-            <Table columns={columns} data={data} height={height} width={width} actions={actions}/>
+            <Table columns={columns} data={data} height={height} width={width} actions={actions} csvDownload={csvDownload}/>
         </Styles>
     )
 }

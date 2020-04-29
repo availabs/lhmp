@@ -6,6 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get";
 import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
 import styled from "styled-components";
+import {falcorGraph} from "../../../store/falcorGraph";
 
 var _ = require("lodash");
 
@@ -56,7 +57,6 @@ class AvlFormsNewData extends React.Component{
     }
 
     handleChange(e){
-        console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
 
@@ -95,6 +95,12 @@ class AvlFormsNewData extends React.Component{
             }
         }
 
+    }
+    componentDidUpdate(prevProps, prevState) {
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        if (countyAttrs.reduce((a,c) => a || !_.isEqual(prevState[c], this.state[c]), false)){
+            this.cousubDropDown({target:{value:this.state[countyAttrs.pop()]}})
+        }
     }
 
     displayPrompt(id){
@@ -222,15 +228,20 @@ class AvlFormsNewData extends React.Component{
     }
 
     cousubDropDown(event){
-        let county = event.target.value;
-        if(county !== 'None'){
+        let county = typeof event.target.value === "object" ? event.target.value : [event.target.value];
+        if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    let cousubs = response.json.geo[county].cousubs;
-                    this.props.falcor.get(['geo',cousubs,['name']])
-                        .then(response =>{
-                            return response
-                        })
+                    console.log('cousub dropdown 1', response, county)
+                    let cousubs = [];
+                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
+                    if (cousubs){
+                        this.props.falcor.get(['geo',cousubs,['name']])
+                            .then(response =>{
+                                console.log('cousub dropdown 2', response, cousubs)
+                                return response
+                            })
+                    }
                 })
         }else{
             return null
@@ -240,8 +251,12 @@ class AvlFormsNewData extends React.Component{
     geoData(){
         let countyData = [];
         let cousubsData = [];
-        if(this.props.geoData){
-            let graph = this.props.geoData;
+        let graph = this.props.geoData;
+        let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
+        let filterOn = this.state[countyAttrs.pop()]
+        console.log('geodata called',graph, this.state)
+        if(graph){
+            // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
                 if(item.length === 5){
                     countyData.push({
@@ -249,15 +264,38 @@ class AvlFormsNewData extends React.Component{
                         name: graph[item].name
                     })
                 }
-                if(item.length > 5){
-                    cousubsData.push({
-                        value : item,
-                        name : graph[item].name
+            })
+            console.log('check this', filterOn, Object.keys(graph).filter(item =>filterOn && filterOn.includes(item.toString())))
+            Object.keys(graph)
+                .filter(item => filterOn && filterOn.includes(item.toString()))
+                .forEach(item =>{
+                    console.log('cousubs loop', item,get(graph, `${item}.cousubs.value`, []))
+
+                    get(graph, `${item}.cousubs.value`, [])
+                        .filter(cousub => get(graph, `${cousub}.name`, null))
+                        .forEach(cousub => {
+                            console.log('pushing for cousub', cousub)
+                        cousubsData.push({
+                            value : cousub,
+                            name : get(graph, `${cousub}.name`, '')
+                        })
                     })
-                }
             })
         }
+        console.log('geodata returning', cousubsData)
         return [countyData,cousubsData]
+    }
+    handleMultiSelectFilterChange(e, id, domain=[]) {
+
+        let tmpObj = {};
+        if (e.includes('Select All') && domain.length > 0){
+            tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
+        }else if (e.includes('Select None')){
+            tmpObj[id] = [];
+        }else{
+            tmpObj[id] = [...e];
+        }
+        this.setState(tmpObj);
     }
 
     implementData(){
@@ -271,25 +309,29 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type]){
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
             }
-
         }
+        if (!countyData.length) return null;
+        console.log('county and cousubs', cousubsData)
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
+
                 if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
-                    item.attributes[attribute].meta && item.attributes[attribute].depend_on === undefined
-                    && item.attributes[attribute].hidden ==='false'
+                    item.attributes[attribute].meta === 'true' && item.attributes[attribute].depend_on === undefined
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
                         data_error : item.attributes[attribute].data_error,
                         required: item.attributes[attribute].field_required,
-                        type:item.attributes[attribute].edit_type,
-                        meta : countyData,
+                        placeholder: item.attributes[attribute].placeholder,
+                        type: 'multiselect',//item.attributes[attribute].edit_type,
+                        meta : countyData || [],
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         onClick : this.cousubDropDown.bind(this),
@@ -299,37 +341,43 @@ class AvlFormsNewData extends React.Component{
                     item.attributes[attribute].depend_on &&
                     item.attributes[attribute].edit_type === 'dropdown' &&
                     item.attributes[attribute].meta === 'true'
-                    && item.attributes[attribute].hidden ==='false'){
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
-                        type:item.attributes[attribute].edit_type,
+                        required: item.attributes[attribute].field_required,
+                        placeholder: item.attributes[attribute].placeholder,
+                        type: 'multiselect',//item.attributes[attribute].edit_type,
                         depend_on : item.attributes[attribute].depend_on,
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
-                        meta : cousubsData,
+                        meta : cousubsData || [],
                         defaultValue: item.attributes[attribute].defaultValue
                     })
-                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
+                }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' &&
+                    item.attributes[attribute].meta === 'true'){
                     data.push({
                         formType : this.props.config.map(d => d.type),
                         label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
+                        //handleChange : this.handleChange,
+                        handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
                         state : this.state,
                         title : attribute,
-                        type: item.attributes[attribute].edit_type,
+                        placeholder: item.attributes[attribute].placeholder,
+                        type: 'multiselect', //item.attributes[attribute].edit_type,
                         required: item.attributes[attribute].field_required,
-                        meta: meta_data,
+                        meta: meta_data ? meta_data : [],
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on,
                         defaultValue: item.attributes[attribute].defaultValue
 
                     })
                 }else if(item.attributes[attribute].edit_type === 'radio'
-                    && item.attributes[attribute].hidden ==='false'
+                    && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -337,6 +385,9 @@ class AvlFormsNewData extends React.Component{
                         handleChange : this.handleChange,
                         state : this.state,
                         title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
+                        inline: item.attributes[attribute].inline,
+                        required: item.attributes[attribute].field_required,
                         type:item.attributes[attribute].edit_type,
                         prompt: this.displayPrompt.bind(this),
                         values:item.attributes[attribute].edit_type_values,
@@ -344,7 +395,7 @@ class AvlFormsNewData extends React.Component{
                     })
                 }
                 else if(
-                    item.attributes[attribute].hidden ==='false' || item.attributes[attribute].hidden === undefined
+                    ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
                         formType : this.props.config.map(d => d.type),
@@ -353,6 +404,7 @@ class AvlFormsNewData extends React.Component{
                         state : this.state,
                         title : attribute,
                         data_error : item.attributes[attribute].data_error,
+                        placeholder: item.attributes[attribute].placeholder,
                         required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
                         type:item.attributes[attribute].edit_type,
@@ -380,15 +432,26 @@ class AvlFormsNewData extends React.Component{
 
 
     render(){
-        console.log('in render state',this.state)
         let test = this.implementData();
+        if (!test) return null
         let data = [];
         test.forEach((d,i) =>{
                 data.push(d)
 
         });
+        console.log('check??', this.props.config[0].page_title, this.state)
         return(
             <div className="container">
+                {get(this.props.config[0], `page_title`, null) &&
+                this.state[this.props.config[0].page_title] ?
+                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {this.state[this.props.config[0].page_title]}
+                        {get(this.props.config[0], `sub_title`, null) ?
+                            <h6>{get(this.state, `${this.props.config[0].sub_title}`, null)}</h6> : null}
+                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                        {get(this.props.config[0], `default_title`,
+                            `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                    </h4>}
                 <Element>
                     <div className="element-box">
                         <div className="form-group">
@@ -430,7 +493,6 @@ class AvlFormsNewData extends React.Component{
 }
 
 const mapStateToProps = (state,ownProps) => {
-    //console.log('state',state.user.email)
     return {
         userEmail:state.user.email,
         activePlan: state.user.activePlan,

@@ -307,11 +307,11 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/roles/',
+        path: '/rolesOld/',
         exact: true,
         name: 'Roles',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             {name: 'Roles', path: '/roles/'},
@@ -328,7 +328,7 @@ export default [
         component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(RolesIndex))
     },
     {
-        path: '/roles/:roleid',
+        path: '/rolesOld/:roleid',
         exact: true,
         name: 'Roles',
         auth: true,

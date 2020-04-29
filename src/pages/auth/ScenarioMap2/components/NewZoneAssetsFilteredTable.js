@@ -31,10 +31,10 @@ class NewZoneAssetsFilteredTable extends Component {
                     [];
 
         return this.props.falcor.get(
-            ['zones','byPlanId',this.props.activePlan,'byName',this.props.name,'byGeom',this.props.geom,
+            ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
             this.props.groupBy,ids.filter(f => f),
             'byRiskScenario',this.props.scenarioId,'byRiskZone','all'],
-            ['zones','byPlanId',this.props.activePlan,'byName',this.props.name,'byGeom',this.props.geom,this.props.groupBy,ids.filter(f => f),'buildings','sum',['count','replacement_value']]
+            ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,this.props.groupBy,ids.filter(f => f),'sum',['num_buildings','replacement_value']]
         )
             .then(response =>{
                 return response
@@ -61,7 +61,7 @@ class NewZoneAssetsFilteredTable extends Component {
                     return a;
                 }, {})
             :
-            this.props.buildingData[this.props.activePlan].byName[this.props.name].byGeom[this.props.geom[0]][this.props.groupBy]
+            get(this.props.buildingData,['byId',this.props.zone_id,this.props.groupBy],{})
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
@@ -79,52 +79,86 @@ class NewZoneAssetsFilteredTable extends Component {
                 }).forEach(item =>{
                 if (this.props.groupBy === 'propType' || this.props.groupBy === 'critical'){
                     if (parseInt(item) % moduloBy === 0){
-                        let tmpSumCount = 0, tmpSumReplacementValue = 0, subCats = [], riskZoneIdsAllValues = {};
+                        //sum subcategories
+                        let tmpSumCount = 0, tmpSumReplacementValue = 0, subCats = [], riskZoneIdsAllValues = {},assetsFilteredByRiskZoneId = []
+
                         Object.keys(graph)
                             .filter(subItem => subItem.toString().slice(0,digitsToMatch) === item.toString().slice(0,digitsToMatch))
-                            .forEach((subItem,i) =>{
+                            .forEach((subItem,si) =>{
+                                //console.log('inside forEach', this.props.groupBy, subItem)
                                 subCats.push(subItem)
-                                tmpSumCount += parseInt(get(graph, `${subItem}.buildings.sum.count.value`, 0));
-                                tmpSumReplacementValue += parseInt(get(graph, `${subItem}.buildings.sum.replacement_value.value`, 0));
-
+                                tmpSumCount += parseInt(get(graph, `${subItem}.sum.num_buildings.value`, 0));
+                                tmpSumReplacementValue += parseInt(get(graph, `${subItem}.sum.replacement_value.value`, 0));
+                                // get risk zone data
                                 Object.keys(get(graph, `${subItem}.byRiskScenario`, {}))
                                     .forEach(scenarioId => {
                                         if (get(graph, `${subItem}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
-                                            get(graph, `${subItem}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
-                                                .forEach(riskZoneIdData => {
-                                                    scenarioToRiskZoneMapping[scenarioId] ?
-                                                        scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
-                                                        scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
+                                            //filtering on riskZoneId
+                                            if(this.props.riskZoneId && this.props.riskZoneId.length > 0){
+                                                get(graph, `${subItem}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                                    .filter(item => this.props.riskZoneId && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
+                                                    .forEach(riskZoneIdData =>{
+                                                        scenarioToRiskZoneMapping[scenarioId] ?
+                                                            scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
+                                                            scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
 
-                                                    if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
-                                                        if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
-                                                            riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
-                                                            riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+                                                        if(!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                            if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                                riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
+                                                                riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+                                                            }
+                                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                                count: parseInt(riskZoneIdData.count) || 0,
+                                                                value: parseInt(riskZoneIdData.sum) || 0
+                                                            };
                                                         }
-                                                        riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
-                                                            count: parseInt(riskZoneIdData.count) || 0,
-                                                            value: parseInt(riskZoneIdData.sum) || 0
-                                                        };
-                                                    }else{
-                                                        riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
-                                                        riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
-                                                    }
+                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] ?
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] += parseInt(riskZoneIdData.count) || 0 :
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] = parseInt(riskZoneIdData.count) || 0;
 
-                                                    riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] ?
-                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] += parseInt(riskZoneIdData.count) || 0 :
-                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] = parseInt(riskZoneIdData.count) || 0;
+                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] ?
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] +=  parseInt(riskZoneIdData.sum) || 0 :
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] =  parseInt(riskZoneIdData.sum) || 0;
+                                                    })
+                                            }else{
+                                                get(graph, `${subItem}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                                    .forEach(riskZoneIdData => {
+                                                        scenarioToRiskZoneMapping[scenarioId] ?
+                                                            scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
+                                                            scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
 
-                                                    riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] ?
-                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] +=  parseInt(riskZoneIdData.sum) || 0 :
-                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] =  parseInt(riskZoneIdData.sum) || 0;
+                                                        if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                            if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                                riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
+                                                                riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+                                                            }
+                                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                                count: parseInt(riskZoneIdData.count) || 0,
+                                                                value: parseInt(riskZoneIdData.sum) || 0
+                                                            };
+                                                        }else{
+                                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
+                                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
+                                                        }
 
-                                                })
+                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] ?
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] += parseInt(riskZoneIdData.count) || 0 :
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] = parseInt(riskZoneIdData.count) || 0;
+
+                                                        riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] ?
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] +=  parseInt(riskZoneIdData.sum) || 0 :
+                                                            riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' $'] =  parseInt(riskZoneIdData.sum) || 0;
+
+                                                    })
+                                            }
+
                                         }
 
                                     })
-                                totalBuildings += parseInt(get(graph, `${subItem}.buildings.sum.count.value`, 0));
-                                totalBuildingsValue += parseInt(get(graph, `${subItem}.buildings.sum.replacement_value.value`, 0));
-                            })
+                                totalBuildings += parseInt(get(graph, `${subItem}.sum.num_buildings.value`, 0));
+                                totalBuildingsValue += parseInt(get(graph, `${subItem}.sum.replacement_value.value`, 0));
+                            });
+
                         BuildingTypeData.push({
                             [primeColName]: this.props.groupByFilter.length ?
                                 get(config.filter(f => f.value === item).pop(), `name`, null) + ' Total' :
@@ -140,15 +174,101 @@ class NewZoneAssetsFilteredTable extends Component {
                                 }, {}),
                             link: linkBase + subCats.join('-'),
                         })
-
                     }
                     if (this.props.groupByFilter.length){
+                        // if filter is on, we display subCats as well
+                        // get risk zone data
                         let riskZoneIdsAllValues = {}
                         Object.keys(get(graph, `${item}.byRiskScenario`, {}))
                             .forEach(scenarioId => {
                                 if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
+                                    //filtering on risk_zone_id
+                                    if(this.props.riskZoneId && this.props.riskZoneId.length > 0){
+                                        get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                            .filter(item => this.props.riskZoneId && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
+                                            .forEach(riskZoneIdData =>{
+                                                if(!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                    if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
+                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+                                                    }
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                        count: parseInt(riskZoneIdData.count) || 0,
+                                                        value: parseInt(riskZoneIdData.sum) || 0
+                                                    };
+                                                }
+                                            })
+                                    }else{
+                                        get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                            .forEach(riskZoneIdData => {
+                                                if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                    if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $` )
+                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+
+                                                    }
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                        count: parseInt(riskZoneIdData.count) || 0,
+                                                        value: parseInt(riskZoneIdData.sum) || 0
+                                                    };
+                                                }else{
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
+                                                }
+
+                                            })
+                                    }
+
+                                }
+
+                            })
+
+                        BuildingTypeData.push({
+                            [primeColName]: get(config.filter(f => f.value === item).pop(), `name`, null),
+                            'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.sum.replacement_value.value`, 0)),
+                            'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.num_buildings.value`, 0)),
+                            ...Object.keys(riskZoneIdsAllValues)
+                                .reduce((a, riskZone) => {
+                                    a[riskZone + ' #'] = riskZoneIdsAllValues[riskZone].count;
+                                    a[riskZone + ' $'] = riskZoneIdsAllValues[riskZone].value;
+
+                                    return a
+                                }, {}),
+                            link: linkBase + item
+                        })
+                    }
+                }else{
+                    // get risk zone data
+                    let riskZoneIdsAllValues = {}
+                    Object.keys(get(graph, `${item}.byRiskScenario`, {}))
+                        .forEach(scenarioId => {
+
+                            if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
+                                if(this.props.riskZoneId && this.props.riskZoneId.length > 0){
+                                    get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                        .filter(item => this.props.riskZoneId && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
+                                        .forEach(riskZoneIdData =>{
+                                            scenarioToRiskZoneMapping[scenarioId] ?
+                                                scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
+                                                scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
+
+                                            if(!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                    riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
+                                                    riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+                                                }
+                                                riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                    count: parseInt(riskZoneIdData.count) || 0,
+                                                    value: parseInt(riskZoneIdData.sum) || 0
+                                                };
+                                            }
+                                        })
+                                }else{
                                     get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
                                         .forEach(riskZoneIdData => {
+                                            scenarioToRiskZoneMapping[scenarioId] ?
+                                                scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
+                                                scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
 
                                             if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
                                                 if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
@@ -168,53 +288,6 @@ class NewZoneAssetsFilteredTable extends Component {
                                         })
                                 }
 
-                            })
-
-                        BuildingTypeData.push({
-                            [primeColName]: get(config.filter(f => f.value === item).pop(), `name`, null),
-                            'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}..buildings.sum.replacement_value.value`, 0)),
-                            'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.buildings.sum.count.value`, 0)),
-                            ...Object.keys(riskZoneIdsAllValues)
-                                .reduce((a, riskZone) => {
-                                    a[riskZone + ' #'] = riskZoneIdsAllValues[riskZone].count;
-                                    a[riskZone + ' $'] = riskZoneIdsAllValues[riskZone].value;
-
-                                    return a
-                                }, {}),
-                            link: linkBase + item
-                        })
-                    }
-                }else{
-                    // get risk zone data
-                    let riskZoneIdsAllValues = {}
-                    Object.keys(get(graph, `${item}.byRiskScenario`, {}))
-                        .forEach(scenarioId => {
-
-                            if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
-
-                                get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
-                                    .forEach(riskZoneIdData => {
-
-                                        scenarioToRiskZoneMapping[scenarioId] ?
-                                            scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
-                                            scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
-
-                                        if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
-                                            if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
-                                                riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $` )
-                                                riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
-
-                                            }
-                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
-                                                count: parseInt(riskZoneIdData.count) || 0,
-                                                value: parseInt(riskZoneIdData.sum) || 0
-                                            };
-                                        }else{
-                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
-                                            riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
-                                        }
-
-                                    })
                             }
 
                         })
@@ -225,8 +298,8 @@ class NewZoneAssetsFilteredTable extends Component {
                             this.props.groupBy === 'critical' ?
                                 item :
                                 get(config.filter(f => f.value === item).pop(), `name`, null),
-                        'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.buildings,sum.replacement_value.value`, 0)),
-                        'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.buildings.sum.count.value`, 0)),
+                        'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.sum.replacement_value.value`, 0)),
+                        'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.sum.num_buildings.value`, 0)),
                         ...Object.keys(riskZoneIdsAllValues)
                             .reduce((a, riskZone) => {
                                 a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
@@ -245,8 +318,8 @@ class NewZoneAssetsFilteredTable extends Component {
                         link: linkBase + item
                     });
 
-                    totalBuildings += parseInt(get(graph, `${item}.buildings.sum.count.value`, 0));
-                    totalBuildingsValue += parseInt(get(graph, `${item}.buildings.sum.replacement_value.value`, 0));
+                    totalBuildings += parseInt(get(graph, `${item}.sum.num_buildings.value`, 0));
+                    totalBuildingsValue += parseInt(get(graph, `${item}.sum.replacement_value.value`, 0));
                 }
             })
             BuildingTypeData.push({
@@ -347,7 +420,7 @@ const mapStateToProps = state => ({
     activeGeoid: state.user.activeGeoid,
     activeCousubid: state.user.activeCousubid,
     geoidData: get(state.graph, 'geo'),
-    buildingData : get(state.graph,'zones.byPlanId'),
+    buildingData : get(state.graph,['form_zones','zones','byPlanId',`${state.user.activePlan}`,]),
     parcelMeta : get(state.graph,'parcel.meta'),
 });
 

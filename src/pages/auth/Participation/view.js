@@ -31,23 +31,17 @@ class ParticipationFormsView extends React.Component{
 
     render(){
         let config = this.chooseConfig();
-        let sub_type = '';
-        config.forEach(item =>{
-            Object.keys(item.attributes).forEach(d =>{
-                if(item.attributes[d].sub_type.length > 0){
-                    sub_type = item.attributes[d].sub_type
-                }
-            })
-        })
-        return(
-            <Element>
-                <h6 className="element-header">Participation {sub_type}</h6>
-                <AvlFormsViewData
-                    json = {config}
-                    id = {[this.props.match.params.id]}
-                />
 
-            </Element>
+        return(
+            <div className='container'>
+                <Element>
+                    <AvlFormsViewData
+                        json = {config}
+                        id = {[this.props.match.params.id]}
+                    />
+
+                </Element>
+            </div>
         )
     }
 }

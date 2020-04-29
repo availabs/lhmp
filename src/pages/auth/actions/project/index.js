@@ -267,14 +267,14 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/actions/project',
+        path: '/actionsOld/project',
         exact: true,
         name: 'ActionsProject',
         auth: true,
         mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
-            {name: 'Actions Project', path: '/actions/project'}
+            {name: 'Actions Project', path: '/actionsOld/project'}
         ],
         menuSettings: {
             image: 'none',

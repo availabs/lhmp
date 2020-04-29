@@ -4,17 +4,23 @@ import { AUTH_HOST, AUTH_PROJECT_NAME } from 'config';
 import {falcorGraph} from "../falcorGraph";
 import {login, logout, setActiveCousubid, setActiveGeoid, setActivePlan, setUserToken} from "./user";
 
-const SET_RISK_ZONE_ID = 'USER::SET_RISK_ZONE_ID';
+const SET_RISK_SCENARIO_ID = 'USER::SET_RISK_SCENARIO_ID';
+const SET_RISK_ZONE_ID = 'USER::SET_RISK_ZONE_ID'
 const SET_RISK_ZONE_ID_OFF = 'USER::SET_RISK_ZONE_ID_OFF';
 const SET_NEW_ZONE = 'USER::SET_NEW_ZONE';
 
-function setRiskZoneId(id) {
+function setRiskScenarioId(id) {
+    return {
+        type:SET_RISK_SCENARIO_ID,
+        id
+    }
+}
+function setRiskZoneId(id){
     return {
         type:SET_RISK_ZONE_ID,
         id
     }
 }
-
 function setRiskZoneIdOff(offId) {
     return {
         type:SET_RISK_ZONE_ID_OFF,
@@ -28,6 +34,12 @@ function setNewZone(newZone){
         newZone
     }
 }
+
+export const setActiveRiskScenarioId = (id) =>{
+    return (dispatch) => {
+        dispatch(setRiskScenarioId(id))
+    }
+};
 
 export const setActiveRiskZoneId = (id) =>{
     return (dispatch) => {
@@ -49,6 +61,7 @@ export const setActiveNewZone = (id) =>{
 
 export const actions = {
 
+    setActiveRiskScenarioId,
     setActiveRiskZoneId,
     setActiveRiskZoneIdOff,
     setActiveNewZone
@@ -57,12 +70,22 @@ export const actions = {
 
 let initialState = {
 
-    activeRiskZoneId:[],
+    activeRiskZoneId:'',
+    activeRiskScenarioId:[],
     offRiskZoneId:[],
     newZone:{}
 };
 
 const ACTION_HANDLERS = {
+
+    [SET_RISK_SCENARIO_ID]: (state =initialState, action) => {
+        const newState = Object.assign({}, state)
+        if(action.id) {
+            newState.activeRiskScenarioId = action.id;
+            localStorage.setItem('riskScenarioId', newState.activeRiskScenarioId);
+        }
+        return newState
+    },
 
     [SET_RISK_ZONE_ID]: (state =initialState, action) => {
         const newState = Object.assign({}, state)

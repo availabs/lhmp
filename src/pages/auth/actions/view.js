@@ -31,14 +31,15 @@ class ActionsWorkSheetFormsView extends React.Component{
     render(){
         let config = this.chooseConfig();
         return(
-            <Element>
-                <h6 className="element-header">Actions Worksheet</h6>
-                <AvlFormsViewData
-                    json = {config}
-                    id = {[this.props.match.params.id]}
-                />
+            <div className='container'>
+                <Element>
+                    <AvlFormsViewData
+                        json = {config}
+                        id = {[this.props.match.params.id]}
+                    />
 
-            </Element>
+                </Element>
+            </div>
         )
     }
 }

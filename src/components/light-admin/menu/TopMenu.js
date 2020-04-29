@@ -79,6 +79,14 @@ class AvatarUser extends Component {
                                     </li>
                                  : null
                             }
+                            {this.props.user.authLevel === 10 ?
+                                <li>
+                                    <a href='/guidance'>
+                                        <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Guidance </span>
+                                    </a>
+                                </li>
+                                : null
+                            }
                         </ul>
                         <ul>
                             <li><Link to="/logout"><i className="os-icon os-icon-signs-11"/><span>Logout</span></Link>
@@ -158,6 +166,14 @@ class AvatarUserMobile extends Component {
                                 <li>
                                     <a href='/admin'>
                                         Admin
+                                    </a>
+                                </li>
+                                : null
+                            }
+                            {this.props.user.authLevel === 10 ?
+                                <li>
+                                    <a href='/guidance'>
+                                        Guidance
                                     </a>
                                 </li>
                                 : null

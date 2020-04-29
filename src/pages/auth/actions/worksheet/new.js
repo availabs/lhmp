@@ -415,12 +415,12 @@ const mapStateToProps = state => {
 export default [
     {
     icon: 'os-icon',
-    path: '/actions/worksheet/new/',
+    path: '/actionsOld/worksheet/new/',
     exact: true,
     mainNav: false,
     breadcrumbs: [
-        { name: 'Actions', path: '/actions/' },
-        { name: 'New Worksheet', path: '/actions/worksheet/new/' }
+        { name: 'Actions', path: '/actionsOld/' },
+        { name: 'New Worksheet', path: '/actionsOld/worksheet/new/' }
     ],
     menuSettings: {
         image: 'none',
@@ -434,14 +434,14 @@ export default [
     component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(Worksheet))
     },
     {
-        path: '/actions/worksheet/edit/:worksheetId',
+        path: '/actionsOld/worksheet/edit/:worksheetId',
         name: 'Edit Actions',
         mainNav: false,
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Actions', path: '/actions/' },
-            { param: 'worksheetId', path: '/actions/worksheet/new/edit' }
+            { name: 'Actions', path: '/actionsOld/' },
+            { param: 'worksheetId', path: '/actionsOld/worksheet/new/edit' }
         ],
         menuSettings: {
             image: 'none',
