@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import Element from 'components/light-admin/containers/Element'
 import get from "lodash.get";
 import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
+import styled from "styled-components";
 
 var _ = require("lodash");
 
@@ -16,7 +17,9 @@ const counties = [
     "36015","36121","36061","36021","36013","36033","36017", "36067","36035","36087","36051","36025",
     "36071","36093","36005"
 ];
-
+const DIV = styled.div`
+${props => props.theme.panelDropdownScrollBar};
+`;
 
 class AvlFormsNewData extends React.Component{
     constructor(props){
@@ -104,11 +107,19 @@ class AvlFormsNewData extends React.Component{
                         }
                         style={{'float': 'right'}}> ?
                 </button>
-                <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-sm show" role="dialog"
+                <div aria-labelledby="mySmallModalLabel"
+                     className="onboarding-modal modal fade animated show" role="dialog"
                      id={`closeMe`+id}
-                     tabIndex="1" style={{'display': 'none'}} aria-hidden="true">
-                    <div className="modal-dialog modal-sm" style={{'float': 'right'}}>
-                        <div className="modal-content">
+                     tabIndex="0"
+                     style={{display: 'none', margin: '0vh 0vw'}}
+                     onClick={(e) => {
+                         if (e.target.id === `closeMe`+id){
+                             e.target.closest(`#closeMe`+id).style.display = 'none'
+                         }
+                     }}
+                     aria-hidden="true">
+                    <div className="modal-dialog modal-centered modal-bg" style={{width: '100%', height: '50%', padding: '5vh 5vw'}}>
+                        <DIV className="modal-content text-center" style={{width: '100%', height: '100%', overflow: 'auto'}}>
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
@@ -116,13 +127,27 @@ class AvlFormsNewData extends React.Component{
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
                                     return (<div>{item.attributes[id].prompt}</div>)
                                 })}
                             </div>
 
-                        </div>
+                            {
+                                this.props.config.map(item =>{
+                                return item.attributes[id].example ?
+                                    <React.Fragment>
+                                        <div className="modal-header"><h6 className="modal-title">Example</h6></div>
+                                        <div className="modal-body" style={{textAlign: 'justify'}}>
+                                            {this.props.config.map(item =>{
+                                                return (<div>{item.attributes[id].example}</div>)
+                                            })}
+                                        </div>
+                                    </React.Fragment> : null
+                                })
+                            }
+
+                        </DIV>
                     </div>
                 </div>
             </div>
@@ -267,7 +292,8 @@ class AvlFormsNewData extends React.Component{
                         meta : countyData,
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
-                        onClick : this.cousubDropDown.bind(this)
+                        onClick : this.cousubDropDown.bind(this),
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }else if(item.attributes[attribute].area === 'true' &&
                     item.attributes[attribute].depend_on &&
@@ -285,6 +311,7 @@ class AvlFormsNewData extends React.Component{
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         meta : cousubsData,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta){
                     data.push({
@@ -297,7 +324,8 @@ class AvlFormsNewData extends React.Component{
                         required: item.attributes[attribute].field_required,
                         meta: meta_data,
                         prompt: this.displayPrompt.bind(this),
-                        depend_on : item.attributes[attribute].depend_on
+                        depend_on : item.attributes[attribute].depend_on,
+                        defaultValue: item.attributes[attribute].defaultValue
 
                     })
                 }else if(item.attributes[attribute].edit_type === 'radio'
@@ -311,7 +339,8 @@ class AvlFormsNewData extends React.Component{
                         title : attribute,
                         type:item.attributes[attribute].edit_type,
                         prompt: this.displayPrompt.bind(this),
-                        values:item.attributes[attribute].edit_type_values
+                        values:item.attributes[attribute].edit_type_values,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
                 else if(
@@ -326,7 +355,8 @@ class AvlFormsNewData extends React.Component{
                         data_error : item.attributes[attribute].data_error,
                         required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
-                        type:item.attributes[attribute].edit_type
+                        type:item.attributes[attribute].edit_type,
+                        defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
 

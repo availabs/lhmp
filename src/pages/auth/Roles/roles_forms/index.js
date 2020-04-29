@@ -44,7 +44,7 @@ const mapDispatchToProps = {
 
 export default [
     {
-        path: '/roles/',
+        path: '/rolesNew/',
         exact: true,
         name: 'Roles',
         auth: true,
