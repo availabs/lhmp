@@ -14,6 +14,7 @@ module.exports = [
             {title:'Step 5',sub_title:'Technical Information',id:'5'},
             {title:'Step 6',sub_title:'Action Information - Supplemental',id:'6'},
             {title:'Step 7',sub_title:'Prioritization',id:'7'}, // TODO visiility condition visibility:{attribute:'new_or_update',check:['new'],hidden:'false',optional:'Step 9'}
+            {title:'Step 8',sub_title:'Action Status ',id:'8'},
             // {title:'Step 9',sub_title:'Hazard Mitigation Plan Maintenance',id:'9'},
             // {title:'Step 5',sub_title:'Federal Requirements',id:'5'}, // TODO this.state.new_or_update === 'new' ? 'Step 10' : 'Step 9'
             // {title:'Step 6',sub_title:'State and Local Requirements',id:'6'},
@@ -922,7 +923,16 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 section:'9'
-            }
+            },
+            action_status_update:{
+                label:'updates',
+                prompt:'',
+                edit_type:'form_array',
+                form_type:'actions_status_update',
+                display_type:'form_view',
+                add_text: 'Status Update',
+                section:'8'
+            },
 
         }
 

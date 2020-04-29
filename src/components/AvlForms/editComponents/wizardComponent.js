@@ -96,7 +96,7 @@ class Wizard extends Component {
             let endStep = this.props.steps.length
             if(currentStep === endStep-1){
                 return(
-                    buttonActive ? <button className="btn btn-primary step-trigger-btn" href ={'#'}> Submit</button>
+                    buttonActive ? <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.props.submit}> Submit</button>
                         : <button className="btn btn-primary step-trigger-btn" href={'#'} disabled> Submit</button>
                 )
             }
@@ -109,7 +109,7 @@ class Wizard extends Component {
     render () {
         return (
             <div className="element-box">
-                <form onSubmit={this.props.submit}>
+                <form>
                     <div className="steps-w">
                         <div className="step-triggers">
                             {
@@ -151,7 +151,7 @@ class Wizard extends Component {
                         </div>
                         <div className="form-buttons-w text-right">
                             {this.previousButton()}{this.nextButton()}
-                            {this.submitButton()}
+                            {this.submitButton(this.props.submit)}
                         </div>
                     </div>
                 </form>

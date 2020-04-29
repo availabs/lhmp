@@ -88,7 +88,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     let tmp_state = {}
                     if(graph){
                         attributes[0].forEach(attribute =>{
-                            if(attribute.includes('date')){
+                            if(attribute.includes('date') && !attribute.includes('update')){
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
                                 tmp_state[attribute] = date
@@ -141,7 +141,7 @@ class AvlFormsNewDataWizard extends React.Component{
             let plan_id = parseInt(this.props.activePlan);
             this.props.config.forEach(config =>{
                 Object.keys(config.attributes).forEach(item =>{
-                    if(get(config, `attributes[${item}].sub_type`, '').length, _ > 0){
+                    if(get(config, `attributes[${item}].sub_type`, '').length > 0){
                         sub_type = config.attributes[item].sub_type
                     }
                 })
@@ -158,6 +158,9 @@ class AvlFormsNewDataWizard extends React.Component{
             args.push(type[0],plan_id,attributes);
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
+                    if (this.props.returnValue){
+                        this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
+                    }
                     this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"});
                 })
         }
@@ -449,6 +452,23 @@ class AvlFormsNewDataWizard extends React.Component{
                             prompt: this.displayPrompt.bind(this),
                             dropDownData : item.attributes[attribute].edit_type_values,
                             defaultValue: item.attributes[attribute].defaultValue
+                        })
+                    }
+                    else if(item.attributes[attribute].edit_type === 'form_array'){
+                        data.push({
+                            section_id: item.attributes[attribute].section,
+                            MainType : this.props.config.map(d => d.type),
+                            label: item.attributes[attribute].label,
+                            handleChange : this.handleChange,
+                            state : this.state,
+                            title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
+                            required: item.attributes[attribute].field_required,
+                            type:item.attributes[attribute].edit_type,
+                            prompt: this.displayPrompt.bind(this),
+                            defaultValue: item.attributes[attribute].defaultValue,
+                            addText: item.attributes[attribute].add_text,
+                            formType: item.attributes[attribute].form_type,
                         })
                     }
                     else{

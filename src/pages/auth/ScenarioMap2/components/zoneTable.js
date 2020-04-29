@@ -65,6 +65,9 @@ class ZoneTable extends React.Component {
         if(oldProps.zone_id !== this.props.zone_id){
             this.fetchFalcorDeps()
         }
+        if(oldProps.activeRiskZoneId !== this.props.activeRiskZoneId){
+            this.fetchFalcorDeps()
+        }
     }
 
     fetchFalcorDeps(){
@@ -100,13 +103,13 @@ class ZoneTable extends React.Component {
                                     num_buildings : zone_buildings_data.num_buildings ? fmt(zone_buildings_data.num_buildings.value) :0,
                                     replacement_value : zone_buildings_data.replacement_value ? fnum(zone_buildings_data.replacement_value.value) : 0,
                                     count_buildings_scenarios:graph_scenario_county.length > 0 ?
-                                        fmt(graph_scenario_county.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,null)) :
+                                        fmt(graph_scenario_county.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,0)) :
                                         graph_scenario_jurisdiction.length > 0 ?
-                                            fmt(graph_scenario_jurisdiction.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,null)) :0,
+                                            fmt(graph_scenario_jurisdiction.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,0)) :0,
                                     sum_buildings_value : graph_scenario_county.length > 0 ?
-                                        fnum(graph_scenario_county.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,null)) :
+                                        fnum(graph_scenario_county.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,0)) :
                                         graph_scenario_jurisdiction.length > 0 ?
-                                            fnum(graph_scenario_jurisdiction.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,null)) :0
+                                            fnum(graph_scenario_jurisdiction.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,0)) :0
                                 })
 
                             }
@@ -130,8 +133,8 @@ class ZoneTable extends React.Component {
                                     zone_name : item.name || '',
                                     num_buildings : zone_buildings_data.num_buildings ? fmt(zone_buildings_data.num_buildings.value) :0,
                                     replacement_value : zone_buildings_data.replacement_value ? fnum(zone_buildings_data.replacement_value.value) : 0,
-                                    count_buildings_scenarios:graph_scenario_new_zone.length > 0 ? fmt(graph_scenario_new_zone.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,null)) : 0,
-                                    sum_buildings_value : graph_scenario_new_zone.length > 0 ? fnum(graph_scenario_new_zone.reduce((a, c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,null)) : 0
+                                    count_buildings_scenarios:graph_scenario_new_zone.length > 0 ? fmt(graph_scenario_new_zone.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,0)) : 0,
+                                    sum_buildings_value : graph_scenario_new_zone.length > 0 ? fnum(graph_scenario_new_zone.reduce((a, c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,0)) : 0
                                 })
                             }
                         }

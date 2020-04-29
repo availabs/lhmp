@@ -13,7 +13,6 @@ class ActionsWorkSheetFormsView extends React.Component{
         let config = ViewConfig
         return(
             <Element>
-                <h6 className="element-header">Actions Worksheet</h6>
                 <AvlFormsViewData
                     json = {config}
                     id = {[this.props.match.params.id]}
