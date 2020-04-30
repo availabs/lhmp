@@ -215,12 +215,12 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                             </th>
                         ))}
                         {csvDownload.length ?
-                            <th colSpan={3}>
+                            <th colSpan={3} key={i}>
                                 <CSVLink className='btn btn-secondary btn-sm'
                                          style={{width:'100%'}}
                                          data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
                             </th> :
-                            actions ? Object.keys(actions).map(action => <th></th>) : null
+                            actions ? Object.keys(actions).map((action,i) => <th key={i}></th>) : null
                         }
                     </tr>
                 ))}
@@ -230,7 +230,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                     (row, i) => {
                         prepareRow(row);
                         return (
-                            <React.Fragment>
+                            <React.Fragment key={i}>
                             <tr {...row.getRowProps()}
                                 className={row.cells
                                     .filter(cell => cell.column.expandable === 'true').length ? "expandable" : ""}
@@ -255,9 +255,9 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                 })}
                                 {actions ?
                                     Object.keys(actions)
-                                        .map(action => {
+                                        .map((action,i) => {
                                                 return (
-                                                    <td>
+                                                    <td key={i}>
                                                         {
                                                             typeof row.original[action] === 'string' ?
                                                                 <Link
