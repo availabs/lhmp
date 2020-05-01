@@ -4,7 +4,7 @@ class DropDownNoMetaComponent extends React.PureComponent{
     render(){
         return (
             <div className="col-sm-12">
-                <div className="form-group"><label htmlFor>{this.props.label}
+                <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}
                     <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                 </label><span style={{'float': 'right'}}>{this.props.prompt !== '' ? this.props.prompt(this.props.title) : ''}</span>
                     <select className="form-control justify-content-sm-end" id={this.props.title}

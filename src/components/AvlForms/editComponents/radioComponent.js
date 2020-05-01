@@ -19,7 +19,7 @@ class RadioComponent extends React.PureComponent{
                                  this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ?
                                      'block' :'none' : 'block', width: '100%'}
                      }>
-                    <label htmlFor style={{gridArea: 'menu'}}>{this.props.label}
+                    <label htmlFor={this.props.label} style={{gridArea: 'menu'}}>{this.props.label}
                         <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                     </label>
                     <span style={{gridArea:'right', float:'right'}}>{this.props.prompt(this.props.title)}</span>
@@ -29,7 +29,7 @@ class RadioComponent extends React.PureComponent{
                             this.props.values.map((value,i) =>{
                                 return (
 
-                                    <label className='mb-2 mr-sm-2 mb-sm-0'>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={value}>
                                         <input
                                             checked={this.props.state[this.props.title] === value}
                                             id={this.props.title}
@@ -51,13 +51,13 @@ class RadioComponent extends React.PureComponent{
                     {display : this.props.display_condition && this.props.display_condition !== '' ?
                             this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ? 'block' :'none' : 'block'
                     }}>
-                    <label htmlFor>{this.props.label}
+                    <label htmlFor={this.props.label}>{this.props.label}
                         <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                     </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                     {
                         this.props.values.map((value,i) =>{
                             return (
-                                <div className='col-sm-5'>
+                                <div className='col-sm-5' key={value}>
                                     <div className='form-inline'>
                                         <label className='mb-2 mr-sm-2 mb-sm-0'>
                                             <input

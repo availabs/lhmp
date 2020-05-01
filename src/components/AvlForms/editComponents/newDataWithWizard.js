@@ -263,7 +263,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             </div>
                             <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
-                                    return (<div>{item.attributes[id].prompt}</div>)
+                                    return (<div key={id}>{item.attributes[id].prompt}</div>)
                                 })}
                             </div>
 
