@@ -44,9 +44,9 @@ class TextComponent extends React.PureComponent {
                                 {
                                     Object.keys(data).filter(d => d !== 'type')
                                         .filter(d => data[d].section === section.id && data[d].displayType !== 'form_view')
-                                        .map(d => {
+                                        .map((d,i) => {
                                             return (
-                                                <tr>
+                                                <tr key={i}>
                                                     <td style={TDStyle}>{`${data[d].label}`} :</td>
                                                     <td style={TDStyle}>{data[d].value || 'None'}</td>
                                                 </tr>
@@ -128,8 +128,8 @@ class TextComponent extends React.PureComponent {
                                                 </thead>
                                                 <tbody>
                                                 {
-                                                    Object.keys(data).filter(d => d !== 'type').map(d =>
-                                                        <tr>
+                                                    Object.keys(data).filter(d => d !== 'type').map((d,i) =>
+                                                        <tr key ={i}>
                                                             <td style={TDStyle}>{`${data[d].label}`} :</td>
                                                             <td style={TDStyle}>{data[d].value || 'None'}</td>
                                                         </tr>

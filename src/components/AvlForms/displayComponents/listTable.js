@@ -193,18 +193,17 @@ class AvlFormsListTable extends React.Component{
                 formAttributes = listAttributes
             }
         }
-        console.log('data', data, formAttributes)
-
         return (
                 <div className='container'>
                     <Element>
                         <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                             <span style={{float:'right'}}>
-                        {this.props.config.map(d =>{
+                        {this.props.config.map((d,i) =>{
                             if(d.type === 'actions' ){
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return(
                                         <Link
+                                            key = {i}
                                             className="btn btn-sm btn-primary"
                                             to={ `/${this.props.config.map(d=> d.type)}/worksheet/new` } >
                                             Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
@@ -229,6 +228,7 @@ class AvlFormsListTable extends React.Component{
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <Link
+                                            key={i}
                                             className="btn btn-sm btn-primary"
                                             to={ `/${this.props.config.map(d=> d.type)}/new` } >
                                             Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
@@ -242,11 +242,12 @@ class AvlFormsListTable extends React.Component{
                         })
                         }
 
-                        {this.props.config.map(d => {
+                        {this.props.config.map((d,i) => {
                             if(d.type === 'actions'){
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <Link
+                                            key={i}
                                             className="btn btn-sm btn-primary"
                                             to={ `/${this.props.config.map(d=> d.type)}/project/new` } >
                                             Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Planner
@@ -260,6 +261,7 @@ class AvlFormsListTable extends React.Component{
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return(
                                         <Link
+                                            key={i}
                                             className="btn btn-sm btn-primary"
                                             to={ `/${this.props.config.map(d=> d.type)}/meeting/new` } >
                                             Create New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))} Meeting
@@ -274,6 +276,7 @@ class AvlFormsListTable extends React.Component{
                                 if(this.props.createButtons === true || this.props.createButtons === undefined){
                                     return (
                                         <button
+                                            key={i}
                                             disabled
                                             className="btn btn-sm btn-disabled"
                                         >
