@@ -411,6 +411,7 @@ class AvlFormsNewData extends React.Component{
                         defaultValue: item.attributes[attribute].defaultValue,
                         addText: item.attributes[attribute].add_text,
                         formType: item.attributes[attribute].form_type,
+                        columnMap: item.attributes[attribute].column_map
                     })
                 }
                 else if(

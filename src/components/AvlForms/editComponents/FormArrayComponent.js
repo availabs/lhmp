@@ -1,10 +1,9 @@
 import React from 'react'
-import _ from  'lodash'
+import _ from 'lodash'
 import get from 'lodash.get'
 import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import AvlFormsNewDataWizard from 'components/AvlForms/editComponents/newDataWithWizard'
 import AvlFormsNewData from 'components/AvlForms/editComponents/newData'
-import Actions_status_update from 'pages/auth/actions/actions_statusupdate_forms/config.js'
 import listNewComp from 'components/AvlForms/editComponents/formTypeToConfig.js'
 
 
@@ -20,9 +19,10 @@ class FormArrayComponent extends React.PureComponent {
         this.handleClick = this.handleClick.bind(this)
         this.addResult = this.addResult.bind(this)
     }
+
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(this.state.result, prevState.result)){
-            this.props.handleChange({target:{id: this.props.title, value: this.state.result}})
+        if (!_.isEqual(this.state.result, prevState.result)) {
+            this.props.handleChange({target: {id: this.props.title, value: this.state.result}})
         }
     }
 
@@ -47,11 +47,18 @@ class FormArrayComponent extends React.PureComponent {
             >Cancel x</a>
         )
     }
-    addResult(id){
+
+    addResult(id) {
         this.setState({result: [...this.state.result, id]})
     }
+
     render() {
-        console.log('this.props',this.props.state)
+        let colummMapping = Object.keys(this.props.state).reduce((a, c) => {
+            if (Object.keys(get(this.props, `columnMap`, {})).includes(c)) {
+                a[c] = this.props.state[c];
+            }
+            return a;
+        }, {})
         let Component =
             get(listNewComp, `${this.props.formType}[0].sections`, []).length ? AvlFormsNewDataWizard : AvlFormsNewData
         return (
@@ -62,7 +69,7 @@ class FormArrayComponent extends React.PureComponent {
                         json={listNewComp[this.props.formType]}
                         id={[]}
                         returnValue={this.addResult}
-                        state={this.props.state}
+                        state={colummMapping}
                     />
                 </div>
                 <div>
