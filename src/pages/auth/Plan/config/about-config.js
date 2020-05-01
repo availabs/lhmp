@@ -7,7 +7,7 @@ const config =  {
 		intent: '',
 		callout: '',
 		icon: 'os-icon-arrow-right7',
-		onlyAdmin: true
+		onlyAdmin: true // visible only in admin CMS by default. used if you want to load this key at a particular location on page.
 	}],
 	'Planning Context' : [
 		{
@@ -17,7 +17,8 @@ const config =  {
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
-			icon: 'os-icon-globe'
+			icon: 'os-icon-globe',
+			// hideNav: true // hides key from public nav. Displays on page.
 		},
 		{
 			title: 'Meetings',

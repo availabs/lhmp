@@ -315,19 +315,20 @@ class AvlFormsListTable extends React.Component{
                                             data={listViewData}
                                             columns={formAttributes
                                                 .filter(f => get(this.props.config, `[0].list_attributes`, [])
-                                                    .map(la => typeof la === 'object' ? Object.keys(la)[0].toString : la)
+                                                    .map(la => typeof la === 'object' ? Object.keys(la)[0].toString() : la)
                                                     .includes(f)
                                                 )
                                                 .map(f => {
                                                 let tmpAttr =
                                                     get(this.props.config, `[0].list_attributes`, [])
-                                                        .filter(la => typeof la === 'object')
+                                                        .filter(la => typeof la === 'object' && Object.keys(la)[0] === f)
                                                         .map(la => la[f])
-                                                    console.log('check?',f, get(this.props.config, `[0].attributes.${f}.expandable`, null))
+                                                    console.log('check?',f, get(tmpAttr, `[0]`, null), this.props.config)
                                                 return ({
                                                     Header: f,
                                                     accessor: f,
-                                                    filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' : '',
+                                                    filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' :
+                                                        get(tmpAttr, `[0].filter`, null),
                                                     sort: get(tmpAttr, `[0].sort`, 'true') === 'true',
                                                     expandable: get(this.props.config, `[0].attributes.${f}.expandable`, null)
                                                 })

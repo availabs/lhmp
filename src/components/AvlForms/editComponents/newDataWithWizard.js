@@ -27,6 +27,7 @@ class AvlFormsNewDataWizard extends React.Component{
         super(props);
 
         this.state = {
+            ...this.props.state
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -596,6 +597,7 @@ const mapStateToProps = (state,ownProps) => {
         activeGeoid: state.user.activeGeoid,
         config: ownProps.json,
         id : ownProps.id,
+        state: ownProps.state,
         geoData : get(state.graph,['geo'],{}),
         meta_data : get(state.graph,['forms'])
     }

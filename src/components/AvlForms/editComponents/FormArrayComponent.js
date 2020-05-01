@@ -51,6 +51,7 @@ class FormArrayComponent extends React.PureComponent {
         this.setState({result: [...this.state.result, id]})
     }
     render() {
+        console.log('this.props',this.props.state)
         let Component =
             get(listNewComp, `${this.props.formType}[0].sections`, []).length ? AvlFormsNewDataWizard : AvlFormsNewData
         return (
@@ -61,6 +62,7 @@ class FormArrayComponent extends React.PureComponent {
                         json={listNewComp[this.props.formType]}
                         id={[]}
                         returnValue={this.addResult}
+                        state={this.props.state}
                     />
                 </div>
                 <div>
