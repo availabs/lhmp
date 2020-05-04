@@ -19,7 +19,7 @@ class DropDownSignUpComponent extends React.Component{
             if(this.props.signup_county && this.props.signup_county.length > 0){
                 return (
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                        <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                             <select className="form-control justify-content-sm-end"
                                     id={this.props.title}
                                     onChange={this.props.handleChange}
@@ -47,7 +47,7 @@ class DropDownSignUpComponent extends React.Component{
             }else{
                 return (
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                        <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                             <select className="form-control justify-content-sm-end"
                                     id={this.props.title}
                                     onChange={this.props.handleChange}
@@ -97,7 +97,7 @@ else if(this.props.depend_on === undefined && this.props.area === undefined && t
             let meta = _.uniqBy(this.props.meta,'category');
             return (
                 <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                    <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                         <select className="form-control justify-content-sm-end"
                                 id={this.props.title} onChange={this.props.handleChange}
                                 value={this.props.state[this.props.title] || ''}
@@ -132,7 +132,7 @@ else if(this.props.state[this.props.depend_on] !== undefined && this.props.area 
             if(this.props.state[this.props.depend_on] !== 'None'){
                 return (
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                        <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                             <select className="form-control justify-content-sm-end" id={this.props.title} onChange={this.props.handleChange} value={this.props.state[this.props.title] || ''}>
                                 <option className="form-control" key={0} value={'None'}>--No {this.props.label} Selected--</option>
                                 {
@@ -161,7 +161,7 @@ else if(this.props.state[this.props.depend_on] !== undefined && this.props.area 
                 let meta = _.uniqBy(this.props.meta,'type');
                 return(
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
+                        <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}</label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                             <select className="form-control justify-content-sm-end" id={this.props.title} onChange={this.props.handleChange} value={this.props.state[this.props.title] || ''}>
                                 <option className="form-control" key={0} value={''}>--No {this.props.label} Selected--</option>
                                 {

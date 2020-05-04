@@ -69,24 +69,34 @@ const config = {
                 columns : [
                     {
                         Header: 'Name',
-                        accessor: 'capability_name'
+                        accessor: 'capability_name',
+                        sort: true,
+                        filter: 'default'
                     },
                     {
                         Header: 'category',
-                        accessor: 'capability_category'
+                        accessor: 'capability_category',
+                        sort: true,
+                        filter: 'multi'
                     },
                     {
                         Header: 'type',
-                        accessor: 'capability_type'
+                        accessor: 'capability_type',
+                        sort: true,
+                        filter: 'multi'
                     },
                     
                     {
                         Header: 'adopting authority',
-                        accessor: 'adopting_authority'
+                        accessor: 'adopting_authority',
+                        sort: true,
+                        filter: 'default'
                     },
                     {
                         Header: 'responsible authority',
-                        accessor: 'responsible_authority'
+                        accessor: 'responsible_authority',
+                        sort: true,
+                        filter: 'default'
                     },
                     {
                         Header: 'Link',
@@ -153,7 +163,8 @@ const config = {
             type: '',
             prompt: '',
             intent: '',
-            icon: 'os-icon-documents-07'
+            icon: 'os-icon-documents-07',
+            hideNav: true
         },
         {
             title: 'Evacuation Routes',
@@ -185,7 +196,8 @@ const config = {
             type: '',
             prompt: '',
             intent: '',
-            icon: 'os-icon-share-2'
+            icon: 'os-icon-share-2',
+            hideNav: true
         }
         
 

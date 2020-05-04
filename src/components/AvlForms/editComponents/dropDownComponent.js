@@ -17,7 +17,7 @@ class DropDownComponent extends React.Component{
         if(this.props.area === 'true' && this.props.depend_on === undefined){ // for county and cousubs
             return (
                 <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>{this.props.label}
+                    <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}
                     <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                     </label>
                         <span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
@@ -50,7 +50,7 @@ class DropDownComponent extends React.Component{
             if(this.props.state[this.props.depend_on] !== 'None'){
                 return (
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}
+                        <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}
                             <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                         </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                             <select className="form-control justify-content-sm-end"
@@ -87,7 +87,7 @@ class DropDownComponent extends React.Component{
                 let meta = _.uniqBy(this.props.meta,'type');
                 return(
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>{this.props.label}
+                        <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}
                             <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                         </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                             <select className="form-control justify-content-sm-end"
@@ -118,7 +118,7 @@ class DropDownComponent extends React.Component{
             let meta = _.uniqBy(this.props.meta,'category');
             return (
                 <div className="col-sm-12">
-                    <div className="form-group"><label htmlFor>{this.props.label}
+                    <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}
                         <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                     </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                         <select className="form-control justify-content-sm-end"

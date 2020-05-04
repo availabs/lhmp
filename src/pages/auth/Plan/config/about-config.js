@@ -7,7 +7,7 @@ const config =  {
 		intent: '',
 		callout: '',
 		icon: 'os-icon-arrow-right7',
-		onlyAdmin: true
+		onlyAdmin: true // visible only in admin CMS by default. used if you want to load this key at a particular location on page.
 	}],
 	'Planning Context' : [
 		{
@@ -17,7 +17,8 @@ const config =  {
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
-			icon: 'os-icon-globe'
+			icon: 'os-icon-globe',
+			// hideNav: true // hides key from public nav. Displays on page.
 		},
 		{
 			title: 'Meetings',
@@ -104,7 +105,7 @@ const config =  {
         				Header: 'Role',
         				accessor: 'contact_title_role',
 						sort: true,
-						filter: 'default'
+						filter: 'multi'
         			}
         		]
         
@@ -148,12 +149,13 @@ const config =  {
 			icon: 'os-icon-rotate-cw'
 		},
 		{
-			title: 'Existing Resources',
+			title: '',
 			requirement: 'Req-A-4A',
 			//type: 'planningDocuments',
 
 			//align: 'full',
 			type: 'formTable',
+			hideNav: true,
 			fontSize: '0.70em',
 			height: '600px',
 			align: 'full',
@@ -283,16 +285,22 @@ const config =  {
 
         			{
         				Header: 'Municipality',
-        				accessor: 'minicipality'
+        				accessor: 'municipality',
+        				sort: true,
+        				filter: 'default'
         			},
         			
         			{
         				Header: 'adopting authority',
-        				accessor: 'adopting_authority'
+        				accessor: 'adopting_authority',
+        				sort: true,
+        				filter: 'default'
         			},
         			{
         				Header: 'responsible authority',
-        				accessor: 'responsible_authority'
+        				accessor: 'responsible_authority',
+        				sort: true,
+        				filter: 'default'
         			},
         			{
         				Header: 'Adoption Date',

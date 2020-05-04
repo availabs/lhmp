@@ -69,7 +69,7 @@ class AvlFormsNewData extends React.Component{
                     let tmp_state = {}
                     if(graph && attributes[0]){
                         attributes[0].forEach(attribute =>{
-                            if(attribute.includes('date')){
+                            if(attribute.includes('date') && !attribute.includes('update')){
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
                                 tmp_state[attribute] = date
@@ -135,7 +135,7 @@ class AvlFormsNewData extends React.Component{
                             </div>
                             <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
-                                    return (<div>{item.attributes[id].prompt}</div>)
+                                    return (<div key={id}>{item.attributes[id].prompt}</div>)
                                 })}
                             </div>
 
@@ -222,6 +222,9 @@ class AvlFormsNewData extends React.Component{
             args.push(type[0],plan_id,attributes);
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
+                    if (this.props.returnValue){
+                        this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
+                    }
                     this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"});
                 })
         }
@@ -393,6 +396,23 @@ class AvlFormsNewData extends React.Component{
                         values:item.attributes[attribute].edit_type_values,
                         defaultValue: item.attributes[attribute].defaultValue
                     })
+                }else if(item.attributes[attribute].edit_type === 'form_array'){
+                    data.push({
+                        section_id: item.attributes[attribute].section,
+                        MainType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
+                        handleChange : this.handleChange,
+                        state : this.state,
+                        title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
+                        required: item.attributes[attribute].field_required,
+                        type:item.attributes[attribute].edit_type,
+                        prompt: this.displayPrompt.bind(this),
+                        defaultValue: item.attributes[attribute].defaultValue,
+                        addText: item.attributes[attribute].add_text,
+                        formType: item.attributes[attribute].form_type,
+                        columnMap: item.attributes[attribute].column_map
+                    })
                 }
                 else if(
                     ['false', undefined].includes(item.attributes[attribute].hidden)
@@ -411,7 +431,6 @@ class AvlFormsNewData extends React.Component{
                         defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
-
             })
         });
         return data

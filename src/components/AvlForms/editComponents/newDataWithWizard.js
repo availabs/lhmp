@@ -27,6 +27,7 @@ class AvlFormsNewDataWizard extends React.Component{
         super(props);
 
         this.state = {
+            ...this.props.state
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -262,7 +263,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             </div>
                             <div className="modal-body" style={{textAlign: 'justify'}}>
                                 {this.props.config.map(item =>{
-                                    return (<div>{item.attributes[id].prompt}</div>)
+                                    return (<div key={id}>{item.attributes[id].prompt}</div>)
                                 })}
                             </div>
 
@@ -469,6 +470,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             defaultValue: item.attributes[attribute].defaultValue,
                             addText: item.attributes[attribute].add_text,
                             formType: item.attributes[attribute].form_type,
+                            columnMap: item.attributes[attribute].column_map
                         })
                     }
                     else{
@@ -596,6 +598,7 @@ const mapStateToProps = (state,ownProps) => {
         activeGeoid: state.user.activeGeoid,
         config: ownProps.json,
         id : ownProps.id,
+        state: ownProps.state,
         geoData : get(state.graph,['geo'],{}),
         meta_data : get(state.graph,['forms'])
     }

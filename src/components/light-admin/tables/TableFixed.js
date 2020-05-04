@@ -190,7 +190,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                             .map((column,j) => (
                             // Add the sorting props to control sorting. For this example
                             // we can add them into the header props
-                            <th key ={j}>
+                            <th key ={j} style={{verticalAlign: 'middle'}}>
                                 {
                                     column.sort ?
                                         (

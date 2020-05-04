@@ -13,20 +13,23 @@ class RadioComponent extends React.PureComponent{
     render() {
         return this.props.inline?
             <div className="col-sm-12">
-                <DIV className="form-group" style ={
-                    {display : this.props.display_condition && this.props.display_condition !== '' ?
-                            this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ?
-                                'grid' :'none' : 'grid', width: '100%'}}>
-                    <label htmlFor style={{gridArea: 'menu'}}>{this.props.label}
+                <div className="form-group"
+                     style ={
+                         {display : this.props.display_condition && this.props.display_condition !== '' ?
+                                 this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ?
+                                     'block' :'none' : 'block', width: '100%'}
+                     }>
+                    <label htmlFor={this.props.label} style={{gridArea: 'menu'}}>{this.props.label}
                         <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                     </label>
-                    <span style={{gridArea:'right'}}>{this.props.prompt(this.props.title)}</span>
-                    <div className='form-inline' style={{gridArea: 'main', width: 'fit-content'}}>
-                    {
-                        this.props.values.map((value,i) =>{
-                            return (
+                    <span style={{gridArea:'right', float:'right'}}>{this.props.prompt(this.props.title)}</span>
 
-                                    <label className='mb-2 mr-sm-2 mb-sm-0'>
+                    <div className='form-inline' style={{gridArea: 'main', width: 'fit-content', float: 'right'}}>
+                        {
+                            this.props.values.map((value,i) =>{
+                                return (
+
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={value}>
                                         <input
                                             checked={this.props.state[this.props.title] === value}
                                             id={this.props.title}
@@ -35,12 +38,12 @@ class RadioComponent extends React.PureComponent{
                                             value={value}
                                             onChange={(e) => this.props.handleChange(e)}/><span><label>{value}</label></span>
                                     </label>
-                            )
-                        })
-                    }
+                                )
+                            })
+                        }
                     </div>
 
-                </DIV>
+                </div>
                 <br/>
             </div> :
             <div className="col-sm-12">
@@ -48,13 +51,13 @@ class RadioComponent extends React.PureComponent{
                     {display : this.props.display_condition && this.props.display_condition !== '' ?
                             this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ? 'block' :'none' : 'block'
                     }}>
-                    <label htmlFor>{this.props.label}
+                    <label htmlFor={this.props.label}>{this.props.label}
                         <span style={{color: 'red'}}>{this.props.required ? ' *' : null}</span>
                     </label><span style={{'float': 'right'}}>{this.props.prompt(this.props.title)}</span>
                     {
                         this.props.values.map((value,i) =>{
                             return (
-                                <div className='col-sm-5'>
+                                <div className='col-sm-5' key={value}>
                                     <div className='form-inline'>
                                         <label className='mb-2 mr-sm-2 mb-sm-0'>
                                             <input
