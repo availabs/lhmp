@@ -105,7 +105,7 @@ const config =  {
         				Header: 'Role',
         				accessor: 'contact_title_role',
 						sort: true,
-						filter: 'default'
+						filter: 'multi'
         			}
         		]
         
