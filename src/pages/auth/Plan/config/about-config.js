@@ -149,12 +149,13 @@ const config =  {
 			icon: 'os-icon-rotate-cw'
 		},
 		{
-			title: 'Existing Resources',
+			title: '',
 			requirement: 'Req-A-4A',
 			//type: 'planningDocuments',
 
 			//align: 'full',
 			type: 'formTable',
+			hideNav: true,
 			fontSize: '0.70em',
 			height: '600px',
 			align: 'full',

@@ -196,7 +196,8 @@ const config = {
             type: '',
             prompt: '',
             intent: '',
-            icon: 'os-icon-share-2'
+            icon: 'os-icon-share-2',
+            hideNav: true
         }
         
 
