@@ -285,16 +285,22 @@ const config =  {
 
         			{
         				Header: 'Municipality',
-        				accessor: 'minicipality'
+        				accessor: 'municipality',
+        				sort: true,
+        				filter: 'default'
         			},
         			
         			{
         				Header: 'adopting authority',
-        				accessor: 'adopting_authority'
+        				accessor: 'adopting_authority',
+        				sort: true,
+        				filter: 'default'
         			},
         			{
         				Header: 'responsible authority',
-        				accessor: 'responsible_authority'
+        				accessor: 'responsible_authority',
+        				sort: true,
+        				filter: 'default'
         			},
         			{
         				Header: 'Adoption Date',
