@@ -153,7 +153,8 @@ const config = {
             type: '',
             prompt: '',
             intent: '',
-            icon: 'os-icon-documents-07'
+            icon: 'os-icon-documents-07',
+            hideNav: true
         },
         {
             title: 'Evacuation Routes',
