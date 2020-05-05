@@ -170,8 +170,8 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
     if (!rows) return null;
     let downloadData;
     if (csvDownload.length){
-        downloadData = rows.map(row => {
-            row = row.original
+        downloadData = [...rows.map(r => r.original)]
+        downloadData = downloadData.map(row => {
             Object.keys(row)
                 .filter(f => !['edit', 'view', 'delete'].includes(f))
                 .forEach(key => {
