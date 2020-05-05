@@ -485,6 +485,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'5'
             },
             // engineering_required_text:{
@@ -537,6 +538,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'5'
             },
             bca_to_bcr:{
@@ -579,6 +581,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'6'
             },
             is_protects_severe_repetitive_loss_property:{
@@ -598,6 +601,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'6'
             },
             is_crs: {
@@ -608,6 +612,7 @@ module.exports = [
                 edit_type_values:['yes','no','unknown'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'6'
             },
             is_climate_adaptation:{
@@ -618,6 +623,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'6'
             },
             climate_smart_communities_action_type:{
@@ -640,6 +646,7 @@ module.exports = [
                 edit_type_values:['yes','no'],
                 display_type:'text',
                 meta:'false',
+                inline:'true',
                 section:'6'
             },
             relates_to_protects_community_lifeline_by_fema:{

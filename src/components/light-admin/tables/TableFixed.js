@@ -167,11 +167,14 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
         useGlobalFilter, // useGlobalFilter!
         useSortBy,
     );
+    if (!rows) return null;
     let downloadData;
     if (csvDownload.length){
-        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = [...rows.map(r => r.original)]
         downloadData = downloadData.map(row => {
-            Object.keys(row).forEach(key => {
+            Object.keys(row)
+                .filter(f => !['edit', 'view', 'delete'].includes(f))
+                .forEach(key => {
                 if (!csvDownload.includes(key)) delete row[key]
             })
             return row

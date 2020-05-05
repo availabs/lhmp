@@ -12,6 +12,7 @@ import {
 import matchSorter from "match-sorter";
 import {Link} from "react-router-dom";
 import MultiSelectFilter from "../../filters/multi-select-filter";
+import get from 'lodash.get'
 import _ from "lodash";
 import {CSVLink} from "react-csv";
 
@@ -299,13 +300,16 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
         useSortBy,
         useRowSelect
     );
+    if (!rows) return null;
     let downloadData;
     if (csvDownload.length){
-        downloadData = _.cloneDeep(rows.map(r => r.original))
+        downloadData = [...rows.map(r => r.original)]
         downloadData = downloadData.map(row => {
-            Object.keys(row).forEach(key => {
-                if (!csvDownload.includes(key)) delete row[key]
-            })
+            Object.keys(row)
+                .filter(f => !['edit', 'view', 'delete'].includes(f))
+                .forEach(key => {
+                    if (!csvDownload.includes(key)) delete row[key]
+                })
             return row
         })
     }
