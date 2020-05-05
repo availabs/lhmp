@@ -105,7 +105,7 @@ const config =  {
         				Header: 'Role',
         				accessor: 'contact_title_role',
 						sort: true,
-						filter: 'default'
+						filter: 'multi'
         			}
         		]
         
@@ -149,12 +149,13 @@ const config =  {
 			icon: 'os-icon-rotate-cw'
 		},
 		{
-			title: 'Existing Resources',
+			title: '',
 			requirement: 'Req-A-4A',
 			//type: 'planningDocuments',
 
 			//align: 'full',
 			type: 'formTable',
+			hideNav: true,
 			fontSize: '0.70em',
 			height: '600px',
 			align: 'full',
@@ -284,16 +285,22 @@ const config =  {
 
         			{
         				Header: 'Municipality',
-        				accessor: 'minicipality'
+        				accessor: 'municipality',
+        				sort: true,
+        				filter: 'default'
         			},
         			
         			{
         				Header: 'adopting authority',
-        				accessor: 'adopting_authority'
+        				accessor: 'adopting_authority',
+        				sort: true,
+        				filter: 'default'
         			},
         			{
         				Header: 'responsible authority',
-        				accessor: 'responsible_authority'
+        				accessor: 'responsible_authority',
+        				sort: true,
+        				filter: 'default'
         			},
         			{
         				Header: 'Adoption Date',

@@ -14,6 +14,7 @@ import Strategies from './pages/Public/Strategies/'
 import RiskMap from './pages/riskmap'
 import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import EvacuationRoutes from 'pages/auth/EvacuationRoutes/'
+import CommentMap from 'pages/auth/CommentMap/index'
 import Home from 'pages/auth/Home';
 
 // -- Actions
@@ -130,7 +131,8 @@ const routes = [
   PlanIndex,
   RiskMap,
   ScenarioMap2,
-    EvacuationRoutes,
+  CommentMap,
+  EvacuationRoutes,
   Logout,
   NoMatch
 
