@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'map_comment', // type is same as the route path for now
-        list_attributes:['title','type'], // to list the attributes on the main page
+        list_attributes:['title','type','point'], // to list the attributes on the main page
         sub_type:'',
         sections: [],
         attributes: {
@@ -24,6 +24,16 @@ module.exports = [
                 meta: 'false',
                 section: '',
                 hidden: 'false'
+            },
+            point:{
+                label:'Point',
+                sub_type:'',
+                prompt:'',
+                edit_type:'text',
+                display_type:'text',
+                meta: 'false',
+                section: '',
+                hidden: 'true'
             }
         }
     }

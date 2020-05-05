@@ -36,6 +36,7 @@
     "html-to-draftjs": "^1.5.0",
     "install": "^0.13.0",
     "keymirror": "^0.1.1",
+    "leaflet": "^1.6.0",
     "lodash": "^4.17.15",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
