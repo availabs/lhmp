@@ -51,7 +51,8 @@ class AvlFormsListTable extends React.Component{
         let formAttributes = this.props.config.map(d => d.list_attributes);
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'],
-            ['forms','map_comment','meta'])
+            ['forms','map_comment','meta'],
+            )
             .then(response =>{
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
                 if(length > 0){
@@ -195,7 +196,6 @@ class AvlFormsListTable extends React.Component{
                                 <tbody>
                                 {
                                     listViewData.map((item,i) =>{
-                                        console.log('item',item)
                                         if(Object.keys(item).length > 0){
                                             return (
                                                 <tr key={i}>
@@ -209,20 +209,35 @@ class AvlFormsListTable extends React.Component{
                                                             }else{
                                                                 return (
                                                                     <td key={i} onClick={(e) =>{
-                                                                        this.props.layer.map.flyTo({center:item.point.reduce((a,c) => c ? [c.lng,c.lat]:a,null), zoom: 13})
+                                                                        let type = this.props.typeMeta.reduce((a,c) => c.type === item.type ? c.category : a,null)
+                                                                        let layer = this.props.layer
+                                                                        let activeGeoid = this.props.activeGeoid
+                                                                        this.props.layer.map.flyTo({center:item.point.reduce((a,c) => c ? [c.lng,c.lat]:a,null), zoom: 12})
+                                                                        let popup = new mapboxgl.Popup({ offset: 25 })
+                                                                            .setHTML(
+                                                                                '<div>'
+                                                                                + '<b>'+ 'Title: ' +'</b>'+ item.title + '<br>'
+                                                                                + '<b>'+ 'Type: ' +'</b>'+ type + '<br>'
+                                                                                + '<b>'+ 'Comment: ' +'</b>'+ item.comment +
+                                                                                '</div>')
+                                                                            .addTo(this.props.layer.map)
+                                                                        popup.on('close', function(e){
+                                                                            return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
+                                                                                .then(response =>{
+                                                                                    let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
+                                                                                    let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                                                                                    layer.map.resize()
+                                                                                    layer.map.fitBounds(bbox)
+                                                                                    layer.forceUpdate()
+                                                                                })
+                                                                        });
                                                                         return new mapboxgl.Marker({
                                                                             draggable: false,
                                                                             color: item.type
                                                                         })
                                                                             .setLngLat(item.point.reduce((a,c) => c ? c:a,null))
                                                                             .addTo(this.props.layer.map)
-                                                                            .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
-                                                                                '<div>'
-                                                                                + '<b>'+ 'Title: ' +'</b>'+ item.title + '<br>'
-                                                                                + '<b>'+ 'Type: ' +'</b>'+ item.type + '<br>'
-                                                                                + '<b>'+ 'Comment: ' +'</b>'+ item.comment +
-                                                                                '</div>'
-                                                                            ))
+                                                                            .setPopup(popup)
                                                                             .on("dragend", e => this.props.layer.calcRoute())
                                                                     }
 
