@@ -39,6 +39,7 @@ import PlanningToolsRoles from 'pages/auth/Roles/index'
 import PlanningToolsCapabilities from 'pages/auth/Capabilities/index'
 import PlanningToolsAssets from 'pages/auth/Assets/index'
 import Guidance from 'pages/auth/Plan/Guidance'
+import GuidanceView from 'pages/auth/Plan/GuidanceView'
 
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
@@ -99,6 +100,7 @@ const routes = [
    ...PlanningToolsCapabilities,
    ...PlanningToolsAssets,
    ...Guidance,
+   ...GuidanceView,
    ...AssetsSearch,
    ...AssetsView,
    ...AssetsEdit,
