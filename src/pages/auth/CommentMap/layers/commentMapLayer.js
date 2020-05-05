@@ -6,8 +6,10 @@ import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
 import * as d3scale from "d3-scale";
 import mapboxgl from "mapbox-gl";
+import * as turf from '@turf/turf'
 import CommentMapModal from "../components/CommentMapModal";
 import CommentMapInfoBoxTable from "../components/CommentMapInfoBoxTable"
+
 var _ = require('lodash')
 class CommentMapLayer extends MapLayer{
     onAdd(map) {
@@ -38,12 +40,19 @@ class CommentMapLayer extends MapLayer{
                                 if(graph[id] && meta.length > 0){
                                     this.markers = graph[id].attributes.point.map((p,i) =>{
                                         return new mapboxgl.Marker({
-                                            draggable: true,
+                                            draggable: false,
                                             color: meta.reduce((a,c) => c.category === graph[id].attributes.type ? c.type : a,null)
                                         })
                                             .setLngLat(p)
                                             .addTo(this.map)
-                                            .on("dragend", e => this.calcRoute());
+                                            .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
+                                                '<div>'
+                                                + '<b>'+ 'Title: ' +'</b>'+ graph[id].attributes.title + '<br>'
+                                                + '<b>'+ 'Type: ' +'</b>'+ graph[id].attributes.type + '<br>'
+                                                + '<b>'+ 'Comment: ' +'</b>'+ graph[id].attributes.comment +
+                                                '</div>'
+                                            ))
+                                            .on("dragend", e => this.calcRoute())
                                     })
                                 }
                             })
@@ -72,14 +81,17 @@ class CommentMapLayer extends MapLayer{
         const scale = d3scale.scaleLinear()
             .domain([0, num * 0.5, num])
             .range(["#1a9641", "#ffffbf", "#d7191c"]);
-
+        var popup = new mapboxgl.Popup({ offset: 25 }).setText(
+            'Construction on the Washington Monument began in 1848.'
+        )
         this.markers.push(...points.map((p, i) => {
             return new mapboxgl.Marker({
-                draggable: true,
+                draggable: false,
                 color: scale(i)
             })
                 .setLngLat(p)
                 .addTo(this.map)
+                .setPopup(popup)
                 .on("dragend", e => this.calcRoute());
         }))
 
@@ -200,12 +212,14 @@ export default (props = {}) =>new CommentMapLayer("CommentMapLayer",{
                 return(
                     <CommentMapInfoBoxTable
                         layer={layer}
+
                     />
                 )
             },
             show: true
         }
-    }
+    },
+
 
 })
 

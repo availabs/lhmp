@@ -29,7 +29,8 @@ class CommentMapInfoBox extends React.Component {
                     json = {config}
                     deleteButton = {false}
                     viewButton={false}
-
+                    layer ={this.props.layer}
+                    bbox = {this.props.bbox}
                 />
             </div>
         )

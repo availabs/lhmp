@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
 import {push} from "react-router-redux";
+import mapboxgl from "mapbox-gl";
 var _ = require('lodash')
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
@@ -50,7 +51,8 @@ class AvlFormsListTable extends React.Component{
         let formAttributes = this.props.config.map(d => d.list_attributes);
         let ids = [];
         return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'],
-            ['forms','map_comment','meta'])
+            ['forms','map_comment','meta'],
+            )
             .then(response =>{
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
                 if(length > 0){
@@ -206,7 +208,43 @@ class AvlFormsListTable extends React.Component{
                                                                 )
                                                             }else{
                                                                 return (
-                                                                    <td key={i}>{item[attribute]}</td>
+                                                                    <td key={i} onClick={(e) =>{
+                                                                        let type = this.props.typeMeta.reduce((a,c) => c.type === item.type ? c.category : a,null)
+                                                                        let layer = this.props.layer
+                                                                        let activeGeoid = this.props.activeGeoid
+                                                                        this.props.layer.map.flyTo({center:item.point.reduce((a,c) => c ? [c.lng,c.lat]:a,null), zoom: 12})
+                                                                        let popup = new mapboxgl.Popup({ offset: 25 })
+                                                                            .setHTML(
+                                                                                '<div>'
+                                                                                + '<b>'+ 'Title: ' +'</b>'+ item.title + '<br>'
+                                                                                + '<b>'+ 'Type: ' +'</b>'+ type + '<br>'
+                                                                                + '<b>'+ 'Comment: ' +'</b>'+ item.comment +
+                                                                                '</div>')
+                                                                            .addTo(this.props.layer.map)
+                                                                        popup.on('close', function(e){
+                                                                            return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
+                                                                                .then(response =>{
+                                                                                    let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
+                                                                                    let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                                                                                    layer.map.resize()
+                                                                                    layer.map.fitBounds(bbox)
+                                                                                    layer.forceUpdate()
+                                                                                })
+                                                                        });
+                                                                        return new mapboxgl.Marker({
+                                                                            draggable: false,
+                                                                            color: item.type
+                                                                        })
+                                                                            .setLngLat(item.point.reduce((a,c) => c ? c:a,null))
+                                                                            .addTo(this.props.layer.map)
+                                                                            .setPopup(popup)
+                                                                            .on("dragend", e => this.props.layer.calcRoute())
+                                                                    }
+
+                                                                    }
+
+                                                                    >
+                                                                        {item[attribute]}</td>
                                                                 )
                                                             }
 
