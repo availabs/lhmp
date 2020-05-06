@@ -196,14 +196,18 @@ class AvlFormsListTable extends React.Component{
         return (
                 <div className='container'>
                     <Element>
-                        <h4 className="element-header">{this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
-                            {config[this.props.config[0].type] ?
-                                <Link
-                                    className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
-                                    to={
-                                        get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
-                                    }>?</Link>
-                                : null}
+                        <h4 className="element-header" >
+                            <label>
+                                {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
+                                {config[this.props.config[0].type] ?
+                                    <Link
+                                        className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                        to={
+                                            get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
+                                        } target={'_blank'}
+                                    >?</Link>
+                                    : null}
+                            </label>
                             <span style={{float:'right'}}>
                         {this.props.config.map((d,i) =>{
                             if(d.type === 'actions' ){

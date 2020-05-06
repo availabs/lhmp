@@ -8,6 +8,8 @@ import GraphFactory from 'components/AvlForms/editComponents/graphFactory.js';
 import Wizard from "./wizardComponent";
 import {falcorGraph} from "../../../store/falcorGraph";
 import styled from "styled-components";
+import config from "../../../pages/auth/Plan/config/guidance-config";
+import {Link} from "react-router-dom";
 var _ = require("lodash");
 
 const counties = [
@@ -577,12 +579,31 @@ class AvlFormsNewDataWizard extends React.Component{
                 {get(this.props.config[0], `page_title`, null) &&
                 this.state[this.props.config[0].page_title] ?
                     <h4 className="element-header" style={{textTransform: 'capitalize'}}>
-                        {this.state[this.props.config[0].page_title]}
+                        <label>
+                            {this.state[this.props.config[0].page_title]}
+                            {config[this.props.config[0].type] ?
+                                <Link
+                                    className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                    to={
+                                        get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
+                                    } target={'_blank'}
+                                >?</Link>
+                                : null}
+                        </label>
                         {get(this.props.config[0], `sub_title`, null) ?
                             <h6>{get(this.state, `${this.props.config[0].sub_title}`, null)}</h6> : null}
-                    </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                    </h4> :
+                    <h4 className="element-header" style={{textTransform: 'capitalize'}}>
                         {get(this.props.config[0], `default_title`,
                             `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                        {config[this.props.config[0].type] ?
+                            <Link
+                                className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                to={
+                                    get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
+                                } target={'_blank'}
+                            >?</Link>
+                            : null}
                     </h4>}
                 <Element>
                     <Wizard steps={sections} submit={this.onSubmit}/>

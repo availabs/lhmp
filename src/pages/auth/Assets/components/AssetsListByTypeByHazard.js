@@ -287,6 +287,10 @@ class AssetsListByTypeByHazard extends React.Component{
                 <Element>
                     <h4>Assets Listed By {property_type} - {this.props.match.params.typeIds.toString().split('-').join()} {hazard_risk ? 'and' + ' ' + hazard_risk : null}
                         {this.props.match.params.riskzoneIds ? `and Risk Zones: ${this.props.match.params.riskzoneIds.toString().split('-').join()}` : null}
+                        <Link
+                            className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                            to={'/guidance/guidance-assets/view'} target={'_blank'}
+                        >?</Link>
                     </h4>
                     <div id="dataTable1_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4" >
                         <div className="row">

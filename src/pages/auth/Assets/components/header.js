@@ -30,7 +30,9 @@ export const header = (caller, geoGraph,setActiveCousubid, activeCousubid,allowe
                     {config['assets'] ?
                         <Link
                             className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
-                            to={'/guidance/guidance-assets/view'}>?</Link>
+                            to={'/guidance/guidance-assets/view'}
+                            target={'_blank'}
+                        >?</Link>
                         : null}
                 </li>
             </ul>

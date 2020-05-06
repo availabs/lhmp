@@ -8,11 +8,13 @@ import {Link} from "react-router-dom";
 import {falcorGraph} from "../../../../store/falcorGraph";
 import AssetLayer from "./assetLayer";
 import TractsLayer from "../../../Public/Home/components/Risk/HazardLoss/layers/TractsLayer";
+import config from "../../Plan/config/guidance-config";
 const BASIC_INFO = [
     'prop_class',
     'replacement_value',
     'critical',
-    'address'
+    'address',
+    'shelter'
 ];
 const OCCUPANCY_INFO = [
     'num_residents',
@@ -132,17 +134,21 @@ class AssetsView extends React.Component{
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if(BASIC_INFO.includes(item)){
-                        if(graph[item] === true){
+                    if(BASIC_INFO.includes(item)/* && typeof graph[item] !== 'object'*/){
+                        let value =
+                            item === 'shelter' ?
+                                graph[item] ? 'true' : 'false' :
+                                graph[item];
+                        if(value){
                             tableData.push({
                                 "characteristic" : item,
-                                "value": graph[item].toString()
+                                "value": value.toString()
                             })
                         }
                         else{
                             tableData.push({
                                 "characteristic" : item,
-                                "value": graph[item] || 'Not available'
+                                "value": 'Not available'
                             })
                         }
 
@@ -522,6 +528,10 @@ class AssetsView extends React.Component{
                 <Element>
                     <form>
                         <h6 className="element-header">{this.state.address}
+                            <Link
+                                className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                to={'/guidance/guidance-assets/view'} target={'_blank'}
+                            >?</Link>
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"

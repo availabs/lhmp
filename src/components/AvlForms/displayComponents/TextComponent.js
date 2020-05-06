@@ -4,6 +4,8 @@ import _ from 'lodash'
 import get from 'lodash.get'
 import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import listNewComp from 'components/AvlForms/editComponents/formTypeToConfig.js'
+import config from "../../../pages/auth/Plan/config/guidance-config";
+import {Link} from "react-router-dom";
 
 const TDStyle = {wordBreak: 'break-word', width: '50%'};
 
@@ -73,12 +75,31 @@ class TextComponent extends React.PureComponent {
                         get(this.props.config[0], `page_title`, null) &&
                         get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null) ?
                             <h4 className="element-header" style={{textTransform: 'capitalize'}}>
-                                {get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null)}
+                                <label>
+                                    {get(data.filter(f => f.attribute === this.props.config[0].page_title), `[0].value`, null)}
+                                    {config[this.props.config[0].type] ?
+                                        <Link
+                                            className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                            to={
+                                                get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
+                                            } target={'_blank'}
+                                        >?</Link>
+                                        : null}
+                                </label>
                                 {get(this.props.config[0], `sub_title`, null) ?
                                     <h6>{get(data.filter(f => f.attribute === this.props.config[0].sub_title), `[0].value`, null)}</h6> : null}
-                            </h4> : <h4 className="element-header" style={{textTransform: 'capitalize'}}>
+                            </h4> :
+                            <h4 className="element-header" style={{textTransform: 'capitalize'}}>
                                 {get(this.props.config[0], `default_title`,
                                     `${get(this.props.config, `[0].type`, '')} ${get(this.props.config, `[0].sub_type`, '')}`)}
+                                {config[this.props.config[0].type] ?
+                                    <Link
+                                        className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                        to={
+                                            get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
+                                        } target={'_blank'}
+                                    >?</Link>
+                                    : null}
                             </h4> : null
                 }
 
