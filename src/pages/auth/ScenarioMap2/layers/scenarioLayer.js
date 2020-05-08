@@ -1,7 +1,6 @@
 import React from "react"
 
 import store from "store"
-import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
 import { connect } from 'react-redux';
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
@@ -18,10 +17,7 @@ import { fnum } from "utils/sheldusUtils"
 import MapLayer from "components/AvlMap/MapLayer.js"
 import { getColorRange } from "constants/color-ranges";
 import {register, unregister} from "components/AvlMap/ReduxMiddleware";
-import COLOR_RANGES from "constants/color-ranges"
 import {Link} from "react-router-dom";
-import {falcorChunkerNiceWithUpdate} from "../../../../store/falcorGraph";
-import scenarioMap2 from "./scenarioMap2";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(8, "YlGn");
 const IDENTITY = i => i;
@@ -404,27 +400,9 @@ export const ScenarioOptions =  (options = {}) => {
                     'url': 'mapbox://am3081.dpm2lod3'
                 }
             },
-            {
-                id:"nys_1811_parcels",
-                source: {
-                    'type': "vector",
-                    'url': "mapbox://am3081.6o6ny609"
-                }
-            }
-        ],
-        layers: [
-            {
-                'id': 'parcels',
-                'source': 'nys_1811_parcels',
-                'source-layer': 'nys_1811_parcels',
-                'type': 'fill',
-                'minzoom': 13,
-                'paint': {
-                    'fill-opacity':0.1,
-                    'fill-outline-color': '#ffffff'
-                }
 
-            },
+        ],
+        layers: [,
             {
                 'id': 'ebr',
                 'source': 'nys_buildings_avail',

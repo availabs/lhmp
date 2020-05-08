@@ -5,6 +5,7 @@ import {AvlInTheMiddle} from "components/AvlMap/ReduxMiddleware"
 
 import user from './modules/user'
 import scenario from "./modules/scenario";
+import landUse from "./modules/landUse";
 import messages from "./modules/messages"
 
 import createHistory from 'history/createBrowserHistory'
@@ -32,6 +33,7 @@ const store = createStore(
   combineReducers({
     user,
     scenario,
+    landUse,
     messages,
     graph,
     router: routerReducer

@@ -8,6 +8,7 @@ import {ScenarioLayer, ScenarioOptions} from "./scenarioLayer.js"
 import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import {AddNewZoneLayer,AddNewZoneOptions} from "./addNewZoneLayer";
+import {LandUseLayer,LandUseOptions} from "./landUseLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -28,12 +29,16 @@ const DynamicZoneLayerFactory =(callingLayer,...args) =>{
     return new ZoneLayer('zone',ZoneOptions())
 };
 
-const DynamicProjectLayerFactory = (callingLayer,...args) =>{
+/*const DynamicProjectLayerFactory = (callingLayer,...args) =>{
     return new ProjectLayer('projects',ProjectOptions())
-}
+}*/
 
 const DynamicAddNewZoneLayerFactory =(callingLayer,...args) =>{
     return new AddNewZoneLayer('addNewZone',AddNewZoneOptions())
+}
+
+const DynamicLandUseLayerFactory = (callingLayer,...args) =>{
+    return new LandUseLayer('landUse',LandUseOptions())
 }
 
 
@@ -47,6 +52,7 @@ export class ControlLayers extends MapLayer {
                 .then(response => {
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                    this.boundingBox = bbox
                     map.resize();
                     map.fitBounds(bbox);
                 })
@@ -212,36 +218,44 @@ export class ControlLayers extends MapLayer {
         ]).then(sl => {
             this.scenarioLayer = sl
             this.doAction([
-                 "addDynamicLayer",
-                 DynamicZoneLayerFactory
-             ]).then(zl => {
+                "addDynamicLayer",
+                DynamicZoneLayerFactory
+            ]).then(zl => {
                 this.zoneLayer = zl
                 this.doAction([
                     "addDynamicLayer",
-                    DynamicProjectLayerFactory
-                ]).then(pl =>{
-                    this.projectLayer = pl
+                    DynamicLandUseLayerFactory
+                ]).then(ll => {
+                    this.landUseLayer = ll
                 })
             })
         })
     }
 
     mainLayerToggleVisibilityOn(layerName){
-        if(layerName === 'scenario'){
+        if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOn()
         }
-        if(layerName === 'zone'){
+        if(layerName.includes('zone')){
             this.zoneLayer.toggleVisibilityOn()
+        }
+        if(layerName.includes('landUse')){
+            this.landUseLayer.toggleVisibilityOn()
         }
 
     }
 
     mainLayerToggleVisibilityOff(layerName){
-        if(layerName === 'scenario'){
+        if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOff()
         }
-        if(layerName === 'zone'){
+        if(layerName.includes('zone')){
             this.zoneLayer.toggleVisibilityOff()
+        }
+        if(layerName.includes('landUse')){
+            this.landUseLayer.toggleVisibilityOff()
+            //this.map.resize()
+            //this.map.fitBounds(this.boundingBox)
         }
     }
 
@@ -283,7 +297,8 @@ export default (options = {}) =>
                 },
                 show: true
             }
-        }
+        },
+        boundingBox : []
 
     })
 

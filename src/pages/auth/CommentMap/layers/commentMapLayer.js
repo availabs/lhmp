@@ -81,9 +81,7 @@ class CommentMapLayer extends MapLayer{
         const scale = d3scale.scaleLinear()
             .domain([0, num * 0.5, num])
             .range(["#1a9641", "#ffffbf", "#d7191c"]);
-        var popup = new mapboxgl.Popup({ offset: 25 }).setText(
-            'Construction on the Washington Monument began in 1848.'
-        )
+
         this.markers.push(...points.map((p, i) => {
             return new mapboxgl.Marker({
                 draggable: false,
@@ -91,7 +89,6 @@ class CommentMapLayer extends MapLayer{
             })
                 .setLngLat(p)
                 .addTo(this.map)
-                .setPopup(popup)
                 .on("dragend", e => this.calcRoute());
         }))
 
