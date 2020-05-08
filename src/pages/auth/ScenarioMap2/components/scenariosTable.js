@@ -220,7 +220,7 @@ class ScenarioTable extends React.Component {
                     </tbody>
                         <tfoot>
                         <tr>
-                            <td><h6>Expected Annualized Avg. Loss:</h6></td>
+                            <td colSpan="2"><h6>Expected Annualized Avg. Loss:</h6></td>
                             <td></td>
                             {/*<td><h6>{fnum(this.state.total_loss ? this.state.total_loss.toString() : '')}</h6></td>*/}
                             <td><h6>{fnum(this.state.annual_loss ? this.state.annual_loss.toString() : '')}</h6></td>
