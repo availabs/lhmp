@@ -4,13 +4,14 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import {falcorChunkerNice} from "store/falcorGraph"
 import ProjectBox from 'components/light-admin/containers/ProjectBox'
 import styled from 'styled-components'
+import get from 'lodash.get'
 
 import { format } from "d3-format"
 
 import hazardMeta from './HazardMeta'
 
 import {
-    getHazardName
+    getHazardName, fnum
 } from 'utils/sheldusUtils'
 
 
@@ -100,6 +101,7 @@ class CountyHeroStats extends React.Component {
             <SideInfoProjectBox 
                 rows={ rows }
                 changeHazard={this.props.changeHazard}
+                activeHazard={this.props.hazard}
             />
         )
     }
@@ -121,33 +123,45 @@ const mapDispatchToProps = {};
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(CountyHeroStats))
 
 
-const BoxRow = ({ value, label, hazard, changeHazard, onClick, i }) => (
-    <div className="col-sm"  key={ i } style={{textAlign:'center'}} value={hazard} onClick={changeHazard.bind(hazard)}>
+const BoxRow = ({ value, label, hazard, changeHazard, onClick, i , activeHazard}) => (
+    <div className="col-sm"  key={ i } style={{textAlign:'center', border: activeHazard === hazard ? '1px solid blue' : ''}}
+         value={hazard} onClick={changeHazard.bind(this,{target:{value:hazard}})}>
         <div className="el-tablo highlight">
             <div className="label" style={{'font-size': '1.2em', fontWeight: 400}}>{ label }</div>
             
             <div className="label" style={{'font-size': '1em'}}>
                 <GraphIcon 
-                    color={hazardMeta[hazard].color}
-                    className={`fi fa-${hazardMeta[hazard].icon}`}
+                    color={get(hazardMeta[hazard], `color`, 'red')}
+                    className={`fi fa-${get(hazardMeta[hazard], `icon`, 'wind')}`}
                 />
             </div>
-            <div className="value" style={{'font-size': 'x-large', color: hazardMeta[hazard].color}}>{ value.main }</div>
+            <div className="value" style={{'font-size': 'x-large', color: get(hazardMeta[hazard], `color`, 'red')}}>
+                { fnum(typeof value.main === "string" ? value.main.replace(/[$]/g, '').replace(/,/g,'') : value.main) }
+            </div>
             <div style={{'font-size': 'small'}}>
-                {Object.keys(value.sub).map(s => <label className="label">{s} : {value.sub[s] }</label>)}
+                {hazard !== '' ? Object.keys(value.sub).map(s => <label className="label">{s} : {value.sub[s] }</label>) : null}
             </div>
             
         </div>
     </div>
 )
 
-const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null }) => (
+const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null, activeHazard }) => (
     <ProjectBox title={ title } style={ {  width:'100%' } }>
         <div className="row align-items-center">
             { rows.length ?
-                rows.map((r,i) => (<BoxRow {...r} changeHazard={changeHazard} i={i} />))
+                rows.map((r,i) => (<BoxRow {...r} changeHazard={changeHazard} i={i} activeHazard={activeHazard}/>))
                 : content
-            }            
+            }
+        </div>
+        <div className="row align-items-center">
+            { rows.length ?
+                <BoxRow value={{main: rows.reduce((a,c) => a+(c.value.main || 0), 0)}}
+                        label={'All Hazards'}
+                        hazard={''}
+                        changeHazard={changeHazard} i={'allHaz'} activeHazard={activeHazard}/>
+                : content
+            }
         </div>
     </ProjectBox>
 )

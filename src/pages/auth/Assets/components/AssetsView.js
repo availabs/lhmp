@@ -8,12 +8,28 @@ import {Link} from "react-router-dom";
 import {falcorGraph} from "../../../../store/falcorGraph";
 import AssetLayer from "./assetLayer";
 import TractsLayer from "../../../Public/Home/components/Risk/HazardLoss/layers/TractsLayer";
+import config from "../../Plan/config/guidance-config";
 const BASIC_INFO = [
     'prop_class',
     'replacement_value',
     'critical',
-    'address'
+    'address',
+    'shelter'
 ];
+const SHELTER = [
+    'building_id',
+    'shelter_id',
+    'shelter_name',
+    'facility_usage_code',
+    'evacuation_capacity',
+    'post_impact_capacity',
+    'ada_compliant',
+    'wheelchair_accessible',
+    'pet_accomodations',
+    'generator_onsite',
+    'self_suffienct_electricty',
+    'shelter_code',
+]
 const OCCUPANCY_INFO = [
     'num_residents',
     'num_employees',
@@ -74,6 +90,7 @@ class AssetsView extends React.Component{
             address : ''
         }
         this.basicInfo = this.basicInfo.bind(this);
+        this.shelterInfo = this.shelterInfo.bind(this);
         this.occupancyInfo = this.occupancyInfo.bind(this);
         this.structuralInfo = this.structuralInfo.bind(this);
         this.servicesInfo = this.servicesInfo.bind(this);
@@ -100,6 +117,13 @@ class AssetsView extends React.Component{
                 this.setState({
                     address : response.json.building.byId[this.props.match.params.assetId].address.toUpperCase()
                 });
+                if(get(response, `json.building.byId.${this.props.match.params.assetId}.shelter`, null)){
+                    return this.props.falcor.get(
+                        ['shelters', 'byId',
+                            get(response, `json.building.byId.${this.props.match.params.assetId}.shelter`, null), SHELTER
+                        ]
+                    )
+                }
                 return response
             })
     }
@@ -132,17 +156,21 @@ class AssetsView extends React.Component{
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
-                    if(BASIC_INFO.includes(item)){
-                        if(graph[item] === true){
+                    if(BASIC_INFO.includes(item)/* && typeof graph[item] !== 'object'*/){
+                        let value =
+                            item === 'shelter' ?
+                                graph[item] ? 'true' : 'false' :
+                                graph[item];
+                        if(value){
                             tableData.push({
                                 "characteristic" : item,
-                                "value": graph[item].toString()
+                                "value": value.toString()
                             })
                         }
                         else{
                             tableData.push({
                                 "characteristic" : item,
-                                "value": graph[item] || 'Not available'
+                                "value": 'Not available'
                             })
                         }
 
@@ -195,6 +223,78 @@ class AssetsView extends React.Component{
         }
 
     }
+    shelterInfo(){
+        if(this.props.shelterData){
+            let graph = this.props.shelterData[get(this.props.buildingData, `${this.props.match.params.assetId}.shelter`, null)];
+            let tableData = [];
+            if(graph){
+                Object.keys(graph).forEach((item)=>{
+                    if(SHELTER.includes(item)/* && typeof graph[item] !== 'object'*/){
+                        let value = get(graph, `[${item}].value`, null);
+                        if(value){
+                            tableData.push({
+                                "characteristic" : item,
+                                "value": value.toString()
+                            })
+                        }
+                        else{
+                            tableData.push({
+                                "characteristic" : item,
+                                "value": 'Not available'
+                            })
+                        }
+
+                    }
+
+                })
+                return(
+                    <div>
+                        <Element>
+                            <h4>Shelter Info</h4>
+                            <div className="table-responsive">
+                                <table className="table table lightBorder">
+                                    <thead>
+                                    <tr>
+                                        <th>ATTRIBUTE</th>
+                                        <th>VALUE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        tableData.map((data)=>{
+                                            if(data.characteristic === 'replacement_value'){
+                                                return(
+                                                    <tr>
+                                                        <td>{data.characteristic}</td>
+                                                        <td>${data.value}</td>
+                                                    </tr>
+                                                )
+                                            }
+                                            else{
+                                                return(
+                                                    <tr>
+                                                        <td>{data.characteristic}</td>
+                                                        <td>{data.value}</td>
+                                                    </tr>
+                                                )
+                                            }
+
+                                        })
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                            </div>
+                        </Element>
+                    </div>
+                )
+            }
+
+        }
+
+    }
+
     occupancyInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
             let graph = this.props.buildingData[this.props.match.params.assetId];
@@ -516,12 +616,17 @@ class AssetsView extends React.Component{
             </div>
         )
     }
+
     render(){
         return(
             <div className='container'>
                 <Element>
                     <form>
                         <h6 className="element-header">{this.state.address}
+                            <Link
+                                className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                to={'/guidance/guidance-assets/view'} target={'_blank'}
+                            >?</Link>
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
@@ -537,6 +642,7 @@ class AssetsView extends React.Component{
                                 <div className='element-box'>
                                     {this.loadMap()}
                                     {this.basicInfo()}
+                                    {this.shelterInfo()}
                                     {this.occupancyInfo()}
                                     {this.structuralInfo()}
                                 </div>
@@ -564,6 +670,7 @@ const mapStateToProps = (state,ownProps) => {
         geoid : ownProps.geoid,
         cousubs: get(state.graph, 'geo',{}),
         buildingData : get(state.graph,'building.byId',{}),
+        shelterData : get(state.graph,'shelters.byId',{}),
         parcelData : get(state.graph,'parcel.byId',{})
     }
 };

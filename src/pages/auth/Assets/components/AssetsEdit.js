@@ -508,6 +508,10 @@ class AssetsEdit extends React.Component{
             <div className='container'>
                 <Element>
                     <h6 className="element-header">Edit Assets
+                        <Link
+                            className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                            to={'/guidance/guidance-assets/view'} target={'_blank'}
+                        >?</Link>
                         <span style={{float:'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"

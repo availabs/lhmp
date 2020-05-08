@@ -59,7 +59,7 @@ export default [{
     exact: true,
     name: 'Landing Page CMS',
     auth: true,
-    authLevel: 1,
+    authLevel: 10,
     mainNav: false,
     menuSettings: {
         image: 'none',
@@ -76,7 +76,7 @@ export default [{
         exact: true,
         name: 'Landing Page CMS',
         auth: true,
-        authLevel: 1,
+        authLevel: 10,
         mainNav: false,
         menuSettings: {
             image: 'none',

@@ -110,16 +110,6 @@ class AssetsByTypeIndex extends React.Component {
                     <div className="row">
                         <div className="col-12">
                             <div className='element-wrapper'>
-                                {config['assets'] ?
-                                    <div className="element-box">
-                                        <RenderConfig
-                                            config={{'Assets':config['assets']}}
-                                            user={this.props.user}
-                                            showTitle={false}
-                                            showHeader={false}
-                                            pureElement={true}
-                                        />
-                                    </div> : null}
                                 <div className='element-box'>
                                     <h4>Buildings By Owner Type</h4>
                                     {this.state.geoid ?
