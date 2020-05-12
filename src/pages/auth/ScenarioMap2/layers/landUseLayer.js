@@ -208,7 +208,7 @@ export class LandUseLayer extends MapLayer{
                     })
                 }
                 this.legend.type = "linear"
-                this.legend.range = getColorRange(9, "YlGn");
+                this.legend.range = getColorRange(8, "YlGn");
                 this.legend.vertical = false;
                 if(resultedLandUseData.length > 0) {
                     const colorScale = this.getColorScale(resultedLandUseData),
@@ -310,7 +310,7 @@ export const LandUseOptions =  (options = {}) => {
             range: [],
             active: true,
             domain: [0,50000,100000,200000,500000,1000000,5000000],
-            //[0,10000,50000,100000, 250000, 500000, 1000000]
+            //[0,50000,100000,200000,500000,1000000,5000000]
             format: fnum
         },
         onClick:{
