@@ -226,7 +226,7 @@ const config = {
             icon: 'os-icon-activity'
         },
         {
-            title: 'Action Form',
+            title: 'Updated Actions',
             requirement: 'Req-D-2',
             type: 'form',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
