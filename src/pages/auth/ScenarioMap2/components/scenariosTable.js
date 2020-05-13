@@ -7,6 +7,7 @@ import { fnum } from "utils/sheldusUtils"
 import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
 import {setActiveRiskZoneId} from "store/modules/scenario"
+import {setActiveRiskLayerVisibility} from "store/modules/scenario";
 
 class ScenarioTable extends React.Component {
     constructor(props) {
@@ -74,6 +75,7 @@ class ScenarioTable extends React.Component {
                                             initial_source : this.props.scenarioData[d.id].map_source,
                                             initial_table_name : this.props.scenarioData[d.id].table_name
                                         })
+                                        this.props.setActiveRiskLayerVisibility([this.state.initial_source,this.state.initial_table_name])
                                     }
                                 })
                                 this.setState({
@@ -129,9 +131,11 @@ class ScenarioTable extends React.Component {
                             })
                             }
                         if(data.some(item => item.risk_zone_id.toString() === this.state.activeToggle && this.state.activeToggle.toString())){
+                            this.props.setActiveRiskLayerVisibility([this.state.map_source,this.state.scenario])
                             this.props.check_visibility.visibilityToggleModeOn(this.state.map_source,this.state.scenario)
                         }
                         else{
+                            this.props.setActiveRiskLayerVisibility([data[0].map_source,data[0].table_name])
                             this.props.check_visibility.visibilityToggleModeOn(data[0].map_source,data[0].table_name)
                         }
                         this.props.setActiveRiskZoneId([Math.min.apply(Math, risk_zone_ids)])
@@ -148,6 +152,7 @@ class ScenarioTable extends React.Component {
             if(id.toString() === d.id.toString()){
                 console.log('d',d.id)
                 this.props.setActiveRiskZoneId([d.id])
+                this.props.setActiveRiskLayerVisibility([d])
                 this.setState((currentState) =>({
                     scenario : d.scenario,
                     map_source: d.visibility,
@@ -247,7 +252,8 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = {
     sendSystemMessage,
-    setActiveRiskZoneId
+    setActiveRiskZoneId,
+    setActiveRiskLayerVisibility
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ScenarioTable))

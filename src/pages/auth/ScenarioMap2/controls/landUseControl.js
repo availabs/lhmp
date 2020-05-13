@@ -13,9 +13,11 @@ class LandUseControl extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
-            land_use:[]
+            land_use:[],
+            land_use_id:''
         }
         this.addLandUseLayer = this.addLandUseLayer.bind(this,true)
+        this.handleChange= this.handleChange.bind(this)
     }
 
     fetchFalcorDeps() {
@@ -76,26 +78,36 @@ class LandUseControl extends React.Component {
         }
     }
 
+    handleChange(e){
+        let land_use_list = this.landUseDropDown()
+        let value = e.target.value
+        land_use_list.forEach(item =>{
+            if(item.label === value){
+                this.props.setActiveLandUseType([{name:item.label,value:item.value}])
+            }
+        })
+        this.setState({ ...this.state, [e.target.id]: e.target.value });
+    }
+
 
     render() {
         let land_use_list = this.landUseDropDown()
 
         if (land_use_list && land_use_list.length > 0) {
             return (
-                <div style={{height:'100px'}}>
-                    <SearchableDropDown
-                        data={land_use_list}
-                        placeholder={'Select a Type'}
-                        value={land_use_list.filter(d => d.value === this.state.land_use)[0]}
-                        onChange={(value) => {
-                            land_use_list.forEach(item =>{
-                                if(item.value === value){
-                                    this.props.setActiveLandUseType([{name:item.label,value:item.value}])
-                                }
+                <div style={{height:'auto'}}>
+                    <select className="form-control justify-content-sm-end"
+                            id = "land_use_id"
+                            onChange={this.handleChange}
+                            value={this.state.land_use_id}>
+                        <option key={0} value ={''}>--None Selected--</option>
+                        {land_use_list ? land_use_list.map((item,i) =>{
+                                return( <option key={i+1} value={item.label}>{item.label}</option>)
                             })
-
-                        }}
-                    />
+                            :
+                            null
+                        }
+                    </select>
                     {
                         <div>
                             {this.addLandUseLayer(true)}

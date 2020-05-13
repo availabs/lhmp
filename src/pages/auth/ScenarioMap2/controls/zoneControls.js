@@ -171,6 +171,7 @@ class ZoneControl extends React.Component{
                             data={zones_list}
                             placeholder={'Select a Type'}
                             value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
+                            hideValue={false}
                             onChange={(value) => {
                                 this.setState({zone_id:value})
                                 ids = JSON.parse(localStorage.getItem('zone'));

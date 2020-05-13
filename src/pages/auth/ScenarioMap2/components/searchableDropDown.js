@@ -52,7 +52,7 @@ class searchableDropDown extends Component {
                         onClick={this.toggleOpen}
                         isSelected={isOpen}
                     >
-                        {value ? `${value.label}` : this.props.placeholder}
+                        {value && this.props.hideValue === false ? `${value.label}` :this.props.placeholder }
                     </Button>
                 }
             >
@@ -70,6 +70,7 @@ class searchableDropDown extends Component {
                     styles={selectStyles}
                     tabSelectsValue={false}
                     value={value}
+                    hideValue={this.props.hideValue}
                 />
             </Dropdown>
         );
@@ -79,7 +80,8 @@ class searchableDropDown extends Component {
 searchableDropDown.defaultProps = {
     data : options,
     isClearable: false,
-    placeholder: 'Please Make a Selection'
+    placeholder: 'Please Make a Selection',
+    hideValue : false
 }
 // styled components
 

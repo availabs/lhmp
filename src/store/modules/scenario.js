@@ -8,6 +8,7 @@ const SET_RISK_SCENARIO_ID = 'USER::SET_RISK_SCENARIO_ID';
 const SET_RISK_ZONE_ID = 'USER::SET_RISK_ZONE_ID'
 const SET_RISK_ZONE_ID_OFF = 'USER::SET_RISK_ZONE_ID_OFF';
 const SET_NEW_ZONE = 'USER::SET_NEW_ZONE';
+const SET_ACTIVE_RISK_LAYER_VISIBILITY = 'USER::SET_ACTIVE_RISK_LAYER_VISIBILITY';
 
 function setRiskScenarioId(id) {
     return {
@@ -35,6 +36,14 @@ function setNewZone(newZone){
     }
 }
 
+function setRiskLayerVisibility(visibility){
+    return {
+        type :SET_ACTIVE_RISK_LAYER_VISIBILITY,
+        visibility
+    }
+}
+
+
 export const setActiveRiskScenarioId = (id) =>{
     return (dispatch) => {
         dispatch(setRiskScenarioId(id))
@@ -59,12 +68,19 @@ export const setActiveNewZone = (id) =>{
     }
 };
 
+export const setActiveRiskLayerVisibility = (id) =>{
+    return (dispatch) => {
+        dispatch(setRiskLayerVisibility(id))
+    }
+};
+
 export const actions = {
 
     setActiveRiskScenarioId,
     setActiveRiskZoneId,
     setActiveRiskZoneIdOff,
-    setActiveNewZone
+    setActiveNewZone,
+    setActiveRiskLayerVisibility
 
 };
 
@@ -73,7 +89,8 @@ let initialState = {
     activeRiskZoneId:'',
     activeRiskScenarioId:[],
     offRiskZoneId:[],
-    newZone:{}
+    newZone:{},
+    activeRiskLayerVisibility:[]
 };
 
 const ACTION_HANDLERS = {
@@ -110,6 +127,15 @@ const ACTION_HANDLERS = {
         if(action.newZone) {
             newState.newZone = action.newZone;
             localStorage.setItem('newZone', newState.newZone);
+        }
+        return newState
+    },
+
+    [SET_ACTIVE_RISK_LAYER_VISIBILITY] : (state =initialState, action) => {
+        const newState = Object.assign({}, state);
+        if(action.visibility) {
+            newState.activeRiskLayerVisibility = action.visibility;
+            localStorage.setItem('activeRiskLayerVisibility', newState.activeRiskLayerVisibility);
         }
         return newState
     }

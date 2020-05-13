@@ -133,20 +133,7 @@ export class ScenarioLayer extends MapLayer{
         return this.fetchData().then(data => this.receiveData(data,this.map))
     }
 
-    toggleVisibilityOn() {
-        //console.log('in map layer toggle visibility',map,this.layers)
-        this._isVisible = !this._isVisible;
-        this.layers.forEach(layer => {
-            this.map.setLayoutProperty(layer.id, 'visibility', "visible");
-        })
-    }
 
-    toggleVisibilityOff(){
-        this._isVisible = !this._isVisible;
-        this.layers.forEach(layer => {
-            this.map.setLayoutProperty(layer.id, 'visibility',"none");
-        })
-    }
 
     fetchData(){
         let owner_types = ['2','3', '4', '5', '6', '7','8'];
@@ -289,9 +276,6 @@ export class ScenarioLayer extends MapLayer{
                     })
                 }
             })
-            localStorage.setItem("building_colors",JSON.stringify(buildingColors))
-            localStorage.setItem("building_radius",JSON.stringify(buildingRadius))
-            localStorage.setItem("buildings_geojson",JSON.stringify(geojson))
         }
         if(this.map.getSource('buildings') && this.map.getLayer("buildings-layer")) {
             this.map.getSource("buildings").setData(geojson)
@@ -306,22 +290,32 @@ export class ScenarioLayer extends MapLayer{
                 'buildings-layer',
                 'circle-radius',
                 ["get", ["to-string", ["get", "id"]], ["literal", buildingRadius]]
-
-
             )
         }
-        if(Object.keys(coloredBuildings).length > 0){
-            this.map.setPaintProperty(
-                'ebr',
-                'fill-color',
-                ["get",
-                    ["to-string", ["get", "id"]],
-                    ["literal",coloredBuildings]
-                ],
-            )
+        if(this.map.getSource('nys_buildings_avail') && this.map.getLayer("ebr")){
+            if(Object.keys(coloredBuildings).length > 0){
+                this.map.setPaintProperty(
+                    'ebr',
+                    'fill-color',
+                    ["get",
+                        ["to-string", ["get", "id"]],
+                        ["literal",coloredBuildings]
+                    ],
+                )
+            }
         }
+    }
 
+    toggleVisibilityOn() {
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
+        })
+    }
 
+    toggleVisibilityOff(){
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',"none");
+        })
     }
 
     getColorScale(data) {
@@ -402,7 +396,7 @@ export const ScenarioOptions =  (options = {}) => {
             },
 
         ],
-        layers: [,
+        layers: [
             {
                 'id': 'ebr',
                 'source': 'nys_buildings_avail',

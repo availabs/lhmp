@@ -233,6 +233,7 @@ export class ControlLayers extends MapLayer {
     }
 
     mainLayerToggleVisibilityOn(layerName){
+        //console.log('on',layerName)
         if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOn()
         }
@@ -246,6 +247,7 @@ export class ControlLayers extends MapLayer {
     }
 
     mainLayerToggleVisibilityOff(layerName){
+        //console.log('off',layerName)
         if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOff()
         }

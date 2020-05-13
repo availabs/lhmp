@@ -12,8 +12,10 @@ import ZoneControl from "./zoneControls";
 import ProjectControl from "./projectControl"
 import LandUseControl from "./landUseControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
+import SearchableDropDown from "../components/searchableDropDown";
+
 var _ = require('lodash');
-const AllModes =[{id:'scenario',title:'Risk Scenarios'},{id:'zone',title:'Zones'},{id:'landUse',title:'Land Use'}];
+const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'}];
 //,{id:'projects',title:'Project'}
 const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'}]
 //{id:'projects_block',title:'Projects'},
@@ -23,11 +25,13 @@ class MainControls extends React.Component {
         super(props);
         this.state = {
             activeMode: ['scenario','zone'],
-            modeOff:''
+            modeOff:'',
+            layerSelected:'',
+            showLayers : ['landUse']
         }
 
         this.handleChange = this.handleChange.bind(this)
-
+        this.renderLayersDropDown = this.renderLayersDropDown.bind(this)
     }
 
     componentDidMount(){
@@ -39,179 +43,169 @@ class MainControls extends React.Component {
     }
 
     componentDidUpdate(oldProps,oldState){
-        if(this.state.activeMode.length === 0 && this.state.modeOff !== "" && this.state.modeOff !== "landUse") {
-            //console.log('in firs if',this.state.modeOff,this.state.activeMode)
-            this.props.layer.mainLayerToggleVisibilityOff([this.state.modeOff])
+        // initially active scenarios are scenarios and zone
+        if(_.isEqual(this.state.activeMode, ["scenario","zone"]) && this.state.modeOff !== "scenario" && this.state.modeOff !== "zone" && this.state.layerSelected !=='scenario' && this.state.layerSelected !== 'zone'){
+            this.props.layer.mainLayerToggleVisibilityOn(["scenario"])
+            this.props.layer.mainLayerToggleVisibilityOn(["zone"])
         }
-        if(!this.state.activeMode.includes(oldState.activeMode) && this.state.modeOff === ""){
-            //console.log('in second if',this.state.activeMode,this.state.modeOff)
+        //landuse is active only when needed and zoomes in
+        if(_.isEqual(this.state.showLayers,['landUse'])){
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
-            this.props.layer.mainLayerToggleVisibilityOn(this.state.activeMode)
         }
-        if(this.state.modeOff !== "" && this.state.modeOff !== 'landUse' ){
-            //console.log('in third if',this.state.modeOff)
+        // if a layer is removed by X
+        if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
             this.props.setActiveRiskZoneIdOff(this.state.activeMode)
             this.props.layer.mainLayerToggleVisibilityOff([this.state.modeOff])
-            this.props.layer.mainLayerToggleVisibilityOn(this.state.activeMode.filter(d => d !== 'landUse'))
+            if(this.state.modeOff === 'scenario') {
+                this.props.layer.visibilityToggleModeOff(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
+                this.props.layer.scenarioLayer.legend.active = false
+                this.props.layer.scenarioLayer.forceUpdate()
+            }
+            if(this.state.modeOff === 'landUse'){
+                this.props.layer.landUseLayer.legend.active = false
+                this.props.layer.landUseLayer.forceUpdate()
+            }
+
         }
-        if(this.state.activeMode.length > oldState.activeMode.length && this.state.activeMode[0] !== 'landUse'){
-            //console.log('in fourth if',this.state.activeMode,oldState.activeMode,this.state.activeMode)
-            this.props.layer.mainLayerToggleVisibilityOn(this.state.activeMode)
+        // if a layer is selected after being turned off
+        if(this.state.layerSelected !== "" && this.state.layerSelected !== 'landUse' && !this.state.showLayers.includes(this.state.layerSelected)){
+            this.props.layer.mainLayerToggleVisibilityOn([this.state.layerSelected])
+            if(this.state.layerSelected === 'scenario') {
+                this.props.layer.visibilityToggleModeOn(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
+                this.props.layer.scenarioLayer.legend.active = true
+                this.props.layer.scenarioLayer.forceUpdate()
+            }
         }
-        if(JSON.stringify(this.state.activeMode) === JSON.stringify(["scenario","zone"]) && this.state.modeOff === 'landUse'){
-            this.props.layer.mainLayerToggleVisibilityOff([this.state.modeOff])
+        //to active the legend if selected landUse
+        if(this.state.layerSelected === 'landUse' && !this.state.showLayers.includes('landUse')){
+            this.props.layer.landUseLayer.legend.active = true
+            this.props.layer.landUseLayer.forceUpdate()
         }
 
     }
 
-    handleChange(e) {
-        console.log('e',e.target.id)
 
+    handleChange(e) {
+        if(document.getElementById('closeMe'+e+'_block')){
+            document.getElementById('closeMe'+e+'_block').style.display = 'initial'
+        }
+    }
+
+    renderLayersDropDown(){
+        return (
+            <div style={{height:'50px',display:'flex',alignSelf: 'auto'}}>
+                <h5>Add a Layer - </h5>
+                <SearchableDropDown
+                    data={this.state.showLayers === ['landUse'] ? AllModes.filter(d => !this.state.activeMode.includes(d.value)) : AllModes.filter(d => this.state.showLayers.includes(d.value))}
+                    placeholder={'Add Layer'}
+                    hideValue={true}
+                    onChange={(value,e) => {
+                        this.setState(currentState =>(
+                            {
+                                activeMode: this.state.activeMode.includes(value) ? this.state.activeMode : [value,...this.state.activeMode],
+                                layerSelected : value,
+                                showLayers : _.pull(this.state.showLayers,value)
+                            }))
+                        this.handleChange(value)
+
+                    }}
+
+
+                />
+            </div>
+        )
     }
 
     render(){
         return (
             <div style={{'overflowX':'auto'}}>
-                <table className='table table-sm table-hover'>
-                    <thead>
-                    <tr>
-                        {AllModes.map((mode,i) =>{
-                            return (
-                                <th key = {i}>
-                                    <button className="btn btn-rounded" type="button" style={{padding:'0px'}}>
-                                        <div id = {mode.id}
-                                             className={this.state.activeMode.includes(mode.id) ? "os-toggler-w on" : "os-toggler-w"}
-                                             key={i}
-                                             >
-                                            <div className="os-toggler-i">
-                                                <div
-                                                    className="os-toggler-pill"
-                                                    id = {mode.id}
-                                                    key={i}
-                                                     onClick={(e) => {
-                                                             this.setState(currentState =>(
-                                                                 {
-                                                                 activeMode: this.state.activeMode.includes(mode.id) ? _.pull(this.state.activeMode,mode.id) : [mode.id,...this.state.activeMode],
-                                                                 modeOff : mode.id
-                                                             }))
-                                                             this.handleChange(e)
-
-                                                     }}>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {mode.title}
-                                    </button>
-                                </th>
-                            )
-                        })}
-                    </tr>
-                    </thead>
-                </table>
+                {this.renderLayersDropDown()}
                 {AllBlocks.map((block,i) =>{
-                    if(this.state.activeMode.length > 0){
-                        if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'scenario'){
-                            return (
-                                <div id={`closeMe`+block.id} key={i}>
-                                    <h4 style ={{display: 'inline'}}>{block.title}</h4>
-                                    <button
-                                            aria-label="Close"
-                                            className="close"
-                                            data-dismiss="alert"
-                                            type="button"
-                                            key={i}
-                                            onClick={(e) =>{
-                                                e.target.closest(`#closeMe`+block.id).style.display = 'none'
-                                                this.setState({
-                                                    activeMode:_.pull(this.state.activeMode,block.id)
-                                                })
-                                                document.getElementById(block.id.split('_')[0]).className = "os-toggler-w"
-                                            }}
-                                    >
-                                        <span aria-hidden="true"> ×</span>
-                                    </button>
-                                    <ScenarioControl
-                                        layer = {this.props}
-                                    />
-                                </div>
-                            )
-                        }
-                        if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'zone'){
-                            return (
-                                <div id={`closeMe`+block.id} key = {i}>
-                                    <h4 style ={{display: 'inline'}}>{block.title}</h4>
-                                    <button
-                                        aria-label="Close"
-                                        className="close"
-                                        data-dismiss="alert"
-                                        type="button"
-                                        onClick={(e) =>{
-                                            e.target.closest(`#closeMe`+block.id).style.display = 'none'
-                                            this.setState({
-                                                activeMode:_.pull(this.state.activeMode,block.id)
-                                            })
-                                            document.getElementById(block.id.split('_')[0]).className = "os-toggler-w"
-                                        }}
-                                    >
-                                        <span aria-hidden="true"> ×</span>
-                                    </button>
-                                    <ZoneControl
-                                        layer = {this.props}
-                                        activeMode = {this.state.activeMode}
-                                    />
-                                </div>
-                            )
-                        }
-                        if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'projects'){
-                            return (
-                                <div id={`closeMe`+block.id} key ={i}>
-                                    <h4 style ={{display: 'inline'}}>{block.title}</h4>
-                                    <button
-                                        aria-label="Close"
-                                        className="close"
-                                        data-dismiss="alert"
-                                        type="button"
-                                        onClick={(e) =>{
-                                            e.target.closest(`#closeMe`+block.id).style.display = 'none'
-                                            this.setState({
-                                                activeMode:_.pull(this.state.activeMode,block.id)
-                                            })
-                                            document.getElementById(block.id.split('_')[0]).className = "os-toggler-w"
-                                        }}
-                                    >
-                                        <span aria-hidden="true"> ×</span>
-                                    </button>
-                                    <ProjectControl
-                                        layer = {this.props}
-                                    />
-                                </div>
-                            )
-                        }
-                        if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'landUse'){
-                            return (
-                                <div id={`closeMe`+block.id} key ={i}>
-                                    <h4 style ={{display: 'inline'}}>{block.title}</h4>
-                                    <button
-                                        aria-label="Close"
-                                        className="close"
-                                        data-dismiss="alert"
-                                        type="button"
-                                        onClick={(e) =>{
-                                            e.target.closest(`#closeMe`+block.id).style.display = 'none'
-                                            this.setState({
-                                                activeMode:_.pull(this.state.activeMode,block.id)
-                                            })
-                                            document.getElementById(block.id.split('_')[0]).className = "os-toggler-w"
-                                        }}
-                                    >
-                                        <span aria-hidden="true"> ×</span>
-                                    </button>
-                                    <LandUseControl
-                                        layer = {this.props}
-                                    />
-                                </div>
-                            )
-                        }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'scenario'){
+                        return (
+                            <div id={`closeMe`+ block.id} key={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    key={i}
+                                    onClick={(e) =>{
+                                        e.preventDefault();
+                                        e.target.closest(`#closeMe`+ block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                        this.props.layer.mainLayerToggleVisibilityOff("scenario")
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <ScenarioControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'zone'){
+                        return (
+                            <div id={`closeMe`+block.id} key = {i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                        this.props.layer.mainLayerToggleVisibilityOff("zone")
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <ZoneControl
+                                    layer = {this.props}
+                                    activeMode = {this.state.activeMode}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'landUse'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <LandUseControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
                     }
                 })}
             </div>
@@ -225,7 +219,8 @@ const mapStateToProps = state => (
         activeGeoid:state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-        assetsData : get(state.graph,['building','byGeoid'],{})
+        assetsData : get(state.graph,['building','byGeoid'],{}),
+        activeRiskLayerVisibility : state.scenario.activeRiskLayerVisibility
     });
 
 const mapDispatchToProps = {
