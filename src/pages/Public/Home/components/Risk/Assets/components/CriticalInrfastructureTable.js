@@ -14,11 +14,10 @@ class NfipTable extends React.Component {
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
         return this.props.falcor.get(
             ['geo',this.props.activeGeoid,['name']],
-            //['geo',this.props.activeGeoid,'cousubs'],
-            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
-        )
+            ["geo", this.props.activeGeoid, 'municipalities'])
             .then(response  => {
-                let allGeos = [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])]
+                let allGeos = [this.props.activeGeoid,
+                    ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.municipalities.value`, [])]
 
                 return this.props.falcor.get(
                     ['building','byGeoid',allGeos,
