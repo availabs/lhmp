@@ -271,10 +271,10 @@ class inventoryTableViewer extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
         activeGeoid: state.user.activeGeoid,
-        activeCousubid: state.user.activeCousubid,
+        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         graph: state.graph,
         activePlan: state.user.activePlan,
         formsListData: get(state.graph, ['forms', 'byId'], {}),

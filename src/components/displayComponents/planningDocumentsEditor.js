@@ -143,8 +143,7 @@ const mapStateToProps = (state, ownProps) => {
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         capabilities: get(state.graph,'capabilitiesLHMP.byId',{}),// so componentWillReceiveProps will get called.
-        activeCousubid: state.user.activeCousubid,
-        activeGeoid: state.user.activeGeoid
+        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid
     })
 };
 

@@ -56,9 +56,9 @@ class inventoryTableViewer extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
     activeGeoid: state.user.activeGeoid,
-    activeCousubid: state.user.activeCousubid
+    activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid
 });
 const mapDispatchToProps = ({authProjects});
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(inventoryTableViewer))

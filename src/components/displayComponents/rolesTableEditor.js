@@ -196,7 +196,7 @@ class rolesTableEditor extends Component {
 const mapStateToProps = (state, ownProps) => {
     return ({
         activePlan: state.user.activePlan,
-        activeCousubid: state.user.activeCousubid
+        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid
     })
 };
 

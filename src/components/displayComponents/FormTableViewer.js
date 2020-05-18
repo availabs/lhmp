@@ -70,7 +70,7 @@ class FormTableViewer extends React.Component{
 const mapStateToProps = (state,ownProps) => {
     return {
         activePlan: state.user.activePlan,
-        activeCousubid: state.user.activeCousubid,
+        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),
         

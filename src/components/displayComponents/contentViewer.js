@@ -54,11 +54,11 @@ class ContentViewer extends Component {
 
 const mapDispatchToProps = {};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
         isAuthenticated: !!state.user.authed,
         geoGraph: state.graph,
-        activeCousubid: state.user.activeCousubid
+        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid
 
     };
 };

@@ -5,11 +5,11 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {setActiveCousubid} from 'store/modules/user'
 import get from "lodash.get";
 import config from "./config/review-config";
+import megaConfig from "./config/megaConfig"
 import Element from "../../../components/light-admin/containers/Element";
 import ElementBox from "../../../components/light-admin/containers/ElementBox";
-import {Link} from "react-router-dom";
 import styled from "styled-components";
-import functions from "./functions";
+import {RenderConfig} from "../../Public/theme/ElementFactory";
 
 const DIV = styled.div`
 ${(props) => props.theme.scrollBar};
@@ -17,7 +17,8 @@ overflow: auto;
 width: 100%;
 height: 50%;
 `
-class PlanReview extends React.Component {
+
+class ReviewRequirement extends React.Component {
 
     constructor(props) {
         super(props);
@@ -38,46 +39,42 @@ class PlanReview extends React.Component {
             })
     }
 
-    processTable(allowedGeos) {
-        return (
-            <DIV>
-                <table className='table table-bordered table-sm table-striped'>
-                    <thead>
-                    <th >Jurisdiction</th>
-                    {
-                        config.elements.map(element => <th>{element.element}</th>)
-                    }
-                    </thead>
-                    <tbody>
-                    {
-                        allowedGeos.map(geo =>
-                            <tr>
-                                <td  style={{width: 'max-content'}}>{functions.formatName(get(this.props.geoGraph, `${geo}.name`, 'N/A'), geo)}</td>
-                                {
-                                    config.elements.map(element =>
-                                    <td onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}>
-                                    </td>)
-                                }
-                            </tr>
-                        )
-                    }
-                    </tbody>
-                </table>
-            </DIV>
-        )
-    }
-
     render() {
         let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
-
+        let element = config.elements.filter(element => element.element === this.props.match.params.req).pop(),
+            requirements = element ? element.requirements_from_software : null;
+        if (!requirements) return null;
         return (
             <div className='container'>
                 <Element>
-                    <h4 className='element-header'>Review Tools</h4>
-                    <ElementBox>
-                        <h6>Jurisdictional Review Table. <small className='text-muted'>Click on the box to review the requirement.</small></h6>
-                        {this.processTable(allowedGeos)}
-                    </ElementBox>
+                    <h4 className='element-header'>Review Requirement</h4>
+                    {requirements.split(',').map(r => {
+                        r = r.trim();
+                        let fullElement = megaConfig.filter(mc => {
+                            return mc.requirement === r
+                        })[0]
+                        return (
+                            <ElementBox>
+                                <RenderConfig
+                                    config={{
+                                        [r]:
+                                            [{
+                                                title: r,
+                                                ...fullElement,
+                                                requirement: r,
+                                                geoId: this.props.match.params.geo,
+                                                intent: element.intent,
+                                            }]
+                                    }
+                                    }
+                                    user={{...this.props.user, activeCousubid: this.props.match.params.geo}}
+                                    showTitle={true}
+                                    showHeader={false}
+                                    pureElement={true}
+                                />
+                            </ElementBox>
+                        )
+                    })}
                 </Element>
             </div>
         )
@@ -96,14 +93,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan_review/',
+    path: '/review_requirement/:req/:geo',
     exact: true,
     name: 'Plan Review',
     auth: true,
     authLevel: 5,
     mainNav: false,
     breadcrumbs: [
-        {name: 'Review Tools', path: '/plan_review'}
+        {name: 'Review Requirement', path: '/review_requirement/'},
+        {param: 'req', path: '/review_requirement/'},
+        {param: 'geo', path: '/review_requirement/:req/'},
     ],
     menuSettings: {
         image: 'none',
@@ -112,6 +111,6 @@ export default [{
         layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(PlanReview))
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ReviewRequirement))
 }];
 
