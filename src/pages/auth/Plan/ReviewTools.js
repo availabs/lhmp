@@ -7,7 +7,6 @@ import get from "lodash.get";
 import config from "./config/review-config";
 import Element from "../../../components/light-admin/containers/Element";
 import ElementBox from "../../../components/light-admin/containers/ElementBox";
-import {Link} from "react-router-dom";
 import styled from "styled-components";
 import functions from "./functions";
 
@@ -15,8 +14,18 @@ const DIV = styled.div`
 ${(props) => props.theme.scrollBar};
 overflow: auto;
 width: 100%;
-height: 50%;
+height: 65vh;
+table {
+  position: relative;
+}
+th {
+  background: #fff;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
 `
+
 class PlanReview extends React.Component {
 
     constructor(props) {
@@ -43,20 +52,22 @@ class PlanReview extends React.Component {
             <DIV>
                 <table className='table table-bordered table-sm table-striped'>
                     <thead>
-                    <th >Jurisdiction</th>
-                    {
-                        config.elements.map(element => <th>{element.element}</th>)
-                    }
+                    <tr>
+                        <th style={{position: 'sticky'}}>Jurisdiction</th>
+                        {
+                            config.elements.map(element => <th>{element.element}</th>)
+                        }
+                    </tr>
                     </thead>
                     <tbody>
                     {
                         allowedGeos.map(geo =>
                             <tr>
-                                <td  style={{width: 'max-content'}}>{functions.formatName(get(this.props.geoGraph, `${geo}.name`, 'N/A'), geo)}</td>
+                                <td style={{width: 'max-content'}}>{functions.formatName(get(this.props.geoGraph, `${geo}.name`, 'N/A'), geo)}</td>
                                 {
                                     config.elements.map(element =>
-                                    <td onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}>
-                                    </td>)
+                                        <td onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}>
+                                        </td>)
                                 }
                             </tr>
                         )
@@ -75,7 +86,8 @@ class PlanReview extends React.Component {
                 <Element>
                     <h4 className='element-header'>Review Tools</h4>
                     <ElementBox>
-                        <h6>Jurisdictional Review Table. <small className='text-muted'>Click on the box to review the requirement.</small></h6>
+                        <h6>Jurisdictional Review Table. <small className='text-muted'>Click on the box to review the
+                            requirement.</small></h6>
                         {this.processTable(allowedGeos)}
                     </ElementBox>
                 </Element>
