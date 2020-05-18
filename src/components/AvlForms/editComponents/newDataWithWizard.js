@@ -93,8 +93,13 @@ class AvlFormsNewDataWizard extends React.Component{
                         attributes[0].forEach(attribute =>{
                             if(attribute.includes('date') && !attribute.includes('update')){
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
-                                let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
-                                tmp_state[attribute] = date
+                                if(d[0] && d[1] && d[2]){
+                                    let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                                    tmp_state[attribute] = date
+                                }
+                                else{
+                                    tmp_state[attribute] = undefined
+                                }
                             }else{
                                 tmp_state[attribute] = graph.attributes[attribute]
                             }
@@ -120,6 +125,7 @@ class AvlFormsNewDataWizard extends React.Component{
         let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
             let attributes = Object.keys(this.state)
+            console.log('attributes',this.state)
             return this.props.falcor.set({
                 paths: [
                     ['forms', 'byId',this.props.id[0],'attributes',attributes]
@@ -128,13 +134,14 @@ class AvlFormsNewDataWizard extends React.Component{
                     forms:{
                         byId:{
                             [this.props.id[0]] : {
-                                attributes : this.state
+                                attributes : _.pickBy(this.state,Object.values(this.state).forEach(d => d !== undefined))
                             }
                         }
                     }
                 }
             })
                 .then(response => {
+                    console.log('response',response)
                     this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
                 })
 
@@ -156,6 +163,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 }else{
                     attributes[item] = this.state[item] || ''
                 }
+                //if(item ==== '')
 
             });
             args.push(type[0],plan_id,attributes);

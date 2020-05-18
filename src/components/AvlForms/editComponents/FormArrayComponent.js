@@ -53,6 +53,7 @@ class FormArrayComponent extends React.PureComponent {
     }
 
     render() {
+        console.log('check',this.state.result)
         let colummMapping = Object.keys(this.props.state).reduce((a, c) => {
             if (Object.keys(get(this.props, `columnMap`, {})).includes(c)) {
                 a[c] = this.props.state[c];
@@ -74,12 +75,15 @@ class FormArrayComponent extends React.PureComponent {
                 </div>
                 <div>
                     Current ids: {this.state.result}
-                    {this.state.result.map(id =>
+                    {this.state.result ? this.state.result.map(id =>
                         <AvlFormsViewData
                             json={listNewComp[this.props.formType]}
                             id={[id]}
                             showHeader={false}
-                        />)}
+                        />)
+                        :
+                        null
+                    }
                 </div>
             </div>
         )

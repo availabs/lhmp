@@ -72,9 +72,15 @@ class AvlFormsNewData extends React.Component{
                     if(graph && attributes[0]){
                         attributes[0].forEach(attribute =>{
                             if(attribute.includes('date') && !attribute.includes('update')){
+
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
-                                let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
-                                tmp_state[attribute] = date
+                                if(d[0] && d[1] && d[2]){
+                                    let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
+                                    tmp_state[attribute] = date
+                                }
+                                else{
+                                    tmp_state[attribute] = undefined
+                                }
                             }else{
                                 tmp_state[attribute] = graph.attributes[attribute]
                             }
@@ -131,7 +137,6 @@ class AvlFormsNewData extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
-                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -176,13 +181,14 @@ class AvlFormsNewData extends React.Component{
                     forms:{
                         byId:{
                             [this.props.id[0]] : {
-                                attributes : this.state
+                                attributes : _.pickBy(this.state,Object.values(this.state).forEach(d => d !== undefined))
                             }
                         }
                     }
                 }
             })
                 .then(response => {
+                    console.log('respponse',response)
                     this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
                 })
 
@@ -222,6 +228,7 @@ class AvlFormsNewData extends React.Component{
                 }
             });
             args.push(type[0],plan_id,attributes);
+
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
                     if (this.props.returnValue){
@@ -237,13 +244,11 @@ class AvlFormsNewData extends React.Component{
         if(county && county !== 'None'){
             return this.props.falcor.get(['geo',county,'cousubs'])
                 .then(response =>{
-                    console.log('cousub dropdown 1', response, county)
                     let cousubs = [];
                     county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
                     if (cousubs){
                         this.props.falcor.get(['geo',cousubs,['name']])
                             .then(response =>{
-                                console.log('cousub dropdown 2', response, cousubs)
                                 return response
                             })
                     }
@@ -259,7 +264,6 @@ class AvlFormsNewData extends React.Component{
         let graph = this.props.geoData;
         let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
         let filterOn = this.state[countyAttrs.pop()]
-        console.log('geodata called',graph, this.state)
         if(graph){
             // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
@@ -270,16 +274,13 @@ class AvlFormsNewData extends React.Component{
                     })
                 }
             })
-            console.log('check this', filterOn, Object.keys(graph).filter(item =>filterOn && filterOn.includes(item.toString())))
             Object.keys(graph)
                 .filter(item => filterOn && filterOn.includes(item.toString()))
                 .forEach(item =>{
-                    console.log('cousubs loop', item,get(graph, `${item}.cousubs.value`, []))
 
                     get(graph, `${item}.cousubs.value`, [])
                         .filter(cousub => get(graph, `${cousub}.name`, null))
                         .forEach(cousub => {
-                            console.log('pushing for cousub', cousub)
                         cousubsData.push({
                             value : cousub,
                             name : get(graph, `${cousub}.name`, '')
@@ -287,7 +288,6 @@ class AvlFormsNewData extends React.Component{
                     })
             })
         }
-        console.log('geodata returning', cousubsData)
         return [countyData,cousubsData]
     }
     handleMultiSelectFilterChange(e, id, domain=[]) {
@@ -316,7 +316,6 @@ class AvlFormsNewData extends React.Component{
             }
         }
         if (!countyData.length) return null;
-        console.log('county and cousubs', cousubsData)
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
 
@@ -460,20 +459,18 @@ class AvlFormsNewData extends React.Component{
                 data.push(d)
 
         });
-        console.log('check??', this.props.config[0].page_title, this.state)
         return(
             <div className="container">
                 {get(this.props.config[0], `page_title`, null) &&
                 this.state[this.props.config[0].page_title] ?
                     <h4 className="element-header" style={{textTransform: 'capitalize'}}>
                         <label>
-                            {this.state[this.props.config[0].page_title]}
+                            {/*{get(this.state,[this.props.config[0].page_title],'Capability')}*/}
                             {config[this.props.config[0].type] ?
                                 <Link
                                     className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
-                                    to={
-                                        get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)
-                                    } target={'_blank'}
+                                    to={get(this.props.config, `[0].guidance`, `/guidance/${config[this.props.config[0].type][0].requirement}/view`)}
+                                    target={'_blank'}
                                 >?</Link>
                                 : null}
                         </label>

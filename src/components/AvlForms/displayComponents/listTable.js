@@ -327,7 +327,6 @@ class AvlFormsListTable extends React.Component{
                                                     get(this.props.config, `[0].list_attributes`, [])
                                                         .filter(la => typeof la === 'object' && Object.keys(la)[0] === f)
                                                         .map(la => la[f])
-                                                    console.log('check?',f, get(tmpAttr, `[0]`, null), this.props.config)
                                                 return ({
                                                     Header: f,
                                                     accessor: f,

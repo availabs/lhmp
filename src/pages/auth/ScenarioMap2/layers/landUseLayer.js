@@ -29,6 +29,8 @@ const IDENTITY = i => i;
 export class LandUseLayer extends MapLayer{
     onAdd(map) {
         register(this, 'USER::SET_LAND_USE_TYPE', ["landUse"]);
+        register(this,'USER:SET_LAND_USE_PROP_TYPE',['landUse']);
+        register(this, 'USER::SET_LAND_USE_SUB_PROP_TYPE',['landUse'])
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
@@ -59,6 +61,8 @@ export class LandUseLayer extends MapLayer{
     }
     receiveMessage(action, data) {
         this.landUseType = data.landUseType
+        this.landUsePropType = data.landUsePropType
+        this.landUseSubPropType = data.landUseSubPropType
         return this.fetchData().then(data => this.receiveData(data,this.map))
 
     }
@@ -106,11 +110,33 @@ export class LandUseLayer extends MapLayer{
                         return response
                     })
         }
-
     }
 
     receiveData(map,data){
         let parcelData = get(falcorGraph.getCache(),['parcel','byId'],{})
+        let filteredParcelData = {}
+        let prop_class_filter = []
+        if(this.landUsePropType){
+            if(!prop_class_filter.includes(this.landUsePropType.every(d => d))){
+                prop_class_filter.push(...this.landUsePropType)
+            }
+        }
+        if(this.landUseSubPropType){
+            if(!prop_class_filter.includes(this.landUseSubPropType.every(d => d))){
+                prop_class_filter.push(...this.landUseSubPropType)
+            }
+
+        }
+        if(prop_class_filter.length > 0){
+            filteredParcelData = Object.keys(parcelData).reduce((a, c) => {
+                prop_class_filter.forEach(prop=>{
+                    if (parcelData[c] && prop === parcelData[c].prop_class )
+                        a[c] = parcelData[c];
+                })
+                return a;
+            }, {})
+
+        }
         if(this.landUseType){
             let resultedLandUseData = []
             let coloredBuildings = {}
@@ -118,7 +144,14 @@ export class LandUseLayer extends MapLayer{
             let land_use_type_name = this.landUseType.map(d => d.name)
             let land_use_type_value = this.landUseType.map(d => d.value)
             if(land_use_type_name.includes('Owner Type')){
-                if(Object.keys(parcelData).length > 0){
+                if(Object.keys(filteredParcelData).length > 0){
+                    Object.keys(filteredParcelData).forEach(item =>{
+                        resultedLandUseData.push({
+                            id : item,
+                            value : land_use_type_value[0].reduce((a,c) => c.value === filteredParcelData[item].owner_type.toString() ? c.name : a,null)
+                        })
+                    })
+                }else if(Object.keys(parcelData).length > 0){
                     Object.keys(parcelData).forEach(item =>{
                         resultedLandUseData.push({
                             id : item,
@@ -154,7 +187,22 @@ export class LandUseLayer extends MapLayer{
                 this.forceUpdate()
             }
             if(land_use_type_name.includes('Land Use Type')){
-                if(Object.keys(parcelData).length > 0){
+                if(Object.keys(filteredParcelData).length > 0){
+                    Object.keys(filteredParcelData).forEach(item =>{
+                        if(filteredParcelData[item].prop_class){
+                            resultedLandUseData.push({
+                                id : item,
+                                value : land_use_type_value[0].reduce((a,c) => c.value.slice(0,1) === filteredParcelData[item].prop_class.slice(0,1) ? c.name : a,null)
+                            })
+                        }else{
+                            resultedLandUseData.push({
+                                id : item,
+                                value : 'None'
+                            })
+                        }
+
+                    })
+                }else if(Object.keys(parcelData).length > 0){
                     Object.keys(parcelData).forEach(item =>{
                         if(parcelData[item].prop_class){
                             resultedLandUseData.push({
@@ -170,7 +218,6 @@ export class LandUseLayer extends MapLayer{
 
                     })
                 }
-
                 this.legend.type = "ordinal"
                 this.legend.domain = land_use_type_value[0].map(d => d.name)
                 this.legend.domain.push('None')
@@ -199,7 +246,14 @@ export class LandUseLayer extends MapLayer{
                 this.forceUpdate()
             }
             if(land_use_type_name.includes('Property Value')){
-                if(Object.keys(parcelData).length > 0){
+                if(Object.keys(filteredParcelData).length > 0){
+                    Object.keys(filteredParcelData).forEach(item =>{
+                        resultedLandUseData.push({
+                            id : item,
+                            value :  filteredParcelData[item] && filteredParcelData[item].total_av || 0
+                        })
+                    })
+                }else if(Object.keys(parcelData).length > 0){
                     Object.keys(parcelData).forEach(item =>{
                         resultedLandUseData.push({
                             id : item,
