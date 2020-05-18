@@ -6,23 +6,45 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
-import {setActiveLandUseType} from "store/modules/landUse"
-import SearchableDropDown from "../components/searchableDropDown";
+import {setActiveLandUseType,setActiveLandUsePropType , setActiveLandUseSubPropType} from "store/modules/landUse"
+import MultiSelectFilter from "../../../../components/filters/multi-select-filter";
+import Container from "nivo/lib/components/charts/Container";
+
+var _ = require("lodash")
 
 class LandUseControl extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
             land_use:[],
-            land_use_id:''
+            land_use_id:'',
+            filter: {
+                domain : [],
+                value : []
+            },
+            subDropDownMeta: [],
+            sub_dropdown_filter:{},
+            prop_type:''
         }
         this.addLandUseLayer = this.addLandUseLayer.bind(this,true)
         this.handleChange= this.handleChange.bind(this)
+        this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
+        this.handleMultiSelectSubDropDownFilterChange = this.handleMultiSelectSubDropDownFilterChange.bind(this)
+        this.renderLandUsePropertySubDropDown= this.renderLandUsePropertySubDropDown.bind(this)
     }
 
     fetchFalcorDeps() {
         return this.props.falcor.get(['parcel', 'meta', ['prop_class', 'owner_type']])
             .then(response => {
+                let BuildingPropTypeList = get(response.json.parcel.meta, ['prop_class'], [])
+                if(BuildingPropTypeList.length > 0){
+                    this.setState((currentState) => ({
+                        filter :{
+                            domain : BuildingPropTypeList.filter((item) => parseInt(item.value) % 100 === 0 ? config : ''),
+                            value : currentState.filter.value ? currentState.filter.value.length > 0 ? currentState.filter.value : [] : []
+                        }
+                    }))
+                }
                 return response
             })
     }
@@ -59,26 +81,8 @@ class LandUseControl extends React.Component {
 
     }
 
-    addLandUseLayer(){
-        if(this.props.layer.layer.landUseLayer) {
-            if(this.props.layer.layer.landUseLayer.map.getZoom() < 13){
-                this.props.layer.layer.mainLayerToggleVisibilityOff(["landUse"])
-                return (
-                    <Element>
-                        <h6>For Land Use, Select a type and zoom in</h6>
-                    </Element>
-                )
-            }else{
-                if(this.props.layer.layer.landUseLayer.map.getZoom() >=13){
-                    this.props.layer.layer.mainLayerToggleVisibilityOn(["landUse"])
-                }
-            }
-        }else {
-            return null
-        }
-    }
-
     handleChange(e){
+        console.log('---',e.target.id,e.target.value,this.state);
         let land_use_list = this.landUseDropDown()
         let value = e.target.value
         land_use_list.forEach(item =>{
@@ -89,34 +93,152 @@ class LandUseControl extends React.Component {
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
 
+    handleMultiSelectFilterChange(e) {
+        let newFilter = this.state.filter;
+        let dropDownData = []
+        newFilter.value = e;
+        let prop_class_meta = get(this.props.parcelsMeta, ['prop_class', 'value'], [])
+        e.forEach(value =>{
+            let data = []
+            prop_class_meta.filter(d => d.value !== value).forEach(meta =>{
+                if(value.slice(0,1) === meta.value.slice(0,1)){
+                    data.push(meta)
+                }
+            })
+            dropDownData.push({
+                name: this.state.filter.domain.reduce((a,c) => c.value === value ? c.name : a,''),
+                value : {
+                    domain : data,
+                    value : []
+                },
+                input : this.state.filter.domain.reduce((a,c) => c.value === value ? c.value : a,'')
+            })
+        })
+        let sub_dropdown_filter = {}
+        dropDownData.map(d =>{
+            sub_dropdown_filter[d.input] = {
+                domain: d.value.domain,
+                value :   this.state.sub_dropdown_filter[d.input] ? this.state.sub_dropdown_filter[d.input].value :[]
+            }
+        })
+        this.props.setActiveLandUsePropType(e)
+        this.setState(currentState => ({
+            filter :newFilter,
+            subDropDownMeta : dropDownData,
+            sub_dropdown_filter :sub_dropdown_filter
+        }))
+    }
+
+    handleMultiSelectSubDropDownFilterChange(e,input) {
+        let newFilter = this.state.sub_dropdown_filter
+        let sub_inputs = []
+        let domain= []
+        if(e.length > 0){
+            sub_inputs.push(...e)
+            domain = this.state.sub_dropdown_filter[input].domain
+            newFilter[input].value = sub_inputs
+            newFilter[input].domain = domain
+        }else{
+            domain = this.state.sub_dropdown_filter[input].domain
+            newFilter[input].value = []
+            newFilter[input].domain = domain
+        }
+        this.props.setActiveLandUseSubPropType(sub_inputs)
+        this.setState({sub_dropdown_filter: newFilter})
+
+    }
+
+    renderLandUsePropertySubDropDown(){
+        return(
+            <div>
+                {
+                    this.state.subDropDownMeta.map((item,i) =>{
+                        return (
+                            <div key={i} >
+                            <h6>{item.name}</h6>
+                             <MultiSelectFilter
+                                    filter = {
+                                        {domain : this.state.sub_dropdown_filter[item.input].domain, value : this.state.sub_dropdown_filter[item.input].value}
+                                    }
+                                    setFilter = {(e) => {this.handleMultiSelectSubDropDownFilterChange(e,item.input)}}
+                                    placeHolder={'Select a Sub Property Type'}
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        )
+
+    }
+
+
+    renderLandUseInfoBoxDropDowns(){
+        let land_use_list = this.landUseDropDown()
+        return (
+            <div style={{display:"flex",flexDirection:"column",justifyContent:"space-evenly",align:"auto"}}>
+                <h6>Property Type :</h6>
+                <MultiSelectFilter
+                    filter = {this.state.filter}
+                    setFilter = {this.handleMultiSelectFilterChange}
+                    placeHolder={'Select a Property Type'}
+                />
+                {this.state.filter.value ? this.state.filter.value.length > 0 ? this.renderLandUsePropertySubDropDown() : null : null}
+                <br/>
+                <h6>Land Use Type :</h6>
+                <select className="form-control justify-content-sm-end"
+                        id = "land_use_id"
+                        onChange={this.handleChange}
+                        value={this.state.land_use_id}>
+                    <option key={0} value ={''}>--None Selected--</option>
+                    {land_use_list ? land_use_list.map((item,i) =>{
+                            return( <option key={i+1} value={item.label}>{item.label}</option>)
+                        })
+                        :
+                        null
+                    }
+                </select>
+            </div>
+        )
+    }
+
+    addLandUseLayer(){
+        if(this.props.layer.layer.landUseLayer) {
+            if(this.props.layer.layer.landUseLayer.map.getZoom() < 13){
+                this.props.layer.layer.mainLayerToggleVisibilityOff(["landUse"])
+                return (
+                    <div>
+                        <br/>
+                        <h6 style ={{textAlign : 'center'}}>For Land Use, Select a Land Use type and zoom in</h6>
+                        {this.renderLandUseInfoBoxDropDowns()}
+                    </div>
+                )
+            }else{
+                if(this.props.layer.layer.landUseLayer.map.getZoom() >=13){
+                    this.props.layer.layer.mainLayerToggleVisibilityOn(["landUse"])
+                    return(
+                        <div>
+                            {this.renderLandUseInfoBoxDropDowns()}
+                        </div>
+                    )
+                }
+            }
+        }else {
+            return null
+        }
+    }
+
+
 
     render() {
         let land_use_list = this.landUseDropDown()
-
         if (land_use_list && land_use_list.length > 0) {
             return (
-                <div style={{height:'auto'}}>
-                    <select className="form-control justify-content-sm-end"
-                            id = "land_use_id"
-                            onChange={this.handleChange}
-                            value={this.state.land_use_id}>
-                        <option key={0} value ={''}>--None Selected--</option>
-                        {land_use_list ? land_use_list.map((item,i) =>{
-                                return( <option key={i+1} value={item.label}>{item.label}</option>)
-                            })
-                            :
-                            null
-                        }
-                    </select>
-                    {
-                        <div>
-                            {this.addLandUseLayer(true)}
-                        </div>
-
-                    }
+                <div>
+                    {this.addLandUseLayer()}
                 </div>
             )
-        } else {
+        }else {
             return (
                 <div>
                     Loading..
@@ -133,12 +255,16 @@ const mapStateToProps = state => (
         activeGeoid:state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-       parcelsMeta: get(state.graph,['parcel','meta'],{})
+        parcelsMeta: get(state.graph,['parcel','meta'],{}),
+        activeLandUsePropType : state.landUse.landUsePropType,
+        activeLandUseSubPropType : state.landUse.landUseSubPropType
     });
 
 const mapDispatchToProps = {
     sendSystemMessage,
-    setActiveLandUseType
+    setActiveLandUseType,
+    setActiveLandUsePropType,
+    setActiveLandUseSubPropType
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(LandUseControl))

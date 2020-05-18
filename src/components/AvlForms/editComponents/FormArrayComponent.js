@@ -79,7 +79,8 @@ class FormArrayComponent extends React.PureComponent {
                             json={listNewComp[this.props.formType]}
                             id={[id]}
                             showHeader={false}
-                        />)}
+                        />)
+                    }
                 </div>
             </div>
         )

@@ -5,7 +5,8 @@ import {falcorGraph} from "../falcorGraph";
 import {login, logout, setActiveCousubid, setActiveGeoid, setActivePlan, setUserToken} from "./user";
 
 const SET_LAND_USE_TYPE = 'USER::SET_LAND_USE_TYPE';
-
+const SET_LAND_USE_PROP_TYPE = 'USER:SET_LAND_USE_PROP_TYPE'
+const SET_LAND_USE_SUB_PROP_TYPE = 'USER::SET_LAND_USE_SUB_PROP_TYPE'
 function setLandUseType(landUseType) {
     return {
         type:SET_LAND_USE_TYPE,
@@ -14,19 +15,49 @@ function setLandUseType(landUseType) {
 
 }
 
+function setLandUsePropType(landUsePropType){
+    return {
+        type : SET_LAND_USE_PROP_TYPE,
+        landUsePropType
+    }
+}
+
+function setLandUseSubPropType(landUseSubPropType){
+    return {
+        type : SET_LAND_USE_SUB_PROP_TYPE,
+        landUseSubPropType
+    }
+}
+
 export const setActiveLandUseType = (landUseType) =>{
     return (dispatch) => {
         dispatch(setLandUseType(landUseType))
     }
 };
 
+export const setActiveLandUsePropType = (landUsePropType) =>{
+    return (dispatch) => {
+        dispatch(setLandUsePropType(landUsePropType))
+    }
+};
+
+export const setActiveLandUseSubPropType = (landUseSubPropType) =>{
+    return (dispatch) =>{
+        dispatch(setLandUseSubPropType(landUseSubPropType))
+    }
+}
+
 
 export const actions = {
-    setActiveLandUseType
+    setActiveLandUseType,
+    setActiveLandUsePropType,
+    setActiveLandUseSubPropType
 };
 
 let initialState = {
-    landUseType:[]
+    landUseType:[],
+    landUsePropType : [],
+    LandUseSubPropType : []
 };
 
 const ACTION_HANDLERS = {
@@ -40,6 +71,23 @@ const ACTION_HANDLERS = {
         return newState
     },
 
+    [SET_LAND_USE_PROP_TYPE] :(state =initialState, action) => {
+        const newState = Object.assign({}, state)
+        if(action.landUsePropType) {
+            newState.landUsePropType = action.landUsePropType;
+            localStorage.setItem('landUsePropType', newState.landUsePropType);
+        }
+        return newState
+    },
+
+    [SET_LAND_USE_SUB_PROP_TYPE] : (state =initialState, action) => {
+        const newState = Object.assign({}, state)
+        if(action.landUseSubPropType) {
+            newState.landUseSubPropType = action.landUseSubPropType;
+            localStorage.setItem('landUseSubPropType', newState.landUseSubPropType);
+        }
+        return newState
+    }
 
 };
 

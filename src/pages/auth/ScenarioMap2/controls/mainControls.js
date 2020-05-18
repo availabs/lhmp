@@ -201,6 +201,7 @@ class MainControls extends React.Component {
                                 >
                                     <span aria-hidden="true"> ×</span>
                                 </button>
+                                <br/>
                                 <LandUseControl
                                     layer = {this.props}
                                 />
