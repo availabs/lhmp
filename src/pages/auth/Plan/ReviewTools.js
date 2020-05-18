@@ -15,9 +15,6 @@ ${(props) => props.theme.scrollBar};
 overflow: auto;
 width: 100%;
 height: 65vh;
-table {
-  position: relative;
-}
 th {
   background: #fff;
   position: sticky;
