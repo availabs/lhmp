@@ -73,7 +73,7 @@ class FormArrayComponent extends React.PureComponent {
                     />
                 </div>
                 <div>
-                    Current ids: {this.state.result}
+                    Current ids: {this.state.result.join()}
                     {this.state.result.map(id =>
                         <AvlFormsViewData
                             json={listNewComp[this.props.formType]}
