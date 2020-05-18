@@ -30,12 +30,11 @@ class AdminLanding extends React.Component {
     }
 
     render() {
-        let geoInfo = get(falcorGraph.getCache(), `geo`, null);
         let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
 
         return functions.render(config,
             this.props.user,
-            geoInfo,
+            this.props.geoGraph,
             this.props.setActiveCousubid,
             this.props.activeCousubid,
             allowedGeos,

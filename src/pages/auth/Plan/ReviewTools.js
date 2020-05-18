@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import {falcorGraph} from "store/falcorGraph";
-import config from './config/strategies-config'
+import config from './config/guidance-config'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import functions from "./functions";
 import {setActiveCousubid} from 'store/modules/user'
 import get from "lodash.get";
-class AdminStrategies extends React.Component {
+
+class PlanReview extends React.Component {
 
     constructor(props) {
         super(props);
@@ -37,7 +38,7 @@ class AdminStrategies extends React.Component {
             this.props.setActiveCousubid,
             this.props.activeCousubid,
             allowedGeos,
-            this.props.match.params.reqId, '/plan/strategies/')
+            this.props.match.params.reqId, '/guidance/')
     }
 }
 
@@ -53,11 +54,11 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan/strategies/',
+    path: '/plan_review/',
     exact: true,
-    name: 'Strategies',
+    name: 'Plan Review',
     auth: true,
-    authLevel: 1,
+    authLevel: 5,
     mainNav: false,
     menuSettings: {
         image: 'none',
@@ -66,23 +67,6 @@ export default [{
         layout: 'menu-layout-mini',
         style: 'color-style-default'
     },
-    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminStrategies))
-},
-    {
-        icon: 'os-icon-pencil-2',
-        path: '/plan/strategies/:reqId',
-        exact: true,
-        name: 'Strategies',
-        auth: true,
-        authLevel: 1,
-        mainNav: false,
-        menuSettings: {
-            image: 'none',
-            scheme: 'color-scheme-light',
-            position: 'menu-position-left',
-            layout: 'menu-layout-mini',
-            style: 'color-style-default'
-        },
-        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AdminStrategies))
-    }];
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(PlanReview))
+}];
 

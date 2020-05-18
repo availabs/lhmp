@@ -12,6 +12,9 @@ import criticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
 import inventoryTableViewer from './inventoryTableViewer'
 import evacuationRoutesViewer from "./evacuationRoutesViewer";
 import capabilityEvaluationTableViewer from "./capabilityEvaluationTableViewer";
+import shelterListTableViewer from "./shelterListTableViewer";
+import actionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
+import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 
 
 const NA = ({ type, state, routes }) =>
@@ -25,6 +28,8 @@ const NA = ({ type, state, routes }) =>
 }
 
 const NE = ((props) => (<div>{props.type} Doesn't Exist</div>))
+
+const ActionsFilteredListTableViewerFunc = (rest) => <ActionsFilteredListTableViewer edit={true} {...rest}/>
 export default {
     NA,
     NE,
@@ -41,6 +46,9 @@ export default {
     inventoryTableViewer,
     evacuationRoutesViewer,
     capabilityEvaluationTableViewer,
+    shelterListTableViewer,
+    actionsFilteredListTableViewer,
+    actionsFilteredListTableEditor: ActionsFilteredListTableViewerFunc,
     capabilityEvaluationTableEditor: capabilityEvaluationTableViewer,
     evacuationRoutesEditor:evacuationRoutesViewer,
     criticalFacilitiesTableEditor: criticalFacilitiesTableViewer,

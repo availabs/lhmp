@@ -64,11 +64,18 @@ class AvatarUser extends Component {
                             }
 
                             {this.props.user.authLevel >= 5 ?
-                                    <li>
-                                        <a href='/user/admin'>
-                                            <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> User Admin </span>
-                                        </a>
-                                    </li>
+                                    <React.Fragment>
+                                        <li>
+                                            <a href='/user/admin'>
+                                                <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> User Admin </span>
+                                            </a>
+                                        </li>
+                                        <li style={{width: 'max-content'}}>
+                                            <a href='/plan_review'>
+                                                <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Review Tools </span>
+                                            </a>
+                                        </li>
+                                    </React.Fragment>
                                  : null
                             }
                             {this.props.user.authLevel >= 1 ? // check for current plan and not in general
@@ -155,11 +162,18 @@ class AvatarUserMobile extends Component {
                             }
 
                             {this.props.user.authLevel >= 5 ?
-                                <li>
-                                    <a href='/user/admin'>
-                                        User Admin
-                                    </a>
-                                </li>
+                                <React.Fragment>
+                                    <li>
+                                        <a href='/user/admin'>
+                                            User Admin
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='/plan_review'>
+                                            Review Tools
+                                        </a>
+                                    </li>
+                                </React.Fragment>
                                 : null
                             }
                             {this.props.user.authLevel >= 1 ? // check for current plan and not in general

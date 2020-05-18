@@ -1,7 +1,5 @@
-
 // -- Landing Routes
 import Landing from './pages/Landing'
-
 // -- Public Pages
 import Public from './pages/Public/Home/'
 import About from './pages/Public/PlanningProcess/'
@@ -9,14 +7,12 @@ import Hazards from './pages/Public/Hazards/'
 import Hazards2 from './pages/Public/Hazards/new'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
 import Strategies from './pages/Public/Strategies/'
-
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import EvacuationRoutes from 'pages/auth/EvacuationRoutes/'
 import CommentMap from 'pages/auth/CommentMap/index'
 import Home from 'pages/auth/Home';
-
 // -- Actions
 import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
@@ -40,12 +36,13 @@ import PlanningToolsCapabilities from 'pages/auth/Capabilities/index'
 import PlanningToolsAssets from 'pages/auth/Assets/index'
 import Guidance from 'pages/auth/Plan/Guidance'
 import GuidanceView from 'pages/auth/Plan/GuidanceView'
+import ReviewTools from 'pages/auth/Plan/ReviewTools'
+
 
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
-import CapabilitiesFormsIndex from 'pages/auth/Capabilities/'
 import CapabilitiesFormsView from 'pages/auth/Capabilities/capability_forms/view'
 import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
 //import RolesIndex from 'pages/auth/Roles/'
@@ -74,69 +71,71 @@ import Logout from './pages/Logout'
 import NoMatch from './pages/404.js'
 
 import test from './pages/Test'
+
 const routes = [
     test,
-  Landing,
-  Home,
-  Login,
-  Signup,
-   //...SignUpForms,
-   ...ResetPassword,
-   ...ActionsFormIndex,
-   ...ActionsFormView,
-   ...ActionsWorksheetFormNew,
-   ...ActionsStatusUpdateForms,
-   
-   ...Plans,
-   ...Plan,
-   ...AdminAbout,
-   ...PlanHazards,
-   ...AdminRisk,
-   ...AdminStrategies,
-    ...AdminLandingPage,
-   ...PlanPage,
+    Landing,
+    Home,
+    Login,
+    Signup,
+    //...SignUpForms,
+    ...ResetPassword,
+    ...ActionsFormIndex,
+    ...ActionsFormView,
+    ...ActionsWorksheetFormNew,
+    ...ActionsStatusUpdateForms,
 
-   ...PlanningToolsRoles,
-   ...PlanningToolsCapabilities,
-   ...PlanningToolsAssets,
-   ...Guidance,
-   ...GuidanceView,
-   ...AssetsSearch,
-   ...AssetsView,
-   ...AssetsEdit,
-   ...AssetsListByTypeByHazard,
-   //...CapabilitiesFormsIndex,
-   ...CapabilitiesFormsView,
-   ...CapabilitiesFormsNew,
-   //...RolesIndex,
-   ...RolesFormsList,
-   ...RolesFormView,
-   ...RolesFormNew,
-   ...Public,
-   ...About,
-   ...Hazards,
-   ...Hazards2,
-   ...Risk,
-   ...Strategies,
-   ...User,
-   ...Admin,
-   ...FormEditOrNew,
-   //...Participation,
-   ...ParticipationListView,
-   ...ParticipationView,
-   ...ParticipationFromsNew,
-   //...ParticipationNew,
-   ...ParticipationMeetingView,
-   ...ParticipationUserRoles,
-   ...ZonesFormsList,
-   ...ZonesFormsView,
-  PlanIndex,
-  RiskMap,
-  ScenarioMap2,
-  CommentMap,
-  EvacuationRoutes,
-  Logout,
-  NoMatch
+    ...Plans,
+    ...Plan,
+    ...AdminAbout,
+    ...PlanHazards,
+    ...AdminRisk,
+    ...AdminStrategies,
+    ...AdminLandingPage,
+    ...PlanPage,
+
+    ...PlanningToolsRoles,
+    ...PlanningToolsCapabilities,
+    ...PlanningToolsAssets,
+    ...Guidance,
+    ...GuidanceView,
+    ...ReviewTools,
+    ...AssetsSearch,
+    ...AssetsView,
+    ...AssetsEdit,
+    ...AssetsListByTypeByHazard,
+    //...CapabilitiesFormsIndex,
+    ...CapabilitiesFormsView,
+    ...CapabilitiesFormsNew,
+    //...RolesIndex,
+    ...RolesFormsList,
+    ...RolesFormView,
+    ...RolesFormNew,
+    ...Public,
+    ...About,
+    ...Hazards,
+    ...Hazards2,
+    ...Risk,
+    ...Strategies,
+    ...User,
+    ...Admin,
+    ...FormEditOrNew,
+    //...Participation,
+    ...ParticipationListView,
+    ...ParticipationView,
+    ...ParticipationFromsNew,
+    //...ParticipationNew,
+    ...ParticipationMeetingView,
+    ...ParticipationUserRoles,
+    ...ZonesFormsList,
+    ...ZonesFormsView,
+    PlanIndex,
+    RiskMap,
+    ScenarioMap2,
+    CommentMap,
+    EvacuationRoutes,
+    Logout,
+    NoMatch
 
 ]
 export default {

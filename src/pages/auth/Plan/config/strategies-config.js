@@ -193,7 +193,8 @@ const config = {
         {
             title: '',
             requirement: 'Req-NYS-F-4B',
-            type: '',
+            type: 'shelterListTable',
+            align: 'full',
             prompt: '',
             intent: '',
             icon: 'os-icon-share-2',
@@ -206,7 +207,9 @@ const config = {
         {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
-            type: 'form',
+            type: 'actionsFilteredListTable',
+            filterBy: ['Proposed-New'],
+            align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
                 ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
                 ' assessment, and 2) identifies the actions and/or projects that the jurisdiction intends to implement.' +
@@ -228,7 +231,9 @@ const config = {
         {
             title: 'Updated Actions',
             requirement: 'Req-D-2',
-            type: 'form',
+            type: 'actionsFilteredListTable',
+            filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
+            align: 'full',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
                 ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
                 ' whether the action is no longer relevant or be included as part of the updated action plan.',
