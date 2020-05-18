@@ -109,7 +109,7 @@ export default [{
         image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-left',
-        layout: 'menu-layout-mini',
+        layout: 'menu-layout-compact',
         style: 'color-style-default'
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(PlanReview))
