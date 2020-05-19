@@ -82,7 +82,12 @@ class AvlFormsNewData extends React.Component{
                                     tmp_state[attribute] = undefined
                                 }
                             }else{
-                                tmp_state[attribute] = graph.attributes[attribute]
+                                if(graph.attributes[attribute] && graph.attributes[attribute].includes("[")){
+                                    tmp_state[attribute] = graph.attributes[attribute].slice(1,-1).split(",")
+                                }else{
+                                    tmp_state[attribute] = graph.attributes[attribute]
+                                }
+
                             }
 
                         });
@@ -173,6 +178,23 @@ class AvlFormsNewData extends React.Component{
         let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
             let attributes = Object.keys(this.state)
+            let action_status_update = []
+            Object.keys(this.state).forEach(attribute =>{
+                if(attribute === 'action_status_update'){
+                    action_status_update = this.state[attribute]
+                }
+            })
+            let edit_attributes = Object.keys(this.state).reduce((a,c) =>{
+                if(this.state[c]){
+                    if(typeof this.state[c] === "object"){
+                        a[c] = '['+this.state[c].toString()+']'
+                    }else{
+                        a[c] = this.state[c]
+                    }
+                }
+                return a;
+            },{})
+
             return this.props.falcor.set({
                 paths: [
                     ['forms', 'byId',this.props.id[0],'attributes',attributes]
@@ -181,14 +203,13 @@ class AvlFormsNewData extends React.Component{
                     forms:{
                         byId:{
                             [this.props.id[0]] : {
-                                attributes : _.pickBy(this.state,Object.values(this.state).forEach(d => d !== undefined))
+                                attributes : edit_attributes
                             }
                         }
                     }
                 }
             })
                 .then(response => {
-                    console.log('respponse',response)
                     this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
                 })
 
@@ -224,11 +245,15 @@ class AvlFormsNewData extends React.Component{
                     }
 
                 }else{
-                    attributes[item] = this.state[item]
+                    if(typeof this.state[item] === "object"){
+                        attributes[item] = "[" + this.state[item].toString() +"]"
+                    }else{
+                        attributes[item] = this.state[item]
+                    }
                 }
             });
-            args.push(type[0],plan_id,attributes);
 
+            args.push(type[0],plan_id,attributes);
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
                     if (this.props.returnValue){

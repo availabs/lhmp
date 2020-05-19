@@ -22,11 +22,12 @@ class TextComponent extends React.PureComponent {
                             showTable = false;
                             return (
                                 get(data, `[${d}].value`, '').split(',')
-                                    .map(value =>
+                                    .map((value,i) =>
                                         <AvlFormsViewData
                                             json = {listNewComp[data[d].formType]}
                                             id = {[value]}
                                             showHeader={false}
+                                            key={i}
                                         />
                                         )
                             )
@@ -126,7 +127,7 @@ class TextComponent extends React.PureComponent {
                                     <div className='element-wrapper'>
                                         <div className='element-box'>
                                             {
-                                                this.props.config[0].sections.filter((s, sI) => sI % 2 !== 0).map(section => this.renderSection(section, data))
+                                                this.props.config[0].sections.filter((s, sI) => sI % 2 !== 0).map((section,i) => this.renderSection(section, data))
                                             }
                                         </div>
                                     </div>

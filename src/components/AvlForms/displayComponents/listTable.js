@@ -95,16 +95,24 @@ class AvlFormsListTable extends React.Component{
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
-
         if(graph){
             if(combine_list_attributes[0] === undefined){
                 Object.keys(graph).forEach(item =>{
+
                     let data = {};
                     formAttributes.forEach(attribute =>{
                         if(graph[item].value && graph[item].value.attributes){
                             if(this.state.form_ids.includes(item)){
                                 data['id'] = item;
-                                data[attribute] = graph[item].value.attributes[attribute] || ' ';
+                                if(graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string"){
+                                    if(graph[item].value.attributes[attribute].includes("[")){
+                                        data[attribute] = graph[item].value.attributes[attribute].slice(1,-1)
+                                    }else{
+                                        data[attribute] = graph[item].value.attributes[attribute]
+                                    }
+                                }else{
+                                    data[attribute] = graph[item].value.attributes[attribute] || ' ';
+                                }
                                 ['view', 'edit']
                                     .filter(f => this.props[f+'Button'] === true || this.props[f+'Button'] === undefined)
                                     .forEach(f => {
@@ -123,6 +131,7 @@ class AvlFormsListTable extends React.Component{
 
                         }
                     });
+                    //console.log('data',data)
                     listViewData.push(data)
 
                 });
@@ -146,7 +155,15 @@ class AvlFormsListTable extends React.Component{
                         if(graph[item].value && graph[item].value.attributes){
                             if(this.state.form_ids.includes(item)){
                                 data['id'] = item
-                                data[attribute] = graph[item].value.attributes[attribute] || ' '
+                                if(graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string"){
+                                    if(graph[item].value.attributes[attribute].includes("[")){
+                                        data[attribute] = graph[item].value.attributes[attribute].slice(1,-1)
+                                    }else{
+                                        data[attribute] = graph[item].value.attributes[attribute]
+                                    }
+                                }else{
+                                    data[attribute] = graph[item].value.attributes[attribute] || ' ';
+                                }
                                 let value = Object.keys(initial_data).filter(d => d !== 'id').map(function(k)
                                 {
                                     if(initial_data['id'] === item)

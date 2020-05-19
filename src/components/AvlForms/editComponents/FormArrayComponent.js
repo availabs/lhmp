@@ -12,7 +12,7 @@ class FormArrayComponent extends React.PureComponent {
         super(props);
         this.state = {
             renderNewComp: false,
-            result: this.props.state[this.props.title] || []
+            result: this.props.state[this.props.title]
         }
         this.addButton = this.addButton.bind(this)
         this.cancelButton = this.cancelButton.bind(this)
@@ -53,6 +53,7 @@ class FormArrayComponent extends React.PureComponent {
     }
 
     render() {
+        //console.log('check',this.props.state[this.props.title].slice(1,-1).split(",") || [])
         let colummMapping = Object.keys(this.props.state).reduce((a, c) => {
             if (Object.keys(get(this.props, `columnMap`, {})).includes(c)) {
                 a[c] = this.props.state[c];
@@ -74,12 +75,18 @@ class FormArrayComponent extends React.PureComponent {
                 </div>
                 <div>
                     Current ids: {this.state.result.join()}
-                    {this.state.result.map(id =>
-                        <AvlFormsViewData
-                            json={listNewComp[this.props.formType]}
-                            id={[id]}
-                            showHeader={false}
-                        />)
+                    {this.state.result.map(id =>{
+                        return(
+                            <div>
+                                <AvlFormsViewData
+                                    json={listNewComp[this.props.formType]}
+                                    id={[id]}
+                                    showHeader={false}
+                                />
+                            </div>
+                        )
+                    }
+                        )
                     }
                 </div>
             </div>

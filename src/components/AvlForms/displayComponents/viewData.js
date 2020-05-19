@@ -18,12 +18,26 @@ let cousub = '';
 class AvlFormsViewData extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            id : ''
+        }
     }
 
     fetchFalcorDeps(){
-        return this.props.falcor.get(['forms','byId',this.props.id])
+        let id = []
+        if(this.props.id[0].includes("[")){
+            id = this.props.id[0].substr(1)
+        }else if(this.props.id[0].includes("]")){
+            id = this.props.id[0].substring(0, this.props.id[0].length - 1);
+        }else{
+            id = this.props.id
+        }
+        return this.props.falcor.get(['forms','byId',id])
             .then(response =>{
-                let graph = response.json.forms.byId[this.props.id].attributes;
+                this.setState({
+                    id : id
+                })
+                let graph = response.json.forms.byId[id].attributes;
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item => {
                     let value = graph[item];
                     if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
@@ -53,7 +67,7 @@ class AvlFormsViewData extends React.Component{
     }
 
     formsViewData(){
-        let graph = this.props.formsViewData[this.props.id];
+        let graph = this.props.formsViewData[this.state.id];
         let geoData = this.props.geoData;
         let data = [];
         let config_attributes = this.props.config.map(d => Object.keys(d.attributes));
