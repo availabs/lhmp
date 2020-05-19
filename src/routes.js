@@ -37,6 +37,7 @@ import PlanningToolsAssets from 'pages/auth/Assets/index'
 import Guidance from 'pages/auth/Plan/Guidance'
 import GuidanceView from 'pages/auth/Plan/GuidanceView'
 import ReviewTools from 'pages/auth/Plan/ReviewTools'
+import ReviewRequirement from 'pages/auth/Plan/ReviewRequirement'
 
 
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
@@ -100,6 +101,7 @@ const routes = [
     ...Guidance,
     ...GuidanceView,
     ...ReviewTools,
+    ...ReviewRequirement,
     ...AssetsSearch,
     ...AssetsView,
     ...AssetsEdit,
