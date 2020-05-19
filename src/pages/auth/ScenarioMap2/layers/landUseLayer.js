@@ -159,7 +159,7 @@ export class LandUseLayer extends MapLayer{
                         })
                     })
                 }
-
+                this.legend.vertical = true
                 this.legend.type = "ordinal"
                 this.legend.domain = land_use_type_value[0].map(d => d.name)
                 this.legend.range = getColorRange(11, "Set3");
@@ -218,6 +218,7 @@ export class LandUseLayer extends MapLayer{
 
                     })
                 }
+                this.legend.vertical = true
                 this.legend.type = "ordinal"
                 this.legend.domain = land_use_type_value[0].map(d => d.name)
                 this.legend.domain.push('None')
@@ -261,9 +262,10 @@ export class LandUseLayer extends MapLayer{
                         })
                     })
                 }
+                this.legend.vertical = false;
                 this.legend.type = "linear"
                 this.legend.range = getColorRange(8, "YlGn");
-                this.legend.vertical = false;
+                this.legend.domain =[0,50000,100000,200000,500000,1000000,5000000]
                 if(resultedLandUseData.length > 0) {
                     const colorScale = this.getColorScale(resultedLandUseData),
                         colors = resultedLandUseData.reduce((a, c) => {
@@ -364,7 +366,6 @@ export const LandUseOptions =  (options = {}) => {
             range: [],
             active: true,
             domain: [0,50000,100000,200000,500000,1000000,5000000],
-            //[0,50000,100000,200000,500000,1000000,5000000]
             format: fnum
         },
         onClick:{
