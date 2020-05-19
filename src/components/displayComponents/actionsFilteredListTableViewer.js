@@ -71,7 +71,9 @@ class inventoryTableViewer extends Component {
                                     .filter(f => get(this.props, `filterBy`, []).includes(f.status))
                                     .map(f => f.id)
                             Object.keys(graph).filter(d => d !== '$__path').forEach(id => {
-                                if (_.intersection(get(graph, `[${id}].attributes.action_status_update`, []),
+                                console.log('check??', typeof get(graph, `[${id}].attributes.action_status_update`, []))
+                                if (_.intersection(
+                                    get(graph, `[${id}].attributes.action_status_update`, "[]").slice(1,-1).split(","),
                                     allowed_action_status).length){
                                     ids.push(graph[id].id)
                                 }
