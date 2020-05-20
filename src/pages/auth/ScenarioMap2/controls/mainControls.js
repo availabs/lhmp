@@ -9,16 +9,22 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import ScenarioControl from "./scenarioControl";
 import ZoneControl from "./zoneControls";
-import ProjectControl from "./projectControl"
 import LandUseControl from "./landUseControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
-
+import styled from "styled-components";
 var _ = require('lodash');
 const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'}];
-//,{id:'projects',title:'Project'}
 const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'}]
-//{id:'projects_block',title:'Projects'},
+
+const DROPDOWN = styled.div`
+                  select,button {
+                    color: #000000;
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                    width:100%;
+                    padding: 0px;
+                   }`
 
 class MainControls extends React.Component {
     constructor(props) {
@@ -93,8 +99,7 @@ class MainControls extends React.Component {
 
     renderLayersDropDown(){
         return (
-            <div style={{height:'50px',display:'flex',alignSelf: 'auto'}}>
-                <h5>Add a Layer - </h5>
+            <DROPDOWN>
                 <SearchableDropDown
                     data={this.state.showLayers === ['landUse'] ? AllModes.filter(d => !this.state.activeMode.includes(d.value)) : AllModes.filter(d => this.state.showLayers.includes(d.value))}
                     placeholder={'Add Layer'}
@@ -107,12 +112,11 @@ class MainControls extends React.Component {
                                 showLayers : _.pull(this.state.showLayers,value)
                             }))
                         this.handleChange(value)
-
                     }}
-
-
+                    width={'100%'}
                 />
-            </div>
+            </DROPDOWN>
+
         )
     }
 
@@ -120,6 +124,7 @@ class MainControls extends React.Component {
         return (
             <div style={{'overflowX':'auto'}}>
                 {this.renderLayersDropDown()}
+                <br/>
                 {AllBlocks.map((block,i) =>{
                     if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'scenario'){
                         return (
