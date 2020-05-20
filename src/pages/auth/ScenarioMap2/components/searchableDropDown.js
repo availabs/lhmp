@@ -21,8 +21,8 @@ const options = [
 const { colors } = defaultTheme;
 
 const selectStyles = {
-    control: provided => ({ ...provided, minWidth: 240, margin: 8 }),
-    menu: () => ({ boxShadow: 'inset 0 1px 0 rgba(0, 0, 0, 0.1)' }),
+    control: provided => ({ ...provided, minWidth: 240, margin: 8}),
+    menu: () => ({ boxShadow: 'inset 0 1px 0 rgba(0, 0, 0, 0.1)'}),
 };
 
 class searchableDropDown extends Component {
@@ -115,7 +115,7 @@ const Blanket = props => (
     />
 );
 const Dropdown = ({ children, isOpen, target, onClose }) => (
-    <div css={{ position: 'relative' }}>
+    <div css={{ position: 'relative'}}>
         {target}
         {isOpen ? <Menu>{children}</Menu> : null}
         {isOpen ? <Blanket onClick={onClose} /> : null}
