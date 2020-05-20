@@ -143,8 +143,9 @@ class LandUseControl extends React.Component {
             newFilter[input].value = []
             newFilter[input].domain = domain
         }
-        this.props.setActiveLandUseSubPropType(sub_inputs)
+        this.props.setActiveLandUseSubPropType(Object.keys(newFilter).map(value => newFilter[value].value).flat(1))
         this.setState({sub_dropdown_filter: newFilter})
+
 
     }
 

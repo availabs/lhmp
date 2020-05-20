@@ -20,6 +20,7 @@ import { fnum } from "utils/sheldusUtils"
 import MapLayer from "components/AvlMap/MapLayer.js"
 import { getColorRange } from "constants/color-ranges";
 import {register, unregister} from "../../../../components/AvlMap/ReduxMiddleware";
+import {filter} from "fuzzy";
 var _ = require('lodash')
 
 
@@ -59,10 +60,11 @@ export class LandUseLayer extends MapLayer{
     onRemove(map) {
         unregister(this);
     }
+
     receiveMessage(action, data) {
         this.landUseType = data.landUseType
-        this.landUsePropType = data.landUsePropType
-        this.landUseSubPropType = data.landUseSubPropType
+        this.landUsePropType = data.landUsePropType || []
+        this.landUseSubPropType = data.landUseSubPropType || []
         return this.fetchData().then(data => this.receiveData(data,this.map))
 
     }
@@ -105,7 +107,8 @@ export class LandUseLayer extends MapLayer{
 
     fetchData(){
         if(this.selection){
-            return falcorGraph.get(['parcel','byId',this.selection,['owner_type','prop_class','total_av']])
+            return falcorGraph.get(['parcel','byId',this.selection,['owner_type','prop_class','total_av']],
+                ['parcel','meta',['prop_class']])
                     .then(response =>{
                         return response
                     })
@@ -115,28 +118,44 @@ export class LandUseLayer extends MapLayer{
     receiveData(map,data){
         let parcelData = get(falcorGraph.getCache(),['parcel','byId'],{})
         let filteredParcelData = {}
-        let prop_class_filter = []
-        if(this.landUsePropType){
-            if(!prop_class_filter.includes(this.landUsePropType.every(d => d))){
-                prop_class_filter.push(...this.landUsePropType)
-            }
+        let prop_class_filters = []
+        let final_filters = []
+        if(!prop_class_filters.includes(this.landUsePropType.every(d => d)) || !prop_class_filters.includes(this.landUseSubPropType.every(d => d))){
+            prop_class_filters.push(...this.landUsePropType,...this.landUseSubPropType)
         }
-        if(this.landUseSubPropType){
-            if(!prop_class_filter.includes(this.landUseSubPropType.every(d => d))){
-                prop_class_filter.push(...this.landUseSubPropType)
-            }
+        prop_class_filters.forEach(filter =>{
+            if(!final_filters.includes(filter % 100 === 0) && !final_filters.includes(filter.slice(0,1)+'00')){
+                final_filters.push(filter)
+            }else{
+                _.pull(final_filters,filter.slice(0,1)+'00')
+                final_filters.push(filter)
 
-        }
-        if(prop_class_filter.length > 0){
+            }
+        })
+
+        if(final_filters.length > 0){
             filteredParcelData = Object.keys(parcelData).reduce((a, c) => {
-                prop_class_filter.forEach(prop=>{
-                    if (parcelData[c] && prop === parcelData[c].prop_class )
-                        a[c] = parcelData[c];
+                final_filters.forEach(prop=>{
+                    if(parseInt(prop) % 100 === 0){
+                        if(get(parcelData[c],['prop_class'],'') && get(parcelData[c],['prop_class'],'').slice(0,1) === prop.slice(0,1)){
+                            a[c] = parcelData[c];
+                        }
+                    }else{
+                        if(get(parcelData[c],['prop_class'],'') && get(parcelData[c],['prop_class'],'') === prop){
+                            a[c] = parcelData[c];
+                        }
+                    }
+
                 })
                 return a;
             }, {})
-
+        }else{
+            filteredParcelData = parcelData
         }
+        this.map.setFilter(
+            'parcels', ["in", "OBJECTID", ...Object.keys(filteredParcelData).map(d => +d)]
+        )
+
         if(this.landUseType){
             let resultedLandUseData = []
             let coloredBuildings = {}
