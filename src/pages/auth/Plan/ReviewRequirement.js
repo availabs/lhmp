@@ -100,9 +100,9 @@ export default [{
     authLevel: 5,
     mainNav: false,
     breadcrumbs: [
-        {name: 'Review Requirement', path: '/review_requirement/'},
+        {name: 'Review Requirement', path: '/plan_review/'},
         {param: 'req', path: '/review_requirement/'},
-        {param: 'geo', path: '/review_requirement/:req/'},
+        {param: 'geo', path: '/review_requirement/req/'},
     ],
     menuSettings: {
         image: 'none',

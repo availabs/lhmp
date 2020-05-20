@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
+import get from 'lodash.get'
 import {Editor} from 'react-draft-wysiwyg';
 import {ContentState, convertToRaw, EditorState} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -8,9 +9,14 @@ import htmlToDraft from 'html-to-draftjs';
 import {sendSystemMessage} from 'store/modules/messages';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './contentEditor.css'
+import styled from "styled-components";
 
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
-
+const DIV = styled.div`
+    * {
+        ${props => props.theme.scrollBar}
+    }
+`
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
@@ -40,16 +46,18 @@ class ContentEditor extends Component {
                 this.setState({'currentKey': contentId});
 
                 let content = contentRes.json.content.byId[contentId].body;
+                let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
+
                 if (content) {
                     const contentBlock = htmlToDraft(content);
                     if (contentBlock) {
                         const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
                         let editorState = EditorState.createWithContent(contentState);
-                        this.setState({'editorState': editorState})
+                        this.setState({'editorState': editorState, status: status, statusFromDb: status})
                     }
                 }
             }else{
-                this.setState({'editorState': EditorState.createEmpty()})
+                this.setState({'editorState': EditorState.createEmpty(), status: '', statusFromDb: ''})
                 this.setState({contentFromDB: null})
                 this.setState({'currentKey': contentId});
             }
@@ -73,10 +81,11 @@ class ContentEditor extends Component {
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
         let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
         let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
-        if (html !== this.state.contentFromDB) {
+        let attributes = this.state.status ? '{"status": "' + this.state.status +'"}' : '{}';
+        if (html !== this.state.contentFromDB || this.state.statusFromDb !== this.state.status) {
             if (this.state.contentFromDB) {
                 // update
-                let args = {'content_id': `${contentId}`, 'attributes': '{}', 'body': `${html}`};
+                let args = {'content_id': `${contentId}`, 'attributes': attributes, 'body': `${html}`};
                 this.props.falcor.set({
                     paths: [
                         ['content', 'byId', [contentId], COLS]
@@ -96,7 +105,7 @@ class ContentEditor extends Component {
             } else {
                 // insert
                 this.props.falcor.call(
-                    ['content', 'insert'], [contentId, '{}', html], [], []
+                    ['content', 'insert'], [contentId, attributes, html], [], []
                 ).then(response => {
                     response.error ?
                         this.props.sendSystemMessage(`Error occurred. Please try again later.`, {type: "danger"}) :
@@ -109,7 +118,7 @@ class ContentEditor extends Component {
 
     loadEditor(editorState){
         return (
-            <div>
+            <DIV>
                 <Editor
                     editorState={editorState}
                     toolbarClassName="toolbar"
@@ -120,7 +129,20 @@ class ContentEditor extends Component {
                 <a className='hoverable btn btn-primary step-trigger-btn'
                    onClick={this.handleSubmit}
                 >Submit</a>
-            </div>
+                <div style={{width: 'fit-content', float: 'right'}}>
+                    <label className='selectLabel'>Status: </label>
+                    <select
+                        className='dropdownSelect hoverable btn btn-outline-primary btn-primary step-trigger-btn'
+                        id={'status'}
+                        value={this.state.status}
+                        onChange={(e)=> this.setState({status: e.target.value})}
+                    >
+                        <option key={0} value={''}></option>
+                        <option key={1} value={'Started'}>Started</option>
+                        <option key={2} value={'Ready for review'}>Ready for review</option>
+                    </select>
+                </div>
+            </DIV>
         )
     }
     render() {

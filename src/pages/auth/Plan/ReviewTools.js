@@ -1,14 +1,15 @@
 import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import {setActiveCousubid} from 'store/modules/user'
+import _ from 'lodash'
 import get from "lodash.get";
 import config from "./config/review-config";
-import Element from "../../../components/light-admin/containers/Element";
-import ElementBox from "../../../components/light-admin/containers/ElementBox";
 import styled from "styled-components";
 import functions from "./functions";
+import Element from "../../../components/light-admin/containers/Element";
+import ElementBox from "../../../components/light-admin/containers/ElementBox";
+import megaConfig from "./config/megaConfig";
 
 const DIV = styled.div`
 ${(props) => props.theme.scrollBar};
@@ -32,6 +33,12 @@ class PlanReview extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (!_.isEqual(this.state.contentData, prevState.contentData)) {
+            this.forceUpdate()
+        }
+    }
+
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
         return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
@@ -41,6 +48,29 @@ class PlanReview extends React.Component {
                         [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
                         ['name']],
                 )
+            })
+            .then(() => {
+                let allGeos =
+                    [this.props.activeGeoid,
+                        ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
+                let allReq = [];
+                config.elements.forEach(element =>
+                    allReq.push(...element.requirements_from_software.split(',')
+                        .filter(r => r.length)
+                        .map(r => r.trim())))
+                let contentIds = []
+                allGeos.map(geo => allReq.map(req => contentIds.push(req + '-' + this.props.activePlan + '-' + geo)));
+                return this.props.falcor.get(
+                    ['content', 'byId', contentIds, ['content_id', 'attributes']]
+                ).then(r => this.setState({
+                    contentData:
+                        Object.keys(r.json.content.byId)
+                            .filter(k => r.json.content.byId[k] && k !== '$__path')
+                            .reduce((a, c) => {
+                                a[c] = r.json.content.byId[c];
+                                return a;
+                            }, {})
+                }))
             })
     }
 
@@ -62,9 +92,26 @@ class PlanReview extends React.Component {
                             <tr>
                                 <td style={{width: 'max-content'}}>{functions.formatName(get(this.props.geoGraph, `${geo}.name`, 'N/A'), geo)}</td>
                                 {
-                                    config.elements.map(element =>
-                                        <td onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}>
-                                        </td>)
+                                    config.elements.map(element => {
+                                            let allStatus =
+                                                element.requirements_from_software.split(',')
+                                                    .map(r => r.trim())
+                                                    .filter(r => r.length)
+                                                    .filter(r => get(megaConfig.filter(mc => {
+                                                            return mc.requirement === r
+                                                        }),
+                                                        `[0].type`, null) === 'content')
+                                                    .map(r => get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '')
+                                                    )
+                                            return <td
+                                                style={{
+                                                    backgroundColor:
+                                                        allStatus.includes('Started') ? '#daebcf' :
+                                                            allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? '#f3f3d1' : 'grey'
+                                                }}
+                                                onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}></td>
+                                        }
+                                    )
                                 }
                             </tr>
                         )
@@ -99,10 +146,11 @@ const mapStateToProps = (state, ownProps) => {
         router: state.router,
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
+        activePlan: state.user.activePlan,
     };
 };
 
-const mapDispatchToProps = {setActiveCousubid};
+const mapDispatchToProps = {};
 export default [{
     icon: 'os-icon-pencil-2',
     path: '/plan_review/',
