@@ -9,6 +9,7 @@ import {ZoneLayer,ZoneOptions} from "./zoneLayer";
 import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import {AddNewZoneLayer,AddNewZoneOptions} from "./addNewZoneLayer";
 import {LandUseLayer,LandUseOptions} from "./landUseLayer";
+import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -41,6 +42,9 @@ const DynamicLandUseLayerFactory = (callingLayer,...args) =>{
     return new LandUseLayer('landUse',LandUseOptions())
 }
 
+const DynamicCommentMapLayerFactory = (callingLayer,...args) =>{
+    return new CommentMapLayer('commentMap',CommentMapOptions())
+}
 
 export class ControlLayers extends MapLayer {
     onAdd(map) {
@@ -227,6 +231,12 @@ export class ControlLayers extends MapLayer {
                     DynamicLandUseLayerFactory
                 ]).then(ll => {
                     this.landUseLayer = ll
+                    this.doAction([
+                        "addDynamicLayer",
+                        DynamicCommentMapLayerFactory
+                    ]).then(cml =>{
+                        this.commentMapLayer = cml
+                    })
                 })
             })
         })
@@ -243,6 +253,9 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes('landUse')){
             this.landUseLayer.toggleVisibilityOn()
         }
+        if(layerName.includes("commentMap")){
+            this.commentMapLayer.toggleVisibilityOn()
+        }
 
     }
 
@@ -256,8 +269,11 @@ export class ControlLayers extends MapLayer {
         }
         if(layerName.includes('landUse')){
             this.landUseLayer.toggleVisibilityOff()
-            //this.map.resize()
-            //this.map.fitBounds(this.boundingBox)
+        }
+        if(layerName.includes("commentMap")){
+            if(this.commentMapLayer){
+                this.commentMapLayer.toggleVisibilityOff()
+            }
         }
     }
 
