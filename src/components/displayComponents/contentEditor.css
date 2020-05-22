@@ -27,4 +27,22 @@
 }
 .hoverable:hover {
     opacity: 1;
+    color: #fafafa !important;
+}
+.dropdownSelect {
+    padding: 5px !important;
+    margin-left: 5px !important;
+    color: black !important;
+}
+
+.selectLabel {
+    float: left;
+    bottom: 5vh;
+    right: 1vw;
+    position: relative;
+    opacity: 0.5;
+    z-index: 100;
+    padding: 5px !important;
+    margin-right: 1px !important;
+    color: black !important;
 }
