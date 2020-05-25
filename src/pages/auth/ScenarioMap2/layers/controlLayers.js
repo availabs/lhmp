@@ -10,6 +10,7 @@ import {ProjectLayer,ProjectOptions} from "./projectLayer";
 import {AddNewZoneLayer,AddNewZoneOptions} from "./addNewZoneLayer";
 import {LandUseLayer,LandUseOptions} from "./landUseLayer";
 import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
+import {CulvertsLayer,CulvertsOptions} from "./culvertsLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -45,6 +46,10 @@ const DynamicLandUseLayerFactory = (callingLayer,...args) =>{
 const DynamicCommentMapLayerFactory = (callingLayer,...args) =>{
     return new CommentMapLayer('commentMap',CommentMapOptions())
 }
+
+const DynamicCulvertsLayerFactory =(callingLayer,...args) =>{
+    return new CulvertsLayer('culverts',CulvertsOptions())
+};
 
 export class ControlLayers extends MapLayer {
     onAdd(map) {
@@ -236,6 +241,12 @@ export class ControlLayers extends MapLayer {
                         DynamicCommentMapLayerFactory
                     ]).then(cml =>{
                         this.commentMapLayer = cml
+                        this.doAction([
+                            "addDynamicLayer",
+                            DynamicCulvertsLayerFactory
+                        ]).then(cl=>{
+                            this.culvertsLayer = cl
+                        })
                     })
                 })
             })
@@ -256,6 +267,9 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes("commentMap")){
             this.commentMapLayer.toggleVisibilityOn()
         }
+        if(layerName.includes("culverts")){
+            this.culvertsLayer.toggleVisibilityOn()
+        }
 
     }
 
@@ -274,6 +288,8 @@ export class ControlLayers extends MapLayer {
             if(this.commentMapLayer){
                 this.commentMapLayer.toggleVisibilityOff()
             }
+        }if(layerName.includes("culverts")){
+            this.culvertsLayer.toggleVisibilityOff()
         }
     }
 

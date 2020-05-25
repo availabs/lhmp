@@ -11,12 +11,13 @@ import ScenarioControl from "./scenarioControl";
 import ZoneControl from "./zoneControls";
 import LandUseControl from "./landUseControl";
 import CommentMapControl from "./commentMapControl";
+import CulvertsControl from "./culvertsControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
 import styled from "styled-components";
 var _ = require('lodash');
-const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'},{value:'commentMap',label:'Comment Map'}];
-const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'},{id:'commentMap_block',title:'Comment Map'}]
+const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'},{value:'commentMap',label:'Comment Map'},{value:'culverts',label:'Culverts'}];
+const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'},{id:'commentMap_block',title:'Comment Map'},{id:'culverts_block',title:'Culverts'}]
 
 const DROPDOWN = styled.div`
                   select,button {
@@ -34,7 +35,7 @@ class MainControls extends React.Component {
             activeMode: ['scenario','zone'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap']
+            showLayers : ['landUse','commentMap','culverts']
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -57,10 +58,11 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOn(["zone"])
         }
         //landuse is active only when needed and zoomes in
-        if(_.isEqual(this.state.showLayers,['landUse','commentMap'])){
+        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts'])){
             //console.log('in second if')
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
             this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
+            this.props.layer.mainLayerToggleVisibilityOff(["culverts"])
         }
         // if a layer is removed by X
         if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
@@ -243,6 +245,34 @@ class MainControls extends React.Component {
                                 </button>
                                 <br/>
                                 <CommentMapControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'culverts'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <CulvertsControl
                                     layer = {this.props}
                                 />
                             </div>
