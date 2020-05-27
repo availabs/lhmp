@@ -120,18 +120,20 @@ export class LandUseLayer extends MapLayer{
         let filteredParcelData = {}
         let prop_class_filters = []
         let final_filters = []
-        if(!prop_class_filters.includes(this.landUsePropType.every(d => d)) || !prop_class_filters.includes(this.landUseSubPropType.every(d => d))){
-            prop_class_filters.push(...this.landUsePropType,...this.landUseSubPropType)
-        }
-        prop_class_filters.forEach(filter =>{
-            if(!final_filters.includes(filter % 100 === 0) && !final_filters.includes(filter.slice(0,1)+'00')){
-                final_filters.push(filter)
-            }else{
-                _.pull(final_filters,filter.slice(0,1)+'00')
-                final_filters.push(filter)
-
+        if(this.landUsePropType || this.landUseSubPropType){
+            if(!prop_class_filters.includes(this.landUsePropType.every(d => d)) || !prop_class_filters.includes(this.landUseSubPropType.every(d => d))){
+                prop_class_filters.push(...this.landUsePropType,...this.landUseSubPropType)
             }
-        })
+            prop_class_filters.forEach(filter =>{
+                if(!final_filters.includes(filter % 100 === 0) && !final_filters.includes(filter.slice(0,1)+'00')){
+                    final_filters.push(filter)
+                }else{
+                    _.pull(final_filters,filter.slice(0,1)+'00')
+                    final_filters.push(filter)
+
+                }
+            })
+        }
 
         if(final_filters.length > 0){
             filteredParcelData = Object.keys(parcelData).reduce((a, c) => {
