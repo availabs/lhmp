@@ -20,12 +20,13 @@ class Home extends React.Component {
                         //this.zone,
                         //this.scenario
                     ] }
-                    zoom={ 13 }
-                    center={ [-73.7749, 42.6583] }
+                    zoom={ 7 }
+                    center={ [-75.7749, 42.6583] }
                     styles={[
                         { name: "Terrain", style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii" },
                         { name: 'Dark Streets', style: 'mapbox://styles/am3081/ck3rtxo2116rr1dmoppdnrr3g'},
-                        { name: 'Light Streets', style: 'mapbox://styles/am3081/ck3t1g9a91vuy1crzp79ffuac'}
+                        { name: 'Light Streets', style: 'mapbox://styles/am3081/ck3t1g9a91vuy1crzp79ffuac'},
+                        { name: 'Sattelite Streets', style: 'mapbox://styles/am3081/cjya70364016g1cpmbetipc8u'}
                     ]}
                 />
             </div>
