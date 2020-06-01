@@ -17,12 +17,17 @@ import {
     
 } 
 from 'pages/Public/theme/components'
+import {Link} from "react-router-dom";
 
-const  ElementFactory =  ({ element: element, user: user, showTitle=true, showHeader, pureElement, ...rest }) => {
+const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, pureElement, ...rest }) => {
     return pureElement ?
         (
             <React.Fragment>
-                {showTitle ? element.title : null}
+                <div>
+                    {showTitle ? element.title : null}
+                    {showEdit ? <span style={{float: 'right'}}>
+                    <Link className='btn btn-primary btn-sm btn-rounded' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                </div>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
                     user={user}
@@ -30,19 +35,20 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showHe
                     {...element}
                     {...rest}
                 />
-                <GraphFactory
-                    graph={{type: 'content' + 'Viewer'}}
-                    user={user}
-                    showHeader={showHeader}
-                    {...{requirement: element.requirement + 'callout'}}
-                    {...rest}
-                />
+                {element.callout ?
+                    <GraphFactory
+                        graph={{type: 'content' + 'Viewer'}}
+                        user={user}
+                        showHeader={showHeader}
+                        {...{requirement: element.requirement + 'callout'}}
+                        {...rest}
+                    /> : null}
             </React.Fragment>
         ):
         (
             <Element name={element.title}>
                 <SectionBox>
-                    {['right'].includes(element.align) ?
+                    {['right'].includes(element.align) && element.callout ?
                         <SectionBoxSidebar >
                             <SidebarCallout>
                                 <GraphFactory
@@ -58,6 +64,8 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showHe
                     }
                     <SectionBoxMain>
                         {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
+                        {showEdit ? <span style={{float: 'right'}}>
+                            <Link className='btn btn-primary btn-sm btn-rounded' to={'#'}>Edit</Link></span> : null}
                         <GraphFactory
                             graph={{type: element.type + 'Viewer'}}
                             user={user}
@@ -66,7 +74,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showHe
                             {...rest}
                         />
                     </SectionBoxMain>
-                    {['right', 'full'].includes(element.align) ?
+                    {['right', 'full'].includes(element.align) && element.callout?
                         React.fragment :
                         <SectionBoxSidebar >
                             <SidebarCallout>

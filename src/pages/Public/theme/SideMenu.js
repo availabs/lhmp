@@ -38,7 +38,9 @@ class SideMenu extends React.Component {
             <ul className="main-menu">
                 {
                     Object.keys(this.props.config)
-                        .filter(section => this.props.config[section].filter(item => this.props.filterAdmin ? !item.onlyAdmin && !item.hideNav : true).length > 0)
+                        .filter(section =>
+                            typeof this.props.config[section] !== "string" &&
+                            this.props.config[section].filter(item => this.props.filterAdmin ? !item.onlyAdmin && !item.hideNav : true).length > 0)
                         .map((section,i) => {
                         return (
                             <React.Fragment key={i}>

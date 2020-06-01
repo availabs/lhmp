@@ -20,7 +20,6 @@ const DIV = styled.div`
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
         // each value to be an array of objects. each object to be key:value pair where key is curent key
         // while setting the state, first filter then assign new value / append new obj
         // while getting the state, filter by current content id
@@ -32,12 +31,17 @@ class ContentEditor extends Component {
         this.onEditorStateChange = this.onEditorStateChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this)
         this.loadEditor = this.loadEditor.bind(this)
+        this.getCurrentKey = this.getCurrentKey.bind(this)
 
     }
+    getCurrentKey = () =>
+        this.props.scope === 'global' ?
+        this.props.requirement :
+        this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
 
     fetchFalcorDeps() {
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return Promise.resolve();
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
+        let contentId = this.getCurrentKey();
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
@@ -65,7 +69,7 @@ class ContentEditor extends Component {
         })
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid){
+        if (this.state.currentKey !== this.getCurrentKey()){
             this.fetchFalcorDeps();
         }
     }
@@ -80,7 +84,7 @@ class ContentEditor extends Component {
         e.preventDefault()
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
         let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
+        let contentId = this.getCurrentKey();
         let attributes = this.state.status ? '{"status": "' + this.state.status +'"}' : '{}';
         if (html !== this.state.contentFromDB || this.state.statusFromDb !== this.state.status) {
             if (this.state.contentFromDB) {
@@ -146,7 +150,8 @@ class ContentEditor extends Component {
         )
     }
     render() {
-        let currentKey = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
+        let currentKey = this.getCurrentKey();
+        console.log('props?', this.props)
 
         let editorState;
         if (this.state.currentKey !== currentKey){
