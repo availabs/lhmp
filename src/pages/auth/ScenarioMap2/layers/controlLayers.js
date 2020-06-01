@@ -31,10 +31,6 @@ const DynamicZoneLayerFactory =(callingLayer,...args) =>{
     return new ZoneLayer('zone',ZoneOptions())
 };
 
-/*const DynamicProjectLayerFactory = (callingLayer,...args) =>{
-    return new ProjectLayer('projects',ProjectOptions())
-}*/
-
 const DynamicAddNewZoneLayerFactory =(callingLayer,...args) =>{
     return new AddNewZoneLayer('addNewZone',AddNewZoneOptions())
 }
@@ -64,6 +60,11 @@ export class ControlLayers extends MapLayer {
                     this.boundingBox = bbox
                     map.resize();
                     map.fitBounds(bbox);
+                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer){
+                        this.landUseLayer.toggleVisibilityOff()
+                        this.commentMapLayer.toggleVisibilityOff()
+                        this.culvertsLayer.toggleVisibilityOff()
+                    }
                 })
         }
 
@@ -274,23 +275,22 @@ export class ControlLayers extends MapLayer {
     }
 
     mainLayerToggleVisibilityOff(layerName){
-        //console.log('off',layerName)
         if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOff()
         }
         if(layerName.includes('zone')){
             this.zoneLayer.toggleVisibilityOff()
         }
-        if(layerName.includes('landUse')){
-            this.landUseLayer.toggleVisibilityOff()
-        }
         if(layerName.includes("commentMap")){
-            if(this.commentMapLayer){
-                this.commentMapLayer.toggleVisibilityOff()
-            }
+            this.commentMapLayer.toggleVisibilityOff()
         }if(layerName.includes("culverts")){
             this.culvertsLayer.toggleVisibilityOff()
         }
+        if(layerName.includes('landUse')){
+            this.landUseLayer.toggleVisibilityOff()
+
+        }
+
     }
 
 

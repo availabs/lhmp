@@ -246,8 +246,25 @@ class ShowNewZoneModal extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            showZoneModal :true
+            showZoneModal :true,
+            new_zone_name : '',
+            zone_type: '',
+            comment:''
+
         }
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(e) {
+        console.log('---',e.target.id,e.target.value,this.state);
+        this.setState({ ...this.state, [e.target.id]: e.target.value });
+    };
+
+    fetchFalcorDeps(){
+        return this.props.falcor.get(['forms','zones','meta'])
+            .then(response =>{
+                return response
+            })
     }
 
     render(){
@@ -260,6 +277,29 @@ class ShowNewZoneModal extends React.Component{
                             <input id='new_zone_name' className="form-control"
                                    placeholder="Name Your Zone"
                                    type="text"
+                                   onChange={this.handleChange}
+                                   value = {this.state.new_zone_name}
+                            /></div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><h6>Type</h6>
+                            <select className="form-control justify-content-sm-end" id='zone_type' onChange={this.handleChange} value={this.state.zone_type}>
+                                <option className="form-control" key={0} value={''}>--No Type Selected--</option>
+                                {
+                                    this.props.formsZonesMeta.map((meta,i) =>{
+                                        return(<option  className="form-control" key={i+1} value={meta.type}>{meta.type}</option>)
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><h6>Comment</h6>
+                            <input id='comment' className="form-control"
+                                   placeholder="Comment"
+                                   type="text"
+                                   onChange={this.handleChange}
+                                   value = {this.state.comment}
                             /></div>
                     </div>
                     <div className="col-sm-12">
@@ -271,12 +311,14 @@ class ShowNewZoneModal extends React.Component{
                                 let args = [];
                                 let attributes = {}
                                 let plan_id = this.props.activePlan
-                                let name = document.getElementById("new_zone_name").value
                                 let geom = result_polygon.geometry
+                                let name = this.state.new_zone_name
                                 geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
                                 attributes['geom'] = geom
                                 attributes['bbox'] = zone_boundary
-                                attributes['name'] = name
+                                attributes['name'] = name || 'None'
+                                attributes['zone_type'] = this.state.zone_type || 'None'
+                                attributes['comment'] = this.state.comment || 'None'
                                 attributes['geojson'] = result_polygon
                                 args.push('zones',plan_id,attributes);
                                 return falcorGraph.call(['form_zones','insert'], args, [], [])
@@ -285,7 +327,7 @@ class ShowNewZoneModal extends React.Component{
                                         let new_zone = localStorage.getItem("zone") ? JSON.parse(localStorage.getItem("zone")) : ''
                                         new_zone.push({
                                             'zone_id':null,
-                                            'name':name,
+                                            'name': name || 'None',
                                             'geom':result_polygon,
                                             'bbox':zone_boundary,
                                             'geojson':result_polygon,
@@ -356,6 +398,7 @@ class ShowNewZoneModal extends React.Component{
 const mapStateToProps = (state, { id }) => ({
     activeGeoid:state.user.activeGeoid,
     activePlan : state.user.activePlan,
+    formsZonesMeta : get(state.graph,['forms','zones','meta','value'],[])
 });
 const mapDispatchToProps = {};
 const NewZoneModal = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ShowNewZoneModal))

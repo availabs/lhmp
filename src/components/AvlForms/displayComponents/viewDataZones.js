@@ -83,16 +83,15 @@ class AvlFormsViewDataZones extends React.Component{
         let geoData = this.props.geoData;
         let data = [];
         let config_attributes = this.props.config.map(d => Object.keys(d.attributes));
-        let missing_attributes = [];
         let config = this.props.config.map(d => d.attributes);
         if(graph){
             Object.keys(graph).filter(d => d !== '$type').forEach(item =>{
                 Object.keys(graph[item].attributes).forEach((d,i) =>{
-                    let section = get(config[0][d], `section`, null),
-                        label = get(config[0][d], `label`, null),
-                        displayType = get(config[0][d], `display_type`, null),
-                        formType = get(config[0][d], `form_type`, null);
                     if(config_attributes[0].includes(d)){
+                        let section = get(config[0][d], `section`, null),
+                            label = get(config[0][d], `label`, null),
+                            displayType = get(config[0][d], `display_type`, null),
+                            formType = get(config[0][d], `form_type`, null);
                         if(graph[item].attributes[d] === county || graph[item].attributes[d]=== cousub){
                             data.push({
                                 attribute : d,
@@ -118,73 +117,28 @@ class AvlFormsViewDataZones extends React.Component{
                         }
                     }
                     else{
-                        if(d !== 'sub_type' && d !== 'type' && d !=='plan_id'){
-                            missing_attributes = config_attributes[0].filter(i => Object.keys(graph[item].attributes).indexOf(i) < 0);
-                            missing_attributes.forEach(ma =>{
-                                let renamed_column = config[0][ma].rename_column;
-                                let section = get(config[0][ma], `section`, null),
-                                    label = get(config[0][ma], `label`, null),
-                                    displayType = get(config[0][d], `display_type`, null),
-                                    formType = get(config[0][d], `form_type`, null);
+                        config_attributes[0].filter(item => item !== d).forEach(ca =>{
+                            if( !config[0][ca].hidden || config[0][ca].hidden !== 'true'){
+                                let section = get(config[0][ca], `section`, null),
+                                    label = get(config[0][ca], `label`, null),
+                                    displayType = get(config[0][ca], `display_type`, null),
+                                    formType = get(config[0][ca], `form_type`, null);
+                                data.push({
+                                    attribute:ca,
+                                    value: graph[item].attributes[ca] ? graph[item].attributes[ca].toString() || 'None' : '',
+                                    section,
+                                    label,
+                                    displayType,
+                                    formType
+                                })
+                            }
 
-                                if(renamed_column){
-                                    Object.keys(renamed_column).forEach(rc =>{
-                                        if(graph[item].attributes[rc]){
-                                            if(graph[item].attributes[rc] === county || graph[item].attributes[rc] === cousub){
-                                                data.push({
-                                                    attribute : ma,
-                                                    value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None',
-                                                    section,
-                                                    label,
-                                                    displayType,
-                                                    formType
-                                                })
-                                            }else{
-                                                data.push({
-                                                    attribute : ma,
-                                                    value : graph[item].attributes[rc],
-                                                    section,
-                                                    label,
-                                                    displayType,
-                                                    formType
-                                                })
-                                            }
-                                        }else{
-                                            renamed_column[rc].forEach(rcc =>{
-                                                if(graph[item].attributes[rcc]){
-                                                    if(graph[item].attributes[rcc] === county || graph[item].attributes[rcc] === cousub){
-                                                        data.push({
-                                                            attribute : ma,
-                                                            value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None',
-                                                            section,
-                                                            label,
-                                                            displayType,
-                                                            formType
-                                                        })
-                                                    }else{
-                                                        data.push({
-                                                            attribute : ma,
-                                                            value : graph[item].attributes[rcc],
-                                                            section,
-                                                            label,
-                                                            displayType,
-                                                            formType
-                                                        })
-                                                    }
-                                                }
-
-                                            })
-                                        }
-                                    })
-                                }
-                            })
-                        }
+                        })
                     }
                 })
             })
 
         }
-
         return _.uniqBy(data,'attribute')
 
     }
