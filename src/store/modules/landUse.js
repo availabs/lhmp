@@ -7,6 +7,7 @@ import {login, logout, setActiveCousubid, setActiveGeoid, setActivePlan, setUser
 const SET_LAND_USE_TYPE = 'USER::SET_LAND_USE_TYPE';
 const SET_LAND_USE_PROP_TYPE = 'USER:SET_LAND_USE_PROP_TYPE'
 const SET_LAND_USE_SUB_PROP_TYPE = 'USER::SET_LAND_USE_SUB_PROP_TYPE'
+const SET_OWNER_TYPE = 'USER::SET_OWNER_TYPE';
 function setLandUseType(landUseType) {
     return {
         type:SET_LAND_USE_TYPE,
@@ -28,6 +29,13 @@ function setLandUseSubPropType(landUseSubPropType){
         landUseSubPropType
     }
 }
+function setOwnerType(ownerType){
+    return {
+        type : SET_OWNER_TYPE,
+        ownerType
+    }
+}
+
 
 export const setActiveLandUseType = (landUseType) =>{
     return (dispatch) => {
@@ -47,17 +55,25 @@ export const setActiveLandUseSubPropType = (landUseSubPropType) =>{
     }
 }
 
+export const setActiveOwnerType = (ownerType) =>{
+    return (dispatch) => {
+        dispatch(setOwnerType(ownerType))
+    }
+};
+
 
 export const actions = {
     setActiveLandUseType,
     setActiveLandUsePropType,
-    setActiveLandUseSubPropType
+    setActiveLandUseSubPropType,
+    setActiveOwnerType
 };
 
 let initialState = {
     landUseType:[],
     landUsePropType : [],
-    LandUseSubPropType : []
+    LandUseSubPropType : [],
+    ownerType:[]
 };
 
 const ACTION_HANDLERS = {
@@ -87,7 +103,15 @@ const ACTION_HANDLERS = {
             localStorage.setItem('landUseSubPropType', newState.landUseSubPropType);
         }
         return newState
-    }
+    },
+    [SET_OWNER_TYPE]: (state =initialState, action) => {
+        const newState = Object.assign({}, state)
+        if(action.ownerType) {
+            newState.ownerType = action.ownerType;
+            localStorage.setItem('ownerType', newState.ownerType);
+        }
+        return newState
+    },
 
 };
 

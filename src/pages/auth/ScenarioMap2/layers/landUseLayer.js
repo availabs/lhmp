@@ -32,6 +32,7 @@ export class LandUseLayer extends MapLayer{
         register(this, 'USER::SET_LAND_USE_TYPE', ["landUse"]);
         register(this,'USER:SET_LAND_USE_PROP_TYPE',['landUse']);
         register(this, 'USER::SET_LAND_USE_SUB_PROP_TYPE',['landUse'])
+        register(this,'USER::SET_OWNER_TYPE',['landUse'])
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
@@ -65,6 +66,7 @@ export class LandUseLayer extends MapLayer{
         this.landUseType = data.landUseType
         this.landUsePropType = data.landUsePropType || []
         this.landUseSubPropType = data.landUseSubPropType || []
+        this.ownerType = data.ownerType || []
         return this.fetchData().then(data => this.receiveData(data,this.map))
 
     }
@@ -120,7 +122,7 @@ export class LandUseLayer extends MapLayer{
         let filteredParcelData = {}
         let prop_class_filters = []
         let final_filters = []
-        if(this.landUsePropType || this.landUseSubPropType){
+        if(this.landUsePropType || this.landUseSubPropType || this.ownerType){
             if(!prop_class_filters.includes(this.landUsePropType.every(d => d)) || !prop_class_filters.includes(this.landUseSubPropType.every(d => d))){
                 prop_class_filters.push(...this.landUsePropType,...this.landUseSubPropType)
             }
@@ -133,8 +135,8 @@ export class LandUseLayer extends MapLayer{
 
                 }
             })
-        }
 
+        }
         if(final_filters.length > 0){
             filteredParcelData = Object.keys(parcelData).reduce((a, c) => {
                 final_filters.forEach(prop=>{
@@ -151,7 +153,27 @@ export class LandUseLayer extends MapLayer{
                 })
                 return a;
             }, {})
-        }else{
+        }else if(this.ownerType && this.ownerType.length > 0){
+            this.ownerType.forEach(owner =>{
+                if(Object.keys(filteredParcelData).length > 0){
+                    filteredParcelData = Object.keys(filteredParcelData).reduce((a, c) => {
+                        if(get(filteredParcelData[c],['owner_type'],'') && get(filteredParcelData[c],['owner_type'],'') === owner){
+                            a[c] = parcelData[c];
+                        }
+                        return a;
+                    }, {})
+                }else{
+                    filteredParcelData = Object.keys(parcelData).reduce((a, c) => {
+                        if(get(parcelData[c],['owner_type'],'') && get(parcelData[c],['owner_type'],'') === owner){
+                            a[c] = parcelData[c];
+                        }
+                        return a;
+                    }, {})
+
+                }
+            })
+        }
+        else{
             filteredParcelData = parcelData
         }
         this.map.setFilter(

@@ -51,11 +51,11 @@ class MainControls extends React.Component {
     }
 
     componentDidUpdate(oldProps,oldState){
-        // initially active scenarios are scenarios and zone
         if(_.isEqual(this.state.activeMode, ["scenario","zone"]) && this.state.modeOff !== "scenario" && this.state.modeOff !== "zone" && this.state.layerSelected !=='scenario' && this.state.layerSelected !== 'zone'){
             //console.log('in first if')
             this.props.layer.mainLayerToggleVisibilityOn(["scenario"])
             this.props.layer.mainLayerToggleVisibilityOn(["zone"])
+
         }
         //landuse is active only when needed and zoomes in
         if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts'])){

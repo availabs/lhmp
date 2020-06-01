@@ -12,6 +12,7 @@ import RiskMap from './pages/riskmap'
 import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import EvacuationRoutes from 'pages/auth/EvacuationRoutes/'
 import CommentMap from 'pages/auth/CommentMap/index'
+//import TestAvlMap from 'pages/auth/testAvlMap/index'
 import Home from 'pages/auth/Home';
 // -- Actions
 import ActionsFormIndex from 'pages/auth/actions/forms_index'
@@ -70,7 +71,6 @@ import Signup from './pages/Landing/SignUp'
 import ResetPassword from './pages/Landing/ResetPassword'
 import Logout from './pages/Logout'
 import NoMatch from './pages/404.js'
-
 import test from './pages/Test'
 
 const routes = [
@@ -135,6 +135,7 @@ const routes = [
     RiskMap,
     ScenarioMap2,
     CommentMap,
+    //TestAvlMap,
     EvacuationRoutes,
     Logout,
     NoMatch

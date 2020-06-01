@@ -19,6 +19,30 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
+            zone_type:{
+                label:'Zone Type',
+                prompt:'',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                show:'true',
+                meta:'false',
+                hidden:'false',
+                section:'',
+                list_attribute: 'true'
+            },
+            comment:{
+                label:'Comment',
+                prompt:'',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                show:'true',
+                meta:'false',
+                hidden:'false',
+                section:'',
+                list_attribute: 'true'
+            },
 
         }
     }

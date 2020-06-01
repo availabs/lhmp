@@ -6,7 +6,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
-import {setActiveLandUseType,setActiveLandUsePropType , setActiveLandUseSubPropType} from "store/modules/landUse"
+import {setActiveLandUseType,setActiveLandUsePropType ,setActiveOwnerType,setActiveLandUseSubPropType} from "store/modules/landUse"
 import MultiSelectFilter from "../../../../components/filters/multi-select-filter";
 import Container from "nivo/lib/components/charts/Container";
 
@@ -17,8 +17,13 @@ class LandUseControl extends React.Component {
         super(props);
         this.state= {
             land_use:[],
-            land_use_id:'',
+            land_use_id:'Land Use Type',
+            owner_type : '',
             filter: {
+                domain : [],
+                value : []
+            },
+            owner_type_filter : {
                 domain : [],
                 value : []
             },
@@ -31,17 +36,33 @@ class LandUseControl extends React.Component {
         this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
         this.handleMultiSelectSubDropDownFilterChange = this.handleMultiSelectSubDropDownFilterChange.bind(this)
         this.renderLandUsePropertySubDropDown= this.renderLandUsePropertySubDropDown.bind(this)
+        this.handleMultiSelectOwnerTypeFilterChange = this.handleMultiSelectOwnerTypeFilterChange.bind(this)
+    }
+    componentDidMount(){
+        let prop_class_meta = get(this.props.parcelsMeta, ['prop_class', 'value'], [])
+        let prop_class_data = []
+        prop_class_meta.map(item => {
+            if (parseInt(item.value) % 100 === 0) {
+                prop_class_data.push(item)
+            }
+        })
+        this.props.setActiveLandUseType([{name:'Land Use Type',value:prop_class_data}])
     }
 
     fetchFalcorDeps() {
         return this.props.falcor.get(['parcel', 'meta', ['prop_class', 'owner_type']])
             .then(response => {
                 let BuildingPropTypeList = get(response.json.parcel.meta, ['prop_class'], [])
+                let owner_type_meta = get(response.json.parcel.meta, ['owner_type'], [])
                 if(BuildingPropTypeList.length > 0){
                     this.setState((currentState) => ({
                         filter :{
                             domain : BuildingPropTypeList.filter((item) => parseInt(item.value) % 100 === 0 ? config : ''),
                             value : currentState.filter.value ? currentState.filter.value.length > 0 ? currentState.filter.value : [] : []
+                        },
+                        owner_type_filter : {
+                            domain : owner_type_meta,
+                            value : currentState.owner_type_filter.value ? currentState.owner_type_filter.value.length > 0 ? currentState.owner_type_filter.value : [] : []
                         }
                     }))
                 }
@@ -129,6 +150,13 @@ class LandUseControl extends React.Component {
         }))
     }
 
+    handleMultiSelectOwnerTypeFilterChange(e) {
+        let newFilter = this.state.owner_type_filter;
+        newFilter.value = e;
+        this.props.setActiveOwnerType(newFilter.value)
+        this.setState({owner_type_filter: newFilter})
+    }
+
     handleMultiSelectSubDropDownFilterChange(e,input) {
         let newFilter = this.state.sub_dropdown_filter
         let sub_inputs = []
@@ -176,29 +204,37 @@ class LandUseControl extends React.Component {
 
     renderLandUseInfoBoxDropDowns(){
         let land_use_list = this.landUseDropDown()
+        let owner_class_meta = get(this.props.parcelsMeta, ['owner_type', 'value'], [])
         return (
             <div style={{display:"flex",flexDirection:"column",justifyContent:"space-evenly",align:"auto"}}>
-                <h6>Property Type :</h6>
-                <MultiSelectFilter
-                    filter = {this.state.filter}
-                    setFilter = {this.handleMultiSelectFilterChange}
-                    placeHolder={'Select a Property Type'}
-                />
-                {this.state.filter.value ? this.state.filter.value.length > 0 ? this.renderLandUsePropertySubDropDown() : null : null}
-                <br/>
-                <h6>Land Use Type :</h6>
+                <h6>View By :</h6>
                 <select className="form-control justify-content-sm-end"
                         id = "land_use_id"
                         onChange={this.handleChange}
                         value={this.state.land_use_id}>
                     <option key={0} value ={''}>--None Selected--</option>
                     {land_use_list ? land_use_list.map((item,i) =>{
+
                             return( <option key={i+1} value={item.label}>{item.label}</option>)
                         })
                         :
                         null
                     }
                 </select>
+                <br/>
+                <h6>Filter :</h6>
+                <MultiSelectFilter
+                    filter = {this.state.filter}
+                    setFilter = {this.handleMultiSelectFilterChange}
+                    placeHolder={'Select a Property Type'}
+                />
+                {this.state.filter.value ? this.state.filter.value.length > 0 ? this.renderLandUsePropertySubDropDown() : null : null}
+                <h6>Owner Type Filter :</h6>
+                <MultiSelectFilter
+                    filter = {this.state.owner_type_filter}
+                    setFilter = {this.handleMultiSelectOwnerTypeFilterChange}
+                    placeHolder={'Select a Owner Type'}
+                />
             </div>
         )
     }
@@ -265,7 +301,8 @@ const mapDispatchToProps = {
     sendSystemMessage,
     setActiveLandUseType,
     setActiveLandUsePropType,
-    setActiveLandUseSubPropType
+    setActiveLandUseSubPropType,
+    setActiveOwnerType
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(LandUseControl))
