@@ -42,7 +42,7 @@ export default {
     path: '/comment_map',
     icon: 'os-icon-map',
     exact: true,
-    mainNav: true,
+    mainNav: false,
     menuSettings: {
         image: 'none',
         scheme: 'color-scheme-light',

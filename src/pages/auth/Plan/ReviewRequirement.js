@@ -10,6 +10,7 @@ import Element from "../../../components/light-admin/containers/Element";
 import ElementBox from "../../../components/light-admin/containers/ElementBox";
 import styled from "styled-components";
 import {RenderConfig} from "../../Public/theme/ElementFactory";
+import {Link} from "react-router-dom";
 
 const DIV = styled.div`
 ${(props) => props.theme.scrollBar};
@@ -69,6 +70,8 @@ class ReviewRequirement extends React.Component {
                                     }
                                     user={{...this.props.user, activeCousubid: this.props.match.params.geo}}
                                     showTitle={true}
+                                    showEdit={true}
+                                    showStatusTracker={true}
                                     showHeader={false}
                                     pureElement={true}
                                 />

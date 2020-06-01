@@ -407,7 +407,7 @@ export const LandUseOptions =  (options = {}) => {
             types: ["threshold", "quantile", "quantize","linear","ordinal"],
             vertical: true,
             range: [],
-            active: true,
+            active: false,
             domain: [0,50000,100000,200000,500000,1000000,5000000],
             format: fnum
         },

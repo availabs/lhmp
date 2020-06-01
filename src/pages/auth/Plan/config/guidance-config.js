@@ -1,5 +1,6 @@
 
 let config = {
+    scope: 'global',
     roles: [{
         title: 'Roles Guidance',
         requirement: `guidance-roles`,

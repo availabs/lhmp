@@ -148,23 +148,23 @@ const renderElement = function(element, section, index, user) {
 }
 
 const render = function(config, user, geoInfo, setActiveCousubid, activecousubId,allowedGeos, reqId, baseLink){
-    console.log('req id', reqId)
     let PageList = [];
     let sections = {};
     let allRequirenments = [];
     let initReqId = null
-    Object.keys(config).map((section,sectionI) => {
+    Object.keys(config)
+        .filter(f => typeof config[f] !== "string")
+        .map((section,sectionI) => {
         sections[section] = [];
         config[section]
             .filter((f,fI) => {if (reqId){ return f.requirement === reqId }else if(sectionI === 0 && fI === 0) {initReqId = f.requirement; return true}})
             .map((requirement, req_i) => {
             allRequirenments.push(requirement.title);
-            PageList.push(renderElement(requirement, section, req_i, user));
+            PageList.push(renderElement({...requirement, scope: config['scope']}, section, req_i, user));
             sections[section].push(PageList.length - 1)
 
         })
     });
-    console.log('component rendered', PageList)
     return (
         <div key={reqId} name={reqId} id={reqId}>
             <div style={{position: 'fixed', left: 50, top: 0, paddingTop: 0,width:  CSS_CONFIG.reqNavWidth, height: '100%'}}>
