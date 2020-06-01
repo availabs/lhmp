@@ -10,12 +10,14 @@ import { fnum } from "utils/sheldusUtils"
 import ScenarioControl from "./scenarioControl";
 import ZoneControl from "./zoneControls";
 import LandUseControl from "./landUseControl";
+import CommentMapControl from "./commentMapControl";
+import CulvertsControl from "./culvertsControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
 import styled from "styled-components";
 var _ = require('lodash');
-const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'}];
-const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'}]
+const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'},{value:'commentMap',label:'Comment Map'},{value:'culverts',label:'Culverts'}];
+const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'},{id:'commentMap_block',title:'Comment Map'},{id:'culverts_block',title:'Culverts'}]
 
 const DROPDOWN = styled.div`
                   select,button {
@@ -33,7 +35,7 @@ class MainControls extends React.Component {
             activeMode: ['scenario','zone'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse']
+            showLayers : ['landUse','commentMap','culverts']
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -51,15 +53,20 @@ class MainControls extends React.Component {
     componentDidUpdate(oldProps,oldState){
         // initially active scenarios are scenarios and zone
         if(_.isEqual(this.state.activeMode, ["scenario","zone"]) && this.state.modeOff !== "scenario" && this.state.modeOff !== "zone" && this.state.layerSelected !=='scenario' && this.state.layerSelected !== 'zone'){
+            //console.log('in first if')
             this.props.layer.mainLayerToggleVisibilityOn(["scenario"])
             this.props.layer.mainLayerToggleVisibilityOn(["zone"])
         }
         //landuse is active only when needed and zoomes in
-        if(_.isEqual(this.state.showLayers,['landUse'])){
+        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts'])){
+            //console.log('in second if')
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
+            this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
+            this.props.layer.mainLayerToggleVisibilityOff(["culverts"])
         }
         // if a layer is removed by X
         if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
+            //console.log('in third if')
             this.props.setActiveRiskZoneIdOff(this.state.activeMode)
             this.props.layer.mainLayerToggleVisibilityOff([this.state.modeOff])
             if(this.state.modeOff === 'scenario') {
@@ -75,6 +82,7 @@ class MainControls extends React.Component {
         }
         // if a layer is selected after being turned off
         if(this.state.layerSelected !== "" && this.state.layerSelected !== 'landUse' && !this.state.showLayers.includes(this.state.layerSelected)){
+            //console.log('in fourth if')
             this.props.layer.mainLayerToggleVisibilityOn([this.state.layerSelected])
             if(this.state.layerSelected === 'scenario') {
                 this.props.layer.visibilityToggleModeOn(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
@@ -84,6 +92,7 @@ class MainControls extends React.Component {
         }
         //to active the legend if selected landUse
         if(this.state.layerSelected === 'landUse' && !this.state.showLayers.includes('landUse')){
+            //console.log('in fifth if')
             this.props.layer.landUseLayer.legend.active = true
             this.props.layer.landUseLayer.forceUpdate()
         }
@@ -208,6 +217,62 @@ class MainControls extends React.Component {
                                 </button>
                                 <br/>
                                 <LandUseControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'commentMap'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <CommentMapControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'culverts'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <CulvertsControl
                                     layer = {this.props}
                                 />
                             </div>

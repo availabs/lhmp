@@ -44,7 +44,6 @@ class RadioComponent extends React.PureComponent{
                     </div>
 
                 </div>
-                <br/>
             </div> :
             <div className="col-sm-12">
                 <div className="form-group" style ={
