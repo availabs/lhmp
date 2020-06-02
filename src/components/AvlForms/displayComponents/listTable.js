@@ -33,27 +33,36 @@ class AvlFormsListTable extends React.Component{
         let formType = this.props.config.map(d => d.type)
         let formAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let ids = [];
-        return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
-            .then(response =>{
-                let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
-                if(length > 0){
-                    this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
-                        .then(response =>{
-                            let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
-                            Object.keys(graph).filter(d => d !== '$__path').forEach(id =>{
-                                if(graph[id]){
-                                    ids.push(graph[id].id)
-                                }
+        return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
+            .then(() =>
+                this.props.falcor.get(
+                    ['forms',formType,'byPlanId',this.props.activePlan,'length'],
+                    ['geo',
+                        [this.props.activeGeoid, ...get(this.props.geoData, `${this.props.activeGeoid}.municipalities.value`, [])],
+                        ['name']]
+                )
+                    .then(response =>{
+                        let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
+                        if(length > 0){
+                            this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
+                                .then(response =>{
+                                    let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
+                                    Object.keys(graph).filter(d => d !== '$__path').forEach(id =>{
+                                        if(graph[id]){
+                                            ids.push(graph[id].id)
+                                        }
 
-                            })
-                            this.setState({
-                                form_ids : ids
-                            })
-                            return response
-                        })
-                }
+                                    })
+                                    this.setState({
+                                        form_ids : ids
+                                    })
+                                    return response
+                                })
+                        }
 
-            })
+                    })
+            )
+
     }
 
 
@@ -100,6 +109,7 @@ class AvlFormsListTable extends React.Component{
                 Object.keys(graph).forEach(item =>{
 
                     let data = {};
+
                     formAttributes.forEach(attribute =>{
                         if(graph[item].value && graph[item].value.attributes){
                             if(this.state.form_ids.includes(item)){
