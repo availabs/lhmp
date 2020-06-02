@@ -10,6 +10,28 @@ module.exports = [
         // if wizard
         sections: [],
         attributes: {
+            capacity:{
+                label:'What is the jurisdictional capacity for implementing this Capability?',
+                prompt:'Select the current the jurisdictional capacity based on High, Medium, and Low',
+                edit_type:'dropdown_no_meta',
+                edit_type_values : ['High','Medium','Low',],
+// disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
+                display_condition : '',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
+            status:{
+                label:'Update Status',
+                prompt:'Select the current status of the capability: New Since Last Plan, Established Since Last Plan, In Development, or No Longer Relevant',
+                edit_type:'dropdown_no_meta',
+                edit_type_values : ['New-Since-Last-Plan','Established-Since-Last-Plan','In-Development','No-Longer-Relevant',],
+// disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
+                display_condition : '',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
             county:{
                 label:'County', // Which you would like to see on the form
                 prompt:'Choose the county the capability is located from the list of all counties.',
