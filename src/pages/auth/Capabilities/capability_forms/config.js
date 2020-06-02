@@ -87,7 +87,7 @@ module.exports = [
             },
             status:{
                 label:'Update Status',
-                prompt:'Select the current status of the capability: New Since Last Plan, Established Before Last Plan, In Development, or No Longer Relevant',
+                prompt:'Select the current status of the capability. Select New-Since-Last-Plan when the capability was newly established since the last Hazard Mitigation Plan. Select Established-Before-Last-Plan if this capability was an established and documented capability in your last Hazard Mitigation Plan. Select In-Development if the capability is currently being developed. Select No-Longer-Relevant when the capability has been discontinued or has ended its useful life.',
                 edit_type:'dropdown_no_meta',
                 edit_type_values : ['New-Since-Last-Plan','Established-Before-Last-Plan','In-Development','No-Longer-Relevant',],
 // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
@@ -160,7 +160,7 @@ module.exports = [
             capacity_explanation:{
                 label:'Explain how you determined your capacity rating.',
                 prompt: 'For Planning and Regulatory consider if the plan, policy, code, or ordinance is robust enough to support effective mitigation. For Administrative and Technical consider if the staffing and tools are sufficient for implementing the mitigation plan. For Financial consider if the funding mechanism is effective for implementation of hazard mitigation planning. For Education/Outreach consider if programs and methods communicate effectively and are implemented as designed for mitigation planning purposes.',
-                edit_type:'number',
+                edit_type:'text',
                 display_type:'text',
                 meta:'false',
                 section:''
