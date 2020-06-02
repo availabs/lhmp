@@ -12,14 +12,13 @@ const counties = ["36","36101", "36003", "36091", "36075", "36111", "36097", "36
     "36083", "36099", "36081", "36037", "36117", "36063", "36047", "36015", "36121", "36061", "36021", "36013", "36033", "36017",
     "36067", "36035", "36087", "36051", "36025", "36071", "36093", "36005"];
 
-let county = '' ;
-let cousub = '';
-
 class AvlFormsViewData extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            id : ''
+            id : '',
+            county: '',
+            cousub: ''
         }
     }
 
@@ -41,21 +40,21 @@ class AvlFormsViewData extends React.Component{
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item => {
                     let value = graph[item];
                     if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
-                        county = value
+                        this.setState({county: value})
                     }
-                    if(value && value.toString().substring(0,5) === county && value.length === 10){
-                        cousub = value
+                    if(value && value.toString().substring(0,5) === this.state.county && value.length === 10){
+                        this.setState({cousub: value})
                     }
 
                 })
-                if(county.length !== 0){
-                    this.props.falcor.get(['geo',county,['name']])
+                if(this.state.county.length !== 0){
+                    this.props.falcor.get(['geo',this.state.county,['name']])
                         .then(response =>{
                             return response
                         })
                 }
-                if(cousub.length !==0){
-                    this.props.falcor.get(['geo',cousub,['name']])
+                if(this.state.cousub.length !==0){
+                    this.props.falcor.get(['geo',this.state.cousub,['name']])
                         .then(response =>{
                             return response
                         })
@@ -75,16 +74,30 @@ class AvlFormsViewData extends React.Component{
         let config = this.props.config.map(d => d.attributes);
         if(graph){
             Object.keys(graph).filter(d => d !== '$type').forEach(item =>{
-                Object.keys(graph[item].attributes).forEach((d,i) =>{
+                Object.keys(config[0]).forEach((d,i) =>{
                     let section = get(config[0][d], `section`, null),
                         label = get(config[0][d], `label`, null),
                         displayType = get(config[0][d], `display_type`, null),
                         formType = get(config[0][d], `form_type`, null);
+                    let value = get(graph, `[${item}].attributes[${d}]`, null)
                     if(config_attributes[0].includes(d)){
-                        if(graph[item].attributes[d] === county || graph[item].attributes[d]=== cousub){
+                        if(value === this.state.county ||
+                            (
+                                (value && value.includes('[') ?
+                                    value.replace('[', '').replace(']', '') :
+                                    value ?
+                                        value : "") === this.state.cousub
+                            )
+                        ){
+                            value =
+                                value &&
+                                value.includes('[') &&
+                                value !== this.state.county ? value.replace('[', '').replace(']', '') :
+                                    value
                             data.push({
                                 attribute : d,
-                                value: geoData[graph[item].attributes[d]] ? geoData[graph[item].attributes[d]].name : 'None',
+                                value: geoData[value] ? geoData[value].name :
+                                    this.props.config[0].attributes[d].defaultValue || 'None',
                                 section,
                                 label,
                                 displayType,
@@ -95,7 +108,7 @@ class AvlFormsViewData extends React.Component{
                             if( !config[0][d].hidden || config[0][d].hidden !== 'true'){
                                 data.push({
                                     attribute:d,
-                                    value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : '',
+                                    value: value ? value.toString() || 'None' : '',
                                     section,
                                     label,
                                     displayType,
@@ -107,7 +120,7 @@ class AvlFormsViewData extends React.Component{
                     }
                     else{
                         if(d !== 'sub_type' && d !== 'type' && d !=='plan_id'){
-                            missing_attributes = config_attributes[0].filter(i => Object.keys(graph[item].attributes).indexOf(i) < 0);
+                            missing_attributes = config_attributes[0].filter(i => Object.keys(config[0]).indexOf(i) < 0);
                             missing_attributes.forEach(ma =>{
                                 let renamed_column = config[0][ma].rename_column;
                                 let section = get(config[0][ma], `section`, null),
@@ -118,7 +131,7 @@ class AvlFormsViewData extends React.Component{
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
                                         if(graph[item].attributes[rc]){
-                                            if(graph[item].attributes[rc] === county || graph[item].attributes[rc] === cousub){
+                                            if(graph[item].attributes[rc] === this.state.county || graph[item].attributes[rc] === this.state.cousub){
                                                 data.push({
                                                     attribute : ma,
                                                     value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None',
@@ -140,7 +153,7 @@ class AvlFormsViewData extends React.Component{
                                         }else{
                                             renamed_column[rc].forEach(rcc =>{
                                                 if(graph[item].attributes[rcc]){
-                                                    if(graph[item].attributes[rcc] === county || graph[item].attributes[rcc] === cousub){
+                                                    if(graph[item].attributes[rcc] === this.state.county || graph[item].attributes[rcc] === this.state.cousub){
                                                         data.push({
                                                             attribute : ma,
                                                             value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None',
