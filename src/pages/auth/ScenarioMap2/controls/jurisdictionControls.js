@@ -7,9 +7,9 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import {falcorGraph} from "../../../../store/falcorGraph";
 import SearchableDropDown from "../components/searchableDropDown";
-import ZoneTable from "../components/zoneTable"
+import JurisdictionTable from "../components/jurisdictionTable"
 var _ = require("lodash")
-class ZoneControl extends React.Component{
+class JurisdictionControl extends React.Component{
     constructor(props){
         super(props);
 
@@ -24,7 +24,7 @@ class ZoneControl extends React.Component{
 
     componentDidUpdate(oldProps,oldState) {
         if (oldProps.activeMode.length !== this.props.activeMode.length) {
-            if (localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0) {
+            if (localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0) {
                 console.log('in if of component did update')
                 this.noSelectedZones()
             } else{
@@ -70,7 +70,7 @@ class ZoneControl extends React.Component{
             if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
                     if(this.state.zone_ids.includes(graph[item].value.id)){
-                        if(!graph[item].value.attributes.geoid){
+                        if(graph[item].value.attributes.geoid){
                             zones_list.push({
                                 'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
                                 'value': graph[item].value ? graph[item].value.id : '',
@@ -92,9 +92,9 @@ class ZoneControl extends React.Component{
         let currentZoneData = []
         let scenario_id = localStorage.getItem("scenario_id")
         let graph = this.props.zonesList
-        let ids = JSON.parse(localStorage.getItem('zone')) || [];
+        let ids = JSON.parse(localStorage.getItem('jurisdiction')) || [];
         if(Object.keys(graph).length > 0){
-            if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
+            if(localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0){
                 Object.keys(graph).forEach(item =>{
                     if(graph[item].value.attributes.geoid === this.props.activeGeoid){
                         currentZoneData.push({
@@ -107,10 +107,10 @@ class ZoneControl extends React.Component{
 
                 })
                 ids = currentZoneData
-                localStorage.setItem('zone', JSON.stringify(ids));
+                localStorage.setItem('jurisdiction', JSON.stringify(ids));
             }
             return (
-                <ZoneTable
+                <JurisdictionTable
                     zones = {currentZoneData}
                     scenario_id={scenario_id}
                 />
@@ -123,7 +123,7 @@ class ZoneControl extends React.Component{
         let selectedZonesData = [];
         let graph = this.props.zonesList
         let scenario_id = localStorage.getItem("scenario_id");
-        let ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
+        let ids = JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0];
         if(Object.keys(graph).length > 0){
             Object.keys(graph).forEach(item =>{
                 ids.forEach(zone_id =>{
@@ -148,13 +148,14 @@ class ZoneControl extends React.Component{
                     }
                 })
             })
+
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id');
             return (
-                <ZoneTable
+                <JurisdictionTable
                     zone_id = {this.state.zone_id}
                     zones = {_.uniqBy(selectedZonesData,'zone_id')}
                     scenario_id={scenario_id}
-                    noShowBoundary = {this.props.layer.layer.zoneLayer}
+                    noShowBoundary = {this.props.layer.layer.jurisdictonLayer}
                 />
             )
 
@@ -163,8 +164,9 @@ class ZoneControl extends React.Component{
 
 
     render(){
+
         let zones_list = this.zoneDropDown();
-        //localStorage.removeItem("zone")
+        //localStorage.removeItem("jurisdiction")
         if(zones_list && zones_list.length > 0){
             let ids = []
             return (
@@ -177,7 +179,7 @@ class ZoneControl extends React.Component{
                             hideValue={false}
                             onChange={(value) => {
                                 this.setState({zone_id:value})
-                                ids = JSON.parse(localStorage.getItem('zone'));
+                                ids = JSON.parse(localStorage.getItem('jurisdiction'));
                                 zones_list.forEach(zone =>{
                                     if(zone.value === value){
                                         ids.push({
@@ -189,23 +191,15 @@ class ZoneControl extends React.Component{
                                         });
                                     }
                                 })
-                                localStorage.setItem('zone', JSON.stringify(ids));
-                                this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
+                                localStorage.setItem('jurisdiction', JSON.stringify(ids));
+                                this.props.layer.layer.jurisdictonLayer.showTownBoundary(localStorage.getItem("jurisdiction"))
                                 this.selectedZones()
                             }}
                         />
-                    <button
-                            id="new_zone_button"
-                            className="mr-2 mb-2 btn btn-primary btn-sm"
-                            type="button"
-                            onClick = {(e) =>{
-                                this.props.layer.layer.addNewZoneOnClick(e)
-                            }}
-                    >Add New Zone</button>
                     </div>
                     <div>
                         {
-                            localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0?
+                            localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0?
                                 this.noSelectedZones()
                                 :
                                 this.selectedZones()
@@ -226,7 +220,7 @@ class ZoneControl extends React.Component{
 const mapStateToProps = state => (
     {
         activePlan : state.user.activePlan,
-        activeGeoid:state.user.activeGeoid, 
+        activeGeoid:state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         zonesList : get(state.graph,['forms','byId'],{}),
@@ -237,4 +231,4 @@ const mapDispatchToProps = {
     sendSystemMessage
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ZoneControl))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(JurisdictionControl))

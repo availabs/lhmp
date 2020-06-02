@@ -11,6 +11,7 @@ import {AddNewZoneLayer,AddNewZoneOptions} from "./addNewZoneLayer";
 import {LandUseLayer,LandUseOptions} from "./landUseLayer";
 import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
 import {CulvertsLayer,CulvertsOptions} from "./culvertsLayer";
+import {JurisdictionLayer,JurisdictionOptions} from "./jurisdictionLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -45,6 +46,10 @@ const DynamicCommentMapLayerFactory = (callingLayer,...args) =>{
 
 const DynamicCulvertsLayerFactory =(callingLayer,...args) =>{
     return new CulvertsLayer('culverts',CulvertsOptions())
+};
+
+const DynamicJurisdictionLayerFactory =(callingLayer,...args) =>{
+    return new JurisdictionLayer('jurisdiction',JurisdictionOptions())
 };
 
 export class ControlLayers extends MapLayer {
@@ -247,6 +252,12 @@ export class ControlLayers extends MapLayer {
                             DynamicCulvertsLayerFactory
                         ]).then(cl=>{
                             this.culvertsLayer = cl
+                            this.doAction([
+                                "addDynamicLayer",
+                                DynamicJurisdictionLayerFactory
+                            ]).then(jl =>{
+                                this.jurisdictonLayer = jl
+                            })
                         })
                     })
                 })
@@ -271,6 +282,9 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes("culverts")){
             this.culvertsLayer.toggleVisibilityOn()
         }
+        if(layerName.includes("jurisdiction")){
+            this.jurisdictonLayer.toggleVisibilityOn()
+        }
 
     }
 
@@ -288,6 +302,10 @@ export class ControlLayers extends MapLayer {
         }
         if(layerName.includes('landUse')){
             this.landUseLayer.toggleVisibilityOff()
+
+        }
+        if(layerName.includes('jurisdiction')){
+            this.jurisdictonLayer.toggleVisibilityOff()
 
         }
 
