@@ -65,7 +65,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                     <SectionBoxMain>
                         {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
                         {showEdit ? <span style={{float: 'right'}}>
-                            <Link className='btn btn-primary btn-sm btn-rounded' to={'#'}>Edit</Link></span> : null}
+                            <Link className='btn btn-primary btn-sm btn-rounded' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
                         <GraphFactory
                             graph={{type: element.type + 'Viewer'}}
                             user={user}
@@ -99,6 +99,7 @@ export const RenderConfig = ({ config: config, showHeader, pureElement, filterAd
     return (
         pureElement ?
             Object.keys(config)
+                .filter(key => typeof config[key] !== "string")
                 .filter(section => filterAdmin ? config[section].filter(item => !item.onlyAdmin).length > 0 : true)
                 .map(section => {
                 return (
@@ -110,7 +111,7 @@ export const RenderConfig = ({ config: config, showHeader, pureElement, filterAd
                                 .map(requirement => {
                                 return (
                                     <ElementFactory
-                                        element={requirement}
+                                        element={{...requirement, scope: config['scope']}}
                                         pureElement={pureElement}
                                         {...rest}
 

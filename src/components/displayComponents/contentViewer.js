@@ -27,11 +27,16 @@ class ContentViewer extends Component {
             currentKey: null
         };
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.getCurrentKey = this.getCurrentKey.bind(this)
     }
+    getCurrentKey = () =>
+        this.props.scope === 'global' ?
+            this.props.requirement :
+            this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
 
     componentDidUpdate(prevProps, prevState){
         if (prevProps.activeCousubid !== this.props.activeCousubid ||
-            this.state.currentKey !== this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
+            this.state.currentKey !== this.getCurrentKey()
         ){
             this.fetchFalcorDeps()
         }
@@ -39,7 +44,7 @@ class ContentViewer extends Component {
 
     fetchFalcorDeps() {
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.activeCousubid) return Promise.resolve();
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.activeCousubid;
+        let contentId = this.getCurrentKey();
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS]
         ).then(contentRes => {
@@ -59,7 +64,7 @@ class ContentViewer extends Component {
         e.preventDefault()
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
         let html = this.state.contentFromDB;
-        let contentId = this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid;
+        let contentId = this.getCurrentKey();
         let attributes = this.state.status ? '{"status": "' + this.state.status +'"}' : '{}';
         if (this.state.statusFromDb !== this.state.status) {
             let args = {'content_id': `${contentId}`, 'attributes': attributes, 'body': `${html}`};

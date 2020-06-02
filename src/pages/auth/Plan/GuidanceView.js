@@ -28,7 +28,11 @@ class AdminLanding extends React.Component {
                     <h4 className="element-header">Guidance for {this.props.match.params.reqId.split('-')[1]}</h4>
                     <ElementBox>
                         <RenderConfig
-                            config={{[this.props.match.params.reqId]:config[this.props.match.params.reqId.split('-')[1]]}}
+                            config={
+                                {[this.props.match.params.reqId]: config[this.props.match.params.reqId.split('-')[1]],
+                                    scope: config['scope']
+                                }
+                            }
                             user={this.props.user}
                             showTitle={false}
                             showHeader={false}
