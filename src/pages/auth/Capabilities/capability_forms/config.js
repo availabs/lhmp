@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-        list_attributes:['capability_type','capability_category','municipality', 'capability_description'],
+        list_attributes:['capability_type','capability_category', 'jurisdiction_utilization'],
         csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
         default_title: 'Capability', // in the case when page_title is invalid
         page_title: 'capability_name', // page title in edit and view
@@ -10,6 +10,28 @@ module.exports = [
         // if wizard
         sections: [],
         attributes: {
+            capacity:{
+                label:'What is the jurisdictional capacity for implementing this Capability?',
+                prompt:'Select the current the jurisdictional capacity based on High, Medium, and Low',
+                edit_type:'dropdown_no_meta',
+                edit_type_values : ['High','Medium','Low',],
+// disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
+                display_condition : '',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
+            status:{
+                label:'Update Status',
+                prompt:'Select the current status of the capability: New Since Last Plan, Established Since Last Plan, In Development, or No Longer Relevant',
+                edit_type:'dropdown_no_meta',
+                edit_type_values : ['New-Since-Last-Plan','Established-Since-Last-Plan','In-Development','No-Longer-Relevant',],
+// disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
+                display_condition : '',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
             county:{
                 label:'County', // Which you would like to see on the form
                 prompt:'Choose the county the capability is located from the list of all counties.',
@@ -85,24 +107,23 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
-            adoption_date:{
-                label:'Date of adoption',
-                prompt:'Provide the date (mm/dd/yyyy) capability was originally adopted by governing body/authority.',
-                sub_type:'',
-                edit_type:'date',
+            status:{
+                label:'Update Status',
+                prompt:'Select the current status of the capability: New Since Last Plan, Established Since Last Plan, In Development, or No Longer Relevant',
+                edit_type:'dropdown_no_meta',
+                edit_type_values : ['New-Since-Last-Plan','Established-Since-Last-Plan','In-Development','No-Longer-Relevant',],
+                // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
+                display_condition : '',
                 display_type:'text',
                 meta:'false',
-                hidden:'false',
                 section:''
-            },
+            },       
             development_update:{
-                label:'Update on Development',
-                prompt:'Is your jurisdiction currently working towards implementing or enhancing the status of this capability?',
+                label:'Description of Status',
+                prompt:'Describe how your jurisdiction is currently working towards implementing, enhancing the status of this capability? Or why it is no longer relevant.',
                 sub_type:'',
-                edit_type:'radio',
-                edit_type_values:['yes','no'], // the values you would like to see as options for radio buttons
+                edit_type:'text', // the values you would like to see as options for radio buttons
                 disable_condition:'',
-                display_condition:'',
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
@@ -116,7 +137,6 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
-                expandable:'true',
                 section:''
             },
               jurisdiction_utilization:{
@@ -127,6 +147,7 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
+                expandable:'true',
                 section:'',
             },
             mitigation_contribution:{
@@ -134,6 +155,43 @@ module.exports = [
                 prompt:'Describe how mitigation planning supports and contributes to building maintaining or enhancing capacity for this capability',
                 sub_type:'',
                 edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:''
+            },
+            capacity:{
+                label:'What is the jurisdictional capacity for implementing this Capability?',
+                prompt:'Select the current the jurisdictional capacity based on High, Medium, and Low',
+                edit_type:'dropdown_no_meta',
+                edit_type_values : ['High','Medium','Low',],
+                // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
+                display_condition : '',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
+            capacity_score:{
+                label:'Estimate a score associated with the jurisdictional capacity for this Capability, 1-3 is low, 4-7 is medium, and 8-10 is high',
+                prompt: 'Estimate a score associated with the jurisdictional capacity for this capability, 1-3 is low, 4-7 is medium, and 8-10 is high',
+                edit_type:'number',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },   
+            capacity_explanation:{
+                label:'Explain how you determined your capacity rating.',
+                prompt: 'For Planning and Regulatory consider if the plan, policy, code, or ordinance is robust enough to support effective mitigation. For Administrative and Technical consider if the staffing and tools are sufficient for implementing the mitigation plan. For Financial consider if the funding mechanism is effective for implementation of hazard mitigation planning. For Education/Outreach consider if programs and methods communicate effectively and are implemented as designed for mitigation planning purposes.',
+                edit_type:'number',
+                display_type:'text',
+                meta:'false',
+                section:''
+            }, 
+            adoption_date:{
+                label:'Date of adoption',
+                prompt:'Provide the date (mm/dd/yyyy) capability was originally adopted by governing body/authority.',
+                sub_type:'',
+                edit_type:'date',
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
@@ -193,37 +251,17 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
-            upload:{
-                label:'Upload',
-                prompt:'If applicable, provide a PDF upload of any and all supporting documents related to capability and its assessment. Examples include; meeting minutes, public participation surveys, regulatory documents, studies pertaining to development and updates.',
-                sub_type:'',
-                edit_type:'text',
-                display_type:'text',
-                meta:'false',
-                hidden:'false',
-                data:'true',
-                section:''
-            },
-            capacity:{
-                label:'What is the jurisdictional capacity for implementing this Capability?',
-                prompt:'Select the current the jurisdictional capacity based on High, Medium, and Low',
-                edit_type:'dropdown_no_meta',
-                edit_type_values : ['High','Medium','Low'],
-                display_condition : '',
-                display_type:'text',
-                meta:'false',
-                section:''
-            },
-            status:{
-                label:'Update Status',
-                prompt:'Select the current status of the capability: New Since Last Plan, Established Since Last Plan, In Development, or No Longer Relevant',
-                edit_type:'dropdown_no_meta',
-                edit_type_values : ['New-Since-Last-Plan','Established-Since-Last-Plan','In-Development','No-Longer-Relevant'],
-                display_condition : '',
-                display_type:'text',
-                meta:'false',
-                section:''
-            },
+            // upload:{
+            //     label:'Upload',
+            //     prompt:'If applicable, provide a PDF upload of any and all supporting documents related to capability and its assessment. Examples include; meeting minutes, public participation surveys, regulatory documents, studies pertaining to development and updates.',
+            //     sub_type:'',
+            //     edit_type:'text',
+            //     display_type:'text',
+            //     meta:'false',
+            //     hidden:'false',
+            //     data:'true',
+            //     section:''
+            // }
         }
     }
 ];
