@@ -1,23 +1,35 @@
 import React from 'react';
-import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
-import config from 'pages/auth/Roles/roles_forms/config.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
-import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
-import { fnum } from "utils/sheldusUtils"
 import ScenarioControl from "./scenarioControl";
 import ZoneControl from "./zoneControls";
 import LandUseControl from "./landUseControl";
 import CommentMapControl from "./commentMapControl";
 import CulvertsControl from "./culvertsControl";
+import JurisdictionControl from "./jurisdictionControls";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
 import styled from "styled-components";
+
 var _ = require('lodash');
-const AllModes =[{value:'scenario',label:'Risk Scenarios'},{value:'zone',label:'Zones'},{value:'landUse',label:'Land Use'},{value:'commentMap',label:'Comment Map'},{value:'culverts',label:'Culverts'}];
-const AllBlocks = [{id:'scenario_block',title:'Risk Scenarios'},{id:'zone_block',title:'Zones'},{id:'landUse_block',title:'Land Use'},{id:'commentMap_block',title:'Comment Map'},{id:'culverts_block',title:'Culverts'}]
+const AllModes =[
+    {value:'scenario',label:'Risk Scenarios'},
+    {value:'zone',label:'Zones'},
+    {value:'landUse',label:'Land Use'},
+    {value:'commentMap',label:'Comment Map'},
+    {value:'culverts',label:'Culverts'},
+    {value:'jurisdiction',label:'Jurisdictions'}
+    ];
+const AllBlocks = [
+    {id:'scenario_block',title:'Risk Scenarios'},
+    {id:'zone_block',title:'Zones'},
+    {id:'landUse_block',title:'Land Use'},
+    {id:'commentMap_block',title:'Comment Map'},
+    {id:'culverts_block',title:'Culverts'},
+    {id:'jurisdiction_block',title:'Jurisdictions'}
+    ]
 
 const DROPDOWN = styled.div`
                   select,button {
@@ -32,10 +44,10 @@ class MainControls extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeMode: ['scenario','zone'],
+            activeMode: ['scenario','jurisdiction'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap','culverts']
+            showLayers : ['landUse','commentMap','culverts','zone']
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -51,18 +63,19 @@ class MainControls extends React.Component {
     }
 
     componentDidUpdate(oldProps,oldState){
-        if(_.isEqual(this.state.activeMode, ["scenario","zone"]) && this.state.modeOff !== "scenario" && this.state.modeOff !== "zone" && this.state.layerSelected !=='scenario' && this.state.layerSelected !== 'zone'){
+        if(_.isEqual(this.state.activeMode, ["scenario","jurisdiction"]) && this.state.modeOff !== "scenario" && this.state.modeOff !== "jurisdiction" && this.state.layerSelected !=='scenario' && this.state.layerSelected !== 'jurisdiction'){
             //console.log('in first if')
             this.props.layer.mainLayerToggleVisibilityOn(["scenario"])
-            this.props.layer.mainLayerToggleVisibilityOn(["zone"])
+            this.props.layer.mainLayerToggleVisibilityOn(["jurisdiction"])
 
         }
         //landuse is active only when needed and zoomes in
-        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts'])){
+        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone'])){
             //console.log('in second if')
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
             this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
             this.props.layer.mainLayerToggleVisibilityOff(["culverts"])
+            this.props.layer.mainLayerToggleVisibilityOff(["zone"])
         }
         // if a layer is removed by X
         if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
@@ -274,6 +287,35 @@ class MainControls extends React.Component {
                                 <br/>
                                 <CulvertsControl
                                     layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'jurisdiction'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <JurisdictionControl
+                                    layer = {this.props}
+                                    activeMode = {this.state.activeMode}
                                 />
                             </div>
                         )
