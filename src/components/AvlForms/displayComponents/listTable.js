@@ -116,12 +116,18 @@ class AvlFormsListTable extends React.Component{
                                 data['id'] = item;
                                 if(graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string"){
                                     if(graph[item].value.attributes[attribute].includes("[")){
-                                        data[attribute] = graph[item].value.attributes[attribute].slice(1,-1)
+
+                                        data[attribute] = this.props.geoData[graph[item].value.attributes[attribute].slice(1,-1)] ?
+                                            this.props.geoData[graph[item].value.attributes[attribute].slice(1,-1)].name || '' :
+                                            graph[item].value.attributes[attribute].slice(1,-1);
                                     }else{
-                                        data[attribute] = graph[item].value.attributes[attribute]
+                                        data[attribute] = geo[graph[item].value.attributes[attribute]] ?
+                                            geo[graph[item].value.attributes[attribute]].name || '' :
+                                            graph[item].value.attributes[attribute];
                                     }
                                 }else{
-                                    data[attribute] = graph[item].value.attributes[attribute] || ' ';
+                                    data[attribute] = graph[item].value.attributes[attribute] ||
+                                        this.props.config[0].attributes[attribute].defaultValue;
                                 }
                                 ['view', 'edit']
                                     .filter(f => this.props[f+'Button'] === true || this.props[f+'Button'] === undefined)
