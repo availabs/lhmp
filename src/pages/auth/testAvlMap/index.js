@@ -1,5 +1,5 @@
 import React from 'react';
-import AvlMap from 'avlmap/src/app.js';
+import AvlMap from 'avlmap-npm/index';
 import TestAvlMapLayer from "./testAvlMap";
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'

@@ -95,10 +95,9 @@ class AvlFormsListTable extends React.Component{
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
-        if(graph){
+        if(graph && this.props.geoData){
             if(combine_list_attributes[0] === undefined){
                 Object.keys(graph).forEach(item =>{
-
                     let data = {};
                     formAttributes.forEach(attribute =>{
                         if(graph[item].value && graph[item].value.attributes){
@@ -106,9 +105,13 @@ class AvlFormsListTable extends React.Component{
                                 data['id'] = item;
                                 if(graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string"){
                                     if(graph[item].value.attributes[attribute].includes("[")){
-                                        data[attribute] = graph[item].value.attributes[attribute].slice(1,-1)
+                                        data[attribute] = this.props.geoData[graph[item].value.attributes[attribute].slice(1,-1)] ?
+                                            this.props.geoData[graph[item].value.attributes[attribute].slice(1,-1)].name || '' :
+                                            graph[item].value.attributes[attribute].slice(1,-1);
                                     }else{
-                                        data[attribute] = graph[item].value.attributes[attribute]
+                                        data[attribute] = this.props.geoData[graph[item].value.attributes[attribute]] ?
+                                            this.props.geoData[graph[item].value.attributes[attribute]].name || '' :
+                                            graph[item].value.attributes[attribute];
                                     }
                                 }else{
                                     data[attribute] = graph[item].value.attributes[attribute] || ' ';

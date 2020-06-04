@@ -16,19 +16,19 @@ import styled from "styled-components";
 var _ = require('lodash');
 const AllModes =[
     {value:'scenario',label:'Risk Scenarios'},
+    {value:'jurisdiction',label:'Jurisdictions'},
     {value:'zone',label:'Zones'},
     {value:'landUse',label:'Land Use'},
     {value:'commentMap',label:'Comment Map'},
     {value:'culverts',label:'Culverts'},
-    {value:'jurisdiction',label:'Jurisdictions'}
     ];
 const AllBlocks = [
     {id:'scenario_block',title:'Risk Scenarios'},
+    {id:'jurisdiction_block',title:'Jurisdictions'},
     {id:'zone_block',title:'Zones'},
     {id:'landUse_block',title:'Land Use'},
     {id:'commentMap_block',title:'Comment Map'},
     {id:'culverts_block',title:'Culverts'},
-    {id:'jurisdiction_block',title:'Jurisdictions'}
     ]
 
 const DROPDOWN = styled.div`
@@ -47,7 +47,8 @@ class MainControls extends React.Component {
             activeMode: ['scenario','jurisdiction'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap','culverts','zone']
+            showLayers : ['landUse','commentMap','culverts','zone'],
+            selected : true
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -57,10 +58,9 @@ class MainControls extends React.Component {
     componentDidMount(){
         if(this.state.activeMode !== ''){
             this.props.layer.loadLayers()
-
         }
-
     }
+
 
     componentDidUpdate(oldProps,oldState){
         if(_.isEqual(this.state.activeMode, ["scenario","jurisdiction"]) && this.state.modeOff !== "scenario" && this.state.modeOff !== "jurisdiction" && this.state.layerSelected !=='scenario' && this.state.layerSelected !== 'jurisdiction'){
@@ -96,7 +96,7 @@ class MainControls extends React.Component {
         // if a layer is selected after being turned off
         if(this.state.layerSelected !== "" && this.state.layerSelected !== 'landUse' && !this.state.showLayers.includes(this.state.layerSelected)){
             //console.log('in fourth if')
-            this.props.layer.mainLayerToggleVisibilityOn([this.state.layerSelected])
+            this.props.layer.mainLayerToggleVisibilityOn([this.state.layerSelected],this.state.selected)
             if(this.state.layerSelected === 'scenario') {
                 this.props.layer.visibilityToggleModeOn(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
                 this.props.layer.scenarioLayer.legend.active = true
@@ -174,6 +174,35 @@ class MainControls extends React.Component {
                                 </button>
                                 <ScenarioControl
                                     layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'jurisdiction'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <JurisdictionControl
+                                    layer = {this.props}
+                                    activeMode = {this.state.activeMode}
                                 />
                             </div>
                         )
@@ -287,35 +316,6 @@ class MainControls extends React.Component {
                                 <br/>
                                 <CulvertsControl
                                     layer = {this.props}
-                                />
-                            </div>
-                        )
-                    }
-                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'jurisdiction'){
-                        return (
-                            <div id={`closeMe`+block.id} key ={i}>
-                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
-                                <button
-                                    aria-label="Close"
-                                    className="close"
-                                    data-dismiss="alert"
-                                    type="button"
-                                    onClick={(e) =>{
-                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
-                                        this.setState(currentState =>(
-                                            {
-                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
-                                                modeOff : block.id.split('_')[0]
-                                            }
-                                        ))
-                                    }}
-                                >
-                                    <span aria-hidden="true"> ×</span>
-                                </button>
-                                <br/>
-                                <JurisdictionControl
-                                    layer = {this.props}
-                                    activeMode = {this.state.activeMode}
                                 />
                             </div>
                         )

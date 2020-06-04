@@ -1,7 +1,7 @@
 import React from "react"
 import store from "store"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
-import MapLayer from "avlmap/src/app.js"
+import MapLayer from "avlmap-npm/index"
 import { getColorRange } from "constants/color-ranges";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
