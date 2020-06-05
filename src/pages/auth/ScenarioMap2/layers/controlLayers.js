@@ -22,8 +22,7 @@ const COLORS = getColorRange(12, "Set3");
 
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
-let layerToShow = ''
-let activeLayers = []
+let culvertsLayer,landUseLayer,commentMapLayer = {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -234,39 +233,43 @@ export class ControlLayers extends MapLayer {
             this.scenarioLayer = sl
             this.doAction([
                 "addDynamicLayer",
-                DynamicZoneLayerFactory
-            ]).then(zl => {
-                this.zoneLayer = zl
+                DynamicJurisdictionLayerFactory
+            ]).then(jl => {
+                this.jurisdictonLayer = jl
                 this.doAction([
                     "addDynamicLayer",
-                    DynamicLandUseLayerFactory
-                ]).then(ll => {
-                    this.landUseLayer = ll
+                    DynamicZoneLayerFactory
+                ]).then(zl => {
+                    this.zoneLayer = zl
                     this.doAction([
                         "addDynamicLayer",
-                        DynamicCommentMapLayerFactory
-                    ]).then(cml =>{
-                        this.commentMapLayer = cml
+                        DynamicCulvertsLayerFactory
+                    ]).then(cl => {
+                        culvertsLayer = cl
+                        this.culvertsLayer = cl
                         this.doAction([
                             "addDynamicLayer",
-                            DynamicCulvertsLayerFactory
-                        ]).then(cl=>{
-                            this.culvertsLayer = cl
+                            DynamicLandUseLayerFactory
+                        ]).then(ll => {
+                            landUseLayer = ll
+                            this.landUseLayer = ll
                             this.doAction([
                                 "addDynamicLayer",
-                                DynamicJurisdictionLayerFactory
-                            ]).then(jl =>{
-                                this.jurisdictonLayer = jl
+                                DynamicCommentMapLayerFactory
+                            ]).then(cml => {
+                                commentMapLayer = cml
+                                this.commentMapLayer = cml
                             })
                         })
                     })
                 })
             })
         })
+
     }
 
-    mainLayerToggleVisibilityOn(layerName){
-        //console.log('on',layerName)
+    mainLayerToggleVisibilityOn(layerName,selected){
+        //console.log('in on',layerName)
         if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOn()
         }
@@ -274,13 +277,20 @@ export class ControlLayers extends MapLayer {
             this.zoneLayer.toggleVisibilityOn()
         }
         if(layerName.includes('landUse')){
-            this.landUseLayer.toggleVisibilityOn()
+            if(Object.keys(landUseLayer).length > 0){
+                landUseLayer.toggleVisibilityOn()
+            }
         }
         if(layerName.includes("commentMap")){
-            this.commentMapLayer.toggleVisibilityOn()
+            if(Object.keys(commentMapLayer).length > 0){
+                commentMapLayer.toggleVisibilityOn()
+            }
         }
         if(layerName.includes("culverts")){
-            this.culvertsLayer.toggleVisibilityOn()
+            if(Object.keys(culvertsLayer).length > 0){
+                culvertsLayer.toggleVisibilityOn()
+            }
+
         }
         if(layerName.includes("jurisdiction")){
             this.jurisdictonLayer.toggleVisibilityOn()
@@ -289,6 +299,7 @@ export class ControlLayers extends MapLayer {
     }
 
     mainLayerToggleVisibilityOff(layerName){
+        //console.log('in off',layerName)
         if(layerName.includes('scenario')){
             this.scenarioLayer.toggleVisibilityOff()
         }
@@ -296,13 +307,19 @@ export class ControlLayers extends MapLayer {
             this.zoneLayer.toggleVisibilityOff()
         }
         if(layerName.includes("commentMap")){
-            this.commentMapLayer.toggleVisibilityOff()
-        }if(layerName.includes("culverts")){
-            this.culvertsLayer.toggleVisibilityOff()
+            if(Object.keys(commentMapLayer).length > 0){
+                commentMapLayer.toggleVisibilityOff()
+            }
+        }
+        if(layerName.includes("culverts")){
+            if(Object.keys(culvertsLayer).length > 0){
+                culvertsLayer.toggleVisibilityOff()
+            }
         }
         if(layerName.includes('landUse')){
-            this.landUseLayer.toggleVisibilityOff()
-
+            if(Object.keys(landUseLayer).length > 0){
+                landUseLayer.toggleVisibilityOff()
+            }
         }
         if(layerName.includes('jurisdiction')){
             this.jurisdictonLayer.toggleVisibilityOff()
@@ -353,5 +370,4 @@ export default (options = {}) =>
         boundingBox : []
 
     })
-
 
