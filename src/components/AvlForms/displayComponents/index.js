@@ -1,5 +1,6 @@
 import React from 'react'
 import TextComponent from "./TextComponent";
+import CommentComponent from "./CommentComponent"
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -14,6 +15,7 @@ const NE = ((props) => (<div>{props.type} Doesn't Exist</div>))
 export default {
     NA,
     NE,
-    text: TextComponent
+    text: TextComponent,
+    comments: CommentComponent,
 }
 

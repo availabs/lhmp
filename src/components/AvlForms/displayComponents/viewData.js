@@ -36,7 +36,7 @@ class AvlFormsViewData extends React.Component{
                 this.setState({
                     id : id
                 })
-                let graph = response.json.forms.byId[id].attributes;
+                let graph = get(response, `json.forms.byId[${id}].attributes`, {});
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item => {
                     let value = graph[item];
                     if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
@@ -80,6 +80,7 @@ class AvlFormsViewData extends React.Component{
                         displayType = get(config[0][d], `display_type`, null),
                         formType = get(config[0][d], `form_type`, null);
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
+                    value = value ? value.toString() : value;
                     if(config_attributes[0].includes(d)){
                         if(value === this.state.county ||
                             (
@@ -195,7 +196,7 @@ class AvlFormsViewData extends React.Component{
 
         return(
             <GraphFactory
-                graph={{type: 'text'}}
+                graph={{type: this.props.config[0].type === 'comments' ? 'comments' : 'text'}}
                 data={data}
                 config={this.props.config}
                 isVisible = {true}

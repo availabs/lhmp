@@ -142,6 +142,7 @@ class AvlFormsNewData extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
+                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
