@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-
+import store from "../../../../store";
 import * as d3scale from "d3-scale";
 import { set as d3set } from "d3-collection"
 
 import * as turf from "@turf/turf"
-
+import get from 'lodash.get'
 import {
     getChildGeo,
     getGeoMesh,
@@ -82,9 +82,13 @@ class HazardEventsMapController extends React.Component {
     componentWillMount() {
         const { geoid } = this.props;
         this.props.getChildGeo(geoid.slice(0, 2), 'counties');
+        this.props.getChildGeo(geoid.slice(0, 2), 'cousubs');
+
         this.props.getGeoMesh(geoid.slice(0, 2), 'counties');
         this.props.getGeoMerge(geoid.slice(0, 2), 'counties');
-        this.props.getChildGeo(geoid.slice(0, 2), 'cousubs');
+
+        this.props.getGeoMesh(geoid.slice(0, 2), 'cousubs');
+        this.props.getGeoMerge(geoid.slice(0, 2), 'cousubs');
     }
     componentWillUnmount() {
         ACTIVE_CONTROLLERS.remove(this.state.controllerId)
@@ -113,20 +117,25 @@ class HazardEventsMapController extends React.Component {
         const { geoid, geoLevel, hazard } = newProps;
         let geojson = null
         let padding = this.props.zoomPadding
+        let cousubs = get(newProps, `geoGraph.${newProps.geoid.slice(0,5)}.cousubs.value`, []);
+
         switch (geoLevel) {
             case 'counties':
-                geojson = newProps.geo['merge'][geoid.slice(0, 2)]['counties']
+                geojson = newProps.geo[geoid.slice(0, 2)]['counties'].features
+                    .reduce((a, c) => (c.properties.geoid === geoid) ? c : a, null);
                 break;
             case 'cousubs':
-                geojson = newProps.geo[geoid.slice(0, 2)]['counties'].features
-                    .reduce((a, c) => (c.properties.geoid == geoid) ? c : a, null);
+                geojson = newProps.geo[geoid.slice(0, 2)]['cousubs'].features
+                    .reduce((a, c) => (c.properties.geoid === geoid) ? c : a, null);
                 break;
         }
+        if (!geojson) return;
+
         this.state.viewport.fitGeojson(geojson, { padding });
 
         this.setState({ bounds: geojson })
-        if ((geoid != this.props.geoid) ||
-            (hazard != this.props.hazard)) {
+        if ((geoid !== this.props.geoid) ||
+            (hazard !== this.props.hazard)) {
             this.setState({ loadedRanges: {} });
             this.fetchFalcorDeps(newProps);
         }
@@ -164,10 +173,9 @@ class HazardEventsMapController extends React.Component {
         } = this.state;
 
         const { range } = loadedRanges[key];
-
         const { geoid, dataType, geoLevel, hazard } = this.props,
 
-            features = this.props.geo[geoid.slice(0, 2)][geoLevel].features;
+            features = get(this.props.geo, `${geoid.slice(0, 2)}.${geoLevel}.features`, []);
 
         if (geoid.slice(0, 2) === '72') {
             radiusScale.range([1, 10])
@@ -315,13 +323,15 @@ HazardEventsMapController.defaultProps = {
     allTime: false
 }
 
-const mapStateToProps = state => ({
-    router: state.router,
-    geo: state.geo,
-    geoGraph: state.graph.geo,
-    severeWeather: state.graph.severeWeather,
-    riskIndexGraph: state.graph.riskIndex
-})
+const mapStateToProps = (state, ownProps) => {
+    return {
+        router: state.router,
+        geo: state.geo,
+        geoGraph: state.graph.geo,
+        severeWeather: state.graph.severeWeather,
+        riskIndexGraph: state.graph.riskIndex
+    }
+}
 
 const mapDispatchToProps = {
     getChildGeo,

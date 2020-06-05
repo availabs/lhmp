@@ -158,28 +158,24 @@ class HazardEventsMap extends React.Component {
                     data.features.push(...eventsData[geoid][geoLevel][gid][hazard][this.props.allTime ? "allTime" : this.state.currentYear])
                 }, this)
             }
-
             const getLineColor = ({ properties }) => {
                 const hexColor = colorScale(properties.hazard),
                     rgbColor = d3color.rgb(hexColor);
                 return [rgbColor.r, rgbColor.g, rgbColor.b, 255];
             }
             return [
-                { id: 'counties-merge-layer-filled',
-                    data: this.props.geo['merge'][geoid.slice(0, 2)]['counties'],
+
+                { id: 'cousubs-layer-filled',
+                    data: this.props.bounds,
                     filled: true,
                     getFillColor: [242, 239, 233, 255]
                 },
-                { id: 'counties-mesh-layer',
-                    data: this.props.geo['mesh'][geoid.slice(0, 2)]['counties'],
-                    filled: false,
-                    getLineColor: [200, 200, 200, 255],
-                    lineWidthMinPixels: 1
-                },
-                { id: 'counties-merge-layer-stroked',
-                    data: this.props.geo['merge'][geoid.slice(0, 2)]['counties'],
+                { id: 'cousubs-layer-stroked',
+                    data: this.props.bounds,
                     stroked: true,
-                    getLineColor: [242, 239, 233, 255],
+                    getLineColor: (d) =>
+                        d.properties.geoid === this.props.geoid ?
+                        [255, 0, 0, 255] : [255, 0, 0, 0],
                     lineWidthMinPixels: 2
                 },
                 { id: 'events-layer',

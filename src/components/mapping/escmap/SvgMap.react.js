@@ -171,7 +171,16 @@ class SvgMap extends React.Component {
 
 		return (
       		<div id={ this.state.id } style={ { width: '100%', height: `${ this.props.height }px`, position: "relative" } }>
-				<div style={ { position: "absolute" } }>
+				<div style={ { position: "absolute", height: 'fit-content' } }>
+					<span style={{float: 'right'}}>
+						{
+							controls.map((control, i) => <MapControl key={ i } { ...control }/>)
+						}
+						{ this.props.hoverData ?
+							<MapHover { ...this.props.hoverData }/>
+							: null
+						}
+					</span>
 					<svg id={ this.state.id + "-svg" }
 						style={ {
 							width: `${ width }px`,
@@ -187,13 +196,6 @@ class SvgMap extends React.Component {
 							
 						}
 					</svg>
-					{
-						controls.map((control, i) => <MapControl key={ i } { ...control }/>)
-					}
-		          	{ this.props.hoverData ? 
-		          		<MapHover { ...this.props.hoverData }/>
-		          		: null
-		          	}
 				</div>
 			</div>
 		)
