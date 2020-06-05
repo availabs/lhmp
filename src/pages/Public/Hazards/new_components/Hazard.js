@@ -59,7 +59,7 @@ class Hazards extends React.Component {
 
         return (
             <div>
-{/*                <div className='row'>
+                <div className='row'>
                     <div>
                         <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Narrative</h5>
                         <div
@@ -151,7 +151,7 @@ class Hazards extends React.Component {
                             hazard={this.props.hazard}
                         />
                     </div>
-                </div>*/}
+                </div>
 
                 <div className='row'>
                     <div className='col-md-12'>
@@ -164,7 +164,7 @@ class Hazards extends React.Component {
                             dataType='severeWeather'
                             hazards={this.props.hazards}
                             hazard={this.props.hazard}
-                            zoomPadding={200}
+                            zoomPadding={150}
                         />
                     </div>
                 </div>
