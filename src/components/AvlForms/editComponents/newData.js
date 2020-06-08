@@ -142,6 +142,7 @@ class AvlFormsNewData extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
+                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -487,6 +488,39 @@ class AvlFormsNewData extends React.Component{
                         required:item.attributes[attribute].field_required,
                         prompt: this.displayPrompt.bind(this),
                         type:item.attributes[attribute].edit_type,
+                        defaultValue: item.attributes[attribute].defaultValue
+                    })
+                }
+                else if(item.attributes[attribute].edit_type === 'dropdown_no_meta'){
+                    data.push({
+                        section_id: item.attributes[attribute].section,
+                        formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
+                        handleChange : this.handleChange,
+                        state : this.state,
+                        title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
+                        required: item.attributes[attribute].field_required,
+                        type:item.attributes[attribute].edit_type,
+                        prompt: this.displayPrompt.bind(this),
+                        dropDownData : item.attributes[attribute].edit_type_values,
+                        defaultValue: item.attributes[attribute].defaultValue
+                    })
+                }
+                else if(item.attributes[attribute].edit_type === 'dropdown_no_meta' && item.attributes[attribute].disable_condition){
+                    data.push({
+                        section_id: item.attributes[attribute].section,
+                        formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
+                        handleChange : this.handleChange,
+                        state : this.state,
+                        title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
+                        required: item.attributes[attribute].field_required,
+                        type:item.attributes[attribute].edit_type,
+                        prompt: this.displayPrompt.bind(this),
+                        disable_condition : item.attributes[attribute].disable_condition,
+                        dropDownData : item.attributes[attribute].edit_type_values,
                         defaultValue: item.attributes[attribute].defaultValue
                     })
                 }

@@ -53,7 +53,9 @@ export class LandUseLayer extends MapLayer{
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                     map.resize();
                     map.fitBounds(bbox);
-
+                    this.layers.forEach(layer => {
+                        map.setLayoutProperty(layer.id, 'visibility',"none");
+                    })
                     return this.fetchData()
                 })
         }

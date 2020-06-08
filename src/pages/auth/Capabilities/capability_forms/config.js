@@ -1,7 +1,11 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
+<<<<<<< HEAD
         list_attributes:['municipality','capability_type','capability_category', 'jurisdiction_utilization'],
+=======
+        list_attributes:['county','municipality','capability_type','capability_category', 'jurisdiction_utilization'],
+>>>>>>> bcb2d913409230023ae65de6f0d3a4846e471992
         csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
         default_title: 'Capability', // in the case when page_title is invalid
         page_title: 'capability_name', // page title in edit and view

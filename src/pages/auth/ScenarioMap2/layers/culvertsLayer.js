@@ -35,6 +35,9 @@ export class CulvertsLayer extends MapLayer{
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                 map.resize();
                 map.fitBounds(bbox);
+                this.layers.forEach(layer => {
+                    map.setLayoutProperty(layer.id, 'visibility',"none");
+                })
                 this.fetchData().then(data => this.receiveData(this.map,data))
 
             })
@@ -89,11 +92,6 @@ export class CulvertsLayer extends MapLayer{
                 'circle-color',
                 ["get", ["to-string", ["get", "id"]], ["literal", culvertsColors]]
             )
-            /*this.map.setPaintProperty(
-                'buildings-layer',
-                'circle-radius',
-                ["get", ["to-string", ["get", "id"]], ["literal", buildingRadius]]
-            )*/
         }
     }
 
@@ -137,6 +135,7 @@ export const CulvertsOptions =  (options = {}) => {
                 }
             }
         ],
+        loading:0,
         layers: [
             {
                 'id': 'culverts',
@@ -147,6 +146,7 @@ export const CulvertsOptions =  (options = {}) => {
                     'line-color': '#FFFFFF',
                     'line-opacity': 0.5
                 },
+                'visibility' : 'none',
                 filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
 
             },
@@ -158,7 +158,8 @@ export const CulvertsOptions =  (options = {}) => {
                     //'circle-radius': 3,
                     'circle-opacity': 0.5,
 
-                }
+                },
+                'visibility' : 'none',
             }
 
         ],

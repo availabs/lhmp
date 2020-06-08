@@ -10,6 +10,7 @@ import NumberOfHazardsMonthStackedBarGraph from './NumberOfHazardsMonthStackedBa
 import HazardEventsTable from './HazardEventsTable'
 
 import CousubTotalLossTable from "../components/CousubTotalLossTable";
+import HazardEventsMapController from "../components/HazardEventsMapController";
 import get from "lodash.get"
 import fnum from 'utils/sheldusUtils'
 
@@ -61,14 +62,14 @@ class Hazards extends React.Component {
                 <div className='row'>
                     <div>
                         <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Narrative</h5>
-                        <div 
-                            dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}} 
+                        <div
+                            dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
                         />
                     </div>
                 </div>
                 <div className='row'>
                     <div className='col-md-6'>
-                        <h6>{HazardName} Loss by Year</h6> 
+                        <h6>{HazardName} Loss by Year</h6>
                         <HazardBarChart
                             hazard={this.props.hazard}
                             geoid={this.props.geoid}
@@ -84,7 +85,7 @@ class Hazards extends React.Component {
                             hazard={this.props.hazard}
                             geoid={this.props.geoid}
                             geoLevel={this.props.geoLevel}
-                            
+
                             height={300}
                         />
                     </div>
@@ -148,6 +149,22 @@ class Hazards extends React.Component {
                             dataType='severeWeather'
                             hazards={this.props.hazards}
                             hazard={this.props.hazard}
+                        />
+                    </div>
+                </div>
+
+                <div className='row'>
+                    <div className='col-md-12'>
+                        <h5>Hazard Events</h5>
+                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                        <h6>{HazardName} Events</h6>
+                        <HazardEventsMapController
+                            geoid={this.props.geoid}
+                            geoLevel={this.props.geoLevel}
+                            dataType='severeWeather'
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
+                            zoomPadding={150}
                         />
                     </div>
                 </div>

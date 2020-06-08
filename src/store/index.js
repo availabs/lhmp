@@ -4,6 +4,7 @@ import { reducer as graph } from 'utils/redux-falcor';
 import {AvlInTheMiddle} from "components/AvlMap/ReduxMiddleware"
 
 import user from './modules/user'
+import geo from './modules/geo'
 import scenario from "./modules/scenario";
 import landUse from "./modules/landUse";
 import messages from "./modules/messages"
@@ -32,6 +33,7 @@ const middleware = [
 const store = createStore(
   combineReducers({
     user,
+      geo,
     scenario,
     landUse,
     messages,

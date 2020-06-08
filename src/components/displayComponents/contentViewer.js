@@ -17,7 +17,10 @@ const DIV = styled.div`
     display: flex;
     justify-content: space-between;
     .left {float: left !important;}
-    .fullWidth {width: 85%;}
+    .halfWidth {width: 50%;}
+    .quarterToFullWidth {width: 75%;}
+    .quarterWidth {width: 25%;}
+    * {height: fit-content;}
 `
 class ContentViewer extends Component {
     constructor(props) {
@@ -88,10 +91,10 @@ class ContentViewer extends Component {
     }
     renderStatusTracker(){
         return (
-            <DIV className='col-12' style={{marginTop:'50px'}}>
+            <DIV className='col-12' style={{marginTop: '50px', paddingRight: '0', display:'flex'}}>
                 <label className='selectLabel'>Status: </label>
                 <select
-                    className='dropdownSelect hoverable fullWidth left btn btn-outline-primary btn-primary step-trigger-btn'
+                    className='dropdownSelect hoverable quarterToFullWidth left btn btn-outline-primary btn-primary step-trigger-btn'
                     id={'status'}
                     value={this.state.status}
                     onChange={(e)=> this.setState({status: e.target.value})}
@@ -107,7 +110,7 @@ class ContentViewer extends Component {
                         </React.Fragment> : null
                     }
                 </select>
-                <a className='hoverable left btn btn-primary step-trigger-btn'
+                <a className='hoverable left quarterWidth btn btn-primary step-trigger-btn'
                    onClick={this.handleSubmit}
                 >Submit</a>
             </DIV>
@@ -117,13 +120,13 @@ class ContentViewer extends Component {
         let {editorState} = this.state;
         return (
             //this.props.type === 'contentEditor' ? (
-                <div>
+                <React.Fragment>
                     {this.props.showStatusTracker ? this.renderStatusTracker() : null}
                     <div style={{display:'inline-block', textAlign: 'justify'}}
                         dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB :
                             this.props.requirement.includes('callout') ? null : '<i>Content not available.</i>'
                     }} />
-                </div>
+                </React.Fragment>
             //) : ''
         )
     }
