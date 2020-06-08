@@ -1,11 +1,7 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-<<<<<<< HEAD
-        list_attributes:['municipality','capability_type','capability_category', 'jurisdiction_utilization'],
-=======
         list_attributes:['county','municipality','capability_type','capability_category', 'jurisdiction_utilization'],
->>>>>>> bcb2d913409230023ae65de6f0d3a4846e471992
         csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
         default_title: 'Capability', // in the case when page_title is invalid
         page_title: 'capability_name', // page title in edit and view
@@ -79,9 +75,9 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
-            regulatory_name:{
-                label:'Regulatory Name',
-                prompt:'If the capability is a law/ordinance/resolution/policy, provide the legal ID (ex. Article 3, Section 4.6.1) of the capability at the time of adoption.',
+            capability_description:{
+                label:'Capability Description',
+                prompt:'Describe this capability',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
@@ -106,16 +102,6 @@ module.exports = [
                 sub_type:'',
                 edit_type:'text', // the values you would like to see as options for radio buttons
                 disable_condition:'',
-                display_type:'text',
-                meta:'false',
-                hidden:'false',
-                section:''
-            },
-            capability_description:{
-                label:'Capability Description',
-                prompt:'Describe this capability',
-                sub_type:'',
-                edit_type:'text',
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
@@ -226,6 +212,16 @@ module.exports = [
             link_url:{
                 label:'URL for the link',
                 prompt:'if the capability has a website or online document associated with the capability. Examples include; emergency manager/department, soil and water conservation districts websites, weblink to a complete streets policy.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:''
+            },
+            regulatory_name:{
+                label:'Regulatory Name',
+                prompt:'If the capability is a law/ordinance/resolution/policy, provide the legal ID (ex. Article 3, Section 4.6.1) of the capability at the time of adoption.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
