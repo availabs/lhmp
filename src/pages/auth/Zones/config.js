@@ -1,7 +1,7 @@
 module.exports = [
     {
         type: 'zones', // type is same as the route path for now
-        list_attributes: ['name'],
+        list_attributes: ['name','zone_type'],
         //csv_download: ['capability_category', 'capability_type', 'capability_name', 'regulatory_name', 'municipality', 'capability_description', 'adoption_date', 'development_update', 'jurisdiction_utilization', 'mitigation_contribution', 'adopting_authority', 'responsible_authority', 'support_authority', 'affiliated_agency', 'link_url', 'upload'],
         sub_type: '',
         // if wizard
@@ -11,7 +11,7 @@ module.exports = [
                 label:'Zone Name',
                 prompt:'',
                 sub_type:'',
-                edit_type:'text',
+                edit_type: 'hidden',
                 display_type:'text',
                 show:'true',
                 meta:'false',
@@ -23,10 +23,10 @@ module.exports = [
                 label:'Zone Type',
                 prompt:'',
                 sub_type:'',
-                edit_type:'text',
+                edit_type:'dropdown',
                 display_type:'text',
                 show:'true',
-                meta:'false',
+                meta:'true',
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
@@ -35,7 +35,7 @@ module.exports = [
                 label:'Comment',
                 prompt:'',
                 sub_type:'',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 show:'true',
                 meta:'false',

@@ -337,9 +337,11 @@ class AvlFormsNewData extends React.Component{
         if(this.props.meta_data) {
             let graph = this.props.meta_data;
             if(graph[form_type]){
+
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
             }
         }
+
         if (!countyData.length) return null;
         this.props.config.forEach(item =>{
             Object.keys(item.attributes).forEach(attribute =>{
