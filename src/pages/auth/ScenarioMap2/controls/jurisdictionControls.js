@@ -174,9 +174,9 @@ class JurisdictionControl extends React.Component{
                     <div style={{display:'flex',justifyContent:'space-between'}}>
                         <SearchableDropDown
                             data={zones_list}
-                            placeholder={'Select a Type'}
+                            placeholder={'Add Jurisdiction'}
                             value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
-                            hideValue={false}
+                            hideValue={true}
                             onChange={(value) => {
                                 this.setState({zone_id:value})
                                 ids = JSON.parse(localStorage.getItem('jurisdiction'));
