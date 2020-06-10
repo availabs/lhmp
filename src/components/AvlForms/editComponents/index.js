@@ -21,10 +21,20 @@ const NA = ({ type, state, routes }) =>
     )
 }
 
+const HIDDEN = ({ type, state, routes }) =>
+{
+    return (
+        <div>
+
+        </div>
+    )
+}
+
 const NE = ((props) => (<div>{props.type} Doesn't Exist</div>))
 export default {
     NA,
     NE,
+    hidden: HIDDEN,
     text: TextComponent,
     dropdown: DropDownComponent,
     date: DateComponent,

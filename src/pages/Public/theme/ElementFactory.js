@@ -26,7 +26,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                 <div>
                     {showTitle ? element.title : null}
                     {showEdit ? <span style={{float: 'right'}}>
-                    <Link className='btn btn-primary btn-sm btn-rounded' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                    <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
                 </div>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
@@ -65,7 +65,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                     <SectionBoxMain>
                         {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
                         {showEdit ? <span style={{float: 'right'}}>
-                            <Link className='btn btn-primary btn-sm btn-rounded' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                            <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
                         <GraphFactory
                             graph={{type: element.type + 'Viewer'}}
                             user={user}
