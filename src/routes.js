@@ -64,6 +64,7 @@ import ParticipationMeetingView from "./pages/auth/Participation/components/meet
 import ParticipationUserRoles from "./pages/auth/Participation/components/userroles";
 import ZonesFormsList from 'pages/auth/Zones/index'
 import ZonesFormsView from 'pages/auth/Zones/view'
+import ZonesFormsNew from 'pages/auth/Zones/new'
 // -- Util Routes
 import Login from './pages/Landing/Login'
 import Signup from './pages/Landing/SignUp'
@@ -131,6 +132,7 @@ const routes = [
     ...ParticipationUserRoles,
     ...ZonesFormsList,
     ...ZonesFormsView,
+    ...ZonesFormsNew,
     PlanIndex,
     RiskMap,
     ScenarioMap2,

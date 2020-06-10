@@ -714,9 +714,18 @@ class BuildingModalBase extends React.Component {
         return (
             <BuildingContainer>
                 { address || name ?
+                    <div style={{display:'flex',justifyContent:'space-between'}}>
                     <h4>
                         { address || name }
                     </h4>
+                        <Link
+                            key={0}
+                            target="_blank"
+                            className="mr-2 mb-2 btn btn-primary btn-sm"
+                            to={ `/assets/list/edit/${this.props.id}` } >
+                            Edit Asset
+                        </Link>
+                    </div>
                     : null
                 }
                 <div style={ { width: "100%", display: "flex", padding: "10px 0px" } }>

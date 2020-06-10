@@ -19,7 +19,7 @@ class ZonesFormsIndex extends React.Component{
             <AvlFormsListTable
                 json = {config}
                 createButtons = {false}
-                editButton = {false}
+                editButton = {true}
                 viewButton = {true}
                 deleteButton = {false}
             />

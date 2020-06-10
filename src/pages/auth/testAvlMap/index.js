@@ -1,12 +1,15 @@
 import React from 'react';
-import AvlMap from 'avlmap-npm/index';
+import AvlMap from 'avlmap-npm/AvlMap';
 import TestAvlMapLayer from "./testAvlMap";
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
+import {AvlInTheMiddle} from "../../../store/modules/ReduxMiddleware";
+import {register,unregister} from'avlmap-npm/ReduxMiddleware'
 
 class Home extends React.Component {
 
     TestAvlMapLayer = TestAvlMapLayer()
+    // TODO need tp solve the props style problem here in order to give styles as props while rendering AvlMap
     render() {
         return (
             <div style={ { width: '100%', height: '100vh' } }>
