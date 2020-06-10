@@ -20,6 +20,7 @@ class Home extends React.Component {
                         //this.zone,
                         //this.scenario
                     ] }
+                    sidebar={false}
                     zoom={ 7 }
                     center={ [-75.7749, 42.6583] }
                     styles={[
