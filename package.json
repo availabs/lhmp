@@ -71,6 +71,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.4.0-beta.8",
     "react-router-redux": "^5.0.0-alpha.9",
+    "react-s3-uploader": "^4.9.3",
     "react-scripts": "^3.3.0",
     "react-scroll": "^1.7.16",
     "react-select": "^3.0.8",
