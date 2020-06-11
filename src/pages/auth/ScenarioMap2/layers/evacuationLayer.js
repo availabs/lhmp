@@ -8,22 +8,23 @@ import mapboxgl from "mapbox-gl"
 
 import MapLayer from "components/AvlMap/MapLayer"
 
-import {ConflationStyle} from './conflation.style.js'
+import {ConflationStyle} from '../components/conflation.style'
 
 import * as d3scale from "d3-scale"
 
-import RouteInfoBox from "../components/RouteInfoBox"
 
 import {MAPBOX_TOKEN} from 'store/config'
 
 const atts = ['id', 'name', 'type', 'owner', "updatedAt", "tmcArray", "points"];
 
-class RouteLayer extends MapLayer {
+export class EvacuationRoutesLayer extends MapLayer {
     onAdd(map) {
         // register(this, REDUX_UPDATE, ["graph"]);
         if (this.viewOnly) this.mode = null;
         this.markers.forEach(m => m.addTo(map));
-
+        this.layers.forEach(layer => {
+            map.setLayoutProperty(layer.id, 'visibility',"none");
+        })
         return this.loadUserRoutes(false)
             .then(() => falcorGraph.get(
                 ["conflation", "latestVersion"],
@@ -46,6 +47,7 @@ class RouteLayer extends MapLayer {
                     get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
                         .slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+
                 map.resize();
                 map.fitBounds(bbox, {maxDuration: 0});
             })
@@ -54,6 +56,20 @@ class RouteLayer extends MapLayer {
     onRemove(map) {
         // unregister(this);
         this.markers.forEach(m => m.remove());
+    }
+
+    toggleVisibilityOn() {
+        this._isVisible = !this._isVisible;
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility', "visible");
+        })
+    }
+
+    toggleVisibilityOff(){
+        this._isVisible = !this._isVisible;
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',"none");
+        })
     }
 
     loadUserRoutes(forceUpdate = true) {
@@ -307,8 +323,8 @@ class RouteLayer extends MapLayer {
     }
 
     paintRoute(geom) {
-        if (RouteLayer.map.getSource('execution-route-source')) {
-            RouteLayer.map.getSource('execution-route-source').setData(geom);
+        if (EvacuationRoutesLayer.map.getSource('execution-route-source')) {
+            EvacuationRoutesLayer.map.getSource('execution-route-source').setData(geom);
         }
     }
 
@@ -426,10 +442,12 @@ class RouteLayer extends MapLayer {
     getRouteName() {
         return get(this.filters, ["userRoutes", "value", "name"], "Route");
     }
+
 }
 
-export default (props = {}) =>
-    new RouteLayer("Conflation Routing", {
+export const EvacuationRoutesOptions =  (options = {}) =>{
+    return {
+        active: true,
         sources: [
             {
                 id: 'execution-route-source',
@@ -505,10 +523,6 @@ export default (props = {}) =>
                 ]
             }
         },
-
-        active: false,
-
-        ...props,
         version: 2.0,
 
         mode: "markers",
@@ -561,25 +575,6 @@ export default (props = {}) =>
             }
         },
 
-        infoBoxes: {
-            router: {
-                title: ({layer}) => layer.getRouteName(),
-                comp: ({layer}) => {
-                    return (
-                        <RouteInfoBox layer={layer}
-                                      userRoute={layer.filters.userRoutes.value}
-                                      nameArray={layer.nameArray}
-                                      data={layer.data}
-                                      geom={layer.geom}
-                                      paintRoute={layer.receiveRoute.bind(layer)}
-                                      viewOnly={layer.viewOnly}
-                        />
-                    )
-                },
-                show: true
-            }
-        },
-
         mapActions: {
             modeToggle: {
                 Icon: ({layer}) => <span
@@ -590,5 +585,6 @@ export default (props = {}) =>
                 }
             }
         }
+    }
+}
 
-    })

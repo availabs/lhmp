@@ -12,6 +12,7 @@ import {LandUseLayer,LandUseOptions} from "./landUseLayer";
 import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
 import {CulvertsLayer,CulvertsOptions} from "./culvertsLayer";
 import {JurisdictionLayer,JurisdictionOptions} from "./jurisdictionLayer";
+import {EvacuationRoutesLayer,EvacuationRoutesOptions} from "./evacuationLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -22,7 +23,7 @@ const COLORS = getColorRange(12, "Set3");
 
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
-let culvertsLayer,landUseLayer,commentMapLayer = {}
+let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer = {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -51,6 +52,11 @@ const DynamicJurisdictionLayerFactory =(callingLayer,...args) =>{
     return new JurisdictionLayer('jurisdiction',JurisdictionOptions())
 };
 
+const DynamicEvacuationRoutesLayerFactory =(callingLayer,...args) =>{
+    return new EvacuationRoutesLayer('evacuationRoutes',EvacuationRoutesOptions())
+};
+
+
 export class ControlLayers extends MapLayer {
     onAdd(map) {
         super.onAdd(map);
@@ -64,10 +70,11 @@ export class ControlLayers extends MapLayer {
                     this.boundingBox = bbox
                     map.resize();
                     map.fitBounds(bbox);
-                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer){
+                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer){
                         this.landUseLayer.toggleVisibilityOff()
                         this.commentMapLayer.toggleVisibilityOff()
                         this.culvertsLayer.toggleVisibilityOff()
+                        this.evacuationRoutesLayer.toggleVisibilityOff()
                     }
                 })
         }
@@ -259,6 +266,13 @@ export class ControlLayers extends MapLayer {
                             ]).then(cml => {
                                 commentMapLayer = cml
                                 this.commentMapLayer = cml
+                                this.doAction([
+                                    "addDynamicLayer",
+                                    DynamicEvacuationRoutesLayerFactory
+                                ]).then(erl =>{
+                                    evacuationRoutesLayer = erl
+                                    this.evacuationRoutesLayer = erl
+                                })
                             })
                         })
                     })
@@ -290,7 +304,11 @@ export class ControlLayers extends MapLayer {
             if(Object.keys(culvertsLayer).length > 0){
                 culvertsLayer.toggleVisibilityOn()
             }
-
+        }
+        if(layerName.includes("evacuationRoutes")){
+            if(Object.keys(evacuationRoutesLayer).length > 0){
+                evacuationRoutesLayer.toggleVisibilityOn()
+            }
         }
         if(layerName.includes("jurisdiction")){
             this.jurisdictonLayer.toggleVisibilityOn()
@@ -319,6 +337,11 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes('landUse')){
             if(Object.keys(landUseLayer).length > 0){
                 landUseLayer.toggleVisibilityOff()
+            }
+        }
+        if(layerName.includes("evacuationRoutes")){
+            if(Object.keys(evacuationRoutesLayer).length > 0){
+                evacuationRoutesLayer.toggleVisibilityOff()
             }
         }
         if(layerName.includes('jurisdiction')){

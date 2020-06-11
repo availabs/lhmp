@@ -10,7 +10,7 @@ import Strategies from './pages/Public/Strategies/'
 // import PublicPlan from './pages/PublicPlan'
 import RiskMap from './pages/riskmap'
 import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
-import EvacuationRoutes from 'pages/auth/EvacuationRoutes/'
+//import EvacuationRoutes from 'pages/auth/EvacuationRoutes/'
 import CommentMap from 'pages/auth/CommentMap/index'
 //import TestAvlMap from 'pages/auth/testAvlMap/index'
 import Home from 'pages/auth/Home';
@@ -138,7 +138,7 @@ const routes = [
     ScenarioMap2,
     CommentMap,
     //TestAvlMap,
-    EvacuationRoutes,
+    //EvacuationRoutes,
     Logout,
     NoMatch
 

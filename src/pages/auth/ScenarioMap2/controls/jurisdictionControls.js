@@ -69,7 +69,7 @@ class JurisdictionControl extends React.Component{
             let graph = this.props.zonesList
             if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
-                    if(this.state.zone_ids.includes(graph[item].value.id)){
+                    if(graph[item].value && this.state.zone_ids.includes(graph[item].value.id)){
                         if(graph[item].value.attributes.geoid){
                             zones_list.push({
                                 'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
@@ -128,7 +128,7 @@ class JurisdictionControl extends React.Component{
             Object.keys(graph).forEach(item =>{
                 ids.forEach(zone_id =>{
                     //if already in database
-                    if(zone_id['zone_id'] === graph[item].value.id){
+                    if(graph[item].value && zone_id['zone_id'] === graph[item].value.id){
                         selectedZonesData.push({
                             zone_id:  graph[item].value ? graph[item].value.id : '',
                             geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',

@@ -9,6 +9,7 @@ import LandUseControl from "./landUseControl";
 import CommentMapControl from "./commentMapControl";
 import CulvertsControl from "./culvertsControl";
 import JurisdictionControl from "./jurisdictionControls";
+import EvacuationControl from "./evacuationControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
 import styled from "styled-components";
@@ -21,6 +22,7 @@ const AllModes =[
     {value:'landUse',label:'Land Use'},
     {value:'commentMap',label:'Comment Map'},
     {value:'culverts',label:'Culverts'},
+    {value:'evacuationRoutes',label:'Evacuation Routes'}
     ];
 const AllBlocks = [
     {id:'scenario_block',title:'Risk Scenarios'},
@@ -29,6 +31,7 @@ const AllBlocks = [
     {id:'landUse_block',title:'Land Use'},
     {id:'commentMap_block',title:'Comment Map'},
     {id:'culverts_block',title:'Culverts'},
+    {id:'evacuationRoutes_block',title:'Evacuation Routes'}
     ]
 
 const DROPDOWN = styled.div`
@@ -47,7 +50,7 @@ class MainControls extends React.Component {
             activeMode: ['scenario','jurisdiction'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap','culverts','zone'],
+            showLayers : ['landUse','commentMap','culverts','zone','evacuationRoutes'],
             selected : true
         }
 
@@ -76,6 +79,7 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
             this.props.layer.mainLayerToggleVisibilityOff(["culverts"])
             this.props.layer.mainLayerToggleVisibilityOff(["zone"])
+            this.props.layer.mainLayerToggleVisibilityOff(["evacuationRoutes"])
         }
         // if a layer is removed by X
         if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
@@ -143,6 +147,7 @@ class MainControls extends React.Component {
     }
 
     render(){
+
         return (
             <div style={{'overflowX':'auto'}}>
                 {this.renderLayersDropDown()}
@@ -316,6 +321,41 @@ class MainControls extends React.Component {
                                 <br/>
                                 <CulvertsControl
                                     layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'evacuationRoutes'){
+
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <EvacuationControl
+                                    layer = {this.props}
+                                    userRoute={this.props.layer.evacuationRoutesLayer ? this.props.layer.evacuationRoutesLayer.filters.userRoutes : ''}
+                                    nameArray={this.props.layer.evacuationRoutesLayer.nameArray}
+                                    data={this.props.layer.evacuationRoutesLayer.data}
+                                    geom={this.props.layer.evacuationRoutesLayer.geom}
+                                    paintRoute={this.props.layer.evacuationRoutesLayer.receiveRoute.bind(this.props.layer.evacuationRoutesLayer)}
+                                    viewOnly={this.props.layer.evacuationRoutesLayer.viewOnly}
                                 />
                             </div>
                         )
