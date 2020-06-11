@@ -51,6 +51,10 @@ import CapabilitiesFormsNew from 'pages/auth/Capabilities/capability_forms/new'
 import RolesFormsList from 'pages/auth/Roles/roles_forms/index'
 import RolesFormView from 'pages/auth/Roles/roles_forms/view'
 import RolesFormNew from 'pages/auth/Roles/roles_forms/new'
+
+import MunicipalitiesFormsList from 'pages/auth/municipalities/index'
+import MunicipalitiesFormView from 'pages/auth/municipalities/view'
+import MunicipalitiesFormNew from 'pages/auth/municipalities/new'
 import User from 'pages/auth/Users/'
 import Admin from 'pages/auth/Users/admin'
 import FormEditOrNew from 'components/light-admin/tables/FormEditOrNew'
@@ -114,6 +118,9 @@ const routes = [
     ...RolesFormsList,
     ...RolesFormView,
     ...RolesFormNew,
+    ...MunicipalitiesFormsList,
+    ...MunicipalitiesFormView,
+    ...MunicipalitiesFormNew,
     ...Public,
     ...About,
     ...Hazards,

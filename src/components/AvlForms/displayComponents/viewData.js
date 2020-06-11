@@ -39,6 +39,10 @@ class AvlFormsViewData extends React.Component{
                 let graph = get(response, `json.forms.byId[${id}].attributes`, {});
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item => {
                     let value = graph[item];
+                    value = value ? value.toString() : value;
+                    value = value && value.includes('[') ?
+                        value.replace('[', '').replace(']', '') : value;
+
                     if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
                         this.setState({county: value})
                     }
@@ -81,20 +85,19 @@ class AvlFormsViewData extends React.Component{
                         formType = get(config[0][d], `form_type`, null);
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value ? value.toString() : value;
+                    value = value && value.includes('[') ?
+                        value.replace('[', '').replace(']', '') : value;
                     if(config_attributes[0].includes(d)){
                         if(value === this.state.county ||
                             (
-                                (value && value.includes('[') ?
-                                    value.replace('[', '').replace(']', '') :
-                                    value ?
-                                        value : "") === this.state.cousub
+                                (value ? value : "") === this.state.cousub
                             )
                         ){
-                            value =
+                            /*value =
                                 value &&
                                 value.includes('[') &&
                                 value !== this.state.county ? value.replace('[', '').replace(']', '') :
-                                    value
+                                    value*/
                             data.push({
                                 attribute : d,
                                 value: geoData[value] ? geoData[value].name :

@@ -80,14 +80,15 @@ class AssetsByTypeIndex extends React.Component {
         )
             .then(response => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache(), `geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
-                )
+                    ['geo',
+                        [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
+                        ['name']],                )
             })
     }
 
     renderMenu(caller) {
-        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoidData, `${this.props.activeGeoid}.counties.municipalities.value`, [])];
-        return header(caller, this.props.geoidData, this.props.setActiveCousubid, this.props.activeCousubid, allowedGeos)
+        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
+        return header(caller, this.props.geoGraph, this.props.setActiveCousubid, this.props.activeCousubid, allowedGeos)
     }
 
     renderLandUseMenu(){
@@ -162,7 +163,7 @@ const mapStateToProps = state => ({
 
     isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
-    geoidData: get(state.graph, 'geo'),
+    geoGraph: get(state.graph, 'geo'),
     activeGeoid: state.user.activeGeoid,
     activeCousubid: state.user.activeCousubid,
 });
