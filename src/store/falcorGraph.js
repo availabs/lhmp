@@ -11,8 +11,8 @@ var Promise = require("bluebird");
 
 
 
-let url = 'https://graph.availabs.org/'
-// let url = 'http://localhost:4444/'
+// let url = 'https://graph.availabs.org/'
+let url = 'http://localhost:4444/'
 
 
 
@@ -21,6 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   url = 'https://graph.availabs.org/'
 }
 
+export const URL = () => url
 console.log('url', url,process.env.NODE_ENV)
 class CustomSource extends HttpDataSource {
   onBeforeRequest(config) {
