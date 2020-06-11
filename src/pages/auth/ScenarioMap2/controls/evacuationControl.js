@@ -115,25 +115,27 @@ class EvacuationControl extends React.Component {
             );
     }
     render() {
-        const {layer, nameArray} = this.props;
+
+        let layer = this.props.layer.layer.evacuationRoutesLayer
+        //console.log('props in evacuation COntrol',this.props.layer.layer.evacuationRoutesLayer.data)
         let somethingToRemove = false;
         if ((layer.mode === "markers") && (layer.markers.length)) {
             somethingToRemove = true;
         } else if ((layer.mode === "click") && (layer.data.click.length)) {
             somethingToRemove = true;
         }
-        console.log('in evacuation control',this.props.userRoute)
-        let routes = get(this.props.data, `routes`, []).pop(),
+        let routes = get(layer.data, `routes`, []).pop(),
             geom = get(routes, `geometry`, {coordinates: [], type: "LineString"});
+        //console.log('routes',layer.data)
         return (
             <div>
-                {!this.props.userRoute.value ? null :
+                {!layer.filters.userRoutes.value ? null :
                     <div style={{fontSize: "18px", paddingTop: "5px"}}>
-                        Year Created: {new Date(this.props.userRoute.value.updatedAt).getFullYear()}
+                        Year Created: {new Date(layer.filters.userRoutes.value.updatedAt).getFullYear()}
                     </div>
                 }
 
-                {!this.props.viewOnly ?
+                {!layer.viewOnly ?
                     <div style={{position: "relative", paddingTop: "10px", display: 'flex', justifyContent: 'space-between'}}>
                         <Button style={{width: "calc(33% - 5px)"}}
                                 onClick={e => layer.removeLast()}
@@ -148,7 +150,7 @@ class EvacuationControl extends React.Component {
                             Clear Route
                         </Button>
                         <Button style={{width: "calc(33% - 5px)"}}
-                                disabled={!nameArray.length}
+                                disabled={!layer.nameArray.length}
                                 onClick={e => this.setState({showSaveModal: true})}
                                 primary>
                             Save Route
@@ -157,17 +159,17 @@ class EvacuationControl extends React.Component {
                     : null
                 }
 
-                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this)) : null}
+                {this.state.showSaveModal ? saveModalForm(layer.geom, this.setState.bind(this)) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}
-                    deleteButton = {!this.props.viewOnly}
+                    deleteButton = {!layer.viewOnly}
                     viewButton={true}
                     onViewClick={(e) => {
                         if (e.initLoad){
                             if(!this.state.initLoad){
                                 this.setState({initLoad: true})
-                                return  this.props.paintRoute(
+                                return  layer.paintRoute(
                                     {
                                         mode: 'markers',
                                         data: {
@@ -181,7 +183,7 @@ class EvacuationControl extends React.Component {
                                 )
                             }
                         }else{
-                            return  this.props.paintRoute(
+                            return  layer.paintRoute(
                                 {
                                     mode: 'markers',
                                     data: {

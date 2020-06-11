@@ -12,7 +12,7 @@ import {ConflationStyle} from '../components/conflation.style'
 
 import * as d3scale from "d3-scale"
 
-
+import { listen, unlisten } from "components/AvlMap/LayerMessageSystem"
 import {MAPBOX_TOKEN} from 'store/config'
 
 const atts = ['id', 'name', 'type', 'owner', "updatedAt", "tmcArray", "points"];
@@ -21,16 +21,15 @@ export class EvacuationRoutesLayer extends MapLayer {
     onAdd(map) {
         // register(this, REDUX_UPDATE, ["graph"]);
         if (this.viewOnly) this.mode = null;
-        this.markers.forEach(m => m.addTo(map));
+        this.onRemove(map)
         this.layers.forEach(layer => {
             map.setLayoutProperty(layer.id, 'visibility',"none");
         })
-        return this.loadUserRoutes(false)
-            .then(() => falcorGraph.get(
-                ["conflation", "latestVersion"],
+        return falcorGraph.get(
+                //["conflation", "latestVersion"],
                 ["geo", [store.getState().user.activeGeoid], "boundingBox"],
                 ['geo', store.getState().user.activeGeoid, 'cousubs']
-            ))
+            )
             .then(() => this.calcRoute())
             .then(() => {
                 let graph = falcorGraph.getCache();
@@ -54,26 +53,29 @@ export class EvacuationRoutesLayer extends MapLayer {
     }
 
     onRemove(map) {
-        // unregister(this);
+        unlisten(this);
         this.markers.forEach(m => m.remove());
     }
 
     toggleVisibilityOn() {
         this._isVisible = !this._isVisible;
+        this.mode = "markers"
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility', "visible");
         })
+        this.markers.forEach(m => m.addTo(this.map));
     }
 
     toggleVisibilityOff(){
         this._isVisible = !this._isVisible;
+        this.mode = ''
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',"none");
         })
+        this.onRemove(this.map)
     }
 
     loadUserRoutes(forceUpdate = true) {
-
         return falcorGraph.get(["routes", "length"])
             .then(res => {
                 const num = get(res, ["json", "routes", "length"], 0);
@@ -153,6 +155,7 @@ export class EvacuationRoutesLayer extends MapLayer {
     fetchData() {
         return Promise.resolve()
             .then(() => {
+                console.log('in fetch data')
                 if (this.mode === "click") {
                     return {mode: "click", data: [...this.data["click"]]};
                 }
@@ -173,6 +176,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                         return res.json()
                     })
                     .then(res => {
+                        console.log('res',res)
                         return {mode: "markers", data: res};
                     })
             })
@@ -261,6 +265,7 @@ export class EvacuationRoutesLayer extends MapLayer {
 
     receiveRoute({mode, data}) {
         this.data[mode] = data;
+        console.log('data in receive data',data)
         data = get(data, `routes`, []).pop();
         if (!data) return;
         if (data.hideAll) {
@@ -323,8 +328,20 @@ export class EvacuationRoutesLayer extends MapLayer {
     }
 
     paintRoute(geom) {
-        if (EvacuationRoutesLayer.map.getSource('execution-route-source')) {
-            EvacuationRoutesLayer.map.getSource('execution-route-source').setData(geom);
+        if (this.map.getSource('execution-route-source')) {
+            let geojson = {
+                "type": "FeatureCollection",
+                "features": []
+            }
+            geom.data.routes[0].data.forEach(d => {
+                geojson.features.push({
+                    type : "Feature",
+                    properties:{},
+                    geometry: typeof d.geometry === 'string' ? JSON.parse(d.geometry) : d.geometry
+                })
+
+            })
+            this.map.getSource('execution-route-source').setData(geojson);
         }
     }
 

@@ -340,6 +340,7 @@ export class ControlLayers extends MapLayer {
             }
         }
         if(layerName.includes("evacuationRoutes")){
+
             if(Object.keys(evacuationRoutesLayer).length > 0){
                 evacuationRoutesLayer.toggleVisibilityOff()
             }

@@ -16,11 +16,12 @@ class ActionsWorksheetFormsNew extends React.Component{
         let config = ViewConfig.config;
         console.log('data in saveRoute', this.props.geom)
         return(
-            <AvlFormsNewData
+            <div></div>
+           /* <AvlFormsNewData
                 json = {config}
                 id = {[]}
                 data = {{geom: this.props.geom}}
-            />
+            />*/
         )
     }
 }

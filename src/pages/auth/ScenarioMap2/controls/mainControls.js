@@ -73,7 +73,7 @@ class MainControls extends React.Component {
 
         }
         //landuse is active only when needed and zoomes in
-        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone'])){
+        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone','evacuationRoutes'])){
             //console.log('in second if')
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
             this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
@@ -147,7 +147,6 @@ class MainControls extends React.Component {
     }
 
     render(){
-
         return (
             <div style={{'overflowX':'auto'}}>
                 {this.renderLayersDropDown()}
@@ -350,12 +349,6 @@ class MainControls extends React.Component {
                                 <br/>
                                 <EvacuationControl
                                     layer = {this.props}
-                                    userRoute={this.props.layer.evacuationRoutesLayer ? this.props.layer.evacuationRoutesLayer.filters.userRoutes : ''}
-                                    nameArray={this.props.layer.evacuationRoutesLayer.nameArray}
-                                    data={this.props.layer.evacuationRoutesLayer.data}
-                                    geom={this.props.layer.evacuationRoutesLayer.geom}
-                                    paintRoute={this.props.layer.evacuationRoutesLayer.receiveRoute.bind(this.props.layer.evacuationRoutesLayer)}
-                                    viewOnly={this.props.layer.evacuationRoutesLayer.viewOnly}
                                 />
                             </div>
                         )
