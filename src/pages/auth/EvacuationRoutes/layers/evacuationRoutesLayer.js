@@ -280,10 +280,10 @@ class RouteLayer extends MapLayer {
             let feature = {
                 type: 'Feature',
                 properties: {name: get(data, `name`, '')},
-                geometry: get(data, `geometry`, {coordinates: [], type: "LineString"})
+                geometry: this.geom
             };
 
-            if (feature.geometry.coordinates.length > 0){
+            if (get(feature, `geometry.coordinates.length`, 0) > 0){
                 bounds = bounds.extend(new mapboxgl.LngLatBounds(geoJsonExtent(
                     get(feature, `geometry`, {coordinates: [], type: "LineString"})
                 )));

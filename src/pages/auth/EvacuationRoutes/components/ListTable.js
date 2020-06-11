@@ -95,6 +95,7 @@ class AvlFormsListTable extends React.Component{
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         if(graph){
+            console.log('graph?', graph)
             if(combine_list_attributes[0] === undefined){
                 Object.keys(graph).forEach(item =>{
                     let data = {};
@@ -103,6 +104,9 @@ class AvlFormsListTable extends React.Component{
                             if(this.state.form_ids.includes(item)){
                                 data['id'] = item
                                 data[attribute] = graph[item].value.attributes[attribute] || ' '
+                                if (attribute === 'geom' && typeof graph[item].value.attributes[attribute] === "string"){
+                                    data[attribute] = JSON.parse(graph[item].value.attributes[attribute])
+                                }
                             }
 
                         }

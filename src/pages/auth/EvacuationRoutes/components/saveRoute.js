@@ -19,7 +19,7 @@ class ActionsWorksheetFormsNew extends React.Component{
             <AvlFormsNewData
                 json = {config}
                 id = {[]}
-                data = {{geom: this.props.geom}}
+                data = {{geom: JSON.stringify(this.props.geom)}}
             />
         )
     }
