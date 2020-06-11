@@ -2,7 +2,8 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { routerReducer, routerMiddleware } from 'react-router-redux'
 import { reducer as graph } from 'utils/redux-falcor';
 import {AvlInTheMiddle} from "components/AvlMap/ReduxMiddleware"
-
+/*import {AvlInTheMiddle} from "avlmap-npm/ReduxMiddleware";
+import {AvlInTheMiddle} from 'store/modules/ReduxMiddleware'*/
 import user from './modules/user'
 import geo from './modules/geo'
 import scenario from "./modules/scenario";

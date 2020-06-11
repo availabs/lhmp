@@ -13,7 +13,11 @@ class MultiSelectComponent extends React.PureComponent {
         if(this.props.area === 'true' && this.props.depend_on === undefined){
             data = data.map((item,i) => item)
         }else if(this.props.depend_on === undefined && this.props.area === undefined && this.props.state[this.props.depend_on] === undefined){
-            data = data[0] && data[0].category ? _.uniqBy(data,'category').map(m => m.category) : data
+            if(this.props.formType.includes('zones')){
+                data = data[0] && data[0].type ? _.uniqBy(data,'type').map(m => m.type) : data
+            }else{
+                data = data[0] && data[0].category ? _.uniqBy(data,'category').map(m => m.category) : data
+            }
         }else if(this.props.state[this.props.depend_on] !== undefined && this.props.area === undefined
             && this.props.state[this.props.depend_on] !== 'None'){
             data = data.filter(m => this.props.state[this.props.depend_on].includes(m.category)).map(m => m.type)
@@ -25,7 +29,7 @@ class MultiSelectComponent extends React.PureComponent {
         }else{
             data = this.props.meta ? this.props.meta : this.props.filterData;
         }
-        //console.log('data after conditions', data, this.props)
+        //console.log('data after conditions', data, this.props)data = data[0] && data[0].category ? _.uniqBy(data,'category').map(m => m.category) : data
         return (
             <div className="col-sm-12" onClick={this.props.onClick ? this.props.onClick : () => {
             }}>

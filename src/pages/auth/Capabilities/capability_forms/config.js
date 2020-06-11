@@ -123,7 +123,7 @@ module.exports = [
                 section:''
             },
               jurisdiction_utilization:{
-                label:'How is this Capability utilized in Mitigation Work? How does it contribute to Mitigation?',
+                label:'Utilization: How is this Capability utilized in Mitigation Work? How does it contribute to Mitigation?',
                 prompt:'Describe how or in what ways your jurisdiction is currently utilizing the capability. If it is an asset, describe in what capacity the asset is being used. If it is planning or regulatory based, describe the role it plays in your jurisdictional decision making. If it is educational, describe the method of outreach. If it is financial, for example; grants, local funds, state funds, tax agreements, etc. describe the distribution of the funds and their impacts on your jurisdiction. If it is administrative or technical, describe assistance offered to jurisdiction.',
                 sub_type:'',
                 edit_type:'text',
@@ -134,7 +134,7 @@ module.exports = [
                 section:'',
             },
             mitigation_contribution:{
-                label:'What capacity does Mitigation planning provide this Capability?',
+                label:'Integration: What capacity does Mitigation planning provide this Capability?',
                 prompt:'Describe how mitigation planning supports and contributes to building maintaining or enhancing capacity for this capability',
                 sub_type:'',
                 edit_type:'text',
@@ -144,7 +144,7 @@ module.exports = [
                 section:''
             },
             capacity:{
-                label:'What is the jurisdictional capacity for implementing this Capability?',
+                label:'Capacity: What is the jurisdictional capacity for implementing this Capability?',
                 prompt:'Select the current the jurisdictional capacity based on High, Medium, and Low',
                 edit_type:'dropdown_no_meta',
                 edit_type_values : ['High','Medium','Low',],
