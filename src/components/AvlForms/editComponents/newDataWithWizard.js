@@ -624,6 +624,16 @@ class AvlFormsNewDataWizard extends React.Component{
         });
         return wizard_steps
     }
+    renderHeaderText(header){
+        return (
+            this.props.geoData[header] ?
+                this.props.geoData[header].name :
+                Array.isArray(header) &&
+                header.filter(f => Object.keys(this.props.geoData).includes(f)).length ?
+                    header.map(f => this.props.geoData[f].name).join() :
+                    header
+        )
+    }
     render(){
 
         let sections = this.createWizardSections();
@@ -633,7 +643,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 this.state[this.props.config[0].page_title] ?
                     <h4 className="element-header" style={{textTransform: 'capitalize'}}>
                         <label>
-                            {this.state[this.props.config[0].page_title]}
+                            {this.renderHeaderText(get(this.state,[this.props.config[0].page_title],''))}
                             {config[this.props.config[0].type] ?
                                 <Link
                                     className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
@@ -644,7 +654,7 @@ class AvlFormsNewDataWizard extends React.Component{
                                 : null}
                         </label>
                         {get(this.props.config[0], `sub_title`, null) ?
-                            <h6>{get(this.state, `${this.props.config[0].sub_title}`, null)}</h6> : null}
+                            <h6>{this.renderHeaderText(get(this.state, `${this.props.config[0].sub_title}`, null))}</h6> : null}
                     </h4> :
                     <h4 className="element-header" style={{textTransform: 'capitalize'}}>
                         {get(this.props.config[0], `default_title`,
