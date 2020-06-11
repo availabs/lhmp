@@ -229,7 +229,7 @@ class AvlFormsNewData extends React.Component{
             })
             this.props.config.forEach(config =>{
                 Object.keys(config.attributes).forEach(item =>{
-                    if(config.attributes[item].sub_type.length > 0){
+                    if(get(config, `attributes.${item}.sub_type`, '').length > 0){
                         sub_type = config.attributes[item].sub_type
                     }
                 })
@@ -476,23 +476,6 @@ class AvlFormsNewData extends React.Component{
                         defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
-                else if(
-                    ['false', undefined].includes(item.attributes[attribute].hidden)
-                ){
-                    data.push({
-                        formType : this.props.config.map(d => d.type),
-                        label: item.attributes[attribute].label,
-                        handleChange : this.handleChange,
-                        state : this.state,
-                        title : attribute,
-                        data_error : item.attributes[attribute].data_error,
-                        placeholder: item.attributes[attribute].placeholder,
-                        required:item.attributes[attribute].field_required,
-                        prompt: this.displayPrompt.bind(this),
-                        type:item.attributes[attribute].edit_type,
-                        defaultValue: item.attributes[attribute].defaultValue
-                    })
-                }
                 else if(item.attributes[attribute].edit_type === 'dropdown_no_meta'){
                     data.push({
                         section_id: item.attributes[attribute].section,
@@ -523,6 +506,42 @@ class AvlFormsNewData extends React.Component{
                         prompt: this.displayPrompt.bind(this),
                         disable_condition : item.attributes[attribute].disable_condition,
                         dropDownData : item.attributes[attribute].edit_type_values,
+                        defaultValue: item.attributes[attribute].defaultValue
+                    })
+                }
+                else if(item.attributes[attribute].edit_type === 'imageEditor'){
+                    data.push({
+                        section_id: item.attributes[attribute].section,
+                        formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
+                        handleChange : this.handleChange,
+                        state : this.state,
+                        title : attribute,
+                        placeholder: item.attributes[attribute].placeholder,
+                        required: item.attributes[attribute].field_required,
+                        type:item.attributes[attribute].edit_type,
+                        prompt: this.displayPrompt.bind(this),
+                        disable_condition : item.attributes[attribute].disable_condition,
+                        defaultValue: item.attributes[attribute].defaultValue,
+                        height: item.attributes[attribute].height,
+                        width: item.attributes[attribute].width,
+                        border: item.attributes[attribute].border,
+                    })
+                }
+                else if(
+                    ['false', undefined].includes(item.attributes[attribute].hidden)
+                ){
+                    data.push({
+                        formType : this.props.config.map(d => d.type),
+                        label: item.attributes[attribute].label,
+                        handleChange : this.handleChange,
+                        state : this.state,
+                        title : attribute,
+                        data_error : item.attributes[attribute].data_error,
+                        placeholder: item.attributes[attribute].placeholder,
+                        required:item.attributes[attribute].field_required,
+                        prompt: this.displayPrompt.bind(this),
+                        type:item.attributes[attribute].edit_type,
                         defaultValue: item.attributes[attribute].defaultValue
                     })
                 }
@@ -559,7 +578,7 @@ class AvlFormsNewData extends React.Component{
                 this.state[this.props.config[0].page_title] ?
                     <h4 className="element-header" style={{textTransform: 'capitalize'}}>
                         <label>
-                            {/*{get(this.state,[this.props.config[0].page_title],'Capability')}*/}
+                            {get(this.state,[this.props.config[0].page_title],'')}
                             {config[this.props.config[0].type] ?
                                 <Link
                                     className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"

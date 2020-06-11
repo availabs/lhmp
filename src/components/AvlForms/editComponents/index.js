@@ -11,6 +11,7 @@ import DropDownNoMetaComponent from "./dropDownNoMeta";
 import EmailComponent from "./emailComponent";
 import dropDownSignUp from "./dropDownSignUp";
 import FormArrayComponent from "./FormArrayComponent";
+import ImageEditor from "./imageComponent/index"
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -46,6 +47,7 @@ export default {
     dropdown_no_meta: DropDownNoMetaComponent,
     email: EmailComponent,
     dropDownSignUp:dropDownSignUp,
-    form_array: FormArrayComponent
+    form_array: FormArrayComponent,
+    imageEditor: ImageEditor
 }
 

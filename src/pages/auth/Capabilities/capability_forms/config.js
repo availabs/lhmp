@@ -10,11 +10,26 @@ module.exports = [
         // if wizard
         sections: [],
         attributes: {
+/*            image:{
+                label:'Image', // Which you would like to see on the form
+                prompt:'',
+                sub_type:'',
+                edit_type:'imageEditor',
+                display_type:'imageViewer',
+                area:'true',
+                meta: 'true',
+                height: 250,
+                width: 500,
+                border: 1,
+                //hidden:'false',
+                section: '',
+                //field_required:"required",
+            },*/
             county:{
                 label:'County', // Which you would like to see on the form
                 prompt:'Choose the county the capability is located from the list of all counties.',
                 sub_type:'',
-                edit_type:'dropdown',  
+                edit_type:'dropdown',
                 display_type:'text',
                 area:'true',
                 meta: 'true',
@@ -94,7 +109,7 @@ module.exports = [
                 display_condition : '',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
             },       
             development_update:{
                 label:'Description of Status',

@@ -3,6 +3,7 @@ import Element from "../../light-admin/containers/Element";
 import _ from 'lodash'
 import get from 'lodash.get'
 import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
+import ImageViewer from "./imageViewer";
 import listNewComp from 'components/AvlForms/editComponents/formTypeToConfig.js'
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
@@ -27,6 +28,22 @@ class TextComponent extends React.PureComponent {
                                             json = {listNewComp[data[d].formType]}
                                             id = {[value]}
                                             showHeader={false}
+                                            key={i}
+                                        />
+                                        )
+                            )
+                        })
+                }
+                {
+                    Object.keys(data).filter(d => d !== 'type')
+                        .filter(d => data[d].section === section.id && data[d].displayType === 'imageViewer')
+                        .map(d => {
+                            showTable = false;
+                            return (
+                                get(data, `[${d}].value`, '').split(',')
+                                    .map((value,i) =>
+                                        <ImageViewer
+                                            image={value}
                                             key={i}
                                         />
                                         )
@@ -153,7 +170,14 @@ class TextComponent extends React.PureComponent {
                                                     Object.keys(data).filter(d => d !== 'type').map((d,i) =>
                                                         <tr key ={i}>
                                                             <td style={TDStyle}>{`${data[d].label}`} :</td>
-                                                            <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                                            <td style={TDStyle}>
+                                                                {console.log('???', data[d])}
+                                                                {
+                                                                    data[d].displayType === 'imageViewer' ?
+                                                                        <ImageViewer image={data[d].value} {...data[d]}/> :
+                                                                        (data[d].value || 'None')
+                                                                }
+                                                            </td>
                                                         </tr>
                                                     )
                                                 }

@@ -507,6 +507,27 @@ class AvlFormsNewDataWizard extends React.Component{
                             columnMap: item.attributes[attribute].column_map
                         })
                     }
+                    else if(item.attributes[attribute].edit_type === 'imageEditor'){
+                        data.push({
+                            section_id: item.attributes[attribute].section,
+                            MainType : this.props.config.map(d => d.type),
+                            label: item.attributes[attribute].label,
+                            handleChange : this.handleChange,
+                            state : this.state,
+                            title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
+                            required: item.attributes[attribute].field_required,
+                            type:item.attributes[attribute].edit_type,
+                            prompt: this.displayPrompt.bind(this),
+                            defaultValue: item.attributes[attribute].defaultValue,
+                            addText: item.attributes[attribute].add_text,
+                            formType: item.attributes[attribute].form_type,
+                            columnMap: item.attributes[attribute].column_map,
+                            height: item.attributes[attribute].height,
+                            width: item.attributes[attribute].width,
+                            border: item.attributes[attribute].border,
+                        })
+                    }
                     else{
                         data.push({
                             section_id: item.attributes[attribute].section,
