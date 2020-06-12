@@ -22,6 +22,10 @@ const DIV = styled.div`
     .quarterWidth {width: 25%;}
     * {height: fit-content;}
 `
+const CONTENTDIV = styled.div`
+    margin: 0px;
+    
+`
 class ContentViewer extends Component {
     constructor(props) {
         super(props);
@@ -91,29 +95,55 @@ class ContentViewer extends Component {
     }
     renderStatusTracker(){
         return (
-            <DIV className='col-12' style={{marginTop: '50px', paddingRight: '0', display:'flex'}}>
-                <label className='selectLabel'>Status: </label>
-                <select
-                    className='dropdownSelect hoverable quarterToFullWidth left btn btn-outline-primary btn-primary step-trigger-btn'
-                    id={'status'}
-                    value={this.state.status}
-                    onChange={(e)=> this.setState({status: e.target.value})}
-                >
-                    <option key={0} value={''}></option>
-                    <option key={1} value={'Not Started'}>Not Started</option>
-                    <option key={1} value={'Started'}>Started</option>
-                    <option key={2} value={'Ready for review'}>Ready for review</option>
-                    {this.props.user.authLevel > 5 ?
-                        <React.Fragment>
-                            <option key={3} value={'Requirement not met'}>Requirement not met</option>
-                            <option key={4} value={'Requirement met'}>Requirement met</option>
-                        </React.Fragment> : null
-                    }
-                </select>
-                <a className='hoverable left quarterWidth btn btn-primary step-trigger-btn'
-                   onClick={this.handleSubmit}
-                >Submit</a>
-            </DIV>
+            <React.Fragment>
+                <DIV className='col-12' style={{marginTop: '50px', paddingRight: '0', display:'flex'}}>
+                    <label className='selectLabel'>Status: </label>
+                    <select
+                        className='dropdownSelect hoverable quarterToFullWidth left btn btn-outline-primary btn-primary step-trigger-btn'
+                        id={'status'}
+                        value={this.state.status}
+                        onChange={(e)=> this.setState({status: e.target.value})}
+                    >
+                        <option key={0} value={''}></option>
+                        <option key={1} value={'Not Started'}>Not Started</option>
+                        <option key={1} value={'Started'}>Started</option>
+                        <option key={2} value={'Ready for review'}>Ready for review</option>
+                        {this.props.user.authLevel > 5 ?
+                            <React.Fragment>
+                                <option key={3} value={'Requirement not met'}>Requirement not met</option>
+                                <option key={4} value={'Requirement met'}>Requirement met</option>
+                            </React.Fragment> : null
+                        }
+                    </select>
+                    <a className='hoverable left quarterWidth btn btn-primary step-trigger-btn'
+                       onClick={this.handleSubmit}
+                    >Submit</a>
+                </DIV>
+                <CONTENTDIV>
+                    {this.renderContent()}
+                </CONTENTDIV>
+            </React.Fragment>
+        )
+    }
+
+    renderCallout(){
+        return (
+            <React.Fragment>
+                <DIV className='col-12' style={{marginTop: '50px', paddingRight: '0', display:'flex'}}>
+                    <label className='selectLabel'>Callout: </label>
+                </DIV>
+                <CONTENTDIV>
+                    {this.renderContent()}
+                </CONTENTDIV>
+            </React.Fragment>
+        )
+    }
+    renderContent(){
+        return (
+            <div style={{display:'inline-block', textAlign: 'justify'}}
+                 dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB :
+                         this.props.requirement.includes('callout') ? null : '<i>Content not available.</i>'
+                 }} />
         )
     }
     render() {
@@ -121,11 +151,9 @@ class ContentViewer extends Component {
         return (
             //this.props.type === 'contentEditor' ? (
                 <React.Fragment>
-                    {this.props.showStatusTracker ? this.renderStatusTracker() : null}
-                    <div style={{display:'inline-block', textAlign: 'justify'}}
-                        dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB :
-                            this.props.requirement.includes('callout') ? null : '<i>Content not available.</i>'
-                    }} />
+                    {this.props.showStatusTracker && this.props.requirement.slice(-7) !== 'callout' ? this.renderStatusTracker() :
+                        this.renderCallout()}
+
                 </React.Fragment>
             //) : ''
         )
