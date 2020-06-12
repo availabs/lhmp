@@ -133,19 +133,24 @@ class ContentEditor extends Component {
                 <a className='hoverable btn btn-primary step-trigger-btn'
                    onClick={this.handleSubmit}
                 >Submit</a>
-                <div style={{width: 'fit-content', float: 'right'}}>
-                    <label className='selectLabel'>Status: </label>
-                    <select
-                        className='dropdownSelect hoverable btn btn-outline-primary btn-primary step-trigger-btn'
-                        id={'status'}
-                        value={this.state.status}
-                        onChange={(e)=> this.setState({status: e.target.value})}
-                    >
-                        <option key={0} value={''}></option>
-                        <option key={1} value={'Started'}>Started</option>
-                        <option key={2} value={'Ready for review'}>Ready for review</option>
-                    </select>
-                </div>
+                {
+                    this.props.requirement.slice(-7) !== 'callout' ?
+                        <React.Fragment>
+                            <div style={{width: 'fit-content', float: 'right'}}>
+                                <label className='selectLabel'>Status: </label>
+                                <select
+                                    className='dropdownSelect hoverable btn btn-outline-primary btn-primary step-trigger-btn'
+                                    id={'status'}
+                                    value={this.state.status}
+                                    onChange={(e)=> this.setState({status: e.target.value})}
+                                >
+                                    <option key={0} value={''}></option>
+                                    <option key={1} value={'Started'}>Started</option>
+                                    <option key={2} value={'Ready for review'}>Ready for review</option>
+                                </select>
+                            </div>
+                        </React.Fragment> : null
+                }
             </DIV>
         )
     }

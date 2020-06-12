@@ -172,12 +172,16 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
     if (csvDownload.length){
         downloadData = [...rows.map(r => r.original)]
         downloadData = downloadData.map(row => {
+            let tmpRow = {}
             Object.keys(row)
                 .filter(f => !['edit', 'view', 'delete'].includes(f))
                 .forEach(key => {
-                if (!csvDownload.includes(key)) delete row[key]
+                    if (csvDownload.includes(key)){
+                        tmpRow[key] = row[key]
+                    }
+                // if (!csvDownload.includes(key)) delete row[key]
             })
-            return row
+            return tmpRow
         })
     }
 

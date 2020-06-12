@@ -27,7 +27,7 @@ class HazardEventsMap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentYear: LATEST_YEAR + props.yearDelta
+            currentYear: 'allTime'
         }
     }
 
@@ -39,17 +39,17 @@ class HazardEventsMap extends React.Component {
     }
 
     decrementCurrentPopulationYear() {
-        const currentYear = Math.max(EARLIEST_YEAR, this.state.currentYear - 1);
+        const currentYear = this.state.currentYear === 'allTime' ? LATEST_YEAR : Math.max(EARLIEST_YEAR, this.state.currentYear - 1);
         this.setState({ currentYear });
     }
     incrementCurrentPopulationYear() {
-        const currentYear = Math.min(LATEST_YEAR, this.state.currentYear + 1);
+        const currentYear = this.state.currentYear === LATEST_YEAR ? 'allTime' : Math.min(LATEST_YEAR, this.state.currentYear + 1);
         this.setState({ currentYear });
     }
     generateMapNavigator() {
         const currentYear = this.state.currentYear,
             decDisabled = (currentYear === EARLIEST_YEAR),
-            incDisabled = (currentYear === LATEST_YEAR);
+            incDisabled = (currentYear === 'allTime');
         return (
             <table className="map-test-table" style={ { tableLayout: "fixed" } }>
                 <tbody>
@@ -62,7 +62,7 @@ class HazardEventsMap extends React.Component {
                         </button>
                     </th>
                     <th style={ { textAlign: "center", width: "40%" } }>
-                        { currentYear }
+                        { currentYear === 'allTime' ? 'All time' : currentYear }
                     </th>
                     <th style={ { textAlign: "center", width: "30%" } }>
                         <button className="map-test-button"
