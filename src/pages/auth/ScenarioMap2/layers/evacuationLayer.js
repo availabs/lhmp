@@ -325,7 +325,6 @@ export class EvacuationRoutesLayer extends MapLayer {
     }
 
     paintRoute(geom) {
-        console.log('geom',geom)
         if (this.map.getSource('execution-route-source')) {
             let geojson = {
                 "type": "FeatureCollection",
@@ -402,8 +401,8 @@ export class EvacuationRoutesLayer extends MapLayer {
         if(mode === 'markers'){
             this.doAction([
                 "sendMessage",
-                {Message: 'Evacuation Route. Click to drop pins and save a route',
-                    id:'evacuationRoute',
+                {Message: 'Evacuation Route. Click to drop pins and Click on save route to save the route',
+                    id:'evacuationRoutes',
                     duration:0
                 },
             ])
@@ -623,7 +622,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
     }
 }
 
-const saveModalForm = (geom, setState) => {
+const saveModalForm = (geom, setState,layer) => {
     return (
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
@@ -631,7 +630,15 @@ const saveModalForm = (geom, setState) => {
                 <div className="modal-content">
                     <div className="modal-header"><h5 className="modal-title" id="exampleModalLabel">Save Route</h5>
                         <button aria-label="Close" className="close" data-dismiss="modal" type="button"
-                                onClick={() => setState({ showSaveModal: false })}
+                                onClick={() => {
+                                    setState({ showSaveModal: false })
+                                    layer.doAction([
+                                        "dismissMessage",
+                                        {id:"evacuationRoutes"}
+                                    ])
+                                    layer.map.resize()
+                                    layer.forceUpdate()
+                                }}
                         >
                             <span aria-hidden="true"> ×</span>
                         </button>
@@ -639,6 +646,7 @@ const saveModalForm = (geom, setState) => {
                     <div className="modal-body">
                         <SaveRoute
                             geom={geom}
+                            layer={layer}
                         />
                     </div>
                 </div>
@@ -733,7 +741,7 @@ class EvacuationControlBase extends React.Component{
                     </div>
                     : null
                 }
-                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this)) : null}
+                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this),layer) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}
