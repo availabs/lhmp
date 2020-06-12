@@ -325,6 +325,7 @@ export class EvacuationRoutesLayer extends MapLayer {
     }
 
     paintRoute(geom) {
+        console.log('geom',geom)
         if (this.map.getSource('execution-route-source')) {
             let geojson = {
                 "type": "FeatureCollection",
@@ -732,17 +733,17 @@ class EvacuationControlBase extends React.Component{
                     </div>
                     : null
                 }
-                {this.state.showSaveModal ? saveModalForm(layer.geom, this.setState.bind(this)) : null}
+                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this)) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}
-                    deleteButton = {!layer.viewOnly}
+                    deleteButton = {!this.props.viewOnly}
                     viewButton={true}
                     onViewClick={(e) => {
                         if (e.initLoad){
                             if(!this.state.initLoad){
                                 this.setState({initLoad: true})
-                                return  layer.paintRoute(
+                                return  this.props.paintRoute(
                                     {
                                         mode: 'markers',
                                         data: {
@@ -756,7 +757,7 @@ class EvacuationControlBase extends React.Component{
                                 )
                             }
                         }else{
-                            return  layer.paintRoute(
+                            return  this.props.paintRoute(
                                 {
                                     mode: 'markers',
                                     data: {

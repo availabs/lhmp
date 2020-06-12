@@ -631,9 +631,9 @@ class AvlFormsNewData extends React.Component{
 
                                         if(i === 0){
                                             if(d.formType[0] === 'roles'){
-                                                return (<button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm()}> Submit</button>)
+                                                return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm()}> Submit</button>)
                                             }else{
-                                                return (<button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>)
+                                                return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>)
                                             }
                                         }
 
