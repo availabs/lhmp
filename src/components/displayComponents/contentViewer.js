@@ -119,9 +119,6 @@ class ContentViewer extends Component {
                        onClick={this.handleSubmit}
                     >Submit</a>
                 </DIV>
-                <CONTENTDIV>
-                    {this.renderContent()}
-                </CONTENTDIV>
             </React.Fragment>
         )
     }
@@ -130,11 +127,8 @@ class ContentViewer extends Component {
         return (
             <React.Fragment>
                 <DIV className='col-12' style={{marginTop: '50px', paddingRight: '0', display:'flex'}}>
-                    <label className='selectLabel'>Callout: </label>
+                    <label className='selectLabel'> </label>
                 </DIV>
-                <CONTENTDIV>
-                    {this.renderContent()}
-                </CONTENTDIV>
             </React.Fragment>
         )
     }
@@ -152,8 +146,11 @@ class ContentViewer extends Component {
             //this.props.type === 'contentEditor' ? (
                 <React.Fragment>
                     {this.props.showStatusTracker && this.props.requirement.slice(-7) !== 'callout' ? this.renderStatusTracker() :
-                        this.renderCallout()}
-
+                        this.props.requirement.slice(-7) === 'callout' ? this.renderCallout() : null
+                    }
+                    <CONTENTDIV>
+                        {this.renderContent()}
+                    </CONTENTDIV>
                 </React.Fragment>
             //) : ''
         )
