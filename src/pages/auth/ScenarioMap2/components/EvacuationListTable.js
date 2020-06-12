@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import pick from "lodash.pick"
 import {push} from "react-router-redux";
+
 var _ = require('lodash')
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
@@ -103,6 +104,9 @@ class AvlFormsListTable extends React.Component{
                             if(this.state.form_ids.includes(item)){
                                 data['id'] = item
                                 data[attribute] = graph[item].value.attributes[attribute] || ' '
+                                if (attribute === 'geom' && typeof graph[item].value.attributes[attribute] === "string"){
+                                    data[attribute] = JSON.parse(graph[item].value.attributes[attribute])
+                                }
                             }
 
                         }
@@ -162,7 +166,6 @@ class AvlFormsListTable extends React.Component{
             this.props.onViewClick({viewAll: true, data:listViewData, initLoad: true});
 
         }
-
         return (
             <div>
                 {
@@ -174,9 +177,9 @@ class AvlFormsListTable extends React.Component{
                                     {
                                         formAttributes ? formAttributes
                                                 .filter(f => get(this.props.config[0], `attributes[${f}].hidden`, "false") === "true" ? false : true)
-                                                .map((item) => {
+                                                .map((item,i) => {
                                                     return (
-                                                        <th>{item}</th>
+                                                        <th key={i}>{item}</th>
                                                     )
                                                 })
                                             :
@@ -186,31 +189,31 @@ class AvlFormsListTable extends React.Component{
                                 </thead>
                                 <tbody>
                                 {formType[0] === 'evacuation_route' ?
-                                   <tr>
-                                       <td></td>
-                                       <td>
-                                           <button className="btn btn-sm btn-outline-primary"
-                                                   onClick={(e) => this.props.onViewClick({viewAll: true, data:listViewData})}>
-                                               View All
-                                           </button>
-                                       </td>
-                                       <td>
-                                           <button className="btn btn-sm btn-outline-danger"
-                                                   onClick={(e) => this.props.onViewClick({hideAll: true})}>
-                                               Hide All
-                                           </button>
-                                       </td>
-                                   </tr>: null}
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <button className="btn btn-sm btn-outline-primary"
+                                                    onClick={(e) => this.props.onViewClick({viewAll: true, data:listViewData})}>
+                                                View All
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-sm btn-outline-danger"
+                                                    onClick={(e) => this.props.onViewClick({hideAll: true})}>
+                                                Hide All
+                                            </button>
+                                        </td>
+                                    </tr>: null}
                                 {
-                                    listViewData.map(item =>{
+                                    listViewData.map((item,i) =>{
                                         if(Object.keys(item).length > 0){
                                             return (
-                                                <tr>
+                                                <tr key={i}>
                                                     {formAttributes ? formAttributes
                                                         .filter(f => get(this.props.config[0], `attributes[${f}].hidden`, "false") === "true" ? false : true)
-                                                        .map(attribute =>{
+                                                        .map((attribute,i) =>{
                                                             return (
-                                                                <td>{item[attribute]}</td>
+                                                                <td key={i}>{item[attribute]}</td>
                                                             )
                                                         }):null}
                                                     {this.props.editButton === true ?
@@ -276,6 +279,7 @@ class AvlFormsListTable extends React.Component{
                         :
                         <div className="element-box">No data found...</div>
                 }
+
             </div>
 
         )

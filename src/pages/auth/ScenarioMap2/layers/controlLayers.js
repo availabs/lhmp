@@ -53,7 +53,7 @@ const DynamicJurisdictionLayerFactory =(callingLayer,...args) =>{
 };
 
 const DynamicEvacuationRoutesLayerFactory =(callingLayer,...args) =>{
-    return new EvacuationRoutesLayer('evacuationRoutes',EvacuationRoutesOptions())
+    return new EvacuationRoutesLayer('evacuationRoutes',EvacuationRoutesOptions({viewOnly: false}))
 };
 
 
@@ -340,7 +340,6 @@ export class ControlLayers extends MapLayer {
             }
         }
         if(layerName.includes("evacuationRoutes")){
-
             if(Object.keys(evacuationRoutesLayer).length > 0){
                 evacuationRoutesLayer.toggleVisibilityOff()
             }

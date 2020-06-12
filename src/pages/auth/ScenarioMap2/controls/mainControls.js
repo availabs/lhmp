@@ -106,6 +106,9 @@ class MainControls extends React.Component {
                 this.props.layer.scenarioLayer.legend.active = true
                 this.props.layer.scenarioLayer.forceUpdate()
             }
+            if(this.state.layerSelected === 'evacuationRoutes'){
+                this.props.layer.evacuationRoutesLayer.showInfoBox(true)
+            }
         }
         //to active the legend if selected landUse
         if(this.state.layerSelected === 'landUse' && !this.state.showLayers.includes('landUse')){
@@ -342,6 +345,7 @@ class MainControls extends React.Component {
                                                 modeOff : block.id.split('_')[0]
                                             }
                                         ))
+                                        this.props.layer.evacuationRoutesLayer.showInfoBox(false)
                                     }}
                                 >
                                     <span aria-hidden="true"> ×</span>

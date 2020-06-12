@@ -14,6 +14,16 @@ import * as d3scale from "d3-scale"
 
 import { listen, unlisten } from "components/AvlMap/LayerMessageSystem"
 import {MAPBOX_TOKEN} from 'store/config'
+import RouteInfoBox from "../../EvacuationRoutes/components/RouteInfoBox";
+import EvacuationControl from "../controls/evacuationControl";
+import {connect} from "react-redux";
+import {reduxFalcor} from "../../../../utils/redux-falcor";
+import AvlFormsListTable from "../components/EvacuationListTable";
+import config from "../components/config";
+import {Button} from "../../../../components/common/styled-components";
+import ViewConfig from '../components/view_config.js'
+import SaveRoute from "../components/saveRoute";
+import _ from "lodash";
 
 const atts = ['id', 'name', 'type', 'owner', "updatedAt", "tmcArray", "points"];
 
@@ -21,16 +31,11 @@ export class EvacuationRoutesLayer extends MapLayer {
     onAdd(map) {
         // register(this, REDUX_UPDATE, ["graph"]);
         if (this.viewOnly) this.mode = null;
-        this.onRemove(map)
-        this.layers.forEach(layer => {
-            map.setLayoutProperty(layer.id, 'visibility',"none");
-        })
         return falcorGraph.get(
                 //["conflation", "latestVersion"],
                 ["geo", [store.getState().user.activeGeoid], "boundingBox"],
                 ['geo', store.getState().user.activeGeoid, 'cousubs']
             )
-            .then(() => this.calcRoute())
             .then(() => {
                 let graph = falcorGraph.getCache();
                 this.cousubs = get(graph, `geo.${store.getState().user.activeGeoid}.cousubs.value`, []);
@@ -47,6 +52,10 @@ export class EvacuationRoutesLayer extends MapLayer {
                         .slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
 
+                this.layers.forEach(layer => {
+                    map.setLayoutProperty(layer.id, 'visibility',"none");
+                })
+                this.onRemove(map)
                 map.resize();
                 map.fitBounds(bbox, {maxDuration: 0});
             })
@@ -74,6 +83,7 @@ export class EvacuationRoutesLayer extends MapLayer {
         })
         this.onRemove(this.map)
     }
+
 
     loadUserRoutes(forceUpdate = true) {
         return falcorGraph.get(["routes", "length"])
@@ -155,7 +165,6 @@ export class EvacuationRoutesLayer extends MapLayer {
     fetchData() {
         return Promise.resolve()
             .then(() => {
-                console.log('in fetch data')
                 if (this.mode === "click") {
                     return {mode: "click", data: [...this.data["click"]]};
                 }
@@ -176,22 +185,10 @@ export class EvacuationRoutesLayer extends MapLayer {
                         return res.json()
                     })
                     .then(res => {
-                        console.log('res',res)
                         return {mode: "markers", data: res};
                     })
             })
             .then(data => this.receiveRoute(data))
-            /*.then(() => {
-                if (this.data[this.mode].length) {
-                    return falcorChunkerNice(this.getGeomRequest(this.data[this.mode]))
-                }
-            })*/
-            /*.then(() => {
-                if (this.mode === "markers" && this.data.markers.length) {
-                    const request = ["conflation", "con", this.data.markers, "meta", ['tmc17id','tmc19id']];
-                    return falcorChunkerNice(request)
-                }
-            })*/
             .then(() => {
                 if (this.mode === "markers") {
                     const falcorCache = falcorGraph.getCache();
@@ -233,7 +230,6 @@ export class EvacuationRoutesLayer extends MapLayer {
         this.markers.forEach(m => m.remove());
 
         let points = this.markers.map(m => m.getLngLat());
-
         if (lngLat) {
             if (Array.isArray(lngLat)) {
                 points = lngLat;
@@ -257,6 +253,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                 .addTo(this.map)
                 .on("dragend", e => this.calcRoute());
         })
+
     }
 
     calcRoute() {
@@ -265,7 +262,6 @@ export class EvacuationRoutesLayer extends MapLayer {
 
     receiveRoute({mode, data}) {
         this.data[mode] = data;
-        console.log('data in receive data',data)
         data = get(data, `routes`, []).pop();
         if (!data) return;
         if (data.hideAll) {
@@ -301,10 +297,10 @@ export class EvacuationRoutesLayer extends MapLayer {
             let feature = {
                 type: 'Feature',
                 properties: {name: get(data, `name`, '')},
-                geometry: get(data, `geometry`, {coordinates: [], type: "LineString"})
+                geometry: this.geom
             };
 
-            if (feature.geometry.coordinates.length > 0){
+            if (get(feature, `geometry.coordinates.length`, 0) > 0){
                 bounds = bounds.extend(new mapboxgl.LngLatBounds(geoJsonExtent(
                     get(feature, `geometry`, {coordinates: [], type: "LineString"})
                 )));
@@ -323,6 +319,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                     features: this.features
                 }
             );
+            this.forceUpdate()
 
         }
     }
@@ -342,6 +339,7 @@ export class EvacuationRoutesLayer extends MapLayer {
 
             })
             this.map.getSource('execution-route-source').setData(geojson);
+            this.forceUpdate()
         }
     }
 
@@ -388,7 +386,7 @@ export class EvacuationRoutesLayer extends MapLayer {
         this.calcRoute();
     }
 
-    toggleCreationMode() {
+    toggleCreationMode(mode) {
         switch (this.viewMode) {
             case "single":
                 this.viewMode = "multi";
@@ -399,8 +397,36 @@ export class EvacuationRoutesLayer extends MapLayer {
                 // this.generateMapMarkers();
                 break;
         }
-        this.forceUpdate()
+        this.creationMode = mode
+        if(mode === 'markers'){
+            this.doAction([
+                "sendMessage",
+                {Message: 'Evacuation Route. Click to drop pins and save a route',
+                    id:'evacuationRoute',
+                    duration:0
+                },
+            ])
+            document.addEventListener('click', onClick.bind(this));
+
+            this.map.on('click',onClick.bind(this))
+
+            function onClick(e){
+                document.removeEventListener('click', onClick.bind(this));
+                switch (mode) {
+                    case "markers":
+                        this.handleMapClick(e.lngLat);
+                        break;
+                }
+                this.forceUpdate()
+            }
+
+        }
         // this.calcRoute();
+    }
+
+    showInfoBox(flag){
+        this.infoBoxes.router.show = !!flag ;
+        this.forceUpdate()
     }
 
     loadUserRoute(route) {
@@ -528,7 +554,6 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
                 }
             },
         ],
-
         onHover: {
             layers: ["execution-route"],
             filterFunc: function (features) {
@@ -540,6 +565,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
                 ]
             }
         },
+
         version: 2.0,
 
         mode: "markers",
@@ -555,22 +581,6 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
         doZoom: false,
         geom: null,
         routeToLoad: null,
-
-        onClick: {
-            layers: ["map", "conflation"],
-            dataFunc: function (features, point, lngLat, layer) {
-                switch (this.mode) {
-                    case "markers":
-                        layer === "map" && this.handleMapClick(lngLat);
-                        break;
-                    case "click":
-                        (layer === "conflation") && features &&
-                        this.handleMapClick(features.map(f => f.properties[this.getNetworkId()]).filter(Boolean));
-                        break;
-                }
-
-            }
-        },
 
         popover: {
             layers: ["cousubs-layer", 'counties-layer'],
@@ -591,17 +601,193 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
                 }
             }
         },
-
-        mapActions: {
-            modeToggle: {
-                Icon: ({layer}) => <span
-                    className={`fa fa-2x fa-${layer.viewMode === "single" ? "minus" : "align-justify"}`}/>,
-                tooltip: "Toggle View Mode",
-                action: function () {
-                    this.toggleCreationMode();
-                }
+        infoBoxes: {
+            router: {
+                title: ({layer}) => '',
+                comp: ({layer}) => {
+                    return (
+                        <ControlBase layer={layer}
+                                      userRoute={layer.filters.userRoutes.value}
+                                      nameArray={layer.nameArray}
+                                      data={layer.data}
+                                      geom={layer.geom}
+                                      paintRoute={layer.receiveRoute.bind(layer)}
+                                      viewOnly={layer.viewOnly}
+                        />
+                    )
+                },
+                show: false
             }
-        }
+        },
     }
 }
 
+const saveModalForm = (geom, setState) => {
+    return (
+        <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
+             tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
+            <div className="modal-dialog modal-lg">
+                <div className="modal-content">
+                    <div className="modal-header"><h5 className="modal-title" id="exampleModalLabel">Save Route</h5>
+                        <button aria-label="Close" className="close" data-dismiss="modal" type="button"
+                                onClick={() => setState({ showSaveModal: false })}
+                        >
+                            <span aria-hidden="true"> ×</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <SaveRoute
+                            geom={geom}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+};
+
+const DEFAULT_ROUTE_DATA = {
+    name: "",
+    type: "personal",
+    id: null
+};
+class EvacuationControlBase extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state ={
+            showSaveModal: false,
+            route: {...DEFAULT_ROUTE_DATA}
+        }
+
+    }
+
+    componentDidMount() {
+        this.setState({
+            route: {
+                ...this.state.route,
+                owner: this.state.route.owner === "group" ? this.props.user.groups[0] : this.props.user.id
+            }
+        })
+    }
+
+    componentDidUpdate(oldProps, oldState) {
+        if (oldProps.userRoute !== this.props.userRoute || !_.isEqual(oldProps.data, this.props.data)) {
+            if (this.props.userRoute === null) {
+                this.setState({
+                    route: {
+                        ...DEFAULT_ROUTE_DATA,
+                        owner: this.props.user.id
+                    }
+                });
+            } else {
+                this.setState({
+                    route: {
+                        name: this.props.userRoute.name,
+                        type: this.props.userRoute.type,
+                        owner: this.props.userRoute.owner,
+                        id: this.props.userRoute.id
+                    }
+                })
+            }
+        }
+    }
+
+    render(){
+        let layer = this.props.layer
+        let somethingToRemove = false;
+        if ((layer.mode === "markers") && (layer.markers.length)) {
+            somethingToRemove = true;
+        } else if ((layer.mode === "click") && (layer.data.click.length)) {
+            somethingToRemove = true;
+        }
+        let routes = get(layer.data, `routes`, []).pop(),
+            geom = get(routes, `geometry`, {coordinates: [], type: "LineString"});
+        return (
+            <div>
+                {!layer.filters.userRoutes.value ? null :
+                    <div style={{fontSize: "18px", paddingTop: "5px"}}>
+                        Year Created: {new Date(layer.filters.userRoutes.value.updatedAt).getFullYear()}
+                    </div>
+                }
+                {!layer.viewOnly ?
+                    <div style={{position: "relative", paddingTop: "10px", display: 'flex', justifyContent: 'space-between'}}>
+                        <Button style={{width: "calc(33% - 5px)"}}
+                                onClick={e => layer.removeLast()}
+                                disabled={!somethingToRemove}
+                                secondary>
+                            Remove Last
+                        </Button>
+                        <Button style={{width: "calc(33% - 5px)"}}
+                                onClick={e => layer.clearRoute()}
+                                disabled={!somethingToRemove}
+                                secondary>
+                            Clear Route
+                        </Button>
+                        <Button style={{width: "calc(33% - 5px)"}}
+                                disabled={!layer.nameArray.length}
+                                onClick={e => this.setState({showSaveModal: true})}
+                                primary>
+                            Save Route
+                        </Button>
+                    </div>
+                    : null
+                }
+                {this.state.showSaveModal ? saveModalForm(layer.geom, this.setState.bind(this)) : null}
+
+                <AvlFormsListTable
+                    json = {ViewConfig.view}
+                    deleteButton = {!layer.viewOnly}
+                    viewButton={true}
+                    onViewClick={(e) => {
+                        if (e.initLoad){
+                            if(!this.state.initLoad){
+                                this.setState({initLoad: true})
+                                return  layer.paintRoute(
+                                    {
+                                        mode: 'markers',
+                                        data: {
+                                            routes: [{hideAll: e.hideAll, viewAll: e.viewAll,
+                                                data: e.data ?
+                                                    e.data.map(f => ({geometry: f.geom, name: f.route_name})):
+                                                    []
+                                                , geometry: e.geom, name: e.route_name}]
+                                        }
+                                    }
+                                )
+                            }
+                        }else{
+                            return  layer.paintRoute(
+                                {
+                                    mode: 'markers',
+                                    data: {
+                                        routes: [{hideAll: e.hideAll, viewAll: e.viewAll,
+                                            data: e.data ?
+                                                e.data.map(f => ({geometry: f.geom, name: f.route_name})):
+                                                []
+                                            , geometry: e.geom, name: e.route_name}]
+                                    }
+                                }
+                            )
+                        }
+                    }}
+                />
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = (state, { id }) =>
+    ({
+        user: state.user,
+        graph: state.graph,
+        buildingData: get(state, ["graph", "building", "byId", id], {}),
+        parcelMeta: get(state, ["graph", "parcel", "meta"], {}),
+        buildingRiskData : get(state,["graph","building","byId"]),
+        actionsData : get(state,["graph","actions","assets","byId"]),
+        buildingsByIdData : get(state,['graph','building','byGeoid'])
+    });
+const mapDispatchToProps = {
+
+};
+
+const ControlBase = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(EvacuationControlBase))
