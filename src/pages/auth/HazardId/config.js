@@ -1,7 +1,7 @@
 module.exports = [
     {
-        type:'municipalities', // type is same as the route path for now
-        list_attributes:['community_name','initial_fhbm_date','initial_firm_date', 'is_csc', 'csc_level', 'crs_member', 'crs_entry_date','status'],
+        type:'hazardid', // type is same as the route path for now
+        list_attributes:['community_name','hazard_concern','previous_occurence', 'future_occurence', 'csc_level', 'crs_member', 'crs_entry_date','status'],
         csv_download: ['county', 'community_name', 'cid','initial_fhbm_date','initial_firm_date','current_map_date','regular_emergency_program_date','is_tribal','fips','duns','is_csc','csc_level','crs_member','crs_community_number','crs_entry_date','current_effective_date','current_class','discount_sfha','discount_non_sfha','status','nfip_standing','community_assistance_visit','community_assistance_call','current_nfip_ordinance','nfip_ordinance_adoption','nfip_administrator_name'],
         default_title: 'Municipality', // in the case when page_title is invalid
         page_title: 'community_name', // page title in edit and view
@@ -35,43 +35,49 @@ module.exports = [
                 hidden:'false',
                 section: ''
             },
-            cid: {
-                label:'CID',
-                prompt:'Provide the community identification number for the incorporated city.',
+            hazard_concern: {
+                label:'Hazard of Concern',
+                prompt:'Identify the hazards of concern for your jurisdiction.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
             },
-            initial_fhbm_date:{
-                label:'Flood Hazard Boundary Map',
-                prompt:'Provide the date the Flood Hazard Boundary Map was created.',
+            previous_occurence:{
+                label:'Previous Hazard Occurance',
+                prompt:'Prevoious occurances are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low, 4-7 is Medium, and 8-10 is High. Please indicate using H/M/L the level at which this hazard has previous occurred. ',
                 sub_type:'',
-                edit_type:'date',
+                edit_type:'dropdown_no_meta',
+                edit_type_values: ['High','Medium','Low']
+                display_type:'text',
+                meta: 'false',
+            },
+            future_occurence:{
+                label:'Likelihood of Future Occurence',
+                prompt:'Likelihood of future orrurences are measured as High, Medium, Low on a sacle of 1 to 10. 1-3 is Low, 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the likeliness of this hazard happening in th future.',
+                sub_type:'',
+                edit_type:'dropdown_no_meta',
+                edit_type_values: ['High','Medium', 'Low'],
+                display_type:'text',
+                meta: 'false',
+            },
+            loss_life_property:{
+                label:'Loss of Life and Property',
+                prompt:'Loss of Life and Property are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low 4-7 is Medium and 8-10 is High. Please indicating using H/M/L the level of loss your jurisdiction has experienced as a result of a hazard event. .',
+                sub_type:'',
+                edit_type:'dropdown_no_meta',
+                edit_type_values:['High', 'Medium', 'Low'],
+                display_type:'text',
+                meta: 'false',
+            },
+            extent_description:{
+                label:'General Area of This Hazard  .',
+                prompt:'Please describe the scale of this hazard, and the areas it typically covers.',
+                sub_type:'',
+                edit_type:'text',
                 display_type:'text',
             },
-            initial_firm_date:{
-                label:'Flood Insurance Rate Map',
-                prompt:'Provide the date of the communitys first Flood Insurance Rate Map',
-                sub_type:'',
-                edit_type:'date',
-                display_type:'text',
-            },
-            current_map_date:{
-                label:'Current Effective FIRM',
-                prompt:'Provide the date of the flood insurance rate map currently in effect.',
-                sub_type:'',
-                edit_type:'date',
-                display_type:'text',
-            },
-            regular_emergency_program_date:{
-                label:'Regular Emergency Program Date.',
-                prompt:'Provide the date (mm/dd/yyyy) the community first joind the NFIP. An "E" next to the date indicates that the community is in the Emergency Program and subject to limited coverage. If there is no "E" next to the date, then the community participates in the regular program.',
-                sub_type:'',
-                edit_type:'date',
-                display_type:'text',
-            },
-            is_tribal:{
-                label:'Tribal',
+            location_description:{
+                label:'Local Description',
                 prompt:'Identify with a yes or no if the participating community is a tribal nation.',
                 sub_type:'',
                 edit_type:'radio',
