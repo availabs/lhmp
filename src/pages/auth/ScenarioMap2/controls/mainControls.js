@@ -99,6 +99,10 @@ class MainControls extends React.Component {
                 this.props.layer.landUseLayer.legend.active = false
                 this.props.layer.landUseLayer.forceUpdate()
             }
+            if(this.state.modeOff === 'vulnerableDemographics'){
+                this.props.layer.vulnerableDemographicsLayer.legend.active = false
+                this.props.layer.vulnerableDemographicsLayer.forceUpdate()
+            }
 
         }
         // if a layer is selected after being turned off
@@ -119,6 +123,10 @@ class MainControls extends React.Component {
             //console.log('in fifth if')
             this.props.layer.landUseLayer.legend.active = true
             this.props.layer.landUseLayer.forceUpdate()
+        }
+        if(this.state.layerSelected === 'vulnerableDemographics'){
+            this.props.layer.vulnerableDemographicsLayer.legend.active = true
+            this.props.layer.vulnerableDemographicsLayer.forceUpdate()
         }
 
     }
