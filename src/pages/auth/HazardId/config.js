@@ -62,7 +62,7 @@ module.exports = [
             },
             loss_life_property:{
                 label:'Loss of Life and Property',
-                prompt:'Loss of Life and Property are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low 4-7 is Medium and 8-10 is High. Please indicating using H/M/L the level of loss your jurisdiction has experienced as a result of a hazard event. .',
+                prompt:'Loss of Life and Property are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the level of loss your jurisdiction has experienced as a result of a hazard event.',
                 sub_type:'',
                 edit_type:'dropdown_no_meta',
                 edit_type_values:['High','Medium','Low'],
@@ -70,15 +70,15 @@ module.exports = [
                 meta: 'false',
             },
             extent_description:{
-                label:'General Area of This Hazard  .',
-                prompt:'Please describe the scale of this hazard, and the areas it typically covers.',
+                label:'General Area of Hazard.',
+                prompt:'Please describe the general scale of this hazard.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
             },
             location_description:{
                 label:'Local Description',
-                prompt:'Identify with a yes or no if the participating community is a tribal nation.',
+                prompt:'Please describe specifically where this hazard occurs.',
                 sub_type:'',
                 edit_type:'text', // the values you would like to see as options for radio buttons
                 disable_condition:'',
