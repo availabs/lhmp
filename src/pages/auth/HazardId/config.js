@@ -88,6 +88,34 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
+            affected_climate_change:{
+                label:'Does Climate Change affect this Hazard?',
+                prompt:'Please indicate whether Climate Change has affected the duration, intensity, and occurrence of this hazard.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+            },
+            impact_climate_change:{
+                label:'How will Climate Change affect this Hazard?',
+                prompt:'Please describe how Climate Change will impact this hazard event.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+            },
+            impact_description:{
+                label:'Hazard Impact Description',
+                prompt:'Describe in detail the effects this hazard had in your community.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+            },
+            case_study:{
+                label:'Case Study',
+                prompt:'Please provide a description or Case Study of a specific hazard event and the effects it had on your community.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+            }   
         }
     }
 ];
