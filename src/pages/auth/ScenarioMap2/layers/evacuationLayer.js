@@ -540,7 +540,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
                 'type': 'line',
                 'paint': {
                     ...ConflationStyle.paint,
-                    'line-color': 'rgb(16,255,53)',
+                    'line-color': '#F31616',
                 },
                 filter: ['in', 'geoid', store.getState().user.activeGeoid]
             },

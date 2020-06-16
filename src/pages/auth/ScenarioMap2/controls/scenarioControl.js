@@ -7,10 +7,12 @@ import get from "lodash.get";
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
-import ControlLayers from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
+import Legend from "../../../../components/AvlMap/components/legend/Legend";
 import ScenarioTable from "../components/scenariosTable";
 import {setActiveRiskScenarioId} from "store/modules/scenario"
+import {getColorRange} from "../../../../constants/color-ranges";
 var _ = require("lodash")
+const LEGEND_COLOR_RANGE = getColorRange(8, "YlGn");
 let scenarios_list  = []
 class ScenarioControl extends React.Component {
     constructor(props) {
@@ -144,6 +146,14 @@ class ScenarioControl extends React.Component {
         if(scenarios_list && scenarios_list.length > 0){
             return (
                 <div>
+                    <Legend
+                        title = {'Total Hazard Loss'}
+                        type = {"linear"}
+                        vertical= {false}
+                        range= {LEGEND_COLOR_RANGE}
+                        domain = {[0,10000,50000,100000, 250000, 500000, 1000000]}
+                        format= {fnum}
+                    />
                     <select className="form-control justify-content-sm-end"
                             id="scenario_id"
                             value = {this.state.scenario_id || ''}
@@ -165,6 +175,7 @@ class ScenarioControl extends React.Component {
                         })}
                     </select>
                     <div>
+
                         {this.renderScenarioTable()}
                     </div>
                 </div>

@@ -87,6 +87,7 @@ export class VulnerableDemographicsLayer extends MapLayer{
                     .domain(this.legend.domain)
                     .range(this.legend.range);
         }
+        this.layer.forceUpdate()
 
     }
 

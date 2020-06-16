@@ -8,7 +8,9 @@ import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import {setActiveLandUseType,setActiveLandUsePropType ,setActiveOwnerType,setActiveLandUseSubPropType} from "store/modules/landUse"
 import MultiSelectFilter from "../../../../components/filters/multi-select-filter";
-import Container from "nivo/lib/components/charts/Container";
+import Legend from "../../../../components/AvlMap/components/legend/Legend";
+import {getColorRange} from "../../../../constants/color-ranges";
+import {fnum} from "../../../../utils/sheldusUtils";
 
 var _ = require("lodash")
 
@@ -269,9 +271,46 @@ class LandUseControl extends React.Component {
 
     render() {
         let land_use_list = this.landUseDropDown()
+        let domain_values = []
         if (land_use_list && land_use_list.length > 0) {
+            land_use_list.forEach(item =>{
+                if(item.label === this.state.land_use_id){
+                    if(this.state.land_use_id === "Land Use Type"){
+                        domain_values = item.value.map(d => d.name)
+                        domain_values.push("None")
+                    }else{
+                        domain_values = item.value.map(d => d.name)
+                    }
+                }
+            })
             return (
                 <div>
+                    {this.state.land_use_id === 'Land Use Type' ?
+                        <Legend
+                            title ={"Land Use Type"}
+                            vertical ={true}
+                            type={"ordinal"}
+                            domain = {domain_values}
+                            range = {getColorRange("10","Set3")}
+                        />
+                        : this.state.land_use_id === 'Owner Type' ?
+                            <Legend
+                                title ={"Owner Type"}
+                                vertical ={true}
+                                type={"ordinal"}
+                                domain = {domain_values}
+                                range = {getColorRange(11, "Set3")}
+                            />
+                            : this.state.land_use_id === 'Property Value' ?
+                                <Legend
+                                    title ={"Property Value"}
+                                    vertical ={false}
+                                    type={"linear"}
+                                    domain = {[0,50000,100000,200000,500000,1000000,5000000]}
+                                    range = {getColorRange(8, "YlGn")}
+                                    format =  {fnum}
+                                />
+                        :null}
                     {this.addLandUseLayer()}
                 </div>
             )

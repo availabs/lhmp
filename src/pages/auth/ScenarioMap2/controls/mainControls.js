@@ -14,6 +14,8 @@ import VulnerableDemographicsControl from "./vulnerableDemographicsControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
 import styled from "styled-components";
+import {falcorGraph} from "../../../../store/falcorGraph";
+import store from "../../../../store";
 
 var _ = require('lodash');
 const AllModes =[
@@ -92,15 +94,15 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOff([this.state.modeOff])
             if(this.state.modeOff === 'scenario') {
                 this.props.layer.visibilityToggleModeOff(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
-                this.props.layer.scenarioLayer.legend.active = false
+                //this.props.layer.scenarioLayer.legend.active = false
                 this.props.layer.scenarioLayer.forceUpdate()
             }
             if(this.state.modeOff === 'landUse'){
-                this.props.layer.landUseLayer.legend.active = false
+                //this.props.layer.landUseLayer.legend.active = false
                 this.props.layer.landUseLayer.forceUpdate()
             }
             if(this.state.modeOff === 'vulnerableDemographics'){
-                this.props.layer.vulnerableDemographicsLayer.legend.active = false
+                //this.props.layer.vulnerableDemographicsLayer.legend.active = false
                 this.props.layer.vulnerableDemographicsLayer.forceUpdate()
             }
 
@@ -111,7 +113,7 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOn([this.state.layerSelected],this.state.selected)
             if(this.state.layerSelected === 'scenario') {
                 this.props.layer.visibilityToggleModeOn(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
-                this.props.layer.scenarioLayer.legend.active = true
+                //this.props.layer.scenarioLayer.legend.active = true
                 this.props.layer.scenarioLayer.forceUpdate()
             }
             if(this.state.layerSelected === 'evacuationRoutes'){
@@ -121,11 +123,11 @@ class MainControls extends React.Component {
         //to active the legend if selected landUse
         if(this.state.layerSelected === 'landUse' && !this.state.showLayers.includes('landUse')){
             //console.log('in fifth if')
-            this.props.layer.landUseLayer.legend.active = true
+            //this.props.layer.landUseLayer.legend.active = true
             this.props.layer.landUseLayer.forceUpdate()
         }
         if(this.state.layerSelected === 'vulnerableDemographics'){
-            this.props.layer.vulnerableDemographicsLayer.legend.active = true
+            //this.props.layer.vulnerableDemographicsLayer.legend.active = true
             this.props.layer.vulnerableDemographicsLayer.forceUpdate()
         }
 
@@ -358,6 +360,7 @@ class MainControls extends React.Component {
                                             }
                                         ))
                                         this.props.layer.evacuationRoutesLayer.showInfoBox(false)
+
                                     }}
                                 >
                                     <span aria-hidden="true"> ×</span>

@@ -7,6 +7,9 @@ import {sendSystemMessage} from 'store/modules/messages';
 import censusIndicatorConfig from '../components/censusIndicatorConfig'
 import {setActiveIndicator} from "../../../../store/modules/demographics";
 import {zoom} from "leaflet/src/control/Control.Zoom";
+import {getColorRange} from "../../../../constants/color-ranges";
+import Legend from "../../../../components/AvlMap/components/legend/Legend";
+import {format as d3format} from "d3-format/src/defaultLocale";
 var _ = require('lodash')
 
 class VulnerableDemographicsControl extends React.Component{
@@ -79,6 +82,14 @@ class VulnerableDemographicsControl extends React.Component{
         if(this.props.layer.layer.vulnerableDemographicsLayer){
             return (
                 <div>
+                    <Legend
+                        title ={"Vulnerable Demographics Data"}
+                        vertical ={false}
+                        type={"quantile"}
+                        domain = {this.props.layer.layer.vulnerableDemographicsLayer.legend.domain}
+                        format ={d3format(".0%")}
+                        range = {getColorRange(7, "YlGn")}
+                    />
                     {this.renderIndicatorDropDown()}
                 </div>
             )
