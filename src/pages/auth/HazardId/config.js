@@ -1,8 +1,8 @@
 module.exports = [
     {
         type:'hazardid', // type is same as the route path for now
-        list_attributes:['community_name','hazard_concern','previous_occurence', 'future_occurence', '', '', '',''],
-        csv_download: ['county', 'community_name', 'cid','initial_fhbm_date','initial_firm_date','current_map_date','regular_emergency_program_date','is_tribal','fips','duns','is_csc','csc_level','crs_member','crs_community_number','crs_entry_date','current_effective_date','current_class','discount_sfha','discount_non_sfha','status','nfip_standing','community_assistance_visit','community_assistance_call','current_nfip_ordinance','nfip_ordinance_adoption','nfip_administrator_name'],
+        list_attributes:['community_name','hazard_concern','previous_occurence', 'future_occurence', 'loss_life_property', 'extent_description', 'location_description'],
+        csv_download: ['county', 'community_name','hazard_concern','previous_occurence', 'future_occurence', 'loss_life_property', 'extent_description', 'location_description'],
         default_title: 'Hazard ID', // in the case when page_title is invalid
         page_title: 'community_name', // page title in edit and view
         sub_title: '', // sub title in edit and view
