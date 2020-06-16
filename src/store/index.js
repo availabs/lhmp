@@ -8,6 +8,7 @@ import user from './modules/user'
 import geo from './modules/geo'
 import scenario from "./modules/scenario";
 import landUse from "./modules/landUse";
+import demographics from "./modules/demographics";
 import messages from "./modules/messages"
 
 import createHistory from 'history/createBrowserHistory'
@@ -37,6 +38,7 @@ const store = createStore(
       geo,
     scenario,
     landUse,
+    demographics,
     messages,
     graph,
     router: routerReducer
