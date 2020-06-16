@@ -42,18 +42,18 @@ module.exports = [
                 edit_type:'text',
                 display_type:'text',
             },
-            previous_occurence:{
-                label:'Previous Hazard Occurance',
-                prompt:'Prevoious occurances are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low, 4-7 is Medium, and 8-10 is High. Please indicate using H/M/L the level at which this hazard has previous occurred. ',
+            previous_occurrence:{
+                label:'Previous Hazard Occurrence',
+                prompt:'Prevoious occurences are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low, 4-7 is Medium, and 8-10 is High. Please indicate using H/M/L the level at which this hazard has previously occurred. ',
                 sub_type:'',
                 edit_type:'dropdown_no_meta',
                 edit_type_values: ['High','Medium','Low'],
                 display_type:'text',
                 meta: 'false',
             },
-            future_occurence:{
-                label:'Likelihood of Future Occurence',
-                prompt:'Likelihood of future orrurences are measured as High, Medium, Low on a sacle of 1 to 10. 1-3 is Low, 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the likeliness of this hazard happening in th future.',
+            future_occurrence:{
+                label:'Likelihood of Future Occurrence',
+                prompt:'Likelihood of future orrurences are measured as High, Medium, Low on a sacle of 1 to 10. 1-3 is Low, 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the likeliness of this hazard happening in the future.',
                 sub_type:'',
                 edit_type:'dropdown_no_meta',
                 edit_type_values: ['High','Medium', 'Low'],
