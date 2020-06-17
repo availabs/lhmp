@@ -111,11 +111,13 @@ class Hazards extends React.Component {
     }
 
     setGeoLevel(geoid_len) {
-        return geoid_len < 5 ? 'state'
+        console.log('geolevel?', geoid_len)
+        return geoid_len === 2 ? 'state'
             : geoid_len === 5 ? 'counties'
-                : geoid_len === 10 ? 'cousubs'
-                    : geoid_len === 11 ? 'tracts'
-                        : geoid_len === 12 ? 'blockgroup' : ''
+                : geoid_len === 7 ? 'villages'
+                    : geoid_len === 10 ? 'cousubs'
+                        : geoid_len === 11 ? 'tracts'
+                            : geoid_len === 12 ? 'blockgroup' : ''
     }
 
     getGeoidName() {

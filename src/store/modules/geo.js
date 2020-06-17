@@ -1,15 +1,18 @@
 import geoApi from 'store/data-adapters/geoApi'
+import {falcorGraph} from "../falcorGraph";
+import get from "lodash.get";
 
 let geoData = new geoApi();
 // ------------------------------------
 // Constants
 // ------------------------------------
 const SET_CHILD_GEO = 'SET_CHILD_GEO';
+const GET_ALL_FIPS = 'GET_ALL_FIPS';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-function setChildGeo(geoid, data, geoType, mesh=false, merge=false) {
+function setChildGeo(geoid, data, geoType, mesh = false, merge = false) {
     return {
         type: SET_CHILD_GEO,
         geoid,
@@ -20,14 +23,14 @@ function setChildGeo(geoid, data, geoType, mesh=false, merge=false) {
     };
 }
 
-export const getChildGeo = (geoid=36, geoType='counties') => {
+export const getChildGeo = (geoid = 36, geoType = 'counties') => {
     return dispatch => {
         return geoData.getChildGeo(geoid, geoType).then(data => {
-            dispatch(setChildGeo(geoid,data, geoType))
+            dispatch(setChildGeo(geoid, data, geoType))
         })
     }
 };
-export const getGeoMesh = (geoid=36, geoType='counties') => {
+export const getGeoMesh = (geoid = 36, geoType = 'counties') => {
     return dispatch => {
         return geoData.getGeoMesh(geoid, geoType)
             .then(data => {
@@ -35,7 +38,7 @@ export const getGeoMesh = (geoid=36, geoType='counties') => {
             })
     }
 };
-export const getGeoMerge = (geoid=36, geoType='counties') => {
+export const getGeoMerge = (geoid = 36, geoType = 'counties') => {
     return dispatch => {
         return geoData.getGeoMerge(geoid, geoType)
             .then(data => {
@@ -44,7 +47,27 @@ export const getGeoMerge = (geoid=36, geoType='counties') => {
     }
 };
 
+export const getAllGeo = (parentGeo) => {
+    return (dispatch) => {
+        falcorGraph.get(["geo", parentGeo, 'municipalities'])
+            .then(response => {
+                return falcorGraph.get(
+                    ['geo',
+                        [parentGeo, ...get(response, `json.geo.${parentGeo}.municipalities`, [])],
+                        ['name']],
+                )
+            })
+            .then(response => dispatch(callGetAllGeo(get(response, `json.geo`, {}), parentGeo)))
+    }
+}
 
+function callGetAllGeo(allGeo, parentGeo) {
+    return {
+        type: GET_ALL_FIPS,
+        allGeo,
+        parentGeo
+    }
+}
 
 // export const actions = {
 //   getHazardTotal
@@ -63,20 +86,31 @@ const ACTION_HANDLERS = {
     [SET_CHILD_GEO]: (state = initialState, action) => {
         let newState = Object.assign({}, state);
         if (action.merge) {
-            let value  = Object.assign({}, state["merge"][action.geoid], {[action.geoType]: action.data})
+            let value = Object.assign({}, state["merge"][action.geoid], {[action.geoType]: action.data})
             newState["merge"][action.geoid] = value
-        }
-        else if (action.mesh) {
-            let value  = Object.assign({}, state["mesh"][action.geoid], {[action.geoType]: action.data})
+        } else if (action.mesh) {
+            let value = Object.assign({}, state["mesh"][action.geoid], {[action.geoType]: action.data})
             newState["mesh"][action.geoid] = value
-        }
-        else {
+        } else {
             // add childGeo to previous state geoid
-            let value  = Object.assign({}, state[action.geoid], {[action.geoType]: action.data})
+            let value = Object.assign({}, state[action.geoid], {[action.geoType]: action.data})
             // then set the geoid equal to the expanded value
             newState[action.geoid] = value
         }
         return newState;
+    },
+    [GET_ALL_FIPS]: (state = initialState, action) => {
+        let newState = Object.assign({}, state);
+        newState['allGeos'] = Object.keys(action.allGeo)
+            .filter(key => key !== '$__path')
+            .reduce((a, c) => {
+                a[c] = action.allGeo[c].name;
+                return a;
+            }, {})
+        newState['geoRelations'] ?
+            newState['geoRelations'][action.parentGeo] =  Object.keys(action.allGeo).filter(f => f !== action.parentGeo):
+            newState['geoRelations'] = {[action.parentGeo]: Object.keys(action.allGeo).filter(f => f !== action.parentGeo)};
+        return newState
     }
 };
 

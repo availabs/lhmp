@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import geoDropdown from 'pages/auth/Plan/functions'
+import {GeoDropdown} from 'pages/auth/Plan/functions'
 import config from "../../Plan/config/guidance-config";
 import {Link} from "react-router-dom";
 import get from "lodash.get";
@@ -37,9 +37,7 @@ export const header = (caller, geoGraph,setActiveCousubid, activeCousubid,allowe
                 </li>
             </ul>
             <DROPDOWN>
-                {
-                   geoDropdown.geoDropdown(geoGraph,setActiveCousubid, activeCousubid,allowedGeos)
-                }
+                <GeoDropdown />
             </DROPDOWN>
         </div>
     )

@@ -67,9 +67,9 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                     //['riskIndex', geoids, hazards, ['score', 'value']],
                     //[dataType, geoids, hazards, { from: EARLIEST_YEAR, to: LATEST_YEAR }, ['property_damage', 'total_loss', 'num_events','num_episodes', 'num_loans']]
                 )
-                    .then(d => falcorChunkerNice(['geo', geoids, 'name']))
-                    .then(d => falcorChunkerNice(['riskIndex', geoids, hazards, ['score', 'value']]))
-                    .then(d => falcorChunkerNice(
+                    .then(d => this.props.falcor.get(['geo', geoids, 'name']))
+                    .then(d => this.props.falcor.get(['riskIndex', geoids, hazards, ['score', 'value']]))
+                    .then(d => this.props.falcor.get(
                         [dataType,'byMonth', geoids, hazards, ['January','February', 'March', 'April', 'May','June','July',
                             'August','September', 'October', 'November', 'December'],
                             ['property_damage', 'total_damage', 'num_events', 'num_episodes']]

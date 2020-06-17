@@ -1,26 +1,29 @@
 import React, {Component} from 'react'
 import MainMenu from './MainMenu'
 import MobileMenu from "./MobileMenu";
-import geoDropdown from 'pages/auth/Plan/functions'
+import {GeoDropdown} from 'pages/auth/Plan/functions'
 import {AvatarUser, AvatarUserMobile, LoginMenu, LoginMenuMobile, Logo} from './TopMenu'
 import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
 import {setActiveCousubid} from 'store/modules/user'
+import {getAllGeo} from 'store/modules/geo'
 import get from 'lodash.get'
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import _ from "lodash";
 
 // import './menu.css'
 
 class Menu extends Component {
     constructor(props) {
         super(props);
+        props.getAllGeo(props.activeGeoid)
         this.state = {
             menuDisplay: 'none'
         }
     }
 
-    fetchFalcorDeps() {
+/*    fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
         return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
             .then(response => {
@@ -30,14 +33,17 @@ class Menu extends Component {
                         ['name']],
                 )
             })
+    }*/
+    shouldComponentUpdate(nextProps, nextState) {
+        return !_.isEqual(nextProps.allGeo, this.props.allGeo)
     }
-
     render() {
+        console.log('render?', this.props)
         if (this.props.menuSettings.hide) return null;
 
-        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
+        const allowedGeos = Object.keys(get(this.props, `allGeo`, {}));
         let currentPath = this.props.menus.filter(p => p.path === this.props.path)[0];
-
+        console.log('allgeo?', this.props.allGeo, allowedGeos)
 
         // let title = currentPath[0] ? currentPath[0].name : ''
         let defaultOptions = {
@@ -73,8 +79,8 @@ class Menu extends Component {
             dynamicStyle['width'] = '100vw' : dynamicStyle['height'] = '100vh';
 
         const DROPDOWN = defaultOptions.scheme === 'color-scheme-dark' ? styled.div`
+                        div > * {${props => props.theme.scrollBar};}
                         div > select {
-                        ${props => props.theme.panelDropdownScrollBar};
                         color: #fff;
                         border: none;
                         font-size: 0.81rem;
@@ -86,7 +92,7 @@ class Menu extends Component {
                         }
                     ` : styled.div`
                     div > select {
-                    ${props => props.theme.panelDropdownScrollBar};
+                    ${props => props.theme.scrollBar};
                     color: #3E4B5B;
                     border: none;
                     background: none;
@@ -122,7 +128,7 @@ class Menu extends Component {
                     <MainMenu {...this.props} />
                     {!this.props.auth ?
                         <DROPDOWN>
-                            {geoDropdown.geoDropdown(this.props.geoGraph, this.props.setActiveCousubid, this.props.activeCousubid, allowedGeos)}
+                            {<GeoDropdown />}
                         </DROPDOWN>
                         : ''}
                 </div>
@@ -161,8 +167,9 @@ const mapStateToProps = (state, ownProps) => {
         router: state.router,
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
+        allGeo: state.geo.allGeos
     };
 };
 
-const mapDispatchToProps = {setActiveCousubid};
+const mapDispatchToProps = {setActiveCousubid, getAllGeo};
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Menu))
