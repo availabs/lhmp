@@ -14,6 +14,12 @@ class ActionsWorksheetFormsNew extends React.Component{
 
     render(){
         let config = ViewConfig.config;
+        this.props.layer.doAction([
+            "dismissMessage",
+            {id:'evacuationRoutes'}
+        ])
+        this.props.layer.forceUpdate()
+        this.props.layer.map.resize()
         return(
             <AvlFormsNewData
                 json = {config}

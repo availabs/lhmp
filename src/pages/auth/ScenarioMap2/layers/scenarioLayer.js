@@ -427,7 +427,7 @@ export const ScenarioOptions =  (options = {}) => {
             types: ["threshold", "quantile", "quantize","linear"],
             vertical: false,
             range: LEGEND_COLOR_RANGE,
-            active: true,
+            active: false,
             domain: [0,10000,50000,100000, 250000, 500000, 1000000], //10k, 50k, 100k, 250k, 500k, 1m+
             format: fnum
         },

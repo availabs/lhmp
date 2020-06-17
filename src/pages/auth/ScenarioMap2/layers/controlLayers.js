@@ -13,6 +13,7 @@ import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
 import {CulvertsLayer,CulvertsOptions} from "./culvertsLayer";
 import {JurisdictionLayer,JurisdictionOptions} from "./jurisdictionLayer";
 import {EvacuationRoutesLayer,EvacuationRoutesOptions} from "./evacuationLayer";
+import {VulnerableDemographicsLayer,VulnerableDemographicsOptions} from "./vulnerableDemographicsLayer";
 import { getColorRange } from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -23,7 +24,7 @@ const COLORS = getColorRange(12, "Set3");
 
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
-let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer = {}
+let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer,vulnerableDemographicsLayer = {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -56,6 +57,10 @@ const DynamicEvacuationRoutesLayerFactory =(callingLayer,...args) =>{
     return new EvacuationRoutesLayer('evacuationRoutes',EvacuationRoutesOptions({viewOnly: false}))
 };
 
+const DynamicVulnerableDemographicsLayerFactory = (callingLayer,...args) =>{
+    return new VulnerableDemographicsLayer('vulnerableDemographics',VulnerableDemographicsOptions())
+}
+
 
 export class ControlLayers extends MapLayer {
     onAdd(map) {
@@ -70,11 +75,12 @@ export class ControlLayers extends MapLayer {
                     this.boundingBox = bbox
                     map.resize();
                     map.fitBounds(bbox);
-                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer){
+                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer && this.vulnerableDemographicsLayer){
                         this.landUseLayer.toggleVisibilityOff()
                         this.commentMapLayer.toggleVisibilityOff()
                         this.culvertsLayer.toggleVisibilityOff()
                         this.evacuationRoutesLayer.toggleVisibilityOff()
+                        this.vulnerableDemographicsLayer.toggleVisibilityOff()
                     }
                 })
         }
@@ -272,6 +278,13 @@ export class ControlLayers extends MapLayer {
                                 ]).then(erl =>{
                                     evacuationRoutesLayer = erl
                                     this.evacuationRoutesLayer = erl
+                                    this.doAction([
+                                        "addDynamicLayer",
+                                        DynamicVulnerableDemographicsLayerFactory
+                                    ]).then(vdl =>{
+                                        vulnerableDemographicsLayer = vdl
+                                        this.vulnerableDemographicsLayer = vdl
+                                    })
                                 })
                             })
                         })
@@ -310,6 +323,11 @@ export class ControlLayers extends MapLayer {
                 evacuationRoutesLayer.toggleVisibilityOn()
             }
         }
+        if(layerName.includes("vulnerableDemographics")){
+            if(Object.keys(vulnerableDemographicsLayer).length > 0){
+                vulnerableDemographicsLayer.toggleVisibilityOn()
+            }
+        }
         if(layerName.includes("jurisdiction")){
             this.jurisdictonLayer.toggleVisibilityOn()
         }
@@ -342,6 +360,11 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes("evacuationRoutes")){
             if(Object.keys(evacuationRoutesLayer).length > 0){
                 evacuationRoutesLayer.toggleVisibilityOff()
+            }
+        }
+        if(layerName.includes("vulnerableDemographics")){
+            if(Object.keys(vulnerableDemographicsLayer).length > 0){
+                vulnerableDemographicsLayer.toggleVisibilityOff()
             }
         }
         if(layerName.includes('jurisdiction')){

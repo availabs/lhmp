@@ -10,9 +10,12 @@ import CommentMapControl from "./commentMapControl";
 import CulvertsControl from "./culvertsControl";
 import JurisdictionControl from "./jurisdictionControls";
 import EvacuationControl from "./evacuationControl";
+import VulnerableDemographicsControl from "./vulnerableDemographicsControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
 import SearchableDropDown from "../components/searchableDropDown";
 import styled from "styled-components";
+import {falcorGraph} from "../../../../store/falcorGraph";
+import store from "../../../../store";
 
 var _ = require('lodash');
 const AllModes =[
@@ -22,7 +25,8 @@ const AllModes =[
     {value:'landUse',label:'Land Use'},
     {value:'commentMap',label:'Comment Map'},
     {value:'culverts',label:'Culverts'},
-    {value:'evacuationRoutes',label:'Evacuation Routes'}
+    {value:'evacuationRoutes',label:'Evacuation Routes'},
+    {value:'vulnerableDemographics',label:'Vulnerable Demographics'}
     ];
 const AllBlocks = [
     {id:'scenario_block',title:'Risk Scenarios'},
@@ -31,7 +35,8 @@ const AllBlocks = [
     {id:'landUse_block',title:'Land Use'},
     {id:'commentMap_block',title:'Comment Map'},
     {id:'culverts_block',title:'Culverts'},
-    {id:'evacuationRoutes_block',title:'Evacuation Routes'}
+    {id:'evacuationRoutes_block',title:'Evacuation Routes'},
+    {id:'vulnerableDemographics_block',title:'Vulnerable Demographics'}
     ]
 
 const DROPDOWN = styled.div`
@@ -50,7 +55,7 @@ class MainControls extends React.Component {
             activeMode: ['scenario','jurisdiction'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap','culverts','zone','evacuationRoutes'],
+            showLayers : ['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics'],
             selected : true
         }
 
@@ -73,13 +78,14 @@ class MainControls extends React.Component {
 
         }
         //landuse is active only when needed and zoomes in
-        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone','evacuationRoutes'])){
+        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics'])){
             //console.log('in second if')
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
             this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
             this.props.layer.mainLayerToggleVisibilityOff(["culverts"])
             this.props.layer.mainLayerToggleVisibilityOff(["zone"])
             this.props.layer.mainLayerToggleVisibilityOff(["evacuationRoutes"])
+            this.props.layer.mainLayerToggleVisibilityOff(['vulnerableDemographics'])
         }
         // if a layer is removed by X
         if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
@@ -88,12 +94,16 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOff([this.state.modeOff])
             if(this.state.modeOff === 'scenario') {
                 this.props.layer.visibilityToggleModeOff(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
-                this.props.layer.scenarioLayer.legend.active = false
+                //this.props.layer.scenarioLayer.legend.active = false
                 this.props.layer.scenarioLayer.forceUpdate()
             }
             if(this.state.modeOff === 'landUse'){
-                this.props.layer.landUseLayer.legend.active = false
+                //this.props.layer.landUseLayer.legend.active = false
                 this.props.layer.landUseLayer.forceUpdate()
+            }
+            if(this.state.modeOff === 'vulnerableDemographics'){
+                //this.props.layer.vulnerableDemographicsLayer.legend.active = false
+                this.props.layer.vulnerableDemographicsLayer.forceUpdate()
             }
 
         }
@@ -103,7 +113,7 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOn([this.state.layerSelected],this.state.selected)
             if(this.state.layerSelected === 'scenario') {
                 this.props.layer.visibilityToggleModeOn(this.props.activeRiskLayerVisibility[0], this.props.activeRiskLayerVisibility[1])
-                this.props.layer.scenarioLayer.legend.active = true
+                //this.props.layer.scenarioLayer.legend.active = true
                 this.props.layer.scenarioLayer.forceUpdate()
             }
             if(this.state.layerSelected === 'evacuationRoutes'){
@@ -113,8 +123,12 @@ class MainControls extends React.Component {
         //to active the legend if selected landUse
         if(this.state.layerSelected === 'landUse' && !this.state.showLayers.includes('landUse')){
             //console.log('in fifth if')
-            this.props.layer.landUseLayer.legend.active = true
+            //this.props.layer.landUseLayer.legend.active = true
             this.props.layer.landUseLayer.forceUpdate()
+        }
+        if(this.state.layerSelected === 'vulnerableDemographics'){
+            //this.props.layer.vulnerableDemographicsLayer.legend.active = true
+            this.props.layer.vulnerableDemographicsLayer.forceUpdate()
         }
 
     }
@@ -346,12 +360,42 @@ class MainControls extends React.Component {
                                             }
                                         ))
                                         this.props.layer.evacuationRoutesLayer.showInfoBox(false)
+
                                     }}
                                 >
                                     <span aria-hidden="true"> ×</span>
                                 </button>
                                 <br/>
                                 <EvacuationControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'vulnerableDemographics'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                        this.props.layer.evacuationRoutesLayer.showInfoBox(false)
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <VulnerableDemographicsControl
                                     layer = {this.props}
                                 />
                             </div>
