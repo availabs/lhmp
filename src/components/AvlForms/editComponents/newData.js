@@ -268,10 +268,10 @@ class AvlFormsNewData extends React.Component{
     cousubDropDown(event){
         let county = typeof event.target.value === "object" ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
-            return this.props.falcor.get(['geo',county,'cousubs'])
+            return this.props.falcor.get(['geo',county,'municipalities'])
                 .then(response =>{
                     let cousubs = [];
-                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
+                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].municipalities`, []).filter(f => f)));
                     if (cousubs){
                         this.props.falcor.get(['geo',cousubs,['name']])
                             .then(response =>{
@@ -304,7 +304,7 @@ class AvlFormsNewData extends React.Component{
                 .filter(item => filterOn && filterOn.includes(item.toString()))
                 .forEach(item =>{
 
-                    get(graph, `${item}.cousubs.value`, [])
+                    get(graph, `${item}.municipalities.value`, [])
                         .filter(cousub => get(graph, `${cousub}.name`, null))
                         .forEach(cousub => {
                         cousubsData.push({
@@ -388,6 +388,7 @@ class AvlFormsNewData extends React.Component{
                         area:item.attributes[attribute].area,
                         prompt: this.displayPrompt.bind(this),
                         meta : cousubsData || [],
+                        geoRelations: this.props.geoRelations,
                         defaultValue: item.attributes[attribute].defaultValue
                     })
                 }else if(item.attributes[attribute].area === undefined && item.attributes[attribute].edit_type === 'dropdown' &&
@@ -566,10 +567,10 @@ class AvlFormsNewData extends React.Component{
     renderHeaderText(header){
         return (
             this.props.geoData[header] ?
-                this.props.geoData[header].name :
+                get(this.props.geoData, `${header}.name`, '') :
                     Array.isArray(header) &&
                     header.filter(f => Object.keys(this.props.geoData).includes(f)).length ?
-                        header.map(f => this.props.geoData[f].name).join() :
+                        header.map(f => get(this.props.geoData, `${f}.name`, '')).join() :
                         header
         )
     }
@@ -660,8 +661,8 @@ const mapStateToProps = (state,ownProps) => {
         id : ownProps.id,
         geoData : get(state.graph,['geo'],{}),
         meta_data : get(state.graph,['forms']),
-        forms_roles_data: get(state.graph,['forms','byId'])
-
+        forms_roles_data: get(state.graph,['forms','byId']),
+        geoRelations: state.geo.geoRelations
     }
 
 };

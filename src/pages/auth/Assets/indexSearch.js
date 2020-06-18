@@ -7,7 +7,7 @@ import ElementBox from 'components/light-admin/containers/ElementBox'
 import {connect} from "react-redux";
 import {authProjects} from "../../../store/modules/user";
 import get from "lodash.get";
-import functions from 'pages/auth/Plan/functions'
+import {GeoDropdown} from 'pages/auth/Plan/functions'
 
 import styled from 'styled-components'
 import {asyncContainer, Typeahead} from 'react-bootstrap-typeahead';
@@ -102,14 +102,10 @@ class AssetsBySearch extends React.Component {
     }
 
     fetchFalcorDeps(){
-        return this.props.falcor.get(
-            ['geo',this.props.activeGeoid,['name']],
-            //['geo',this.props.activeGeoid,'cousubs'],
-            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
-        )
+        return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
             .then(response  => {
                 return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.counties.municipalities.value`, [])], ['name']],
+                    ['geo', [this.props.activeGeoid, ...get(this.props.falcor.getCache() ,`geo.${this.props.activeGeoid}.municipalities.value`, [])], ['name']],
                 )
             })
     }
@@ -131,43 +127,18 @@ class AssetsBySearch extends React.Component {
     renderFilterMenu() {
         let county = [];
         let cousubs = [];
-        if(this.props.geoidData !== undefined){
-            Object.keys(this.props.geoidData).forEach((item,i)=>
-            {
-                if (i === 0){
-                    county.push({
-                        name : functions.formatName(this.props.geoidData[this.props.activeGeoid].name, item),
-                        value : item
-                    })
-                }else{
-                    cousubs.push({
-                        name : functions.formatName(this.props.geoidData[item].name, item),
-                        value : item
-                    })
-                }
 
-            })
-
-        }
         return (
             <div>
                 <div>
                     <h6>Geography</h6>
-                    <select className="form-control justify-content-sm-end"
-                        id='geoid' onChange={this.handleChange}
-                        value={this.state.geoid}>
-                        {county.map((d,i) =>{
-                            return(
-                                <option className="form-control" key={i} value={d.value}>{d.name}</option>
-                            )
-                        })}
-
-                        {cousubs.map((ac,ac_i) => {
-                            return (
-                                <option className="form-control" key={ac_i+2} value={ac.value}>{ac.name}</option>
-                            )
-                        })}
-                    </select>
+                    <GeoDropdown
+                        className="form-control justify-content-sm-end"
+                        id='geoid'
+                        value={this.state.geoid}
+                        onChange={this.handleChange}
+                        pureElement={true}
+                    />
                 </div>
                 <br/>
                 <div>

@@ -24,7 +24,7 @@ class RouteLayer extends MapLayer {
         if (this.viewOnly) this.mode = null;
         this.markers.forEach(m => m.addTo(map));
 
-        return this.loadUserRoutes(false)
+        return Promise.resolve()// this.loadUserRoutes(false)
             .then(() => falcorGraph.get(
                 ["conflation", "latestVersion"],
                 ["geo", [store.getState().user.activeGeoid], "boundingBox"],

@@ -1,42 +1,69 @@
-import React from "react";
-import {falcorGraph} from "store/falcorGraph";
+import React, {Component} from "react";
 import GraphFactory from "components/displayComponents/graphFactory";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import {Stickyroll} from '@stickyroll/stickyroll';
-import {Pagers} from "@stickyroll/pagers";
-import CSS_CONFIG from 'pages/auth/css-config'
 import Element from "components/light-admin/containers/Element";
 import ElementBox from "components/light-admin/containers/ElementBox";
-import SideMenu from 'pages/Public/theme/SideMenu'
 import styled from "styled-components";
+import {connect} from "react-redux";
+import {reduxFalcor} from 'utils/redux-falcor'
+import {setActiveCousubid} from 'store/modules/user'
+import {getAllGeo} from 'store/modules/geo'
+import SideMenu from 'pages/Public/theme/SideMenu'
+import {Pagers} from "@stickyroll/pagers";
+import CSS_CONFIG from 'pages/auth/css-config'
+import get from "lodash.get";
+import _ from 'lodash'
+
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
 `;
-const geoDropdown = function(geoInfo,setActiveCousubid, activecousubId,allowedGeos){
-    return geoInfo ? (
-        <div>
-            <select
-                style={{height: '5vh', width:'250px'}}
-                className="ae-side-menu"
-                id='contact_county'
-                data-error="Please select county"
-                onChange={(e) => {
-                    setActiveCousubid(e.target.value)
-                }}
-                value={activecousubId}
-            >
-                {Object.keys(geoInfo)
-                    .filter(f => allowedGeos.includes(f))
-                    .map((county, county_i) =>
-                        <option className="ae-side-menu" key={county_i + 1}
-                                value={county}> {this.formatName(geoInfo[county].name, county)}
-                        </option>
-                )}
-            </select>
-        </div>
-    ) : <div></div>
+class GD extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render(){
+        const geoInfo = this.props.allGeo,
+            setActiveCousubid = this.props.setActiveCousubid,
+            activecousubId = this.props.activeCousubid,
+            allowedGeos = Object.keys(get(this.props, `allGeo`, {}));
+        return geoInfo ? (
+            <div>
+                <select
+                    style={this.props.pureElement ? null : {height: '5vh', width:'250px'}}
+                    className={this.props.className || "ae-side-menu"}
+                    id={this.props.id || 'contact_county'}
+                    data-error="Please select county"
+                    onChange={(e) => {
+                        this.props.onChange ? this.props.onChange(e) : setActiveCousubid(e.target.value)
+                    }}
+                    value={this.props.value || activecousubId}
+                >
+                    {Object.keys(geoInfo)
+                        .filter(f => allowedGeos.includes(f))
+                        .map((county, county_i) =>
+                            <option className="ae-side-menu" key={county_i + 1}
+                                    value={county}> {formatName(geoInfo[county].name || geoInfo[county], county)}
+                            </option>
+                        )}
+                </select>
+            </div>
+        ) : <div></div>
+    }
 }
+const mapStateToProps = (state, ownProps) => {
+    return {
+        geoGraph: state.graph.geo,
+        router: state.router,
+        activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
+        allGeo: state.geo.allGeos
+    };
+};
+const mapDispatchToProps = {setActiveCousubid, getAllGeo};
+
+export const GeoDropdown = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(GD));
 
 const formatName = function(name= 'no name', geoid){
     let jurisdiction =
@@ -50,7 +77,7 @@ const formatName = function(name= 'no name', geoid){
     }else{
         name  += ' (' + jurisdiction + ')';
     }
-    return name.toUpperCase()
+    return name.replace(name.charAt(0), name.charAt(0).toUpperCase())
 }
 const renderReqNav = function(allRequirenments, pageIndex){
     return (
@@ -177,7 +204,7 @@ const render = function(config, user, geoInfo, setActiveCousubid, activecousubId
                         display: 'block',
                         zIndex:100
                     }}>
-                    {this.geoDropdown(geoInfo,setActiveCousubid, activecousubId,allowedGeos)}
+                    {<GeoDropdown />}
                 </div>
                 <SideMenu config={config} linkToReq={true} linkPath={baseLink} currReq={reqId || initReqId}/>
             </div>
@@ -209,7 +236,7 @@ export default {
     renderReqNav: renderReqNav,
     renderElement: renderElement,
     render : render,
-    geoDropdown: geoDropdown,
+    //geoDropdown: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(geoDropdown)),
     formatName: formatName
 }
 

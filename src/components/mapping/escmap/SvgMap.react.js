@@ -323,6 +323,7 @@ const MapControl = ({ comp, pos="top-left" }) => {
 }
 
 const isValidGeojson = geojson => {
+	if (!geojson) return false
 	if (geojson.type == "FeatureCollection") {
 		return geojson.features.length;
 	}

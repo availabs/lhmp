@@ -204,10 +204,10 @@ class AvlFormsNewDataWizard extends React.Component{
     cousubDropDown(event){
         let county = typeof event.target.value === 'object' ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
-            return this.props.falcor.get(['geo',county,'cousubs'])
+            return this.props.falcor.get(['geo',county,'municipalities'])
                 .then(response =>{
                     let cousubs = [];
-                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].cousubs`, []).filter(f => f)));
+                    county.map(c => cousubs.push(...get(response, `json.geo[${c}].municipalities`, []).filter(f => f)));
                     if (cousubs){
                         this.props.falcor.get(['geo',cousubs,['name']])
                             .then(response =>{
@@ -241,7 +241,7 @@ class AvlFormsNewDataWizard extends React.Component{
             Object.keys(graph)
                 .filter(item => filterOn && filterOn.includes(item.toString()))
                 .forEach(item =>{
-                    get(graph, `${item}.cousubs.value`, [])
+                    get(graph, `${item}.municipalities.value`, [])
                         .filter(cousub => get(graph, `${cousub}.name`, null))
                         .forEach(cousub => {
                             cousubsData.push({
@@ -364,6 +364,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             area:item.attributes[attribute].area,
                             prompt: this.displayPrompt.bind(this),
                             meta : cousubsData,
+                            geoRelations: this.props.geoRelations,
                             defaultValue: item.attributes[attribute].defaultValue
                         })
                     }else if(!item.attributes[attribute].area && item.attributes[attribute].edit_type === 'dropdown' &&
@@ -418,7 +419,10 @@ class AvlFormsNewDataWizard extends React.Component{
                         let graph = this.props.meta_data;
                         let filter = [];
                         if(graph && graph[item.attributes[attribute].meta_filter.filter_key]){
-                            graph[item.attributes[attribute].meta_filter.filter_key].byPlanId[this.props.activePlan].attributes.value.forEach(d =>{
+                            get(graph[item.attributes[attribute].meta_filter.filter_key],
+                                `byPlanId.${this.props.activePlan}.attributes.value`, [])
+                                .filter(d => get(d, `attributes.${item.attributes[attribute].meta_filter.value}`, null))
+                                .forEach(d =>{
                                 filter.push(d.attributes[item.attributes[attribute].meta_filter.value])
                             })
 
@@ -627,10 +631,10 @@ class AvlFormsNewDataWizard extends React.Component{
     renderHeaderText(header){
         return (
             this.props.geoData[header] ?
-                this.props.geoData[header].name :
+                get(this.props.geoData, `${header}.name`, '') :
                 Array.isArray(header) &&
                 header.filter(f => Object.keys(this.props.geoData).includes(f)).length ?
-                    header.map(f => this.props.geoData[f].name).join() :
+                    header.map(f => get(this.props.geoData, `${f}.name`, '')).join() :
                     header
         )
     }
@@ -684,7 +688,8 @@ const mapStateToProps = (state,ownProps) => {
         id : ownProps.id,
         state: ownProps.state,
         geoData : get(state.graph,['geo'],{}),
-        meta_data : get(state.graph,['forms'])
+        meta_data : get(state.graph,['forms']),
+        geoRelations: state.geo.geoRelations
     }
 };
 

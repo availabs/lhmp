@@ -4,6 +4,8 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import {sendSystemMessage} from 'store/modules/messages';
 import GraphFactory from 'components/AvlForms/displayComponents/graphFactory.js'
+import {getAllGeo} from 'store/modules/geo'
+import functions from "../../../pages/auth/Plan/functions";
 var _ = require('lodash')
 
 const counties = ["36","36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
@@ -44,9 +46,15 @@ class AvlFormsViewData extends React.Component{
                         value.replace('[', '').replace(']', '') : value;
 
                     if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
+                        this.props.getAllGeo(value)
                         this.setState({county: value})
                     }
-                    if(value && value.toString().substring(0,5) === this.state.county && value.length === 10){
+                    if(value &&
+                        ((get(this.props.geoRelations, [this.state.county], null) &&
+                        this.props.geoRelations[this.state.county].includes(value)) ||
+                        (value.toString().substring(0,5) === this.state.county && value.length === 10))
+
+                    ){
                         this.setState({cousub: value})
                     }
 
@@ -100,7 +108,7 @@ class AvlFormsViewData extends React.Component{
                                     value*/
                             data.push({
                                 attribute : d,
-                                value: geoData[value] ? geoData[value].name :
+                                value: geoData[value] ? functions.formatName(geoData[value].name, value) :
                                     this.props.config[0].attributes[d].defaultValue || 'None',
                                 section,
                                 label,
@@ -138,7 +146,9 @@ class AvlFormsViewData extends React.Component{
                                             if(graph[item].attributes[rc] === this.state.county || graph[item].attributes[rc] === this.state.cousub){
                                                 data.push({
                                                     attribute : ma,
-                                                    value: geoData[graph[item].attributes[rc]] ? geoData[graph[item].attributes[rc]].name : 'None',
+                                                    value: geoData[graph[item].attributes[rc]] ?
+                                                        functions.formatName(geoData[graph[item].attributes[rc]].name, graph[item].attributes[rc])
+                                                        : 'None',
                                                     section,
                                                     label,
                                                     displayType,
@@ -160,7 +170,9 @@ class AvlFormsViewData extends React.Component{
                                                     if(graph[item].attributes[rcc] === this.state.county || graph[item].attributes[rcc] === this.state.cousub){
                                                         data.push({
                                                             attribute : ma,
-                                                            value: geoData[graph[item].attributes[rcc]] ? geoData[graph[item].attributes[rcc]].name : 'None',
+                                                            value: geoData[graph[item].attributes[rcc]] ?
+                                                                functions.formatName(geoData[graph[item].attributes[rcc]].name, graph[item].attributes[rcc])
+                                                                : 'None',
                                                             section,
                                                             label,
                                                             displayType,
@@ -219,12 +231,13 @@ const mapStateToProps = (state,ownProps) => {
         config: ownProps.json,
         formsViewData : get(state.graph,['forms','byId'],{}),
         geoData : get(state.graph,['geo'],{}),
+        geoRelations: state.geo.geoRelations,
         id : ownProps.id
     }
 };
 
 const mapDispatchToProps = {
-    sendSystemMessage
+    sendSystemMessage, getAllGeo
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AvlFormsViewData))

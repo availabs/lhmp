@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
-
+import functions from "../../../pages/auth/Plan/functions";
 class MultiSelectComponent extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -24,8 +24,14 @@ class MultiSelectComponent extends React.PureComponent {
         }else if(this.props.state[this.props.depend_on] !== undefined && this.props.area ==='true'
             && this.props.state[this.props.depend_on] !== 'None'){
             data = data
-                .filter(item => this.props.state[this.props.depend_on].includes(item.value.slice(0,5)))
-                .map((item,i) => item)
+                /*.filter(item =>
+                    Object.keys(this.props.geoRelations)
+                        .filter(geoid => this.props.state[this.props.depend_on].includes(geoid))
+                        .reduce((a,c) => {
+                            a.push(...this.props.geoRelations[c]);
+                            return a;
+                        }, []).includes(item.value))*/
+                .map((item,i) => ({value: item.value, name: functions.formatName(item.name, item.value)}))
         }else{
             data = this.props.meta ? this.props.meta : this.props.filterData;
         }
