@@ -38,7 +38,7 @@ import {
 } from 'pages/Public/theme/components'
 
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-
+const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 
 class Introduction extends Component {
     constructor(props) {
@@ -46,13 +46,38 @@ class Introduction extends Component {
         // Don't call this.setState() here!
         this.state = {
         };
+        this.getCurrentKey = this.getCurrentKey.bind(this)
+
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.currentKey !== this.getCurrentKey('landing-image')){
+            console.log('didupdate?')
+            this.fetchFalcorDeps()
+        }
+    }
+
+
     fetchFalcorDeps(){
-        if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
+        if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined' || !this.props.user.activePlan) return Promise.resolve();
+        let contentId = this.getCurrentKey('landing-image');
+
         return this.props.falcor.get(
-            ['geo', parseInt(this.props.activeCousubid), 'name']
-        )
+            ['geo', parseInt(this.props.activeCousubid), 'name'],
+            ['content', 'byId', [contentId], COLS]
+        ).then(contentRes => {
+            this.setState({
+                image: get(contentRes, `json.content.byId.${contentId}.body`, '/img/sullivan-min.png'),
+                'currentKey': contentId,
+                status: get(contentRes.json.content.byId[contentId], `attributes.status`, ''),
+            })
+        })
     }
+    getCurrentKey = (requirement) =>
+        this.props.scope === 'global' ?
+            requirement :
+            requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
+
     priceTest () {
         let info = [
             {
@@ -138,9 +163,10 @@ considered.`,
     }
 
     render() {
+        console.log('this.state?', this.state, this.props)
         return (
             <PageContainer>
-                <HeaderImageContainer img={'/img/sullivan-min.png'}>
+                <HeaderImageContainer img={this.state.image}>
                     <div style={{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.4)', padding: 50}}>
                         <PageHeader style={{color: '#efefef'}}>{get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Mitigation Plan</PageHeader>
                         <div className="row">
