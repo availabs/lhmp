@@ -18,6 +18,7 @@ class JurisdictionControl extends React.Component{
             geoid: '',
             zone_name:'',
             zone_ids : [],
+            jurisdiction_data : {},
             new_zone:false
         }
     }
@@ -37,12 +38,12 @@ class JurisdictionControl extends React.Component{
     }
 
     fetchFalcorDeps(){
-        return this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'length'])
+        return this.props.falcor.get(['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
-                let length = response.json.forms['zones'].byPlanId[this.props.activePlan].length
-                this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
+                let length = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'length'],0)
+                this.props.falcor.get(['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
                     .then(response =>{
-                        let graph = response.json.forms['zones'].byPlanId[this.props.activePlan].byIndex
+                        let graph = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'byIndex'],{})
                         let ids = []
                         if(graph){
                             Object.keys(graph).forEach(item =>{
@@ -50,7 +51,8 @@ class JurisdictionControl extends React.Component{
                             })
                         }
                         this.setState({
-                            zone_ids : ids
+                            zone_ids : ids,
+                            jurisdiction_data : graph
                         })
                         return response
                     })
@@ -63,26 +65,21 @@ class JurisdictionControl extends React.Component{
 
     };
 
-    zoneDropDown(){
+    jurisdictionDropDown(){
         if(this.props.zonesList){
-            let zones_list  = []
-            let graph = this.props.zonesList
+            let jurisdiction_list  = []
+            let graph = this.state.jurisdiction_data
             if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
-                    if(graph[item].value && this.state.zone_ids.includes(graph[item].value.id)){
-                        if(graph[item].value.attributes.geoid){
-                            zones_list.push({
-                                'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                                'value': graph[item].value ? graph[item].value.id : '',
-                                'geoid': graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                                'geom' : graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                                'geojson' : graph[item].value.attributes.geojson ? graph[item].value.attributes.geojson : ''
-                            })
-                        }
-
-                    }
+                    jurisdiction_list.push({
+                        'label': graph[item].attributes ? graph[item].attributes.name : 'None',
+                        'value': graph[item] ? graph[item].id : '',
+                        'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
+                        'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
+                        'geojson' : graph[item].attributes ? graph[item].attributes.geojson : ''
+                    })
                 })
-                return zones_list
+                return jurisdiction_list
             }
         }
     }
@@ -91,17 +88,18 @@ class JurisdictionControl extends React.Component{
     noSelectedZones(){
         let currentZoneData = []
         let scenario_id = localStorage.getItem("scenario_id")
-        let graph = this.props.zonesList
+        let graph = this.state.jurisdiction_data
         let ids = JSON.parse(localStorage.getItem('jurisdiction')) || [];
+        //console.log('graph',this.props.zonesList)
         if(Object.keys(graph).length > 0){
             if(localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0){
                 Object.keys(graph).forEach(item =>{
-                    if(graph[item].value.attributes.geoid === this.props.activeGeoid){
+                    if(graph[item].attributes.geoid === this.props.activeGeoid){
                         currentZoneData.push({
-                            zone_id:  graph[item].value ? graph[item].value.id : '',
-                            geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
+                            zone_id:  graph[item] ? graph[item].id : '',
+                            geoid : graph[item].attributes ? graph[item].attributes.geoid : '',
+                            name: graph[item].attributes ? graph[item].attributes.name : 'None',
+                            geom: graph[item].attributes ? graph[item].attributes.geom : '',
                         })
                     }
 
@@ -121,34 +119,22 @@ class JurisdictionControl extends React.Component{
 
     selectedZones(){
         let selectedZonesData = [];
-        let graph = this.props.zonesList
+        let graph = this.state.jurisdiction_data
         let scenario_id = localStorage.getItem("scenario_id");
         let ids = JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0];
         if(Object.keys(graph).length > 0){
-            Object.keys(graph).forEach(item =>{
+            Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
                 ids.forEach(zone_id =>{
-                    //if already in database
-                    if(graph[item].value && zone_id['zone_id'] === graph[item].value.id){
+                    if(graph[item] && zone_id['geoid'] === graph[item].attributes.geoid){
                         selectedZonesData.push({
-                            zone_id:  graph[item].value ? graph[item].value.id : '',
-                            geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                        })
-                    }
-                    //if a new zone is created
-                    else if(zone_id.zone_id === null && _.isEqual(JSON.stringify(zone_id.bbox.map(d => [d[0], d[1]])),graph[item].value.attributes.bbox)){
-                        selectedZonesData.push({
-                            zone_id: graph[item].value ? graph[item].value.id : '',
-                            geoid: graph[item].value.attributes ? graph[item].value.attributes.geoid : null,
-                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                            bbox: graph[item].value.attributes ? graph[item].value.attributes.bbox : ''
+                            zone_id:  graph[item] ? graph[item].id : '',
+                            geoid : graph[item].attributes ? graph[item].attributes.geoid : '',
+                            name: graph[item].attributes ? graph[item].attributes.name : 'None',
+                            geom: graph[item].attributes ? graph[item].attributes.geom : '',
                         })
                     }
                 })
             })
-
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id');
             return (
                 <JurisdictionTable
@@ -164,8 +150,7 @@ class JurisdictionControl extends React.Component{
 
 
     render(){
-
-        let zones_list = this.zoneDropDown();
+        let zones_list = this.jurisdictionDropDown();
         //localStorage.removeItem("jurisdiction")
         if(zones_list && zones_list.length > 0){
             let ids = []

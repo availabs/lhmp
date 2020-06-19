@@ -33,10 +33,9 @@ export class ZoneLayer extends MapLayer{
                 "cousubs",
                 ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
             )
-
+            //console.log('localStorage',localStorage.getItem("zone"))
             if(localStorage.getItem("zone")){
                 let new_zones = JSON.parse(localStorage.getItem("zone"))
-
                 let geojson = {
                     "type": "FeatureCollection",
                     "features": []
@@ -189,7 +188,7 @@ export const ZoneOptions =  (options = {}) => {
                     'source': 'polygon',
                     'type': 'line',
                     'paint': {
-                        'line-color': '#F31616',
+                        'line-color': '#3AC406',
                         'line-opacity': 0.5,
                         'line-width': 4
                     }

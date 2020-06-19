@@ -313,6 +313,7 @@ class ShowNewZoneModal extends React.Component{
                                 let plan_id = this.props.activePlan
                                 let geom = result_polygon.geometry
                                 let name = this.state.new_zone_name
+                                let geoid = this.props.activeGeoid
                                 geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
                                 attributes['geom'] = geom
                                 attributes['bbox'] = zone_boundary
@@ -320,6 +321,7 @@ class ShowNewZoneModal extends React.Component{
                                 attributes['zone_type'] = this.state.zone_type || 'None'
                                 attributes['comment'] = this.state.comment || 'None'
                                 attributes['geojson'] = result_polygon
+                                attributes['geoid'] = geoid
                                 args.push('zones',plan_id,attributes);
                                 return falcorGraph.call(['form_zones','insert'], args, [], [])
                                     .then(response =>{
@@ -331,7 +333,7 @@ class ShowNewZoneModal extends React.Component{
                                             'geom':result_polygon,
                                             'bbox':zone_boundary,
                                             'geojson':result_polygon,
-                                            'geoid' : null
+                                            'geoid' : geoid
                                         })
                                         localStorage.setItem("zone",JSON.stringify(new_zone))
                                         this.props.layer.doAction([

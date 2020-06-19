@@ -80,13 +80,13 @@ class JurisdictionTable extends React.Component {
                         if(item.geoid){
                             if(item.geoid.length === 5){
                                 this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid,['county'],item.geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'],
-                                    ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
+                                    ['form_zones',['jurisdictions'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
                                     .then(response =>{
                                         return response
                                     })
                             }else{
                                 this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'jurisdiction',item.geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'],
-                                    ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
+                                    ['form_zones',['jurisdictions'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
                                     .then(response =>{
                                         return response
                                     })
@@ -96,6 +96,7 @@ class JurisdictionTable extends React.Component {
                             let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
                             let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
                             if((graph_scenario_county.length > 0 || graph_scenario_jurisdiction.length > 0) && Object.keys(forms_zone).length > 0 && Object.keys(zone_buildings_data).length > 0){
+                                console.log('check',this.props.zonesByBuildingsData)
                                 data.push({
                                     zone_geoid : item.geoid,
                                     zone_id : item.zone_id,
@@ -236,7 +237,7 @@ const mapStateToProps = state => (
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         zonesByActiveScenarioData : get(state.graph,['building','byGeoid',`${state.user.activeGeoid}`]),
-        zonesByBuildingsData : get(state.graph,['form_zones','zones','byPlanId',`${state.user.activePlan}`,'byId']),
+        zonesByBuildingsData : get(state.graph,['form_zones','jurisdictions','byPlanId',`${state.user.activePlan}`,'byId']),
         zonesFormsList : get(state.graph,['forms','byId'],{}),
         activeRiskZoneId: state.scenario.activeRiskZoneId
     });

@@ -123,9 +123,10 @@ class AvlFormsViewDataZones extends React.Component{
                                     label = get(config[0][ca], `label`, null),
                                     displayType = get(config[0][ca], `display_type`, null),
                                     formType = get(config[0][ca], `form_type`, null);
+                                console.log('check',graph[item].attributes[ca])
                                 data.push({
                                     attribute:ca,
-                                    value: graph[item].attributes[ca] ? ca === 'zone_type' ? graph[item].attributes[ca].toString().slice(1,-1) : graph[item].attributes[ca].toString() || 'None' : '',
+                                    value: graph[item].attributes[ca] ? ca === 'zone_type' ? graph[item].attributes[ca].includes('[') ? graph[item].attributes[ca].toString().slice(1,-1) : graph[item].attributes[ca].toString() || 'None' : '' : '',
                                     section,
                                     label,
                                     displayType,
