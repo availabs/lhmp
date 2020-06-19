@@ -1,4 +1,17 @@
 const config = {
+    'Risk Image': [{
+        title: 'Risk Image',
+        requirement: `risk-image`,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 250,
+        width: 500,
+        border: 1,
+        icon: 'os-icon-arrow-right7',
+    }],
     'Header' : [{
         title: 'Risk Quote',
         requirement: 'risk-quote',

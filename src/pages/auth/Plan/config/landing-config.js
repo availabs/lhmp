@@ -1,5 +1,18 @@
 
 let config = {
+    'Landing Image': [{
+        title: 'Landing Image',
+        requirement: `landing-image`,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 250,
+        width: 500,
+        border: 1,
+        icon: 'os-icon-arrow-right7',
+    }],
     'Landing Quote': [{
         title: 'Landing Quote',
         requirement: `landing-quote`,
