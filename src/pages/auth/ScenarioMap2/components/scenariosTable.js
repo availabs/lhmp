@@ -92,7 +92,7 @@ class ScenarioTable extends React.Component {
     componentDidMount(){
         this.fetchFalcorDeps()
             .then(d=>{
-                let length = d.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].length;
+                let length = get(d,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'],0);
                 return this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['risk_zone_id','risk_scenario_id']])
                     .then(response =>{
                         //console.log('response',response)
