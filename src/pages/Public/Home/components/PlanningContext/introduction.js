@@ -52,7 +52,6 @@ class Introduction extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.currentKey !== this.getCurrentKey('landing-image')){
-            console.log('didupdate?')
             this.fetchFalcorDeps()
         }
     }
