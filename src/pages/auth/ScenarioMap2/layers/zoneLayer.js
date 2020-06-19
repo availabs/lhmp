@@ -20,46 +20,13 @@ export class ZoneLayer extends MapLayer{
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
-            let geoids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
-            let cousubs = [];
-            if(geoids){
-                geoids.forEach(geoid =>{
-                    if(geoid.geoid && geoid.geoid.length !== 5){
-                        cousubs.push(geoid.geoid)
-                    }
-                });
-            }
-            this.map.setFilter(
-                "cousubs",
-                ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
-            )
-            //console.log('localStorage',localStorage.getItem("zone"))
-            if(localStorage.getItem("zone")){
-                let new_zones = JSON.parse(localStorage.getItem("zone"))
-                let geojson = {
-                    "type": "FeatureCollection",
-                    "features": []
-                }
-                new_zones.forEach(new_zone =>{
-                    if(new_zone.geoid === null){
-                        if(new_zone.geojson){
-                            geojson.features.push({
-                                type : "Feature",
-                                properties:{},
-                                geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
-                            })
-                        }else{
-                            geojson.features.push(new_zone.geom)
-                        }
-                    }
-                })
-                this.map.getSource("polygon").setData(geojson)
-            }
-
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                    this.layers.forEach(layer => {
+                        map.setLayoutProperty(layer.id, 'visibility',"none");
+                    })
                     map.resize();
                     map.fitBounds(bbox);
                 })
@@ -68,9 +35,32 @@ export class ZoneLayer extends MapLayer{
     }
 
     toggleVisibilityOn() {
+        let activeGeoid = store.getState().user.activeGeoid
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
+        if(localStorage.getItem("zone") && this.map.getLayoutProperty("polygon-layer","visibility") === 'visible'){
+            let new_zones = JSON.parse(localStorage.getItem("zone"))
+            let geojson = {
+                "type": "FeatureCollection",
+                "features": []
+            }
+            new_zones.forEach(new_zone =>{
+                if(new_zone.geoid === activeGeoid && !new_zone.name.includes("County")){
+                    if(new_zone.geojson){
+                        geojson.features.push({
+                            type : "Feature",
+                            properties:{},
+                            geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
+                        })
+                    }else{
+                        geojson.features.push(new_zone.geom)
+                    }
+                }
+            })
+            this.map.getSource("polygon").setData(geojson)
+        }
+
     }
 
     toggleVisibilityOff(){
@@ -86,13 +76,12 @@ export class ZoneLayer extends MapLayer{
             "type": "FeatureCollection",
             "features": []
         }
+        let activeGeoid = store.getState().user.activeGeoid
         geoids.forEach(geoid =>{
-            if(geoid.geoid && geoid.geoid.length !== 5){
-                cousubs.push(geoid.geoid)
-            }else if(geoid.geoid === null){
+            if(geoid.geoid){
                 let new_zones = JSON.parse(localStorage.getItem("zone"))
                 new_zones.forEach(new_zone =>{
-                    if(new_zone.geoid === null){
+                    if(new_zone.geoid === activeGeoid && !new_zone.name.includes("County")){
                         if(new_zone.geojson){
                             if(new_zone.geojson.geometry){
                                 geojson.features.push({
@@ -114,10 +103,6 @@ export class ZoneLayer extends MapLayer{
                 })
             }
         });
-        this.map.setFilter(
-            "cousubs",
-            ['all', ['in', 'geoid',...cousubs]]
-        )
         this.map.getSource("polygon").setData(geojson)
     }
 
@@ -190,8 +175,8 @@ export const ZoneOptions =  (options = {}) => {
                     'paint': {
                         'line-color': '#3AC406',
                         'line-opacity': 0.5,
-                        'line-width': 4
-                    }
+                        'line-width': 4,
+                    },
                 }
 
             ],

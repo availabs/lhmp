@@ -96,7 +96,6 @@ class JurisdictionTable extends React.Component {
                             let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
                             let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
                             if((graph_scenario_county.length > 0 || graph_scenario_jurisdiction.length > 0) && Object.keys(forms_zone).length > 0 && Object.keys(zone_buildings_data).length > 0){
-                                console.log('check',this.props.zonesByBuildingsData)
                                 data.push({
                                     zone_geoid : item.geoid,
                                     zone_id : item.zone_id,

@@ -93,7 +93,7 @@ class JurisdictionControl extends React.Component{
         //console.log('graph',this.props.zonesList)
         if(Object.keys(graph).length > 0){
             if(localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0){
-                Object.keys(graph).forEach(item =>{
+                Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
                     if(graph[item].attributes.geoid === this.props.activeGeoid){
                         currentZoneData.push({
                             zone_id:  graph[item] ? graph[item].id : '',
