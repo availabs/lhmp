@@ -6,6 +6,22 @@ import _ from 'lodash'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
 
+const sources = {
+    "_dfirm_500_100": {
+        source: "mapbox://am3081.dm85ldgj",
+        paint: {
+            'fill-color': "hsl(352,82%,31%)",
+            'fill-opacity':0.3
+        }
+    },
+    "_dfirm_100": {
+        source: "mapbox://am3081.6ta7ljid",
+        paint: {
+            'fill-color': "hsl(211, 83%, 31%)",
+            'fill-opacity':0.3
+        }
+     }
+}
 class ShowZoneLayer extends MapLayer{
     receiveProps(oldProps, newProps){
         if (!this.zoneId || !_.isEqual(this.zoneId, newProps.zoneId)){
@@ -21,6 +37,27 @@ class ShowZoneLayer extends MapLayer{
         }
 
         this.doAction(["fetchLayerData"]);
+    }
+    addFloodPlane(){
+        ['_dfirm_100','_dfirm_500_100'].forEach(layerName => {
+            if (this.map.getSource('dfirm')) {
+                this.map.removeLayer('dfirm_layer');
+                this.map.removeSource('dfirm')
+            }
+            this.map.addSource("dfirm", {
+                'type': "vector",
+                'url': sources[layerName].source
+            })
+            this.map.addLayer({
+                'id': 'dfirm_layer',
+                'source': 'dfirm',
+                'source-layer': store.getState().user.activePlan + layerName,
+                'type': 'fill',
+                'minzoom': 8,
+                'paint': sources[layerName].paint,
+
+            })
+        })
     }
     onAdd(map) {
         super.onAdd(map);
@@ -45,6 +82,7 @@ class ShowZoneLayer extends MapLayer{
                             })
                         })
                     }
+                    this.addFloodPlane();
                     map.resize();
                     map.fitBounds(bbox);
                     this.map.getSource("polygon").setData(geojson)
