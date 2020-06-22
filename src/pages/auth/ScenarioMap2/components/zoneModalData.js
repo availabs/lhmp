@@ -1,16 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import get from "lodash.get";
-import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
-import { fnum } from "utils/sheldusUtils"
-import { register, unregister } from "components/AvlMap/ReduxMiddleware.js"
 import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
 import * as d3 from "d3";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
 import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
-import NewZoneAssetsFilteredTable from "./NewZoneAssetsFilteredTable";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 var _ = require("lodash")
@@ -76,38 +71,25 @@ class ZoneModalData extends React.Component {
     }
 
     render() {
+        console.log('props',this.props)
         return (
             <div className='element-wrapper'>
                 <div className='element-box'>
                     {this.renderLandUseMenu()}
                     <h4>Buildings By Land Use</h4>
                     {
-                        this.props.geoid !== "" ?
-                            <AssetsFilteredTable
-                                geoid={[this.props.geoid]}
-                                zone_id ={[this.props.zone_id]}
-                                groupBy={'propType'}
-                                groupByFilter={this.state.filter.value}
-                                scenarioId={this.props.scenario_id.map(d => d.id)}
-                                riskZoneId = {[this.props.risk_zone_id]}
-                                height={'fit-content'}
-                                width={'100%'}
-                                tableClass={`table table-sm table-lightborder table-hover`}
-                            />
-                            :
-                            <NewZoneAssetsFilteredTable
-                                name = {[this.props.name]}
-                                geom = {[this.props.geom]}
-                                geoid = {[this.props.geoid]}
-                                zone_id ={[this.props.zone_id]}
-                                groupBy = {'propType'}
-                                groupByFilter = {this.state.filter.value}
-                                scenarioId={this.props.scenario_id.map(d => d.id)}
-                                riskZoneId = {[this.props.risk_zone_id]}
-                                height={'fit-content'}
-                                width={'100%'}
-                                tableClass={`table table-sm table-lightborder table-hover`}
-                            />
+                        <AssetsFilteredTable
+                            geoid={[this.props.geoid]}
+                            zone_id ={[this.props.zone_id]}
+                            groupBy={'propType'}
+                            groupByFilter={this.state.filter.value}
+                            scenarioId={this.props.scenario_id.map(d => d.id)}
+                            riskZoneId = {[this.props.risk_zone_id]}
+                            height={'fit-content'}
+                            width={'100%'}
+                            tableClass={`table table-sm table-lightborder table-hover`}
+                        />
+
                     }
                 </div>
             </div>
