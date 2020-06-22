@@ -39,7 +39,6 @@ export class ZoneLayer extends MapLayer{
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
-        //console.log('in toggle visibility on',localStorage.getItem("zone"))
         if(localStorage.getItem("zone") && this.map.getLayoutProperty("polygon-layer","visibility") === 'visible'){
             let new_zones = JSON.parse(localStorage.getItem("zone")) || []
             let geojson = {

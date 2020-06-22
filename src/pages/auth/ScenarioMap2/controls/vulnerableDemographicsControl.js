@@ -24,7 +24,7 @@ class VulnerableDemographicsControl extends React.Component{
     componentDidMount(){
         let defaultIndicator = []
         Object.keys(censusIndicatorConfig).forEach(item =>{
-            if (item === "Percent Poverty"){
+            if (item === "Percentage Poverty"){
                 defaultIndicator.push({
                     "label":item,
                     "value":censusIndicatorConfig[item]
@@ -40,6 +40,7 @@ class VulnerableDemographicsControl extends React.Component{
     }
     handleChange(e){
         console.log('---',e.target.id,e.target.value,this.state);
+        this.props.setActiveIndicator([JSON.parse(e.target.value)])
         this.setState({ ...this.state, [e.target.id]: JSON.parse(e.target.value) });
     }
 
@@ -66,7 +67,7 @@ class VulnerableDemographicsControl extends React.Component{
                         value={JSON.stringify(this.state.selected_indicator)}
                 >
                     <option key={0} value ={JSON.stringify(indicators_list[0].value)}>{indicators_list[0].label}</option>
-                    {indicators_list ? indicators_list.filter( d=> d.label !== "Percent Poverty").map((item,i) =>{
+                    {indicators_list ? indicators_list.filter( d=> d.label !== "Percentage Poverty").map((item,i) =>{
                             return( <option key={i+1} value={JSON.stringify(item.value)}>{item.label}</option>)
 
                         })
@@ -88,7 +89,7 @@ class VulnerableDemographicsControl extends React.Component{
                         type={"quantile"}
                         domain = {this.props.layer.layer.vulnerableDemographicsLayer.legend.domain}
                         format ={d3format(".0%")}
-                        range = {getColorRange(7, "YlGn")}
+                        range = {getColorRange(7, "Reds")}
                     />
                     {this.renderIndicatorDropDown()}
                 </div>
