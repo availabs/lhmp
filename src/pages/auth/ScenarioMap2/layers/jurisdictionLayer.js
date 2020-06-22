@@ -49,27 +49,6 @@ export class JurisdictionLayer extends MapLayer{
             "jurisdiction_cousubs",
             ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
         )
-        if(localStorage.getItem("jurisdiction")){
-            let new_zones = JSON.parse(localStorage.getItem("jurisdiction"))
-            let geojson = {
-                "type": "FeatureCollection",
-                "features": []
-            }
-            new_zones.forEach(new_zone =>{
-                if(new_zone.geoid === null){
-                    if(new_zone.geojson){
-                        geojson.features.push({
-                            type : "Feature",
-                            properties:{},
-                            geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
-                        })
-                    }else{
-                        geojson.features.push(new_zone.geom)
-                    }
-                }
-            })
-            this.map.getSource("polygon").setData(geojson)
-        }
     }
 
     toggleVisibilityOff(){
@@ -159,17 +138,6 @@ export const JurisdictionOptions =  (options = {}) => {
                 filter : ['in','geoid','']
 
             },
-            {
-                'id': 'jurisdiction-polygon-layer',
-                'source': 'polygon',
-                'type': 'line',
-                'paint': {
-                    'line-color': '#F31616',
-                    'line-opacity': 0.5,
-                    'line-width': 4
-                }
-            }
-
         ],
         _isVisible: true
     }

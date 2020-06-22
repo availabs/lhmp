@@ -151,24 +151,11 @@ export const ZoneOptions =  (options = {}) => {
 
                 },
                 {
-                    'id': 'cousubs',
-                    'source': 'cousubs',
-                    'source-layer': 'cousubs',
-                    'type': 'line',
-                    'paint': {
-                        'line-color': '#F31616',
-                        'line-opacity': 0.5,
-                        'line-width': 4
-                    },
-                    filter : ['in','geoid','']
-
-                },
-                {
                     'id': 'polygon-layer',
                     'source': 'polygon',
                     'type': 'line',
                     'paint': {
-                        'line-color': '#3AC406',
+                        'line-color': '#F31616',
                         'line-opacity': 0.5,
                         'line-width': 4,
                     },
