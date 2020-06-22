@@ -21,7 +21,7 @@ import MapLayer from "components/AvlMap/MapLayer.js"
 import { getColorRange } from "constants/color-ranges";
 import {register, unregister} from "../../../../components/AvlMap/ReduxMiddleware";
 var _ = require('lodash')
-const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
+const LEGEND_COLOR_RANGE = getColorRange(7, "Reds");
 const BORDER_COLOR = "#4292c6"
 const HOVER_COLOR = "#6baed6";
 const IDENTITY = i => i;
@@ -54,11 +54,11 @@ export class VulnerableDemographicsLayer extends MapLayer{
     }
     receiveMessage(action, data) {
         this.activeIndicator = data.indicator[0]
-        this.activeIndicator.forEach(item =>{
-            this.censusKey = [item.censusKey]
+            this.activeIndicator.forEach(item =>{
+            this.censusKey = [item.censusKey].flat(1)
             this.divisorKey = [item.divisorKey]
-            this.census_keys = [...this.censusKey,...this.divisorKey]
-        })
+            this.census_keys = [...this.censusKey,...this.divisorKey].flat(1)
+            })
         return this.fetchData().then(data => this.receiveData(data,this.map))
     }
 
@@ -77,7 +77,7 @@ export class VulnerableDemographicsLayer extends MapLayer{
     getColorScale(domain) {
         switch (this.legend.type) {
             case "quantile":
-                this.legend.domain = domain;
+                this.legend.domain = domain
                 return scaleQuantile()
                     .domain(this.legend.domain)
                     .range(this.legend.range);
@@ -116,6 +116,7 @@ export class VulnerableDemographicsLayer extends MapLayer{
                 if (v !== -666666666) {
                     aa += v;
                 }
+
                 return aa;
             }, 0);
             const divisor = this.divisorKey.reduce((aa, cc) => {
