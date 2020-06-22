@@ -39,8 +39,9 @@ export class ZoneLayer extends MapLayer{
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
+        //console.log('in toggle visibility on',localStorage.getItem("zone"))
         if(localStorage.getItem("zone") && this.map.getLayoutProperty("polygon-layer","visibility") === 'visible'){
-            let new_zones = JSON.parse(localStorage.getItem("zone"))
+            let new_zones = JSON.parse(localStorage.getItem("zone")) || []
             let geojson = {
                 "type": "FeatureCollection",
                 "features": []
@@ -69,40 +70,34 @@ export class ZoneLayer extends MapLayer{
         })
     }
 
-    showTownBoundary(data,id){
-        let geoids = JSON.parse("[" + data + "]")[0];
-        let cousubs = [];
+    showTownBoundary(data,id,zones_data){
+        let zones = JSON.parse("[" + data + "]")[0] || [];
         let geojson = {
             "type": "FeatureCollection",
             "features": []
         }
         let activeGeoid = store.getState().user.activeGeoid
-        geoids.forEach(geoid =>{
-            if(geoid.geoid){
-                let new_zones = JSON.parse(localStorage.getItem("zone"))
-                new_zones.forEach(new_zone =>{
-                    if(new_zone.geoid === activeGeoid && !new_zone.name.includes("County")){
-                        if(new_zone.geojson){
-                            if(new_zone.geojson.geometry){
-                                geojson.features.push({
-                                    type : "Feature",
-                                    properties:{},
-                                    geometry:new_zone.geojson.geometry
-                                })
-                            }else{
-                                geojson.features.push({
-                                    type : "Feature",
-                                    properties:{},
-                                    geometry:new_zone.geojson
-                                })
-                            }
-                        }else{
-                            geojson.features.push(new_zone.geom)
-                        }
+        zones.forEach(zone =>{
+            if(zone.geoid === activeGeoid && !zone.name.includes("County")){
+                if(zone.geojson){
+                    if(zone.geojson.geometry){
+                        geojson.features.push({
+                            type : "Feature",
+                            properties:{},
+                            geometry:zone.geojson.geometry
+                        })
+                    }else{
+                        geojson.features.push({
+                            type : "Feature",
+                            properties:{},
+                            geometry:zone.geojson
+                        })
                     }
-                })
+                }else{
+                    geojson.features.push(zone.geom)
+                }
             }
-        });
+        })
         this.map.getSource("polygon").setData(geojson)
     }
 

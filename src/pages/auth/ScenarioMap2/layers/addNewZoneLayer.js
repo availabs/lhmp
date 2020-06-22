@@ -323,13 +323,12 @@ class ShowNewZoneModal extends React.Component{
                                 attributes['geojson'] = result_polygon
                                 attributes['geoid'] = geoid
                                 args.push('zones',plan_id,attributes);
-                                console.log('args',args)
                                 return falcorGraph.call(['form_zones','insert'], args, [], [])
                                     .then(response =>{
                                         alert("Zone has been saved")
-                                        let new_zone = localStorage.getItem("zone") ? JSON.parse(localStorage.getItem("zone")) : ''
+                                        let new_zone = localStorage.getItem("zone") ? JSON.parse(localStorage.getItem("zone")) : []
                                         new_zone.push({
-                                            'zone_id':null,
+                                            'zone_id':Object.keys(get(response,['json','forms','zones','byId'],{})).filter(d => d!== '$__path')[0],
                                             'name': name || 'None',
                                             'geom':result_polygon,
                                             'bbox':zone_boundary,

@@ -110,27 +110,9 @@ class ZoneTable extends React.Component {
     }
 
     removeZone(e){
-        let ids = [];
-        ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0] || [];
-        let removeNoIdZone = ids.find(id => {
-            if(id.bbox){
-                if(_.isEqual(JSON.stringify(id.bbox.map(d => [d[0], d[1]])),this.props.zonesFormsList[e.target.id].value.attributes.bbox)){
-                    return id
-                }
-            }else{
-                return null
-            }
-        })
-        if(removeNoIdZone){
-            _.remove(ids, {
-                name:removeNoIdZone.name,
-            });
-        }else{
-            _.remove(ids, {
-                zone_id:e.target.id
-            });
-        }
-        localStorage.setItem('zone', JSON.stringify(ids));
+        let zones = JSON.parse("[" + localStorage.getItem("zone") + "]")[0] || [];
+        zones = zones.filter(d => d.zone_id !== e.target.id)
+        localStorage.setItem('zone', JSON.stringify(zones))
         let data = this.state.data
         this.setState({
             data : data.filter(d => d.zone_id.toString() !== e.target.id)
@@ -139,7 +121,6 @@ class ZoneTable extends React.Component {
     }
 
     render(){
-
         return (
             <div style={{'overflowX':'auto'}}>
                 <table className='table table-sm table-hover'>
@@ -179,6 +160,7 @@ class ZoneTable extends React.Component {
                                             <td>{d.sum_buildings_value}</td>
                                         </React.Fragment>
                                     }
+                                    {this.props.noShowBoundary.showTownBoundary(localStorage.getItem("zone"),this.state.data)}
                                     <td>
                                         <div id={`closeMe`+ d.zone_id}>
                                             <button
