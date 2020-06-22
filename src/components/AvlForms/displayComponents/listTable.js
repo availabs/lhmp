@@ -47,7 +47,17 @@ class AvlFormsListTable extends React.Component{
                             this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes])
                                 .then(response =>{
                                     let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
-                                    Object.keys(graph).filter(d => d !== '$__path').forEach(id =>{
+                                    Object.keys(graph)
+                                        .filter(d => {
+                                            if (this.props.filterBy){
+                                                return Object.keys(this.props.filterBy)
+                                                    .reduce((a,c) =>
+                                                        a && this.props.filterBy[c].includes(get(graph[d], `attributes.${c}`, null)), true)
+                                            }
+                                            return true
+                                            }
+                                        )
+                                        .filter(d => d !== '$__path').forEach(id =>{
                                         if(graph[id]){
                                             ids.push(graph[id].id)
                                         }
@@ -213,6 +223,7 @@ class AvlFormsListTable extends React.Component{
     }
 
     render(){
+
         let formAttributes = [];
         let listViewData = [];
         let listAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))

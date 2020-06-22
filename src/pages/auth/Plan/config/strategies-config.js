@@ -165,7 +165,8 @@ const config = {
         {
             title: 'Relocation Zones',
             requirement: 'Req-NYS-F-3B-1',
-            type: 'content',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['Relocation Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-documents-07'
