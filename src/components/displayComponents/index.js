@@ -16,6 +16,8 @@ import shelterListTableViewer from "./shelterListTableViewer";
 import actionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
+import developementZoneFilteredTable from "./developementZoneFilteredTable";
+import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 
 
 const NA = ({ type, state, routes }) =>
@@ -57,6 +59,10 @@ export default {
     inventoryTableEditor: inventoryTableViewer,
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
-    imageViewer: ImageComponent
+    imageViewer: ImageComponent,
+    developementZonesFilteredTableEditor: developementZoneFilteredTable,
+    developementZonesFilteredTableViewer: developementZoneFilteredTable,
+    developementZonesFilteredMapEditor: developementZoneFilteredMap,
+    developementZonesFilteredMapViewer: developementZoneFilteredMap
 }
 

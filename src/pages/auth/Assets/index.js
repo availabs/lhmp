@@ -76,9 +76,15 @@ class AssetsByTypeIndex extends React.Component {
         return this.props.falcor.get(
             ['geo', this.props.activeGeoid, ['name']],
             //['geo',this.props.activeGeoid,'cousubs'],
-            ["geo", this.props.activeGeoid, 'counties', 'municipalities']
+            ["geo", this.props.activeGeoid, 'counties', 'municipalities'],
+            ['plan',[this.props.activePlan],'scenarios']
         )
             .then(response => {
+                this.setState({scenarioIds:
+                        get(response, `json.plan.${this.props.activePlan}.scenarios`, [])
+                            .filter(f => f.name.includes('DFIRM'))
+                            .map(f => f.id)})
+
                 return this.props.falcor.get(
                     ['geo',
                         [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
@@ -118,7 +124,7 @@ class AssetsByTypeIndex extends React.Component {
                                             geoid={[this.state.geoid]}
                                             groupBy={'ownerType'}
                                             groupByFilter={[]}
-                                            scenarioId={[3]}
+                                            scenarioId={this.state.scenarioIds}
                                             height={'fit-content'}
                                             width={'100%'}
                                             tableClass={`table table-sm table-lightborder table-hover`}
@@ -137,7 +143,7 @@ class AssetsByTypeIndex extends React.Component {
                                                 geoid={[this.state.geoid]}
                                                 groupBy={'propType'}
                                                 groupByFilter={this.state.filter.value}
-                                                scenarioId={[3]}
+                                                scenarioId={this.state.scenarioIds}
                                                 height={'fit-content'}
                                                 width={'100%'}
                                                 tableClass={`table table-sm table-lightborder table-hover`}
@@ -164,6 +170,7 @@ const mapStateToProps = state => ({
     isAuthenticated: !!state.user.authed,
     activePlan: state.user.activePlan, // so componentWillReceiveProps will get called.
     geoGraph: get(state.graph, 'geo'),
+    planGraph: get(state.graph, 'plan'),
     activeGeoid: state.user.activeGeoid,
     activeCousubid: state.user.activeCousubid,
 });

@@ -119,7 +119,8 @@ const config = {
         {
             title: 'Development Zones',
             requirement: 'Req-D-1B',
-            type: 'form',
+            type: 'developementZonesFilteredTable',
+            filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-grid-squares-2'
@@ -127,14 +128,15 @@ const config = {
         {
             title: 'Development Map',
             requirement: 'Req-D-1C',
-            type: 'map?',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
         },
         {
             title: 'Open Space ',
-            requirement: 'Req-D-1C',
+            requirement: 'Req-E-1A',
             type: 'content',
             prompt: '',
             intent: '',
@@ -142,7 +144,7 @@ const config = {
         },
         {
             title: 'Open Space Statistics',
-            requirement: 'Req-D-1C',
+            requirement: 'Req-E-1B',
             type: 'map?',
             prompt: '',
             intent: '',

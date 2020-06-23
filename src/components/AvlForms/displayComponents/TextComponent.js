@@ -4,6 +4,7 @@ import _ from 'lodash'
 import get from 'lodash.get'
 import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import ImageViewer from "./imageViewer";
+import AvlFormsJoin from '../editComponents/AvlFormsJoin'
 import listNewComp from 'components/AvlForms/editComponents/formTypeToConfig.js'
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
@@ -45,6 +46,23 @@ class TextComponent extends React.PureComponent {
                                         <ImageViewer
                                             image={value}
                                             key={i}
+                                        />
+                                        )
+                            )
+                        })
+                }
+                {
+                    Object.keys(data).filter(d => d !== 'type')
+                        .filter(d => data[d].section === section.id && data[d].displayType === 'AvlFormsJoin')
+                        .map(d => {
+                            showTable = false;
+                            return (
+                                get(data, `[${d}].value`, '').split(',')
+                                    .map((value,i) =>
+                                        <AvlFormsJoin
+                                            id={value}
+                                            key={i}
+                                            {...data[d]}
                                         />
                                         )
                             )
@@ -171,10 +189,11 @@ class TextComponent extends React.PureComponent {
                                                         <tr key ={i}>
                                                             <td style={TDStyle}>{`${data[d].label}`} :</td>
                                                             <td style={TDStyle}>
-                                                                {console.log('???', data[d])}
                                                                 {
                                                                     data[d].displayType === 'imageViewer' ?
                                                                         <ImageViewer image={data[d].value} {...data[d]}/> :
+                                                                        data[d].displayType === 'AvlFormsJoin' ?
+                                                                        <AvlFormsJoin id={data[d].value} {...data[d]}/> :
                                                                         (data[d].value || 'None')
                                                                 }
                                                             </td>
