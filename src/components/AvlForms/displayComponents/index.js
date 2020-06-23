@@ -2,6 +2,8 @@ import React from 'react'
 import TextComponent from "./TextComponent";
 import CommentComponent from "./CommentComponent"
 import imageViewer from "./imageViewer";
+import AvlFormsJoin from '../editComponents/AvlFormsJoin'
+
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -18,6 +20,7 @@ export default {
     NE,
     text: TextComponent,
     comments: CommentComponent,
-    imageViewer: imageViewer
+    imageViewer: imageViewer,
+    AvlFormsJoin
 }
 

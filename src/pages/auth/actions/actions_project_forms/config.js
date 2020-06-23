@@ -318,6 +318,18 @@ module.exports = [
                 inline:'true',
                 section:'3'
             },
+            zones:{
+                label:'Zones',
+                sub_type:'project',
+                prompt:'',
+                edit_type:'AvlFormsJoin',
+                display_type:'AvlFormsJoin',
+                parentConfig: 'actions', // this is the attribute name by which the data will be stored in target config
+                targetConfig: 'zones',
+                display_condition:{attribute:'is_proposed_project_located_in_sfha',check:['yes', 'true', true]},
+                meta:'false',
+                section:'3'
+            },
             is_project_structure_located_in_sfha:{
                 label:'Is Project Structure(s) Located in SFHA?',
                 sub_type:'project',

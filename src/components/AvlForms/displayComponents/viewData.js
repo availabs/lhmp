@@ -90,7 +90,8 @@ class AvlFormsViewData extends React.Component{
                     let section = get(config[0][d], `section`, null),
                         label = get(config[0][d], `label`, null),
                         displayType = get(config[0][d], `display_type`, null),
-                        formType = get(config[0][d], `form_type`, null);
+                        formType = get(config[0][d], `form_type`, null),
+                        parentConfig = get(config[0][d], `parentConfig`, null);
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value ? value.toString() : value;
                     value = value && value.includes('[') ?
@@ -113,7 +114,8 @@ class AvlFormsViewData extends React.Component{
                                 section,
                                 label,
                                 displayType,
-                                formType
+                                formType,
+                                parentConfig
                             })
                         }
                         else{
@@ -124,7 +126,8 @@ class AvlFormsViewData extends React.Component{
                                     section,
                                     label,
                                     displayType,
-                                    formType
+                                    formType,
+                                    parentConfig
                                 })
                             }
 
@@ -138,7 +141,8 @@ class AvlFormsViewData extends React.Component{
                                 let section = get(config[0][ma], `section`, null),
                                     label = get(config[0][ma], `label`, null),
                                     displayType = get(config[0][d], `display_type`, null),
-                                    formType = get(config[0][d], `form_type`, null);
+                                    formType = get(config[0][d], `form_type`, null),
+                                    parentConfig = get(config[0][d], `parentConfig`, null);
 
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
@@ -152,7 +156,8 @@ class AvlFormsViewData extends React.Component{
                                                     section,
                                                     label,
                                                     displayType,
-                                                    formType
+                                                    formType,
+                                                    parentConfig
                                                 })
                                             }else{
                                                 data.push({
@@ -161,7 +166,8 @@ class AvlFormsViewData extends React.Component{
                                                     section,
                                                     label,
                                                     displayType,
-                                                    formType
+                                                    formType,
+                                                    parentConfig
                                                 })
                                             }
                                         }else{
@@ -176,7 +182,8 @@ class AvlFormsViewData extends React.Component{
                                                             section,
                                                             label,
                                                             displayType,
-                                                            formType
+                                                            formType,
+                                                            parentConfig
                                                         })
                                                     }else{
                                                         data.push({
@@ -185,7 +192,8 @@ class AvlFormsViewData extends React.Component{
                                                             section,
                                                             label,
                                                             displayType,
-                                                            formType
+                                                            formType,
+                                                            parentConfig
                                                         })
                                                     }
                                                 }

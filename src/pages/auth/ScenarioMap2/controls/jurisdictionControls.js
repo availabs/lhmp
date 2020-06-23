@@ -6,7 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import {falcorGraph} from "../../../../store/falcorGraph";
-import SearchableDropDown from "../components/searchableDropDown";
+import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 import JurisdictionTable from "../components/jurisdictionTable"
 var _ = require("lodash")
 class JurisdictionControl extends React.Component{

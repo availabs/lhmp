@@ -12,7 +12,7 @@ import JurisdictionControl from "./jurisdictionControls";
 import EvacuationControl from "./evacuationControl";
 import VulnerableDemographicsControl from "./vulnerableDemographicsControl";
 import {setActiveRiskZoneIdOff} from "store/modules/scenario"
-import SearchableDropDown from "../components/searchableDropDown";
+import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 import styled from "styled-components";
 import {falcorGraph} from "../../../../store/falcorGraph";
 import store from "../../../../store";
