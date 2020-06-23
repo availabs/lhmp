@@ -107,6 +107,7 @@ class AvlFormsViewDataZones extends React.Component {
                             })
                         } else {
                             if (!config[0][d].hidden || config[0][d].hidden !== 'true') {
+
                                 data.push({
                                     attribute: d,
                                     value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : '',
@@ -114,12 +115,12 @@ class AvlFormsViewDataZones extends React.Component {
                                     label,
                                     displayType,
                                     formType,
-                                    parentConfig: 'parentConfig'
+                                    parentConfig: parentConfig
                                 })
                             }
 
                         }
-                    } else {
+                    } /*else {
                         config_attributes[0].filter(item => item !== d).forEach(ca => {
                             if (!config[0][ca].hidden || config[0][ca].hidden !== 'true') {
                                 let section = get(config[0][ca], `section`, null),
@@ -147,7 +148,7 @@ class AvlFormsViewDataZones extends React.Component {
                             }
 
                         })
-                    }
+                    }*/
                 })
             })
 
