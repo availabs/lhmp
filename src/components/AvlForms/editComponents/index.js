@@ -12,6 +12,7 @@ import EmailComponent from "./emailComponent";
 import dropDownSignUp from "./dropDownSignUp";
 import FormArrayComponent from "./FormArrayComponent";
 import ImageEditor from "./imageComponent/index"
+import AvlFormsJoin from './AvlFormsJoin'
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -48,6 +49,7 @@ export default {
     email: EmailComponent,
     dropDownSignUp:dropDownSignUp,
     form_array: FormArrayComponent,
-    imageEditor: ImageEditor
+    imageEditor: ImageEditor,
+    AvlFormsJoin: (rest) => <AvlFormsJoin editView={true} {...rest}/>
 }
 

@@ -38,13 +38,10 @@ class Menu extends Component {
         return !_.isEqual(nextProps.allGeo, this.props.allGeo)
     }
     render() {
-        console.log('render?', this.props)
         if (this.props.menuSettings.hide) return null;
 
         const allowedGeos = Object.keys(get(this.props, `allGeo`, {}));
         let currentPath = this.props.menus.filter(p => p.path === this.props.path)[0];
-        console.log('allgeo?', this.props.allGeo, allowedGeos)
-
         // let title = currentPath[0] ? currentPath[0].name : ''
         let defaultOptions = {
             'location': 'menu-w',

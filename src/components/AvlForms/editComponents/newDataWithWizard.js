@@ -124,8 +124,36 @@ class AvlFormsNewDataWizard extends React.Component{
         }
     }
 
+    afterSubmitEdit(newId, attributes){
+        console.log('newid?', newId)
+        return attributes.reduce((a,c) => {
+            return a.then(resA => {
+                return this.props.falcor.set({
+                    paths: [
+                        ['forms', 'byId',this.state[c],'attributes',this.props.config[0].attributes[c].parentConfig]
+                    ],
+                    jsonGraph: {
+                        forms:{
+                            byId:{
+                                [this.state[c]] : {
+                                    attributes : {[this.props.config[0].attributes[c].parentConfig]: newId}
+                                }
+                            }
+                        }
+                    }
+                })
+            })
+        }, Promise.resolve())
+            .then(response => {
+                console.log('response',response)
+                // this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
+            })
+    }
     onSubmit(e){
         e.preventDefault();
+        let editAfterSubmitAttributes =
+            Object.keys(get(this.props, `config[0].attributes`, {}))
+                .filter(attribute => this.props.config[0].attributes[attribute].edit_type === 'AvlFormsJoin')
         let args = [];
         let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
@@ -161,8 +189,9 @@ class AvlFormsNewDataWizard extends React.Component{
                 }
             })
                 .then(response => {
-                    //console.log('response',response)
-                    this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
+                    console.log('edit res', response)
+                    this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
+                        .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
 
         }else{
@@ -196,7 +225,8 @@ class AvlFormsNewDataWizard extends React.Component{
                     if (this.props.returnValue){
                         this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                     }
-                    this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"});
+                    this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
+                        .then(r => this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"}))
                 })
         }
     }
@@ -532,6 +562,23 @@ class AvlFormsNewDataWizard extends React.Component{
                             border: item.attributes[attribute].border,
                         })
                     }
+                    else if (item.attributes[attribute].edit_type === 'AvlFormsJoin'){
+                        data.push({
+                            section_id: item.attributes[attribute].section,
+                            label: item.attributes[attribute].label,
+                            formType : this.props.config.map(d => d.type),
+                            handleChange : this.handleChange,
+                            state : this.state,
+                            title : attribute,
+                            placeholder: item.attributes[attribute].placeholder,
+                            required: item.attributes[attribute].field_required,
+                            prompt: this.displayPrompt.bind(this),
+                            type:item.attributes[attribute].edit_type,
+                            display_condition:item.attributes[attribute].display_condition,
+                            defaultValue: item.attributes[attribute].defaultValue,
+                            parentConfig: item.attributes[attribute].parentConfig
+                        })
+                    }
                     else{
                         data.push({
                             section_id: item.attributes[attribute].section,
@@ -545,7 +592,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             prompt: this.displayPrompt.bind(this),
                             type:item.attributes[attribute].edit_type,
                             display_condition:item.attributes[attribute].display_condition,
-                            defaultValue: item.attributes[attribute].defaultValue
+                            defaultValue: item.attributes[attribute].defaultValue,
                         })
                     }
                 })

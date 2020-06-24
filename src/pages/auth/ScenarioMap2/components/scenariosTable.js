@@ -27,11 +27,10 @@ class ScenarioTable extends React.Component {
     fetchFalcorDeps(){
         return this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'])
             .then(response =>{
-                let length = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].length;
+                let length = get(response,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'],0);
                 this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['table_name','map_source','annual_occurance','risk_zone_id','risk_scenario_id','name']])
                     .then(response =>{
-                        //console.log('response',response)
-                        let graph = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].byIndex;
+                        let graph = get(response,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex'],{});
                         let risk_zone_ids = []
                         if(graph){
                             Object.keys(graph).filter(d => d!== '$__path').forEach(item =>{
@@ -93,11 +92,11 @@ class ScenarioTable extends React.Component {
     componentDidMount(){
         this.fetchFalcorDeps()
             .then(d=>{
-                let length = d.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].length;
+                let length = get(d,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'],0);
                 return this.props.falcor.get(['scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex',[{from:0,to:length-1}],'risk_zones',['risk_zone_id','risk_scenario_id']])
                     .then(response =>{
                         //console.log('response',response)
-                        let graph = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].byIndex;
+                        let graph = get(response,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex'],{})
                         let risk_zone_ids = []
                         if(graph){
                             Object.keys(graph).filter(d => d!== '$__path').forEach((item,i) =>{
@@ -114,14 +113,14 @@ class ScenarioTable extends React.Component {
         if (oldProps.scenario_id[0] !== this.props.scenario_id[0]) {
             this.props.parentCallback(null);
             this.fetchFalcorDeps().then(response => {
-                let length = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].length;
+                let length = get(response,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'length'],0);
                 this.props.falcor.get(['scenarios', 'byPlan', this.props.activePlan, 'byId', this.props.scenario_id, 'byIndex', [{
                     from: 0,
                     to: length - 1
                 }], 'risk_zones', ['table_name', 'map_source', 'annual_occurance', 'risk_zone_id', 'risk_scenario_id']])
                     .then(response => {
                         //console.log('response',response)
-                        let graph = response.json.scenarios.byPlan[this.props.activePlan].byId[this.props.scenario_id].byIndex;
+                        let graph = get(response,['json','scenarios','byPlan',this.props.activePlan,'byId',this.props.scenario_id,'byIndex'],{})
                         let risk_zone_ids = []
                         let data = []
                         if (graph) {
@@ -150,7 +149,6 @@ class ScenarioTable extends React.Component {
         let data = this.state.data
         data.map(d =>{
             if(id.toString() === d.id.toString()){
-                console.log('d',d.id)
                 this.props.setActiveRiskZoneId([d.id])
                 this.props.setActiveRiskLayerVisibility([d])
                 this.setState((currentState) =>({

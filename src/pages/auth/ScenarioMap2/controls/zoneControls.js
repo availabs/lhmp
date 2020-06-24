@@ -6,7 +6,7 @@ import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import { fnum } from "utils/sheldusUtils"
 import {falcorGraph} from "../../../../store/falcorGraph";
-import SearchableDropDown from "../components/searchableDropDown";
+import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 import ZoneTable from "../components/zoneTable"
 var _ = require("lodash")
 class ZoneControl extends React.Component{
@@ -18,6 +18,7 @@ class ZoneControl extends React.Component{
             geoid: '',
             zone_name:'',
             zone_ids : [],
+            zones_data:{},
             new_zone:false
         }
     }
@@ -39,18 +40,21 @@ class ZoneControl extends React.Component{
     fetchFalcorDeps(){
         return this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
-                let length = response.json.forms['zones'].byPlanId[this.props.activePlan].length
+                let length = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],1) === null ? 1 :  get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0)
                 this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
                     .then(response =>{
-                        let graph = response.json.forms['zones'].byPlanId[this.props.activePlan].byIndex
+                        let graph = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'byIndex'],{})
                         let ids = []
                         if(graph){
-                            Object.keys(graph).forEach(item =>{
-                                ids.push(graph[item].id)
+                            Object.keys(graph).filter(d => d !=='$__path').forEach(item =>{
+                                if(graph[item]){
+                                    ids.push(graph[item].id)
+                                }
                             })
                         }
                         this.setState({
-                            zone_ids : ids
+                            zone_ids : ids,
+                            zones_data:graph
                         })
                         return response
                     })
@@ -66,20 +70,18 @@ class ZoneControl extends React.Component{
     zoneDropDown(){
         if(this.props.zonesList){
             let zones_list  = []
-            let graph = this.props.zonesList
+            let graph = this.state.zones_data
             if(Object.keys(graph).length >0){
-                Object.keys(graph).forEach(item =>{
-                    if(this.state.zone_ids.includes(graph[item].value.id)){
-                        if(!graph[item].value.attributes.geoid){
-                            zones_list.push({
-                                'label': graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                                'value': graph[item].value ? graph[item].value.id : '',
-                                'geoid': graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                                'geom' : graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                                'geojson' : graph[item].value.attributes.geojson ? graph[item].value.attributes.geojson : ''
-                            })
-                        }
-
+                Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
+                    if(graph[item] && this.state.zone_ids.includes(graph[item].id)){
+                        zones_list.push({
+                            'label': graph[item].attributes ? graph[item].attributes.name : 'None',
+                            'value': graph[item] ? graph[item].id : '',
+                            'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
+                            'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
+                            'geojson' : graph[item].attributes.geojson ? graph[item].attributes.geojson : '',
+                            'bbox':graph[item].attributes.bbox ? graph[item].attributes.bbox : ''
+                        })
                     }
                 })
                 return zones_list
@@ -87,68 +89,21 @@ class ZoneControl extends React.Component{
         }
     }
 
-
-    noSelectedZones(){
-        let currentZoneData = []
-        let scenario_id = localStorage.getItem("scenario_id")
-        let graph = this.props.zonesList
-        let ids = JSON.parse(localStorage.getItem('zone')) || [];
-        if(Object.keys(graph).length > 0){
-            if(localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0){
-                Object.keys(graph).forEach(item =>{
-                    if(graph[item].value.attributes.geoid === this.props.activeGeoid){
-                        currentZoneData.push({
-                            zone_id:  graph[item].value ? graph[item].value.id : '',
-                            geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                        })
-                    }
-
-                })
-                ids = currentZoneData
-                localStorage.setItem('zone', JSON.stringify(ids));
-            }
-            return (
-                <ZoneTable
-                    zones = {currentZoneData}
-                    scenario_id={scenario_id}
-                />
-            )
-        }
-
-    }
-
     selectedZones(){
         let selectedZonesData = [];
-        let graph = this.props.zonesList
         let scenario_id = localStorage.getItem("scenario_id");
-        let ids = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
-        if(Object.keys(graph).length > 0){
-            Object.keys(graph).forEach(item =>{
-                ids.forEach(zone_id =>{
-                    //if already in database
-                    if(zone_id['zone_id'] === graph[item].value.id){
-                        selectedZonesData.push({
-                            zone_id:  graph[item].value ? graph[item].value.id : '',
-                            geoid : graph[item].value.attributes ? graph[item].value.attributes.geoid : '',
-                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                        })
-                    }
-                    //if a new zone is created
-                    else if(zone_id.zone_id === null && _.isEqual(JSON.stringify(zone_id.bbox.map(d => [d[0], d[1]])),graph[item].value.attributes.bbox)){
-                        selectedZonesData.push({
-                            zone_id: graph[item].value ? graph[item].value.id : '',
-                            geoid: graph[item].value.attributes ? graph[item].value.attributes.geoid : null,
-                            geom: graph[item].value.attributes ? graph[item].value.attributes.geom : '',
-                            name: graph[item].value.attributes ? graph[item].value.attributes.name : 'None',
-                            bbox: graph[item].value.attributes ? graph[item].value.attributes.bbox : ''
-                        })
-                    }
+        let zones = JSON.parse("[" + localStorage.getItem("zone") + "]")[0];
+        if(zones && zones.length > 0){
+            zones.forEach(zone =>{
+                selectedZonesData.push({
+                    zone_id: zone.zone_id || '',
+                    geoid: zone.geoid || '',
+                    geom: zone.geom || '',
+                    name: zone.name || 'None',
+                    bbox: zone.bbox || ''
                 })
             })
-            selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id');
+            selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id')
             return (
                 <ZoneTable
                     zone_id = {this.state.zone_id}
@@ -157,16 +112,15 @@ class ZoneControl extends React.Component{
                     noShowBoundary = {this.props.layer.layer.zoneLayer}
                 />
             )
-
         }
     }
 
 
     render(){
-        let zones_list = this.zoneDropDown();
         //localStorage.removeItem("zone")
-        if(zones_list && zones_list.length > 0){
-            let ids = []
+        let zones_list = this.zoneDropDown();
+        let zones = JSON.parse(localStorage.getItem('zone')) || []
+        if(zones_list){
             return (
                 <div>
                     <div style={{display:'flex',justifyContent:'space-between'}}>
@@ -177,19 +131,19 @@ class ZoneControl extends React.Component{
                             hideValue={false}
                             onChange={(value) => {
                                 this.setState({zone_id:value})
-                                ids = JSON.parse(localStorage.getItem('zone'));
                                 zones_list.forEach(zone =>{
                                     if(zone.value === value){
-                                        ids.push({
+                                        zones.push({
                                             zone_id:value,
                                             geoid:zone.geoid || null,
                                             geom: zone.geom,
                                             name:zone.label,
-                                            geojson: zone.geojson
+                                            geojson: zone.geojson,
+                                            bbox: zone.bbox
                                         });
                                     }
                                 })
-                                localStorage.setItem('zone', JSON.stringify(ids));
+                                localStorage.setItem('zone', JSON.stringify(zones));
                                 this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
                                 this.selectedZones()
                             }}
@@ -205,10 +159,7 @@ class ZoneControl extends React.Component{
                     </div>
                     <div>
                         {
-                            localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0?
-                                this.noSelectedZones()
-                                :
-                                this.selectedZones()
+                            zones && zones.length>0 ? this.selectedZones() : <div>Please Create or Select a zone</div>
                         }
                     </div>
                 </div>

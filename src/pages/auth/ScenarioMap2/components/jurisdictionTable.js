@@ -80,13 +80,13 @@ class JurisdictionTable extends React.Component {
                         if(item.geoid){
                             if(item.geoid.length === 5){
                                 this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid,['county'],item.geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'],
-                                    ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
+                                    ['form_zones',['jurisdictions'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
                                     .then(response =>{
                                         return response
                                     })
                             }else{
                                 this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'jurisdiction',item.geoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'],
-                                    ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
+                                    ['form_zones',['jurisdictions'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],'sum',['num_buildings','replacement_value']])
                                     .then(response =>{
                                         return response
                                     })
@@ -236,7 +236,7 @@ const mapStateToProps = state => (
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         zonesByActiveScenarioData : get(state.graph,['building','byGeoid',`${state.user.activeGeoid}`]),
-        zonesByBuildingsData : get(state.graph,['form_zones','zones','byPlanId',`${state.user.activePlan}`,'byId']),
+        zonesByBuildingsData : get(state.graph,['form_zones','jurisdictions','byPlanId',`${state.user.activePlan}`,'byId']),
         zonesFormsList : get(state.graph,['forms','byId'],{}),
         activeRiskZoneId: state.scenario.activeRiskZoneId
     });

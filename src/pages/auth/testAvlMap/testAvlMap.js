@@ -1,9 +1,7 @@
 import React from "react"
-import store from "store"
-import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
 import MapLayer from "avlmap-npm/MapLayer"
 import { getColorRange } from "constants/color-ranges";
-import {register,unregister} from'avlmap-npm/ReduxMiddleware'
+/*import {register,unregister} from'avlmap-npm/ReduxMiddleware'*/
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -11,8 +9,8 @@ const IDENTITY = i => i;
 
 export class TestAvlMapLayer extends MapLayer{
     onAdd(map) {
-        super.onAdd(map);
-        if(store.getState().user.activeGeoid){
+        //super.onAdd(map);
+        /*if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
             let graph = ''
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
@@ -22,10 +20,8 @@ export class TestAvlMapLayer extends MapLayer{
                     map.resize();
                     map.fitBounds(bbox);
                 })
-        }
+        }*/
     }
-
-
 
 }
 
@@ -51,7 +47,7 @@ export default (props = {}) =>new TestAvlMapLayer("TestAvlMapLayer",{
                     'line-color': '#FFFFFF',
                     'line-opacity': 0.5
                 },
-                filter: ['all', ['in', 'geoid', store.getState().user.activeGeoid]]
+                filter: ['all', ['in', 'geoid','36025']]
 
             },
 

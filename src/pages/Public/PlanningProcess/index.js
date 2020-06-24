@@ -30,28 +30,44 @@ import {
     HeaderImageContainer
 } 
 from 'pages/Public/theme/components'
+import get from "lodash.get";
+const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 
 class About extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            imageReq: 'planning-image'
         }
+        this.getCurrentKey = this.getCurrentKey.bind(this)
+    }
+    getCurrentKey = (requirement) =>
+        this.props.scope === 'global' ?
+            requirement :
+            requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
+
+    fetchFalcorDeps(){
+        if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined' || !this.props.user.activePlan) return Promise.resolve();
+        let contentId = this.getCurrentKey(this.state.imageReq);
+
+        return this.props.falcor.get(
+            ['geo', parseInt(this.props.activeCousubid), 'name'],
+            ['content', 'byId', [contentId], COLS]
+        ).then(contentRes => {
+            this.setState({
+                image: get(contentRes, `json.content.byId.${contentId}.body`, '/img/sullivan-min.png'),
+                'currentKey': contentId,
+                status: get(contentRes.json.content.byId[contentId], `attributes.status`, ''),
+            })
+        })
     }
 
-    fetchFalcorDeps() {
-        if (!this.props.activeGeoid) return Promise.resolve();
-        return this.props.falcor.get(
-            ['geo', this.props.activeGeoid, 'cousubs']
-        )
-            .then(response => {
-                console.log(response,falcorGraph.getCache().geo[this.props.activeGeoid])
-                return this.props.falcor.get(
-                    ['geo', [this.props.activeGeoid, ...falcorGraph.getCache().geo[this.props.activeGeoid].cousubs.value], ['name']],
-                )
-            })
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.currentKey !== this.getCurrentKey(this.state.imageReq)){
+            this.fetchFalcorDeps()
+        }
     }
-    
     render() {
         let graph = this.props.graph
         let geoInfo = graph.geo
@@ -73,7 +89,7 @@ class About extends React.Component {
                     <SideMenu config={config} filterAdmin={true}/>
                 </div>
                 <div style={{marginLeft: 220}}>
-                    <HeaderImageContainer>
+                    <HeaderImageContainer img={this.state.image}>
                         <div style={{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.4)', padding: 50}}>
                             <PageHeader style={{color: '#efefef'}}>Planning Process</PageHeader>
                             <div className="row">

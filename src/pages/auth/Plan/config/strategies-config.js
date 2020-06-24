@@ -1,4 +1,17 @@
 const config = {
+    'Strategies Image': [{
+        title: 'Strategies Image',
+        requirement: `strategies-image`,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 250,
+        width: 500,
+        border: 1,
+        icon: 'os-icon-arrow-right7',
+    }],
     'Header' : [{
         title: 'Strategies Quote',
         requirement: 'strategies-quote',
@@ -152,7 +165,8 @@ const config = {
         {
             title: 'Relocation Zones',
             requirement: 'Req-NYS-F-3B-1',
-            type: 'content',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['Relocation Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-documents-07'

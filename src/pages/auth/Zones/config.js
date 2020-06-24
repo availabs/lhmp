@@ -31,6 +31,18 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
+            actions:{
+                label:'Actions',
+                sub_type:'',
+                prompt:'',
+                edit_type:'AvlFormsJoin',
+                display_type:'AvlFormsJoin',
+                parentConfig: 'zones',
+                targetConfig: 'actions',
+                hidden:'false',
+                meta:'false',
+                section:'',
+            },
             comment:{
                 label:'Comment',
                 prompt:'',

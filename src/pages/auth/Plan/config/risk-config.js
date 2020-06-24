@@ -1,4 +1,17 @@
 const config = {
+    'Risk Image': [{
+        title: 'Risk Image',
+        requirement: `risk-image`,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 250,
+        width: 500,
+        border: 1,
+        icon: 'os-icon-arrow-right7',
+    }],
     'Header' : [{
         title: 'Risk Quote',
         requirement: 'risk-quote',
@@ -106,7 +119,8 @@ const config = {
         {
             title: 'Development Zones',
             requirement: 'Req-D-1B',
-            type: 'form',
+            type: 'developementZonesFilteredTable',
+            filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-grid-squares-2'
@@ -114,14 +128,15 @@ const config = {
         {
             title: 'Development Map',
             requirement: 'Req-D-1C',
-            type: 'map?',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
         },
         {
             title: 'Open Space ',
-            requirement: 'Req-D-1C',
+            requirement: 'Req-E-1A',
             type: 'content',
             prompt: '',
             intent: '',
@@ -129,7 +144,7 @@ const config = {
         },
         {
             title: 'Open Space Statistics',
-            requirement: 'Req-D-1C',
+            requirement: 'Req-E-1B',
             type: 'map?',
             prompt: '',
             intent: '',

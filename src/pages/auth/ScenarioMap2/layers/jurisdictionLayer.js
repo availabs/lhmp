@@ -20,43 +20,6 @@ export class JurisdictionLayer extends MapLayer{
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
-            let geoids = JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0];
-            let cousubs = [];
-            if(geoids){
-                geoids.forEach(geoid =>{
-                    if(geoid.geoid && geoid.geoid.length !== 5){
-                        cousubs.push(geoid.geoid)
-                    }
-                });
-            }
-            this.map.setFilter(
-                "jurisdiction_cousubs",
-                ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
-            )
-
-            if(localStorage.getItem("jurisdiction")){
-                let new_zones = JSON.parse(localStorage.getItem("jurisdiction"))
-
-                let geojson = {
-                    "type": "FeatureCollection",
-                    "features": []
-                }
-                new_zones.forEach(new_zone =>{
-                    if(new_zone.geoid === null){
-                        if(new_zone.geojson){
-                            geojson.features.push({
-                                type : "Feature",
-                                properties:{},
-                                geometry:new_zone.geojson.geometry ? new_zone.geojson.geometry : new_zone.geojson
-                            })
-                        }else{
-                            geojson.features.push(new_zone.geom)
-                        }
-                    }
-                })
-                this.map.getSource("polygon").setData(geojson)
-            }
-
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
@@ -72,6 +35,20 @@ export class JurisdictionLayer extends MapLayer{
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
+        let activeGeoid = store.getState().user.activeGeoid
+        let geoids = JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0];
+        let cousubs = [];
+        if(geoids){
+            geoids.forEach(geoid =>{
+                if(geoid.geoid && geoid.geoid.length !== 5){
+                    cousubs.push(geoid.geoid)
+                }
+            });
+        }
+        this.map.setFilter(
+            "jurisdiction_cousubs",
+            ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
+        )
     }
 
     toggleVisibilityOff(){
@@ -161,17 +138,6 @@ export const JurisdictionOptions =  (options = {}) => {
                 filter : ['in','geoid','']
 
             },
-            {
-                'id': 'jurisdiction-polygon-layer',
-                'source': 'polygon',
-                'type': 'line',
-                'paint': {
-                    'line-color': '#F31616',
-                    'line-opacity': 0.5,
-                    'line-width': 4
-                }
-            }
-
         ],
         _isVisible: true
     }
