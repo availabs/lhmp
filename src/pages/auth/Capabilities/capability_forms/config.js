@@ -27,7 +27,7 @@ module.exports = [
             },*/
             county:{
                 label:'County', // Which you would like to see on the form
-                prompt:'Choose the county the capability is located from the list of all counties.',
+                prompt:'Choose the county where the capability is located.',
                 sub_type:'',
                 edit_type:'dropdown',
                 display_type:'text',
@@ -39,7 +39,7 @@ module.exports = [
             },
             municipality:{
                 label:'Jurisdiction',
-                prompt:'Choose the jurisdiction where the capability is located. Jurisdictions that occur are based on the County selected in question 1',
+                prompt:'Choose the jurisdiction(s) where the capability is located. Selections will autopopulate based on the County selection. If Countywide, select Countywide.',
                 sub_type:'',
                 edit_type:'dropdown',
                 defaultValue: ['Countywide'],
@@ -51,8 +51,8 @@ module.exports = [
                 section: ''
             },
             capability_category: {
-                label:'Capability Category',
-                prompt:'Choose a Capability Category Type from the Dropdown Menu. This will limit the number of options in the Capability dropdown menu on the next question.',
+                label:'Capability Type',
+                prompt:'Choose a Capability Type from the Dropdown Menu. Use the above guidance to identify which type best fits this capability or select Other.',
                 sub_type:'',
                 edit_type:'dropdown',
                 display_type:'text',
@@ -63,8 +63,8 @@ module.exports = [
                 example:'Demo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo ExampleDemo Example',
             },
             capability_type :{
-                label:'Capability type',
-                prompt:'Choose a Capability. To limit the number of choices in this dropdown menu, choose a capability category from the dropdown menu in question 1.',
+                label:'Capability',
+                prompt:'Choose a Capability from the Dropdown Menu. Selections are based on the Capability Type selection. Use the above guidance to identify the best fit for this capability or select Other.',
                 sub_type:'',
                 edit_type:'dropdown',
                 display_type:'text',
@@ -76,11 +76,10 @@ module.exports = [
             },
             capability_name:{
                 label:'Capability Name',
-                prompt:'How your Jurisdiction titled this capability. ' +
-                    'Provide a capability title only if it differs from the capability you chose in the dropdown menu on question 2. ' +
-                    'You might fill out this optional field if the Capability you chose in question 2 is different than the official name of ' +
-                    'your jurisdictional capability ex:  You chose “Floodplain Management Plan” but the specific capability name for your jurisdiction ' +
-                    '“Floodplain Resources Management Plan.” Enter “Floodplain Resources Management Plan” in the Capability Title  box for question 3',
+                prompt:'Provide a capability title only if it differs from the capability you chose in the dropdown menu in the previous question. ' +
+                    'You might fill out this optional field if the Capability chosen is different than the official name for the capability.' +
+                    '(Ex: You chose “Floodplain Management Plan” but the specific capability name for your jurisdictions Floodplain Management Plan is ' +
+                    '“Floodplain Resources Management Plan.” Enter “Floodplain Resources Management Plan” in the Capability Name box.)',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
@@ -102,9 +101,13 @@ module.exports = [
             },
             status:{
                 label:'Update Status',
-                prompt:'Select the current status of the capability. Select New-Since-Last-Plan when the capability was newly established since the last Hazard Mitigation Plan. Select Established-Before-Last-Plan if this capability was an established and documented capability in your last Hazard Mitigation Plan. Select In-Development if the capability is currently being developed. Select No-Longer-Relevant when the capability has been discontinued or has ended its useful life.',
+                prompt:'Select the current status of the capability.' +
+                   'New-Since-Last-Plan: capability was newly established since the last Hazard Mitigation Plan.' + 
+                   'On-going-Since-Last-Plan: capability was established and documented in your last Hazard Mitigation Plan.' + 
+                   'In-Development: capability is currently being developed.' + 
+                   'No-Longer-Relevant: capability has been discontinued or has ended its useful life.',
                 edit_type:'dropdown_no_meta',
-                edit_type_values : ['New-Since-Last-Plan','Established-Before-Last-Plan','In-Development','No-Longer-Relevant',],
+                edit_type_values : ['New-Since-Last-Plan','On-Going-Since-Last-Plan','In-Development','No-Longer-Relevant',],
 // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
                 display_condition : '',
                 display_type:'text',
@@ -113,7 +116,7 @@ module.exports = [
             },       
             development_update:{
                 label:'Description of Status',
-                prompt:'Describe how your jurisdiction is currently working towards implementing, enhancing the status of this capability? Or why it is no longer relevant.',
+                prompt:'If appropriate, provide additional information related to the status of this capability. For instance, if In-Development, describe how your jurisdiction is currently working towards implementing or enhancing the status of this capability; if No-Longer-Relevant, please describe why.',
                 sub_type:'',
                 edit_type:'text', // the values you would like to see as options for radio buttons
                 disable_condition:'',
@@ -133,9 +136,19 @@ module.exports = [
                 expandable:'true',
                 section:'',
             },
+             potential_risk:{
+                label:'Risk Potential: Does this capability present goals, objectives or practices that may work against the goals and objectives of this Hazard Mitigation Plan and the mitigation programs in your community?',
+                prompt:'Describe in what ways this capability may conflict with the goals and objectives of this hazard mitigation plan. For example, an economic development plan may seek to re-develop a waterfront area. If this waterfront area is a designated Special Flood Hazard Area, development without careful consideration of potential flooding may inadvertently incease risk to your community.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:'',
+            },    
             mitigation_contribution:{
                 label:'Integration: What capacity does Mitigation planning provide this Capability?',
-                prompt:'Describe how mitigation planning supports and contributes to building maintaining or enhancing capacity for this capability',
+                prompt:'Describe how mitigation planning supports and contributes to building, maintaining or enhancing capacity for this capability',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
@@ -193,7 +206,7 @@ module.exports = [
             },
             responsible_authority:{
                 label:'Responsible Authority',
-                prompt:'Provide name and description of responsible authority, ' +
+                prompt:'Provide name and description of responsible authority,' +
                     'if different from the adopting authority and how they provided assistance. ' +
                     'As an example; the County Planning Board is the “Adopting Authority” for a Water Resource Management Plan, ' +
                     'the “Responsible Authority” would be the Soil and Water Conservation District.',
@@ -206,7 +219,7 @@ module.exports = [
             },
             support_authority:{
                 label:'Supporting Authority',
-                prompt:'Provide the name and contact info of any jurisdictional  department/authority/organization that provides assistance to or is associated with the capability.',
+                prompt:'Provide the name and contact info of any jurisdictional department, authority, or organization that provides assistance to or is associated with the capability.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
@@ -226,7 +239,7 @@ module.exports = [
             },
             link_url:{
                 label:'URL for the link',
-                prompt:'if the capability has a website or online document associated with the capability. Examples include; emergency manager/department, soil and water conservation districts websites, weblink to a complete streets policy.',
+                prompt:'if the capability has a website or online document associated with the capability, provide the link here. (E.g.: Emergency Management Office or Soil and Water Conservation District websites, weblink to a complete streets policy, etc.)',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
