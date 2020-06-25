@@ -104,7 +104,7 @@ class SvgMap extends React.Component {
 					strokeWidth={ lineWidthMinPixels }/>
 	}
 	getLayerPaths({ data, key, ...rest }) {
-		if (data.type === "FeatureCollection") {
+		if (data && data.type === "FeatureCollection") {
 			return data.features.map((feature, i) =>
 				this.getPath(feature, rest, i)
 			);
