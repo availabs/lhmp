@@ -164,17 +164,18 @@ const config = {
         },
         {
             title: 'Relocation Zones',
-            requirement: 'Req-NYS-F-3B-1',
-            type: 'developementZonesFilteredMap',
-            filterBy: {zone_type: ['Relocation Zone']},
-            prompt: '',
+            requirement: 'Req-NYS-F-3B',
+            type: 'content',
+            prompt: 'Tell us about your relocation zones...',
             intent: '',
-            icon: 'os-icon-documents-07'
+            icon: 'os-icon-documents-07',
+            
         },
         {
             title: '',
-            requirement: 'Req-NYS-F-3B',
-            type: '',
+            requirement: 'Req-NYS-F-3B-1',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['Relocation Zone']},
             prompt: '',
             intent: '',
             icon: 'os-icon-documents-07',
