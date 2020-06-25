@@ -71,7 +71,6 @@ class ZoneModalData extends React.Component {
     }
 
     render() {
-        console.log('props',this.props)
         return (
             <div className='element-wrapper'>
                 <div className='element-box'>
