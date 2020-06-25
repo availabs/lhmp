@@ -32,6 +32,6 @@ class ElementHider extends React.Component{
         let {isVisible, Graph, graph, ...rest} = this.props
         return this.state.show ?
             <Graph {...rest} {...graph} {...this.props.rest}/> :
-            <div>Loading...</div>
+            <span />
     }
 }
