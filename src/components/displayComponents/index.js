@@ -16,7 +16,7 @@ import shelterListTableViewer from "./shelterListTableViewer";
 import actionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
-import developementZoneFilteredTable from "./developementZoneFilteredTable";
+import DevelopementZoneFilteredTable from "./developementZoneFilteredTable";
 import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 
 
@@ -60,8 +60,8 @@ export default {
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
     imageViewer: ImageComponent,
-    developementZonesFilteredTableEditor: developementZoneFilteredTable,
-    developementZonesFilteredTableViewer: developementZoneFilteredTable,
+    developementZonesFilteredTableEditor: (rest) => <DevelopementZoneFilteredTable edit={true} {...rest}/>,
+    developementZonesFilteredTableViewer: DevelopementZoneFilteredTable,
     developementZonesFilteredMapEditor: developementZoneFilteredMap,
     developementZonesFilteredMapViewer: developementZoneFilteredMap
 }
