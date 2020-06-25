@@ -18,6 +18,7 @@ class developementZonesFilteredTable extends Component {
     }
 
     render(){
+        let edit = this.props.edit ? true : false; // for some reason
         return(
             <div className='container'>
                 <Element>
@@ -25,9 +26,9 @@ class developementZonesFilteredTable extends Component {
                         json = {[Object.assign({}, config[0], {list_attributes: ['name', 'zone_type', 'comment']})]}
                         filterBy = {this.props.filterBy}
                         createButtons = {false}
-                        editButton = {true}
-                        viewButton = {true}
-                        deleteButton = {false}
+                        editButton = {edit}
+                        viewButton = {edit}
+                        deleteButton = {edit}
                     />
                 </Element>
             </div>
