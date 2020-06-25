@@ -12,7 +12,7 @@ var Promise = require("bluebird");
 
 
 let url = 'https://graph.availabs.org/'
- //let url = 'http://localhost:4444/'
+// let url = 'http://localhost:4444/'
 
 
 
