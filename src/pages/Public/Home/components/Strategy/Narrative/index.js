@@ -44,14 +44,6 @@ class Narrative extends Component {
             <PageContainer>
                 <HeaderContainer>
                     <PageHeader>Strategy Overview</PageHeader>
-                    <div className="row">
-                        <div className="col-12">
-                            <StatementText>
-                                By focusing on adapatave capacity we are ensuring that all memebers of our community
-                                can weather any natural hazard.
-                            </StatementText>
-                        </div>
-                    </div>
                     <SectionBox>
                         <SectionBoxMain>
                             <RenderConfig

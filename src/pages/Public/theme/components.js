@@ -46,9 +46,9 @@ let themes = [
         mainFontColor : '#3E4B5B',
         DarkFontColor: '#3E4B5B',
         LightFontColor: '#fefefe',
-        mainFontSize: '1.4em',
+        mainFontSize: '1.2em',
         mainFontWeight: '400',
-        mainFontLineHeight: '2',
+        mainFontLineHeight: '1.5',
         mainFontFamily: `'Roboto', sans-serif`,
         sidebarScheme: 'default', //light or dark
         sidebarStyle: 'default', //bright or light
@@ -92,6 +92,7 @@ export const StatementText = styled.div`
 	font-size: 3rem;
 	font-weight: 500;
 	padding: 120px;
+    line-height: 1.1;
     color: ${LightFontColor};
 `
 
