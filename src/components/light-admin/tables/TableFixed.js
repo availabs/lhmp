@@ -7,6 +7,7 @@ import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
 import _ from 'lodash'
 import MultiSelectFilter from "../../filters/multi-select-filter";
+import megaAvlFormsConfig from 'pages/auth/megaAvlFormsConfig.js';
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
@@ -177,7 +178,10 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                 .filter(f => !['edit', 'view', 'delete'].includes(f))
                 .forEach(key => {
                     if (csvDownload.includes(key)){
-                        tmpRow[key] = row[key]
+                        tmpRow[
+                            megaAvlFormsConfig[key].label && megaAvlFormsConfig[key].label.length ?
+                                megaAvlFormsConfig[key].label : key
+                            ] = row[key]
                     }
                 // if (!csvDownload.includes(key)) delete row[key]
             })
