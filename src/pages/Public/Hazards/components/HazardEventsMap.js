@@ -22,6 +22,16 @@ import {
 import {
     fnum
 } from "utils/sheldusUtils"
+import TractsLayer from "./hazardEvents/layers/TractsLayer";
+import AvlMap from "../../../../components/AvlMap";
+
+const MapControl = ({ comp, pos="top-left" }) => {
+    return (
+        <div className={ "map-test-table-div " + pos }>
+            { comp }
+        </div>
+    )
+}
 
 class HazardEventsMap extends React.Component {
     constructor(props) {
@@ -126,13 +136,6 @@ class HazardEventsMap extends React.Component {
     }
     generateMapControls() {
         const controls = [];
-        if (this.props.showLegend) {
-            controls.push(
-                { pos: this.props.mapLegendLocation,
-                    comp: (this.props.mapLegendSize == "large") ? this.generateLegend() : this.generateSmallLegend()
-                }
-            )
-        }
         if (!this.props.allTime) {
             controls.push(
                 { pos: this.props.mapControlsLocation,
@@ -191,15 +194,46 @@ class HazardEventsMap extends React.Component {
             return []
         }
     }
+
     render () {
         return (
-            <ElementBox style={ { padding: this.props.padding } }>
-                <SvgMap layers={ this.generateLayers() }
+            <ElementBox style={ { padding: this.props.padding, height: '80vh', width: '100%' } }>
+                {this.generateMapControls().map((control, i) => <MapControl key={ i } { ...control }/>)}
+                <AvlMap
+                    sidebar={false}
+                    mapactions={false}
+                    scrollZoom={false}
+                    zoom={6}
+                    update={[this.state.update]}
+                    style='Clear'
+                    styles={[{
+                        name: "Clear",
+                        style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii"
+                    }]}
+                    fitBounds={[
+                        [
+                            -79.8046875,
+                            40.538851525354666
+                        ],
+                        [
+                            -71.7626953125,
+                            45.042478050891546
+                        ]]}
+                    layers={[TractsLayer]}
+                    layerProps={ {
+                        [TractsLayer.name]: {
+                            hazard: this.props.hazard,
+                            hazards: this.props.hazards,
+                            currentYear: this.state.currentYear
+                        }
+                    } }
+                />
+                {/*<SvgMap layers={ this.generateLayers() }
                         height={ this.props.height }
                         viewport={ this.props.viewport }
                         controls={ this.generateMapControls() }
                         padding={ this.props.zoomPadding }
-                        bounds={ this.props.bounds }/>
+                        bounds={ this.props.bounds }/>*/}
             </ElementBox>
         )
     }

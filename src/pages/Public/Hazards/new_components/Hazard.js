@@ -18,6 +18,8 @@ import {
     EARLIEST_YEAR,
     LATEST_YEAR
 } from "./yearsOfSevereWeatherData"
+import HazardEvents from 'pages/Public/Hazards/components/hazardEvents/'
+
 
 
 //import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
@@ -158,6 +160,7 @@ class Hazards extends React.Component {
                         <h5>Hazard Events</h5>
                         <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                         <h6>{HazardName} Events</h6>
+
                         <HazardEventsMapController
                             geoid={this.props.geoid}
                             geoLevel={this.props.geoLevel}
@@ -165,6 +168,7 @@ class Hazards extends React.Component {
                             hazards={this.props.hazards}
                             hazard={this.props.hazard}
                             zoomPadding={150}
+                            year={1999}
                         />
                     </div>
                 </div>
