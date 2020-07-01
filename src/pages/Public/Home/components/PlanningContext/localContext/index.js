@@ -36,7 +36,6 @@ class LocalContext extends Component {
 
     fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined') return Promise.resolve();
-        console.log('activeCousubid', this.props.activeCousubid)
         return this.props.falcor.get(
             ['acs', parseInt(this.props.activeCousubid), ['2017'],['B19013_001E','B01003_001E','B17001_002E']],
             ['geo', parseInt(this.props.activeCousubid), 'name']

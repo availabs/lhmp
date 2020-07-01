@@ -139,7 +139,6 @@ class TractLayer extends MapLayer {
             "type": "FeatureCollection",
             "features": []
         };
-        console.log('came here', rawGraph, graph);
 
         if (!graph) return Promise.resolve();
         Object.keys(graph)

@@ -162,7 +162,6 @@ considered.`,
     }
 
     render() {
-        console.log('this.state?', this.state, this.props)
         return (
             <PageContainer>
                 <HeaderImageContainer img={this.state.image}>

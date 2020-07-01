@@ -103,7 +103,6 @@ class Public extends React.Component {
     }
 
     render() {
-
         return (
             <div style={{backgroundColor: backgroundColor}}>
                 <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>

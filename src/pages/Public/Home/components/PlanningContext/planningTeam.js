@@ -53,14 +53,14 @@ class PlanningTeam extends Component {
             ['geo', parseInt(this.props.activeCousubid), 'name']
         )
         .then(response => {
-            console.log('got response', response)
+            return response
         })
 
     }
 
     renderMainTable() {
         let roles = Object.values(this.props.roles)
-        console.log('renderMainTable', this.props.rolesMeta)
+
          
         return roles.map((data,i) => {
             return (
