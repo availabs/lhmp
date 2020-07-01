@@ -62,7 +62,6 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     handleChange(e){
-        console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
 
@@ -76,7 +75,6 @@ class AvlFormsNewDataWizard extends React.Component{
         }else{
             tmpObj[id] = [...e];
         }
-        console.log('multi select', e, tmpObj, this.state);
         this.setState(tmpObj);
     }
 
@@ -125,7 +123,6 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     afterSubmitEdit(newId, attributes){
-        console.log('newid?', newId)
         return attributes.reduce((a,c) => {
             return a.then(resA => {
                 return this.props.falcor.set({
@@ -145,7 +142,6 @@ class AvlFormsNewDataWizard extends React.Component{
             })
         }, Promise.resolve())
             .then(response => {
-                console.log('response',response)
                 // this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
             })
     }
@@ -428,7 +424,7 @@ class AvlFormsNewDataWizard extends React.Component{
                         })
 
                     }
-                    else if(item.attributes[attribute].edit_type === 'radio') {
+                    else if(item.attributes[attribute].edit_type === 'radio' || item.attributes[attribute].edit_type === 'checkbox') {
                         data.push({
                             section_id: item.attributes[attribute].section,
                             label: item.attributes[attribute].label,
