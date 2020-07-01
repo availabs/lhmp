@@ -20,6 +20,9 @@ from 'pages/Public/theme/components'
 import {Link} from "react-router-dom";
 
 const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, pureElement, ...rest }) => {
+    if(element.title === 'County Description') {
+        console.log('element county desc', element)
+    }
     return pureElement ?
         (
             <React.Fragment>
@@ -74,8 +77,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                             {...rest}
                         />
                     </SectionBoxMain>
-                    {['right', 'full'].includes(element.align) && element.callout?
-                        React.fragment :
+                    {['left'].includes(element.align) && element.callout?
                         <SectionBoxSidebar >
                             <SidebarCallout>
                                 <GraphFactory
@@ -87,6 +89,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                                 />
                             </SidebarCallout>
                         </SectionBoxSidebar>
+                        : React.fragment 
                     }
                 </SectionBox>
             </Element>
@@ -123,9 +126,7 @@ export const RenderConfig = ({ config: config, showHeader, pureElement, filterAd
                 )
             }) :
             <ContentContainer>
-                <div className="row">
-                    <div className="col-12">
-                        <div className="element-wrapper">
+                
                             {
                                 Object.keys(config)
                                     .filter(section => filterAdmin ? config[section].filter(item => !item.onlyAdmin).length > 0 : true)
@@ -150,9 +151,7 @@ export const RenderConfig = ({ config: config, showHeader, pureElement, filterAd
                                     )
                                 })
                             }
-                        </div>
-                    </div>
-                </div>
+               
             </ContentContainer>
     )
 }

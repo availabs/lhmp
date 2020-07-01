@@ -58,9 +58,9 @@ class PlanningTeam extends Component {
                 <HeaderContainer>
                     <PageHeader>Actions</PageHeader>
                 </HeaderContainer>
-                <VerticalAlign>
+                
                     
-                    <div className = 'd-flex justify-content-center' style={{paddingTop:50, }}>
+                    <div className = 'd-flex justify-content-center' style={{paddingTop: '50px'}}>
                             
                        
                             <HMGPTable
@@ -74,7 +74,7 @@ class PlanningTeam extends Component {
                         />
                        
                     </div>
-                </VerticalAlign>
+                
                 
             </PageContainer>
         )

@@ -15,6 +15,7 @@ import MultiSelectFilter from "../../filters/multi-select-filter";
 import get from 'lodash.get'
 import _ from "lodash";
 import {CSVLink} from "react-csv";
+import megaAvlFormsConfig from "../../../pages/auth/megaAvlFormsConfig";
 
 
 const Styles = styled.div`
@@ -310,7 +311,10 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                 .filter(f => !['edit', 'view', 'delete'].includes(f))
                 .forEach(key => {
                     if (csvDownload.includes(key)){
-                        tmpRow[key] = row[key]
+                        tmpRow[
+                            megaAvlFormsConfig[key].label && megaAvlFormsConfig[key].label.length ?
+                                megaAvlFormsConfig[key].label : key
+                            ] = row[key]
                     }
                     // if (!csvDownload.includes(key)) delete row[key]
                 })

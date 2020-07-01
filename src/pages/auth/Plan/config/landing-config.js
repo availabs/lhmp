@@ -28,8 +28,9 @@ let config = {
         type: 'content',
         prompt: '',
         intent: '',
-        callout: '',
-        icon: 'os-icon-arrow-right7'
+        
+        icon: 'os-icon-arrow-right7',
+        'align': 'full'
     }],
 /*    'Roles': [{
         title: 'Roles',

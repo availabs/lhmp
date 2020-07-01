@@ -136,7 +136,7 @@ class ContentViewer extends Component {
         return (
             <div style={{display:'inline-block', textAlign: 'justify'}}
                  dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB :
-                         this.props.requirement.includes('callout') ? null : '<i>Content not available.</i>'
+                         this.props.requirement.includes('callout') ? null : ''
                  }} />
         )
     }
