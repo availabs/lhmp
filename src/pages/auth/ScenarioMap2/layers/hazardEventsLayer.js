@@ -132,7 +132,7 @@ export class HazardEventsLayer extends MapLayer{
 
     receiveMessage(action, data) {
         this.currentYear = data.activeYear
-        this.filters.hazard.value = data.activeHazard || ''
+        this.filters.hazard.value = data.activeHazard
         return this.fetchData().then(data => this.receiveData(this.map, data))
         //     this.fetchData().then(data => this.receiveData(this.map,data))
 
