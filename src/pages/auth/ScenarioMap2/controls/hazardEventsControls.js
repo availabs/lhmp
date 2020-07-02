@@ -11,7 +11,7 @@ var _ = require("lodash")
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
 const hazardMeta = [
-    {value: undefined, name: 'All'},
+    {value: 'all', name: 'All Haz'},
     {value: 'wind', name: 'Wind', description: '', sheldus: "Wind", colors: getColor('Greys')},
     {value: 'wildfire', name: 'Wildfire', description: '', sheldus: "Wildfire", colors: getColor('Blues')},
     {value: 'tsunami', name: 'Tsunami/Seiche', description: '', sheldus: "Tsunami/Seiche", colors: getColor('Blues')},
@@ -66,7 +66,9 @@ class HazardEventsControl extends React.Component {
         }
 
         if (prevState.hazard !== this.state.hazard){
-            this.props.setActiveHazard(this.state.hazard)
+            this.state.hazard === 'all' ?
+                this.props.setActiveHazard(hazardMeta.map(f => f.value)) :
+                this.props.setActiveHazard(this.state.hazard)
         }
     }
 
