@@ -265,6 +265,7 @@ class HazardEventsMapController extends React.Component {
             hazard,
             allTime,
             showLegend,
+            hazards,
         } = this.props;
         showLegend = (showLegend !== "auto") ? showLegend : (numMaps > 1)
         const maps = Array(this.props.numMaps).fill(getMapWidth(this.props.numMaps))
@@ -285,6 +286,7 @@ class HazardEventsMapController extends React.Component {
                             radiusScale={this.state.radiusScale}
                             zoomPadding={zoomPadding}
                             hazard={hazard}
+                            hazards={hazards}
                             bounds={this.state.bounds}
                             allTime={allTime}/>
                     </div>

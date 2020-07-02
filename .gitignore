@@ -21,6 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 
 user.json
+database_config.py
 
 /src/store/config.js
 

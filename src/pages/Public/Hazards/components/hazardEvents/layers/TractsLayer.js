@@ -69,7 +69,9 @@ class TractLayer extends MapLayer {
                 Object.keys(events[geo])
                     .filter(f => this.filters.hazard.value && this.filters.hazard.value.includes(f))
                     .forEach(haz => {
-                    Object.keys(events[geo][haz]).forEach(year => {
+                    Object.keys(events[geo][haz])
+                        .filter(f => this.currentYear ? this.currentYear.toString() === f.toString() || this.currentYear === 'allTime' : true)
+                        .forEach(year => {
                         if (events[geo][haz][year].property_damage.value && events[geo][haz][year].property_damage.value.length > 0) {
                             events[geo][haz][year].property_damage.value.forEach(data => {
                                 if (JSON.parse(data.geom)) {
@@ -120,23 +122,26 @@ class TractLayer extends MapLayer {
     }
 
     receiveProps(oldProps, newProps){
-        if ((newProps.hazard || newProps.hazards) && this.filters.hazard.value !== newProps.hazard) {
+        if (((newProps.hazard || newProps.hazards) && this.filters.hazard.value !== newProps.hazard) ||
+            (newProps.currentYear && this.currentYear !== newProps.currentYear)) {
             this.filters.hazard.value = newProps.hazard ?
                 [newProps.hazard] : newProps.hazards ? newProps.hazards : null;
+            this.currentYear = newProps.currentYear
 
         }
     }
     onPropsChange(oldProps, newProps){
-        if ((newProps.hazard || newProps.hazards) && this.filters.hazard.value !== newProps.hazard) {
+        if (((newProps.hazard || newProps.hazards) && this.filters.hazard.value !== newProps.hazard) ||
+            (newProps.currentYear && this.currentYear !== newProps.currentYear)) {
             this.filters.hazard.value = newProps.hazard ?
                 [newProps.hazard] : newProps.hazards ? newProps.hazards : null;
+            this.currentYear = newProps.currentYear
             this.doAction(["fetchLayerData"]);
             }
     }
     onAdd(map) {
         super.onAdd(map);
         if (!store.getState().user.activeGeoid) return Promise.resolve();
-
         return falcorGraph.get(
             ['riskIndex', 'hazards'],
             ['geo', store.getState().user.activeGeoid, 'tracts'],

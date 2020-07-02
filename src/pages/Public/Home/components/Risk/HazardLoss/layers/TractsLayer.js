@@ -1,5 +1,6 @@
 import React from "react"
 import * as d3scale from "d3-scale"
+import * as d3 from 'd3'
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
@@ -142,6 +143,7 @@ class TractLayer extends MapLayer {
                 ['severeWeather', this.tracts, this.filters.hazard.value, 'tract_totals', 'total_damage'])
                 .then(fullData => {
                     this.data = {};
+                    this.geoNames = fullData.json.geo;
                     graph = falcorGraph.getCache();
                     let countiesOrCousubs = get(graph,
                         `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
@@ -170,17 +172,24 @@ class TractLayer extends MapLayer {
 
     receiveData(map, data) {
         // console.log('in recData: analysis')
+        let allowedGeoLen = 11
         if(!this.data) {return }
         let keyDomain = this.data;
         let maxDamage = Math.max(...Object.keys(keyDomain)
-            .filter(f => f.length === 11)
+            .filter(f => f.length === allowedGeoLen)
             .map(f => keyDomain[f]));
-        let domain = [0,1,2,3,4].map(i => ((maxDamage)*(i/4)));
-        domain = [10000,100000,1e6,1e7,1e8]
+        let sortedData = _.uniq(
+            Object.keys(keyDomain)
+                .filter(f => f.length === allowedGeoLen)
+                .map(f => keyDomain[f]))
+            .sort((a,b) => a-b)
+
+        let domain =  [d3.quantile(sortedData, 0),d3.quantile(sortedData, 0.25),d3.quantile(sortedData, 0.5),
+            d3.quantile(sortedData, 0.75),d3.quantile(sortedData, 1)]//[0,1,2,3,4].map(i => ((maxDamage)*(i/4)));
+        // domain = [10000,100000,1e6,1e7,1e8]
         // console.log('keyDomain', keyDomain);
         let range = hazardcolors[this.filters.hazard.value + '_range'];
-        // console.log('range',maxDamage, range, domain);
-
+        // console.log('range',maxDamage, range, domain, Object.values(keyDomain).sort((a,b) => a-b));
 
         let colorScale = d3scale.scaleThreshold()
             .domain(domain)
@@ -194,7 +203,9 @@ class TractLayer extends MapLayer {
         this.legend.range = range;
         this.legend.title = `${hazardMeta.filter(f => f.value === this.filters.hazard.value)[0].name} Loss`.toUpperCase()
         this.legend.active = true;
-        let mapColors = Object.keys(keyDomain).reduce((out, curr) => {
+        let mapColors = Object.keys(keyDomain)
+            .filter(f => f.length === allowedGeoLen)
+            .reduce((out, curr) => {
             if (keyDomain[curr]) {
                 // console.log('testing', curr, keyDomain[curr],colorScale(keyDomain[curr]) )
                 out[curr] = colorScale(keyDomain[curr]);
@@ -308,19 +319,18 @@ const tractLayer = new TractLayer("Analysis Layer", {
         vertical: false
     },
     popover: {
-        layers: ['tracts-layer-line', 'tracts-layer'],
+        layers: [/*'tracts-layer-line', */'tracts-layer'],
         dataFunc: (feature, features, layer, map, e) =>
             {
                 if (!map) return []
-                let cache = falcorGraph.getCache();
+                let geoNames = tractLayer.geoNames;
                 let allFeats = map.queryRenderedFeatures(e.point, { layers: ['tracts-layer-line', 'tracts-layer'] });
                 let cousubs = allFeats.filter(f => f.layer.id === 'tracts-layer-line');
                 let tracts = allFeats.filter(f => f.layer.id === 'tracts-layer');
-
                 return [
-                    tractLayer.formatName(get(cache, `geo.${cousubs[0].properties.geoid}.name`, 0), cousubs[0].properties.geoid),
-                    ["Tract", get(cache, `geo.${tracts[0].properties.geoid}.name`, 0)],
-                    ["Damage", fnum(get(tractLayer, `data.${cousubs[0].properties.geoid}`, 0))],
+                    tractLayer.formatName(get(geoNames, `${cousubs[0].properties.geoid}.name`, 0), cousubs[0].properties.geoid),
+                    ["Tract", get(geoNames, `${tracts[0].properties.geoid}.name`, 0)],
+                    ["Damage", fnum(get(tractLayer, `data.${tracts[0].properties.geoid}`, 0))],
                 ];
 
             }
