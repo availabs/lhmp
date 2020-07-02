@@ -70,7 +70,7 @@ const formatName = function(name= 'no name', geoid){
         geoid.length === 2 ? 'State' :
             geoid.length === 5 ? 'County' :
                 geoid.length === 7 ? 'Village' :
-                    geoid.length === 10 ? 'Town' :
+                    geoid.length === 10 ? name.toLowerCase().includes('city') ? ' City' : 'Town' :
                         geoid.length === 11 ? 'Tract' : '';
     if (name.toLowerCase().includes(jurisdiction.toLowerCase())){
         name = name.toLowerCase().replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
