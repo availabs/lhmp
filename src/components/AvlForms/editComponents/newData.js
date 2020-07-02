@@ -174,7 +174,6 @@ class AvlFormsNewData extends React.Component{
     }
 
     afterSubmitEdit(newId, attributes){
-        console.log('newid?', newId)
         return attributes.reduce((a,c) => {
             return a.then(resA => {
                 return this.props.falcor.set({
@@ -194,7 +193,6 @@ class AvlFormsNewData extends React.Component{
             })
         }, Promise.resolve())
             .then(response => {
-                console.log('response',response)
                 // this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
             })
     }
@@ -440,7 +438,8 @@ class AvlFormsNewData extends React.Component{
                         defaultValue: item.attributes[attribute].defaultValue
 
                     })
-                }else if(item.attributes[attribute].edit_type === 'radio'
+                }else if((item.attributes[attribute].edit_type === 'radio' ||
+                    item.attributes[attribute].edit_type === 'checkbox')
                     && ['false', undefined].includes(item.attributes[attribute].hidden)
                 ){
                     data.push({
@@ -602,15 +601,12 @@ class AvlFormsNewData extends React.Component{
     }
 
 
-    static validateForm () {
-        let cond2 = (document.getElementById('contact_county') &&
-            document.getElementById('contact_title_role'))
-            && (document.getElementById('contact_county').value.length > 0 &&
-                document.getElementById('contact_title_role').value.length > 0);
+    static validateForm (state, config) {
+        let cond2 = Object.keys(config.attributes)
+            .filter(f => config.attributes[f].field_required === 'required')
+            .reduce((a,c) => a && state[c], true)
 
-        let cond3 = (document.getElementById('contact_name')) && (document.getElementById('contact_name').value.length > 0)
-
-        return cond2 && cond3
+        return cond2
     }
 
     renderHeaderText(header){
@@ -681,7 +677,7 @@ class AvlFormsNewData extends React.Component{
 
                                         if(i === 0){
                                             if(d.formType[0] === 'roles'){
-                                                return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm()}> Submit</button>)
+                                                return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm(this.state, this.props.config[0])}> Submit</button>)
                                             }else{
                                                 return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>)
                                             }

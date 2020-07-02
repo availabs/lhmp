@@ -13,6 +13,7 @@ import dropDownSignUp from "./dropDownSignUp";
 import FormArrayComponent from "./FormArrayComponent";
 import ImageEditor from "./imageComponent/index"
 import AvlFormsJoin from './AvlFormsJoin'
+import CheckboxComponent from './checkboxComponent'
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -50,6 +51,7 @@ export default {
     dropDownSignUp:dropDownSignUp,
     form_array: FormArrayComponent,
     imageEditor: ImageEditor,
-    AvlFormsJoin: (rest) => <AvlFormsJoin editView={true} {...rest}/>
+    AvlFormsJoin: (rest) => <AvlFormsJoin editView={true} {...rest}/>,
+    checkbox: CheckboxComponent
 }
 

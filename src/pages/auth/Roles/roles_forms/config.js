@@ -77,6 +77,17 @@ module.exports = [
                 section: '',
                 list_attribute: 'true'
             },
+            is_hazard_mitigation_representative:{
+                label:'Is Hazard Mitigation Representative?',
+                sub_type:'',
+                prompt:'if yes, select',
+                edit_type:'checkbox',
+                edit_type_values:['yes'],
+                display_type:'text',
+                meta:'false',
+                inline:'true',
+                section:''
+            },
             contact_name:{
                 label:'Name',
                 prompt:'',

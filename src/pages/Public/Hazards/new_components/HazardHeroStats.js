@@ -71,16 +71,19 @@ class CountyHeroStats extends React.Component {
         let data = [];
         try {
             for (const hazard in this.props[dataType][geoid]) {
-              
                     const value = +this.props[dataType][geoid][hazard].allTime.annualized_damage;
                     const dailyProb = +this.props[dataType][geoid][hazard].allTime.daily_event_prob;
                     const annualNumEvents = +this.props[dataType][geoid][hazard].allTime.annualized_num_events;
+                    const totalDamage = +this.props[dataType][geoid][hazard].allTime.total_damage;
                     if (value) {
                         data.push({
                             label: this.getHazardName(hazard),
                             hazard: hazard,
                             value: {main:FORMAT(value),
-                            sub:{'Daily Probability': (dailyProb*100).toFixed(2) + '%', 'Annual Avg Number of Events': annualNumEvents}},
+                            sub:{
+                                'Total Loss': totalDamage,
+                                'Daily Probability': (dailyProb*100).toFixed(2) + '%',
+                                'Annual Avg Number of Events': annualNumEvents}},
                             sort: value
                         })
                     }
@@ -136,10 +139,14 @@ const BoxRow = ({ value, label, hazard, changeHazard, onClick, i , activeHazard}
                 />
             </div>
             <div className="value" style={{'font-size': 'x-large', color: get(hazardMeta[hazard], `color`, 'red')}}>
+                {'Annual Average Loss'} :
                 { fnum(typeof value.main === "string" ? value.main.replace(/[$]/g, '').replace(/,/g,'') : value.main) }
             </div>
             <div style={{'font-size': 'small'}}>
-                {hazard !== '' ? Object.keys(value.sub).map(s => <label className="label">{s} : {value.sub[s] }</label>) : null}
+                {hazard !== '' ? Object.keys(value.sub).map(s =>
+                    <label className="label">
+                        {s} : {['Total Loss'].includes(s) ? fnum(value.sub[s]) : value.sub[s] }
+                    </label>) : null}
             </div>
             
         </div>
