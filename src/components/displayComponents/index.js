@@ -8,8 +8,8 @@ import capabilitiesTableHMPViewer from "./capabiltiesTableHMP/capabilitiesTableH
 import planningDocumentsEditor from "./planningDocumentsEditor";
 import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer";
 import formTableViewer from './FormTableViewer'
-import criticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
-import inventoryTableViewer from './inventoryTableViewer'
+import CriticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
+import InventoryTableViewer from './inventoryTableViewer'
 import evacuationRoutesViewer from "./evacuationRoutesViewer";
 import capabilityEvaluationTableViewer from "./capabilityEvaluationTableViewer";
 import shelterListTableViewer from "./shelterListTableViewer";
@@ -18,6 +18,7 @@ import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
 import DevelopementZoneFilteredTable from "./developementZoneFilteredTable";
 import developementZoneFilteredMap from "./developementZoneFilteredMap/";
+import criticalFacilitiesTableViewer from "./criticalFacilitiesTableViewer";
 
 
 const NA = ({ type, state, routes }) =>
@@ -34,6 +35,8 @@ const NE = ((props) => (<div>{props.type} Doesn't Exist</div>))
 
 const ActionsFilteredListTableViewerFunc = (rest) => <ActionsFilteredListTableViewer edit={true} {...rest}/>
 const ImageEditor = (rest) => <ImageComponent edit={true} {...rest}/>
+const CriticalFacilitiesTableEditor = (rest) => <CriticalFacilitiesTableViewer public={false} {...rest}/>
+const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...rest}/>
 export default {
     NA,
     NE,
@@ -46,8 +49,6 @@ export default {
     planningDocumentsEditor,
     planningDocumentsViewer,
     formTableViewer,
-    criticalFacilitiesTableViewer,
-    inventoryTableViewer,
     evacuationRoutesViewer,
     capabilityEvaluationTableViewer,
     shelterListTableViewer,
@@ -55,8 +56,10 @@ export default {
     actionsFilteredListTableEditor: ActionsFilteredListTableViewerFunc,
     capabilityEvaluationTableEditor: capabilityEvaluationTableViewer,
     evacuationRoutesEditor:evacuationRoutesViewer,
-    criticalFacilitiesTableEditor: criticalFacilitiesTableViewer,
-    inventoryTableEditor: inventoryTableViewer,
+    criticalFacilitiesTableViewer: CriticalFacilitiesTableViewer,
+    criticalFacilitiesTableEditor: CriticalFacilitiesTableEditor,
+    inventoryTableViewer: InventoryTableViewer,
+    inventoryTableEditor: InventoryTableEditor,
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
     imageViewer: ImageComponent,

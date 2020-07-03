@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
 import styled from 'styled-components'
 import {authProjects} from "store/modules/user";
+import get from "lodash.get";
 
 const DIV = styled.div`
 ${props => props.theme.panelDropdownScrollBar};
@@ -16,6 +17,18 @@ class inventoryTableViewer extends Component {
             geoid: this.props.activeGeoid,
         };
     }
+    fetchFalcorDeps() {
+        return this.props.falcor.get(
+            ['plan',[this.props.activePlan],'scenarios']
+        )
+            .then(response => {
+                this.setState({scenarioIds:
+                        get(response, `json.plan.${this.props.activePlan}.scenarios`, [])
+                            .filter(f => f.name.includes('DFIRM'))
+                            .map(f => f.id)})
+            })
+    }
+
     componentDidUpdate(prevProps, prevState){
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid){
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
@@ -33,10 +46,10 @@ class inventoryTableViewer extends Component {
                         geoid={[this.state.geoid]}
                         groupBy={'jurisdiction'}
                         groupByFilter={[]}
-                        scenarioId={[3]}
+                        scenarioId={this.state.scenarioIds}
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
-                        public={true}
+                        public={this.props.public === true ? true : false}
                     />
                 </div>
                 <div>
@@ -45,10 +58,10 @@ class inventoryTableViewer extends Component {
                         geoid={[this.state.geoid]}
                         groupBy={'propType'}
                         groupByFilter={[]}
-                        scenarioId={[3]}
+                        scenarioId={this.state.scenarioIds}
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
-                        public={true}
+                        public={this.props.public === true ? true : false}
                     />
                 </div>
             </div>
@@ -58,7 +71,11 @@ class inventoryTableViewer extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
     activeGeoid: state.user.activeGeoid,
-    activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid
+    activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
+    activePlan: state.user.activePlan
 });
+inventoryTableViewer.defaultProps = {
+    public: true
+}
 const mapDispatchToProps = ({authProjects});
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(inventoryTableViewer))
