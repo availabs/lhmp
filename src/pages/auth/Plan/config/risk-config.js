@@ -58,7 +58,7 @@ const config = {
          {
             title: 'Social Vulnerability',
             requirement: 'Req-D-2C',
-            type: 'content',
+            type: 'sociallyVulnerableDemographicsMap',
             prompt: '',
             intent: '',
             icon: 'os-icon-grid-squares-2'
