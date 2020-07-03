@@ -18,7 +18,7 @@ import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
 import DevelopementZoneFilteredTable from "./developementZoneFilteredTable";
 import developementZoneFilteredMap from "./developementZoneFilteredMap/";
-import criticalFacilitiesTableViewer from "./criticalFacilitiesTableViewer";
+import sociallyVulnerableDemographicsMapViewer from './sociallyVulnerableDemographicsMap/index'
 
 
 const NA = ({ type, state, routes }) =>
@@ -66,6 +66,8 @@ export default {
     developementZonesFilteredTableEditor: (rest) => <DevelopementZoneFilteredTable edit={true} {...rest}/>,
     developementZonesFilteredTableViewer: DevelopementZoneFilteredTable,
     developementZonesFilteredMapEditor: developementZoneFilteredMap,
-    developementZonesFilteredMapViewer: developementZoneFilteredMap
+    developementZonesFilteredMapViewer: developementZoneFilteredMap,
+    sociallyVulnerableDemographicsMapEditor: sociallyVulnerableDemographicsMapViewer,
+    sociallyVulnerableDemographicsMapViewer
 }
 
