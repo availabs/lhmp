@@ -60,17 +60,8 @@ module.exports = [
                 display_type:'text',
                 meta: 'false',
             },
-            magnitude:{
-                label:'Magnitude/Extent Rating',
-                prompt:'Loss of Life and Property are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the level of loss your jurisdiction has experienced as a result of a hazard event.',
-                sub_type:'',
-                edit_type:'dropdown_no_meta',
-                edit_type_values:['High','Medium','Low'],
-                display_type:'text',
-                meta: 'false',
-            },
             extent_description:{
-                label:'Magnitude/Extent Description.',
+                label:'Magnitude/Extent Description',
                 prompt:'Extent is the strength or magnitude of the hazard. Extent can be described in a combination of ways depending on the hazard, such as:• The value on an established scientific scale or measurement system, such as EF2 on the Enhanced Fujita Scale for tornadoes or 5.5 on the Richter Scale for earthquakes. • Other measures of magnitude, such as water depth or wind speed.• The speed of onset. For example, hurricanes have longer warning times, giving people and governments more time to prepare and evacuate, while earthquakes occur without warning. • The duration of hazard events. For most hazards, the longer the duration of an event, the greater the extent. Flooding that peaks and retreats in a matter of hours is typically less damaging than flooding of the same depth that remains in place for days.',
                 sub_type:'',
                 edit_type:'text',
