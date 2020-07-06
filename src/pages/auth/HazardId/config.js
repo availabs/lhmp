@@ -68,7 +68,7 @@ module.exports = [
                 display_type:'text',
             },
             location_description:{
-                label:'Local Description',
+                label:'Location Description',
                 prompt:'Location is the geographic areas within the planning area that are affected by the hazard, such as a floodplain. Hazard areas may be further defined, such as high wildfire hazard areas versus low wildfire hazard areas. The entire planning area may be uniformly affected by some hazards, such as drought or winter storm. Although maps are usually the best way to illustrate location for many hazards, location may be described in other formats, such as a narrative.',
                 sub_type:'',
                 edit_type:'text', // the values you would like to see as options for radio buttons
