@@ -12,6 +12,7 @@ import {LandUseLayer,LandUseOptions} from "./landUseLayer";
 import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
 import {CulvertsLayer,CulvertsOptions} from "./culvertsLayer";
 import {JurisdictionLayer,JurisdictionOptions} from "./jurisdictionLayer";
+import {HazardEventsLayer,HazardEventsOptions} from "./hazardEventsLayer";
 import {EvacuationRoutesLayer,EvacuationRoutesOptions} from "./evacuationLayer";
 import {VulnerableDemographicsLayer,VulnerableDemographicsOptions} from "./vulnerableDemographicsLayer";
 import { getColorRange } from "constants/color-ranges";
@@ -24,7 +25,7 @@ const COLORS = getColorRange(12, "Set3");
 
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
-let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer,vulnerableDemographicsLayer = {}
+let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer,vulnerableDemographicsLayer, hazardEventsLayer = {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -59,6 +60,10 @@ const DynamicEvacuationRoutesLayerFactory =(callingLayer,...args) =>{
 
 const DynamicVulnerableDemographicsLayerFactory = (callingLayer,...args) =>{
     return new VulnerableDemographicsLayer('vulnerableDemographics',VulnerableDemographicsOptions())
+}
+
+const DynamicHazardEventsLayerFactory = (callingLayer,...args) =>{
+    return new HazardEventsLayer('hazardEvents',HazardEventsOptions())
 }
 
 
@@ -284,6 +289,13 @@ export class ControlLayers extends MapLayer {
                                     ]).then(vdl =>{
                                         vulnerableDemographicsLayer = vdl
                                         this.vulnerableDemographicsLayer = vdl
+                                        this.doAction([
+                                            "addDynamicLayer",
+                                            DynamicHazardEventsLayerFactory
+                                        ]).then(hel =>{
+                                                hazardEventsLayer = hel
+                                                this.hazardEventsLayer = hel
+                                            })
                                     })
                                 })
                             })
@@ -328,6 +340,11 @@ export class ControlLayers extends MapLayer {
                 vulnerableDemographicsLayer.toggleVisibilityOn()
             }
         }
+        if(layerName.includes("hazardEvents")){
+            if(Object.keys(hazardEventsLayer).length > 0){
+                hazardEventsLayer.toggleVisibilityOn()
+            }
+        }
         if(layerName.includes("jurisdiction")){
             this.jurisdictonLayer.toggleVisibilityOn()
         }
@@ -365,6 +382,11 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes("vulnerableDemographics")){
             if(Object.keys(vulnerableDemographicsLayer).length > 0){
                 vulnerableDemographicsLayer.toggleVisibilityOff()
+            }
+        }
+        if(layerName.includes("hazardEvents")){
+            if(Object.keys(hazardEventsLayer).length > 0){
+                hazardEventsLayer.toggleVisibilityOff()
             }
         }
         if(layerName.includes('jurisdiction')){
