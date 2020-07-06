@@ -107,7 +107,7 @@ class ZoneModalData extends React.Component {
                                    onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: link.link})}
                                    href="#"> {`${link.header} x ${link.row0}`}</a>
                                 <div
-                                    style={{padding: '0.5vw'}}
+                                    style={{padding: '0.5vw', cursor: 'pointer'}}
                                     className="nav-item"
                                     onClick={() => {
                                         this.setState({
