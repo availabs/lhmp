@@ -1,85 +1,90 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { reduxFalcor } from 'utils/redux-falcor'
+import {connect} from 'react-redux';
+import {reduxFalcor} from 'utils/redux-falcor'
 import _ from 'lodash'
 import get from "lodash.get";
-import pick from "lodash.pick"
 import Element from 'components/light-admin/containers/Element'
 import TableBox from 'components/light-admin/tables/TableBox'
 import {Link} from "react-router-dom";
-import {falcorChunkerNice} from "store/falcorGraph"
-import config from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import owner_config from 'pages/auth/Assets/components/BuildingByOwnerTypeConfig.js'
-import {falcorGraph} from "../../../../store/falcorGraph";
+import ElementBox from "../../../../components/light-admin/containers/ElementBox";
 
-const ATTRIBUTES =[
+const ATTRIBUTES = [
     'address',
     'prop_class',
     'owner_type',
     'replacement_value',
 ];
 let length = 0;
-const owner_types = ['1','2','3','4','5','6','7','8','9','10','-999']
+const owner_types = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '-999']
 
-class AssetsListByTypeByHazard extends React.Component{
+class AssetsListByTypeByHazard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             geoid: this.props.match.params.geoid ? this.props.match.params.geoid : this.props.activeGeoid,
             data: [],
             loading: false,
-            columns : ATTRIBUTES
+            columns: ATTRIBUTES
         };
     }
-    componentDidUpdate(prevProps, prevState){
-        if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid){
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
         }
+        if (prevProps.match.url !== this.props.match.url){
+           this.componentDidMount()
+        }
     }
-    componentDidMount(){
+
+    componentDidMount() {
         let data = [];
         let types = this.props.match.params.typeIds.toString()
-        if(this.props.match.params.hazardIds){
+        if (this.props.match.params.hazardIds) {
             this.setState({
-                loading : true
+                loading: true
             });
             return this.props.falcor.get(['building', 'byGeoid',
                     this.state.geoid,
                     this.props.match.params.type,
                     types,
                     [this.props.match.params.hazardIds],
-                    'byIndex',{from:0, to:50},ATTRIBUTES],
-                ['building','meta',['owner_type','prop_class'],'name'])
+                    'byIndex', {from: 0, to: 50}, ATTRIBUTES],
+                ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.state.geoid][this.props.match.params.type][types][this.props.match.params.hazardIds].byIndex;
-                    Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path']){
+                    Object.keys(graph).forEach(item => {
+                        if (graph[item] && graph[item]['$__path']) {
                             data.push({
-                                'address':graph[item].address,
-                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                'address': graph[item].address,
+                                'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
-                                'building_id':graph[item]['$__path'][2]
+                                'building_id': graph[item]['$__path'][2]
                             })
                         }
 
                     });
 
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
+                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                    data.map(d => {
+                        d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
                 })
-        } else if(this.props.match.params.scenarioIds){
+        } else if (this.props.match.params.scenarioIds) {
             this.setState({
-                loading : true
+                loading: true
             });
             return this.props.falcor.get(
                 ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
-                    'byRiskZone',this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {from:0, to:50}, ATTRIBUTES],
-                ['building','meta',['owner_type','prop_class'],'name']
+                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
+                    from: 0,
+                    to: 50
+                }, ATTRIBUTES],
+                ['building', 'meta', ['owner_type', 'prop_class'], 'name']
             )
                 .then(response => {
                     let meta = response.json.building.meta;
@@ -87,30 +92,29 @@ class AssetsListByTypeByHazard extends React.Component{
                     let graph = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
-
-                    Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path']){
+                    if (!graph) return Promise.resolve()
+                    Object.keys(graph).forEach(item => {
+                        if (graph[item] && graph[item]['$__path']) {
                             data.push({
-                                'address':graph[item].address,
-                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                'address': graph[item].address,
+                                'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
-                                'building_id':graph[item]['$__path'][2]
+                                'building_id': graph[item]['$__path'][2]
                             })
                         }
 
                     });
 
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
+                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                    data.map(d => {
+                        d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
                 })
-        }
-        else{
+        } else {
             this.setState({
-                loading : true
+                loading: true
             });
             let type = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type;
             return this.props.falcor.get(
@@ -118,40 +122,41 @@ class AssetsListByTypeByHazard extends React.Component{
                     this.state.geoid,
                     type,
                     types,
-                    'byIndex',{from:0, to:50},ATTRIBUTES],
+                    'byIndex', {from: 0, to: 50}, ATTRIBUTES],
 
-                ['building','meta',['owner_type','prop_class'],'name'])
+                ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     //console.log('res', response.json.building.byGeoid[this.state.geoid][this.props.match.params.type][types].byIndex)
                     let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
-                    Object.keys(graph).forEach(item =>{
-                        if (get(graph, `${item}.$__path`, null) !== null){
+                    Object.keys(graph).forEach(item => {
+                        if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({
-                                'address':graph[item].address,
-                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                'address': graph[item].address,
+                                'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
-                                'building_id':graph[item]['$__path'][2]
+                                'building_id': graph[item]['$__path'][2]
                             })
                         }
 
                     });
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
+                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                    data.map(d => {
+                        d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
                 })
         }
 
     }
+
     onPageChange(from, to) {
         let data = [];
         let types = this.props.match.params.typeIds.toString()
-        if(this.props.match.params.hazardIds){
+        if (this.props.match.params.hazardIds) {
             this.setState({
-                loading : true
+                loading: true
             })
             return this.props.falcor.get(
                 ['building', 'byGeoid',
@@ -159,36 +164,39 @@ class AssetsListByTypeByHazard extends React.Component{
                     this.props.match.params.type,
                     types,
                     [this.props.match.params.hazardIds],
-                    'byIndex',{from:from, to:to},ATTRIBUTES],
-                ['building','meta',['owner_type','prop_class'],'name'])
+                    'byIndex', {from: from, to: to}, ATTRIBUTES],
+                ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.state.geoid][this.props.match.params.type][types][this.props.match.params.hazardIds].byIndex;
-                    Object.keys(graph).forEach(item =>{
-                        if (get(graph, `${item}.$__path`, null) !== null){
+                    Object.keys(graph).forEach(item => {
+                        if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({
-                                'address':graph[item].address,
-                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                'address': graph[item].address,
+                                'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
-                                'building_id':graph[item]['$__path'][2]
+                                'building_id': graph[item]['$__path'][2]
                             })
                         }
                     })
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
+                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                    data.map(d => {
+                        d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
                 })
-        } else if(this.props.match.params.scenarioIds){
+        } else if (this.props.match.params.scenarioIds) {
             this.setState({
-                loading : true
+                loading: true
             });
             return this.props.falcor.get(
                 ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
-                    'byRiskZone',this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {from: from, to: to}, ATTRIBUTES],
-                ['building','meta',['owner_type','prop_class'],'name']
+                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
+                    from: from,
+                    to: to
+                }, ATTRIBUTES],
+                ['building', 'meta', ['owner_type', 'prop_class'], 'name']
             )
                 .then(response => {
                     let meta = response.json.building.meta;
@@ -196,29 +204,28 @@ class AssetsListByTypeByHazard extends React.Component{
                     let graph = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
-                    Object.keys(graph).forEach(item =>{
-                        if (graph[item] && graph[item]['$__path']){
+                    Object.keys(graph).forEach(item => {
+                        if (graph[item] && graph[item]['$__path']) {
                             data.push({
-                                'address':graph[item].address,
-                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                'address': graph[item].address,
+                                'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
-                                'building_id':graph[item]['$__path'][2]
+                                'building_id': graph[item]['$__path'][2]
                             })
                         }
 
                     });
 
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
+                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                    data.map(d => {
+                        d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
                 })
-        }
-        else{
+        } else {
             this.setState({
-                loading : true
+                loading: true
             })
             let type = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type;
 
@@ -227,25 +234,25 @@ class AssetsListByTypeByHazard extends React.Component{
                     this.state.geoid,
                     type,
                     types,
-                    'byIndex',{from:from, to:to},ATTRIBUTES],
-                ['building','meta',['owner_type','prop_class'],'name'])
+                    'byIndex', {from: from, to: to}, ATTRIBUTES],
+                ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
-                    Object.keys(graph).forEach(item =>{
-                        if (get(graph, `${item}.$__path`, null) !== null){
+                    Object.keys(graph).forEach(item => {
+                        if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({
-                                'address':graph[item].address,
-                                'prop_class':meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
-                                'owner_type':meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
+                                'address': graph[item].address,
+                                'prop_class': meta.prop_class.map(d => d.value === graph[item].prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === graph[item].owner_type ? d.name : null),
                                 'replacement_value': graph[item].replacement_value,
-                                'building_id':graph[item]['$__path'][2]
+                                'building_id': graph[item]['$__path'][2]
                             })
                         }
                     })
-                    data.sort((a,b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1: -1);
-                    data.map(d =>{
-                        d.replacement_value = '$'+d.replacement_value
+                    data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                    data.map(d => {
+                        d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
                 })
@@ -254,65 +261,71 @@ class AssetsListByTypeByHazard extends React.Component{
 
     }
 
-    render(){
+    render() {
         let hazard_risk = ''
         let property_type = ''
-        if (this.props.match.params.hazardIds === 'flood_100' ){
+        if (this.props.match.params.hazardIds === 'flood_100') {
             hazard_risk = '100-year Flood Zone'
-        }
-        else if (this.props.match.params.hazardIds === 'flood_500') {
+        } else if (this.props.match.params.hazardIds === 'flood_500') {
             hazard_risk = '500-year Flood Zone'
         }
-        if(this.props.match.params.type === 'propType'){
+        if (this.props.match.params.type === 'propType') {
             property_type = 'Property'
-        }
-        else if(this.props.match.params.type === 'ownerType'){
+        } else if (this.props.match.params.type === 'ownerType') {
             let owner_type = this.props.match.params.typeIds.split('-')
-            if(owner_type.length === 1){
-                owner_config.forEach(d=>{
-                    if (d.value === owner_type[0]){
+            if (owner_type.length === 1) {
+                owner_config.forEach(d => {
+                    if (d.value === owner_type[0]) {
                         property_type = d.name + ' ' + 'Owner'
                     }
                 })
+            } else {
+                property_type = 'Municipal' + ' ' + 'Owner'
             }
-            else{
-                property_type = 'Municipal' +' '+ 'Owner'
-            }
-        }
-        else if(this.props.match.params.type === 'critical'){
+        } else if (this.props.match.params.type === 'critical') {
             property_type = 'Critical Infrastructure'
         }
         return (
             <div>
                 <Element>
-                    <h4>Assets Listed By {property_type} - {this.props.match.params.typeIds.toString().split('-').join()} {hazard_risk ? 'and' + ' ' + hazard_risk : null}
-                        {this.props.match.params.riskzoneIds ? `and Risk Zones: ${this.props.match.params.riskzoneIds.toString().split('-').join()}` : null}
-                        <Link
-                            className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
-                            to={'/guidance/guidance-assets/view'} target={'_blank'}
-                        >?</Link>
-                    </h4>
-                    <div id="dataTable1_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4" >
-                        <div className="row">
-                            <TableBox
-                                page={0}
-                                size={this.props.size}
-                                length={[length]}
-                                loading={this.state.loading}
-                                onPage={this.onPageChange.bind(this)}
-                                filterData = {true}
-                                tableData = {this.props.match.url.split('/')[1] === 'risk' ?
-                                    this.state.data.map(f => {delete f.replacement_value; return f}) :
-                                    this.state.data}
-                                columns = {
-                                    this.props.match.url.split('/')[1] === 'risk' ?
-                                    this.state.columns.filter(f => f !== 'replacement_value') :
-                                    this.state.columns
-                                }
-                                isPublic={this.props.match.url.split('/')[1] === 'risk'}
-                            />
+                    <ElementBox>
+                        <h4 style={{textWrap: 'break-word', wordBreak: 'break-word'}}>
+                            <label>
+                                Assets Listed By {property_type} -
+                                {this.props.match.params.typeIds.toString().split('-').join(', ')}
+                                {hazard_risk ? ' and ' + ' ' + hazard_risk : null}
+                                {this.props.match.params.riskzoneIds ? ` and Risk Zones: ${this.props.match.params.riskzoneIds.toString().split('-').join(', ')}` : null}
+                            </label>
+                            <Link
+                                className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
+                                to={'/guidance/guidance-assets/view'} target={'_blank'}
+                            >?</Link>
+                        </h4>
+                        <div id="dataTable1_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div className="row">
+                                <TableBox
+                                    page={0}
+                                    pageSize={this.props.size}
+                                    length={[length]}
+                                    loading={this.state.loading}
+                                    onPage={this.onPageChange.bind(this)}
+                                    filterData={true}
+                                    tableData={this.props.match.url.split('/')[1] === 'risk' ?
+                                        this.state.data.map(f => {
+                                            delete f.replacement_value;
+                                            return f
+                                        }) :
+                                        this.state.data}
+                                    columns={
+                                        this.props.match.url.split('/')[1] === 'risk' ?
+                                            this.state.columns.filter(f => f !== 'replacement_value') :
+                                            this.state.columns
+                                    }
+                                    isPublic={this.props.match.url.split('/')[1] === 'risk'}
+                                />
+                            </div>
                         </div>
-                    </div>
+                    </ElementBox>
                 </Element>
             </div>
         )
@@ -329,11 +342,11 @@ class AssetsListByTypeByHazard extends React.Component{
 const mapStateToProps = (state, ownProps) => {
     return ({
         activeGeoid: state.user.activeGeoid,
-        filter_type : ownProps.filter_type,
-        filter_value : ownProps.filter_value,
+        filter_type: ownProps.filter_type,
+        filter_value: ownProps.filter_value,
         //geoid: ownProps.geoid,
         prop_class: ownProps.prop_class,
-        buildingMeta: get(state.graph,'building.meta',{}),
+        buildingMeta: get(state.graph, 'building.meta', {}),
     })
 };
 
@@ -347,9 +360,9 @@ let authRoutes = [
         exact: true,
         mainNav: false,
         breadcrumbs: [
-            { name: 'Assets', path: '/assets/' },
-            { name: 'type', path: '/assets/list/:type' },
-            { name: 'typeIds',path:'/assets/list/:type/:typeIds'}
+            {name: 'Assets', path: '/assets/'},
+            {name: 'type', path: '/assets/list/:type'},
+            {name: 'typeIds', path: '/assets/list/:type/:typeIds'}
         ],
         menuSettings: {
             image: 'none',
@@ -360,7 +373,7 @@ let authRoutes = [
         },
         name: 'Asset List',
         auth: true,
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
     },
     {
         path: '/assets/list/:type/:typeIds/hazard/:hazardIds',
@@ -369,10 +382,10 @@ let authRoutes = [
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Assets', path: '/assets/' },
-            { name: 'type', path: '/assets/list/:type' },
-            { name: 'typeIds',path:'/assets/list/:type/:typeIds'},
-            { name: 'hazardIds',path:'/assets/list/:type/:typeIds/hazard/:hazardIds'}
+            {name: 'Assets', path: '/assets/'},
+            {name: 'type', path: '/assets/list/:type'},
+            {name: 'typeIds', path: '/assets/list/:type/:typeIds'},
+            {name: 'hazardIds', path: '/assets/list/:type/:typeIds/hazard/:hazardIds'}
         ],
         menuSettings: {
             image: 'none',
@@ -381,7 +394,7 @@ let authRoutes = [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
     },
 
     {
@@ -391,10 +404,10 @@ let authRoutes = [
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Assets', path: '/assets/' },
-            { name: 'type', path: '/assets/list/:type' },
-            { name: 'typeIds',path:'/assets/list/:type/:typeIds'},
-            { name: 'scenarioIds',path:'/assets/list/:type/:typeIds/scenario/:scenarioIds'},
+            {name: 'Assets', path: '/assets/'},
+            {name: 'type', path: '/assets/list/:type'},
+            {name: 'typeIds', path: '/assets/list/:type/:typeIds'},
+            {name: 'scenarioIds', path: '/assets/list/:type/:typeIds/scenario/:scenarioIds'},
         ],
         menuSettings: {
             image: 'none',
@@ -403,7 +416,7 @@ let authRoutes = [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
     },
 
     {
@@ -413,11 +426,11 @@ let authRoutes = [
         auth: true,
         exact: true,
         breadcrumbs: [
-            { name: 'Assets', path: '/assets/' },
-            { name: 'type', path: '/assets/list/:type' },
-            { name: 'typeIds',path:'/assets/list/:type/:typeIds'},
-            { name: 'scenarioIds',path:'/assets/list/:type/:typeIds/scenario/:scenarioIds'},
-            { name: 'riskzoneIds',path:'/assets/list/:type/:typeIds/scenario/:scenarioIds/riskZone/:riskzoneIds'}
+            {name: 'Assets', path: '/assets/'},
+            {name: 'type', path: '/assets/list/:type'},
+            {name: 'typeIds', path: '/assets/list/:type/:typeIds'},
+            {name: 'scenarioIds', path: '/assets/list/:type/:typeIds/scenario/:scenarioIds'},
+            {name: 'riskzoneIds', path: '/assets/list/:type/:typeIds/scenario/:scenarioIds/riskZone/:riskzoneIds'}
         ],
         menuSettings: {
             image: 'none',
@@ -426,7 +439,7 @@ let authRoutes = [
             layout: 'menu-layout-compact',
             style: 'color-style-default'
         },
-        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
     },
 ];
 let publicRoutes = authRoutes.map(r => {
@@ -440,7 +453,7 @@ let publicRoutes = authRoutes.map(r => {
     return newR
 });
 
-authRoutes.push( ...publicRoutes);
+authRoutes.push(...publicRoutes);
 
 let geoRoutes = authRoutes.map(r => {
     let newR = _.cloneDeep(r);
@@ -448,7 +461,7 @@ let geoRoutes = authRoutes.map(r => {
     return newR
 });
 
-authRoutes.push( ... geoRoutes);
-
+authRoutes.push(...geoRoutes);
+export const ListWithoutUrl = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
 export default authRoutes
 

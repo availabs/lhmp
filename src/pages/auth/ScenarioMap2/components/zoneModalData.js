@@ -8,6 +8,7 @@ import styled from "styled-components";
 import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
+import {ListWithoutUrl} from 'pages/auth/Assets/components/AssetsListByTypeByHazard.js'
 var _ = require("lodash")
 var format =  d3.format("~s")
 const fmt = (d) => d < 1000 ? d : format(d)
@@ -23,6 +24,12 @@ const ZoneContainer = styled.div`
   }
 `;
 
+const DIV = styled.div`
+  ${ props => props.theme.scrollbar };
+  max-height: 50vh;
+  overflow: auto;
+`;
+
 
 class ZoneModalData extends React.Component {
 
@@ -34,9 +41,17 @@ class ZoneModalData extends React.Component {
                 domain: BuildingByLandUseConfig.filter((config) => parseInt(config.value) % 100 === 0 ? config : ''),
                 value: []
             },
+            links: [],
+            activeLink: undefined,
+            prevActiveLink: undefined
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleMultiSelectFilterChange = this.handleMultiSelectFilterChange.bind(this)
+        this.renderNav = this.renderNav.bind(this)
+        this.setLink = this.setLink.bind(this)
+        this.renderAll = this.renderAll.bind(this)
+        this.renderData = this.renderData.bind(this)
+        this.renderLink = this.renderLink.bind(this)
     }
     fetchFalcorDeps() {
         return this.props.falcor.get(
@@ -69,27 +84,103 @@ class ZoneModalData extends React.Component {
             </div>
         )
     }
+    setLink(link){
+        this.setState({links: _.uniqBy([...this.state.links, link], 'link'), prevActiveLink: this.state.activeLink, activeLink: link.link})
+    }
+    renderNav(){
+        return (
+            <div className="os-tabs-controls">
+                <ul className="nav nav-tabs upper">
+                    <li className="nav-item">
+                        <a aria-expanded="false"
+                           className={!this.state.activeLink ? "nav-link active" : "nav-link"}
+                           onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: undefined})}
+                           data-toggle="tab"
+                           href="#tab_overview"> All</a>
+                    </li>
+                    {this.state.links.map(link =>
+                        <li className="nav-item">
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <a aria-expanded="false"
+                                   style={{marginRight: 0}}
+                                   className={this.state.activeLink === link.link ? "nav-link active" : "nav-link"}
+                                   onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: link.link})}
+                                   href="#"> {`${link.header} x ${link.row0}`}</a>
+                                <div
+                                    style={{padding: '0.5vw'}}
+                                    className="nav-item"
+                                    onClick={() => {
+                                        this.setState({
+                                            links: this.state.links.filter(f => f.link !== link.link),
+                                            prevActiveLink: undefined,
+                                            activeLink: this.state.prevActiveLink
+                                        })
+                                    }}> x </div>
+                            </div>
+                        </li>
+                    )}
+                </ul>
+            </div>
+        )
+    }
 
+    renderAll(){
+        return (
+            <React.Fragment>
+                {this.renderLandUseMenu()}
+                <h4>Buildings By Land Use</h4>
+                {
+                    <AssetsFilteredTable
+                        geoid={[this.props.geoid]}
+                        zone_id ={[this.props.zone_id]}
+                        groupBy={'propType'}
+                        groupByFilter={this.state.filter.value}
+                        scenarioId={this.props.scenario_id.map(d => d.id)}
+                        riskZoneId = {[this.props.risk_zone_id]}
+                        height={'fit-content'}
+                        width={'100%'}
+                        tableClass={`table table-sm table-lightborder table-hover`}
+                        linkOnClick={this.setLink.bind(this)}
+                    />
+
+                }
+            </React.Fragment>
+        )
+    }
+
+    getParam(link, param){
+        return link.indexOf(param) > -1 ? link[link.indexOf(param) + 1] : undefined
+    }
+
+    renderLink(){
+        let link = this.state.activeLink.split('/')
+        return <ListWithoutUrl
+            size={5}
+            match={
+                {
+                    url: this.state.activeLink,
+                    params: {
+                        type: this.getParam(link, 'list'),
+                        typeIds: this.getParam(link, this.getParam(link, 'list')),
+                        hazardIds: this.getParam(link, 'hazard'),
+                        scenarioIds: this.getParam(link, 'scenario'),
+                        riskzoneIds: this.getParam(link, 'riskZone'),
+                        geoid: this.getParam(link, 'geoid'),
+                    }
+                }
+            }
+        />
+    }
+
+    renderData(){
+        return <DIV>{this.state.activeLink ? this.renderLink() : this.renderAll()}</DIV>
+    }
     render() {
         return (
             <div className='element-wrapper'>
                 <div className='element-box'>
-                    {this.renderLandUseMenu()}
-                    <h4>Buildings By Land Use</h4>
-                    {
-                        <AssetsFilteredTable
-                            geoid={[this.props.geoid]}
-                            zone_id ={[this.props.zone_id]}
-                            groupBy={'propType'}
-                            groupByFilter={this.state.filter.value}
-                            scenarioId={this.props.scenario_id.map(d => d.id)}
-                            riskZoneId = {[this.props.risk_zone_id]}
-                            height={'fit-content'}
-                            width={'100%'}
-                            tableClass={`table table-sm table-lightborder table-hover`}
-                        />
-
-                    }
+                    {this.renderNav()}
+                    {this.renderData()}
                 </div>
             </div>
         )

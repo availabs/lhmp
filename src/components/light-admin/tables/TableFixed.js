@@ -100,14 +100,32 @@ fuzzyTextFilterFn.autoRemove = val => !val;
 function renderCell(cell) {
     return (
         cell.column.link ?
-            <Link
-                to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                {
-                    cell.column.formatValue ?
-                        cell.column.formatValue(cell.value) :
-                        cell.render('Cell')
-                }
-            </Link> :
+            cell.column.linkOnClick ?
+                <div
+                    className={'a'}
+                    style={{cursor: 'pointer'}}
+                    onClick={() => cell.column.linkOnClick(
+                        {
+                            link: typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link),
+                            header: cell.column.Header,
+                            row0: cell.row.allCells[0].value
+                        }
+                    )
+                    }>
+                    {
+                        cell.column.formatValue ?
+                            cell.column.formatValue(cell.value) :
+                            cell.render('Cell')
+                    }
+                </div> :
+                <Link
+                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                    {
+                        cell.column.formatValue ?
+                            cell.column.formatValue(cell.value) :
+                            cell.render('Cell')
+                    }
+                </Link> :
             cell.column.formatValue ?
                 cell.column.formatValue(cell.value) :
                 cell.render('Cell')
