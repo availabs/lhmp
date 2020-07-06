@@ -94,11 +94,15 @@ class AvlFormsViewDataZones extends React.Component {
                             displayType = get(config[0][d], `display_type`, null),
                             formType = get(config[0][d], `form_type`, null),
                             parentConfig = get(config[0][d], `parentConfig`, null);
+                        let value = get(graph, `[${item}].attributes[${d}]`, null)
+                        value = value ? value.toString() : value;
+                        value = value && value.includes('[') ?
+                            value.replace('[', '').replace(']', '') : value;
 
-                        if (graph[item].attributes[d] === county || graph[item].attributes[d] === cousub) {
+                        if (value === county || value === cousub) {
                             data.push({
                                 attribute: d,
-                                value: geoData[graph[item].attributes[d]] ? geoData[graph[item].attributes[d]].name : 'None',
+                                value: geoData[value] ? geoData[value].name : 'None',
                                 section,
                                 label,
                                 displayType,
@@ -110,7 +114,7 @@ class AvlFormsViewDataZones extends React.Component {
 
                                 data.push({
                                     attribute: d,
-                                    value: graph[item].attributes[d] ? graph[item].attributes[d].toString() || 'None' : '',
+                                    value: value ? value.toString() || 'None' : '',
                                     section,
                                     label,
                                     displayType,
