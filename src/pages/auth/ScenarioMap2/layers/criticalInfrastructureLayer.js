@@ -81,25 +81,29 @@ export class CriticalInfrastructureLayer extends MapLayer{
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
-                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']] //, ["id",  "owner_type", "critical", "flood_zone"]
+                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter']
         ).then(d => {
             let allIds = [],
-                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {});
-
+                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {}),
+                shelterData = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.shelter`, [])
+                    .map(shelters => shelters.building_id);
             ['3', '4', '5', '6', '7'].map(owner => {
                 allIds.push(...get(data, `${owner}.critical.true`), ...get(data, `${owner}.critical.false`))
             });
             allIds = allIds.map(f => f.id);
+            allIds.push(...shelterData);
             if (allIds.length === 0) return Promise.resolve();
             return falcorGraph.get(
                 ['building', 'geom', 'byBuildingId', allIds, 'centroid']
-            ).then(d => console.log('centroid res', d))
+            )//.then(d => console.log('centroid res', d))
         })
     }
 
     receiveData(map, data) {
         let rawGraph = falcorGraph.getCache(),
             graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
+            shelterGraph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.shelter.value`, []),
             centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
             critical = [],
             buildingColors = {};
@@ -107,7 +111,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
             "type": "FeatureCollection",
             "features": []
         };
-        if (!graph) return Promise.resolve();
+        if (!graph || !shelterGraph) return Promise.resolve();
         Object.keys(graph)
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
@@ -116,14 +120,24 @@ export class CriticalInfrastructureLayer extends MapLayer{
                     .map(f => f.id)
                     .forEach(buildingId => {
                         critical.push(buildingId);
-                        buildingColors[buildingId] = '#FFC300';
+                        buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
                             "type": "Feature",
-                            "properties":{id:buildingId, color:'#FFC300'},
+                            "properties":{id:buildingId, color:'#fbff00'},
                             "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
                         })
                     });
 
+            });
+
+        shelterGraph
+            .forEach(shelter => {
+                buildingColors[shelter.building_id] = '#ffffff';
+                geojson.features.push({
+                    "type": "Feature",
+                    "properties":{id:shelter.building_id, color:'#ffffff'},
+                    "geometry": {...get(centroidGraph, `${shelter.building_id}.centroid.value`, null)}
+                })
             });
 
         if(map.getSource('buildingsCritical')) {
@@ -140,7 +154,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
                 'type': 'circle',
                 'paint': {
                     'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
-                    'circle-opacity': 1,
+                    'circle-opacity': 0.8,
                     'circle-radius': 10,
                 }
             })
@@ -208,10 +222,9 @@ export class CriticalInfrastructureLayer extends MapLayer{
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',"none");
         })
-        if(this.map.getSource('buildingsCritical') && this.map.getLayer('buildingsCritical-layer')) {
+        if(this.map.getSource('buildingsCritical')) {
             this.map.removeLayer('buildingsCritical-layer');
             this.map.removeSource('buildingsCritical');
-
         }
     }
 }
@@ -291,4 +304,4 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
             }
         }
 
-}}
+    }}
