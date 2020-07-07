@@ -1,9 +1,11 @@
 import React from 'react'
 import SearchableDropDown from "../../filters/searchableDropDown";
+import MultiSelectComponent from "./multiSelectComponent";
 import get from "lodash.get";
 import {sendSystemMessage} from "../../../store/modules/messages";
 import {connect} from "react-redux";
 import {reduxFalcor} from "../../../utils/redux-falcor";
+import MultiSelectFilter from "../../filters/multi-select-filter";
 
 class TextComponent extends React.PureComponent{
     constructor(props){
@@ -19,6 +21,8 @@ class TextComponent extends React.PureComponent{
         this.zoneDropDown = this.zoneDropDown.bind(this)
         this.renderEdit = this.renderEdit.bind(this)
         this.renderView = this.renderView.bind(this)
+        this.renderDropdown = this.renderDropdown.bind(this)
+        this.renderElement = this.renderElement.bind(this)
     }
     fetchFalcorDeps(){
         let ids = [];
@@ -77,8 +81,8 @@ class TextComponent extends React.PureComponent{
                     })
         )
     }
+
     zoneDropDown(filterId){
-        console.log('filterid?', filterId, this.props)
         let zones_list  = []
         let graph = this.state.data
         if(graph && Object.keys(graph).length >0){
@@ -105,7 +109,7 @@ class TextComponent extends React.PureComponent{
         return zones_list
     }
 
-    renderElement() {
+    renderDropdown() {
         let zones_list = this.zoneDropDown();
 
         return (
@@ -121,6 +125,26 @@ class TextComponent extends React.PureComponent{
             />
         )
     }
+
+    renderElement() {
+        let zones_list = this.zoneDropDown().map(f => ({value: f.value, name: f.label}));
+        return (
+            <MultiSelectFilter
+                filter={{
+                    domain: zones_list || [],
+                    value: this.props.state[this.props.title] ? this.props.state[this.props.title] : []
+                }}
+                setFilter={(e) => {
+                    this.props.handleChange(e, this.props.title, zones_list);
+                    if (this.props.onClick) {
+                        this.props.onClick({target: {value: e}})
+                    }
+                }}
+                placeHolder={this.props.placeholder}
+            />
+        )
+    }
+
     renderEdit(){
         if(this.props.display_condition !== '' && this.props.display_condition){
             return (
@@ -149,9 +173,11 @@ class TextComponent extends React.PureComponent{
         }
 
     }
+
     renderView(){
         return this.props.id && this.props.id !== 'None' ? this.zoneDropDown(this.props.id).map(d => d.label).join() : 'None'
     }
+
     render() {
         return this.props.editView ? this.renderEdit() : this.renderView()
     }

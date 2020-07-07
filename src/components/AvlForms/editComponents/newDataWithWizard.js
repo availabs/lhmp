@@ -125,26 +125,31 @@ class AvlFormsNewDataWizard extends React.Component{
     afterSubmitEdit(newId, attributes){
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                return this.props.falcor.set({
-                    paths: [
-                        ['forms', 'byId',this.state[c],'attributes',this.props.config[0].attributes[c].parentConfig]
-                    ],
-                    jsonGraph: {
-                        forms:{
-                            byId:{
-                                [this.state[c]] : {
-                                    attributes : {[this.props.config[0].attributes[c].parentConfig]: newId}
+                return this.state[c].reduce((a1,c1) => {
+                    return a1.then(resA1 => {
+                        return this.props.falcor.set({
+                            paths: [
+                                ['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig]
+                            ],
+                            jsonGraph: {
+                                forms:{
+                                    byId:{
+                                        [c1] : {
+                                            attributes : {[this.props.config[0].attributes[c].parentConfig]: newId}
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                })
+                        })
+                    })
+                }, Promise.resolve())
             })
         }, Promise.resolve())
             .then(response => {
                 // this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"});
             })
     }
+
     onSubmit(e){
         e.preventDefault();
         let editAfterSubmitAttributes =
@@ -185,7 +190,6 @@ class AvlFormsNewDataWizard extends React.Component{
                 }
             })
                 .then(response => {
-                    console.log('edit res', response)
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
@@ -280,7 +284,7 @@ class AvlFormsNewDataWizard extends React.Component{
         return [countyData,cousubsData]
     }
     handleMultiSelectFilterChange(e, id, domain=[]) {
-
+        if (!e) return;
         let tmpObj = {};
         if (e.includes('Select All') && domain.length > 0){
             tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
@@ -563,7 +567,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             section_id: item.attributes[attribute].section,
                             label: item.attributes[attribute].label,
                             formType : this.props.config.map(d => d.type),
-                            handleChange : this.handleChange,
+                            handleChange : this.handleMultiSelectFilterChange.bind(this),
                             state : this.state,
                             title : attribute,
                             placeholder: item.attributes[attribute].placeholder,

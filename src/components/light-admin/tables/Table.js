@@ -12,8 +12,6 @@ import {
 import matchSorter from "match-sorter";
 import {Link} from "react-router-dom";
 import MultiSelectFilter from "../../filters/multi-select-filter";
-import get from 'lodash.get'
-import _ from "lodash";
 import {CSVLink} from "react-csv";
 import megaAvlFormsConfig from "../../../pages/auth/megaAvlFormsConfig";
 
@@ -140,7 +138,7 @@ const _MultiSelectFilter = styled.div`
 		width: 100%;
 	}
 `
-const actionBtnStyle = {width:'80px'}
+const actionBtnStyle = {width: '80px'}
 const headerProps = (props, {column}) => getStyles(props, column.align);
 
 const cellProps = (props, {cell}) => getStyles(props, cell.column.align);
@@ -182,8 +180,8 @@ function DefaultColumnFilter({
 // a unique option from a list
 
 function MultiSelectColumnFilter({
-                                column: { filterValue, setFilter, preFilteredRows, id },
-                            }) {
+                                     column: {filterValue, setFilter, preFilteredRows, id},
+                                 }) {
     // Calculate the options for filtering
     // using the preFilteredRows
     const options = React.useMemo(() => {
@@ -211,28 +209,49 @@ function MultiSelectColumnFilter({
         </_MultiSelectFilter>
     )
 }
+
 function fuzzyTextFilterFn(rows, id, filterValue) {
     return matchSorter(rows, filterValue, {keys: [row => row.values[id]]})
 }
 
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val;
+
 function renderCell(cell) {
     return (
         cell.column.link ?
-            <Link
-                to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
-                {
-                    cell.column.formatValue ?
-                        cell.column.formatValue(cell.value) :
-                        cell.render('Cell')
-                }
-            </Link> :
+            cell.column.linkOnClick ?
+                <div
+                    className={'a'}
+                    style={{cursor: 'pointer'}}
+                    onClick={() => cell.column.linkOnClick(
+                        {
+                            link: typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link),
+                            header: cell.column.Header,
+                            row0: cell.row.allCells[0].value
+                        }
+                    )
+                    }>
+                    {
+                        cell.column.formatValue ?
+                            cell.column.formatValue(cell.value) :
+                            cell.render('Cell')
+                    }
+                </div> :
+                <Link
+                    to={typeof cell.column.link === 'boolean' ? cell.row.original.link : cell.column.link(cell.row.original.link)}>
+                    {
+                        cell.column.formatValue ?
+                            cell.column.formatValue(cell.value) :
+                            cell.render('Cell')
+                    }
+                </Link> :
             cell.column.formatValue ?
                 cell.column.formatValue(cell.value) :
                 cell.render('Cell')
     )
 }
+
 function Table({columns, data, tableClass, height, width, actions, csvDownload}) {
     /*  const defaultColumn = React.useMemo(
         () => ({
@@ -303,14 +322,14 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
     );
     if (!rows) return null;
     let downloadData;
-    if (csvDownload.length){
+    if (csvDownload.length) {
         downloadData = [...rows.map(r => r.original)]
         downloadData = downloadData.map(row => {
             let tmpRow = {}
             Object.keys(row)
                 .filter(f => !['edit', 'view', 'delete'].includes(f))
                 .forEach(key => {
-                    if (csvDownload.includes(key)){
+                    if (csvDownload.includes(key)) {
                         tmpRow[
                             megaAvlFormsConfig[key].label && megaAvlFormsConfig[key].label.length ?
                                 megaAvlFormsConfig[key].label : key
@@ -336,41 +355,41 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                         {headerGroup.headers
                             .filter(cell => cell.expandable !== 'true')
                             .map(column => (
-                            <div {...column.getHeaderProps()} className="th">
-                                {column.sort ?
-                                    (
-                                        <div {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                            {column.render('Header')}
-                                            {/* Add a sort direction indicator */}
-                                            <span>
+                                <div {...column.getHeaderProps()} className="th">
+                                    {column.sort ?
+                                        (
+                                            <div {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                {column.render('Header')}
+                                                {/* Add a sort direction indicator */}
+                                                <span>
                                                     {column.isSorted
                                                         ? column.isSortedDesc
                                                             ? <i className="os-icon os-icon-arrow-up6"></i>
                                                             : <i className="os-icon os-icon-arrow-down6"></i>
                                                         : ''}
                                                 </span>
-                                        </div>
-                                    ) : column.render('Header')}
+                                            </div>
+                                        ) : column.render('Header')}
 
-                                {/* Render the columns filter UI */}
-                                <div {...column.getHeaderProps()}>{
-                                    column.canFilter && column.filter ?
-                                        column.filter === 'multi' ?
-                                            column.render(MultiSelectColumnFilter) : column.render('Filter') : null
-                                }</div>
+                                    {/* Render the columns filter UI */}
+                                    <div {...column.getHeaderProps()}>{
+                                        column.canFilter && column.filter ?
+                                            column.filter === 'multi' ?
+                                                column.render(MultiSelectColumnFilter) : column.render('Filter') : null
+                                    }</div>
 
-                                {/* Use column.getResizerProps to hook up the events correctly */}
-                                {column.canResize && (
-                                    <div
-                                        {...column.getResizerProps()}
-                                        className={`resizer ${
-                                            column.isResizing ? 'isResizing' : ''
-                                        }`}
-                                    />
-                                )}
+                                    {/* Use column.getResizerProps to hook up the events correctly */}
+                                    {column.canResize && (
+                                        <div
+                                            {...column.getResizerProps()}
+                                            className={`resizer ${
+                                                column.isResizing ? 'isResizing' : ''
+                                            }`}
+                                        />
+                                    )}
 
-                            </div>
-                        ))}
+                                </div>
+                            ))}
 
                         {csvDownload.length ?
                             <div
@@ -385,13 +404,14 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                                         })
                                     }
                                 )}
-                                 className='th'>
+                                className='th'>
                                 <CSVLink className='btn btn-secondary btn-sm'
-                                         style={{height:'fit-content'}}
+                                         style={{height: 'fit-content'}}
                                          data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>
                             </div> :
                             actions ? Object.keys(actions)
-                                .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle} className="th"></div>) : null
+                                .map(action => <div {...headerGroup.headers[0].getHeaderProps()} style={actionBtnStyle}
+                                                    className="th"></div>) : null
                         }
                     </div>
                 ))}
@@ -405,32 +425,33 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                     return (
                         <React.Fragment>
                             <div {...row.getRowProps()}
-                                className={row.cells
-                                    .filter(cell => cell.column.expandable === 'true').length ? "tr expandable" : "tr"}
-                                onClick={(e) => {
-                                    if (document.getElementById(`expandable${i}`)){
-                                        document.getElementById(`expandable${i}`).style.display =
-                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'flex' : 'none'
-                                    }
-                                }}
+                                 className={row.cells
+                                     .filter(cell => cell.column.expandable === 'true').length ? "tr expandable" : "tr"}
+                                 onClick={(e) => {
+                                     if (document.getElementById(`expandable${i}`)) {
+                                         document.getElementById(`expandable${i}`).style.display =
+                                             document.getElementById(`expandable${i}`).style.display === 'none' ? 'flex' : 'none'
+                                     }
+                                 }}
                             >
                                 {row.cells
                                     .filter(cell => cell.column.expandable !== 'true')
                                     .map(cell => {
-                                        if (cell.column.Header.includes('.')){
+                                        if (cell.column.Header.includes('.')) {
                                             cell.value = cell.row.original[cell.column.Header]
                                         }
-                                    return (
-                                        <div {...cell.getCellProps(cellProps)} className="td">
-                                            {renderCell(cell)}
-                                        </div>
-                                    )
-                                })}
+                                        return (
+                                            <div {...cell.getCellProps(cellProps)} className="td">
+                                                {renderCell(cell)}
+                                            </div>
+                                        )
+                                    })}
                                 {actions ?
                                     Object.keys(actions)
                                         .map(action => {
                                                 return (
-                                                    <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle} className="td">
+                                                    <div {...row.cells[0].getCellProps(cellProps)} style={actionBtnStyle}
+                                                         className="td">
                                                         {
                                                             typeof row.original[action] === 'string' ?
                                                                 <Link
@@ -451,16 +472,18 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                             </div>
 
                             <tr className="tr"
-                                 id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
-                                     display: 'none', flex: '0 1 auto', width:'100%', minWidth:'100%'}}>
+                                id={`expandable${i}`} style={{
+                                backgroundColor: 'rgba(0,0,0,0.06)',
+                                display: 'none', flex: '0 1 auto', width: '100%', minWidth: '100%'
+                            }}>
                                 {row.cells
                                     .filter(cell => cell.column.expandable === 'true')
                                     .map(cell => {
                                         return (
                                             <td
-                                                 className="td"
-                                                 {...cell.getCellProps(cellProps)}
-                                                 colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
+                                                className="td"
+                                                {...cell.getCellProps(cellProps)}
+                                                colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
                                                 {renderCell(cell)}
                                             </td>
                                         )
@@ -479,7 +502,8 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
 function StyledTable({columns: columns, data: data, height, width, actions, csvDownload = []}) {
     return (
         <Styles>
-            <Table columns={columns} data={data} height={height} width={width} actions={actions} csvDownload={csvDownload}/>
+            <Table columns={columns} data={data} height={height} width={width} actions={actions}
+                   csvDownload={csvDownload}/>
         </Styles>
     )
 }
