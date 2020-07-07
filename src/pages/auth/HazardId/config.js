@@ -37,14 +37,14 @@ module.exports = [
             },
             hazard_concern: {
                 label:'Hazard of Concern',
-                prompt:'Identify the hazards of concern for your jurisdiction.',
+                prompt:'Select a hazard of concern.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
             },
-            previous_occurrence:{
-                label:'Previous Hazard Occurrence',
-                prompt:'Prevoious occurences are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low, 4-7 is Medium, and 8-10 is High. Please indicate using H/M/L the level at which this hazard has previously occurred. ',
+            concern_level:{
+                label:'What is your level of concern about this hazard',
+                prompt:'In your view what is your jurisdictional concern regarding this hazard. Please rate concern for this hazard on a scale of High, Medium, Low. ',
                 sub_type:'',
                 edit_type:'dropdown_no_meta',
                 edit_type_values: ['High','Medium','Low'],
@@ -52,7 +52,7 @@ module.exports = [
                 meta: 'false',
             },
             future_occurrence:{
-                label:'Likelihood of Future Occurrence',
+                label:'Do you feel that this hazard is likely to occur again in the next 5-10 years?',
                 prompt:'Likelihood of future orrurences are measured as High, Medium, Low on a sacle of 1 to 10. 1-3 is Low, 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the likeliness of this hazard happening in the future.',
                 sub_type:'',
                 edit_type:'dropdown_no_meta',
@@ -60,25 +60,16 @@ module.exports = [
                 display_type:'text',
                 meta: 'false',
             },
-            loss_life_property:{
-                label:'Loss of Life and Property',
-                prompt:'Loss of Life and Property are measured as High, Medium, Low on a scale of 1 to 10. 1-3 is Low 4-7 is Medium and 8-10 is High. Please indicate using H/M/L the level of loss your jurisdiction has experienced as a result of a hazard event.',
-                sub_type:'',
-                edit_type:'dropdown_no_meta',
-                edit_type_values:['High','Medium','Low'],
-                display_type:'text',
-                meta: 'false',
-            },
             extent_description:{
-                label:'General Area of Hazard.',
-                prompt:'Please describe the general scale of this hazard.',
+                label:'Magnitude/Extent Description',
+                prompt:'Extent is the strength or magnitude of the hazard. Extent can be described in a combination of ways depending on the hazard, such as:• The value on an established scientific scale or measurement system, such as EF2 on the Enhanced Fujita Scale for tornadoes or 5.5 on the Richter Scale for earthquakes. • Other measures of magnitude, such as water depth or wind speed.• The speed of onset. For example, hurricanes have longer warning times, giving people and governments more time to prepare and evacuate, while earthquakes occur without warning. • The duration of hazard events. For most hazards, the longer the duration of an event, the greater the extent. Flooding that peaks and retreats in a matter of hours is typically less damaging than flooding of the same depth that remains in place for days.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
             },
             location_description:{
-                label:'Local Description',
-                prompt:'Please describe specifically where this hazard occurs.',
+                label:'Location Description',
+                prompt:'Location is the geographic areas within the planning area that are affected by the hazard, such as a floodplain. Hazard areas may be further defined, such as high wildfire hazard areas versus low wildfire hazard areas. The entire planning area may be uniformly affected by some hazards, such as drought or winter storm. Although maps are usually the best way to illustrate location for many hazards, location may be described in other formats, such as a narrative.',
                 sub_type:'',
                 edit_type:'text', // the values you would like to see as options for radio buttons
                 disable_condition:'',
@@ -89,15 +80,8 @@ module.exports = [
                 section:''
             },
             affected_climate_change:{
-                label:'Does Climate Change affect this Hazard?',
-                prompt:'Please indicate whether Climate Change has affected the duration, intensity, and occurrence of this hazard.',
-                sub_type:'',
-                edit_type:'text',
-                display_type:'text',
-            },
-            impact_climate_change:{
-                label:'How will Climate Change affect this Hazard?',
-                prompt:'Please describe how Climate Change will impact this hazard event.',
+                label:'Does Climate Change affect this Hazard? How?',
+                prompt:'Please indicate whether and how Climate Change affects the duration, intensity, and occurrence of this hazard.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
@@ -110,8 +94,8 @@ module.exports = [
                 display_type:'text',
             },
             case_study:{
-                label:'Case Study',
-                prompt:'Please provide a description or Case Study of a specific hazard event and the effects it had on your community.',
+                label:'Example Event or Case Study',
+                prompt:'Please provide a description of a specific hazard event and the effects it had on your community. Provide URLs to news media and/or vides if possible.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',

@@ -193,7 +193,14 @@ class TextComponent extends React.PureComponent {
                                                                     data[d].displayType === 'imageViewer' ?
                                                                         <ImageViewer image={data[d].value} {...data[d]}/> :
                                                                         data[d].displayType === 'AvlFormsJoin' ?
-                                                                        <AvlFormsJoin id={data[d].value} {...data[d]}/> :
+                                                                            get(data, `[${d}].value`, '').split(',')
+                                                                                .map((value,i) =>
+                                                                                    <AvlFormsJoin
+                                                                                        id={value}
+                                                                                        key={i}
+                                                                                        {...data[d]}
+                                                                                    />
+                                                                                ) :
                                                                         (data[d].value || 'None')
                                                                 }
                                                             </td>

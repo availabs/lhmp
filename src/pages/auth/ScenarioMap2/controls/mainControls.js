@@ -17,6 +17,7 @@ import styled from "styled-components";
 import {falcorGraph} from "../../../../store/falcorGraph";
 import store from "../../../../store";
 import HazardEventsControl from "./hazardEventsControls";
+import CriticalInfrastructureControls from './criticalInfrastructureControls'
 
 var _ = require('lodash');
 const AllModes =[
@@ -28,7 +29,8 @@ const AllModes =[
     {value:'culverts',label:'Culverts'},
     {value:'evacuationRoutes',label:'Evacuation Routes'},
     {value:'vulnerableDemographics',label:'Vulnerable Demographics'},
-    {value:'hazardEvents',label:'Hazard Events'}
+    {value:'hazardEvents',label:'Hazard Events'},
+    {value:'criticalInfrastructure',label:'Critical Infrastructure'}
     ];
 const AllBlocks = [
     {id:'scenario_block',title:'Risk Scenarios'},
@@ -39,7 +41,8 @@ const AllBlocks = [
     {id:'culverts_block',title:'Culverts'},
     {id:'evacuationRoutes_block',title:'Evacuation Routes'},
     {id:'vulnerableDemographics_block',title:'Vulnerable Demographics'},
-    {id:'hazardEvents_block',title:'Hazard Events'}
+    {id:'hazardEvents_block',title:'Hazard Events'},
+    {id:'criticalInfrastructure_block',title:'Critical Infrastructure'}
     ]
 
 const DROPDOWN = styled.div`
@@ -58,7 +61,7 @@ class MainControls extends React.Component {
             activeMode: ['scenario','jurisdiction'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents'],
+            showLayers : ['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents', 'criticalInfrastructure'],
             selected : true
         }
 
@@ -81,7 +84,7 @@ class MainControls extends React.Component {
 
         }
         //landuse is active only when needed and zoomes in
-        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents'])){
+        if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents', 'criticalInfrastructure'])){
             //console.log('in second if')
             this.props.layer.mainLayerToggleVisibilityOff(["landUse"])
             this.props.layer.mainLayerToggleVisibilityOff(["commentMap"])
@@ -90,6 +93,7 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOff(["evacuationRoutes"])
             this.props.layer.mainLayerToggleVisibilityOff(['vulnerableDemographics'])
             this.props.layer.mainLayerToggleVisibilityOff(['hazardEvents'])
+            this.props.layer.mainLayerToggleVisibilityOff(['criticalInfrastructure'])
         }
         // if a layer is removed by X
         if((this.state.modeOff !== oldState.modeOff || this.state.modeOff !== "")  && this.state.showLayers.includes(this.state.modeOff)){
@@ -429,6 +433,36 @@ class MainControls extends React.Component {
                                 </button>
                                 <br/>
                                 <HazardEventsControl
+                                    layer = {this.props}
+                                />
+                            </div>
+                        )
+                    }
+
+                    if(this.state.activeMode.includes(block.id.split('_')[0]) && block.id.split('_')[0] === 'criticalInfrastructure'){
+                        return (
+                            <div id={`closeMe`+block.id} key ={i}>
+                                <h4 style ={{display: 'inline'}}>{block.title}</h4>
+                                <button
+                                    aria-label="Close"
+                                    className="close"
+                                    data-dismiss="alert"
+                                    type="button"
+                                    onClick={(e) =>{
+                                        e.target.closest(`#closeMe`+block.id).style.display = 'none'
+                                        this.setState(currentState =>(
+                                            {
+                                                showLayers: [block.id.split('_')[0],...this.state.showLayers],
+                                                modeOff : block.id.split('_')[0]
+                                            }
+                                        ))
+                                        this.props.layer.evacuationRoutesLayer.showInfoBox(false)
+                                    }}
+                                >
+                                    <span aria-hidden="true"> ×</span>
+                                </button>
+                                <br/>
+                                <CriticalInfrastructureControls
                                     layer = {this.props}
                                 />
                             </div>

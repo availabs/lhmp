@@ -94,6 +94,13 @@ class AssetsFilteredTable extends Component {
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
         if(graph && Object.keys(graph).length) {
+            graph = Object.keys(graph)
+                .reduce((a,c) => {
+                    if (!c.toString().includes('-')) { //removing any data fetched from assetsList file
+                        a[c] = graph[c]
+                    }
+                    return a
+                }, {})
             Object.keys(graph)
                 .filter(item => {
                     if (this.props.groupBy === 'propType' || this.props.groupBy === 'critical'){
@@ -382,14 +389,16 @@ class AssetsFilteredTable extends Component {
                     Header: 'TOTAL # BUILDING TYPE',
                     accessor: 'TOTAL # BUILDING TYPE',
                     sort: true,
-                    link: (d) => d + linkTrail // functional
+                    link: (d) => d + linkTrail, // functional
+                    linkOnClick: this.props.linkOnClick
                 },
                 this.props.public ? null : {
                     Header: 'TOTAL $ REPLACEMENT VALUE',
                     accessor: 'TOTAL $ REPLACEMENT VALUE',
                     sort: true,
                     formatValue: fnum,
-                    link: (d) => d + linkTrail // takes what is in data
+                    link: (d) => d + linkTrail, // takes what is in data
+                    linkOnClick: this.props.linkOnClick
                 },
                 ...riskZoneColNames
                     .map((name) => {
@@ -404,6 +413,7 @@ class AssetsFilteredTable extends Component {
                              a['formatValue'] = fnum
                         }
                         a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}` + linkTrail;
+                        a['linkOnClick'] = this.props.linkOnClick;
                         return a
                     }),
             ].filter(f => f)}

@@ -13,6 +13,7 @@ import {CommentMapLayer,CommentMapOptions} from "./commentMapLayer";
 import {CulvertsLayer,CulvertsOptions} from "./culvertsLayer";
 import {JurisdictionLayer,JurisdictionOptions} from "./jurisdictionLayer";
 import {HazardEventsLayer,HazardEventsOptions} from "./hazardEventsLayer";
+import {CriticalInfrastructureLayer,CriticalInfrastructureOptions} from "./criticalInfrastructureLayer";
 import {EvacuationRoutesLayer,EvacuationRoutesOptions} from "./evacuationLayer";
 import {VulnerableDemographicsLayer,VulnerableDemographicsOptions} from "./vulnerableDemographicsLayer";
 import { getColorRange } from "constants/color-ranges";
@@ -25,7 +26,7 @@ const COLORS = getColorRange(12, "Set3");
 
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${ ++UNIQUE }`
-let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer,vulnerableDemographicsLayer, hazardEventsLayer = {}
+let culvertsLayer,landUseLayer,commentMapLayer,evacuationRoutesLayer,vulnerableDemographicsLayer, hazardEventsLayer, criticalInfrastructureLayer= {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -64,6 +65,10 @@ const DynamicVulnerableDemographicsLayerFactory = (callingLayer,...args) =>{
 
 const DynamicHazardEventsLayerFactory = (callingLayer,...args) =>{
     return new HazardEventsLayer('hazardEvents',HazardEventsOptions())
+}
+
+const DynamicCriticalInfrastructureLayerFactory = (callingLayer,...args) =>{
+    return new CriticalInfrastructureLayer('criticalInfrastructure',CriticalInfrastructureOptions())
 }
 
 
@@ -295,6 +300,13 @@ export class ControlLayers extends MapLayer {
                                         ]).then(hel =>{
                                                 hazardEventsLayer = hel
                                                 this.hazardEventsLayer = hel
+                                                this.doAction([
+                                                    "addDynamicLayer",
+                                                    DynamicCriticalInfrastructureLayerFactory
+                                                ]).then(hel =>{
+                                                    criticalInfrastructureLayer = hel
+                                                    this.criticalInfrastructureLayer = hel
+                                                })
                                             })
                                     })
                                 })
@@ -345,6 +357,11 @@ export class ControlLayers extends MapLayer {
                 hazardEventsLayer.toggleVisibilityOn()
             }
         }
+        if(layerName.includes("criticalInfrastructure")){
+            if(Object.keys(criticalInfrastructureLayer).length > 0){
+                criticalInfrastructureLayer.toggleVisibilityOn()
+            }
+        }
         if(layerName.includes("jurisdiction")){
             this.jurisdictonLayer.toggleVisibilityOn()
         }
@@ -387,6 +404,11 @@ export class ControlLayers extends MapLayer {
         if(layerName.includes("hazardEvents")){
             if(Object.keys(hazardEventsLayer).length > 0){
                 hazardEventsLayer.toggleVisibilityOff()
+            }
+        }
+        if(layerName.includes("criticalInfrastructure")){
+            if(Object.keys(criticalInfrastructureLayer).length > 0){
+                criticalInfrastructureLayer.toggleVisibilityOff()
             }
         }
         if(layerName.includes('jurisdiction')){

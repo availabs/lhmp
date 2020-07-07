@@ -154,30 +154,11 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
-                section:''
-            },
-            capacity:{
-                label:'Capacity: What is the jurisdictional capacity for implementing this Capability?',
-                prompt:'Select the current the jurisdictional capacity based on High, Medium, and Low',
-                edit_type:'dropdown_no_meta',
-                edit_type_values : ['High','Medium','Low',],
-// disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
-                display_condition : '',
-                display_type:'text',
-                meta:'false',
-                section:''
-            },
-            capacity_score:{
-                label:'Estimate a score associated with the jurisdictional capacity for this Capability, 1-3 is low, 4-7 is medium, and 8-10 is high',
-                prompt: 'Estimate a score associated with the jurisdictional capacity for this capability, 1-3 is low, 4-7 is medium, and 8-10 is high',
-                edit_type:'number',
-                display_type:'text',
-                meta:'false',
-                section:''
+                section:'',
             },   
             capacity_explanation:{
-                label:'Explain how you determined your capacity rating.',
-                prompt: 'For Planning and Regulatory consider if the plan, policy, code, or ordinance is robust enough to support effective mitigation. For Administrative and Technical consider if the staffing and tools are sufficient for implementing the mitigation plan. For Financial consider if the funding mechanism is effective for implementation of hazard mitigation planning. For Education/Outreach consider if programs and methods communicate effectively and are implemented as designed for mitigation planning purposes.',
+                label:'Capacity: What is the jurisdictional capacity for implementing this Capability?',
+                prompt: 'For planning and Regulatory consider if the plan, policy, code, or ordinance is robust enough to support effective mitigation. For Administrative and Technical consider if the staffing and tools are sufficient for implementing the mitigation plan. For Financial consider if the funding mechanism is effective for implementation of hazard mitigation planning. For Education/Outreach consider if the programs and methods communicate effectively and are implemented as designed for mitigation planning purposes.',
                 edit_type:'text',
                 display_type:'text',
                 meta:'false',

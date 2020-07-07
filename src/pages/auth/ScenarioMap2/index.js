@@ -23,6 +23,7 @@ class Home extends React.Component {
                     sidebar={false}
                     zoom={ 7 }
                     center={ [-75.7749, 42.6583] }
+                    dragPan={true}
                     styles={[
                         { name: "Terrain", style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii" },
                         { name: 'Dark Streets', style: 'mapbox://styles/am3081/ck3rtxo2116rr1dmoppdnrr3g'},
