@@ -51,6 +51,122 @@ export class CriticalInfrastructureLayer extends MapLayer{
         super.onAdd(map);
         if (!store.getState().user.activeGeoid) return Promise.resolve();
 
+        let activeGeoid = store.getState().user.activeGeoid
+        return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
+            .then(response =>{
+                let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
+                let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                map.resize();
+                map.fitBounds(bbox);
+                this.layers.forEach(layer => {
+                    map.setLayoutProperty(layer.id, 'visibility',"none");
+                })
+                this.fetchData().then(data => this.receiveData(this.map,data))
+
+            })
+
+
+    }
+
+    fetchData(graph) {
+        if (this.tracts && this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
+        if (!store.getState().user.activeGeoid) return Promise.resolve();
+        if (!graph) graph = falcorGraph.getCache();
+        let countiesOrCousubs = get(graph,
+            `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
+            null);
+        let geoids = get(graph,
+            `geo.${store.getState().user.activeGeoid}.cousubs`,
+            null);
+        if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
+        return falcorGraph.get(
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
+                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter']
+        ).then(d => {
+            let allIds = [],
+                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {}),
+                shelterData = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.shelter`, [])
+                    .map(shelters => shelters.building_id);
+            ['3', '4', '5', '6', '7'].map(owner => {
+                allIds.push(...get(data, `${owner}.critical.true`), ...get(data, `${owner}.critical.false`))
+            });
+            allIds = allIds.map(f => f.id);
+            allIds.push(...shelterData);
+            if (allIds.length === 0) return Promise.resolve();
+            return falcorGraph.get(
+                ['building', 'geom', 'byBuildingId', allIds, 'centroid']
+            )//.then(d => console.log('centroid res', d))
+        })
+    }
+
+    receiveData(map, data) {
+        let rawGraph = falcorGraph.getCache(),
+            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
+            shelterGraph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.shelter.value`, []),
+            centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
+            critical = [],
+            buildingColors = {};
+        let geojson = {
+            "type": "FeatureCollection",
+            "features": []
+        };
+        if (!graph || !shelterGraph) return Promise.resolve();
+        Object.keys(graph)
+            .forEach(owner_type => {
+                let allBuildings = get(graph[owner_type], `critical`);
+
+                allBuildings.true.value
+                    .map(f => f.id)
+                    .forEach(buildingId => {
+                        critical.push(buildingId);
+                        buildingColors[buildingId] = '#fbff00';
+                        geojson.features.push({
+                            "type": "Feature",
+                            "properties":{id:buildingId, color:'#fbff00'},
+                            "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
+                        })
+                    });
+
+            });
+
+        shelterGraph
+            .forEach(shelter => {
+                buildingColors[shelter.building_id] = '#ffffff';
+                geojson.features.push({
+                    "type": "Feature",
+                    "properties":{id:shelter.building_id, color:'#ffffff'},
+                    "geometry": {...get(centroidGraph, `${shelter.building_id}.centroid.value`, null)}
+                })
+            });
+
+        if(map.getSource('buildingsCritical')) {
+            map.removeLayer('buildingsCritical-layer');
+            map.removeSource('buildingsCritical');
+        }else{
+            map.addSource('buildingsCritical', {
+                type: 'geojson',
+                data: geojson
+            });
+            map.addLayer({
+                'id': 'buildingsCritical-layer',
+                'source': 'buildingsCritical',
+                'type': 'circle',
+                'paint': {
+                    'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
+                    'circle-opacity': 0.8,
+                    'circle-radius': 10,
+                }
+            })
+        }
+    }
+
+    toggleVisibilityOn() {
+        this.layers.forEach(layer => {
+            this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
+        })
+
+        // get data and paint map
         return falcorGraph.get(
             ['geo', store.getState().user.activeGeoid, 'tracts'],
             ['geo', store.getState().user.activeGeoid, 'counties'],
@@ -76,8 +192,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
                     get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
                         .slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                map.resize();
-                map.fitBounds(bbox);
+                this.map.resize();
+                this.map.fitBounds(bbox);
 
                 // get tracts
                 let tracts = get(graph,
@@ -86,7 +202,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
                 if (tracts && tracts.value) {
                     this.tracts = tracts.value;
                     // show tracts
-                    map.setFilter('tracts-layer', ['all', ['in', 'geoid', ...tracts.value]]);
+                    this.map.setFilter('tracts-layer-critical', ['all', ['in', 'geoid', ...tracts.value]]);
                 }
 
                 // show cousubs or counties
@@ -94,103 +210,12 @@ export class CriticalInfrastructureLayer extends MapLayer{
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
                     null);
                 if (countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0) {
-                    map.setFilter('tracts-layer-line', ['all', ['in', 'geoid', ...countiesOrCousubs.value]])
+                    this.map.setFilter('tracts-layer-line-critical', ['all', ['in', 'geoid', ...countiesOrCousubs.value]])
                 }
 
                 // get data and paint map
-                return this.fetchData(graph).then(data => this.receiveData(map, data))
+                return this.fetchData(graph).then(data => this.receiveData(this.map, data))
             })
-
-    }
-
-    fetchData(graph) {
-        if (this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
-        if (!store.getState().user.activeGeoid) return Promise.resolve();
-        if (!graph) graph = falcorGraph.getCache();
-        let countiesOrCousubs = get(graph,
-            `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
-            null);
-        let geoids = get(graph,
-            `geo.${store.getState().user.activeGeoid}.cousubs`,
-            null);
-        if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
-        return falcorGraph.get(
-            ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
-                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']] //, ["id",  "owner_type", "critical", "flood_zone"]
-        ).then(d => {
-            let allIds = [],
-                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {});
-
-            ['3', '4', '5', '6', '7'].map(owner => {
-                allIds.push(...get(data, `${owner}.critical.true`), ...get(data, `${owner}.critical.false`))
-            });
-            allIds = allIds.map(f => f.id);
-            if (allIds.length === 0) return Promise.resolve();
-            return falcorGraph.get(
-                ['building', 'geom', 'byBuildingId', allIds, 'centroid']
-            ).then(d => console.log('centroid res', d))
-        })
-    }
-
-    receiveData(map, data) {
-        let rawGraph = falcorGraph.getCache(),
-            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
-            centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
-            critical = [],
-            buildingColors = {};
-        let geojson = {
-            "type": "FeatureCollection",
-            "features": []
-        };
-        console.log('came here', rawGraph, graph);
-
-        if (!graph) return Promise.resolve();
-        Object.keys(graph)
-            .forEach(owner_type => {
-                let allBuildings = get(graph[owner_type], `critical`);
-
-                allBuildings.true.value
-                    .map(f => f.id)
-                    .forEach(buildingId => {
-                        critical.push(buildingId);
-                        buildingColors[buildingId] = '#fbff00';
-                        geojson.features.push({
-                            "type": "Feature",
-                            "properties":{id:buildingId, color:'#fbff00'},
-                            "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
-                        })
-                    });
-
-            });
-
-        if(map.getSource('buildingsCritical')) {
-            map.removeSource('buildingsCritical');
-            map.removeLayer('buildingsCritical-layer');
-        }else{
-            map.addSource('buildingsCritical', {
-                type: 'geojson',
-                data: geojson
-            });
-            map.addLayer({
-                'id': 'buildingsCritical-layer',
-                'source': 'buildingsCritical',
-                'type': 'circle',
-                'paint': {
-                    'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
-                    'circle-opacity': 1,
-                    'circle-radius': 10,
-                }
-            })
-        }
-    }
-
-    toggleVisibilityOn() {
-        this.layers.forEach(layer => {
-            this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
-        })
-
-        // get data and paint map
-        this.fetchData(falcorGraph.getCache()).then(data => this.receiveData(this.map, data))
 
     }
     toggleVisibilityOff(){
@@ -198,8 +223,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
             this.map.setLayoutProperty(layer.id, 'visibility',"none");
         })
         if(this.map.getSource('buildingsCritical')) {
-            this.map.removeSource('buildingsCritical');
             this.map.removeLayer('buildingsCritical-layer');
+            this.map.removeSource('buildingsCritical');
         }
     }
 }
@@ -234,7 +259,7 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
         ],
         layers: [
             {
-                'id': 'tracts-layer',
+                'id': 'tracts-layer-critical',
                 'source': 'tracts',
                 'source-layer': 'tracts',
                 'type': 'fill',
@@ -244,7 +269,7 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
                 }
             },
             {
-                'id': 'tracts-layer-line',
+                'id': 'tracts-layer-line-critical',
                 'source': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                 'source-layer': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                 'type': 'fill',
@@ -279,4 +304,4 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
             }
         }
 
-}}
+    }}
