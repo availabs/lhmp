@@ -85,12 +85,14 @@ export class ControlLayers extends MapLayer {
                     this.boundingBox = bbox
                     map.resize();
                     map.fitBounds(bbox);
-                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer && this.vulnerableDemographicsLayer){
+                    if(this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer && this.vulnerableDemographicsLayer && this.hazardEventsLayer && this.criticalInfrastructureLayer){
                         this.landUseLayer.toggleVisibilityOff()
                         this.commentMapLayer.toggleVisibilityOff()
                         this.culvertsLayer.toggleVisibilityOff()
                         this.evacuationRoutesLayer.toggleVisibilityOff()
                         this.vulnerableDemographicsLayer.toggleVisibilityOff()
+                        this.hazardEventsLayer.toggleVisibilityOff()
+                        this.criticalInfrastructureLayer.toggleVisibilityOff()
                     }
                 })
         }
