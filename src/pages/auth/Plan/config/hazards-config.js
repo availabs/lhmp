@@ -46,14 +46,6 @@ const config =  {
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
             callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
         },
-        {
-            title:'Magnitude/Extent Description',
-            requirement: `req-B1-hazard-magnitude`,
-            type: 'content',
-            prompt:'Extent can be described in a combination of ways depending on the hazard, such as:• The value on an established scientific scale or measurement system, such as EF2 on the Enhanced Fujita Scale for tornadoes or 5.5 on the Richter Scale for earthquakes. • Other measures of magnitude, such as water depth or wind speed.• The speed of onset. For example, hurricanes have longer warning times, giving people and governments more time to prepare and evacuate, while earthquakes occur without warning. • The duration of hazard events. For most hazards, the longer the duration of an event, the greater the extent. Flooding that peaks and retreats in a matter of hours is typically less damaging than flooding of the same depth that remains in place for days.',
-            intent: 'Extent is the strength or magnitude of the hazard.',
-            callout: 'Extent is the strength or magnitude of the hazard.'
-        },
 		...HazardConfig
 	]
 }
