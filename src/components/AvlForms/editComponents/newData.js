@@ -179,20 +179,29 @@ class AvlFormsNewData extends React.Component{
             return a.then(resA => {
                 return this.state[c].reduce((a1,c1) => {
                     return a1.then(resA1 => {
-                        return this.props.falcor.set({
-                            paths: [
-                                ['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig]
-                            ],
-                            jsonGraph: {
-                                forms:{
-                                    byId:{
-                                        [c1] : {
-                                            attributes : {[this.props.config[0].attributes[c].parentConfig]: newId}
+                        return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
+                            .then(originalData => {
+                                originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
+                                originalData = originalData.indexOf(']') > -1 ?
+                                    originalData.replace(']', `,${newId}]` ) :
+                                    originalData !== '' ?
+                                    `[${originalData},${newId}]` : `[${newId}]`
+
+                                return this.props.falcor.set({
+                                    paths: [
+                                        ['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig]
+                                    ],
+                                    jsonGraph: {
+                                        forms:{
+                                            byId:{
+                                                [c1] : {
+                                                    attributes : {[this.props.config[0].attributes[c].parentConfig]: originalData}
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                        })
+                                })
+                            })
                     })
                 }, Promise.resolve())
             })
