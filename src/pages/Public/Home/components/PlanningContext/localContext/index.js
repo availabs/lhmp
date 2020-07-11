@@ -50,13 +50,15 @@ class LocalContext extends Component {
     componentWillReceiveProps(newProps) {
         const {activeGeoid, geoLevel, hazard} = newProps;
         let geojson = null,
-            counties = null;
+            counties = null,
+            activeCounty = null;
         let padding = this.props.zoomPadding
 
         switch (geoLevel) {
             case 'counties':
                 geojson = newProps.geo['merge'][activeGeoid.slice(0, 2)]['counties']
-                counties =  newProps.geo[activeGeoid.slice(0, 2)]['counties'].features
+                counties = newProps.geo['mesh'][activeGeoid.slice(0, 2)]['counties']
+                activeCounty =  newProps.geo[activeGeoid.slice(0, 2)]['counties'].features
                     .reduce((a, c) => (c.properties.geoid === activeGeoid) ? c : a, null);
                 break;
             case 'cousubs':
@@ -69,7 +71,7 @@ class LocalContext extends Component {
 
         Viewport().fitGeojson(geojson, {padding});
 
-        this.setState({bounds: geojson, countiesGeojson: counties})
+        this.setState({bounds: geojson, countiesGeojson: counties, activeCountyGeoJson: activeCounty})
         if ((activeGeoid !== this.props.activeGeoid) ||
             (hazard !== this.props.hazard)) {
             this.setState({loadedRanges: {}});
@@ -152,13 +154,20 @@ class LocalContext extends Component {
     generateLayers() {
         return [
 
-            { id: 'cousubs-layer-filled',
+            { id: 'state-layer-filled',
                 data: this.state.bounds,
                 filled: true,
                 getFillColor: [242, 239, 233, 255]
             },
-            { id: 'cousubs-layer-stroked',
+            { id: 'counties-layer-stroked',
                 data: this.state.countiesGeojson,
+                stroked: true,
+                /*getLineColor:
+                    (d) =>
+                    d.properties.geoid === this.props.activeGeoid ? [255, 0, 0, 255] : [255, 0, 0, 0],*/
+            },
+            { id: 'active-county-layer-filled',
+                data: this.state.activeCountyGeoJson,
                 filled: true,
                 getFillColor: [65, 131, 215, 255]
                 /*getLineColor:
