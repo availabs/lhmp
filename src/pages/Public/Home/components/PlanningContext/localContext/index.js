@@ -169,7 +169,7 @@ class LocalContext extends Component {
             { id: 'active-county-layer-filled',
                 data: this.state.activeCountyGeoJson,
                 filled: true,
-                getFillColor: [65, 131, 215, 255]
+                getFillColor: [68, 142, 239, 255]
                 /*getLineColor:
                     (d) =>
                     d.properties.geoid === this.props.activeGeoid ? [255, 0, 0, 255] : [255, 0, 0, 0],*/
