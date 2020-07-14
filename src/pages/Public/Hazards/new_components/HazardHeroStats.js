@@ -139,8 +139,7 @@ const BoxRow = ({ value, label, hazard, changeHazard, onClick, i , activeHazard}
                 />
             </div>
             <div className="value" style={{'font-size': 'x-large', color: get(hazardMeta[hazard], `color`, 'red')}}>
-                {'Annual Average Loss'} :
-                { fnum(typeof value.main === "string" ? value.main.replace(/[$]/g, '').replace(/,/g,'') : value.main) }
+                Annual Average Loss : { fnum(typeof value.main === "string" ? value.main.replace(/[$]/g, '').replace(/,/g,'') : value.main) }
             </div>
             <div style={{'font-size': 'small'}}>
                 {hazard !== '' ? Object.keys(value.sub).map(s =>
