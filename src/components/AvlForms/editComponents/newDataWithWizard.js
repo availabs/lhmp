@@ -39,12 +39,12 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     fetchFalcorDeps(){
-        let form_type = this.props.config.map(d => d.type);
-        let sub_type = '';
+        let form_type = this.props.config[0].type //.map(d => d.type);
+        let sub_type = this.props.config[0].sub_type;
         let form = '';
-        Object.keys(this.props.config[0].attributes).forEach(item =>{
+        /*Object.keys(this.props.config[0].attributes).forEach(item =>{
             sub_type = this.props.config[0].attributes[item].sub_type
-        });
+        });*/
         if(sub_type && sub_type.length > 0){
             form = form_type + '_' + sub_type
         }else{
@@ -53,7 +53,7 @@ class AvlFormsNewDataWizard extends React.Component{
 
         return this.props.falcor.get(['geo',counties,['name']])
             .then(() =>{
-                this.props.falcor.get(['forms',[form],'meta'],
+                this.props.falcor.get(['forms',form,'meta'],
                     ['forms',['roles'],'byPlanId',this.props.activePlan,'attributes']) // to populate action_point_of_contact for actions project
                     .then(response =>{
                         return response

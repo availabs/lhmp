@@ -74,6 +74,17 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
+            lifelines :{
+                label:'Lifeline',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                meta:'true',
+                hidden:'false',
+                section:'',
+                list_attribute: 'true'
+            },
             capability_name:{
                 label:'Capability Name',
                 prompt:'Provide a capability title only if it differs from the capability you chose in the dropdown menu in the previous question. ' +
