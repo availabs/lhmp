@@ -163,7 +163,8 @@ const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null, activeHa
         </div>
         <div className="row align-items-center">
             { rows.length ?
-                <BoxRow value={{main: rows.reduce((a,c) => a+(c.value.main || 0), 0)}}
+                <BoxRow value={{main: rows.reduce((a,c) =>
+                        a+parseInt(typeof c.value.main === "string" ? c.value.main.replace(/[$]/g, '').replace(/,/g,'') : c.value.main || 0), 0)}}
                         label={'All Hazards'}
                         hazard={''}
                         changeHazard={changeHazard} i={'allHaz'} activeHazard={activeHazard}/>
