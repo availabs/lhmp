@@ -391,7 +391,7 @@ class AvlFormsNewData extends React.Component{
                             fieldSpecificMeta[field] = [f]
                         }
                     })
-                meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
+                meta_data = graph[form_type].meta ? graph[form_type].meta.value.filter(f => f.form_type.split(`${form_type}-`).length === 1) : []
             }
         }
 

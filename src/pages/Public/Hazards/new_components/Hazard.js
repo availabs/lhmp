@@ -78,6 +78,7 @@ class Hazards extends React.Component {
                             geoLevel={this.props.geoLevel}
                             format={"~s"}
                             height={300}
+                            maxValueButtons={true}
                         />
                     </div>
                     <div className='col-md-6'>
@@ -87,7 +88,6 @@ class Hazards extends React.Component {
                             hazard={this.props.hazard}
                             geoid={this.props.geoid}
                             geoLevel={this.props.geoLevel}
-
                             height={300}
                         />
                     </div>
@@ -106,6 +106,7 @@ class Hazards extends React.Component {
                             format={"~s"}
                             hazard={this.props.hazard}
                             height={300}
+                            maxValueButtons={true}
                         />
                     </div>
                     <div className='col-md-6'>
@@ -131,8 +132,8 @@ class Hazards extends React.Component {
                             Click on a row to view the event description.
                         </div>
                         <HazardEventsTable
-                            hazards={this.state.hazards}
-                            hazard={this.state.hazard}
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
                             geoid={this.state.geoid}
                         />
                         <i style={{color: '#afafaf'}}>Source: <a
