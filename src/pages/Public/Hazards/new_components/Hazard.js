@@ -132,8 +132,8 @@ class Hazards extends React.Component {
                             Click on a row to view the event description.
                         </div>
                         <HazardEventsTable
-                            hazards={this.state.hazards}
-                            hazard={this.state.hazard}
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
                             geoid={this.state.geoid}
                         />
                         <i style={{color: '#afafaf'}}>Source: <a
