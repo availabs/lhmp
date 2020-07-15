@@ -39,4 +39,4 @@ def main(args):
 # END main
 
 if __name__ == "__main__":
-    main({'from_plan': 59, 'to_plan': 64, 'forms': ['capabilities', 'actions', 'zones']})
+    main({'from_plan': 32, 'to_plan': 65, 'forms': ['capabilities', 'actions', 'zones']})

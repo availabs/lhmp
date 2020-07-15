@@ -288,7 +288,9 @@ export class EvacuationRoutesLayer extends MapLayer {
                     features: this.features
                 }
             );
-            this.map.fitBounds(bounds);
+            if(!data.initLoad){
+                this.map.fitBounds(bounds);
+            }
 
             this.forceUpdate()
         } else if (this.map.getSource('execution-route-source')) {
@@ -755,7 +757,7 @@ class EvacuationControlBase extends React.Component{
                                     {
                                         mode: 'markers',
                                         data: {
-                                            routes: [{hideAll: e.hideAll, viewAll: e.viewAll,
+                                            routes: [{hideAll: e.hideAll, viewAll: e.viewAll, initLoad: e.initLoad,
                                                 data: e.data ?
                                                     e.data.map(f => ({geometry: f.geom, name: f.route_name})):
                                                     []

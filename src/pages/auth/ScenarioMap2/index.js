@@ -16,6 +16,7 @@ class Home extends React.Component {
                         //this.scenario
                     ] }
                     sidebar={false}
+                    hideAttributes={true}
                     zoom={ 7 }
                     center={ [-75.7749, 42.6583] }
                     dragPan={true}

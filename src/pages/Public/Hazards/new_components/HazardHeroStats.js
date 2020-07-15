@@ -139,8 +139,7 @@ const BoxRow = ({ value, label, hazard, changeHazard, onClick, i , activeHazard}
                 />
             </div>
             <div className="value" style={{'font-size': 'x-large', color: get(hazardMeta[hazard], `color`, 'red')}}>
-                {'Annual Average Loss'} :
-                { fnum(typeof value.main === "string" ? value.main.replace(/[$]/g, '').replace(/,/g,'') : value.main) }
+                Annual Average Loss : { fnum(typeof value.main === "string" ? value.main.replace(/[$]/g, '').replace(/,/g,'') : value.main) }
             </div>
             <div style={{'font-size': 'small'}}>
                 {hazard !== '' ? Object.keys(value.sub).map(s =>
@@ -163,7 +162,8 @@ const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null, activeHa
         </div>
         <div className="row align-items-center">
             { rows.length ?
-                <BoxRow value={{main: rows.reduce((a,c) => a+(c.value.main || 0), 0)}}
+                <BoxRow value={{main: rows.reduce((a,c) =>
+                        a+parseInt(typeof c.value.main === "string" ? c.value.main.replace(/[$]/g, '').replace(/,/g,'') : c.value.main || 0), 0)}}
                         label={'All Hazards'}
                         hazard={''}
                         changeHazard={changeHazard} i={'allHaz'} activeHazard={activeHazard}/>

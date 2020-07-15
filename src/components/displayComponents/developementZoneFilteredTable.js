@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
 import config from 'pages/auth/Zones/config.js'
-import { connect } from 'react-redux';
-import { reduxFalcor } from 'utils/redux-falcor'
+import {connect} from 'react-redux';
+import {reduxFalcor} from 'utils/redux-falcor'
 import get from "lodash.get";
-import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
-
 
 
 class developementZonesFilteredTable extends Component {
@@ -17,21 +15,19 @@ class developementZonesFilteredTable extends Component {
         };
     }
 
-    render(){
+    render() {
         let edit = this.props.edit ? true : false; // for some reason
-        return(
-            <div className='container'>
-                <Element>
-                    <AvlFormsListTable
-                        json = {[Object.assign({}, config[0], {list_attributes: ['name', 'zone_type', 'comment']})]}
-                        filterBy = {this.props.filterBy}
-                        createButtons = {false}
-                        editButton = {edit}
-                        viewButton = {edit}
-                        deleteButton = {edit}
-                    />
-                </Element>
-            </div>
+        return (
+            <AvlFormsListTable
+                json={[Object.assign({}, config[0], {list_attributes: ['name', 'zone_type', 'comment']})]}
+                filterBy={this.props.filterBy}
+                createButtons={false}
+                editButton={edit}
+                viewButton={edit}
+                deleteButton={edit}
+                title={false}
+                pureElement={true}
+            />
         )
     }
 }
