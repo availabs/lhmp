@@ -75,7 +75,7 @@ module.exports = [
                 list_attribute: 'true'
             },
             lifelines :{
-                label:'Lifeline',
+                label:'Associated FEMA Lifeline(s)',
                 prompt:'',
                 sub_type:'',
                 edit_type:'dropdown',
