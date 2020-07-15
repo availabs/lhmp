@@ -197,44 +197,46 @@ class HazardEventsMap extends React.Component {
 
     render () {
         return (
-            <ElementBox style={ { padding: this.props.padding, height: '80vh', width: '100%' } }>
+            <React.Fragment>
                 {this.generateMapControls().map((control, i) => <MapControl key={ i } { ...control }/>)}
-                <AvlMap
-                    sidebar={false}
-                    mapactions={false}
-                    scrollZoom={false}
-                    zoom={6}
-                    update={[this.state.update]}
-                    style='Clear'
-                    styles={[{
-                        name: "Clear",
-                        style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii"
-                    }]}
-                    fitBounds={[
-                        [
-                            -79.8046875,
-                            40.538851525354666
-                        ],
-                        [
-                            -71.7626953125,
-                            45.042478050891546
-                        ]]}
-                    layers={[TractsLayer]}
-                    layerProps={ {
-                        [TractsLayer.name]: {
-                            hazard: this.props.hazard,
-                            hazards: this.props.hazards,
-                            currentYear: this.state.currentYear
-                        }
-                    } }
-                />
-                {/*<SvgMap layers={ this.generateLayers() }
+                <ElementBox style={ { padding: this.props.padding, height: '80vh', width: '100%' } }>
+                    <AvlMap
+                        sidebar={false}
+                        mapactions={false}
+                        scrollZoom={false}
+                        zoom={6}
+                        update={[this.state.update]}
+                        style='Clear'
+                        styles={[{
+                            name: "Clear",
+                            style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii"
+                        }]}
+                        fitBounds={[
+                            [
+                                -79.8046875,
+                                40.538851525354666
+                            ],
+                            [
+                                -71.7626953125,
+                                45.042478050891546
+                            ]]}
+                        layers={[TractsLayer]}
+                        layerProps={ {
+                            [TractsLayer.name]: {
+                                hazard: this.props.hazard,
+                                hazards: this.props.hazards,
+                                currentYear: this.state.currentYear
+                            }
+                        } }
+                    />
+                    {/*<SvgMap layers={ this.generateLayers() }
                         height={ this.props.height }
                         viewport={ this.props.viewport }
                         controls={ this.generateMapControls() }
                         padding={ this.props.zoomPadding }
                         bounds={ this.props.bounds }/>*/}
-            </ElementBox>
+                </ElementBox>
+            </React.Fragment>
         )
     }
 }
