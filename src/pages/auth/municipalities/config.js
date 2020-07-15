@@ -84,14 +84,14 @@ module.exports = [
                 section:''
             },
             fips:{
-                label:'Federal Information Processing Standards',
+                label:'FIPS - Federal Information Processing Standards',
                 prompt:'Provide the five digit code used to identify the county.',
                 sub_type:'',
                 edit_type:'number',
                 display_type:'text',
             },
             duns:{
-                label:'Data Universial Numbering System.',
+                label:'DUNS - Data Universial Numbering System.',
                 prompt:'Provide the DUNS for the specific building or county',
                 sub_type:'',
                 edit_type:'number',
