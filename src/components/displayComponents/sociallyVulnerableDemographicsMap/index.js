@@ -38,7 +38,11 @@ class developementZonesFilteredTable extends Component {
         })
         this.setState({selected_indicator: defaultIndicator.map(d => d.label)})
     }
-
+    componentDidUpdate(oldProps,oldState){
+        if(!_.isEqual(oldState.selected_indicator,this.state.selected_indicator)){
+            this.forceUpdate()
+        }
+    }
     handleChange(e) {
         this.setState({...this.state, [e.target.id]: [e.target.value]});
     }
@@ -87,7 +91,7 @@ class developementZonesFilteredTable extends Component {
                     vertical ={false}
                     type={"quantile"}
                     domain = {vulnerableDemographicsLayer.legend.domain}
-                    format ={d3format(".0%")}
+                    format ={d3format(".1%")}
                     range = {getColorRange(7, "Reds")}
                 />
             </div>

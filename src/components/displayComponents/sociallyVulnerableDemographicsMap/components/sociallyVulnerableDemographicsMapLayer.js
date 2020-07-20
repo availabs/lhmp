@@ -114,10 +114,11 @@ class VulnerableDemographicsLayer extends MapLayer {
 
     receiveData(map, data) {
         if (!this.censusKey || !this.divisorKey) return;
+        let graph = falcorGraph.getCache()
         // tracts
         const valueMapTracts = this.tracts.reduce((a, c) => {
             let value = this.censusKey.reduce((aa, cc) => {
-                const v = get(falcorGraph.getCache(), ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2017', cc], -666666666);
                 if (v !== -666666666) {
                     aa += v;
                 }
@@ -125,7 +126,7 @@ class VulnerableDemographicsLayer extends MapLayer {
                 return aa;
             }, 0);
             const divisor = this.divisorKey.reduce((aa, cc) => {
-                const v = get(falcorGraph.getCache(), ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2017', cc], -666666666);
                 if (v != -666666666) {
                     aa += v;
                 }
@@ -163,14 +164,14 @@ class VulnerableDemographicsLayer extends MapLayer {
         //blockGroups
         const valueMapBlockGroup = this.blockGroups.reduce((a, c) => {
             let value = this.censusKey.reduce((aa, cc) => {
-                const v = get(falcorGraph.getCache(), ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2017', cc], -666666666);
                 if (v !== -666666666) {
                     aa += v;
                 }
                 return aa;
             }, 0);
             const divisor = this.divisorKey.reduce((aa, cc) => {
-                const v = get(falcorGraph.getCache(), ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2017', cc], -666666666);
                 if (v != -666666666) {
                     aa += v;
                 }

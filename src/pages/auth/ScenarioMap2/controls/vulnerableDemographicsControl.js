@@ -88,7 +88,7 @@ class VulnerableDemographicsControl extends React.Component{
                         vertical ={false}
                         type={"quantile"}
                         domain = {this.props.layer.layer.vulnerableDemographicsLayer.legend.domain}
-                        format ={d3format(".0%")}
+                        format ={d3format(".1%")}
                         range = {getColorRange(7, "Reds")}
                     />
                     {this.renderIndicatorDropDown()}
