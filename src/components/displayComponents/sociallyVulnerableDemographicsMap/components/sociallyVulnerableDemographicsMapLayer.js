@@ -33,6 +33,7 @@ class VulnerableDemographicsLayer extends MapLayer {
             this.censusKey = [this.activeIndicator.censusKey].flat(1)
             this.divisorKey = [this.activeIndicator.divisorKey]
             this.census_keys = [...this.censusKey, ...this.divisorKey].flat(1)
+            this.setDomain = newProps.setDomain;
             this.fetchData().then(data => this.receiveData(this.map, data))
         }
     }
@@ -42,6 +43,7 @@ class VulnerableDemographicsLayer extends MapLayer {
             this.censusKey = [this.activeIndicator.censusKey].flat(1)
             this.divisorKey = [this.activeIndicator.divisorKey]
             this.census_keys = [...this.censusKey, ...this.divisorKey].flat(1)
+            this.setDomain = newProps.setDomain;
             this.doAction(["fetchLayerData"]);
         }
     }
@@ -83,11 +85,13 @@ class VulnerableDemographicsLayer extends MapLayer {
         switch (this.legend.type) {
             case "quantile":
                 this.legend.domain = domain
+                this.setDomain(domain)
                 return scaleQuantile()
                     .domain(this.legend.domain)
                     .range(this.legend.range);
             case "quantize":
                 this.legend.domain = extent(domain)
+                this.setDomain(extent(domain))
                 return scaleQuantize()
                     .domain(this.legend.domain)
                     .range(this.legend.range);
@@ -114,6 +118,7 @@ class VulnerableDemographicsLayer extends MapLayer {
 
     receiveData(map, data) {
         if (!this.censusKey || !this.divisorKey) return;
+        if (!map) map = this.map;
         let graph = falcorGraph.getCache()
         // tracts
         const valueMapTracts = this.tracts.reduce((a, c) => {

@@ -38,11 +38,13 @@ class developementZonesFilteredTable extends Component {
         })
         this.setState({selected_indicator: defaultIndicator.map(d => d.label)})
     }
-    componentDidUpdate(oldProps,oldState){
-        if(!_.isEqual(oldState.selected_indicator,this.state.selected_indicator)){
+
+    componentDidUpdate(prevProps, prevState) {
+        if(!_.isEqual(prevState.selected_indicator,this.state.selected_indicator)){
             this.forceUpdate()
         }
     }
+
     handleChange(e) {
         this.setState({...this.state, [e.target.id]: [e.target.value]});
     }
@@ -90,7 +92,7 @@ class developementZonesFilteredTable extends Component {
                     title ={"Vulnerable Demographics Data"}
                     vertical ={false}
                     type={"quantile"}
-                    domain = {vulnerableDemographicsLayer.legend.domain}
+                    domain = {this.state.domain || []}
                     format ={d3format(".1%")}
                     range = {getColorRange(7, "Reds")}
                 />
@@ -120,6 +122,11 @@ class developementZonesFilteredTable extends Component {
                         layerProps={{
                             [sociallyVulnerableDemographicsMapLayer.name]: {
                                 selected_indicator: censusIndicatorConfig[this.state.selected_indicator[0]],
+                                setDomain: (d) => {
+                                    if (!_.isEqual(this.state.domain, d)){
+                                        this.setState({domain: d})
+                                    }
+                                }
                             }
                         }}
                     />
