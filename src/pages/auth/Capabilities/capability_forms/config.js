@@ -74,17 +74,6 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
-            lifelines :{
-                label:'Associated FEMA Lifeline(s)',
-                prompt:'',
-                sub_type:'',
-                edit_type:'dropdown',
-                display_type:'text',
-                meta:'true',
-                hidden:'false',
-                section:'',
-                list_attribute: 'true'
-            },
             capability_name:{
                 label:'Capability Name',
                 prompt:'Provide a capability title only if it differs from the capability you chose in the dropdown menu in the previous question. ' +
@@ -110,6 +99,17 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
+            lifelines :{
+                label:'Associated FEMA Lifeline(s)',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                meta:'true',
+                hidden:'false',
+                section:'',
+                list_attribute: 'true'
+            },    
             status:{
                 label:'Update Status',
                 prompt:'Select the current status of the capability.' +
