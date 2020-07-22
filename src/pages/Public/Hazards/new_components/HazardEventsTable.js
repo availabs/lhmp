@@ -13,19 +13,32 @@ import {
 } from "./yearsOfSevereWeatherData"
 
 class HazardEventsTable extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state={}
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+       if ( prevProps.hazard !== this.props.hazard){
+           this.fetchFalcorDeps()
+       }
+    }
 
     fetchFalcorDeps() {
         let hazard = this.props.hazard ?
             [this.props.hazard] :
             this.props.hazards && this.props.hazards.length > 0 ?
                 this.props.hazards : null;
-
+        if (!hazard) return Promise.resolve()
+        this.setState({hazards: hazard})
         return this.props.falcor.get(['riskIndex', 'hazards'])
                 .then(response => {
                     return hazard ? hazard : response.json.riskIndex.hazards;
                 })
             .then(hazardids => {
                 return this.props.falcor.get(
+                    ['riskIndex', 'meta', hazardids, ['id', 'name', 'description']],
                     [this.props.dataType, 'events', this.props.geoid, hazardids, 'top', 'property_damage']
                 )
                     .then(response => {
@@ -63,12 +76,11 @@ class HazardEventsTable extends React.Component {
 
     processData() {
         const { hazard, hazards, dataType, geoid, year } = this.props,
-            hazardids = hazard ? [hazard] : hazards && hazards.length > 0 ? hazards : this.props.riskIndex.hazards.value,
+            hazardids = hazard ? [hazard] : hazards && hazards.length > 0 ? hazards : [],
             graphEventsByGeoid = this.props[dataType].events[geoid],
             graphEventsById = this.props[dataType].events.byId,
             data = [];
         let event_ids = [];
-
         hazardids.forEach(hazardid => {
             const ids = this.props[this.props.dataType].events[this.props.geoid][hazardid].top.property_damage.value;
             event_ids = event_ids.concat(ids);
@@ -85,7 +97,7 @@ class HazardEventsTable extends React.Component {
             } = graphEventsById[event_id];
             data.push({
                 "property damage": fnum(+property_damage),
-                'hazard': hazardid ? hazardid.toUpperCase() : hazardid,
+                'hazard': hazardid && this.props.riskIndex.meta[hazardid].name ? this.props.riskIndex.meta[hazardid].name.toUpperCase() : hazardid,
                 property_damage: +property_damage,
                 "municipality": municipality ? `${ municipality }, ${ county }` : county,
                 "date": new Date(date).toLocaleString(),
