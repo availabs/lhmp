@@ -2,7 +2,7 @@ module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
         list_attributes:['county','municipality','capability_type','capability_category', 'jurisdiction_utilization'],
-        csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
+        csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload','comments'],
         default_title: 'Capability', // in the case when page_title is invalid
         page_title: 'capability_name', // page title in edit and view
         sub_title: 'capability_category', // sub title in edit and view
@@ -74,17 +74,6 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
-            lifelines :{
-                label:'Associated FEMA Lifeline(s)',
-                prompt:'',
-                sub_type:'',
-                edit_type:'dropdown',
-                display_type:'text',
-                meta:'true',
-                hidden:'false',
-                section:'',
-                list_attribute: 'true'
-            },
             capability_name:{
                 label:'Capability Name',
                 prompt:'Provide a capability title only if it differs from the capability you chose in the dropdown menu in the previous question. ' +
@@ -110,6 +99,17 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
+            lifelines :{
+                label:'Associated FEMA Lifeline(s)',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                meta:'true',
+                hidden:'false',
+                section:'',
+                list_attribute: 'true'
+            },    
             status:{
                 label:'Update Status',
                 prompt:'Select the current status of the capability.' +
@@ -249,6 +249,16 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
+            comments:{
+                label:'Additional Comments',
+                prompt:'Additional comments and concerns regarding the capablity.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:''
+            },   
             // upload:{
             //     label:'Upload',
             //     prompt:'If applicable, provide a PDF upload of any and all supporting documents related to capability and its assessment. Examples include; meeting minutes, public participation surveys, regulatory documents, studies pertaining to development and updates.',
