@@ -4,8 +4,11 @@ import {sendSystemMessage} from 'store/modules/messages';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import MultiSelectFilter from "../../../../components/filters/multi-select-filter";
-import COLOR_RANGES from "constants/color-ranges"
+import COLOR_RANGES, {getColorRange} from "constants/color-ranges"
 import {setActiveYear, setActiveHazard} from 'store/modules/hazardEvents'
+import Legend from "../../../../components/AvlMap/components/legend/Legend";
+import {fnum} from "../../../../utils/sheldusUtils";
+import {format as d3format} from "d3-format/src/defaultLocale";
 
 var _ = require("lodash")
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
@@ -69,6 +72,7 @@ class HazardEventsControl extends React.Component {
             this.state.hazard === 'all' ?
                 this.props.setActiveHazard(hazardMeta.map(f => f.value)) :
                 this.props.setActiveHazard(this.state.hazard)
+            this.forceUpdate()
         }
     }
 
@@ -80,6 +84,15 @@ class HazardEventsControl extends React.Component {
     render() {
         return (
             <div style={{display:"flex",flexDirection:"column",justifyContent:"space-evenly",align:"auto"}}>
+                <Legend
+                    title ={"Damage"}
+                    vertical ={false}
+                    type={"linear"}
+                    domain = {this.props.layer.layer.hazardEventsLayer.domain}
+                    format ={(d) => fnum(d)}
+                    range = {this.props.layer.layer.hazardEventsLayer.range}
+                />
+
                 <h6>Year :</h6>
                 <select className="form-control justify-content-sm-end"
                         id = "year"
