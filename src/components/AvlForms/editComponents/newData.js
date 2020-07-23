@@ -179,20 +179,29 @@ class AvlFormsNewData extends React.Component{
             return a.then(resA => {
                 return this.state[c].reduce((a1,c1) => {
                     return a1.then(resA1 => {
-                        return this.props.falcor.set({
-                            paths: [
-                                ['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig]
-                            ],
-                            jsonGraph: {
-                                forms:{
-                                    byId:{
-                                        [c1] : {
-                                            attributes : {[this.props.config[0].attributes[c].parentConfig]: newId}
+                        return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
+                            .then(originalData => {
+                                originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
+                                originalData = originalData.indexOf(']') > -1 ?
+                                    originalData.replace(']', `,${newId}]` ) :
+                                    originalData !== '' ?
+                                    `[${originalData},${newId}]` : `[${newId}]`
+
+                                return this.props.falcor.set({
+                                    paths: [
+                                        ['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig]
+                                    ],
+                                    jsonGraph: {
+                                        forms:{
+                                            byId:{
+                                                [c1] : {
+                                                    attributes : {[this.props.config[0].attributes[c].parentConfig]: originalData}
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                        })
+                                })
+                            })
                     })
                 }, Promise.resolve())
             })
@@ -366,13 +375,23 @@ class AvlFormsNewData extends React.Component{
         let data = [];
         let countyData = this.geoData()[0];
         let cousubsData = this.geoData()[1];
-        let meta_data = [];
+        let meta_data = [],
+            fieldSpecificMeta = {}
         let form_type = this.props.config.map(d => d.type)[0];
         if(this.props.meta_data) {
             let graph = this.props.meta_data;
-            if(graph[form_type]){
-
-                meta_data = graph[form_type].meta ? graph[form_type].meta.value : []
+            if(graph[form_type] && graph[form_type].meta){
+                graph[form_type].meta.value
+                    .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                    .map(f => {
+                        let field = f.form_type.split(`${form_type}-`)[1]
+                        if (fieldSpecificMeta[field]){
+                            fieldSpecificMeta[field].push(f)
+                        }else{
+                            fieldSpecificMeta[field] = [f]
+                        }
+                    })
+                meta_data = graph[form_type].meta ? graph[form_type].meta.value.filter(f => f.form_type.split(`${form_type}-`).length === 1) : []
             }
         }
 
@@ -436,7 +455,7 @@ class AvlFormsNewData extends React.Component{
                         placeholder: item.attributes[attribute].placeholder,
                         type: 'multiselect', //item.attributes[attribute].edit_type,
                         required: item.attributes[attribute].field_required,
-                        meta: meta_data ? meta_data : [],
+                        meta: fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on,
                         defaultValue: item.attributes[attribute].defaultValue

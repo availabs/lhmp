@@ -122,7 +122,9 @@ class ContentEditor extends Component {
                         state={this.state}
                         title={'image'}
                     />
-                    <a className='hoverable btn btn-primary step-trigger-btn'
+                    <a className={
+                        this.state.image ? 'hoverable btn btn-primary step-trigger-btn' :
+                            'hoverable btn btn-primary step-trigger-btn disabled'}
                        onClick={this.handleSubmit}
                     >Submit</a>
                 </React.Fragment>

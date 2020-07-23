@@ -271,7 +271,9 @@ class RouteLayer extends MapLayer {
                     features: this.features
                 }
             );
-            this.map.fitBounds(bounds);
+            if(!data.initLoad){
+                this.map.fitBounds(bounds);
+            }
 
             this.forceUpdate()
         } else if (this.map.getSource('execution-route-source')) {

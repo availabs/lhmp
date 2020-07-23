@@ -21,7 +21,8 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
         this.state = {
             geoid: this.props.geoid,
             geoLevel: this.props.geoLevel,
-            dataType: this.props.dataType
+            dataType: this.props.dataType,
+            maxValue: 'auto'
         }
     }
 
@@ -101,8 +102,25 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
         } else if (this.props.geoid.length > 5) {
             return null;
         }
+        let maxValueButtonStyle = {width: '25%', margin: 0, textAlign: 'center'}
         return (
-            <div style={{height: `${this.props.height}px`, background: '#fff'}}>
+            <React.Fragment>
+                {
+                    get(this.props, `maxValueButtons`, false) ?
+                        <div className="os-tabs-controls" style={{right: 0, top: 0,marginBottom:0, zIndex:100, width: '100%'}}>
+                            <ul className="nav nav-tabs" style={{padding:0}}>
+                                <li className="nav-item" style={maxValueButtonStyle}><a className={this.state.maxValue === 10000 ? 'nav-link active small' : 'nav-link small'}
+                                                                                        onClick={() => this.setState({maxValue: 10000})}> 10K</a></li>
+                                <li className="nav-item" style={maxValueButtonStyle}><a className={this.state.maxValue === 100000 ? 'nav-link active small' : 'nav-link small'}
+                                                                                        onClick={() => this.setState({maxValue: 100000})}> 100K</a></li>
+                                <li className="nav-item" style={maxValueButtonStyle}><a className={this.state.maxValue === 1000000 ? 'nav-link active small' : 'nav-link small'}
+                                                                                        onClick={() => this.setState({maxValue: 1000000})}> 1M</a></li>
+                                <li className="nav-item" style={maxValueButtonStyle}><a className={this.state.maxValue === 'auto' ? 'nav-link active small' : 'nav-link small'}
+                                                                                        onClick={() => this.setState({maxValue: 'auto'})}> Max</a></li>
+                            </ul>
+                        </div> : null
+                }
+                <div style={{height: `${this.props.height}px`, background: '#fff'}}>
                 <ResponsiveBar
                     data={data}
                     keys={keys}
@@ -111,6 +129,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                     colors={(d) => hazardcolors[d.id]}
                     enableLabel={false}
                     tooltipFormat={this.props.format}
+                    maxValue={this.state.maxValue}
                     margin={{
                         "top": 25,
                         "right": this.props.showYlabel ? 25 : 0,
@@ -156,6 +175,7 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
                         }
                     }}/>
             </div>
+            </React.Fragment>
         )
     }
 }

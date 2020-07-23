@@ -18,7 +18,8 @@ const D3_CATEGORY20 = [
     "#bcbd22",
     "#dbdb8d",
     "#17becf",
-    "#9edae5"
+    "#9edae5",
+    "#F1B0A7"
 ];
 const D3_CATEGORY20_RANGE = [
     [
@@ -160,6 +161,13 @@ const D3_CATEGORY20_RANGE = [
         "#648c96",
         "#4f6e76",
         "#41565d",
+    ],
+    [
+        "#F1B0A7",
+        "#E3604F",
+        "#9F2819",
+        "#691812",
+        "#58160E",
     ]
 ];
 const hazardcolors = {
@@ -198,7 +206,9 @@ const hazardcolors = {
     'volcano': D3_CATEGORY20[16],
     'volcano_range': D3_CATEGORY20_RANGE[16],
     'coastal': D3_CATEGORY20[17],
-    'coastal_range': D3_CATEGORY20_RANGE[17]
+    'coastal_range': D3_CATEGORY20_RANGE[17],
+    'all': D3_CATEGORY20[20],
+    'all_range': D3_CATEGORY20_RANGE[20]
 };
 
 export default hazardcolors

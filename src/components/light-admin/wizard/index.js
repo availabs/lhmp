@@ -93,7 +93,7 @@ class Signup extends Component {
       let buttonActive = this.props.steps[this.state.activeStep].nextButtonActive !== undefined ?
           this.props.steps[this.state.activeStep].nextButtonActive : true;
       let endStep = this.props.steps.length
-      if(currentStep === endStep-1){
+      if(currentStep === endStep-1 || this.props.submitOnAll){
           return(
               buttonActive ? <button className="btn btn-primary step-trigger-btn" href ={'#'}> Submit</button>
                   : <button className="btn btn-primary step-trigger-btn" href={'#'} disabled> Submit</button>

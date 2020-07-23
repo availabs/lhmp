@@ -1,58 +1,102 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { reduxFalcor } from 'utils/redux-falcor'
+import {connect} from 'react-redux';
+import {reduxFalcor} from 'utils/redux-falcor'
 import get from "lodash.get";
 import Wizard from 'components/light-admin/wizard'
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import {Link} from "react-router-dom";
 import {falcorGraph} from "../../../../store/falcorGraph";
-import {ATTRIBUTES_PROJECT} from "../../actions/project";
+import criticalFacilityMeta from './criticalFacilityMeta'
 
 const actionList = [];
-class AssetsEdit extends React.Component{
-    constructor(props){
+const ATTRIBUTES = [
+    'owner_type', 'sewer_type', 'water_supply', 'utilities', 'fuel_type', 'prop_class', 'replacement_value',
+    'critical',
+    'num_residents',
+    'num_employees',
+    'num_occupants',
+    'num_vehicles_inhabitants',
+    'num_units',
+    'basement',
+    'building_type',
+    'roof_type',
+    'height',
+    'num_stories',
+    'structure_type',
+    'bldg_style',
+    'address',
+    'sqft_living',
+    'nbr_kitchens',
+    'nbr_full_baths',
+    'nbr_bedrooms',
+    'first_floor_elevation',
+    'heat_type',
+    'naics_code',
+    'census_industry_code',
+    'contents_replacement_value',
+    'inventory_replacement_value',
+    'establishment_revenue',
+    'business_hours',
+    'seismic_zone',
+    'flood_plain',
+    'flood_depth',
+    'flood_duration',
+    'flood_velocity',
+    'high_wind_speed',
+    'soil_type',
+    'storage_hazardous_materials',
+    'topography',
+    'action_type',
+    'shelter'
+]
+const numerics = ['flood_depth', 'flood_velocity', 'flood_base_elevation', 'num_residents', 'num_employees', 'num_occupants',
+    'num_vehicles_inhabitants', 'height', 'sqft_living', 'nbr_kitchens', 'nbr_full_baths', 'nbr_bedrooms', 'contents_replacement_value',
+    'inventory_replacement_value', 'establishment_revenue', 'topography', 'parcel_id', 'shelter']
+const booleans = ['basement']
+class AssetsEdit extends React.Component {
+    constructor(props) {
         super(props)
 
         this.state = {
-            prop_class : '',
-            replacement_value : '',
-            critical : '',
-            num_residents : '',
-            num_employees: '',
-            num_occupants : '',
-            num_vehicles_inhabitants : '',
-            num_units : '',
-            basement : '',
-            building_type : '',
-            roof_type: '',
-            height : '',
-            num_stories : '',
-            structure_type: '',
-            bldg_style: '',
-            address: '',
-            sqft_living : '',
-            nbr_kitchens : '',
-            nbr_full_baths: '',
-            nbr_bedrooms: '',
-            first_floor_elevation: '',
-            heat_type: '',
-            naics_code: '',
-            census_industry_code : '',
-            contents_replacement_value : '',
-            inventory_replacement_value: '',
-            establishment_revenue : '',
-            business_hours: '',
-            seismic_zone : '',
-            flood_plain:'',
-            flood_depth: '',
-            flood_duration : '',
-            flood_velocity: '',
-            high_wind_speed: '',
-            soil_type: '',
-            storage_hazardous_materials: '',
-            topography: '',
-            action_type: '',
+            /*            prop_class : '',
+                        replacement_value : '',
+                        critical : '',
+                        num_residents : '',
+                        num_employees: '',
+                        num_occupants : '',
+                        num_vehicles_inhabitants : '',
+                        num_units : '',
+                        // basement : '',
+                        building_type : '',
+                        roof_type: '',
+                        height : '',
+                        num_stories : '',
+                        structure_type: '',
+                        bldg_style: '',
+                        address: '',
+                        sqft_living : '',
+                        nbr_kitchens : '',
+                        nbr_full_baths: '',
+                        nbr_bedrooms: '',
+                        first_floor_elevation: '',
+                        heat_type: '',
+                        naics_code: '',
+                        census_industry_code : '',
+                        contents_replacement_value : '',
+                        inventory_replacement_value: '',
+                        establishment_revenue : '',
+                        // business_hours: '',
+                        seismic_zone : '',
+                        flood_plain:'',
+                        flood_depth: '',
+                        flood_duration : '',
+                        flood_velocity: '',
+                        high_wind_speed: '',
+                        soil_type: '',
+                        storage_hazardous_materials: '',
+                        topography: '',
+                        action_type: '',*/
             /*
             flood_zone: '',
 
@@ -80,84 +124,96 @@ class AssetsEdit extends React.Component{
         //this.sewerTypeDropDown = this.sewerTypeDropDown.bind(this);
         //this.waterSupplyDropDown = this.waterSupplyDropDown.bind(this);
         //this.utilitiesDropDown = this.utilitiesDropDown.bind(this);
-       // this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
+        // this.fuelTypeDropDown = this.fuelTypeDropDown.bind(this);
         this.heatTypeDropDown = this.heatTypeDropDown.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.getActionsCategoryAndType = this.getActionsCategoryAndType.bind(this);
+        this.criticalInfraDropdown = this.criticalInfraDropdown.bind(this)
     }
 
     handleChange(e) {
-        console.log('---',e.target.id,e.target.value,this.state);
-        this.setState({ ...this.state, [e.target.id]: e.target.value });
+        if (numerics.includes(e.target.id) && e.target.value === '') {
+            this.setState({...this.state, [e.target.id]: null});
+        } else {
+            this.setState({...this.state, [e.target.id]: e.target.value});
+        }
     }
 
-    fetchFalcorDeps(){
-        return this.props.falcor.get(['parcel','meta',['prop_class','owner_type','bldg_style','sewer_type','water_supply','utilities','heat_type','fuel_type']])
-            .then(response =>{
+    fetchFalcorDeps() {
+        return this.props.falcor.get(['parcel', 'meta', ATTRIBUTES])
+            .then(response => {
                 return response
             })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getActionsCategoryAndType();
-        if(this.props.match.params.assetId) {
-            this.props.falcor.get(['building','byId',[this.props.match.params.assetId],Object.keys(this.state)])
-                .then(response =>{
-                    Object.keys(this.state).forEach((key,i)=>{
-                        let tmp_state = {};
-                        tmp_state[key] = response.json.building.byId[this.props.match.params.assetId][key] || '' ;
-                        this.setState(
-                            tmp_state
-                        );
+        if (this.props.match.params.assetId) {
+            this.props.falcor.get(['building', 'byId', [this.props.match.params.assetId], ATTRIBUTES])
+                .then(response => {
+                    ATTRIBUTES
+                        .filter(key => response.json.building.byId[this.props.match.params.assetId][key])
+                        .forEach((key, i) => {
+                            let tmp_state = {};
+                            tmp_state[key] = response.json.building.byId[this.props.match.params.assetId][key] || '';
+                            this.setState(
+                                tmp_state,
+                            );
 
-                    });
-
+                        });
+                    this.setState({isShelter: (this.state.shelter && this.state.shelter !== '') ? 'true' : 'false'})
                 })
         }
 
     }
-    getActionsCategoryAndType(){
+
+    getActionsCategoryAndType() {
         this.props.falcor.get(['actions', [this.props.activePlan], 'project', 'length'])
             .then(response => {
-                console.log('actions len', falcorGraph.getCache().actions[this.props.activePlan].project.length)
                 if (
                     falcorGraph.getCache().actions &&
                     falcorGraph.getCache().actions[this.props.activePlan] &&
                     falcorGraph.getCache().actions[this.props.activePlan].project &&
                     falcorGraph.getCache().actions[this.props.activePlan].project.length
-                ){
+                ) {
                     return falcorGraph.getCache().actions[this.props.activePlan].project.length
                 }
             }).then(length => this.props.falcor.get(
-                ['actions', [this.props.activePlan], 'project', 'byIndex', {from: 0, to: length - 1}, ['id','action_name']]))
+            ['actions', [this.props.activePlan], 'project', 'byIndex', {
+                from: 0,
+                to: length - 1
+            }, ['id', 'action_name']]))
             .then(response => {
                 if (
                     falcorGraph.getCache().actions &&
                     falcorGraph.getCache().actions.project &&
                     falcorGraph.getCache().actions.project.byId &&
                     Object.keys(falcorGraph.getCache().actions.project.byId).length > 0
-                ){
+                ) {
                     actionList.push(...Object.values(falcorGraph.getCache().actions.project.byId))
                 }
                 return response
             })
     }
-    propClassDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined){
+
+    propClassDropDown() {
+        if (this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined) {
             const graph = this.props.parcelMetaData['prop_class'];
             let propClassDropDownData = [];
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
+            Object.values(graph).filter(d => d !== 'atom').forEach(item => {
+                item.forEach(i => {
                     propClassDropDownData.push(i)
                 })
             })
-            return(
-                <select className="form-control justify-content-sm-end" id='prop_class' onChange={this.handleChange} value={this.state.prop_class}>
+            return (
+                <select className="form-control justify-content-sm-end" id='prop_class' onChange={this.handleChange}
+                        value={this.state.prop_class} disabled={this.props.match.params.assetId}>
                     <option default>--Select Prop Class--</option>
                     <option className="form-control" key={0} value="None">No Prop Class Selected</option>
                     {
-                        propClassDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={parseInt(data.value)}>{data.name}</option>)
+                        propClassDropDownData.map((data, i) => {
+                            return (<option className="form-control" key={i + 1}
+                                            value={parseInt(data.value)}>{data.name}</option>)
                         })
                     }
                 </select>
@@ -166,24 +222,26 @@ class AssetsEdit extends React.Component{
     }
 
     //TODO : - yet to be entered in DB
-    buildingTypeDropDown(){
+    buildingTypeDropDown() {
         let buildingTypeDropDownData = [];
-        return(
-            <select className="form-control justify-content-sm-end" id='building_type' onChange={this.handleChange} value={this.state.building_type}>
+        return (
+            <select className="form-control justify-content-sm-end" id='building_type' onChange={this.handleChange}
+                    value={this.state.building_type}>
                 <option default>--Select Building Type--</option>
                 <option className="form-control" key={0} value="None">No Building Type Selected</option>
                 {
-                    buildingTypeDropDownData.map((data,i) =>{
-                        return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                    buildingTypeDropDownData.map((data, i) => {
+                        return (<option className="form-control" key={i + 1} value={data.value}>{data.name}</option>)
                     })
                 }
             </select>
         )
     }
 
-    actionTypeDropDown(){
+    actionTypeDropDown() {
         return (
-            <select className="form-control justify-content-sm-end" id='action_type' onChange={this.handleChange} value={this.state.action_type}>
+            <select className="form-control justify-content-sm-end" id='action_type' onChange={this.handleChange}
+                    value={this.state.action_type}>
                 <option default>--Select Action Type--</option>
                 <option className="form-control" key={0} value="None">No Action Type Selected</option>
                 {actionList.length > 0 ?
@@ -197,52 +255,32 @@ class AssetsEdit extends React.Component{
 
         )
     }
-    addActionToAsset(){
-        console.log('added? ', this.state.action_type, this.props.match.params.assetId)
-        this.props.falcor.call(['actions', 'assets', 'insert'], [this.props.match.params.assetId,this.state.action_type], [], [])
+
+    addActionToAsset() {
+        this.props.falcor.call(['actions', 'assets', 'insert'], [this.props.match.params.assetId, this.state.action_type], [], [])
             .then(response => {
                 this.props.sendSystemMessage(`Action was successfully added.`, {type: "success"});
             })
     }
 
-    buildingStyleDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['bldg_style']){
+    buildingStyleDropDown() {
+        if (this.props.parcelMetaData !== undefined && this.props.parcelMetaData['bldg_style']) {
             const graph = this.props.parcelMetaData['bldg_style'];
             let buildingStyleDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
+            Object.values(graph).filter(d => d !== 'atom').forEach(item => {
+                item.forEach(i => {
                     buildingStyleDropDownData.push(i)
                 })
             })
-            return(
-                <select className="form-control justify-content-sm-end" id='bldg_style' onChange={this.handleChange} value={this.state.bldg_style}>
+            return (
+                <select className="form-control justify-content-sm-end" id='bldg_style' onChange={this.handleChange}
+                        value={this.state.bldg_style}>
                     <option default>--Select Building Style--</option>
                     <option className="form-control" key={0} value="None">No Building Style Selected</option>
                     {
-                        buildingStyleDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
-                        })
-                    }
-                </select>
-            )
-        }
-    }
-    heatTypeDropDown(){
-        if(this.props.parcelMetaData !== undefined && this.props.parcelMetaData['heat_type']){
-            const graph = this.props.parcelMetaData['heat_type'];
-            let heatTypeDropDownData = []
-            Object.values(graph).filter(d => d !== 'atom').forEach(item =>{
-                item.forEach(i =>{
-                    heatTypeDropDownData.push(i)
-                })
-            })
-            return(
-                <select className="form-control justify-content-sm-end" id='heat_type' onChange={this.handleChange} value={this.state.heat_type}>
-                    <option default>--Select Heat Type--</option>
-                    <option className="form-control" key={0} value="None">No Heat Type Selected</option>
-                    {
-                        heatTypeDropDownData.map((data,i) =>{
-                            return(<option className="form-control" key={i+1} value={data.value}>{data.name}</option>)
+                        buildingStyleDropDownData.map((data, i) => {
+                            return (
+                                <option className="form-control" key={i + 1} value={data.value}>{data.name}</option>)
                         })
                     }
                 </select>
@@ -250,21 +288,60 @@ class AssetsEdit extends React.Component{
         }
     }
 
-    onSubmit(event){
+    criticalInfraDropdown() {
+        return (
+            <select className="form-control justify-content-sm-end" id='critical' onChange={this.handleChange}
+                    value={this.state.critical}>
+                <option default>--Select Critical Infrastructure--</option>
+                {
+                    Object.keys(criticalFacilityMeta).map((data, i) => {
+                        return (<option className="form-control" key={i + 1}
+                                        value={data}>{criticalFacilityMeta[data]}</option>)
+                    })
+                }
+            </select>
+        )
+    }
+
+    heatTypeDropDown() {
+        if (this.props.parcelMetaData !== undefined && this.props.parcelMetaData['heat_type']) {
+            const graph = this.props.parcelMetaData['heat_type'];
+            let heatTypeDropDownData = []
+            Object.values(graph).filter(d => d !== 'atom').forEach(item => {
+                item.forEach(i => {
+                    heatTypeDropDownData.push(i)
+                })
+            })
+            return (
+                <select className="form-control justify-content-sm-end" id='heat_type' onChange={this.handleChange}
+                        value={this.state.heat_type}>
+                    <option default>--Select Heat Type--</option>
+                    <option className="form-control" key={0} value="None">No Heat Type Selected</option>
+                    {
+                        heatTypeDropDownData.map((data, i) => {
+                            return (
+                                <option className="form-control" key={i + 1} value={data.value}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    onSubmit(event) {
         event.preventDefault();
         let args = [];
-        if(this.props.match.params.assetId){
+        if (this.props.match.params.assetId) {
             let attributes = Object.keys(this.state)
-            let updated_data ={};
+            let updated_data = {};
             Object.keys(this.state)
                 .filter(f => f !== 'action_type')
                 .forEach((d, i) => {
-                console.log(this.state[d], d)
-                updated_data[d] = this.state[d]
-            })
+                    updated_data[d] = this.state[d]
+                })
             return this.props.falcor.set({
                 paths: [
-                    ['building','byId', [this.props.match.params.assetId], attributes]
+                    ['building', 'byId', [this.props.match.params.assetId], attributes]
                 ],
                 jsonGraph: {
                     building: {
@@ -274,74 +351,143 @@ class AssetsEdit extends React.Component{
                     }
                 }
             })
-            .then(response => {
-                this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
-            })
+                .then(response => {
+                    this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
+                })
         }
 
     }
 
-    render(){
+    render() {
         const wizardSteps = [
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 1</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Basic Info</span></span>),
+                    <span style={{fontSize: '0.7em'}}>Step 1</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Basic Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Prop Type</label>
                             {this.propClassDropDown()}</div>
                     </div>
-                    <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Replacement value</label>
-                            <input id='replacement_value' onChange={this.handleChange} className="form-control" placeholder="Replacement value" type="text" value={this.state.replacement_value}/></div>
-                    </div>
+                    {
+                        this.state.prop_class && ['4'].includes(this.state.prop_class.slice(0, 1)) ? null :
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Replacement value</label>
+                                    <input id='replacement_value' onChange={this.handleChange} className="form-control"
+                                           placeholder="Replacement value" type="text"
+                                           value={this.state.replacement_value}
+                                           disabled={this.props.match.params.assetId}/></div>
+                            </div>
+                    }
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Critical Infrastructure</label>
-                            <input id='critical' onChange={this.handleChange} className="form-control" placeholder="Critical Infrastructure" type="text" value={this.state.critical}/></div>
+                            {this.criticalInfraDropdown()}
+                        </div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Address</label>
-                            <input id='address' onChange={this.handleChange} className="form-control" placeholder="Address" type="text" value={this.state.address}/></div>
+                            <input id='address' onChange={this.handleChange} className="form-control"
+                                   placeholder="Address" type="text" value={this.state.address}
+                                   disabled={this.props.match.params.assetId}/></div>
                     </div>
 
+                    <div className="col-sm-12">
+                        <div className="form-group form-inline"
+                             style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>Shelter? </label>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                <input
+                                    checked={this.state.isShelter === 'true'}
+                                    id={'isShelter'}
+                                    className="form-check-input"
+                                    type={'radio'}
+                                    value={'true'}
+                                    onChange={this.handleChange}/><span><label>Yes</label></span>
+                            </label>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                <input
+                                    checked={this.state.isShelter === 'false'}
+                                    id={'isShelter'}
+                                    className="form-check-input"
+                                    type={'radio'}
+                                    value={'false'}
+                                    onChange={this.handleChange}/><span><label>No</label></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {this.state.isShelter === 'true' ?
+                        <div className="col-sm-12">
+                            <div className="form-group"><label htmlFor>Shelter Id</label>
+                                <input id='shelter' onChange={this.handleChange} className="form-control"
+                                       placeholder="Shelter id" type="number" value={this.state.shelter}/></div>
+                        </div> : null}
                 </div>)
             },
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 2</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Occupancy Info</span></span>),
+                    <span style={{fontSize: '0.7em'}}>Step 2</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Occupancy Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of residents</label>
-                            <input id='num_residents' onChange={this.handleChange} className="form-control" placeholder="Number of residents" type="text" value={this.state.num_residents}/></div>
+                            <input id='num_residents' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of residents" type="text" value={this.state.num_residents}/>
+                        </div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of Employees</label>
-                            <input id='num_employees' onChange={this.handleChange} className="form-control" placeholder="Number of employees" type="text" value={this.state.num_employees}/></div>
+                            <input id='num_employees' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of employees" type="text" value={this.state.num_employees}/>
+                        </div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of occupants</label>
-                            <input id='num_occupants' onChange={this.handleChange} className="form-control" placeholder="Number of occupants" type="text" value={this.state.num_occupants}/></div>
+                            <input id='num_occupants' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of occupants" type="text" value={this.state.num_occupants}/>
+                        </div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of vehicles owned by inhabitants</label>
-                            <input id='num_vehicles_inhabitants' onChange={this.handleChange} className="form-control" placeholder="Number of vehicles owned by inhabitants" type="text" value={this.state.num_vehicles_inhabitants}/></div>
+                            <input id='num_vehicles_inhabitants' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of vehicles owned by inhabitants" type="text"
+                                   value={this.state.num_vehicles_inhabitants}/></div>
                     </div>
                 </div>)
             },
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 3</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Structural Info</span></span>),
+                    <span style={{fontSize: '0.7em'}}>Step 3</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Structural Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of units</label>
-                            <input id='num_units' onChange={this.handleChange} className="form-control" placeholder="Number of units" type="text" value={this.state.num_units}/></div>
+                            <input id='num_units' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of units" type="text" value={this.state.num_units}/></div>
                     </div>
                     <div className="col-sm-12">
-                        <div className="form-group"><label htmlFor>Basement</label>
-                            <input id='basement' onChange={this.handleChange} className="form-control" placeholder="Basement" type="text" value={this.state.basement}/></div>
+                        <div className="form-group form-inline"
+                             style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>Basement? </label>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                <input
+                                    checked={this.state.basement === 'true'}
+                                    id={'basement'}
+                                    className="form-check-input"
+                                    type={'radio'}
+                                    value={'true'}
+                                    onChange={this.handleChange}/><span><label>Yes</label></span>
+                            </label>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                <input
+                                    checked={this.state.basement === 'false'}
+                                    id={'basement'}
+                                    className="form-check-input"
+                                    type={'radio'}
+                                    value={'false'}
+                                    onChange={this.handleChange}/><span><label>No</label></span>
+                            </label>
+                        </div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Building Type</label>
@@ -349,19 +495,23 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Roof type</label>
-                            <input id='roof_type' onChange={this.handleChange} className="form-control" placeholder="Roof type" type="text" value={this.state.roof_type}/></div>
+                            <input id='roof_type' onChange={this.handleChange} className="form-control"
+                                   placeholder="Roof type" type="text" value={this.state.roof_type}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Height</label>
-                            <input id='height' onChange={this.handleChange} className="form-control" placeholder="Height" type="text" value={this.state.height}/></div>
+                            <input id='height' onChange={this.handleChange} className="form-control"
+                                   placeholder="Height" type="text" value={this.state.height}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of Stories</label>
-                            <input id='num_stories' onChange={this.handleChange} className="form-control" placeholder="Number of stories" type="text" value={this.state.num_stories}/></div>
+                            <input id='num_stories' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of stories" type="text" value={this.state.num_stories}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Structure type</label>
-                            <input id='structure_type' onChange={this.handleChange} className="form-control" placeholder="Structure type" type="text" value={this.state.structure_type}/></div>
+                            <input id='structure_type' onChange={this.handleChange} className="form-control"
+                                   placeholder="Structure type" type="text" value={this.state.structure_type}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Building style</label>
@@ -369,30 +519,37 @@ class AssetsEdit extends React.Component{
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Square foot living</label>
-                            <input id='sqft_living' onChange={this.handleChange} className="form-control" placeholder="Square foot living" type="text" value={this.state.sqft_living}/></div>
+                            <input id='sqft_living' onChange={this.handleChange} className="form-control"
+                                   placeholder="Square foot living" type="text" value={this.state.sqft_living}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of kitchens</label>
-                            <input id='nbr_kitchens' onChange={this.handleChange} className="form-control" placeholder="Number of kitchens" type="text" value={this.state.nbr_kitchens}/></div>
+                            <input id='nbr_kitchens' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of kitchens" type="text" value={this.state.nbr_kitchens}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of bedrooms</label>
-                            <input id='nbr_bedrooms' onChange={this.handleChange} className="form-control" placeholder="Number of bedrooms" type="text" value={this.state.nbr_bedrooms}/></div>
+                            <input id='nbr_bedrooms' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of bedrooms" type="text" value={this.state.nbr_bedrooms}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Number of full bathrooms</label>
-                            <input id='nbr_full_baths' onChange={this.handleChange} className="form-control" placeholder="Number of full bathrooms" type="text" value={this.state.nbr_full_baths}/></div>
+                            <input id='nbr_full_baths' onChange={this.handleChange} className="form-control"
+                                   placeholder="Number of full bathrooms" type="text"
+                                   value={this.state.nbr_full_baths}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>First floor elevation</label>
-                            <input id='first_floor_elevation' onChange={this.handleChange} className="form-control" placeholder="First floor elevation" type="text" value={this.state.first_floor_elevation}/></div>
+                            <input id='first_floor_elevation' onChange={this.handleChange} className="form-control"
+                                   placeholder="First floor elevation" type="text"
+                                   value={this.state.first_floor_elevation}/></div>
                     </div>
                 </div>)
             },
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 4</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Services Info</span></span>),
+                    <span style={{fontSize: '0.7em'}}>Step 4</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Services Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Heat Type</label>
@@ -402,40 +559,52 @@ class AssetsEdit extends React.Component{
             },
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 5</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Commercial Info</span></span>),
+                    <span style={{fontSize: '0.7em'}}>Step 5</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Commercial Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>NAICS code</label>
-                            <input id='naics_code' onChange={this.handleChange} className="form-control" placeholder="NAICS code" type="text" value={this.state.naics_code}/></div>
+                            <input id='naics_code' onChange={this.handleChange} className="form-control"
+                                   placeholder="NAICS code" type="text" value={this.state.naics_code}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Census industry code</label>
-                            <input id='census_industry_code' onChange={this.handleChange} className="form-control" placeholder="Census industry code" type="text" value={this.state.census_industry_code}/></div>
+                            <input id='census_industry_code' onChange={this.handleChange} className="form-control"
+                                   placeholder="Census industry code" type="text"
+                                   value={this.state.census_industry_code}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Replacement value</label>
-                            <input id='replacement_value' onChange={this.handleChange} className="form-control" placeholder="Replacement value" type="text" value={this.state.replacement_value}/></div>
+                            <input id='replacement_value' onChange={this.handleChange} className="form-control"
+                                   placeholder="Replacement value" type="text" value={this.state.replacement_value}/>
+                        </div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Contents replacement value</label>
-                            <input id='contents_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Contents replacement value" type="text" value={this.state.contents_replacement_value}/></div>
+                            <input id='contents_replacement_value' onChange={this.handleChange} className="form-control"
+                                   placeholder="Contents replacement value" type="text"
+                                   value={this.state.contents_replacement_value}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Inventory replacement value</label>
-                            <input id='inventory_replacement_value' onChange={this.handleChange} className="form-control" placeholder="Inventory replacement value" type="text" value={this.state.inventory_replacement_value}/></div>
+                            <input id='inventory_replacement_value' onChange={this.handleChange}
+                                   className="form-control" placeholder="Inventory replacement value" type="text"
+                                   value={this.state.inventory_replacement_value}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Establishment revenue</label>
-                            <input id='establishment_revenue' onChange={this.handleChange} className="form-control" placeholder="Establishment revenue" type="text" value={this.state.establishment_revenue}/></div>
+                            <input id='establishment_revenue' onChange={this.handleChange} className="form-control"
+                                   placeholder="Establishment revenue" type="text"
+                                   value={this.state.establishment_revenue}/></div>
                     </div>
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Business hours</label>
-                            <input id='business_hours' onChange={this.handleChange} className="form-control" placeholder="Business hours" type="text" value={this.state.business_hours}/></div>
+                            <input id='business_hours' onChange={this.handleChange} className="form-control"
+                                   placeholder="Business hours" type="text" value={this.state.business_hours}/></div>
                     </div>
                 </div>)
             },
-            {
+            /*{
                 title: (<span>
                     <span style={{fontSize:'0.7em'}}>Step 6</span>
                     <br /><span style={{fontSize:'0.9em'}}>Risk Info</span></span>),
@@ -477,11 +646,11 @@ class AssetsEdit extends React.Component{
                             <input id='topography' onChange={this.handleChange} className="form-control" placeholder="Topography : slope" type="text" value={this.state.topography}/></div>
                     </div>
                 </div>)
-            },
+            },*/
             {
                 title: (<span>
-                    <span style={{fontSize:'0.7em'}}>Step 7</span>
-                    <br /><span style={{fontSize:'0.9em'}}>Actions</span></span>),
+                    <span style={{fontSize: '0.7em'}}>Step 6</span>
+                    <br/><span style={{fontSize: '0.9em'}}>Actions</span></span>),
                 content: (
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Select Action</label>
@@ -500,8 +669,8 @@ class AssetsEdit extends React.Component{
                         </div>
                     </div>
 
-                    )
-                    }
+                )
+            }
 
         ]
         return (
@@ -512,51 +681,51 @@ class AssetsEdit extends React.Component{
                             className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded"
                             to={'/guidance/guidance-assets/view'} target={'_blank'}
                         >?</Link>
-                        <span style={{float:'right'}}>
+                        <span style={{float: 'right'}}>
                         <Link
                             className="btn btn-sm btn-primary"
-                            to={ `/assets/list/view/${this.props.match.params.assetId}` } >
+                            to={`/assets/list/view/${this.props.match.params.assetId}`}>
                                 View Asset
                         </Link>
                         </span>
                     </h6>
-                    <Wizard steps={wizardSteps} submit={this.onSubmit}/>
+                    <Wizard steps={wizardSteps} submit={this.onSubmit} submitOnAll={true}/>
                 </Element>
             </div>
         )
     }
 }
 
-const mapStateToProps = (state,ownProps) => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        geoid : ownProps.geoid,
-        parcelMetaData : get(state.graph,'parcel.meta',{}),
+        geoid: ownProps.geoid,
+        parcelMetaData: get(state.graph, 'parcel.meta', {}),
         activePlan: state.user.activePlan
     }
 };
 
-const mapDispatchToProps =  {
-sendSystemMessage,
+const mapDispatchToProps = {
+    sendSystemMessage,
 };
 
 export default [{
     path: '/assets/list/edit/:assetId',
-        name: 'Edit Actions',
+    name: 'Edit Actions',
     mainNav: false,
     auth: true,
     exact: true,
     breadcrumbs: [
-    { name: 'Assets', path: '/assets/' },
-    { param: 'assetId', path: '/assets/edit/' }
-],
+        {name: 'Assets', path: '/assets/'},
+        {param: 'assetId', path: '/assets/edit/'}
+    ],
     menuSettings: {
-    image: 'none',
+        image: 'none',
         scheme: 'color-scheme-light',
         position: 'menu-position-left',
         layout: 'menu-layout-compact',
         style: 'color-style-default'
-},
-    component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(AssetsEdit))
+    },
+    component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsEdit))
 }
 ]
 

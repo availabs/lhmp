@@ -6,12 +6,13 @@ import uploadCsvToDb.database_config as database_config
 
 
 def move_data(args):
+    forms = tuple(args['forms']) if len(args['forms']) > 1 else '(\'' + args['forms'][0] + '\')'
     return '''
         INSERT INTO forms.forms_data(type,plan_id, attributes)
     
         select type, {}, attributes from forms.forms_data
                     where type in {}
-                    and plan_id = {}'''.format(args['to_plan'], tuple(args['forms']), args['from_plan'])
+                    and plan_id = {}'''.format(args['to_plan'], forms, args['from_plan'])
 
 
 def createTable(cursor, sql):
@@ -39,4 +40,6 @@ def main(args):
 # END main
 
 if __name__ == "__main__":
-    main({'from_plan': 59, 'to_plan': 64, 'forms': ['capabilities', 'actions', 'zones']})
+    main({'from_plan': 59, 'to_plan': 64,
+          'forms': ['municipalities']#['capabilities', 'actions', 'zones']
+          })

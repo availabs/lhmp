@@ -171,7 +171,7 @@ class RouteInfoBox extends React.Component {
                                     {
                                         mode: 'markers',
                                         data: {
-                                            routes: [{hideAll: e.hideAll, viewAll: e.viewAll,
+                                            routes: [{hideAll: e.hideAll, viewAll: e.viewAll, initLoad: e.initLoad,
                                                 data: e.data ?
                                                     e.data.map(f => ({geometry: f.geom, name: f.route_name})):
                                                     []
