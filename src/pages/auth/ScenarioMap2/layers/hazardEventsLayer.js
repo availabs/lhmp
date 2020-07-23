@@ -49,14 +49,16 @@ export class HazardEventsLayer extends MapLayer{
 
 
     paintEvents(map) {
-        const events = get(falcorGraph.getCache(), `severeWeather.events.borked`, null); //[geoid][hazard][year]["property_damage"].value;
+        const graph = falcorGraph.getCache();
+        const events = get(graph, `severeWeather.events.borked`, null); //[geoid][hazard][year]["property_damage"].value;
 
         eventsGeo = {
             type: "FeatureCollection",
             features: []
         };
+
         if (events) {
-            let radiusScale = d3scale.scaleThreshold()
+/*            let radiusScale = d3scale.scaleThreshold()
                 .domain(
                     get(store.getState(), `user.activeGeoid.length`, null) === 2 ?
                         [500, 1000, 5000, 10000, 20000, 50000, 70000, 100000, 150000, 200000, 250000, 300000] :
@@ -66,10 +68,17 @@ export class HazardEventsLayer extends MapLayer{
                     get(store.getState(), `user.activeGeoid.length`, null) === 2 ?
                         [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] :
                         [0.1, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.8, 2, 2.2]
-                );
+                );*/
 
             if (!this.filters.hazard.value && this.hazardsFromFalcor)  this.filters.hazard.value = this.hazardsFromFalcor;
 
+            let colorScale = d3scale.scaleThreshold()
+                .domain(this.domain)
+                .range(this.range);
+            let colorScaleFilter = [
+                'match',
+                ['get', 'property_damage']
+            ];
             Object.keys(events).forEach(geo => {
                 Object.keys(events[geo])
                     .filter(f => this.filters.hazard.value && this.filters.hazard.value.includes(f))
@@ -80,9 +89,26 @@ export class HazardEventsLayer extends MapLayer{
                                 if (events[geo][haz][year].property_damage.value && events[geo][haz][year].property_damage.value.length > 0) {
                                     events[geo][haz][year].property_damage.value.forEach(data => {
                                         if (JSON.parse(data.geom)) {
-                                            let circle = turf.circle(JSON.parse(data.geom).coordinates, radiusScale(data.property_damage));
+                                            if (!colorScaleFilter.includes(data.property_damage)){
+                                                colorScaleFilter.push(data.property_damage)
+                                                colorScaleFilter.push(colorScale(data.property_damage))
+                                            }
+                                            let circle = {
+                                                type: "Feature",
+                                                properties: {'circle-color': colorScale(data.property_damage)},
+                                                geometry: {type: 'Point', coordinates: JSON.parse(data.geom).coordinates}
+                                            }
+                                            /*let circle = turf.circle(
+                                                JSON.parse(data.geom).coordinates,
+                                                 // radiusScale(data.property_damage) //radius
+                                            );*/
                                             circle.properties.hazard = data.hazardid;
                                             circle.properties.property_damage = data.property_damage;
+                                            circle.properties.begin_date_time = data.begin_date_time;
+                                            circle.properties.geoid = get(graph, `geo.${data.geoid.slice(0,5)}.name`, '');
+                                            circle.properties.cousub_geoid = get(graph, `geo.${data.cousub_geoid}.name`, '');
+                                            circle.properties.episode_id = data.episode_id;
+                                            circle.properties.episode_narrative = data.episode_narrative;
 
                                             eventsGeo.features.push(circle)
                                         }
@@ -91,37 +117,48 @@ export class HazardEventsLayer extends MapLayer{
                             })
                     })
             })
-        }
-        let colors = [
-            'match',
-            ['get', 'hazard']
-        ];
-        hazardMeta.forEach(h => {
-            colors.push(h.value);
-            colors.push(hazardcolors[h.value]);
-        });
-        colors.push('#000');
-        if (map.getSource('events')){
-            map.removeLayer('events-layer')
-            map.removeSource('events')
-        }
 
-        if (!map.getSource('events')){
-            map.addSource("events", {
-                'type': 'geojson',
-                'data': eventsGeo
+            colorScaleFilter.push('#000')
+            let colors = [
+                'match',
+                ['get', 'hazard']
+            ];
+
+            hazardMeta.forEach(h => {
+                colors.push(h.value);
+                colors.push(hazardcolors[h.value]);
             });
-            map.addLayer(
-                {
-                    id: 'events-layer',
-                    type: 'fill',
-                    source: 'events',
-                    "paint": {
-                        "fill-color": colors,
-                        "fill-opacity": 0.5
-                    },
-                }
-            );
+            colors.push('#000');
+            if (map.getSource('events')){
+                map.removeLayer('events-layer')
+                map.removeSource('events')
+            }
+
+            if (!map.getSource('events')){
+                map.addSource("events", {
+                    'type': 'geojson',
+                    'data': eventsGeo
+                });
+                map.addLayer(
+                    {
+                        id: 'events-layer',
+                        type: 'circle',
+                        source: 'events',
+                        "paint": {
+                            'circle-radius': {
+                                'base': 3,
+                                'stops': [
+                                    [12, 3],
+                                    [22, 3]
+                                ]
+                            },
+                            "circle-color": colorScaleFilter.length > 3 ? colorScaleFilter : '#000',
+                            "circle-opacity": 1
+                        },
+                    }
+                );
+            }
+
         }
 
     }
@@ -133,6 +170,8 @@ export class HazardEventsLayer extends MapLayer{
     receiveMessage(action, data) {
         this.currentYear = data.activeYear
         this.filters.hazard.value = data.activeHazard
+        this.domain = [0,10000,50000,100000, 250000];
+        this.range = Object.keys(hazardcolors).includes(this.filters.hazard.value) ? hazardcolors[this.filters.hazard.value + '_range'] : hazardcolors['all_range']
         return this.fetchData().then(data => this.receiveData(this.map, data))
         //     this.fetchData().then(data => this.receiveData(this.map,data))
 
@@ -226,7 +265,7 @@ export class HazardEventsLayer extends MapLayer{
                     }
 
                     return requests.reduce((a, c) =>
-                            a.then(() => falcorChunkerNice(c, {chunckSize: 5}))
+                            a.then(() => falcorGraph.get(c))
                         , Promise.resolve());
                 }
                 return d;
@@ -335,7 +374,7 @@ export const HazardEventsOptions =  (options = {}) => {
         }
     },
     popover: {
-        layers: ['tracts-layer-line', 'events-layer'],
+        layers: [/*'tracts-layer-line', */'events-layer'],
         dataFunc: feature => {
             return feature.layer.id === 'tracts-layer-line' ?
                 ["tract",
@@ -343,7 +382,12 @@ export const HazardEventsOptions =  (options = {}) => {
                 ] :
                 ['Event',
                     ['Type', get(feature, `properties.hazard`, null)],
-                    ['Damage', get(feature, `properties.property_damage`, null)]
+                    ['Damage', get(feature, `properties.property_damage`, null)],
+                    ['Date', get(feature, `properties.begin_date_time`, null)],
+                    ['County', get(feature, `properties.geoid`, null)],
+                    ['Municipality', get(feature, `properties.cousub_geoid`, null)],
+                    ['Episode ID', get(feature, `properties.episode_id`, null)],
+                    ['Description', get(feature, `properties.episode_narrative`, null)],
                 ]
 
         }

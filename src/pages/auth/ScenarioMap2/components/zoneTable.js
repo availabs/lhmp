@@ -18,27 +18,16 @@ const showZoneModal = (zone_id,zone_geoid,name,activeScenarioId,activeRiskZoneId
     return (
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
-            <div className="modal-dialog modal-lg">
-                <div className="modal-content">
-                    <div className="modal-header"><h5 className="modal-title" id="exampleModalLabel">Zone Buildings By Scenario : {name}</h5>
-                        <button aria-label="Close" className="close" data-dismiss="modal" type="button"
-                                onClick={() => setState({ showZoneModal: false })}
-                        >
-                            <span aria-hidden="true"> ×</span>
-                        </button>
-                    </div>
-                    <div className="modal-body">
-                        <ZoneModalData
-                            name = {name}
-                            zone_id = {zone_id}
-                            geoid ={zone_geoid}
-                            scenario_id = {activeScenarioId}
-                            risk_zone_id ={activeRiskZoneId}
-                            geom = {geom}
-                        />
-                    </div>
-                </div>
-            </div>
+            <ZoneModalData
+                name = {name}
+                zone_id = {zone_id}
+                geoid ={zone_geoid}
+                scenario_id = {activeScenarioId}
+                risk_zone_id ={activeRiskZoneId}
+                geom = {geom}
+                onClose={() => setState({ showZoneModal: false })}
+                title={`Zone Buildings By Scenario : ${name}`}
+            />
         </div>
     )
 }

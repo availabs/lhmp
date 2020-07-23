@@ -9,6 +9,7 @@ import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import {ListWithoutUrl} from 'pages/auth/Assets/components/AssetsListByTypeByHazard.js'
+import AvlModal from 'components/AvlStuff/DraggableModal'
 var _ = require("lodash")
 var format =  d3.format("~s")
 const fmt = (d) => d < 1000 ? d : format(d)
@@ -76,7 +77,6 @@ class ZoneModalData extends React.Component {
     renderLandUseMenu(){
         return (
             <div>
-                {JSON.stringify(this.state.filter.value)}
                 <MultiSelectFilter
                     filter = {this.state.filter}
                     setFilter = {this.handleMultiSelectFilterChange}
@@ -177,12 +177,13 @@ class ZoneModalData extends React.Component {
     }
     render() {
         return (
-            <div className='element-wrapper'>
-                <div className='element-box'>
+            <AvlModal show={true} onClose={this.props.onClose}>
+                <div>
+                    <h4>{this.props.title}</h4>
                     {this.renderNav()}
                     {this.renderData()}
                 </div>
-            </div>
+            </AvlModal>
         )
     }
 }
