@@ -80,17 +80,6 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
-            lifelines :{
-                label:'Associated FEMA Lifeline(s)',
-                prompt:'',
-                sub_type:'',
-                edit_type:'dropdown',
-                display_type:'text',
-                meta:'true',
-                hidden:'false',
-                section:'',
-                list_attribute: 'true'
-            },
             capability_name:{
                 label:'Capability Name',
                 prompt:'Provide a capability title only if it differs from the capability you chose in the dropdown menu in the previous question. ' +
@@ -116,6 +105,17 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
+            lifelines :{
+                label:'Associated FEMA Lifeline(s)',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                meta:'true',
+                hidden:'false',
+                section:'',
+                list_attribute: 'true'
+            },    
             status:{
                 label:'Update Status',
                 prompt:'Select the current status of the capability.' +
@@ -255,6 +255,16 @@ module.exports = [
                 hidden:'false',
                 section:''
             },
+            comments:{
+                label:'Additional Comments',
+                prompt:'Additional comments and concerns regarding the capablity.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:''
+            },   
             // upload:{
             //     label:'Upload',
             //     prompt:'If applicable, provide a PDF upload of any and all supporting documents related to capability and its assessment. Examples include; meeting minutes, public participation surveys, regulatory documents, studies pertaining to development and updates.',

@@ -118,6 +118,15 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 section:''
+            },    
+            comments:{
+                label:'Additional Information',
+                prompt:'Additional information regarding this role.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',    
             },
             //is_representitive: {}
         }

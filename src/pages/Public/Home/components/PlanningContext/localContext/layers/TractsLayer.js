@@ -87,24 +87,23 @@ class TractLayer extends MapLayer {
                 }
 
                 // get data and paint map
-                console.log('Tracts Layer gonna fetch')
                 this.fetchData(graph).then(data => this.receiveData(map, data))
             })
 
     }
 
     fetchData(graph) {
-        console.log('fetch data tracts layer')
+
         
         if (!graph) graph = falcorGraph.getCache()
-        console.log('fetch data tracts layer')
+
         let geos = get(graph,
             `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
             null);
 
         if (!(geos && geos.value && geos.value.length > 0)) return Promise.resolve();
 
-        console.log('test 123', geos.value)
+
         return falcorGraph.get(['acs', geos.value, ['2017'], ['B01003_001E']])
             .then(d => falcorGraph.get(['geo', geos.value, 'name']))
             

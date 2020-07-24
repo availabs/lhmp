@@ -35,7 +35,6 @@ class ScenarioControl extends React.Component {
         if(this.state.scenario_id){
             return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
                 .then(response =>{
-
                     return response
                 })
         }
