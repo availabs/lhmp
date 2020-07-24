@@ -15,7 +15,7 @@ const YearDiv = styled.div`
 
 class CensusStatBox extends React.Component {
     fetchFalcorDeps(){
-        console.log('getting stuff', this.props.geoids, this.props.years,)
+
         if( this.props.geoids.includes(NaN)) {
           return Promise.resolve({})
         }

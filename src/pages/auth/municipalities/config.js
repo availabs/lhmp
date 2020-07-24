@@ -109,11 +109,18 @@ module.exports = [
                 section:''
             },
             csc_level:{
-                label:'What is the climate smart community certification level?',
+                label:'What is the Climate Smart Community certification level?',
                 prompt:'Identify whether the community is bronze, silver or gold certified.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
+            },
+            status:{
+                label:'Status of Climate Smart Community',
+                prompt:'Identify the current status of the community. Either current or rescinded. If rescinded please explain why.',
+                sub_type:'',
+                edit_type:'text',
+                display_type:'text',    
             },
             crs_member:{
                 label:'Community Rating System Member',
@@ -183,13 +190,6 @@ module.exports = [
                 hidden:'',
                 data:'',
                 section:'',
-            },
-            status:{
-                label:'Status of CSC',
-                prompt:'Identify the current status of the community. Either current or rescinded. If rescinded please explain why.',
-                sub_type:'',
-                edit_type:'text',
-                display_type:'text',
             },
             nfip_standing:{
                 label:'NFIP Community Standing',

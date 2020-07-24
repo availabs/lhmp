@@ -21,7 +21,6 @@ const DIV = styled.div`
 class SideMenu extends React.Component {
    
     render(){
-        console.log('this.props', this.props)
         let counter = 1;
         let baseURL = this.props.linkPath ? this.props.linkPath : '';
         return(
