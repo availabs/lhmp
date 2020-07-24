@@ -34,6 +34,7 @@ import AdminLandingPage from 'pages/auth/Plan/LandingPage'
 
 import PlanningToolsRoles from 'pages/auth/Roles/index'
 import PlanningToolsCapabilities from 'pages/auth/Capabilities/index'
+import PlanningToolsCapabilitiesOverview from 'pages/auth/CapabilitiesOverview/'
 import PlanningToolsAssets from 'pages/auth/Assets/index'
 import Guidance from 'pages/auth/Plan/Guidance'
 import GuidanceView from 'pages/auth/Plan/GuidanceView'
@@ -107,6 +108,7 @@ const routes = [
 
     ...PlanningToolsRoles,
     ...PlanningToolsCapabilities,
+    ...PlanningToolsCapabilitiesOverview,
     ...PlanningToolsAssets,
     ...Guidance,
     ...GuidanceView,
