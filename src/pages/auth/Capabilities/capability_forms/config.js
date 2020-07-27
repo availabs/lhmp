@@ -259,7 +259,7 @@ module.exports = [
                 label:'Additional Comments',
                 prompt:'Additional comments and concerns regarding the capablity.',
                 sub_type:'',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
