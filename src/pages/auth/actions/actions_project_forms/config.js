@@ -76,6 +76,16 @@ module.exports = [
                 meta:'false',
                 section:'1'
             },
+            comments:{
+                label:'Notes',
+                prompt:'Additional comments and concerns regarding this action.',
+                sub_type:'project',
+                edit_type:'textarea',
+                display_type:'text',
+                meta:'false',
+                hidden:'false',
+                section:'1'
+            },  
             // is_agency_type:{
             //     label:'Is the Lead Agency/Department a:',
             //     sub_type:'project',

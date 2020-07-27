@@ -1,8 +1,14 @@
 module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
-        list_attributes:['county','municipality','capability_type','capability_category', 'jurisdiction_utilization'],
-        csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload','comments'],
+        list_attributes:[
+            'county',
+            {'municipality' : {filter:'true'}},   
+            'capability_type',
+            {'capability_category': {filter:'true'}}, 
+            'jurisdiction_utilization'
+            ],
+        csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
         default_title: 'Capability', // in the case when page_title is invalid
         page_title: 'capability_name', // page title in edit and view
         sub_title: 'capability_category', // sub title in edit and view
@@ -253,7 +259,7 @@ module.exports = [
                 label:'Additional Comments',
                 prompt:'Additional comments and concerns regarding the capablity.',
                 sub_type:'',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
