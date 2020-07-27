@@ -33,7 +33,7 @@ module.exports = [
                 area:'true',
                 depend_on:'county',
                 hidden:'false',
-                section: ''
+                section: '',
             },
             hazard_concern: {
                 label:'Hazard of Concern',
