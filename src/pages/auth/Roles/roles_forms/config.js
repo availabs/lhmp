@@ -120,13 +120,13 @@ module.exports = [
                 section:''
             },    
             comments:{
-                label:'Additional Information',
-                prompt:'Additional information regarding this role.',
+                label:'Additional Comments',
+                prompt:'Additional comments and concerns regarding this role.',
                 sub_type:'',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
-                hidden:'false',    
+                hidden:'false',   
             },
             //is_representitive: {}
         }
