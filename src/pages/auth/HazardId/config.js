@@ -70,8 +70,8 @@ module.exports = [
                 meta: 'false',
             },
             extent_description:{
-                label:'General Area of Hazard.',
-                prompt:'Please describe the general scale of this hazard.',
+                label:'General Area of Hazard',
+                prompt:'Please describe the general area of this hazard.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
