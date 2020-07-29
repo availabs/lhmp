@@ -8,7 +8,7 @@ import TableBox from 'components/light-admin/tables/TableBox'
 import {Link} from "react-router-dom";
 import owner_config from 'pages/auth/Assets/components/BuildingByOwnerTypeConfig.js'
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
-
+import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 const ATTRIBUTES = [
     'address',
     'prop_class',
@@ -292,7 +292,12 @@ class AssetsListByTypeByHazard extends React.Component {
                         <h4 style={{textWrap: 'break-word', wordBreak: 'break-word'}}>
                             <label>
                                 Assets Listed By {property_type} -
-                                {this.props.match.params.typeIds.toString().split('-').join(', ')}
+                                {
+                                    get(this.props, `match.params.typeIds`, '').toString().split('-')
+                                        .map(type =>
+                                            get(BuildingByLandUseConfig.filter(f => f.value === type.toString()), `[0].name`, type)
+                                        ).join(', ')
+                                }
                                 {hazard_risk ? ' and ' + ' ' + hazard_risk : null}
                                 {this.props.match.params.riskzoneIds ? ` and Risk Zones: ${this.props.match.params.riskzoneIds.toString().split('-').join(', ')}` : null}
                             </label>

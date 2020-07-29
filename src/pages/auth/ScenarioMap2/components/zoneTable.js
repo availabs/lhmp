@@ -139,7 +139,12 @@ class ZoneTable extends React.Component {
                                            })}>
                                             {d.zone_name}
                                         </a>
-                                        {this.state.showZoneModal ? showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this)) : null}
+                                        {
+                                            this.state.showZoneModal &&
+                                            this.state.zone_id === d.zone_id &&
+                                            this.state.geoid === d.zone_geoid &&
+                                            this.state.name === d.zone_name
+                                            ? showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this)) : null}
                                     </td>
                                     <td>{d.num_buildings}</td>
                                     <td>{d.replacement_value}</td>

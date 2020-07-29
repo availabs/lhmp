@@ -165,7 +165,7 @@ class ZoneModalData extends React.Component {
                         hazardIds: this.getParam(link, 'hazard'),
                         scenarioIds: this.getParam(link, 'scenario'),
                         riskzoneIds: this.getParam(link, 'riskZone'),
-                        geoid: this.getParam(link, 'geoid'),
+                        geoid: link.includes('geo') ? this.getParam(link, 'geo') : this.getParam(link, 'geoid'),
                     }
                 }
             }
