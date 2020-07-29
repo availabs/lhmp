@@ -6,6 +6,8 @@ import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
 import * as d3 from "d3";
 import styled from "styled-components";
 import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
+import NewZoneAssetsFilteredTable from "./NewZoneAssetsFilteredTable";
+
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import {ListWithoutUrl} from 'pages/auth/Assets/components/AssetsListByTypeByHazard.js'
@@ -125,23 +127,40 @@ class ZoneModalData extends React.Component {
     }
 
     renderAll(){
+        console.log('id',this.props.zone_id,this.props.geoid)
         return (
             <React.Fragment>
                 {this.renderLandUseMenu()}
                 <h4>Buildings By Land Use</h4>
                 {
-                    <AssetsFilteredTable
-                        geoid={[this.props.geoid]}
-                        zone_id ={[this.props.zone_id]}
-                        groupBy={'propType'}
-                        groupByFilter={this.state.filter.value}
-                        scenarioId={this.props.scenario_id.map(d => d.id)}
-                        riskZoneId = {[this.props.risk_zone_id]}
-                        height={'fit-content'}
-                        width={'100%'}
-                        tableClass={`table table-sm table-lightborder table-hover`}
-                        linkOnClick={this.setLink.bind(this)}
-                    />
+                    this.props.type === 'zones' ?
+
+                        <NewZoneAssetsFilteredTable
+                            zone_id ={[this.props.zone_id]}
+                            groupBy={'propType'}
+                            groupByFilter={this.state.filter.value}
+                            scenarioId={this.props.scenario_id.map(d => d.id)}
+                            riskZoneId = {[this.props.risk_zone_id]}
+                            height={'fit-content'}
+                            width={'100%'}
+                            tableClass={`table table-sm table-lightborder table-hover`}
+                            linkOnClick={this.setLink.bind(this)}
+                        />
+
+                        :
+
+                        <AssetsFilteredTable
+                            geoid={[this.props.geoid]}
+                            zone_id ={[this.props.zone_id]}
+                            groupBy={'propType'}
+                            groupByFilter={this.state.filter.value}
+                            scenarioId={this.props.scenario_id.map(d => d.id)}
+                            riskZoneId = {[this.props.risk_zone_id]}
+                            height={'fit-content'}
+                            width={'100%'}
+                            tableClass={`table table-sm table-lightborder table-hover`}
+                            linkOnClick={this.setLink.bind(this)}
+                        />
 
                 }
             </React.Fragment>
