@@ -19,6 +19,7 @@ const showZoneModal = (zone_id,zone_geoid,name,activeScenarioId,activeRiskZoneId
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
             <ZoneModalData
+                type = {'zones'}
                 name = {name}
                 zone_id = {zone_id}
                 geoid ={zone_geoid}
