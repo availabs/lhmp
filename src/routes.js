@@ -30,10 +30,12 @@ import AdminRisk from 'pages/auth/Plan/risk' // admin plan page - submenu
 import PlanHazards from 'pages/auth/Plan/hazards' // admin plan page - submenu
 import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
 import AdminLandingPage from 'pages/auth/Plan/LandingPage'
-
+import StormEvents from 'pages/auth/StormEvents/'
+import hazardViewPage from 'pages/auth/StormEvents/hazardView'
 
 import PlanningToolsRoles from 'pages/auth/Roles/index'
 import PlanningToolsCapabilities from 'pages/auth/Capabilities/index'
+import PlanningToolsCapabilitiesOverview from 'pages/auth/CapabilitiesOverview/'
 import PlanningToolsAssets from 'pages/auth/Assets/index'
 import Guidance from 'pages/auth/Plan/Guidance'
 import GuidanceView from 'pages/auth/Plan/GuidanceView'
@@ -104,9 +106,11 @@ const routes = [
     ...AdminStrategies,
     ...AdminLandingPage,
     ...PlanPage,
-
+    ...StormEvents,
+    ...hazardViewPage,
     ...PlanningToolsRoles,
     ...PlanningToolsCapabilities,
+    ...PlanningToolsCapabilitiesOverview,
     ...PlanningToolsAssets,
     ...Guidance,
     ...GuidanceView,

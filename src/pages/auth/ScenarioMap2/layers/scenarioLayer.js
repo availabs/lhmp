@@ -239,39 +239,39 @@ export class ScenarioLayer extends MapLayer{
                     buildingRadius[item.building_id] = 3
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.building_id, color: "#fcbba1"},
+                        "properties": {id: item.building_id, color: "green"},
                         "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
                 }if(parseFloat(item['hazard_loss_dollars']) > 50000 && parseFloat(item['hazard_loss_dollars']) <= 100000){
-                    buildingColors[item.building_id] = "#ef3b2c"
+                    buildingColors[item.building_id] = "green"
                     buildingRadius[item.building_id] = 4
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.building_id, color: "#ef3b2c"},
+                        "properties": {id: item.building_id, color: "green"},
                         "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
                 }if(parseFloat(item['hazard_loss_dollars']) > 100000 && parseFloat(item['hazard_loss_dollars']) <= 500000){
-                    buildingColors[item.building_id] = "#cb181d"
+                    buildingColors[item.building_id] = "green"
                     buildingRadius[item.building_id] = 6
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.building_id, color: "#cb181d"},
+                        "properties": {id: item.building_id, color: "green"},
                         "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
                 }if(parseFloat(item['hazard_loss_dollars']) > 500000 && parseFloat(item['hazard_loss_dollars']) <= 1000000){
-                    buildingColors[item.building_id] =  "#a50f15"
+                    buildingColors[item.building_id] =  "green"
                     buildingRadius[item.building_id] = 8
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.building_id, color:  "#a50f15"},
+                        "properties": {id: item.building_id, color:  "green"},
                         "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
                 }if(parseFloat(item['hazard_loss_dollars']) > 1000000){
-                    buildingColors[item.building_id] =  "#67000d"
+                    buildingColors[item.building_id] =  "green"
                     buildingRadius[item.building_id] = 10
                     geojson.features.push({
                         "type": "Feature",
-                        "properties": {id: item.building_id, color: "#67000d"},
+                        "properties": {id: item.building_id, color: "green"},
                         "geometry": {...get(centroidGraph, `${item.building_id}.centroid.value`, null)}
                     })
                 }

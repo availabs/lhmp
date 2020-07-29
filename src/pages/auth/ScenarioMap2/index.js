@@ -2,15 +2,10 @@ import React from 'react';
 import AvlMap from 'components/AvlMap';
 import CountiesLayerFactory from 'pages/auth/ScenarioMap2/layers/scenarioMap2.js'
 import ControlLayersFactory from 'pages/auth/ScenarioMap2/layers/controlLayers.js'
-// import ScenarioLayerFactory from 'pages/auth/ScenarioMap2/layers/scenarioLayer.js'
-//import ZoneLayerFactory from 'pages/auth/ScenarioMap2/layers/zoneLayer.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 class Home extends React.Component {
-    //CountiesLayer = CountiesLayerFactory();
     ControlLayers = ControlLayersFactory();
-    // scenario = ScenarioLayerFactory();
-    //zone = ZoneLayerFactory();
 
     render() {
         return (
