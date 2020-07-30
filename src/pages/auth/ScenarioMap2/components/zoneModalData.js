@@ -28,6 +28,7 @@ const ZoneContainer = styled.div`
 `;
 
 const DIV = styled.div`
+  table { background-color: #efefef; }
   ${ props => props.theme.scrollbar };
   max-height: 50vh;
   overflow: auto;
@@ -78,7 +79,7 @@ class ZoneModalData extends React.Component {
 
     renderLandUseMenu(){
         return (
-            <div>
+            <div style={{backgroundColor: 'white'}}>
                 <MultiSelectFilter
                     filter = {this.state.filter}
                     setFilter = {this.handleMultiSelectFilterChange}
@@ -131,7 +132,6 @@ class ZoneModalData extends React.Component {
         return (
             <React.Fragment>
                 {this.renderLandUseMenu()}
-                <h4>Buildings By Land Use</h4>
                 {
                     this.props.type === 'zones' ?
 
@@ -197,8 +197,9 @@ class ZoneModalData extends React.Component {
     render() {
         return (
             <AvlModal show={true} onClose={this.props.onClose}>
-                <div>
+                <div style={{padding: '10px'}}>
                     <h4>{this.props.title}</h4>
+                    <h6>Buildings By Land Use</h6>
                     {this.renderNav()}
                     {this.renderData()}
                 </div>
