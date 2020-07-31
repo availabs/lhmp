@@ -19,6 +19,7 @@ const showZoneModal = (zone_id,zone_geoid,name,activeScenarioId,activeRiskZoneId
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
             <ZoneModalData
+                type = {'zones'}
                 name = {name}
                 zone_id = {zone_id}
                 geoid ={zone_geoid}
@@ -139,7 +140,12 @@ class ZoneTable extends React.Component {
                                            })}>
                                             {d.zone_name}
                                         </a>
-                                        {this.state.showZoneModal ? showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this)) : null}
+                                        {
+                                            this.state.showZoneModal &&
+                                            this.state.zone_id === d.zone_id &&
+                                            this.state.geoid === d.zone_geoid &&
+                                            this.state.name === d.zone_name
+                                            ? showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this)) : null}
                                     </td>
                                     <td>{d.num_buildings}</td>
                                     <td>{d.replacement_value}</td>

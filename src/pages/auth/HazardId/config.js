@@ -33,7 +33,7 @@ module.exports = [
                 area:'true',
                 depend_on:'county',
                 hidden:'false',
-                section: ''
+                section: '',
             },
             hazard_concern: {
                 label:'Hazard of Concern',
@@ -70,8 +70,8 @@ module.exports = [
                 meta: 'false',
             },
             extent_description:{
-                label:'General Area of Hazard.',
-                prompt:'Please describe the general scale of this hazard.',
+                label:'General Area of Hazard',
+                prompt:'Please describe the general area of this hazard.',
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
