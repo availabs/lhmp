@@ -4,6 +4,7 @@ module.exports = [
         type:'actions', // type is same as the route path for now
         sub_type:'project',
         list_attributes:['action_description',
+            {'action_jurisdiction': {filter: 'multi'}},
             {'action_category': {filter: 'multi'}},
             {'action_type': {filter: 'multi'}},
             {'action_name': {filter:'true'}},
@@ -150,7 +151,7 @@ module.exports = [
                 label:'Action Number',
                 sub_type:'project',
                 prompt:'Provide county designated action number for this action',
-                edit_type:'number',
+                edit_type:'text',
                 display_type:'text',
                 meta:'false',
                 section:'2'
@@ -178,7 +179,7 @@ module.exports = [
                     ' proposed construction methods, including any excavation and earth-moving activities;' +
                     ' where you are in the development process (e.g., are studies and/or drawings complete),' +
                     ' etc., the extent of any analyses or studies performed (attach any reports or studies).',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 expandable: 'true',
                 meta:'false',
