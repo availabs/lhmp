@@ -123,9 +123,13 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     afterSubmitEdit(newId, attributes){
+        console.log('ase', newId, attributes)
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                return this.state[c].reduce((a1,c1) => {
+                console.log('this.state.c', c, this.state)
+                if (!this.state[c] || typeof this.state[c] !== "object") return Promise.resolve();
+
+                return get(this.state, [c], []).reduce((a1,c1) => {
                     return a1.then(resA1 => {
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {
@@ -232,6 +236,7 @@ class AvlFormsNewDataWizard extends React.Component{
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
                     if (this.props.returnValue){
+                        console.log('res', response, Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                         this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                     }
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
