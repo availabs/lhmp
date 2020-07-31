@@ -2,9 +2,15 @@ module.exports = [
     {
         // TODO check the list view if no data
         type:'roles',
-        list_attributes : 
-            ['contact_municipality','contact_name','contact_title_role','contact_department','contact_agency','contact_county','contact_municipality'],
-        combine_list_attributes:{attributes:['contact_county','contact_municipality'],result:'Jurisidiction'},
+        list_attributes: [
+            'contact_name',
+            'contact_title_role',
+            'contact_department',
+            'contact_agency',
+            'contact_county',
+            'contact_municipality'
+        ],
+        // combine_list_attributes:{attributes:['contact_county','contact_municipality'],result:'Jurisidiction'},
         sub_type:'',
         sections:[],
         attributes:{
@@ -43,6 +49,19 @@ module.exports = [
                 depend_on:'contact_county',
                 section: '',
                 list_attribute: 'true'
+            },
+            contact_name:{
+                label:'Name',
+                prompt:'',
+                sub_type:'',
+                edit_type:'text',
+                field_required:'required',
+                display_type:'text',
+                validation:"true",
+                meta:'false',
+                section:'',
+                list_attribute: 'true'
+
             },
             contact_agency:{
                 label:'Agency(optional)',
@@ -87,19 +106,6 @@ module.exports = [
                 meta:'false',
                 inline:'true',
                 section:''
-            },
-            contact_name:{
-                label:'Name',
-                prompt:'',
-                sub_type:'',
-                edit_type:'text',
-                field_required:'required',
-                display_type:'text',
-                validation:"true",
-                meta:'false',
-                section:'',
-                list_attribute: 'true'
-
             },
             contact_phone:{
                 label:'Phone(optional)',
