@@ -136,6 +136,7 @@ class ZoneModalData extends React.Component {
                     this.props.type === 'zones' ?
 
                         <NewZoneAssetsFilteredTable
+                            geoid={[this.props.geoid]}
                             zone_id ={[this.props.zone_id]}
                             groupBy={'propType'}
                             groupByFilter={this.state.filter.value}
