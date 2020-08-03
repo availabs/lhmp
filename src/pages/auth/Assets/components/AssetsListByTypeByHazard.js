@@ -15,7 +15,7 @@ const ATTRIBUTES = [
     'owner_type',
     'replacement_value',
 ];
-let length = 0;
+let length = 5276890;
 const owner_types = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '-999']
 
 class AssetsListByTypeByHazard extends React.Component {
@@ -35,6 +35,9 @@ class AssetsListByTypeByHazard extends React.Component {
         }
         if (prevProps.match.url !== this.props.match.url){
            this.componentDidMount()
+        }
+        if (!_.isEqual(prevState.data, this.state.data) && this.props.dataChange){
+            this.props.dataChange(get(this.state, `data`, []).slice(0,get(this.props, `size`, 5)))
         }
     }
 
@@ -80,6 +83,8 @@ class AssetsListByTypeByHazard extends React.Component {
             });
             return this.props.falcor.get(
                 ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
+                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length'],
+                ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
                     'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
                     from: 0,
                     to: 50
@@ -89,6 +94,9 @@ class AssetsListByTypeByHazard extends React.Component {
                 .then(response => {
                     let meta = response.json.building.meta;
                     let riskZones = this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds.toString() : 'all';
+                    length = get(response,
+                        `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.length`,
+                        0)
                     let graph = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
@@ -185,6 +193,7 @@ class AssetsListByTypeByHazard extends React.Component {
                         d.replacement_value = '$' + d.replacement_value
                     })
                     this.setState({data: data, loading: false});
+
                 })
         } else if (this.props.match.params.scenarioIds) {
             this.setState({

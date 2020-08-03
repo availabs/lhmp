@@ -4,12 +4,14 @@ import store from "store"
 import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
 import MapLayer from "components/AvlMap/MapLayer.js"
-//import { register, unregister } from "../ReduxMiddleware"
+import {register, unregister} from "../../../../components/AvlMap/ReduxMiddleware";
 
 
 import { getColorRange } from "constants/color-ranges";
 import ZoneControls from "../controls/zoneControls";
 import geo from "../../../../store/modules/geo";
+import mapboxgl from "mapbox-gl";
+import get from 'lodash.get'
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -17,6 +19,8 @@ const IDENTITY = i => i;
 
 export class JurisdictionLayer extends MapLayer{
     onAdd(map) {
+        console.log('on add called')
+        register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
@@ -32,6 +36,7 @@ export class JurisdictionLayer extends MapLayer{
     }
 
     toggleVisibilityOn() {
+        console.log('tvo called')
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
@@ -49,6 +54,53 @@ export class JurisdictionLayer extends MapLayer{
             "jurisdiction_cousubs",
             ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
         )
+    }
+
+    removeCentroids(){
+        console.log('removing', this.markers)
+        this.markers.forEach(m => m.remove());
+        console.log('removed', this.markers)
+    }
+    paintCentroids(){
+        console.log('painting', this.markers)
+        if (this.markers.length){
+            this.markers.map(m => {
+                console.log('m going out', m);
+                m.remove()
+            });
+        }
+        this.markers = Object.keys(this.centroids)
+                                .filter(p => get(this.centroids[p], `centroid.value.coordinates`, null))
+                                .map((p,i) =>{
+                                    return new mapboxgl.Marker({
+                                        draggable: false
+                                    })
+                                        .setLngLat(this.centroids[p].centroid.value.coordinates)
+                                    .addTo(this.map)
+                                    /* .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
+                                         '<div>'
+                                         + '<b>'+ 'Title: ' +'</b>'+ graph[id].attributes.title + '<br>'
+                                         + '<b>'+ 'Type: ' +'</b>'+ graph[id].attributes.type + '<br>'
+                                         + '<b>'+ 'Comment: ' +'</b>'+ graph[id].attributes.comment +
+                                         '</div>'
+                                     ))*/
+                                })
+        this.forceUpdate();
+        console.log('painted', this.markers);
+    }
+
+    receiveMessage(action, data) {
+        console.log('rm called', this.markers, this.centroids)
+        this.centroids = data.centroids || {}
+        if (Object.keys(this.centroids).length){
+            this.paintCentroids()
+            this.markers = []
+        }
+
+    }
+
+    onRemove(map) {
+        unregister(this);
     }
 
     toggleVisibilityOff(){
@@ -139,9 +191,9 @@ export const JurisdictionOptions =  (options = {}) => {
 
             },
         ],
+        markers: [],
         _isVisible: true
     }
-
 
 }
 

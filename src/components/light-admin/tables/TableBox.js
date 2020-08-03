@@ -51,7 +51,7 @@ class TableBox extends React.Component {
   nextPage() {
       const maxPages = Math.ceil( this.props.length[0] / this.props.pageSize);
       let page = Math.min(maxPages - 1, this.state.page +1);
-      console.log('next page and max Pages',page,maxPages,this.props.length[0],this.props.pageSize)
+      // console.log('next page and max Pages',page,maxPages,this.props.length[0],this.props.pageSize)
       this.setState({
           page:page,
           loading : this.props.loading
