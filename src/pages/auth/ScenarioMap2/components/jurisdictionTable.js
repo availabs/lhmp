@@ -14,25 +14,6 @@ var _ = require("lodash")
 var format =  d3.format("~s")
 const fmt = (d) => d < 1000 ? d : format(d)
 
-const showZoneModal = (zone_id,zone_geoid,name,activeScenarioId,activeRiskZoneId,geom,setState) => {
-    return (
-        <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
-             tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
-            <ZoneModalData
-                type ={'jurisdictions'}
-                name = {name}
-                zone_id = {zone_id}
-                geoid ={zone_geoid}
-                scenario_id = {activeScenarioId}
-                risk_zone_id ={activeRiskZoneId}
-                geom = {geom}
-                onClose={() => setState({ showZoneModal: false })}
-                title={`Zone Buildings By Scenario : ${name}`}
-            />
-        </div>
-    )
-}
-
 class JurisdictionTable extends React.Component {
     constructor(props) {
         super(props);
@@ -42,6 +23,32 @@ class JurisdictionTable extends React.Component {
             zone_id : ''
         }
         //this.populateZonesData = this.populateZonesData.bind(this)
+        this.showZoneModal = this.showZoneModal.bind(this)
+    }
+
+    showZoneModal(zone_id,zone_geoid,name,activeScenarioId,activeRiskZoneId,geom,setState, layer){
+        return (
+            <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
+                 tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
+                <ZoneModalData
+                    type ={'jurisdictions'}
+                    name = {name}
+                    zone_id = {zone_id}
+                    geoid ={zone_geoid}
+                    scenario_id = {activeScenarioId}
+                    risk_zone_id ={activeRiskZoneId}
+                    geom = {geom}
+                    onClose={(e) => {
+                        e.persist();
+                        layer.forceUpdate();
+                        setState({showZoneModal: false});
+                        console.log('removing', layer)
+                        layer.removeCentroids();
+                    }}
+                    title={`Zone Buildings By Scenario : ${name}`}
+                />
+            </div>
+        )
     }
 
     componentDidUpdate(oldProps,oldState){
@@ -143,6 +150,7 @@ class JurisdictionTable extends React.Component {
     }
 
     render(){
+        console.log('this.props', this.props)
         return (
             <div style={{'overflowX':'auto'}}>
                 <table className='table table-sm table-hover'>
@@ -171,7 +179,12 @@ class JurisdictionTable extends React.Component {
                                            })}>
                                             {d.zone_name}
                                         </a>
-                                        {this.state.showZoneModal ? showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this)) : null}
+                                        {this.state.showZoneModal &&
+                                        this.state.zone_id === d.zone_id &&
+                                        this.state.geoid === d.zone_geoid &&
+                                        this.state.name === d.zone_name
+                                            ?
+                                            this.showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this), this.props.layer) : null}
                                     </td>
                                     <td>{d.num_buildings}</td>
                                     <td>{d.replacement_value}</td>

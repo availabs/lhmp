@@ -12,7 +12,7 @@ class FormArrayComponent extends React.PureComponent {
         super(props);
         this.state = {
             renderNewComp: false,
-            result: this.props.state[this.props.title]
+            result: this.props.state[this.props.title] || []
         }
         this.addButton = this.addButton.bind(this)
         this.cancelButton = this.cancelButton.bind(this)

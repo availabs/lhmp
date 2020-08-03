@@ -21,9 +21,15 @@ class JurisdictionControl extends React.Component{
             jurisdiction_data : {},
             new_zone:false
         }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.jurisdictionDropDown = this.jurisdictionDropDown.bind(this);
+        this.noSelectedZones = this.noSelectedZones.bind(this);
+        this.selectedZones = this.selectedZones.bind(this);
     }
 
     componentDidUpdate(oldProps,oldState) {
+        console.log('did update?', oldProps.layer.layer.jurisdictonLayer.centroids, this.props.layer.layer.jurisdictonLayer.centroids)
         if (oldProps.activeMode.length !== this.props.activeMode.length) {
             if (localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0) {
                 console.log('in if of component did update')
@@ -34,6 +40,10 @@ class JurisdictionControl extends React.Component{
             }
         }
 
+        if(!_.isEqual(oldProps.layer.layer.jurisdictonLayer.centroids, this.props.layer.layer.jurisdictonLayer.centroids)){
+            console.log('force update')
+            this.props.layer.layer.jurisdictonLayer.forceUpdate()
+        }
 
     }
 
@@ -142,6 +152,7 @@ class JurisdictionControl extends React.Component{
                     zones = {_.uniqBy(selectedZonesData,'zone_id')}
                     scenario_id={scenario_id}
                     noShowBoundary = {this.props.layer.layer.jurisdictonLayer}
+                    layer={this.props.layer.layer.jurisdictonLayer}
                 />
             )
 
@@ -150,6 +161,7 @@ class JurisdictionControl extends React.Component{
 
 
     render(){
+        console.log('layer updated?', this.props.layer.layer.jurisdictonLayer)
         let zones_list = this.jurisdictionDropDown();
         //localStorage.removeItem("jurisdiction")
         if(zones_list && zones_list.length > 0){

@@ -37,6 +37,7 @@ class NewZoneAssetsFilteredTable extends Component {
             ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,this.props.groupBy,ids.filter(f => f),'sum',['num_buildings','replacement_value']]
         )
             .then(response =>{
+                console.log('res', response)
                 return response
             })
     }
@@ -173,6 +174,7 @@ class NewZoneAssetsFilteredTable extends Component {
                                     return a
                                 }, {}),
                             link: linkBase + subCats.join('-'),
+
                         })
                     }
                     if (this.props.groupByFilter.length){
@@ -355,14 +357,16 @@ class NewZoneAssetsFilteredTable extends Component {
                     Header: 'TOTAL # BUILDING TYPE',
                     accessor: 'TOTAL # BUILDING TYPE',
                     sort: true,
-                    link: (d) => d + linkTrail // functional
+                    link: (d) => d + linkTrail, // functional
+                    linkOnClick: this.props.linkOnClick
                 },
                 this.props.public ? null : {
                     Header: 'TOTAL $ REPLACEMENT VALUE',
                     accessor: 'TOTAL $ REPLACEMENT VALUE',
                     sort: true,
                     formatValue: fnum,
-                    link: (d) => d + linkTrail // takes what is in data
+                    link: (d) => d + linkTrail, // takes what is in data
+                    linkOnClick: this.props.linkOnClick
                 },
                 ...riskZoneColNames
                     .map((name) => {
@@ -377,6 +381,7 @@ class NewZoneAssetsFilteredTable extends Component {
                             a['formatValue'] = fnum
                         }
                         a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}` + linkTrail;
+                        a['linkOnClick'] = this.props.linkOnClick;
                         return a
                     }),
             ].filter(f => f)}
