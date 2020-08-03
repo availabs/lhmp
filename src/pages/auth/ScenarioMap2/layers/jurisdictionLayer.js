@@ -19,9 +19,10 @@ const IDENTITY = i => i;
 
 export class JurisdictionLayer extends MapLayer{
     onAdd(map) {
-        console.log('on add called')
+        console.log('on add called', this.markers, this.centroids)
         register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
+        this.map = map;
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
@@ -94,7 +95,7 @@ export class JurisdictionLayer extends MapLayer{
         this.centroids = data.centroids || {}
         if (Object.keys(this.centroids).length){
             this.paintCentroids()
-            this.markers = []
+            // this.markers = []
         }
 
     }
