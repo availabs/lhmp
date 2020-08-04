@@ -46,14 +46,23 @@ const config = {
             intent: 'Overview of loss by asset type by scenario',
             icon: 'os-icon-alert-circle'
         },
-        
         {
             title: 'Critical Facilities',
+            requirement: 'Req-NYS-F-2B',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-loader'
+        },
+        
+        {
+            title: 'Critical Facilities Table',
             requirement: 'Req-NYS-F-2',
             type: 'criticalFacilitiesTable',
             prompt: '',
             intent: '',
-            icon: 'os-icon-loader'
+            icon: 'os-icon-loader',
+            hideNav: true
         },
          {
             title: 'Social Vulnerability',
@@ -73,7 +82,14 @@ const config = {
                 ' a. Describe FPMP for continued compliance, Adoption and enforcement of floodplain management requirements, including regulating new construction in Special Flood Hazard Areas (SFHAs);\n' +
                 '   i.Floodplain identification and mapping, including any local requests for map updates; or' +
                 '   ii.Description of community assistance and monitoring activities.' +
-                ' b. If jurisdiction is not taking part in NFIP describe why',
+                ' b. If jurisdiction is not taking part in NFIP describe why' +
+                ' Describe Floodplain Management (include/use current FIRMS, DFIRMS or best available data)' +
+                ' Review, describe and discuss NFIP Participation, Program and Repetitive Loss Properties' +
+                ' CAV Dates from DEC Received' + 
+                ' Policy Information from DEC/FEMA Received' +
+                ' Claims Information from DEC/FEMA Received' + 
+                ' Repetitive/Severe Repetitive Loss Properties from FEMA Received' + 
+                ' Describe commitment to maintaining NFIP compliance',
             intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA' +
                 ' is the official administering Federal agency of the NFIP, participation in the program is a basic community' +
                 ' capability and resource for flood hazard mitigation activities.',
