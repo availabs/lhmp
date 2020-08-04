@@ -7,7 +7,7 @@ import * as d3 from "d3";
 import styled from "styled-components";
 import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
 import NewZoneAssetsFilteredTable from "./NewZoneAssetsFilteredTable";
-
+import {setActiveCentroids} from "../../../../store/modules/centroids";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import {ListWithoutUrl} from 'pages/auth/Assets/components/AssetsListByTypeByHazard.js'
@@ -61,9 +61,16 @@ class ZoneModalData extends React.Component {
         return this.props.falcor.get(
             //["building", "byId", this.props.id, TABS.filter(tab => tab.name !== 'Actions').reduce((a, c) => [...a, ...c.props], [])],
             ["parcel", "meta", ["prop_class", "owner_type"]],
+            ['forms', 'byId', this.props.zone_id]
             //["building","byId", this.props.id, "riskZone", "riverine", "aal"],
             //['actions', 'assets','byId',[this.props.id],['action_name','action_type']]
-        )
+        ).then(res => {
+            let buildings = get(this.props.formsData, `attributes.building_id`, [])
+            if (!buildings.length) return Promise.resolve();
+            return this.props.falcor.get(
+                ['building', 'geom' ,'byBuildingId', buildings, 'centroid']
+            )
+        })
 
     }
 
@@ -188,6 +195,22 @@ class ZoneModalData extends React.Component {
                     }
                 }
             }
+            dataChange={(data) => {
+                let paginatedBuildings = data.map(d => parseInt(get(d, `building_id`, 0)))
+                if (this.props.centroidData && paginatedBuildings.length){
+
+                    let newCentroids = Object.keys(this.props.centroidData)
+                        .reduce((a,building_id) => {
+                            if (paginatedBuildings.includes(parseInt(building_id))){
+                                a[building_id] = this.props.centroidData[building_id]
+                            }
+                            return a;
+                        }, {})
+                    this.props.setActiveCentroids(
+                        newCentroids
+                    )
+                }
+            }}
         />
     }
 
@@ -195,6 +218,21 @@ class ZoneModalData extends React.Component {
         return <DIV>{this.state.activeLink ? this.renderLink() : this.renderAll()}</DIV>
     }
     render() {
+        /*let buildings = get(this.props.formsData, `attributes.building_id`, [])
+            .map(b => parseInt(b))
+        if (this.props.centroidData && buildings.length){
+
+            let newCentroids = Object.keys(this.props.centroidData)
+                .reduce((a,building_id) => {
+                    if (buildings.includes(parseInt(building_id))){
+                        a[building_id] = this.props.centroidData[building_id]
+                    }
+                    return a;
+                }, {})
+            this.props.setActiveCentroids(
+                newCentroids
+            )
+        }*/
         return (
             <AvlModal show={true} onClose={this.props.onClose}>
                 <div style={{padding: '10px'}}>
@@ -208,8 +246,8 @@ class ZoneModalData extends React.Component {
     }
 }
 
-const mapStateToProps = state => (
-    {
+const mapStateToProps = (state, ownProps) => {
+    return {
         activePlan : state.user.activePlan,
         activeScenarioId:state.scenario.activeRiskZoneId,
         offRiskZoneId:state.scenario.offRiskZoneId,
@@ -217,12 +255,15 @@ const mapStateToProps = state => (
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         zonesData : get(state.graph,['zones','byPlanId']),
+        formsData : get(state.graph,['forms','byId', ownProps.zone_id, 'value']),
+        centroidData : get(state.graph,['building','geom', 'byBuildingId']),
         scenarioByZonesData : get(state.graph,['building','byGeoid',`${state.user.activeGeoid}`]),
         riskZoneId: state.scenario.activeRiskZoneId
-    });
+    }
+};
 
 const mapDispatchToProps = {
-    sendSystemMessage,
+    sendSystemMessage, setActiveCentroids
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ZoneModalData))

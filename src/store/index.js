@@ -11,6 +11,7 @@ import landUse from "./modules/landUse";
 import demographics from "./modules/demographics";
 import messages from "./modules/messages"
 import hazardEvents from "./modules/hazardEvents";
+import centroids from "./modules/centroids";
 import createHistory from 'history/createBrowserHistory'
 import thunk from 'redux-thunk'
 
@@ -42,6 +43,7 @@ const store = createStore(
         messages,
         graph,
         hazardEvents,
+        centroids,
         router: routerReducer
     }),
     applyMiddleware(...middleware)
