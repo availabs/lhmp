@@ -137,6 +137,18 @@ const config = {
             icon: 'os-icon-tasks-checked'
         },
         {
+            title: 'Capability Assessment and Resource Integration',
+            requirement: 'Req-A-4F',
+            type: 'content',
+            prompt: 'Review Existing Resources from Jurisdictions & outside stakeholders.' +
+                    'Identify opportunities for integration of existing resources into HMP and mitigation strategies.' + 
+                    'Review plans identified in existing resources for consistency and/or conflicts.' + 
+                    'Describe ability to expand capabilities, including floodplain management (identify specific steps to be taken)',
+            intent: '',
+            icon: 'os-icon-home'
+        },
+
+        {
             title: 'Evaluation',
             requirement: 'Req-C-1B',
             type: 'capabilityEvaluationTable',

@@ -158,8 +158,10 @@ const config =  {
 			title: 'Existing Resources',
 			requirement: 'revision-1',
 			type: 'content',
-			prompt: '',
-			intent: '',
+			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
+			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
+				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
+				' mechanisms to implement the mitigation strategy.',
 			icon: 'os-icon-rotate-cw'
 		},
 		{
@@ -214,10 +216,8 @@ const config =  {
         		]
         
 			},
-			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
-			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
-				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
-				' mechanisms to implement the mitigation strategy.',
+			prompt: '',
+			intent: '',
 			icon: 'os-icon-tasks-checked'
 		},
 		{
