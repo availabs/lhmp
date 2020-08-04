@@ -119,12 +119,13 @@ class ZoneModalData extends React.Component {
                                 <div
                                     style={{padding: '0.5vw', cursor: 'pointer'}}
                                     className="nav-item"
-                                    onClick={() => {
+                                    onClick={(e) => {
                                         this.setState({
                                             links: this.state.links.filter(f => f.link !== link.link),
                                             prevActiveLink: undefined,
                                             activeLink: this.state.prevActiveLink
                                         })
+                                        if (this.props.onCloseTab) {this.props.onCloseTab.bind(this, e)}
                                     }}> x </div>
                             </div>
                         </li>
@@ -180,8 +181,21 @@ class ZoneModalData extends React.Component {
 
     renderLink(){
         let link = this.state.activeLink.split('/')
+        console.log('??', link, {
+            type: this.getParam(link, 'list'),
+                typeIds: this.getParam(link, this.getParam(link, 'list')),
+                hazardIds: this.getParam(link, 'hazard'),
+                scenarioIds: this.getParam(link, 'scenario'),
+                riskzoneIds: this.getParam(link, 'riskZone'),
+                geoid: link.includes('geo') ? this.getParam(link, 'geo') : this.getParam(link, 'geoid'),
+        })
         return <ListWithoutUrl
             size={5}
+            zone_id ={[this.props.zone_id]}
+            groupBy={'propType'}
+            groupByFilter={this.state.filter.value}
+            scenarioId={this.props.scenario_id.map(d => d.id)}
+            riskZoneId = {[this.props.risk_zone_id]}
             match={
                 {
                     url: this.state.activeLink,
@@ -207,10 +221,11 @@ class ZoneModalData extends React.Component {
                             return a;
                         }, {})
                     this.props.setActiveCentroids(
-                        newCentroids
+                        newCentroids, this.props.type
                     )
                 }
             }}
+            buildings={this.props.type === 'zones' ? get(this.props.formsData, `attributes.building_id`, []) : null}
         />
     }
 
@@ -218,23 +233,8 @@ class ZoneModalData extends React.Component {
         return <DIV>{this.state.activeLink ? this.renderLink() : this.renderAll()}</DIV>
     }
     render() {
-        /*let buildings = get(this.props.formsData, `attributes.building_id`, [])
-            .map(b => parseInt(b))
-        if (this.props.centroidData && buildings.length){
-
-            let newCentroids = Object.keys(this.props.centroidData)
-                .reduce((a,building_id) => {
-                    if (buildings.includes(parseInt(building_id))){
-                        a[building_id] = this.props.centroidData[building_id]
-                    }
-                    return a;
-                }, {})
-            this.props.setActiveCentroids(
-                newCentroids
-            )
-        }*/
         return (
-            <AvlModal show={true} onClose={this.props.onClose}>
+            <AvlModal show={true} onClose={this.props.onClose.bind(this)}>
                 <div style={{padding: '10px'}}>
                     <h4>{this.props.title}</h4>
                     <h6>Buildings By Land Use</h6>

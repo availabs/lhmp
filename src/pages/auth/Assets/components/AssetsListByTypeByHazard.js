@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import owner_config from 'pages/auth/Assets/components/BuildingByOwnerTypeConfig.js'
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
+import BuildingByOwnerTypeConfig from "./BuildingByOwnerTypeConfig";
 const ATTRIBUTES = [
     'address',
     'prop_class',
@@ -27,8 +28,56 @@ class AssetsListByTypeByHazard extends React.Component {
             loading: false,
             columns: ATTRIBUTES
         };
+        this.zonesData = this.zonesData.bind(this)
     }
+    zonesData(from, to){
+        let data = []
+        this.setState({
+            loading: true
+        })
+        let propTypes =
+            BuildingByLandUseConfig
+                .filter(item => !this.props.groupByFilter.length || this.props.groupByFilter.map(f => f.toString().slice(0,1)).includes(item.value.slice(0,1)))
+                .map(item => item.value);
+        let ids = this.props.groupBy === 'ownerType' ? BuildingByOwnerTypeConfig.map(f => f.value) :
+            this.props.groupBy === 'propType' ? propTypes :
+                this.props.groupBy === 'jurisdiction' ? [] :
+                    [];
+        ids = this.props.match.params.typeIds.split('-')
+        console.log('fetching...', ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
+            this.props.groupBy,ids.filter(f => f),
+            'byRiskScenario',this.props.scenarioId,'byRiskZone','list'])
+        return this.props.falcor.get(
+            ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
+                this.props.groupBy,ids.filter(f => f),
+                'byRiskScenario',this.props.scenarioId,'byRiskZone','list'],
+            ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
+            .then(response => {
+                let meta = response.json.building.meta;
+                let graph = response.json.form_zones.zones.byPlanId[this.props.activePlan].byId[this.props.zone_id][this.props.groupBy];
+                Object.keys(graph).forEach(item => {
+                    let tmpItem = get(graph[item], `byRiskScenario.${this.props.scenarioId}.byRiskZone.list`, [])
+                    console.log('graph?', item, tmpItem)
+                    if (tmpItem){
+                        tmpItem.forEach(ti => {
+                            data.push({
+                                'address': ti.address,
+                                'prop_class': meta.prop_class.map(d => d.value === ti.prop_class ? d.name : null),
+                                'owner_type': meta.owner_type.map(d => d.value === ti.owner_type ? d.name : null),
+                                'replacement_value': ti.replacement_value,
+                                'building_id': ti.building_id
+                            })
+                        })
+                    }
+                })
+                data.sort((a, b) => (parseInt(a.replacement_value) < parseInt(b.replacement_value)) ? 1 : -1);
+                data.map(d => {
+                    d.replacement_value = '$' + d.replacement_value
+                })
+                this.setState({data: from && to ? data.slice(from, to) : data, loading: false});
 
+            })
+    }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
@@ -44,6 +93,11 @@ class AssetsListByTypeByHazard extends React.Component {
     componentDidMount() {
         let data = [];
         let types = this.props.match.params.typeIds.toString()
+
+        if (this.props.buildings) { // if building ids are given
+            return  this.zonesData()
+        }
+
         if (this.props.match.params.hazardIds) {
             this.setState({
                 loading: true
@@ -94,9 +148,10 @@ class AssetsListByTypeByHazard extends React.Component {
                 .then(response => {
                     let meta = response.json.building.meta;
                     let riskZones = this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds.toString() : 'all';
-                    length = get(response,
+                    /*length = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.length`,
-                        0)
+                        0);*/
+                    console.log('len', length, response)
                     let graph = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
@@ -162,6 +217,11 @@ class AssetsListByTypeByHazard extends React.Component {
     onPageChange(from, to) {
         let data = [];
         let types = this.props.match.params.typeIds.toString()
+
+        if (this.props.buildings) { // if building ids are given
+            return this.zonesData()
+        }
+
         if (this.props.match.params.hazardIds) {
             this.setState({
                 loading: true
@@ -356,6 +416,7 @@ class AssetsListByTypeByHazard extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return ({
         activeGeoid: state.user.activeGeoid,
+        activePlan: state.user.activePlan,
         filter_type: ownProps.filter_type,
         filter_value: ownProps.filter_value,
         //geoid: ownProps.geoid,
