@@ -44,6 +44,7 @@ class JurisdictionTable extends React.Component {
                         setState({showZoneModal: false});
                         //layer.removeCentroids();
                     }}
+                    onCloseTab={(e) => layer.removeCentroids()}
                     title={`Zone Buildings By Scenario : ${name}`}
                 />
             </div>

@@ -21,6 +21,10 @@ class ZoneControl extends React.Component{
             zones_data:{},
             new_zone:false
         }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.zoneDropDown = this.zoneDropDown.bind(this);
+        this.selectedZones = this.selectedZones.bind(this);
     }
 
     componentDidUpdate(oldProps,oldState) {
@@ -34,6 +38,10 @@ class ZoneControl extends React.Component{
             }
         }
 
+        if(!_.isEqual(oldProps.layer.layer.zoneLayer.centroids, this.props.layer.layer.zoneLayer.centroids)){
+            console.log('force update')
+            this.props.layer.layer.zoneLayer.forceUpdate()
+        }
 
     }
 
@@ -115,7 +123,6 @@ class ZoneControl extends React.Component{
             )
         }
     }
-
 
     render(){
         //localStorage.removeItem("zone")

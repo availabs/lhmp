@@ -40,7 +40,6 @@ module.exports = [
                 meta: 'true',
                 meta_filter:{filter_key:'roles',value:'contact_name'}, // if populating from another form type
                 section: '1',
-                field_required: 'required',
                 //defaultValue: ['Countywide'],
                 //example: 'Demo example.'
 
@@ -451,10 +450,9 @@ module.exports = [
                 label:'Potential funding sources name',
                 sub_type:'project',
                 prompt:'Identify the name of the potential funding source.',
-                edit_type:'dropdown_no_meta',
-                edit_type_values:[],
-                disable_condition:'',
+                edit_type:'text',
                 display_type:'text',
+                disable_condition:'',
                 meta:'false',
                 section:'4'
             },
@@ -462,10 +460,9 @@ module.exports = [
                 label:'Secured funding sources name',
                 sub_type:'project',
                 prompt:'Identify the name of the secured funding source. Or enter a new funding source.',
-                edit_type:'dropdown_no_meta',
-                edit_type_values:[],
-                disable_condition:'',
+                edit_type:'text',
                 display_type:'text',
+                disable_condition:'',
                 meta:'false',
                 section:'4'
             },
