@@ -12,6 +12,7 @@ import ZoneControls from "../controls/zoneControls";
 import geo from "../../../../store/modules/geo";
 import mapboxgl from "mapbox-gl";
 import get from 'lodash.get'
+import * as d3scale from "d3-scale";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -19,7 +20,6 @@ const IDENTITY = i => i;
 
 export class JurisdictionLayer extends MapLayer{
     onAdd(map) {
-        console.log('on add called')
         register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
@@ -35,8 +35,8 @@ export class JurisdictionLayer extends MapLayer{
         }
     }
 
+
     toggleVisibilityOn() {
-        console.log('tvo called')
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
@@ -56,20 +56,13 @@ export class JurisdictionLayer extends MapLayer{
         )
     }
 
-    removeCentroids(){
-        console.log('removing', this.markers)
-        this.markers.forEach(m => m.remove());
-        console.log('removed', this.markers)
-    }
     paintCentroids(){
-        console.log('painting', this.markers)
-        if (this.markers.length){
+        /*if (this.markers.length){
             this.markers.map(m => {
-                console.log('m going out', m);
                 m.remove()
             });
-        }
-        this.markers = Object.keys(this.centroids)
+        }*/
+        this.markers.push(...Object.keys(this.centroids)
                                 .filter(p => get(this.centroids[p], `centroid.value.coordinates`, null))
                                 .map((p,i) =>{
                                     return new mapboxgl.Marker({
@@ -77,24 +70,15 @@ export class JurisdictionLayer extends MapLayer{
                                     })
                                         .setLngLat(this.centroids[p].centroid.value.coordinates)
                                     .addTo(this.map)
-                                    /* .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
-                                         '<div>'
-                                         + '<b>'+ 'Title: ' +'</b>'+ graph[id].attributes.title + '<br>'
-                                         + '<b>'+ 'Type: ' +'</b>'+ graph[id].attributes.type + '<br>'
-                                         + '<b>'+ 'Comment: ' +'</b>'+ graph[id].attributes.comment +
-                                         '</div>'
-                                     ))*/
-                                })
+                                }))
+        console.log('markers',this.markers)
         this.forceUpdate();
-        console.log('painted', this.markers);
     }
 
     receiveMessage(action, data) {
-        console.log('rm called', this.markers, this.centroids)
         this.centroids = data.centroids || {}
         if (Object.keys(this.centroids).length){
             this.paintCentroids()
-            this.markers = []
         }
 
     }

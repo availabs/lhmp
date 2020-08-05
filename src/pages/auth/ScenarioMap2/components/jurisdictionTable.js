@@ -42,8 +42,7 @@ class JurisdictionTable extends React.Component {
                         e.persist();
                         layer.forceUpdate();
                         setState({showZoneModal: false});
-                        console.log('removing', layer)
-                        layer.removeCentroids();
+                        //layer.removeCentroids();
                     }}
                     title={`Zone Buildings By Scenario : ${name}`}
                 />
@@ -150,7 +149,7 @@ class JurisdictionTable extends React.Component {
     }
 
     render(){
-        console.log('this.props', this.props)
+        console.log('this.props', this.props.layer)
         return (
             <div style={{'overflowX':'auto'}}>
                 <table className='table table-sm table-hover'>

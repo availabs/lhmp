@@ -135,7 +135,6 @@ class ZoneModalData extends React.Component {
     }
 
     renderAll(){
-        console.log('id',this.props.zone_id,this.props.geoid)
         return (
             <React.Fragment>
                 {this.renderLandUseMenu()}
