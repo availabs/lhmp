@@ -6,17 +6,18 @@ import {login, logout, setActiveCousubid, setActiveGeoid, setActivePlan, setUser
 
 const SET_CENTROIDS = 'USER::SET_CENTROIDS'
 
-function setCentroids(centroids){
+function setCentroids(centroids, type){
     return {
         type : SET_CENTROIDS,
-        centroids
+        centroids,
+        centroidType: type
     }
 }
 
 
-export const setActiveCentroids = (centroids) =>{
+export const setActiveCentroids = (centroids, type) =>{
     return (dispatch) => {
-        dispatch(setCentroids(centroids))
+        dispatch(setCentroids(centroids, type))
     }
 };
 
@@ -34,6 +35,7 @@ const ACTION_HANDLERS = {
         const newState = Object.assign({}, state)
         if(action.centroids) {
             newState.centroids = action.centroids;
+            newState.type = action.centroidType;
         }
         return newState
     },

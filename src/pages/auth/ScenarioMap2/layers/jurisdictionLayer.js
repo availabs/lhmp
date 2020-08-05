@@ -91,9 +91,9 @@ export class JurisdictionLayer extends MapLayer{
     }
 
     receiveMessage(action, data) {
-        console.log('rm called', this.markers, this.centroids)
+        console.log('rm called', this.markers, this.centroids, action, data)
         this.centroids = data.centroids || {}
-        if (Object.keys(this.centroids).length){
+        if (Object.keys(this.centroids).length && data.type === 'jurisdictions'){
             this.paintCentroids()
             // this.markers = []
         }

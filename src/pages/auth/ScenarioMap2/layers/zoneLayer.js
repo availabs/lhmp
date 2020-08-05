@@ -10,6 +10,9 @@ import MapLayer from "components/AvlMap/MapLayer.js"
 import { getColorRange } from "constants/color-ranges";
 import ZoneControls from "../controls/zoneControls";
 import geo from "../../../../store/modules/geo";
+import {register, unregister} from "../../../../components/AvlMap/ReduxMiddleware";
+import get from "lodash.get";
+import mapboxgl from "mapbox-gl";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -17,6 +20,7 @@ const IDENTITY = i => i;
 
 export class ZoneLayer extends MapLayer{
     onAdd(map) {
+        register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
@@ -61,6 +65,50 @@ export class ZoneLayer extends MapLayer{
             this.map.getSource("polygon").setData(geojson)
         }
 
+    }
+
+    removeCentroids(){
+        this.markers.forEach(m => m.remove());
+    }
+    paintCentroids(){
+        if (this.markers.length){
+            this.markers.map(m => {
+                console.log('m going out', m);
+                m.remove()
+            });
+        }
+        this.markers = Object.keys(this.centroids)
+            .filter(p => get(this.centroids[p], `centroid.value.coordinates`, null))
+            .map((p,i) =>{
+                return new mapboxgl.Marker({
+                    draggable: false
+                })
+                    .setLngLat(this.centroids[p].centroid.value.coordinates)
+                    .addTo(this.map)
+                /* .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
+                     '<div>'
+                     + '<b>'+ 'Title: ' +'</b>'+ graph[id].attributes.title + '<br>'
+                     + '<b>'+ 'Type: ' +'</b>'+ graph[id].attributes.type + '<br>'
+                     + '<b>'+ 'Comment: ' +'</b>'+ graph[id].attributes.comment +
+                     '</div>'
+                 ))*/
+            })
+        this.forceUpdate();
+        console.log('painted', this.markers);
+    }
+
+    receiveMessage(action, data) {
+        console.log('rm called zones', this.markers, this.centroids)
+        this.centroids = data.centroids || {}
+        if (Object.keys(this.centroids).length && data.type === 'zones'){
+            this.paintCentroids()
+            // this.markers = []
+        }
+
+    }
+
+    onRemove(map) {
+        unregister(this);
     }
 
     toggleVisibilityOff(){
@@ -161,6 +209,7 @@ export const ZoneOptions =  (options = {}) => {
                 }
 
             ],
+            markers: [],
             _isVisible: true
         }
 
