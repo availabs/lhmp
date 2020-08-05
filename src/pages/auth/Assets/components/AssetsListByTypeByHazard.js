@@ -44,20 +44,20 @@ class AssetsListByTypeByHazard extends React.Component {
                 this.props.groupBy === 'jurisdiction' ? [] :
                     [];
         ids = this.props.match.params.typeIds.split('-')
-        console.log('fetching...', ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
-            this.props.groupBy,ids.filter(f => f),
-            'byRiskScenario',this.props.scenarioId,'byRiskZone','list'])
+
         return this.props.falcor.get(
             ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
                 this.props.groupBy,ids.filter(f => f),
                 'byRiskScenario',this.props.scenarioId,'byRiskZone','list'],
+            ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',this.props.zone_id,
+                this.props.groupBy,ids.filter(f => f), 'list'],
             ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
             .then(response => {
                 let meta = response.json.building.meta;
                 let graph = response.json.form_zones.zones.byPlanId[this.props.activePlan].byId[this.props.zone_id][this.props.groupBy];
                 Object.keys(graph).forEach(item => {
-                    let tmpItem = get(graph[item], `byRiskScenario.${this.props.scenarioId}.byRiskZone.list`, [])
-                    console.log('graph?', item, tmpItem)
+                    let tmpItem = this.props.match.params.scenarioIds ? get(graph[item], `byRiskScenario.${this.props.scenarioId}.byRiskZone.list`, []) :
+                        get(graph[item], `list`, [])
                     if (tmpItem){
                         tmpItem.forEach(ti => {
                             data.push({
@@ -74,7 +74,7 @@ class AssetsListByTypeByHazard extends React.Component {
                 data.map(d => {
                     d.replacement_value = '$' + d.replacement_value
                 })
-                this.setState({data: from && to ? data.slice(from, to) : data, loading: false});
+                this.setState({data: from && to ? data.slice(from, to) : data.slice(0, this.props.size), loading: false});
 
             })
     }
@@ -137,8 +137,6 @@ class AssetsListByTypeByHazard extends React.Component {
             });
             return this.props.falcor.get(
                 ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
-                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length'],
-                ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
                     'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
                     from: 0,
                     to: 50
@@ -148,10 +146,7 @@ class AssetsListByTypeByHazard extends React.Component {
                 .then(response => {
                     let meta = response.json.building.meta;
                     let riskZones = this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds.toString() : 'all';
-                    /*length = get(response,
-                        `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.length`,
-                        0);*/
-                    console.log('len', length, response)
+
                     let graph = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
@@ -219,7 +214,7 @@ class AssetsListByTypeByHazard extends React.Component {
         let types = this.props.match.params.typeIds.toString()
 
         if (this.props.buildings) { // if building ids are given
-            return this.zonesData()
+            return this.zonesData(from, to)
         }
 
         if (this.props.match.params.hazardIds) {
