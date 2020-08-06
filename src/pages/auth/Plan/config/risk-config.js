@@ -105,7 +105,7 @@ const config = {
             icon: 'os-icon-home'
         },
         {
-            title: 'NFIP Problem Areas',
+            title: 'Problem Statements',
             requirement: 'Req-B-4A',
             type: 'content',
             prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
@@ -120,7 +120,7 @@ const config = {
     
     'Changes in Development' : [
         {
-            title: 'Overview',
+            title: 'Development in the Floodplain',
             requirement: 'Req-D-1A',
             type: 'content',
             prompt: 'The plan must describe changes in development that have occurred in hazard prone areas and increased' +
