@@ -24,32 +24,53 @@ class ZoneTable extends React.Component {
         }
         //this.populateZonesData = this.populateZonesData.bind(this)
         this.showZoneModal = this.showZoneModal.bind(this)
+        this.onClose = this.onClose.bind(this)
     }
 
+    onClose(layer){
+        // layer.forceUpdate();
+        this.setState({showZoneModal: false});
+        layer.removeCentroids();
+    }
     showZoneModal(zone_id,zone_geoid,name,activeScenarioId,activeRiskZoneId,geom,setState, layer){
-        return (
-            <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
-                 tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
-                <ZoneModalData
-                    type = {'zones'}
-                    name = {name}
-                    zone_id = {zone_id}
-                    geoid ={zone_geoid}
-                    scenario_id = {activeScenarioId}
-                    risk_zone_id ={activeRiskZoneId}
-                    geom = {geom}
-                    onClose={(e) => {
-                        e.persist();
-                        layer.forceUpdate();
-                        setState({showZoneModal: false});
-                        console.log('removing', layer)
-                        layer.removeCentroids();
-                    }}
-                    onCloseTab={(e) => layer.removeCentroids()}
-                    title={`Zone Buildings By Scenario : ${name}`}
-                />
-            </div>
-        )
+        return layer.showModal(
+            () => <ZoneModalData
+                type ={'zones'}
+                name = {name}
+                zone_id = {zone_id}
+                geoid ={zone_geoid}
+                scenario_id = {activeScenarioId}
+                risk_zone_id ={activeRiskZoneId}
+                geom = {geom}
+                onCloseTab={() => layer.removeCentroids()}
+            />,
+            `Zone Buildings By Scenario : ${name}`,
+            this.onClose.bind(this, layer),
+
+        );
+        // return (
+        //     <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
+        //          tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
+        //         <ZoneModalData
+        //             type ={'jurisdictions'}
+        //             name = {name}
+        //             zone_id = {zone_id}
+        //             geoid ={zone_geoid}
+        //             scenario_id = {activeScenarioId}
+        //             risk_zone_id ={activeRiskZoneId}
+        //             geom = {geom}
+        //             onClose={(e) => {
+        //                 e.persist();
+        //                 layer.forceUpdate();
+        //                 setState({showZoneModal: false});
+        //                 console.log('removing', layer)
+        //                 layer.removeCentroids();
+        //             }}
+        //             onCloseTab={(e) => layer.removeCentroids()}
+        //             title={`Zone Buildings By Scenario : ${name}`}
+        //         />
+        //     </div>
+        // )
     }
 
     componentDidUpdate(oldProps,oldState){

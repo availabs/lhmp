@@ -12,6 +12,7 @@ import ZoneControls from "../controls/zoneControls";
 import geo from "../../../../store/modules/geo";
 import mapboxgl from "mapbox-gl";
 import get from 'lodash.get'
+import AttributesTable from "../../../../components/AvlMap/components/AttributesTable";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -19,7 +20,6 @@ const IDENTITY = i => i;
 
 export class JurisdictionLayer extends MapLayer{
     onAdd(map) {
-        console.log('on add called', this.markers, this.centroids)
         register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
         this.map = map;
@@ -35,9 +35,17 @@ export class JurisdictionLayer extends MapLayer{
 
         }
     }
+    showModal(modal, title, onClose, onClosetab){
 
+        this.modals.dataModal = {
+            show: true,
+            comp: modal,
+            title: title,
+            onClose: onClose
+        }
+        //this.forceUpdate()
+    }
     toggleVisibilityOn() {
-        console.log('tvo called')
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
@@ -58,15 +66,11 @@ export class JurisdictionLayer extends MapLayer{
     }
 
     removeCentroids(){
-        console.log('removing', this.markers)
         this.markers.forEach(m => m.remove());
-        console.log('removed', this.markers)
     }
     paintCentroids(){
-        console.log('painting', this.markers)
         if (this.markers.length){
             this.markers.map(m => {
-                console.log('m going out', m);
                 m.remove()
             });
         }
@@ -86,12 +90,10 @@ export class JurisdictionLayer extends MapLayer{
                                          '</div>'
                                      ))*/
                                 })
-        this.forceUpdate();
-        console.log('painted', this.markers);
+        //this.forceUpdate();
     }
 
     receiveMessage(action, data) {
-        console.log('rm called', this.markers, this.centroids, action, data)
         this.centroids = data.centroids || {}
         if (Object.keys(this.centroids).length && data.type === 'jurisdictions'){
             this.paintCentroids()
@@ -193,7 +195,19 @@ export const JurisdictionOptions =  (options = {}) => {
             },
         ],
         markers: [],
-        _isVisible: true
+        _isVisible: true,
+        modals: {
+            dataModal: {
+                title: "Attributes",
+                comp: ( modal ) => {
+                    return <div></div>
+                },
+                show: false,
+                position: "bottom",
+                startSize: [800, 500],
+                onClose: () => console.log('closing...')
+            }
+        }
     }
 
 }
