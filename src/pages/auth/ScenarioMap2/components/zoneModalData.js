@@ -57,6 +57,7 @@ class ZoneModalData extends React.Component {
         this.renderData = this.renderData.bind(this)
         this.renderLink = this.renderLink.bind(this)
     }
+
     fetchFalcorDeps() {
         return this.props.falcor.get(
             //["building", "byId", this.props.id, TABS.filter(tab => tab.name !== 'Actions').reduce((a, c) => [...a, ...c.props], [])],
@@ -67,9 +68,19 @@ class ZoneModalData extends React.Component {
         ).then(res => {
             let buildings = get(this.props.formsData, `attributes.building_id`, [])
             if (!buildings.length) return Promise.resolve();
-            return this.props.falcor.get(
-                ['building', 'geom' ,'byBuildingId', buildings, 'centroid']
-            )
+            if (buildings.length > 100){
+                let requests = [];
+                for (let i = 0; i < buildings.length; i+=100){
+                    requests.push(['building', 'geom' ,'byBuildingId', buildings.slice(i, i+100), 'centroid'])
+                }
+
+                return requests.reduce((a,c) => a.then(() => this.props.falcor.get(c)), Promise.resolve())
+            }else{
+                return this.props.falcor.get(
+                    ['building', 'geom' ,'byBuildingId', buildings, 'centroid']
+                )
+            }
+
         })
 
     }
@@ -98,24 +109,25 @@ class ZoneModalData extends React.Component {
         this.setState({links: _.uniqBy([...this.state.links, link], 'link'), prevActiveLink: this.state.activeLink, activeLink: link.link})
     }
     renderNav(){
+
         return (
             <div className="os-tabs-controls">
                 <ul className="nav nav-tabs upper">
-                    <li className="nav-item">
-                        <a aria-expanded="false"
+                    <li className="nav-item" key={`nav-0`}>
+                        <div aria-expanded="false"
                            className={!this.state.activeLink ? "nav-link active" : "nav-link"}
                            onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: undefined})}
                            data-toggle="tab"
-                           href="#tab_overview"> All</a>
+                        > All</div>
                     </li>
-                    {this.state.links.map(link =>
-                        <li className="nav-item">
+                    {this.state.links.map((link, linkI) =>
+                        <li className="nav-item" key={`nav-${linkI+1}`}>
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <a aria-expanded="false"
+                                <div aria-expanded="false"
                                    style={{marginRight: 0}}
                                    className={this.state.activeLink === link.link ? "nav-link active" : "nav-link"}
                                    onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: link.link})}
-                                   href="#"> {`${link.header} x ${link.row0}`}</a>
+                                   > {`${link.header} x ${link.row0}`}</div>
                                 <div
                                     style={{padding: '0.5vw', cursor: 'pointer'}}
                                     className="nav-item"
@@ -136,7 +148,6 @@ class ZoneModalData extends React.Component {
     }
 
     renderAll(){
-        console.log('id',this.props.zone_id,this.props.geoid)
         return (
             <React.Fragment>
                 {this.renderLandUseMenu()}
@@ -181,14 +192,6 @@ class ZoneModalData extends React.Component {
 
     renderLink(){
         let link = this.state.activeLink.split('/')
-        console.log('??', link, {
-            type: this.getParam(link, 'list'),
-                typeIds: this.getParam(link, this.getParam(link, 'list')),
-                hazardIds: this.getParam(link, 'hazard'),
-                scenarioIds: this.getParam(link, 'scenario'),
-                riskzoneIds: this.getParam(link, 'riskZone'),
-                geoid: link.includes('geo') ? this.getParam(link, 'geo') : this.getParam(link, 'geoid'),
-        })
         return <ListWithoutUrl
             size={5}
             zone_id ={[this.props.zone_id]}
@@ -234,14 +237,12 @@ class ZoneModalData extends React.Component {
     }
     render() {
         return (
-            <AvlModal show={true} onClose={this.props.onClose.bind(this)}>
-                <div style={{padding: '10px'}}>
-                    <h4>{this.props.title}</h4>
-                    <h6>Buildings By Land Use</h6>
-                    {this.renderNav()}
-                    {this.renderData()}
-                </div>
-            </AvlModal>
+            <div style={{padding: '10px'}}>
+                <h4>{this.props.title}</h4>
+                <h6>Buildings By Land Use</h6>
+                {this.renderNav()}
+                {this.renderData()}
+            </div>
         )
     }
 }
