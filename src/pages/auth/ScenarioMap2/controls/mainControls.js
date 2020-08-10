@@ -139,7 +139,6 @@ class MainControls extends React.Component {
             this.props.layer.vulnerableDemographicsLayer.forceUpdate()
         }
 
-        console.log('did update??', this.state, this.props)
     }
 
 

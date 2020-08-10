@@ -19,7 +19,6 @@ const IDENTITY = i => i;
 
 export class JurisdictionLayer extends MapLayer{
     onAdd(map) {
-        console.log('on add called', this.markers, this.centroids)
         register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
         this.map = map;
@@ -37,7 +36,6 @@ export class JurisdictionLayer extends MapLayer{
     }
 
     toggleVisibilityOn() {
-        console.log('tvo called')
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })
@@ -58,15 +56,12 @@ export class JurisdictionLayer extends MapLayer{
     }
 
     removeCentroids(){
-        console.log('removing', this.markers)
         this.markers.forEach(m => m.remove());
-        console.log('removed', this.markers)
+        this.forceUpdate()
     }
     paintCentroids(){
-        console.log('painting', this.markers)
         if (this.markers.length){
             this.markers.map(m => {
-                console.log('m going out', m);
                 m.remove()
             });
         }
@@ -87,15 +82,12 @@ export class JurisdictionLayer extends MapLayer{
                                      ))*/
                                 })
         this.forceUpdate();
-        console.log('painted', this.markers);
     }
 
     receiveMessage(action, data) {
-        console.log('rm called', this.markers, this.centroids, action, data)
         this.centroids = data.centroids || {}
         if (Object.keys(this.centroids).length && data.type === 'jurisdictions'){
             this.paintCentroids()
-            // this.markers = []
         }
 
     }
