@@ -83,7 +83,7 @@ class AvlFormsNewData extends React.Component{
                                     tmp_state[attribute] = undefined
                                 }
                             }else{
-                                if(graph.attributes[attribute] && graph.attributes[attribute].includes("[")){
+                                if(graph.attributes[attribute] && typeof graph.attributes[attribute] === "string" && graph.attributes[attribute].includes("[")){
                                     tmp_state[attribute] = graph.attributes[attribute].slice(1,-1).split(",")
                                 }else{
                                     tmp_state[attribute] = graph.attributes[attribute]

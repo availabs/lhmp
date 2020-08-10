@@ -93,7 +93,15 @@ class Hazards extends React.Component {
                     .filter(k => k !== '$__path')
                     .filter(k => data[k].allTime.total_damage > 0)
                     .sort((a,b) => data[b].allTime.total_damage - data[a].allTime.total_damage)
-                this.setState({hazards, hazard:hazards[0]})
+
+                if(!this.state.hazard){
+                    this.setState({
+                        hazards,
+                        hazard : hazards[0]
+                    })
+                }else{
+                    this.setState({hazards})
+                }
 
             })
         })

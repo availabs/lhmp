@@ -1,6 +1,6 @@
 module.exports = [
     'Acquisition of Land for Open Space and Public Recreation Uses',
-    'Brownfield Redevelopment ',
+    'Brownfield Redevelopment',
     'Building Code',
     'Building Code Effectiveness Grading Schedule Score',
     'Capital Improvement plan',

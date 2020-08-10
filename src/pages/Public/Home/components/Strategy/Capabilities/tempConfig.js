@@ -15,297 +15,297 @@ module.exports = [
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Acquisition of Land for Open Space and Public Recreation Uses',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Brownfield Redevelopment',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Building Code',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Building Code Effectiveness Grading Schedule Score',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Capital Improvements Plan',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Capital Improvement plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Climate Change Adaption',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Coastal Erosion Hazard Areas(CEHA)',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Coastal Zone Management',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Coastal Zone Management Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Code Enforcement Disaster Assistance Response',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Community Wildfire Protection',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Community Wildfire Protection Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Comprehensive Master Plan ',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Comprehensive/Master Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Continuity of Operations Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Dam Safety Program',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Disaster Recovery Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Drought Preparedness Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Economic Development Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Emergency Operations Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Evacuation Plan',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Farmland Preservation Plan',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'FEMA Flood Mapping/Risk Mapping',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Fire Code',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Fire Department ISO rating',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Flood Damage Protection Ordinance',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Flood Insurance Rate Map(FIRM)',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Flood Plain Management',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Floodplain Ordinance',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Hazard Mitigation Plan',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Historic Preservation Plan',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Local Emergency Operations Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Local Waterfront Revitalization Program',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Maintenance of Infrastructure',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Mitigation Planning Resources to Local Government',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'National Flood Insurance Progarm(NFIP)',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'National Hazard Specific Ordinance',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Natural Resource Protection Plan',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'New York State Building Code',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'NFIP Community Rating System(CRS)',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Highway Infrastructure',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Open Space Management Plan',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Post-Disaster Redevelopment Ordinance',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Seismic Design Specifications for New Bridges',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Site Plan Review Requirements',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Statewide Mitigation Collaboration',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Stormwater Management Program',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Water Management Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Subdivision Ordinance',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Transfer Development Rights',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Transportation Plan',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Unified Development Ordinance',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Water Conservation Standards',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Watershed protection Ordinance',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Zoning Ordinance',
         required:'yes'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Planning/Regulatory Other - Ordinance',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Planning and Regulatory Other - Ordinance',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Planning/Regulatory Other-Local Lam',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Planning and Regulatory Other-Local Lam',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Planning/Regulatory Other - Policy',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Planning and Regulatory Other - Policy',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Planning/Regulatory Other - State Statue',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Planning and Regulatory Other - State Statue',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
-        capability_type:'Planning/Regulatory Other - Other',
+        capability_category : 'Planning and Regulatory',
+        capability_type:'Planning and Regulatory Other - Other',
         required:'no'
     },
     {
-        capability_category : 'Planning/Regulatory',
+        capability_category : 'Planning and Regulatory',
         capability_type:'Other',
         required:'no'
     },
@@ -376,12 +376,12 @@ module.exports = [
     },
     {
         capability_category : 'Financial',
-        capability_type:'Capital Improvements Projects Funding',
+        capability_type:'Capital Improvement Projects Funding',
         required:'yes'
     },
     {
         capability_category : 'Financial',
-        capability_type:'Community Development Block Grants(s) (CDBG)',
+        capability_type:'Community Development Block Grant(s) (CDBG)',
         required:'yes'
     },
     {
@@ -411,17 +411,17 @@ module.exports = [
     },
     {
         capability_category : 'Financial',
-        capability_type:'Impact fees for New Development',
+        capability_type:'Impact Fees for New Development',
         required:'yes'
     },
     {
         capability_category : 'Financial',
-        capability_type:'Incur debt through private activities',
+        capability_type:'Incur Debt Through Private Activities',
         required:'yes'
     },
     {
         capability_category : 'Financial',
-        capability_type:'Incur debt through general obligation bonds and/or special tax bonds',
+        capability_type:'Incur Debt Through General Obligation Bonds and/or Special Tax Bonds',
         required:'yes'
     },
     {
@@ -456,7 +456,7 @@ module.exports = [
     },
     {
         capability_category : 'Financial',
-        capability_type:'Storm water utility fee',
+        capability_type:'Storm Water Utility Fee',
         required:'yes'
     },
     {

@@ -355,9 +355,13 @@ class AssetsListByTypeByHazard extends React.Component {
                     <ElementBox>
                         <h4 style={{textWrap: 'break-word', wordBreak: 'break-word'}}>
                             <label>
-                                Assets Listed By {property_type} -
+                                {`Assets Listed By ${property_type} - `}
                                 {
                                     get(this.props, `match.params.typeIds`, '').toString().split('-')
+                                        .filter(type =>
+                                            type.slice(1,3) === '00'
+                                            || !get(this.props, `match.params.typeIds`, '').toString().split('-')
+                                                .includes(type.toString().slice(0,1) + '00'))
                                         .map(type =>
                                             get(BuildingByLandUseConfig.filter(f => f.value === type.toString()), `[0].name`, type)
                                         ).join(', ')
