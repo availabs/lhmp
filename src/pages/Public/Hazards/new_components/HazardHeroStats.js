@@ -75,7 +75,7 @@ class CountyHeroStats extends React.Component {
                     const dailyProb = +this.props[dataType][geoid][hazard].allTime.daily_event_prob;
                     const annualNumEvents = +this.props[dataType][geoid][hazard].allTime.annualized_num_events;
                     const totalDamage = +this.props[dataType][geoid][hazard].allTime.total_damage;
-                    if (value) {
+                    if (true) {
                         data.push({
                             label: this.getHazardName(hazard),
                             hazard: hazard,
