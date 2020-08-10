@@ -38,6 +38,17 @@ export class ZoneLayer extends MapLayer{
         }
     }
 
+    showModal(modal, title, onClose, onClosetab){
+
+        this.modals.dataModal = {
+            show: true,
+            comp: modal,
+            title: title,
+            onClose: onClose
+        }
+        //this.forceUpdate()
+    }
+
     toggleVisibilityOn() {
         let activeGeoid = store.getState().user.activeGeoid
         this.layers.forEach(layer => {
@@ -73,7 +84,6 @@ export class ZoneLayer extends MapLayer{
     paintCentroids(){
         if (this.markers.length){
             this.markers.map(m => {
-                console.log('m going out', m);
                 m.remove()
             });
         }
@@ -93,12 +103,10 @@ export class ZoneLayer extends MapLayer{
                      '</div>'
                  ))*/
             })
-        this.forceUpdate();
-        console.log('painted', this.markers);
+        // this.forceUpdate();
     }
 
     receiveMessage(action, data) {
-        console.log('rm called zones', this.markers, this.centroids)
         this.centroids = data.centroids || {}
         if (Object.keys(this.centroids).length && data.type === 'zones'){
             this.paintCentroids()
@@ -210,7 +218,19 @@ export const ZoneOptions =  (options = {}) => {
 
             ],
             markers: [],
-            _isVisible: true
+            _isVisible: true,
+            modals: {
+                dataModal: {
+                    title: "Attributes",
+                    comp: ( modal ) => {
+                        return <div></div>
+                    },
+                    show: false,
+                    position: "bottom",
+                    startSize: [800, 500],
+                    onClose: () => console.log('closing...')
+                }
+            }
         }
 
 

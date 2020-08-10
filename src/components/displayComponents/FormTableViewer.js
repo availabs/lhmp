@@ -20,7 +20,6 @@ class FormTableViewer extends React.Component{
         // get columns to filter if not displayed
         if(this.props.config.filters){
             this.props.config.filters.forEach(f => {
-                console.log('filters', f, f.column)
                 if(!formAttributes.includes(f.column)){
                     formAttributes.push(f.column)    
                 }
@@ -40,9 +39,22 @@ class FormTableViewer extends React.Component{
             })
     }
 
+    isMatch(matchee, matcher){
+        matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
+            matchee.replace('[', '').replace(']', '').split(',') : matchee;
+
+        return (!matchee || !matcher) ? false :
+            typeof matchee === 'string' ?
+            matchee.toString() === matcher.toString() :
+            matchee.map(m => m.toString()).includes(matcher.toString())
+    }
     render(){
-        // process data from  
-        let tableData = Object.values(this.props.tableList).map(d => {
+        // process data from
+        let tableData = Object.values(this.props.tableList)
+            .filter(d => this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
+                this.isMatch(this.props.formData[d.value[2]].value.attributes.cousub || this.props.formData[d.value[2]].value.attributes.municipality, this.props.activeCousubid) :
+                this.isMatch(this.props.formData[d.value[2]].value.attributes.county, this.props.activeGeoid))
+            .map(d => {
             return this.props.formData[d.value[2]].value.attributes
         })
 
@@ -70,6 +82,7 @@ class FormTableViewer extends React.Component{
 const mapStateToProps = (state,ownProps) => {
     return {
         activePlan: state.user.activePlan,
+        activeGeoid: ownProps.geoId ? ownProps.geoId : state.user.activeGeoid,
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),

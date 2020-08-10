@@ -12,6 +12,7 @@ import ZoneControls from "../controls/zoneControls";
 import geo from "../../../../store/modules/geo";
 import mapboxgl from "mapbox-gl";
 import get from 'lodash.get'
+import AttributesTable from "../../../../components/AvlMap/components/AttributesTable";
 var _ = require('lodash')
 const LEGEND_COLOR_RANGE = getColorRange(7, "YlGn");
 
@@ -34,7 +35,16 @@ export class JurisdictionLayer extends MapLayer{
 
         }
     }
+    showModal(modal, title, onClose, onClosetab){
 
+        this.modals.dataModal = {
+            show: true,
+            comp: modal,
+            title: title,
+            onClose: onClose
+        }
+        //this.forceUpdate()
+    }
     toggleVisibilityOn() {
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
@@ -57,7 +67,6 @@ export class JurisdictionLayer extends MapLayer{
 
     removeCentroids(){
         this.markers.forEach(m => m.remove());
-        this.forceUpdate()
     }
     paintCentroids(){
         if (this.markers.length){
@@ -81,13 +90,14 @@ export class JurisdictionLayer extends MapLayer{
                                          '</div>'
                                      ))*/
                                 })
-        this.forceUpdate();
+        //this.forceUpdate();
     }
 
     receiveMessage(action, data) {
         this.centroids = data.centroids || {}
         if (Object.keys(this.centroids).length && data.type === 'jurisdictions'){
             this.paintCentroids()
+            // this.markers = []
         }
 
     }
@@ -185,7 +195,19 @@ export const JurisdictionOptions =  (options = {}) => {
             },
         ],
         markers: [],
-        _isVisible: true
+        _isVisible: true,
+        modals: {
+            dataModal: {
+                title: "Attributes",
+                comp: ( modal ) => {
+                    return <div></div>
+                },
+                show: false,
+                position: "bottom",
+                startSize: [800, 500],
+                onClose: () => console.log('closing...')
+            }
+        }
     }
 
 }
