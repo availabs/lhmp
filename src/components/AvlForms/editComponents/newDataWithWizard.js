@@ -66,7 +66,7 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     handleMultiSelectFilterChange(e, id, domain=[]) {
-
+        if (!e) return;
         let tmpObj = {};
         if (e.includes('Select All') && domain.length > 0){
             tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
@@ -297,18 +297,7 @@ class AvlFormsNewDataWizard extends React.Component{
         }
         return [countyData,cousubsData]
     }
-    handleMultiSelectFilterChange(e, id, domain=[]) {
-        if (!e) return;
-        let tmpObj = {};
-        if (e.includes('Select All') && domain.length > 0){
-            tmpObj[id] = domain.filter(f => f !== 'Select All' && f !== 'Select None');
-        }else if (e.includes('Select None')){
-            tmpObj[id] = [];
-        }else{
-            tmpObj[id] = [...e];
-        }
-        this.setState(tmpObj);
-    }
+
     displayPrompt(id){
         return (
             <div>
@@ -381,6 +370,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             formType : this.props.config.map(d => d.type),
                             //handleChange : this.handleChange,
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
+                            addAll: item.attributes[attribute].addAll,
                             state : this.state,
                             title : attribute,
                             placeholder: item.attributes[attribute].placeholder,
@@ -399,6 +389,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             formType : this.props.config.map(d => d.type),
                             //handleChange : this.handleChange,
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
+                            addAll: item.attributes[attribute].addAll,
                             state : this.state,
                             title : attribute,
                             placeholder: item.attributes[attribute].placeholder,
@@ -479,6 +470,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             formType : this.props.config.map(d => d.type),
                             label: item.attributes[attribute].label,
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
+                            addAll: item.attributes[attribute].addAll,
                             state : this.state,
                             title : attribute,
                             placeholder: item.attributes[attribute].placeholder,
@@ -494,6 +486,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             formType : this.props.config.map(d => d.type),
                             label: item.attributes[attribute].label,
                             handleMultiSelectFilterChange : this.handleMultiSelectFilterChange.bind(this),
+                            addAll: item.attributes[attribute].addAll,
                             state : this.state,
                             title : attribute,
                             placeholder: item.attributes[attribute].placeholder,
@@ -582,6 +575,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             label: item.attributes[attribute].label,
                             formType : this.props.config.map(d => d.type),
                             handleChange : this.handleMultiSelectFilterChange.bind(this),
+                            addAll: item.attributes[attribute].addAll,
                             state : this.state,
                             title : attribute,
                             placeholder: item.attributes[attribute].placeholder,

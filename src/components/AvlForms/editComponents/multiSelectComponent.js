@@ -45,11 +45,13 @@ class MultiSelectComponent extends React.PureComponent {
                     style={{'float': 'right'}}>{this.props.prompt !== '' ? this.props.prompt(this.props.title) : ''}</span>
                     <MultiSelectFilter
                         filter={{
-                            domain: data || [],
+                            domain: this.props.addAll === 'true' ?
+                                data ? ['Select All', 'Select None', ...data] : ['Select All', 'Select None'] :
+                                data || [],
                             value: this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : []
                         }}
                         setFilter={(e) => {
-                            this.props.handleMultiSelectFilterChange(e, this.props.title, data);
+                            this.props.handleMultiSelectFilterChange(e, this.props.title, data.map(d => typeof d === "object" ? d.value || d : d));
                             if (this.props.onClick) {
                                 this.props.onClick({target: {value: e}})
                             }
