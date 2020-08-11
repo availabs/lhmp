@@ -74,6 +74,7 @@ const config = {
             title: 'Capabilities Table',
             requirement: 'Req-C-1A-1',
             type: 'formTable',
+            activeGeoFilter: 'true',
             fontSize: '0.70em',
             height: '600px',
             align: 'full',

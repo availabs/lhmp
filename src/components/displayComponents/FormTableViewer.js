@@ -51,9 +51,12 @@ class FormTableViewer extends React.Component{
     render(){
         // process data from
         let tableData = Object.values(this.props.tableList)
-            .filter(d => this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
-                this.isMatch(this.props.formData[d.value[2]].value.attributes.cousub || this.props.formData[d.value[2]].value.attributes.municipality, this.props.activeCousubid) :
-                this.isMatch(this.props.formData[d.value[2]].value.attributes.county, this.props.activeGeoid))
+            .filter(d =>
+                this.props.activeGeoFilter === 'true' ?
+                    this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
+                        this.isMatch(this.props.formData[d.value[2]].value.attributes.cousub || this.props.formData[d.value[2]].value.attributes.municipality, this.props.activeCousubid) :
+                        this.isMatch(this.props.formData[d.value[2]].value.attributes.county, this.props.activeGeoid) : true
+            )
             .map(d => {
             return this.props.formData[d.value[2]].value.attributes
         })
