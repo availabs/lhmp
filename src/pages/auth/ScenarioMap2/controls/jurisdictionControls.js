@@ -150,7 +150,7 @@ class JurisdictionControl extends React.Component{
                     zones = {_.uniqBy(selectedZonesData,'zone_id')}
                     scenario_id={scenario_id}
                     noShowBoundary = {this.props.layer.layer.jurisdictonLayer}
-                    layer={this.props.layer.layer}
+                    layer={this.props.layer.layer.jurisdictonLayer}
                 />
             )
 
