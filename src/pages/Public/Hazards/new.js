@@ -70,6 +70,8 @@ class Hazards extends React.Component {
     }
 
 
+
+
     fetchFalcorDeps(geoid, geoLevel, dataType) {
         if (!geoid) geoid = this.props.geoid;
         if (!dataType) dataType = this.state.dataType;
@@ -91,10 +93,14 @@ class Hazards extends React.Component {
                 let data = response.json[dataType][geoid]
                 let hazards = Object.keys(data)
                     .filter(k => k !== '$__path')
-                    .filter(k => data[k].allTime.total_damage > 0)
+                    //.filter(k => data[k].allTime.total_damage > 0)
                     .sort((a,b) => data[b].allTime.total_damage - data[a].allTime.total_damage)
-                this.setState({hazards, hazard:hazards[0]})
-
+                this.setState({hazards})
+                if(!this.state.hazard){
+                    this.setState({
+                        hazard : hazards[0]
+                    })
+                }
             })
         })
     }
@@ -129,6 +135,7 @@ class Hazards extends React.Component {
     }
 
     stickyHazards(){
+
         return this.state.hazards && this.state.hazards.length > 0 ?
             (
                 <StickySelect>

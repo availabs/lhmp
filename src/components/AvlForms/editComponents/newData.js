@@ -73,7 +73,6 @@ class AvlFormsNewData extends React.Component{
                     if(graph && attributes[0]){
                         attributes[0].forEach(attribute =>{
                             if(attribute.includes('date') && !attribute.includes('update')){
-
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 if(d[0] && d[1] && d[2]){
                                     let date = d[0] +'-'+ d[1] +'-'+ d[2] // 10/30/2010
@@ -83,6 +82,7 @@ class AvlFormsNewData extends React.Component{
                                     tmp_state[attribute] = undefined
                                 }
                             }else{
+                                console.log('check',graph.attributes[attribute])
                                 if(graph.attributes[attribute] && graph.attributes[attribute].includes("[")){
                                     tmp_state[attribute] = graph.attributes[attribute].slice(1,-1).split(",")
                                 }else{
@@ -368,6 +368,7 @@ class AvlFormsNewData extends React.Component{
         }else{
             tmpObj[id] = [...e];
         }
+
         this.setState(tmpObj);
     }
 

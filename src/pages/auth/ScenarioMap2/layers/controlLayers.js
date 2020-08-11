@@ -101,6 +101,13 @@ export class ControlLayers extends MapLayer {
 
     visibilityToggleModeOn(source, layerName) {
         //console.log('in visibility toggle mode on',source,layerName)
+        let activePlan = store.getState().user.activePlan;
+        let opacity = 0
+        if(activePlan === '10' || activePlan === '56'){
+            opacity = 1
+        }else{
+            opacity = 0.3
+        }
         if (layerName.includes('_27') || layerName.includes('_26')) {
             if (this.map.getSource('andes_riverine')) {
                 this.map.removeLayer('andes_riverine_layer');
@@ -187,7 +194,7 @@ export class ControlLayers extends MapLayer {
                             83,
                             "hsl(211, 83%, 31%)"
                         ],
-                        'fill-opacity': 0.3
+                        'fill-opacity': opacity
                     },
 
                 })

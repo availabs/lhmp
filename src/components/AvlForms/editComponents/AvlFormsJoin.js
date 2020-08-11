@@ -146,6 +146,7 @@ class TextComponent extends React.PureComponent{
     }
 
     renderEdit(){
+
         if(this.props.display_condition !== '' && this.props.display_condition){
             return (
                 <div className="col-sm-12" style={{display: this.props.display_condition.check.includes(this.props.state[this.props.display_condition.attribute]) ? 'block' : 'none'}}>
@@ -159,6 +160,7 @@ class TextComponent extends React.PureComponent{
 
             )
         }else{
+
             return (
                 <div className="col-sm-12">
                     <div className="form-group"><label htmlFor={this.props.label}>{this.props.label}
