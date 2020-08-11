@@ -8,6 +8,8 @@ import { fnum } from "utils/sheldusUtils"
 import {falcorGraph} from "../../../../store/falcorGraph";
 import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 import JurisdictionTable from "../components/jurisdictionTable"
+import functions from 'pages/auth/Plan/functions'
+
 var _ = require("lodash")
 class JurisdictionControl extends React.Component{
     constructor(props){
@@ -80,7 +82,7 @@ class JurisdictionControl extends React.Component{
             if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
                     jurisdiction_list.push({
-                        'label': graph[item].attributes ? graph[item].attributes.name : 'None',
+                        'label': graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                         'value': graph[item] ? graph[item].id : '',
                         'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
                         'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
@@ -106,7 +108,7 @@ class JurisdictionControl extends React.Component{
                         currentZoneData.push({
                             zone_id:  graph[item] ? graph[item].id : '',
                             geoid : graph[item].attributes ? graph[item].attributes.geoid : '',
-                            name: graph[item].attributes ? graph[item].attributes.name : 'None',
+                            name: graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                             geom: graph[item].attributes ? graph[item].attributes.geom : '',
                         })
                     }
@@ -137,7 +139,7 @@ class JurisdictionControl extends React.Component{
                         selectedZonesData.push({
                             zone_id:  graph[item] ? graph[item].id : '',
                             geoid : graph[item].attributes ? graph[item].attributes.geoid : '',
-                            name: graph[item].attributes ? graph[item].attributes.name : 'None',
+                            name: graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                             geom: graph[item].attributes ? graph[item].attributes.geom : '',
                         })
                     }
