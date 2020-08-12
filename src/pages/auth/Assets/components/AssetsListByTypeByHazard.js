@@ -17,6 +17,7 @@ const ATTRIBUTES = [
     'replacement_value',
 ];
 let length = 5276890;
+let lengthDefault = 5276890;
 const owner_types = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '-999']
 
 class AssetsListByTypeByHazard extends React.Component {
@@ -74,6 +75,7 @@ class AssetsListByTypeByHazard extends React.Component {
                 data.map(d => {
                     d.replacement_value = '$' + d.replacement_value
                 })
+                if (!from && !to) length = data.length;
                 this.setState({data: from && to ? data.slice(from, to) : data.slice(0, this.props.size), loading: false});
 
             })
@@ -141,6 +143,8 @@ class AssetsListByTypeByHazard extends React.Component {
                     from: 0,
                     to: 50
                 }, ATTRIBUTES],
+                ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
+                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length'],
                 ['building', 'meta', ['owner_type', 'prop_class'], 'name']
             )
                 .then(response => {
@@ -150,6 +154,10 @@ class AssetsListByTypeByHazard extends React.Component {
                     let graph = get(response,
                         `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
                         null);
+
+                    length = get(response,
+                        `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.length`,
+                        lengthDefault);
                     if (!graph) return Promise.resolve()
                     Object.keys(graph).forEach(item => {
                         if (graph[item] && graph[item]['$__path']) {
@@ -181,12 +189,14 @@ class AssetsListByTypeByHazard extends React.Component {
                     type,
                     types,
                     'byIndex', {from: 0, to: 50}, ATTRIBUTES],
+                ['building', 'byGeoid', this.state.geoid, type, types, 'length'],
 
                 ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
                     let meta = response.json.building.meta;
                     //console.log('res', response.json.building.byGeoid[this.state.geoid][this.props.match.params.type][types].byIndex)
                     let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
+                    length = get(response, `json.building.byGeoid.${this.state.geoid}.${type}.${types}.length`, lengthDefault);
                     Object.keys(graph).forEach(item => {
                         if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({

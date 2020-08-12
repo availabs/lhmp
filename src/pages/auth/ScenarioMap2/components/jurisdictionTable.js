@@ -142,7 +142,6 @@ class JurisdictionTable extends React.Component {
                             }
                         }
                     })
-                    console.log('data set', data)
                     this.setState({
                         data : _.uniqBy(data,'zone_id')
                     })
