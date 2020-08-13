@@ -52,16 +52,33 @@ export class JurisdictionLayer extends MapLayer{
         let activeGeoid = store.getState().user.activeGeoid
         let geoids = JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0];
         let cousubs = [];
+        let places = []
         if(geoids){
             geoids.forEach(geoid =>{
-                if(geoid.geoid && geoid.geoid.length !== 5){
+                if(geoid.geoid && geoid.geoid.length === 10){
                     cousubs.push(geoid.geoid)
+                }else if(geoid.geoid && geoid.geoid.length === 7){
+                    places.push(geoid.geoid)
                 }
             });
         }
         this.map.setFilter(
             "jurisdiction_cousubs",
             ['all', ['in', 'geoid',...cousubs.filter(d => d)]]
+        )
+        this.map.setFilter(
+            "jurisdiction_places",
+            [
+                "all",
+                [
+                    "match",
+                    ["get", "geoid"],
+                    ["",...places],
+                    true,
+                    false
+                ]
+            ]
+
         )
     }
 
@@ -115,20 +132,37 @@ export class JurisdictionLayer extends MapLayer{
     showTownBoundary(data,id){
         let geoids = JSON.parse("[" + data + "]")[0];
         let cousubs = [];
+        let places = []
         let geojson = {
             "type": "FeatureCollection",
             "features": []
         }
         geoids.forEach(geoid =>{
-            if(geoid.geoid && geoid.geoid.length !== 5){
+            if(geoid.geoid && geoid.geoid.length === 10){
                 cousubs.push(geoid.geoid)
+            }else if(geoid.geoid && geoid.geoid.length === 7){
+                places.push(geoid.geoid)
             }
         });
         this.map.setFilter(
             "jurisdiction_cousubs",
             ['all', ['in', 'geoid',...cousubs]]
         )
-        this.map.getSource("polygon").setData(geojson)
+        this.map.setFilter(
+            "jurisdiction_places",
+            [
+                "all",
+                [
+                    "match",
+                    ["get", "geoid"],
+                    ["",...places],
+                    true,
+                    false
+                ]
+            ]
+
+        )
+        //this.map.getSource("polygon").setData(geojson)
     }
 
 
@@ -164,6 +198,12 @@ export const JurisdictionOptions =  (options = {}) => {
                     'type': "vector",
                     'url': 'mapbox://am3081.dlnvkxdi'
                 },
+            },
+            { id: "places",
+                source: {
+                    'type': "vector",
+                    'url': 'mapbox://am3081.6u9e7oi9'
+                },
             }
         ],
         layers: [
@@ -184,6 +224,19 @@ export const JurisdictionOptions =  (options = {}) => {
                 'id': 'jurisdiction_cousubs',
                 'source': 'cousubs',
                 'source-layer': 'cousubs',
+                'type': 'line',
+                'paint': {
+                    'line-color': '#F31616',
+                    'line-opacity': 0.5,
+                    'line-width': 4
+                },
+                filter : ['in','geoid','']
+
+            },
+            {
+                'id': 'jurisdiction_places',
+                'source': 'places',
+                'source-layer': 'places',
                 'type': 'line',
                 'paint': {
                     'line-color': '#F31616',

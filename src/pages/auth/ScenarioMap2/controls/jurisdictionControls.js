@@ -8,6 +8,8 @@ import { fnum } from "utils/sheldusUtils"
 import {falcorGraph} from "../../../../store/falcorGraph";
 import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 import JurisdictionTable from "../components/jurisdictionTable"
+import functions from 'pages/auth/Plan/functions'
+
 var _ = require("lodash")
 class JurisdictionControl extends React.Component{
     constructor(props){
@@ -29,7 +31,6 @@ class JurisdictionControl extends React.Component{
     }
 
     componentDidUpdate(oldProps,oldState) {
-        console.log('did update?', oldProps.layer.layer.jurisdictonLayer.centroids, this.props.layer.layer.jurisdictonLayer.centroids)
         if (oldProps.activeMode.length !== this.props.activeMode.length) {
             if (localStorage.getItem("jurisdiction") === null || JSON.parse("[" + localStorage.getItem("jurisdiction") + "]")[0].length === 0) {
                 console.log('in if of component did update')
@@ -40,11 +41,10 @@ class JurisdictionControl extends React.Component{
             }
         }
 
-        if(!_.isEqual(oldProps.layer.layer.jurisdictonLayer.centroids, this.props.layer.layer.jurisdictonLayer.centroids)){
-            console.log('force update')
+        /*if(!_.isEqual(oldProps.layer.layer.jurisdictonLayer.centroids, this.props.layer.layer.jurisdictonLayer.centroids)){
             this.props.layer.layer.jurisdictonLayer.forceUpdate()
         }
-
+*/
     }
 
     fetchFalcorDeps(){
@@ -82,7 +82,7 @@ class JurisdictionControl extends React.Component{
             if(Object.keys(graph).length >0){
                 Object.keys(graph).forEach(item =>{
                     jurisdiction_list.push({
-                        'label': graph[item].attributes ? graph[item].attributes.name : 'None',
+                        'label': graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                         'value': graph[item] ? graph[item].id : '',
                         'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
                         'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
@@ -108,7 +108,7 @@ class JurisdictionControl extends React.Component{
                         currentZoneData.push({
                             zone_id:  graph[item] ? graph[item].id : '',
                             geoid : graph[item].attributes ? graph[item].attributes.geoid : '',
-                            name: graph[item].attributes ? graph[item].attributes.name : 'None',
+                            name: graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                             geom: graph[item].attributes ? graph[item].attributes.geom : '',
                         })
                     }
@@ -139,7 +139,7 @@ class JurisdictionControl extends React.Component{
                         selectedZonesData.push({
                             zone_id:  graph[item] ? graph[item].id : '',
                             geoid : graph[item].attributes ? graph[item].attributes.geoid : '',
-                            name: graph[item].attributes ? graph[item].attributes.name : 'None',
+                            name: graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                             geom: graph[item].attributes ? graph[item].attributes.geom : '',
                         })
                     }
@@ -161,7 +161,6 @@ class JurisdictionControl extends React.Component{
 
 
     render(){
-        console.log('layer updated?', this.props.layer.layer.jurisdictonLayer)
         let zones_list = this.jurisdictionDropDown();
         //localStorage.removeItem("jurisdiction")
         if(zones_list && zones_list.length > 0){

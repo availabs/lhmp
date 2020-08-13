@@ -42,6 +42,8 @@ const _MultiSelectFilter = styled.div`
 		width: 100%;
 	}
 `
+
+const COL_SIZE_STYLE = {maxWidth: '30vw', overflowWrap: 'anywhere'}
 // Define a default UI for filtering
 function DefaultColumnFilter({
                                  column: {filterValue, preFilteredRows, setFilter},
@@ -219,7 +221,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                             .map((column,j) => (
                             // Add the sorting props to control sorting. For this example
                             // we can add them into the header props
-                            <th key ={j} style={{verticalAlign: 'middle'}}>
+                            <th key ={j} style={{verticalAlign: 'middle', maxWidth: '30vw'}}>
                                 {
                                     column.sort ?
                                         (
@@ -277,7 +279,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                         cell.value = cell.row.original[cell.column.Header]
                                     }
                                     return (
-                                        <td {...cell.getCellProps()}>
+                                        <td {...cell.getCellProps()} style={COL_SIZE_STYLE}>
                                             {renderCell(cell)}
                                         </td>
                                     )
@@ -316,7 +318,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                                     colSpan={
                                                         row.cells.filter(cell => cell.column.expandable !== 'true').length +
                                                         (actions ? Object.keys(actions).length : 0)
-                                                    }>
+                                                    } style={COL_SIZE_STYLE}>
                                                     {renderCell(cell)}
                                                 </td>
                                             )

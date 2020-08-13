@@ -3,7 +3,7 @@ module.exports = [
         type:'capabilities', // type is same as the route path for now
         list_attributes:[
             'county',
-            {'municipality' : {filter:'true'}},   
+            {'municipality' : {filter:'true'}},
             'capability_type',
             {'capability_category': {filter:'true'}},
             'capability_name', 
@@ -49,6 +49,7 @@ module.exports = [
                 prompt:'Choose the jurisdiction(s) where the capability is located. Selections will autopopulate based on the County selection. If Countywide, select Countywide.',
                 sub_type:'',
                 edit_type:'dropdown',
+                addAll:'true', // to give add all option to multiselect
                 defaultValue: ['Countywide'],
                 display_type:'text',
                 meta: 'true',

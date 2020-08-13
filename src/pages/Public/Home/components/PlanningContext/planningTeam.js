@@ -55,7 +55,11 @@ class PlanningTeam extends Component {
                 this.setState({
                     data:
                         Object.keys(response)
-                            .filter(f => f !== '$__path' && response[f].attributes.is_hazard_mitigation_representative === 'yes')
+                            .filter(f => f !== '$__path' && response[f].attributes.is_hazard_mitigation_representative === 'yes' &&
+                                (
+                                    // response[f].attributes.contact_county === this.props.activeGeoid ||
+                                response[f].attributes.contact_municipality === this.props.activeCousubid )
+                            )
                             .reduce((a, c) => [...a, response[c]], [])
                 })
             })
@@ -112,8 +116,9 @@ class PlanningTeam extends Component {
                 <div className='row'>
                     <div className='col-12' style={{textAlign: 'center'}}>
                         <ContentHeader>
-                            {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')}
-                            Hazard Mitigation Representative
+                            {
+                                `${get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} Hazard Mitigation Representative`
+                            }
                         </ContentHeader>
                     </div>
                 </div>
@@ -134,6 +139,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         activePlan: get(state, `user.activePlan`, null),
         activeCousubid: get(state, `user.activeCousubid`, null),
+        activeGeoid: get(state, `user.activeGeoid`, null),
         roles: get(state, `graph.forms.roles`, {}),
         rolesMeta: get(state, `graph.rolesMeta`, {}),
         graph: state.graph,

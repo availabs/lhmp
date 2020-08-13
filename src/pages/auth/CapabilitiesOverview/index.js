@@ -65,7 +65,7 @@ class CapabilitiesIndex extends React.Component {
                                 (typeof (capabilityDB.cousub || capabilityDB.municipality) === 'string' &&
                                     (capabilityDB.cousub || capabilityDB.municipality) === this.state.geoid ||
                                     typeof (capabilityDB.cousub || capabilityDB.municipality) === 'object' &&
-                                    (capabilityDB.cousub || capabilityDB.municipality).includes(this.state.geoid))
+                                    (capabilityDB.cousub || capabilityDB.municipality || []).includes(this.state.geoid))
                         )
                     ).length)
         alreadyPresentCap.forEach(capability => this.setState({[capability]: 'true'}))

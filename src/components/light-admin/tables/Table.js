@@ -72,6 +72,8 @@ const Styles = styled.div`
       padding: 0.75rem;
       vertical-align: middle;
       border-top: 1px solid rgba(83, 101, 140, 0.08);
+      overflow-wrap: anywhere;
+
 }
 
       
