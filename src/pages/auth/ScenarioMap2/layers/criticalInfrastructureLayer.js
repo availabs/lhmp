@@ -7,6 +7,8 @@ import {falcorChunkerNice, falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
 import {unregister} from "../../../../components/AvlMap/ReduxMiddleware";
 import {EARLIEST_YEAR, LATEST_YEAR} from "../components/yearsOfSevereWeatherData";
+import hazardIcons from "../../../Public/Hazards/new_components/HazardMeta";
+import mapboxgl from "mapbox-gl";
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -35,6 +37,59 @@ const hazardMeta = [
     {value: 'winterweat', name: 'Snow Storm', description: '', sheldus: "Winter Weather", colors: getColor('Blues')},
     {value: 'volcano', name: 'Volcano', description: '', colors: getColor('Blues')},
     {value: 'coastal', name: 'Coastal Hazards', description: '', sheldus: "Coastal Hazards", colors: getColor('Blues')}
+];
+
+const ATTRIBUTES = [
+    "owner_type",
+    "type",
+    "name",
+    "parcel_id",
+    "geoid",
+    "cousub_geoid",
+    "id",
+    "replacement_value",
+    "critical",
+    "flood_zone",
+    "prop_class",
+    "flood_velocity",
+    "flood_depth",
+    "flood_base_elevation",
+    'num_units',
+    'basement',
+    'num_stories',
+    'building_type',
+    'roof_type',
+    'address',
+    'num_residents',
+    'heat_type',
+    'naics_code',
+    'census_industry_code',
+    'contents_replacement_value',
+    'inventory_replacement_value',
+    'establishment_revenue',
+    'business_hours',
+    'seismic_zone',
+    'flood_plain',
+    'flood_duration',
+    'high_wind_speed',
+    'soil_type',
+    'storage_hazardous_materials',
+    'topography',
+    'num_occupants',
+    'num_vehicles_inhabitants',
+    'height',
+    'structure_type',
+    'bldg_style',
+    'sqft_living',
+    'nbr_kitchens',
+    'nbr_full_baths',
+    'nbr_bedrooms',
+    'first_floor_elevation',
+    'num_employees',
+    'owner_type',
+    'shelter',
+    'building_id'
+
 ];
 
 let eventsGeo = {
@@ -82,7 +137,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
-            ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter']
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter'],
+            ['geo', countiesOrCousubs.value, 'name']
         ).then(d => {
             let allIds = [],
                 data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {}),
@@ -95,7 +151,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
             allIds.push(...shelterData);
             if (allIds.length === 0) return Promise.resolve();
             return falcorGraph.get(
-                ['building', 'geom', 'byBuildingId', allIds, 'centroid']
+                ['building', 'geom', 'byBuildingId', allIds, 'centroid'],
+                ['building', 'byId', allIds, ATTRIBUTES]
             )//.then(d => console.log('centroid res', d))
         })
     }
@@ -123,7 +180,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
                         buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
                             "type": "Feature",
-                            "properties":{id:buildingId, color:'#fbff00'},
+                            "properties":{id:buildingId, color:'#fbff00', type: 'critical'},
                             "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
                         })
                     });
@@ -135,11 +192,36 @@ export class CriticalInfrastructureLayer extends MapLayer{
                 buildingColors[shelter.building_id] = '#ffffff';
                 geojson.features.push({
                     "type": "Feature",
-                    "properties":{id:shelter.building_id, color:'#ffffff'},
+                    "properties":{id:shelter.building_id, color:'#ffffff', type: 'shelter',
+                    ...Object.keys(get(rawGraph, ['building', 'byId', shelter.building_id], {}))
+                        .filter(k => get(rawGraph, ['building', 'byId', shelter.building_id, k], null))
+                        .reduce((a,k) => {
+                            a[k] = get(rawGraph, ['building', 'byId', shelter.building_id, k], null);
+                            a[k] = k === 'geoid' ? get(rawGraph, `geo.${a[k].slice(0,5)}.name`, '') :
+                                k === 'cousub_geoid' ? get(rawGraph, `geo.${a[k]}.name`, '') : a[k]
+
+                            return a;
+                        }, {})
+                    },
                     "geometry": {...get(centroidGraph, `${shelter.building_id}.centroid.value`, null)}
                 })
             });
+        this.markers.forEach(m => m.remove())
+        geojson.features.forEach(marker => {
+            // add icon
+            let el = document.createElement('div');
+            el.className = 'icon-w'
+            el.style.color = marker.properties.color
+            let el2 = document.createElement('div');
+            el2.className = marker.properties.type === 'critical' ? 'os-icon os-icon-alert-circle' : 'os-icon os-icon-home'
+            el.appendChild(el2)
 
+            this.markers.push(
+                new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(this.map)
+            )
+        })
         if(map.getSource('buildingsCritical')) {
             map.removeLayer('buildingsCritical-layer');
             map.removeSource('buildingsCritical');
@@ -154,7 +236,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
                 'type': 'circle',
                 'paint': {
                     'circle-color': ["get", ["to-string", ["get", "id"]], ["literal", buildingColors]],
-                    'circle-opacity': 0.8,
+                    'circle-opacity': 0,
                     'circle-radius': 10,
                 }
             })
@@ -280,6 +362,7 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
             },
         ],
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
+        markers: [],
         filters: {
             hazard: {
                 name: "hazard",
@@ -298,7 +381,9 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
                         ],
                     ] :
                     ['Building',
-                        ['id', get(feature, `properties.id`, null)],
+                        ...Object.keys(get(feature, `properties`, {}))
+                            .filter(k => k !== 'color')
+                            .map(k => [k.split('_').join(' '), get(feature, `properties.${k}`, null)])
                     ]
 
             }
