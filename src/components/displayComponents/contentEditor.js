@@ -124,6 +124,7 @@ class ContentEditor extends Component {
         return (
             <DIV>
                 <Editor
+                    spellCheck={true}
                     editorState={editorState}
                     toolbarClassName="toolbar"
                     wrapperClassName="wrapper"
