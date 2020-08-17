@@ -33,6 +33,8 @@ class AvlFormsViewData extends React.Component{
         } else {
             id = this.props.id
         }
+        if (!id || id[0] === '') return Promise.resolve();
+
         return this.props.falcor.get(['forms', 'byId', id])
             .then(response => {
                 this.setState({
@@ -44,7 +46,7 @@ class AvlFormsViewData extends React.Component{
                     value = value ? value.toString() : value;
                     value = value && value.includes('[') ?
                         value.replace('[', '').replace(']', '').split(',') : value;
-                    if (typeof value === "object"){
+                    if (value && typeof value === "object"){
                         value.forEach(v => {
                             if(v && v.toString().substring(0,2) === '36' && counties.includes(v)){
                                 this.props.getAllGeo(v)
@@ -106,7 +108,10 @@ class AvlFormsViewData extends React.Component{
                         label = get(config[0][d], `label`, null),
                         displayType = get(config[0][d], `display_type`, null),
                         formType = get(config[0][d], `form_type`, null),
-                        parentConfig = get(config[0][d], `parentConfig`, null);
+                        parentConfig = get(config[0][d], `parentConfig`, null),
+                        targetConfig = get(config[0][d], `targetConfig`, null),
+                        targetKey = get(config[0][d], `targetKey`, null);
+
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value ? value.toString() : value;
                     value = value && value.includes('[') ?
@@ -148,7 +153,9 @@ class AvlFormsViewData extends React.Component{
                                 label,
                                 displayType,
                                 formType,
-                                parentConfig
+                                parentConfig,
+                                targetConfig,
+                                targetKey
                             })
                         }
                         else{
@@ -160,7 +167,9 @@ class AvlFormsViewData extends React.Component{
                                     label,
                                     displayType,
                                     formType,
-                                    parentConfig
+                                    parentConfig,
+                                    targetConfig,
+                                    targetKey
                                 })
                             }
 
@@ -175,7 +184,9 @@ class AvlFormsViewData extends React.Component{
                                     label = get(config[0][ma], `label`, null),
                                     displayType = get(config[0][d], `display_type`, null),
                                     formType = get(config[0][d], `form_type`, null),
-                                    parentConfig = get(config[0][d], `parentConfig`, null);
+                                    parentConfig = get(config[0][d], `parentConfig`, null),
+                                    targetConfig = get(config[0][d], `targetConfig`, null),
+                                    targetKey = get(config[0][d], `targetKey`, null);
 
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
@@ -190,7 +201,9 @@ class AvlFormsViewData extends React.Component{
                                                     label,
                                                     displayType,
                                                     formType,
-                                                    parentConfig
+                                                    parentConfig,
+                                                    targetConfig,
+                                                    targetKey
                                                 })
                                             }else{
                                                 data.push({
@@ -200,7 +213,9 @@ class AvlFormsViewData extends React.Component{
                                                     label,
                                                     displayType,
                                                     formType,
-                                                    parentConfig
+                                                    parentConfig,
+                                                    targetConfig,
+                                                    targetKey
                                                 })
                                             }
                                         }else{
@@ -226,7 +241,9 @@ class AvlFormsViewData extends React.Component{
                                                             label,
                                                             displayType,
                                                             formType,
-                                                            parentConfig
+                                                            parentConfig,
+                                                            targetConfig,
+                                                            targetKey
                                                         })
                                                     }
                                                 }

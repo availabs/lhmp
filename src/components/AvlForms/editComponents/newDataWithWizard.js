@@ -123,10 +123,10 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     afterSubmitEdit(newId, attributes){
-        console.log('ase', newId, attributes)
+
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                console.log('this.state.c', c, this.state)
+
                 if (!this.state[c] || typeof this.state[c] !== "object") return Promise.resolve();
 
                 return get(this.state, [c], []).reduce((a1,c1) => {
@@ -135,8 +135,10 @@ class AvlFormsNewDataWizard extends React.Component{
                             .then(originalData => {
                                 originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
                                 originalData = originalData.indexOf(']') > -1 ?
-                                    originalData.replace(']', `,${newId}]` ) :
-                                    originalData !== '' ?
+                                    `[${
+                                        _.uniqBy([...originalData.slice(1,-1).split(','), newId]).filter(od => od && od !== '').join(',')
+                                    }]` :
+                                    originalData && originalData !== '' ?
                                         `[${originalData},${newId}]` : `[${newId}]`
 
                                 return this.props.falcor.set({
@@ -236,7 +238,6 @@ class AvlFormsNewDataWizard extends React.Component{
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
                     if (this.props.returnValue){
-                        console.log('res', response, Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                         this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                     }
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
@@ -324,7 +325,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
-                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
+                                            e.target.closest(`#closeMe`+id).style.display = 'none'
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -584,7 +585,9 @@ class AvlFormsNewDataWizard extends React.Component{
                             type:item.attributes[attribute].edit_type,
                             display_condition:item.attributes[attribute].display_condition,
                             defaultValue: item.attributes[attribute].defaultValue,
-                            parentConfig: item.attributes[attribute].parentConfig
+                            parentConfig: item.attributes[attribute].parentConfig,
+                            targetConfig: item.attributes[attribute].targetConfig,
+                            targetKey: item.attributes[attribute].targetKey,
                         })
                     }
                     else{

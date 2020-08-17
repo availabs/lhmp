@@ -143,7 +143,7 @@ class AvlFormsNewData extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
-                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
+                                            e.target.closest(`#closeMe`+id).style.display = 'none'
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -182,9 +182,12 @@ class AvlFormsNewData extends React.Component{
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {
                                 originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
+
                                 originalData = originalData.indexOf(']') > -1 ?
-                                    originalData.replace(']', `,${newId}]` ) :
-                                    originalData !== '' ?
+                                    `[${
+                                    _.uniqBy([...originalData.slice(1,-1).split(','), newId]).filter(od => od && od !== '').join(',')
+                                }]` :
+                                    originalData && originalData !== '' ?
                                     `[${originalData},${newId}]` : `[${newId}]`
 
                                 return this.props.falcor.set({
@@ -600,7 +603,9 @@ class AvlFormsNewData extends React.Component{
                         type:item.attributes[attribute].edit_type,
                         display_condition:item.attributes[attribute].display_condition,
                         defaultValue: item.attributes[attribute].defaultValue,
-                        parentConfig: item.attributes[attribute].parentConfig
+                        parentConfig: item.attributes[attribute].parentConfig,
+                        targetConfig: item.attributes[attribute].targetConfig,
+                        targetKey: item.attributes[attribute].targetKey,
                     })
                 }
                 else if(
