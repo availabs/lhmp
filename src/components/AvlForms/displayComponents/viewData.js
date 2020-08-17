@@ -24,58 +24,73 @@ class AvlFormsViewData extends React.Component{
         }
     }
 
-    fetchFalcorDeps(){
+    fetchFalcorDeps() {
         let id = []
-        if(this.props.id[0].includes("[")){
+        if (this.props.id[0].includes("[")) {
             id = this.props.id[0].substr(1)
-        }else if(this.props.id[0].includes("]")){
+        } else if (this.props.id[0].includes("]")) {
             id = this.props.id[0].substring(0, this.props.id[0].length - 1);
-        }else{
+        } else {
             id = this.props.id
         }
-        return this.props.falcor.get(['forms','byId',id])
-            .then(response =>{
+        return this.props.falcor.get(['forms', 'byId', id])
+            .then(response => {
                 this.setState({
-                    id : id
+                    id: id
                 })
                 let graph = get(response, `json.forms.byId[${id}].attributes`, {});
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item => {
-                    let value = graph[item];
+                    let value = get(graph, [item], null);
                     value = value ? value.toString() : value;
                     value = value && value.includes('[') ?
-                        value.replace('[', '').replace(']', '') : value;
-
-                    if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
-                        this.props.getAllGeo(value)
-                        this.setState({county: value})
+                        value.replace('[', '').replace(']', '').split(',') : value;
+                    if (typeof value === "object"){
+                        value.forEach(v => {
+                            if(v && v.toString().substring(0,2) === '36' && counties.includes(v)){
+                                this.props.getAllGeo(v)
+                                this.setState({county: v})
+                            }
+                            if(v &&
+                                ((get(this.props.geoRelations, [this.state.county], null) &&
+                                    this.props.geoRelations[this.state.county].includes(v)) ||
+                                    (v.toString().substring(0,5) === this.state.county && value.length === 10)
+                                )
+                            ){
+                                this.setState({cousub: value})
+                            }
+                        })
+                    }else{
+                        if(value && value.toString().substring(0,2) === '36' && counties.includes(value)){
+                            this.props.getAllGeo(value)
+                            this.setState({county: value})
+                        }
+                        if(value &&
+                            ((get(this.props.geoRelations, [this.state.county], null) &&
+                                this.props.geoRelations[this.state.county].includes(value)) ||
+                                (value.toString().substring(0,5) === this.state.county && value.length === 10))
+                        ){
+                            this.setState({cousub: value})
+                        }
                     }
-                    if(value &&
-                        ((get(this.props.geoRelations, [this.state.county], null) &&
-                        this.props.geoRelations[this.state.county].includes(value)) ||
-                        (value.toString().substring(0,5) === this.state.county && value.length === 10))
 
-                    ){
-                        this.setState({cousub: value})
+                    if (this.state.county.length !== 0) {
+                        this.props.falcor.get(['geo', this.state.county, ['name']])
+                            .then(response => {
+                                return response
+                            })
+                    }
+                    if (this.state.cousub.length !== 0) {
+                        this.props.falcor.get(['geo', this.state.cousub, ['name']])
+                            .then(response => {
+                                return response
+                            })
                     }
 
+                    return response
                 })
-                if(this.state.county.length !== 0){
-                    this.props.falcor.get(['geo',this.state.county,['name']])
-                        .then(response =>{
-                            return response
-                        })
-                }
-                if(this.state.cousub.length !==0){
-                    this.props.falcor.get(['geo',this.state.cousub,['name']])
-                        .then(response =>{
-                            return response
-                        })
-                }
-
-
-                return response
             })
     }
+
 
     formsViewData(){
         let graph = this.props.formsViewData[this.state.id];
@@ -95,11 +110,20 @@ class AvlFormsViewData extends React.Component{
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value ? value.toString() : value;
                     value = value && value.includes('[') ?
-                        value.replace('[', '').replace(']', '') : value;
+                        value.replace('[', '').replace(']', '').split(',') : value;
+
                     if(config_attributes[0].includes(d)){
-                        if(value === this.state.county ||
+                        if(
+                            value && (typeof value === "string" && typeof this.state.county === "string" && value === this.state.county ||
+                            typeof value === "object" && typeof this.state.county === "string" && value.includes(this.state.county) ||
+                            typeof value === "object" && typeof this.state.county === "object" && _.isEqual(value, this.state.county) ||
+                            typeof value === "string" && typeof this.state.county === "object" && this.state.county.includes(value)) ||
+
                             (
-                                (value ? value : "") === this.state.cousub
+                                value && (typeof value === "string" && typeof this.state.cousub === "string" && value === this.state.cousub ||
+                                    typeof value === "object" && typeof this.state.cousub === "string" && value.includes(this.state.cousub) ||
+                                    typeof value === "object" && typeof this.state.cousub === "object" && _.isEqual(value, this.state.cousub) ||
+                                    typeof value === "string" && typeof this.state.cousub === "object" && this.state.cousub.includes(value))
                             )
                         ){
                             /*value =
@@ -109,8 +133,17 @@ class AvlFormsViewData extends React.Component{
                                     value*/
                             data.push({
                                 attribute : d,
-                                value: geoData[value] ? functions.formatName(geoData[value].name, value) :
-                                    this.props.config[0].attributes[d].defaultValue || 'None',
+                                value:
+                                typeof value === "string" ?
+                                        geoData[value] ?
+                                            functions.formatName(geoData[value].name, value) :
+                                            this.props.config[0].attributes[d].defaultValue || 'None' :
+                                typeof value === "object" ?
+                                        value.map(v =>
+                                            geoData[v] ?
+                                                functions.formatName(geoData[v].name, v) :
+                                                this.props.config[0].attributes[d].defaultValue || 'None'
+                                        ).join(', ') : 'None',
                                 section,
                                 label,
                                 displayType,
