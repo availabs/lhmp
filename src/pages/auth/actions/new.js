@@ -3,6 +3,7 @@ import Element from 'components/light-admin/containers/Element'
 import WorksheetConfig from 'pages/auth/actions/actions_worksheet_forms/config.js'
 import AvlFormsNewDataWizard from 'components/AvlForms/editComponents/newDataWithWizard.js'
 import ViewConfig from 'pages/auth/actions/view_config.js'
+import ProjectMeta from 'pages/auth/actions/actions_project_forms/meta.js'
 
 class ActionsWorksheetFormsNew extends React.Component{
     constructor(props){
@@ -32,6 +33,7 @@ class ActionsWorksheetFormsNew extends React.Component{
             <Element>
                 <AvlFormsNewDataWizard
                 json = {config}
+                meta = {ProjectMeta}
                 id = {[this.props.match.params.id]}
                 />
             </Element>

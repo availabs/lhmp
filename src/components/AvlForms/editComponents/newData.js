@@ -412,7 +412,7 @@ class AvlFormsNewData extends React.Component{
                             if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
                                 fieldSpecificMeta[field].push(f)
                             }else{
-                                fieldSpecificMeta[field] = [f]
+                                fieldSpecificMeta[field] = f.value ? f.value : [f]
                             }
                         })
 

@@ -117,6 +117,7 @@ module.exports = [
                 disable_condition:'',
                 display_type:'text',
                 meta: 'true',
+                // metaSource: 'meta_file',
                 meta_filter:{filter_key:'actions_project',value:'category'}, // if populated from forms_meta
                 section: '2'
             },
@@ -131,6 +132,7 @@ module.exports = [
                 disable_condition:'',
                 display_type:'text',
                 meta: 'true',
+                // metaSource: 'meta_file',
                 meta_filter:{filter_key:'actions_project',value:'type'},
                 depend_on:'action_category',
                 section: '2',
@@ -190,10 +192,11 @@ module.exports = [
                 prompt:'Identify the hazard(s) being addressed with this action.',
                 edit_type:'multiselect',
                 display_type:'text',
-                meta: 'false',
+                meta: 'true',
+                metaSource: 'meta_file',
                 meta_filter:{filter_key:'',value:['Select All', 'Select None','Avalanche', 'Coastal Hazards', 'Coldwave', 'Drought',
                         'Earthquake', 'Hail', 'Heat Wave', 'Hurricane', 'Ice Storm', 'Landslide', 'Lightning',
-                        'Flooding', 'Tornado', 'Tsunami/Seiche', 'Volcano', 'Wildfire', 'Wind', 'Snow Storm']},
+                        'Flooding', 'Tornado', 'Tsunami/Seiche', 'Volcano', 'Wildfire', 'Wind', 'Snow Storm']}, // only used when metaSource is not meta_file
                 section: '2'
             },
             metric_for_measurement:{
