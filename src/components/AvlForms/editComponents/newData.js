@@ -9,6 +9,7 @@ import styled from "styled-components";
 import {falcorGraph} from "../../../store/falcorGraph";
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
+import attributes from "../../../pages/auth/megaAvlFormsConfig";
 
 var _ = require("lodash");
 
@@ -386,6 +387,7 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type] && graph[form_type].meta){
                 graph[form_type].meta.value
                     .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                    .filter(f => this.props.config[0].attributes[f.form_type.split(`${form_type}-`)[1]].metaSource !== 'meta_file')
                     .map(f => {
                         let field = f.form_type.split(`${form_type}-`)[1]
                         if (fieldSpecificMeta[field]){
@@ -396,6 +398,26 @@ class AvlFormsNewData extends React.Component{
                     })
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value.filter(f => f.form_type.split(`${form_type}-`).length === 1) : []
             }
+        }
+
+        // get meta from file
+        // for fields which have meta from file, meta from db will be overridden
+        if(this.props.meta){
+            this.props.meta
+                .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                .forEach(f => {
+                    f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
+                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .forEach(field => {
+                            if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
+                                fieldSpecificMeta[field].push(f)
+                            }else{
+                                fieldSpecificMeta[field] = [f]
+                            }
+                        })
+
+                })
+            // meta_data = this.props.meta.filter(f => f.form_type.split(`-`).length === 1)
         }
 
         if (!countyData.length) return null;

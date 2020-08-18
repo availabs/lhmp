@@ -65,6 +65,7 @@ module.exports = [
                 edit_type:'dropdown',
                 display_type:'text',
                 meta: 'true',
+                // metaSource: 'meta_file', // meta_file, default: database
                 hidden:'false',
                 section: '',
                 list_attribute: 'true',
@@ -77,6 +78,7 @@ module.exports = [
                 edit_type:'dropdown',
                 display_type:'text',
                 meta:'true',
+                // metaSource: 'meta_file', // meta_file, default: database
                 depend_on : 'capability_category',
                 hidden:'false',
                 section:'',
@@ -113,7 +115,8 @@ module.exports = [
                 sub_type:'',
                 edit_type:'dropdown',
                 display_type:'text',
-                meta:'true',
+                meta: 'true',
+                // metaSource: 'meta_file', // meta_file, default: database
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
