@@ -70,7 +70,20 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 section:''
-            }
+            },
+            roles:{
+                label:'Roles',
+                sub_type:'',
+                prompt:'',
+                edit_type:'AvlFormsJoin',
+                display_type:'AvlFormsJoin',
+                parentConfig: 'participation',
+                targetConfig: 'roles',
+                targetKey: 'contact_name',
+                hidden:'false',
+                meta:'false',
+                section:'',
+            },
         }
     }
 ]

@@ -9,6 +9,7 @@ import styled from "styled-components";
 import {falcorGraph} from "../../../store/falcorGraph";
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
+import attributes from "../../../pages/auth/megaAvlFormsConfig";
 
 var _ = require("lodash");
 
@@ -143,7 +144,7 @@ class AvlFormsNewData extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
-                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
+                                            e.target.closest(`#closeMe`+id).style.display = 'none'
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -182,9 +183,12 @@ class AvlFormsNewData extends React.Component{
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {
                                 originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
+
                                 originalData = originalData.indexOf(']') > -1 ?
-                                    originalData.replace(']', `,${newId}]` ) :
-                                    originalData !== '' ?
+                                    `[${
+                                    _.uniqBy([...originalData.slice(1,-1).split(','), newId]).filter(od => od && od !== '').join(',')
+                                }]` :
+                                    originalData && originalData !== '' ?
                                     `[${originalData},${newId}]` : `[${newId}]`
 
                                 return this.props.falcor.set({
@@ -383,6 +387,7 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type] && graph[form_type].meta){
                 graph[form_type].meta.value
                     .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                    .filter(f => this.props.config[0].attributes[f.form_type.split(`${form_type}-`)[1]].metaSource !== 'meta_file')
                     .map(f => {
                         let field = f.form_type.split(`${form_type}-`)[1]
                         if (fieldSpecificMeta[field]){
@@ -393,6 +398,26 @@ class AvlFormsNewData extends React.Component{
                     })
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value.filter(f => f.form_type.split(`${form_type}-`).length === 1) : []
             }
+        }
+
+        // get meta from file
+        // for fields which have meta from file, meta from db will be overridden
+        if(this.props.meta){
+            this.props.meta
+                .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                .forEach(f => {
+                    f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
+                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .forEach(field => {
+                            if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
+                                fieldSpecificMeta[field].push(f)
+                            }else{
+                                fieldSpecificMeta[field] = f.value ? f.value : [f]
+                            }
+                        })
+
+                })
+            // meta_data = this.props.meta.filter(f => f.form_type.split(`-`).length === 1)
         }
 
         if (!countyData.length) return null;
@@ -600,7 +625,9 @@ class AvlFormsNewData extends React.Component{
                         type:item.attributes[attribute].edit_type,
                         display_condition:item.attributes[attribute].display_condition,
                         defaultValue: item.attributes[attribute].defaultValue,
-                        parentConfig: item.attributes[attribute].parentConfig
+                        parentConfig: item.attributes[attribute].parentConfig,
+                        targetConfig: item.attributes[attribute].targetConfig,
+                        targetKey: item.attributes[attribute].targetKey,
                     })
                 }
                 else if(

@@ -23,6 +23,16 @@ class HazardEventsControl extends React.Component {
     render() {
         return (
             <div>
+                <div style={{paddingBottom: '5px'}}>
+                    <div className="icon-w">
+                        <div className="os-icon os-icon-home"> Shelter </div>
+                    </div>
+                </div>
+                <div>
+                    <div className="icon-w">
+                        <div className="os-icon os-icon-alert-circle"> Critical Infrastructure</div>
+                    </div>
+                </div>
             </div>
 
         )

@@ -28,7 +28,8 @@ class TextComponent extends React.PureComponent{
         let ids = [];
         return this.props.parentConfig === 'actions' ? (this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
-                let length = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],1) === null ? 1 :  get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0)
+                let length = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],1) === null ? 1 :
+                    get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0)
                 this.props.falcor.get(['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
                     .then(response =>{
                         let graph = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'byIndex'],{})
@@ -46,7 +47,9 @@ class TextComponent extends React.PureComponent{
                         })
                         return response
                     })
-            })) : (
+            })) :
+            this.props.parentConfig === 'zones' ?
+            (
                 this.props.falcor.get(['forms','actions','byPlanId',this.props.activePlan,'length'])
                     .then(response =>{
                         let length = response.json.forms['actions'].byPlanId[this.props.activePlan].length;
@@ -79,7 +82,30 @@ class TextComponent extends React.PureComponent{
                         }
                         return response
                     })
-        )
+        ) :
+                (this.props.falcor.get(['forms',this.props.targetConfig,'byPlanId',this.props.activePlan,'length'])
+                    .then(response =>{
+                        let length = get(response,['json','forms',this.props.targetConfig,'byPlanId',this.props.activePlan,'length'],1) === null ? 1 :
+                            get(response,['json','forms',this.props.targetConfig,'byPlanId',this.props.activePlan,'length'],0)
+
+                        this.props.falcor.get(['forms',this.props.targetConfig,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
+                            .then(response =>{
+                                let graph = get(response,['json','forms',this.props.targetConfig,'byPlanId',this.props.activePlan,'byIndex'],{})
+                                let ids = []
+                                if(graph){
+                                    Object.keys(graph).filter(d => d !=='$__path').forEach(item =>{
+                                        if(graph[item]){
+                                            ids.push(graph[item].id)
+                                        }
+                                    })
+                                }
+                                this.setState({
+                                    ids : ids,
+                                    data:graph
+                                })
+                                return response
+                            })
+                    }))
     }
 
     zoneDropDown(filterId){
@@ -100,7 +126,11 @@ class TextComponent extends React.PureComponent{
                 .forEach(item =>{
                 if(graph[item] && this.state.ids.includes(graph[item].id)){
                     zones_list.push({
-                        'label': graph[item].attributes ? graph[item].attributes.name || graph[item].attributes.action_name : 'None',
+                        'label': graph[item].attributes ?
+                            this.props.targetKey ?  graph[item].attributes[this.props.targetKey] :
+                            graph[item].attributes.name || graph[item].attributes.action_name ||
+                            graph[item].attributes.title || graph[item].attributes.role
+                            : 'None',
                         'value': graph[item] ? graph[item].id : ''
                     })
                 }
@@ -111,7 +141,6 @@ class TextComponent extends React.PureComponent{
 
     renderDropdown() {
         let zones_list = this.zoneDropDown();
-
         return (
             <SearchableDropDown
                 data={zones_list}
@@ -132,7 +161,8 @@ class TextComponent extends React.PureComponent{
             <MultiSelectFilter
                 filter={{
                     domain: zones_list || [],
-                    value: this.props.state[this.props.title] ? this.props.state[this.props.title] : []
+                    value: this.props.state[this.props.title] && typeof this.props.state[this.props.title] === "object" ?
+                            this.props.state[this.props.title].filter(f => f && f !== '') : []
                 }}
                 setFilter={(e) => {
                     this.props.handleChange(e, this.props.title, zones_list);

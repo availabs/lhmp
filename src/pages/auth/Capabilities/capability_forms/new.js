@@ -4,6 +4,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import Element from 'components/light-admin/containers/Element'
 import React from 'react';
 import config from 'pages/auth/Capabilities/capability_forms/config.js'
+import meta from 'pages/auth/Capabilities/capability_forms/meta.js'
 import AvlFormsNewData from 'components/AvlForms/editComponents/newData.js'
 import get from "lodash.get";
 
@@ -18,6 +19,7 @@ class CapabilitiesFormsNew extends React.Component{
             <Element>
                 <AvlFormsNewData
                     json = {config}
+                    meta = {meta}
                     id = {[this.props.match.params.id]}
                     //data = {{upload: geomData}}
 

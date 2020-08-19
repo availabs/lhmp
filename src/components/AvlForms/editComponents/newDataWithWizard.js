@@ -123,10 +123,10 @@ class AvlFormsNewDataWizard extends React.Component{
     }
 
     afterSubmitEdit(newId, attributes){
-        console.log('ase', newId, attributes)
+
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                console.log('this.state.c', c, this.state)
+
                 if (!this.state[c] || typeof this.state[c] !== "object") return Promise.resolve();
 
                 return get(this.state, [c], []).reduce((a1,c1) => {
@@ -135,8 +135,10 @@ class AvlFormsNewDataWizard extends React.Component{
                             .then(originalData => {
                                 originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
                                 originalData = originalData.indexOf(']') > -1 ?
-                                    originalData.replace(']', `,${newId}]` ) :
-                                    originalData !== '' ?
+                                    `[${
+                                        _.uniqBy([...originalData.slice(1,-1).split(','), newId]).filter(od => od && od !== '').join(',')
+                                    }]` :
+                                    originalData && originalData !== '' ?
                                         `[${originalData},${newId}]` : `[${newId}]`
 
                                 return this.props.falcor.set({
@@ -236,7 +238,6 @@ class AvlFormsNewDataWizard extends React.Component{
             return this.props.falcor.call(['forms','insert'], args, [], [])
                 .then(response => {
                     if (this.props.returnValue){
-                        console.log('res', response, Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                         this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
                     }
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
@@ -324,7 +325,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
-                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
+                                            e.target.closest(`#closeMe`+id).style.display = 'none'
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -359,8 +360,33 @@ class AvlFormsNewDataWizard extends React.Component{
         let data = [];
         let countyData = this.geoData()[0];
         let cousubsData = this.geoData()[1];
-        let filter_data = [];
-        if(this.props.meta_data){
+        let filter_data = [],
+            fieldSpecificMeta = {},
+            form_type = this.props.config[0].type;
+
+        // get meta from file
+        // for fields which have meta from file, meta from db will be overridden
+        if(this.props.meta){
+            this.props.meta
+                .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                .forEach(f => {
+                    f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
+                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .forEach(field => {
+                            if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
+                                fieldSpecificMeta[field].push(f)
+                            }else{
+                                fieldSpecificMeta[field] = f.value ? f.value : [f]
+                            }
+                        })
+
+                })
+            // meta_data = this.props.meta.filter(f => f.form_type.split(`-`).length === 1)
+        }
+        if(this.props.meta_data ||
+            (this.props.meta && Object.keys(this.props.config[0].attributes)
+                .filter(attr => this.props.config[0].attributes[attr].metaSource === 'meta_file').length)
+        ){
             this.props.config.forEach(item => {
                 Object.keys(item.attributes).forEach(attribute => {
                     if(item.attributes[attribute].area === 'true' && item.attributes[attribute].edit_type === 'dropdown' && item.attributes[attribute].meta === 'true' && item.attributes[attribute].depend_on === undefined){
@@ -405,14 +431,12 @@ class AvlFormsNewDataWizard extends React.Component{
                     }else if(!item.attributes[attribute].area && item.attributes[attribute].edit_type === 'dropdown' &&
                         item.attributes[attribute].meta === 'true' && item.attributes[attribute].meta_filter){
                         let graph = this.props.meta_data;
-
-                        if(graph && item.attributes[attribute]){
+                        if(graph && item.attributes[attribute] && item.attributes[attribute].metaSource !== 'meta_file'){
                             if(graph[item.attributes[attribute].meta_filter.filter_key]){
                                 graph[item.attributes[attribute].meta_filter.filter_key].meta.value.forEach(d =>{
                                     filter_data.push(d)
                                 })
                             }
-
                         }
 
                         data.push({
@@ -428,7 +452,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             disable_condition:item.attributes[attribute].disable_condition,
                             depend_on:item.attributes[attribute].depend_on,
                             prompt: this.displayPrompt.bind(this),
-                            meta : filter_data ? filter_data : [],
+                            meta : fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: filter_data ? filter_data : [],
                             defaultValue: item.attributes[attribute].defaultValue,
                         })
 
@@ -477,7 +501,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             required: item.attributes[attribute].field_required,
                             type:item.attributes[attribute].edit_type,
                             prompt: this.displayPrompt.bind(this),
-                            filterData : filter ? filter : [],
+                            filterData : fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute] : filter ? filter : [],
                             defaultValue: item.attributes[attribute].defaultValue
                         })
                     }else if(item.attributes[attribute].edit_type === 'multiselect' && item.attributes[attribute].meta === 'false'){
@@ -584,7 +608,9 @@ class AvlFormsNewDataWizard extends React.Component{
                             type:item.attributes[attribute].edit_type,
                             display_condition:item.attributes[attribute].display_condition,
                             defaultValue: item.attributes[attribute].defaultValue,
-                            parentConfig: item.attributes[attribute].parentConfig
+                            parentConfig: item.attributes[attribute].parentConfig,
+                            targetConfig: item.attributes[attribute].targetConfig,
+                            targetKey: item.attributes[attribute].targetKey,
                         })
                     }
                     else{

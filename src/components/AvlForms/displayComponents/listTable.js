@@ -8,6 +8,7 @@ import {Link} from "react-router-dom"
 import {sendSystemMessage} from 'store/modules/messages';
 import TableSelector from "components/light-admin/tables/tableSelector"
 import config from 'pages/auth/Plan/config/guidance-config'
+import functions from "../../../pages/auth/Plan/functions";
 
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
@@ -130,13 +131,13 @@ class AvlFormsListTable extends React.Component {
                                 data['id'] = item;
                                 if (graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string") {
                                     if (graph[item].value.attributes[attribute].includes("[")) {
-
-                                        data[attribute] = this.props.geoData[graph[item].value.attributes[attribute].slice(1, -1)] ?
-                                            this.props.geoData[graph[item].value.attributes[attribute].slice(1, -1)].name || '' :
-                                            graph[item].value.attributes[attribute].slice(1, -1);
+                                        data[attribute] = graph[item].value.attributes[attribute].slice(1,-1).split(',')
+                                            .map(geoData =>  this.props.geoData[geoData] ?
+                                                functions.formatName(this.props.geoData[geoData].name, geoData) || '' :
+                                                geoData).join(', ');
                                     } else {
                                         data[attribute] = geo[graph[item].value.attributes[attribute]] ?
-                                            geo[graph[item].value.attributes[attribute]].name || '' :
+                                            functions.formatName(geo[graph[item].value.attributes[attribute]].name, graph[item].value.attributes[attribute]) || '' :
                                             graph[item].value.attributes[attribute];
                                     }
                                 } else {
@@ -174,7 +175,7 @@ class AvlFormsListTable extends React.Component {
                             if (this.state.form_ids.includes(item)) {
                                 initial_data['id'] = item;
                                 initial_data[attribute] = geo[graph[item].value.attributes[attribute]] ?
-                                    geo[graph[item].value.attributes[attribute]].name || '' :
+                                    functions.formatName(geo[graph[item].value.attributes[attribute]].name, graph[item].value.attributes[attribute]) || '' :
                                     graph[item].value.attributes[attribute];
                             }
 
@@ -187,7 +188,10 @@ class AvlFormsListTable extends React.Component {
                                 data['id'] = item
                                 if (graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string") {
                                     if (graph[item].value.attributes[attribute].includes("[")) {
-                                        data[attribute] = graph[item].value.attributes[attribute].slice(1, -1)
+                                        data[attribute] = graph[item].value.attributes[attribute].slice(1,-1).split(',')
+                                            .map(geoData =>  this.props.geoData[geoData] ?
+                                                functions.formatName(this.props.geoData[geoData].name, geoData) || '' :
+                                                geoData).join(', ')
                                     } else {
                                         data[attribute] = graph[item].value.attributes[attribute]
                                     }
