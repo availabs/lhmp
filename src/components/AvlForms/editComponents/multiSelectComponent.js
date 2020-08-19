@@ -36,6 +36,7 @@ class MultiSelectComponent extends React.PureComponent {
             data = this.props.meta ? this.props.meta : this.props.filterData;
         }
         //console.log('data after conditions', data, this.props)data = data[0] && data[0].category ? _.uniqBy(data,'category').map(m => m.category) : data
+        let finalValue = this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : [];
         return (
             <div className="col-sm-12" onClick={this.props.onClick ? this.props.onClick : () => {
             }}>
@@ -48,7 +49,8 @@ class MultiSelectComponent extends React.PureComponent {
                             domain: this.props.addAll === 'true' ?
                                 data ? ['Select All', 'Select None', ...data] : ['Select All', 'Select None'] :
                                 data || [],
-                            value: this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : []
+                            value: finalValue && typeof finalValue === "object" ? finalValue.filter(f => f && f !== '') :
+                                finalValue && typeof finalValue === "string" ? [finalValue] : []
                         }}
                         setFilter={(e) => {
                             this.props.handleMultiSelectFilterChange(e, this.props.title, data.map(d => typeof d === "object" ? d.value || d : d));

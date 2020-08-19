@@ -23,7 +23,7 @@ class CensusStatBox extends React.Component {
           ['acs', this.props.geoids, this.props.years,
             [...this.props.censusKeys, ...this.props.divisorKeys]
           ]
-        ).then(res => console.log('res?', res))
+        )
     }
 
     calculateValues(){
