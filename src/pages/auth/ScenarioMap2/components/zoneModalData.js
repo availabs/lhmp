@@ -194,7 +194,7 @@ class ZoneModalData extends React.Component {
     renderLink(){
         let link = this.state.activeLink.split('/')
         return <ListWithoutUrl
-            size={5}
+            size={100}
             zone_id ={[this.props.zone_id]}
             groupBy={'propType'}
             groupByFilter={this.state.filter.value}
