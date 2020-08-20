@@ -6,6 +6,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import MultiSelectFilter from "../../../../components/filters/multi-select-filter";
 import COLOR_RANGES from "constants/color-ranges"
 import {setActiveYear, setActiveHazard} from 'store/modules/hazardEvents'
+import criticalInfrastructureByCode from 'pages/auth/ScenarioMap2/components/criticalInfrastructureByCode'
 
 var _ = require("lodash")
 
@@ -32,6 +33,11 @@ class HazardEventsControl extends React.Component {
                     <div className="icon-w">
                         <div className="os-icon os-icon-alert-circle"> Critical Infrastructure</div>
                     </div>
+                    {
+                        get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, [])
+                            .map(code => criticalInfrastructureByCode[code])
+                    }
+
                 </div>
             </div>
 
