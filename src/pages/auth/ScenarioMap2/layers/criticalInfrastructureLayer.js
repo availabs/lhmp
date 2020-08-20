@@ -179,8 +179,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
                     .forEach(buildingId => {
                         let criticalCode =  get(rawGraph, ['building', 'byId', buildingId, 'critical'], null)
 
-                        if (criticalCode && !this.criticalCodes.includes(parseInt(criticalCode)))
-                        this.criticalCodes.push(parseInt(criticalCode))
+                        if (criticalCode && !this.criticalCodes.includes(criticalCode))
+                        this.criticalCodes.push(criticalCode)
                         critical.push(buildingId);
                         buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
