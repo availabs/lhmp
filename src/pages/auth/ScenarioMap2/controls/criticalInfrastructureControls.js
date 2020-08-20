@@ -30,15 +30,14 @@ class HazardEventsControl extends React.Component {
                         <div className="os-icon os-icon-home"> Shelter </div>
                     </div>
                 </div>
-                <div>
+                <div style={{paddingBottom: '5px'}}>
                     <div className="icon-w">
                         <div className="os-icon os-icon-alert-circle"> Critical Infrastructure</div>
                     </div>
                 </div>
                 <table className='table table-sm table-hover'>
                     <thead>
-                    <th>Code</th>
-                    <th>Name</th>
+                    <th>Critical Infrastructure Type</th>
                     <th>#</th>
                     </thead>
                     <tbody>
@@ -46,8 +45,7 @@ class HazardEventsControl extends React.Component {
                         Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
                             .map(code =>
                                 <tr>
-                                    <td>{ code.slice(0,3) }</td>
-                                    <td>{ criticalInfrastructureByCode[`${code.slice(0,3)}00`] }</td>
+                                    <td>{ `${code.slice(0,3)} - ${criticalInfrastructureByCode[`${code.slice(0, 3)}00`]}` }</td>
                                     <td>
                                         {
                                             Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
