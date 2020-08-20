@@ -35,7 +35,7 @@ class HazardEventsControl extends React.Component {
                     </div>
                     {
                         get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, [])
-                            .map(code => criticalInfrastructureByCode[`${code.slice(0,3)}00`])
+                            .map(code => code.slice(0,3) + ` - ` +criticalInfrastructureByCode[`${code.slice(0,3)}00`])
                     }
 
                 </div>
