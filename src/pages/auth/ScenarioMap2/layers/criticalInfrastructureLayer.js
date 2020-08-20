@@ -169,7 +169,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
             "features": []
         };
         if (!graph || !shelterGraph) return Promise.resolve();
-
+        this.criticalCodes = {}
         Object.keys(graph)
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
@@ -179,8 +179,12 @@ export class CriticalInfrastructureLayer extends MapLayer{
                     .forEach(buildingId => {
                         let criticalCode =  get(rawGraph, ['building', 'byId', buildingId, 'critical'], null)
 
-                        if (criticalCode && !this.criticalCodes.includes(criticalCode))
-                        this.criticalCodes.push(criticalCode)
+                        if (criticalCode && this.criticalCodes[criticalCode]){
+                            this.criticalCodes[criticalCode] += 1
+                        }else if(criticalCode && !this.criticalCodes[criticalCode]){
+                            this.criticalCodes[criticalCode] = 1
+                        }
+
                         critical.push(buildingId);
                         buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
@@ -370,7 +374,7 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
         ],
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
         markers: [],
-        criticalCodes: [],
+        criticalCodes: {},
         filters: {
             hazard: {
                 name: "hazard",

@@ -22,6 +22,7 @@ class HazardEventsControl extends React.Component {
     };
 
     render() {
+
         return (
             <div>
                 <div style={{paddingBottom: '5px'}}>
@@ -33,12 +34,31 @@ class HazardEventsControl extends React.Component {
                     <div className="icon-w">
                         <div className="os-icon os-icon-alert-circle"> Critical Infrastructure</div>
                     </div>
-                    {
-                        get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, [])
-                            .map(code => code.slice(0,3) + ` - ` +criticalInfrastructureByCode[`${code.slice(0,3)}00`])
-                    }
-
                 </div>
+                <table className='table table-sm table-hover'>
+                    <thead>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>#</th>
+                    </thead>
+                    <tbody>
+                    {
+                        Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
+                            .map(code =>
+                                <tr>
+                                    <td>{ code.slice(0,3) }</td>
+                                    <td>{ criticalInfrastructureByCode[`${code.slice(0,3)}00`] }</td>
+                                    <td>
+                                        {
+                                            Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
+                                                .filter(codeToSum => codeToSum.slice(0,3) === code.slice(0,3))
+                                                .reduce((a,codeToSum) => a + get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes.${codeToSum}`, 0), 0)
+                                        }
+                                    </td>
+                                </tr>)
+                    }
+                    </tbody>
+                </table>
             </div>
 
         )
