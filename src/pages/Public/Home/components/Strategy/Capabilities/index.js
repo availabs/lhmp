@@ -5,7 +5,7 @@ import capability_config from "pages/Public/Home/components/Strategy/Capabilitie
 import get from "lodash.get";
 import Table from 'components/light-admin/tables/Table'
 import {HeaderContainer, PageContainer, PageHeader, VerticalAlign} from 'pages/Public/theme/components'
-
+import functions from "../../../../../auth/Plan/functions";
 var _ = require('lodash')
 
 
@@ -30,8 +30,16 @@ class CapabilityStrategy extends React.Component {
         let ids = []
 
         if (!this.props.activePlan) return Promise.resolve({});
-        return this.props.falcor.get(['forms', ['capabilities'], 'byPlanId', this.props.activePlan, 'length'])
+
+        return this.props.falcor.get(
+            ['forms', ['capabilities'], 'byPlanId', this.props.activePlan, 'length'],
+            ['acs',
+                Object.values(get(this.props, `geoRelations`, {[this.props.activeGeoid]: [this.props.activeGeoid]}))
+                    .reduce((a,c) => [...a, ...c.filter(f => f !== '$__path')], [this.props.activeGeoid]),
+                2016, 'B01003_001E']
+        )
             .then(response => {
+
                 let length = response.json.forms['capabilities'].byPlanId[this.props.activePlan].length;
                 if (length > 0) {
                     this.props.falcor.get(['forms', ['capabilities'], 'byPlanId', this.props.activePlan, 'byIndex', [{
@@ -158,18 +166,25 @@ class CapabilityStrategy extends React.Component {
                 })
             }
         });
-        Object.keys(result).forEach(geo => {
+        Object.keys(result)
+            .filter(geo => geo !== 'Countywide')
+            .forEach(geo => {
             data.push({
-                'Capability Region': get(this.props.geoData, [geo, 'name'], geo),
+                'Capability Region': functions.formatName(get(this.props.geoData, [geo, 'name'], geo), geo),
                 ...['Education and outreach', 'Planning and Regulatory', 'Financial', 'Administrative and Technical'].reduce((a, c) => {
 
-                    a[c] = result[geo][c]  ? (Object.values(result[geo][c]).reduce((a,c) => a + (c || 0), 0) / this.state.required_capabilities[c] * 100).toFixed(0) + '%' : 0 + '%';
+                    a[c] = result[geo][c]  ?
+                        (
+                            [...Object.values(result[geo][c]), ...Object.values(get(result, ['Countywide',c], {}))]
+                                .reduce((a1,c1) => a1 + (c1 || 0), 0) / this.state.required_capabilities[c] * 100
+                        ).toFixed(0) + '%' : 0 + '%';
                     return a
-                }, {})
+                }, {}),
+                'Population': get(this.props.acsData, [geo, 2016, 'B01003_001E'])
             })
         });
         return {
-            data: data,
+            data: data.sort((a,b) => b.Population - a.Population),
             columns: [
                 {
                     Header: 'Capability Region',
@@ -198,6 +213,12 @@ class CapabilityStrategy extends React.Component {
                 {
                     Header: 'Administrative and Technical',
                     accessor: 'Administrative and Technical',
+                    align: 'center',
+                    width: 200
+                },
+                {
+                    Header: 'Population',
+                    accessor: 'Population',
                     align: 'center',
                     width: 200
                 },
@@ -244,9 +265,12 @@ const mapStateToProps = state => {
         router: state.router,
         geoGraph: state.graph.geo,
         activePlan: state.user.activePlan,
+        activeGeoid: state.user.activeGeoid,
         geoData: get(state.graph, ['geo']),
         allData: state.graph,
-        capabilityData: get(state.graph, `forms.byId`, {})
+        capabilityData: get(state.graph, `forms.byId`, {}),
+        acsData: get(state.graph, `acs`, {}),
+        geoRelations: state.geo.geoRelations
     }
 }
 
