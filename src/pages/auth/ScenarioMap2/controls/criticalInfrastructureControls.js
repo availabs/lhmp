@@ -41,7 +41,13 @@ class HazardEventsControl extends React.Component {
 
     render() {
         let data = this.state.data;
-
+        let countByCode = Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
+            .reduce((a, codeToSum) => {
+                a[codeToSum.slice(0,3)] = a[codeToSum.slice(0,3)] ?
+                    a[codeToSum.slice(0,3)] + get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes.${codeToSum}`) :
+                    get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes.${codeToSum}`)
+                return a;
+            }, {})
         return (
             <React.Fragment>
                 <div className='row' style={{marginRight: 0}}>
@@ -78,15 +84,13 @@ class HazardEventsControl extends React.Component {
                     </thead>
                     <tbody>
                     {
-                        Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
+                        Object.keys(countByCode)
                             .map(code =>
                                 <tr key={`criticalInfrastructureTable${code}`}>
-                                    <td>{`${code.slice(0, 3)} - ${criticalInfrastructureByCode[`${code.slice(0, 3)}00`]}`}</td>
+                                    <td>{`${code} - ${criticalInfrastructureByCode[`${code}00`]}`}</td>
                                     <td>
                                         {
-                                            Object.keys(get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes`, {}))
-                                                .filter(codeToSum => codeToSum.slice(0, 3) === code.slice(0, 3))
-                                                .reduce((a, codeToSum) => a + get(this.props.layer, `layer.criticalInfrastructureLayer.criticalCodes.${codeToSum}`, 0), 0)
+                                           countByCode[code]
                                         }
                                     </td>
                                 </tr>)

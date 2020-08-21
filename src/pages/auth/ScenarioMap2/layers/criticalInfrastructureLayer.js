@@ -137,12 +137,12 @@ export class CriticalInfrastructureLayer extends MapLayer{
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
-                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
+                ['all'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter'],
             ['geo', countiesOrCousubs.value, 'name']
         ).then(d => {
             let allIds = [],
-                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {}),
+                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.all.owner_type`, {}),
                 shelterData = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.shelter`, [])
                     .map(shelters => shelters.building_id);
             ['3', '4', '5', '6', '7'].map(owner => {
@@ -163,7 +163,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
     }
     receiveData(map, data) {
         let rawGraph = falcorGraph.getCache(),
-            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
+            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.all.owner_type`, null),
             shelterGraph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.shelter.value`, []),
             centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
             critical = [],
