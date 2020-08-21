@@ -46,6 +46,7 @@ const ATTRIBUTES = [
     "parcel_id",
     "geoid",
     "cousub_geoid",
+    "place_geoid",
     "id",
     "replacement_value",
     "critical",
@@ -156,7 +157,10 @@ export class CriticalInfrastructureLayer extends MapLayer{
             )//.then(d => console.log('centroid res', d))
         })
     }
-
+    setGeoFilter(geos){
+        this.geoFilter = geos;
+        this.receiveData(this.map)
+    }
     receiveData(map, data) {
         let rawGraph = falcorGraph.getCache(),
             graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
@@ -176,6 +180,12 @@ export class CriticalInfrastructureLayer extends MapLayer{
 
                 allBuildings.true.value
                     .map(f => f.id)
+                    .filter(buildingId =>
+                        this.geoFilter.length ?
+                            this.geoFilter.includes(get(rawGraph, ['building', 'byId', buildingId, 'geoid'], null)) ||
+                            this.geoFilter.includes(get(rawGraph, ['building', 'byId', buildingId, 'cousub_geoid'], null)) ||
+                            this.geoFilter.includes(get(rawGraph, ['building', 'byId', buildingId, 'place_geoid'], null)) : true
+                    )
                     .forEach(buildingId => {
                         let criticalCode =  get(rawGraph, ['building', 'byId', buildingId, 'critical'], null)
 
@@ -375,6 +385,7 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
         markers: [],
         criticalCodes: {},
+        geoFilter: [],
         filters: {
             hazard: {
                 name: "hazard",
