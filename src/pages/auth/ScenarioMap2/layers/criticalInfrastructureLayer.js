@@ -46,6 +46,7 @@ const ATTRIBUTES = [
     "parcel_id",
     "geoid",
     "cousub_geoid",
+    "place_geoid",
     "id",
     "replacement_value",
     "critical",
@@ -136,12 +137,12 @@ export class CriticalInfrastructureLayer extends MapLayer{
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
-                ['flood_100'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
+                ['all'], 'owner_type', ['3', '4', '5', '6', '7'], 'critical', ['true', 'false']], //, ["id",  "owner_type", "critical", "flood_zone"]
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter'],
             ['geo', countiesOrCousubs.value, 'name']
         ).then(d => {
             let allIds = [],
-                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, {}),
+                data = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.all.owner_type`, {}),
                 shelterData = get(d, `json.building.byGeoid.${store.getState().user.activeGeoid}.shelter`, [])
                     .map(shelters => shelters.building_id);
             ['3', '4', '5', '6', '7'].map(owner => {
@@ -156,10 +157,13 @@ export class CriticalInfrastructureLayer extends MapLayer{
             )//.then(d => console.log('centroid res', d))
         })
     }
-
+    setGeoFilter(geos){
+        this.geoFilter = geos;
+        this.receiveData(this.map)
+    }
     receiveData(map, data) {
         let rawGraph = falcorGraph.getCache(),
-            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.flood_100.owner_type`, null),
+            graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.all.owner_type`, null),
             shelterGraph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.shelter.value`, []),
             centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
             critical = [],
@@ -169,13 +173,28 @@ export class CriticalInfrastructureLayer extends MapLayer{
             "features": []
         };
         if (!graph || !shelterGraph) return Promise.resolve();
+        this.criticalCodes = {}
         Object.keys(graph)
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
 
                 allBuildings.true.value
                     .map(f => f.id)
+                    .filter(buildingId =>
+                        this.geoFilter.length ?
+                            this.geoFilter.includes(get(rawGraph, ['building', 'byId', buildingId, 'geoid'], null)) ||
+                            this.geoFilter.includes(get(rawGraph, ['building', 'byId', buildingId, 'cousub_geoid'], null)) ||
+                            this.geoFilter.includes(get(rawGraph, ['building', 'byId', buildingId, 'place_geoid'], null)) : true
+                    )
                     .forEach(buildingId => {
+                        let criticalCode =  get(rawGraph, ['building', 'byId', buildingId, 'critical'], null)
+
+                        if (criticalCode && this.criticalCodes[criticalCode]){
+                            this.criticalCodes[criticalCode] += 1
+                        }else if(criticalCode && !this.criticalCodes[criticalCode]){
+                            this.criticalCodes[criticalCode] = 1
+                        }
+
                         critical.push(buildingId);
                         buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
@@ -211,7 +230,9 @@ export class CriticalInfrastructureLayer extends MapLayer{
             // add icon
             let el = document.createElement('div');
             el.className = 'icon-w'
-            el.style.color = marker.properties.color
+            el.style.backgroundColor = marker.properties.color
+            el.style.color = '#ccc'
+            el.style.borderRadius = '50%'
             let el2 = document.createElement('div');
             el2.className = marker.properties.type === 'critical' ? 'os-icon os-icon-alert-circle' : 'os-icon os-icon-home'
             el.appendChild(el2)
@@ -363,6 +384,8 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
         ],
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
         markers: [],
+        criticalCodes: {},
+        geoFilter: [],
         filters: {
             hazard: {
                 name: "hazard",

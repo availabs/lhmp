@@ -801,4 +801,4 @@ const mapDispatchToProps = {
 
 };
 
-const ControlBase = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(EvacuationControlBase))
+export const ControlBase = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(EvacuationControlBase))

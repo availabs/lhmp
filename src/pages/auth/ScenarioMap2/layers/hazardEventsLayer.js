@@ -191,9 +191,16 @@ export class HazardEventsLayer extends MapLayer{
             eventsGeo.features.forEach(marker => {
                 // add icon
                 let el = document.createElement('div');
-                el.className = `fi fa-${get(hazardIcons[marker.properties.hazard], `icon`, 'wind')}`
+                el.className = 'icon-w';
+                el.style.backgroundColor = marker.properties['circle-color']
                 // el.style.backgroundColor = hazardcolors[marker.properties.hazard]
-                el.style.color = marker.properties['circle-color']
+                el.style.color = '#ccc'
+                el.style.borderRadius = '50%'
+
+                let el2 = document.createElement('div');
+                el2.className = `fi fa-${get(hazardIcons[marker.properties.hazard], `icon`, 'wind')}`;
+                el.appendChild(el2)
+
                 this.markers.push(
                     new mapboxgl.Marker(el)
                         .setLngLat(marker.geometry.coordinates)

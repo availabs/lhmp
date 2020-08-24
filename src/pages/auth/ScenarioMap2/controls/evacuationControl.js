@@ -5,6 +5,7 @@ import _ from 'lodash'
 import get from "lodash.get"
 import styled from "styled-components"
 import {sendSystemMessage} from "../../../../store/modules/messages";
+import {ControlBase} from '../layers/evacuationLayer'
 
 const DEFAULT_ROUTE_DATA = {
     name: "",
@@ -23,8 +24,7 @@ class EvacuationControl extends React.Component {
 
 
     render() {
-
-
+        let layer = this.props.layer.layer.evacuationRoutesLayer
         return (
             <div>
                 <button
@@ -36,7 +36,13 @@ class EvacuationControl extends React.Component {
                     }}
                 >Add New Route</button>
                 <div>
-                    {this.props.layer.layer.evacuationRoutesLayer.showInfoBox(true)}
+                    <ControlBase layer={layer}
+                                 userRoute={layer.filters.userRoutes.value}
+                                 nameArray={layer.nameArray}
+                                 data={layer.data}
+                                 geom={layer.geom}
+                                 paintRoute={layer.receiveRoute.bind(layer)}
+                                 viewOnly={layer.viewOnly} />
                 </div>
             </div>
         )

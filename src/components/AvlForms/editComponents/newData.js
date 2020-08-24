@@ -178,7 +178,7 @@ class AvlFormsNewData extends React.Component{
     afterSubmitEdit(newId, attributes){
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                return this.state[c].reduce((a1,c1) => {
+                return get(this.state, [c], []).reduce((a1,c1) => {
                     return a1.then(resA1 => {
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {
