@@ -389,7 +389,6 @@ export class EvacuationRoutesLayer extends MapLayer {
     }
 
     toggleCreationMode(mode) {
-        console.log('mode?', mode)
         switch (this.viewMode) {
             case "single":
                 this.viewMode = "multi";
