@@ -253,7 +253,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                 .addTo(this.map)
                 .on("dragend", e => this.calcRoute());
         })
-
+        this.forceUpdate()
     }
 
     calcRoute() {
@@ -624,7 +624,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
     }
 }
 
-const saveModalForm = (geom, setState,layer) => {
+const saveModalForm = (geom, setState,layer, onClosePromt) => {
     return (
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
@@ -649,6 +649,7 @@ const saveModalForm = (geom, setState,layer) => {
                         <SaveRoute
                             geom={geom}
                             layer={layer}
+                            onSave={onClosePromt}
                         />
                     </div>
                 </div>
@@ -669,9 +670,21 @@ class EvacuationControlBase extends React.Component{
             showSaveModal: false,
             route: {...DEFAULT_ROUTE_DATA}
         }
-
+        this.onClosePromt = this.onClosePromt.bind(this)
     }
-
+    onClosePromt(){
+        this.props.layer.map.fire('toggleMode')
+        this.setState({ showSaveModal: false })
+        this.mode = ''
+        this.props.layer.doAction([
+            "dismissMessage",
+            {id:"evacuationRoutes"}
+        ])
+        this.props.layer.map.resize()
+        this.props.layer.forceUpdate()
+        unlisten(this)
+        this.forceUpdate()
+    }
     componentDidMount() {
         this.setState({
             route: {
@@ -713,6 +726,7 @@ class EvacuationControlBase extends React.Component{
         }
         let routes = get(layer.data, `routes`, []).pop(),
             geom = get(routes, `geometry`, {coordinates: [], type: "LineString"});
+
         return (
             <div>
                 {!layer.filters.userRoutes.value ? null :
@@ -743,7 +757,7 @@ class EvacuationControlBase extends React.Component{
                     </div>
                     : null
                 }
-                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this),layer) : null}
+                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this), layer, this.onClosePromt.bind(this)) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}

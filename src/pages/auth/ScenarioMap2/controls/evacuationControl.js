@@ -22,6 +22,11 @@ class EvacuationControl extends React.Component {
         };
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(!_.isEqual( prevProps.layer.layer.evacuationRoutesLayer,  this.props.layer.layer.evacuationRoutesLayer)){
+            this.forceUpdate()
+        }
+    }
 
     render() {
         let layer = this.props.layer.layer.evacuationRoutesLayer
@@ -35,7 +40,15 @@ class EvacuationControl extends React.Component {
                         this.props.layer.layer.evacuationRoutesLayer.toggleCreationMode("markers")
                     }}
                 >Add New Route</button>
-                <div>
+                <button
+                    id="new_route_button"
+                    className="mr-2 mb-2 btn btn-primary btn-sm"
+                    type="button"
+                    onClick = {(e) =>{
+                        this.props.layer.layer.evacuationRoutesLayer.toggleCreationMode("")
+                    }}
+                >Cancel Editing</button>
+                {/*<div>
                     <ControlBase layer={layer}
                                  userRoute={layer.filters.userRoutes.value}
                                  nameArray={layer.nameArray}
@@ -43,7 +56,7 @@ class EvacuationControl extends React.Component {
                                  geom={layer.geom}
                                  paintRoute={layer.receiveRoute.bind(layer)}
                                  viewOnly={layer.viewOnly} />
-                </div>
+                </div>*/}
             </div>
         )
     }
