@@ -68,7 +68,7 @@ export class EvacuationRoutesLayer extends MapLayer {
 
     toggleVisibilityOn() {
         this._isVisible = !this._isVisible;
-        this.mode = "markers"
+        //this.mode = "markers"
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility', "visible");
         })
@@ -389,6 +389,7 @@ export class EvacuationRoutesLayer extends MapLayer {
     }
 
     toggleCreationMode(mode) {
+        console.log('mode?', mode)
         switch (this.viewMode) {
             case "single":
                 this.viewMode = "multi";
@@ -399,7 +400,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                 // this.generateMapMarkers();
                 break;
         }
-        this.creationMode = mode
+        this.mode = mode
         if(mode === 'markers'){
             this.doAction([
                 "sendMessage",
@@ -422,7 +423,23 @@ export class EvacuationRoutesLayer extends MapLayer {
                 this.forceUpdate()
             }
 
+        }else{
+            this.markers.forEach(m => m.remove())
+            this.markers = []
+            this.data = {click:[]}
+            this.filters.userRoutes.value = null;
+            this.features = []
+            this.map.getSource('execution-route-source').setData(
+                {
+                    type: 'FeatureCollection',
+                    features: this.features
+                }
+            );
+            document.removeEventListener('click', () => {});
+            this.map.on('click', () => {})
         }
+        this.forceUpdate()
+
         // this.calcRoute();
     }
 
@@ -570,7 +587,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
 
         version: 2.0,
 
-        mode: "markers",
+        mode: "",
         viewMode: 'single',
         features: [],
         markers: [],
@@ -614,6 +631,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
                                       data={layer.data}
                                       geom={layer.geom}
                                       paintRoute={layer.receiveRoute.bind(layer)}
+                                      toggleMode={layer.toggleCreationMode.bind(layer)}
                                       viewOnly={layer.viewOnly}
                         />
                     )
@@ -673,7 +691,7 @@ class EvacuationControlBase extends React.Component{
         this.onClosePromt = this.onClosePromt.bind(this)
     }
     onClosePromt(){
-        this.props.layer.map.fire('toggleMode')
+        this.props.toggleMode()
         this.setState({ showSaveModal: false })
         this.mode = ''
         this.props.layer.doAction([
@@ -757,7 +775,7 @@ class EvacuationControlBase extends React.Component{
                     </div>
                     : null
                 }
-                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this), layer, this.onClosePromt.bind(this)) : null}
+                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this), layer, this.onClosePromt.bind(this), this.props.toggleMode) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}

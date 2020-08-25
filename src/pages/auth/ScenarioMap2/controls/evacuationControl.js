@@ -23,7 +23,7 @@ class EvacuationControl extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(!_.isEqual( prevProps.layer.layer.evacuationRoutesLayer,  this.props.layer.layer.evacuationRoutesLayer)){
+        if(!_.isEqual( prevProps.layer.layer.evacuationRoutesLayer.mode,  this.props.layer.layer.evacuationRoutesLayer.mode)){
             this.forceUpdate()
         }
     }
@@ -32,22 +32,30 @@ class EvacuationControl extends React.Component {
         let layer = this.props.layer.layer.evacuationRoutesLayer
         return (
             <div>
-                <button
-                    id="new_route_button"
-                    className="mr-2 mb-2 btn btn-primary btn-sm"
-                    type="button"
-                    onClick = {(e) =>{
-                        this.props.layer.layer.evacuationRoutesLayer.toggleCreationMode("markers")
-                    }}
-                >Add New Route</button>
-                <button
-                    id="new_route_button"
-                    className="mr-2 mb-2 btn btn-primary btn-sm"
-                    type="button"
-                    onClick = {(e) =>{
-                        this.props.layer.layer.evacuationRoutesLayer.toggleCreationMode("")
-                    }}
-                >Cancel Editing</button>
+                {
+                    this.props.layer.layer.evacuationRoutesLayer.mode === "markers" ?
+                        <button
+                            id="new_route_button"
+                            className="mr-2 mb-2 btn btn-primary btn-sm"
+                            type="button"
+                            onClick = {(e) =>{
+                                this.props.layer.layer.evacuationRoutesLayer.toggleCreationMode("")
+                                this.props.layer.layer.evacuationRoutesLayer.forceUpdate()
+                                this.forceUpdate()
+                            }}
+                        >Cancel Editing</button> :
+                        <button
+                            id="new_route_button"
+                            className="mr-2 mb-2 btn btn-primary btn-sm"
+                            type="button"
+                            onClick = {(e) =>{
+                                this.props.layer.layer.evacuationRoutesLayer.toggleCreationMode("markers")
+                                this.props.layer.layer.evacuationRoutesLayer.forceUpdate()
+                                this.forceUpdate()
+                            }}
+                        >Add New Route</button>
+                }
+
                 {/*<div>
                     <ControlBase layer={layer}
                                  userRoute={layer.filters.userRoutes.value}

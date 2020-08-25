@@ -322,6 +322,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
 
     }
     toggleVisibilityOff(){
+        this.markers.forEach(m => m.remove())
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',"none");
         })
