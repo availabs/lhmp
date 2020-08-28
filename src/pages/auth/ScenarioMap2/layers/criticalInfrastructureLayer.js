@@ -135,7 +135,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
             `geo.${store.getState().user.activeGeoid}.cousubs`,
             null);
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
-        let owner_types = ['2', '3', '4', '5', '6', '7', '8', '9'] // ['3', '4', '5', '6', '7']
+        let owner_types = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '-999'] // ['3', '4', '5', '6', '7']
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['all'], 'owner_type', owner_types, 'critical', ['true']], //, ["id",  "owner_type", "critical", "flood_zone"]
