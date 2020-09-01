@@ -27,10 +27,22 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'true',
+
                 meta_filter:{
                     filter_key:'',
-                    value:['Select All', 'Zone A', 'Zone B', 'Zone C']
+                    value:[
+                        'Select All',
+                        'Recent Development Zone', 
+                        'Future Development Zone', 
+                        'Historic Distric',
+                        'Relocation Zone',
+                        'Jurisdiction',
+                        'Area of Concern',
+                        'Vulnerable Population',
+                        'Other'
+                    ]
                 },
+
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
