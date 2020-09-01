@@ -27,6 +27,10 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:['Select All', 'Zone A', 'Zone B', 'Zone C']
+                },
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
