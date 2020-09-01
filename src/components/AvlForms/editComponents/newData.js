@@ -485,7 +485,9 @@ class AvlFormsNewData extends React.Component{
                         type: 'multiselect', //item.attributes[attribute].edit_type,
                         addAll: item.attributes[attribute].addAll,
                         required: item.attributes[attribute].field_required,
-                        meta: fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
+                        meta: get(item, `attributes.${attribute}.meta_filter.value`, null) ?
+                            get(item, `attributes.${attribute}.meta_filter.value`, []) :
+                            fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on,
                         defaultValue: item.attributes[attribute].defaultValue

@@ -27,6 +27,7 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'true',
+                meta_filter:{filter_key:'',value:['Zone 1', 'Zone 2', 'Zone 3']}, // only used when metaSource is not meta_file
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
