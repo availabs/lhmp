@@ -180,7 +180,7 @@ class CapabilityStrategy extends React.Component {
                         ).toFixed(0) + '%' : 0 + '%';
                     return a
                 }, {}),
-                'Population': get(this.props.acsData, [geo, 2016, 'B01003_001E'])
+                'Population': get(this.props.acsData, [geo, 2016, 'B01003_001E'], '').toLocaleString()
             })
         });
         return {
@@ -191,6 +191,12 @@ class CapabilityStrategy extends React.Component {
                     accessor: 'Capability Region',
                     align: 'left',
                     width: 400
+                },
+                {
+                    Header: 'Population',
+                    accessor: 'Population',
+                    align: 'center',
+                    width: 200
                 },
                 {
                     Header: 'Education and outreach',
@@ -213,12 +219,6 @@ class CapabilityStrategy extends React.Component {
                 {
                     Header: 'Administrative and Technical',
                     accessor: 'Administrative and Technical',
-                    align: 'center',
-                    width: 200
-                },
-                {
-                    Header: 'Population',
-                    accessor: 'Population',
                     align: 'center',
                     width: 200
                 },
