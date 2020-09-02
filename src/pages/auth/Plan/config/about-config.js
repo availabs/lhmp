@@ -72,6 +72,20 @@ const config =  {
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
 			icon: 'os-icon-user-check'
 		},
+		{
+			title: 'Planning Teams',
+			requirement: `planning-image`,
+			type: 'image',
+			prompt: '',
+			intent: '',
+			callout: '',
+			label:'Image', // Which you would like to see on the form
+			height: 250,
+			width: 500,
+			border: 1,
+			icon: 'os-icon-arrow-right7',
+			onlyAdmin: true
+		},
 
 		{
 			title: 'Public Participation',
