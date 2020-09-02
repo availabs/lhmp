@@ -68,7 +68,7 @@ export class EvacuationRoutesLayer extends MapLayer {
 
     toggleVisibilityOn() {
         this._isVisible = !this._isVisible;
-        this.mode = "markers"
+        //this.mode = "markers"
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility', "visible");
         })
@@ -253,7 +253,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                 .addTo(this.map)
                 .on("dragend", e => this.calcRoute());
         })
-
+        this.forceUpdate()
     }
 
     calcRoute() {
@@ -399,7 +399,7 @@ export class EvacuationRoutesLayer extends MapLayer {
                 // this.generateMapMarkers();
                 break;
         }
-        this.creationMode = mode
+        this.mode = mode
         if(mode === 'markers'){
             this.doAction([
                 "sendMessage",
@@ -422,7 +422,23 @@ export class EvacuationRoutesLayer extends MapLayer {
                 this.forceUpdate()
             }
 
+        }else{
+            this.markers.forEach(m => m.remove())
+            this.markers = []
+            this.data = {click:[]}
+            this.filters.userRoutes.value = null;
+            this.features = []
+            this.map.getSource('execution-route-source').setData(
+                {
+                    type: 'FeatureCollection',
+                    features: this.features
+                }
+            );
+            document.removeEventListener('click', () => {});
+            this.map.on('click', () => {})
         }
+        this.forceUpdate()
+
         // this.calcRoute();
     }
 
@@ -570,7 +586,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
 
         version: 2.0,
 
-        mode: "markers",
+        mode: "",
         viewMode: 'single',
         features: [],
         markers: [],
@@ -614,6 +630,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
                                       data={layer.data}
                                       geom={layer.geom}
                                       paintRoute={layer.receiveRoute.bind(layer)}
+                                      toggleMode={layer.toggleCreationMode.bind(layer)}
                                       viewOnly={layer.viewOnly}
                         />
                     )
@@ -624,7 +641,7 @@ export const EvacuationRoutesOptions =  (options = {}) =>{
     }
 }
 
-const saveModalForm = (geom, setState,layer) => {
+const saveModalForm = (geom, setState,layer, onClosePromt) => {
     return (
         <div aria-labelledby="mySmallModalLabel" className="modal fade bd-example-modal-lg show" role="dialog"
              tabIndex="-1" aria-modal="true" style={{paddingRight: '15px', display: 'block'}}>
@@ -649,6 +666,7 @@ const saveModalForm = (geom, setState,layer) => {
                         <SaveRoute
                             geom={geom}
                             layer={layer}
+                            onSave={onClosePromt}
                         />
                     </div>
                 </div>
@@ -669,9 +687,21 @@ class EvacuationControlBase extends React.Component{
             showSaveModal: false,
             route: {...DEFAULT_ROUTE_DATA}
         }
-
+        this.onClosePromt = this.onClosePromt.bind(this)
     }
-
+    onClosePromt(){
+        this.props.toggleMode()
+        this.setState({ showSaveModal: false })
+        this.mode = ''
+        this.props.layer.doAction([
+            "dismissMessage",
+            {id:"evacuationRoutes"}
+        ])
+        this.props.layer.map.resize()
+        this.props.layer.forceUpdate()
+        unlisten(this)
+        this.forceUpdate()
+    }
     componentDidMount() {
         this.setState({
             route: {
@@ -713,6 +743,7 @@ class EvacuationControlBase extends React.Component{
         }
         let routes = get(layer.data, `routes`, []).pop(),
             geom = get(routes, `geometry`, {coordinates: [], type: "LineString"});
+
         return (
             <div>
                 {!layer.filters.userRoutes.value ? null :
@@ -743,7 +774,7 @@ class EvacuationControlBase extends React.Component{
                     </div>
                     : null
                 }
-                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this),layer) : null}
+                {this.state.showSaveModal ? saveModalForm(this.props.geom, this.setState.bind(this), layer, this.onClosePromt.bind(this), this.props.toggleMode) : null}
 
                 <AvlFormsListTable
                     json = {ViewConfig.view}

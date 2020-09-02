@@ -208,6 +208,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
+                .then(response => this.props.onFinish ? this.props.onFinish() : response)
 
         }else{
             let attributes = {};
@@ -243,6 +244,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"}))
                 })
+                .then(response => this.props.onFinish ? this.props.onFinish() : response)
         }
     }
 

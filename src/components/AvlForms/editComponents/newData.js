@@ -258,6 +258,7 @@ class AvlFormsNewData extends React.Component{
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
+                .then(response => this.props.onFinish ? this.props.onFinish : response)
 
         }else{
             let args = []
@@ -308,6 +309,7 @@ class AvlFormsNewData extends React.Component{
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"}))
                 })
+                .then(response => this.props.onFinish ? this.props.onFinish() : response)
         }
     }
 
@@ -483,7 +485,9 @@ class AvlFormsNewData extends React.Component{
                         type: 'multiselect', //item.attributes[attribute].edit_type,
                         addAll: item.attributes[attribute].addAll,
                         required: item.attributes[attribute].field_required,
-                        meta: fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
+                        meta: get(item, `attributes.${attribute}.meta_filter.value`, null) ?
+                            get(item, `attributes.${attribute}.meta_filter.value`, []) :
+                            fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on,
                         defaultValue: item.attributes[attribute].defaultValue
