@@ -7,6 +7,7 @@ import Element from 'components/light-admin/containers/Element'
 import {Link} from "react-router-dom";
 import {falcorGraph} from "../../../../store/falcorGraph";
 import AssetLayer from "./assetLayer";
+import _ from 'lodash'
 import TractsLayer from "../../../Public/Home/components/Risk/HazardLoss/layers/TractsLayer";
 import config from "../../Plan/config/guidance-config";
 const BASIC_INFO = [
@@ -87,7 +88,9 @@ class AssetsView extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            address : ''
+            address : '',
+            buildingData:{},
+            shelterData:{}
         }
         this.basicInfo = this.basicInfo.bind(this);
         this.shelterInfo = this.shelterInfo.bind(this);
@@ -98,8 +101,13 @@ class AssetsView extends React.Component{
         this.riskInfo = this.riskInfo.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount() {
         this.fetchFalcorDeps();
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (!_.isEqual(prevState.shelterData, this.state.shelterData)){
+            this.forceUpdate()
+        }
     }
 
     fetchFalcorDeps(){
@@ -115,14 +123,17 @@ class AssetsView extends React.Component{
         )
             .then(response =>{
                 this.setState({
-                    address : response.json.building.byId[this.props.match.params.assetId].address.toUpperCase()
+                    address : response.json.building.byId[this.props.match.params.assetId].address.toUpperCase(),
+                    buildingData : response.json.building.byId
                 });
-                if(get(response, `json.building.byId.${this.props.match.params.assetId}.shelter`, null)){
+                let shelterId = get(response, `json.building.byId.${this.props.match.params.assetId}.shelter`, null)
+                if(shelterId){
                     return this.props.falcor.get(
-                        ['shelters', 'byId',
-                            get(response, `json.building.byId.${this.props.match.params.assetId}.shelter`, null), SHELTER
-                        ]
-                    )
+                        ['shelters', 'byId', shelterId, SHELTER])
+                        .then(r => {
+                            this.setState({shelterData: r.json.shelters.byId})
+                            return r
+                        })
                 }
                 return response
             })
@@ -152,7 +163,7 @@ class AssetsView extends React.Component{
     }
     basicInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.buildingData[this.props.match.params.assetId];
+            let graph = Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId] : null;
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
@@ -224,14 +235,15 @@ class AssetsView extends React.Component{
 
     }
     shelterInfo(){
-        if(this.props.shelterData){
-            let graph = this.props.shelterData[get(this.props.buildingData, `${this.props.match.params.assetId}.shelter`, null)];
+        if(Object.keys(this.props.shelterData).length){
+            let shelter = Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId].shelter : null
+            let graph = get(this.state.shelterData, `${shelter}`, null);
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
                     if(SHELTER.includes(item)/* && typeof graph[item] !== 'object'*/){
-                        let value = get(graph, `[${item}].value`, null);
-                        if(value){
+                        let value = get(graph, `[${item}]`, null);
+                        if(value || value === false){
                             tableData.push({
                                 "characteristic" : item,
                                 "value": value.toString()
@@ -297,7 +309,7 @@ class AssetsView extends React.Component{
 
     occupancyInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.buildingData[this.props.match.params.assetId];
+            let graph =  Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId] : null;
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
@@ -346,7 +358,9 @@ class AssetsView extends React.Component{
 
     structuralInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.buildingData[this.props.match.params.assetId];
+            //let graph = this.props.buildingData[this.props.match.params.assetId];
+
+            let graph = Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId] : null
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
@@ -407,7 +421,7 @@ class AssetsView extends React.Component{
 
     servicesInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.buildingData[this.props.match.params.assetId];
+            let graph = Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId] : null;
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
@@ -456,7 +470,7 @@ class AssetsView extends React.Component{
 
     commercialInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.buildingData[this.props.match.params.assetId];
+            let graph = Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId] : null
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{
@@ -518,7 +532,7 @@ class AssetsView extends React.Component{
 
     riskInfo(){
         if(this.props.buildingData[this.props.match.params.assetId] !== undefined){
-            let graph = this.props.buildingData[this.props.match.params.assetId];
+            let graph = Object.keys(this.state.buildingData).length > 0 ? this.state.buildingData[this.props.match.params.assetId] : null
             let tableData = [];
             if(graph){
                 Object.keys(graph).forEach((item)=>{

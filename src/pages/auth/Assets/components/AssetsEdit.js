@@ -49,11 +49,29 @@ const ATTRIBUTES = [
     'topography',
     'action_type',
     'shelter'
-]
+],
+    SHELTER_ATTRIBUTES = [
+        'shelter_id',
+        'building_id',
+        'shelter_name',
+        'facility_usage_code',
+        'evacuation_capacity',
+        'post_impact_capacity',
+        'ada_compliant',
+        'wheelchair_accessible',
+        'pet_accomodations',
+        'generator_onsite',
+        'self_suffienct_electricty',
+        'lat',
+        'lon',
+        'shelter_code',
+        'location'
+    ]
 const numerics = ['flood_depth', 'flood_velocity', 'flood_base_elevation', 'num_residents', 'num_employees', 'num_occupants',
     'num_vehicles_inhabitants', 'height', 'sqft_living', 'nbr_kitchens', 'nbr_full_baths', 'nbr_bedrooms', 'contents_replacement_value',
     'inventory_replacement_value', 'establishment_revenue', 'topography', 'parcel_id', 'shelter']
 const booleans = ['basement']
+
 class AssetsEdit extends React.Component {
     constructor(props) {
         super(props)
@@ -162,6 +180,19 @@ class AssetsEdit extends React.Component {
 
                         });
                     this.setState({isShelter: (this.state.shelter && this.state.shelter !== '') ? 'true' : 'false'})
+                })
+                .then(() => {
+                    if(this.state.isShelter === 'true'){
+                        let tmp_state = {}
+                        this.props.falcor.get(['shelters', 'byId', this.state.shelter, SHELTER_ATTRIBUTES])
+                            .then(response => {
+                                SHELTER_ATTRIBUTES
+                                    .forEach(key => {
+                                        tmp_state[key] = response.json.shelters.byId[this.state.shelter][key]
+                                    })
+                                this.setState(tmp_state)
+                            })
+                    }
                 })
         }
 
@@ -339,25 +370,80 @@ class AssetsEdit extends React.Component {
                 .forEach((d, i) => {
                     updated_data[d] = this.state[d]
                 })
-            return this.props.falcor.set({
-                paths: [
-                    ['building', 'byId', [this.props.match.params.assetId], attributes]
-                ],
-                jsonGraph: {
-                    building: {
-                        byId: {
-                            [this.props.match.params.assetId]: updated_data
+            if (this.state.isShelter === 'false') {
+                updated_data.shelter = null
+            }
+            if (!this.state.shelter && this.state.isShelter === 'true') {
+                args = SHELTER_ATTRIBUTES
+                return this.props.falcor.call(['shelters', 'insert'], args.map(a => a === 'building_id' ? this.props.match.params.assetId : this.state[a] ), [], [])
+                    .then((res) =>
+                    {
+                        updated_data.shelter = Object.keys(res.json.shelters.byId)[0]
+                        return this.props.falcor.set({
+                            paths: [
+                                ['building', 'byId', [this.props.match.params.assetId], Object.keys(updated_data)]
+                            ],
+                            jsonGraph: {
+                                building: {
+                                    byId: {
+                                        [this.props.match.params.assetId]: updated_data
+                                    }
+                                }
+                            }
+                        })
+                    })
+                    .then(response => {
+                        this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
+                    })
+            } else if (this.state.shelter && this.state.isShelter === 'true') {
+                return this.props.falcor.set({
+                    paths: [
+                        ['shelters', 'byId', [this.state.shelter], Object.keys(updated_data)]
+                    ],
+                    jsonGraph: {
+                        shelters: {
+                            byId: {
+                                [this.state.shelter]: updated_data
+                            }
                         }
                     }
-                }
-            })
-                .then(response => {
-                    this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
                 })
+                    .then(response => {
+                        return this.props.falcor.set({
+                            paths: [
+                                ['building', 'byId', [this.props.match.params.assetId], Object.keys(updated_data)]
+                            ],
+                            jsonGraph: {
+                                building: {
+                                    byId: {
+                                        [this.props.match.params.assetId]: updated_data
+                                    }
+                                }
+                            }
+                        })
+                    })
+                    .then(response => {
+                        this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
+                    })
+            }else{
+                return this.props.falcor.set({
+                    paths: [
+                        ['building', 'byId', [this.props.match.params.assetId], attributes]
+                    ],
+                    jsonGraph: {
+                        building: {
+                            byId: {
+                                [this.props.match.params.assetId]: updated_data
+                            }
+                        }
+                    }
+                })
+                    .then(response => {
+                        this.props.sendSystemMessage(`Asset was successfully edited.`, {type: "success"});
+                    })
+            }
         }
-
     }
-
     render() {
         const wizardSteps = [
             {
@@ -417,11 +503,165 @@ class AssetsEdit extends React.Component {
                     </div>
 
                     {this.state.isShelter === 'true' ?
-                        <div className="col-sm-12">
-                            <div className="form-group"><label htmlFor>Shelter Id</label>
-                                <input id='shelter' onChange={this.handleChange} className="form-control"
-                                       placeholder="Shelter id" type="number" value={this.state.shelter}/></div>
-                        </div> : null}
+                        <React.Fragment>
+                            {/*<div className="col-sm-12">
+                                <div className="form-group">
+                                    <input id='shelter' onChange={this.handleChange} className="form-control"
+                                           placeholder="Shelter id" type="hidden" value={this.props.match.params.assetId}/></div>
+                            </div>*/}
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Shelter Name</label>
+                                    <input id='shelter_name' onChange={this.handleChange} className="form-control"
+                                           placeholder="Shelter Name" type="text" value={this.state.shelter_name}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Facility Usage Code</label>
+                                    <input id='facility_usage_code' onChange={this.handleChange}
+                                           className="form-control"
+                                           placeholder="Facility Usage Code" type="text"
+                                           value={this.state.facility_usage_code}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Evacuation Capacity</label>
+                                    <input id='evacuation_capacity' onChange={this.handleChange}
+                                           className="form-control"
+                                           placeholder="Evacuation Capacity" type="number"
+                                           value={this.state.evacuation_capacity}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Post Impact Capacity</label>
+                                    <input id='post_impact_capacity' onChange={this.handleChange}
+                                           className="form-control"
+                                           placeholder="Post Impact Capacity" type="number"
+                                           value={this.state.post_impact_capacity}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group form-inline"
+                                     style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>ADA Compliant? </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                        <input
+                                            checked={[true, 'true', 'yes'].includes(this.state.ada_compliant)}
+                                            id={'ada_compliant'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={'yes'}
+                                            onChange={this.handleChange}/><span><label>Yes</label></span>
+                                    </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                        <input
+                                            checked={[false, 'false', 'no'].includes(this.state.ada_compliant)}
+                                            id={'ada_compliant'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={'no'}
+                                            onChange={this.handleChange}/><span><label>No</label></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group form-inline"
+                                     style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>Wheelchair Accessible? </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                        <input
+                                            checked={[true, 'true'].includes(this.state.wheelchair_accessible)}
+                                            id={'wheelchair_accessible'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={true}
+                                            onChange={this.handleChange}/><span><label>Yes</label></span>
+                                    </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                        <input
+                                            checked={[false, 'false'].includes(this.state.wheelchair_accessible)}
+                                            id={'wheelchair_accessible'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={false}
+                                            onChange={this.handleChange}/><span><label>No</label></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Pet Accommodations</label>
+                                    <input id='pet_accomodations' onChange={this.handleChange} className="form-control"
+                                           placeholder="Pet Accommodations" type="text"
+                                           value={this.state.pet_accomodations}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group form-inline"
+                                     style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>Generator Onsite? </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                        <input
+                                            checked={[true, 'true'].includes(this.state.generator_onsite)}
+                                            id={'generator_onsite'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={true}
+                                            onChange={this.handleChange}/><span><label>Yes</label></span>
+                                    </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                        <input
+                                            checked={[false, 'false'].includes(this.state.generator_onsite)}
+                                            id={'generator_onsite'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={false}
+                                            onChange={this.handleChange}/><span><label>No</label></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group form-inline"
+                                     style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>Self Sufficient
+                                        Electricity? </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                        <input
+                                            checked={[true, 'true'].includes(this.state.self_suffienct_electricty)}
+                                            id={'self_suffienct_electricty'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={true}
+                                            onChange={this.handleChange}/><span><label>Yes</label></span>
+                                    </label>
+                                    <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                        <input
+                                            checked={[false, 'false'].includes(this.state.self_suffienct_electricty)}
+                                            id={'self_suffienct_electricty'}
+                                            className="form-check-input"
+                                            type={'radio'}
+                                            value={false}
+                                            onChange={this.handleChange}/><span><label>No</label></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Latitude</label>
+                                    <input id='lat' onChange={this.handleChange} className="form-control"
+                                           placeholder="Latitude" type="number" value={this.state.lat}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Longitude</label>
+                                    <input id='lon' onChange={this.handleChange} className="form-control"
+                                           placeholder="Longitude" type="number" value={this.state.lon}
+                                    /></div>
+                            </div>
+                            <div className="col-sm-12">
+                                <div className="form-group"><label htmlFor>Shelter Code</label>
+                                    <input id='shelter_code' onChange={this.handleChange} className="form-control"
+                                           placeholder="Shelter Code" type="text" value={this.state.shelter_code}
+                                    /></div>
+                            </div>
+                        </React.Fragment> : null}
                 </div>)
             },
             {
