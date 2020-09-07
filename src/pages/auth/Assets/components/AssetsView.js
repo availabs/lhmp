@@ -10,6 +10,7 @@ import AssetLayer from "./assetLayer";
 import _ from 'lodash'
 import TractsLayer from "../../../Public/Home/components/Risk/HazardLoss/layers/TractsLayer";
 import config from "../../Plan/config/guidance-config";
+import criticalFacilityMeta from "./criticalFacilityMeta";
 const BASIC_INFO = [
     'prop_class',
     'replacement_value',
@@ -171,6 +172,8 @@ class AssetsView extends React.Component{
                         let value =
                             item === 'shelter' ?
                                 graph[item] ? 'true' : 'false' :
+                                item === 'critical' && graph[item] ?
+                                    criticalFacilityMeta[graph[item]] :
                                 graph[item];
                         if(value){
                             tableData.push({

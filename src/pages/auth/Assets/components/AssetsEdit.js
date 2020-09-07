@@ -319,13 +319,16 @@ class AssetsEdit extends React.Component {
         }
     }
 
-    criticalInfraDropdown() {
+    criticalInfraDropdown(level) {
         return (
             <select className="form-control justify-content-sm-end" id='critical' onChange={this.handleChange}
-                    value={this.state.critical}>
+                    value={level === 'parent' ? `${ get(this.state, `critical`, '').toString().slice(0,3)}00` : this.state.critical}>
                 <option default>--Select Critical Infrastructure--</option>
                 {
-                    Object.keys(criticalFacilityMeta).map((data, i) => {
+                    Object.keys(criticalFacilityMeta)
+                        .filter(key => level === 'parent' ? key.toString().slice(3,5) == '00' :
+                        level === 'child' ? key.toString().slice(0,3) == get(this.state, `critical`, '').toString().slice(0,3) : true)
+                        .map((data, i) => {
                         return (<option className="form-control" key={i + 1}
                                         value={data}>{criticalFacilityMeta[data]}</option>)
                     })
@@ -467,7 +470,12 @@ class AssetsEdit extends React.Component {
                     }
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Critical Infrastructure</label>
-                            {this.criticalInfraDropdown()}
+                            {this.criticalInfraDropdown('parent')}
+                        </div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor></label>
+                            {this.criticalInfraDropdown('child')}
                         </div>
                     </div>
                     <div className="col-sm-12">
