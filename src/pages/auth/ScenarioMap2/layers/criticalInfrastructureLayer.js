@@ -3,13 +3,15 @@ import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import { fnum } from "utils/sheldusUtils"
 import get from 'lodash.get'
+import _ from 'lodash'
 import {falcorChunkerNice, falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
 import {unregister} from "../../../../components/AvlMap/ReduxMiddleware";
 import {EARLIEST_YEAR, LATEST_YEAR} from "../components/yearsOfSevereWeatherData";
 import hazardIcons from "../../../Public/Hazards/new_components/HazardMeta";
 import mapboxgl from "mapbox-gl";
-
+import criticalFacilityMeta from "../../Assets/components/criticalFacilityMeta";
+const IDENTITY = i => i;
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
 const hazardMeta = [
@@ -97,6 +99,14 @@ let eventsGeo = {
     type: "FeatureCollection",
     features: []
 };
+const getPropClassName = (falcorCache, value) =>
+    get(falcorCache, ["parcel", "meta", "prop_class", "value"], [])
+        .reduce((a, c) => c.value.toString() === value.toString() ? c.name : a, "Unknown")
+
+const getOwnerTypeName = (falcorCache,value) =>
+    get(falcorCache, ["parcel", "meta", "owner_type", "value"], [])
+        .reduce((a, c) => c.value.toString() === value.toString() ? c.name : a, "Unknown")
+
 
 export class CriticalInfrastructureLayer extends MapLayer{
     onRemove(map) {
@@ -140,6 +150,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['all'], 'owner_type', owner_types, 'critical', ['true']], //, ["id",  "owner_type", "critical", "flood_zone"]
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'shelter'],
+            ['building','byGeoid',store.getState().user.activeGeoid,'byRiskZones',store.getState().scenario.activeRiskZoneId,'data'],
             ['geo', countiesOrCousubs.value, 'name']
         ).then(d => {
             let allIds = [],
@@ -200,7 +211,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
                         buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
                             "type": "Feature",
-                            "properties":{id:buildingId, color:'#fbff00', type: 'critical'},
+                            "properties":{id:buildingId, color:'#fbff00', critical: criticalFacilityMeta[criticalCode]},
                             "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
                         })
                     });
@@ -396,22 +407,132 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
                 value: "hurricane"
             }
         },
+
         popover: {
             layers: ['buildingsCritical-layer'],
-            dataFunc: feature => {
-                return feature.layer.id === 'tracts-layer-line' ?
-                    ["tract",
-                        ["Name", get(falcorGraph.getCache(), `geo.${feature.properties.geoid}.name`, 0)],
-                        ["Damage", get(CriticalInfrastructureLayer, `data.${feature.properties.geoid}`, 0)
-                        ],
-                    ] :
-                    ['Building',
-                        ...Object.keys(get(feature, `properties`, {}))
-                            .filter(k => k !== 'color')
-                            .map(k => [k.split('_').join(' '), get(feature, `properties.${k}`, null)])
-                    ]
+            dataFunc: function(topFeature, features) {
+                const { id } = topFeature.properties;
+                let result = [];
+                let data = [];
+                return falcorGraph.get(['building', 'byId', id, ['address', 'owner_type', 'prop_class']])
+                    .then(buildingRes => {
+                        const scenario_graph = get(falcorGraph.getCache(), ["building", "byGeoid",store.getState().user.activeGeoid,'byRiskZones',store.getState().scenario.activeRiskZoneId,'data'], {}),
+                            attributes = [
+                                [null, ["address"]],
+                                ["Owner Type", ["owner_type"],d => getOwnerTypeName(falcorGraph.getCache(), d)],
+                                ["Land Use", ["prop_class"], d => getPropClassName(falcorGraph.getCache(), d)],
+                                ["500 year Loss Value",null],
+                                ["100 year Loss Value",null],
+                                ["50 year Loss Value",null],
+                                ["25 year Loss Value",null],
+                                ["500 year Building Depth",null],
+                                ["100 year Building Depth",null],
+                                ["50 year Building Depth",null],
+                                ["25 year Building Depth",null],
+                                ["Expected Annual Flood Loss",['hazard_loss_dollars']]
 
-            }
-        }
+                            ];
+                        scenario_graph.value.forEach(building =>{
+                            if(building.building_id.toString() === id.toString()){
+                                data = attributes.reduce((a, [name, key, format = IDENTITY]) => {
+                                    const data = get(building, key, false);
+                                    let result = {}
+                                    if (data && (name === null)) {
+                                        a.push(format(data));
+                                    }
+                                    if(name !== null && name.includes('500 year') && key === null){
+                                        result = scenario_graph.value.find(obj => {
+                                            return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '0.2'
+                                        });
+                                        if(result && Object.keys(result).length > 0){
+                                            a.push(["500 year Loss Value",result['hazard_loss_dollars']])
+                                            a.push(["500 year Building Depth",result["risk_value"] + "ft"])
+                                        }
+
+                                    }
+                                    if(name !== null && name.includes('100 year') && key === null){
+                                        result = scenario_graph.value.find(obj => {
+                                            return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '1'
+                                        });
+                                        if(result && Object.keys(result).length > 0) {
+                                            a.push(["100 year Loss Value", result['hazard_loss_dollars']])
+                                            a.push(["100 year Building Depth", result["risk_value"] + "ft"])
+                                        }
+                                    }
+                                    if(name !== null && name.includes('50 year') && key === null){
+                                        result = scenario_graph.value.find(obj => {
+                                            return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '2'
+                                        });
+                                        if(result && Object.keys(result).length > 0) {
+                                            a.push(["50 year Loss Value", result['hazard_loss_dollars']])
+                                            a.push(["50 year Building Depth", result["risk_value"] + "ft"])
+                                        }
+                                    }
+                                    if(name !== null && name.includes('25 year') && key === null){
+                                        result = scenario_graph.value.find(obj => {
+                                            return obj.building_id.toString()=== id.toString() && obj.annual_occurance === '4'
+                                        });
+                                        if(result && Object.keys(result).length > 0) {
+                                            a.push(["25 year Loss Value", result['hazard_loss_dollars']])
+                                            a.push(["25 year Building Depth", result["risk_value"] + "ft"])
+                                        }
+                                    }if(data && (name !== null)){
+                                        a.push([name, format(data)]);
+                                    }
+                                    return _.uniqWith(a,_.isEqual);
+                                }, [])
+
+                            }
+                        });
+                        if (data.length) {
+                            let value_500 = '',
+                                value_100 = '',
+                                value_50='',
+                                value_25= '';
+                            data.push(["Building ID", id]);
+                            data.forEach(d =>{
+                                if(d[0] === '500 year Loss Value'){
+                                    value_500 = d[1]
+                                    d[1] = fnum(d[1])
+                                }if(d[0] === '100 year Loss Value'){
+                                    value_100 = d[1]
+                                    d[1] = fnum(d[1])
+                                }if(d[0] === '50 year Loss Value'){
+                                    value_50 = d[1]
+                                    d[1] = fnum(d[1])
+                                }if(d[0] === '25 year Loss Value'){
+                                    value_25 = d[1]
+                                    d[1] = fnum(d[1])
+                                }if(d[0] === 'Expected Annual Flood Loss'){
+                                    d[1] = fnum(
+                                        (
+                                            (parseFloat(value_500) * (0.2/100)) || '0'
+                                            + (parseFloat(value_100) * (1/100)) || '0'
+                                            + (parseFloat(value_50) * (2/100)) || '0'
+                                            + (parseFloat(value_25) * (4/100)) || '0').toString()
+                                    )
+
+                                }
+                            });
+                            return [...data,
+                                ...Object.keys(get(topFeature, `properties`, {}))
+                                    .filter(k => !["id", "color"].includes(k))
+                                    .map(k => [k.split('_').join(' '), get(topFeature, `properties.${k}`, null)])];
+                        }else{
+                            buildingRes = get(buildingRes, ['json', 'building', 'byId', id], null)
+
+                            return [
+                                ...data,
+                                [null, buildingRes.address],
+                                ["Owner Type", getOwnerTypeName(falcorGraph.getCache(), buildingRes.owner_type)],
+                                ["Land Use", getPropClassName(falcorGraph.getCache(), buildingRes.prop_class)],
+                                ...Object.keys(get(topFeature, `properties`, {}))
+                                    .filter(k => !["id", "color"].includes(k))
+                                    .map(k => [k.split('_').join(' '), get(topFeature, `properties.${k}`, null)])
+                            ]
+                        }
+                    })
+            },
+        },
 
     }}
