@@ -13,6 +13,7 @@ import config from "../../Plan/config/guidance-config";
 import criticalFacilityMeta from "./criticalFacilityMeta";
 const BASIC_INFO = [
     'prop_class',
+    'user_property_class',
     'replacement_value',
     'critical',
     'address',
@@ -120,7 +121,8 @@ class AssetsView extends React.Component{
             ['building','byId',[this.props.match.params.assetId],SERVICES_INFO],
             ['building','byId',[this.props.match.params.assetId],COMMERCIAL_INFO],
             ['building','byId',[this.props.match.params.assetId],RISK_INFO],
-            ['actions', 'assets','byId',[this.props.match.params.assetId],ACTIONS_INFO]
+            ['actions', 'assets','byId',[this.props.match.params.assetId],ACTIONS_INFO],
+            ['parcel', 'meta', ['prop_class']]
         )
             .then(response =>{
                 this.setState({
@@ -174,6 +176,8 @@ class AssetsView extends React.Component{
                                 graph[item] ? 'true' : 'false' :
                                 item === 'critical' && graph[item] ?
                                     criticalFacilityMeta[graph[item]] :
+                                    item === 'prop_class' || item === 'user_property_class' ?
+                                        get(get(this.props, `parcelMetaData.prop_class.value`, []).filter(d => d.value == graph[item]), `[0].name`, graph[item]) :
                                 graph[item];
                         if(value){
                             tableData.push({
@@ -688,7 +692,8 @@ const mapStateToProps = (state,ownProps) => {
         cousubs: get(state.graph, 'geo',{}),
         buildingData : get(state.graph,'building.byId',{}),
         shelterData : get(state.graph,'shelters.byId',{}),
-        parcelData : get(state.graph,'parcel.byId',{})
+        parcelData : get(state.graph,'parcel.byId',{}),
+        parcelMetaData: get(state.graph, 'parcel.meta', {}),
     }
 };
 

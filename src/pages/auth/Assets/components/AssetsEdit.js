@@ -48,7 +48,8 @@ const ATTRIBUTES = [
     'storage_hazardous_materials',
     'topography',
     'action_type',
-    'shelter'
+    'shelter',
+    'user_property_class'
 ],
     SHELTER_ATTRIBUTES = [
         'shelter_id',
@@ -133,6 +134,7 @@ class AssetsEdit extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.propClassDropDown = this.propClassDropDown.bind(this);
+        this.userPropClassDropDown = this.userPropClassDropDown.bind(this);
         this.buildingTypeDropDown = this.buildingTypeDropDown.bind(this);
         this.actionTypeDropDown = this.actionTypeDropDown.bind(this);
         this.addActionToAsset = this.addActionToAsset.bind(this);
@@ -243,6 +245,35 @@ class AssetsEdit extends React.Component {
                     <option className="form-control" key={0} value="None">No Prop Class Selected</option>
                     {
                         propClassDropDownData.map((data, i) => {
+                            return (<option className="form-control" key={i + 1}
+                                            value={parseInt(data.value)}>{data.name}</option>)
+                        })
+                    }
+                </select>
+            )
+        }
+    }
+
+    userPropClassDropDown(level) {
+        if (this.props.parcelMetaData !== undefined && this.props.parcelMetaData['prop_class'] !== undefined) {
+            const graph = this.props.parcelMetaData['prop_class'];
+            let propClassDropDownData = [];
+            Object.values(graph).filter(d => d !== 'atom').forEach(item => {
+                item.forEach(i => {
+                    propClassDropDownData.push(i)
+                })
+            })
+            return (
+                <select className="form-control justify-content-sm-end" id='user_property_class' onChange={this.handleChange}
+                        value={level === 'parent' ?
+                            `${get(this.state, `user_property_class`, '').slice(0,1)}00` : this.state.user_property_class}>
+                    <option default>--Select Prop Class--</option>
+                    <option className="form-control" key={0} value="None">No Prop Class Selected</option>
+                    {
+                        propClassDropDownData
+                            .filter(data => level === 'parent' ? data.value.slice(1,3) == '00' :
+                                            data.value.slice(0,1) == get(this.state, `user_property_class`, '').slice(0,1))
+                            .map((data, i) => {
                             return (<option className="form-control" key={i + 1}
                                             value={parseInt(data.value)}>{data.name}</option>)
                         })
@@ -457,6 +488,15 @@ class AssetsEdit extends React.Component {
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Prop Type</label>
                             {this.propClassDropDown()}</div>
+                    </div>
+
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor>Secondary Prop Type</label>
+                            {this.userPropClassDropDown('parent')}</div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group"><label htmlFor></label>
+                            {this.userPropClassDropDown('chile')}</div>
                     </div>
                     {
                         this.state.prop_class && ['4'].includes(this.state.prop_class.slice(0, 1)) ? null :
