@@ -49,7 +49,8 @@ const ATTRIBUTES = [
     'topography',
     'action_type',
     'shelter',
-    'user_property_class'
+    'user_property_class',
+    'emergency_generator'
 ],
     SHELTER_ATTRIBUTES = [
         'shelter_id',
@@ -71,7 +72,7 @@ const ATTRIBUTES = [
 const numerics = ['flood_depth', 'flood_velocity', 'flood_base_elevation', 'num_residents', 'num_employees', 'num_occupants',
     'num_vehicles_inhabitants', 'height', 'sqft_living', 'nbr_kitchens', 'nbr_full_baths', 'nbr_bedrooms', 'contents_replacement_value',
     'inventory_replacement_value', 'establishment_revenue', 'topography', 'parcel_id', 'shelter']
-const booleans = ['basement']
+const booleans = ['basement', 'emergency_generator']
 
 class AssetsEdit extends React.Component {
     constructor(props) {
@@ -172,10 +173,12 @@ class AssetsEdit extends React.Component {
             this.props.falcor.get(['building', 'byId', [this.props.match.params.assetId], ATTRIBUTES])
                 .then(response => {
                     ATTRIBUTES
-                        .filter(key => response.json.building.byId[this.props.match.params.assetId][key])
+                        .filter(key => response.json.building.byId[this.props.match.params.assetId][key] ||
+                            booleans.includes(key) && response.json.building.byId[this.props.match.params.assetId][key] === false)
                         .forEach((key, i) => {
                             let tmp_state = {};
-                            tmp_state[key] = response.json.building.byId[this.props.match.params.assetId][key] || '';
+                            tmp_state[key] = booleans.includes(key) && response.json.building.byId[this.props.match.params.assetId][key] === false ? false :
+                                response.json.building.byId[this.props.match.params.assetId][key] || '';
                             this.setState(
                                 tmp_state,
                             );
@@ -770,6 +773,30 @@ class AssetsEdit extends React.Component {
                                 <input
                                     checked={this.state.basement === 'false'}
                                     id={'basement'}
+                                    className="form-check-input"
+                                    type={'radio'}
+                                    value={'false'}
+                                    onChange={this.handleChange}/><span><label>No</label></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="form-group form-inline"
+                             style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' htmlFor>Emergency Generator? </label>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' key={'true'}>
+                                <input
+                                    checked={['true', true, 't'].includes(this.state.emergency_generator)}
+                                    id={'emergency_generator'}
+                                    className="form-check-input"
+                                    type={'radio'}
+                                    value={'true'}
+                                    onChange={this.handleChange}/><span><label>Yes</label></span>
+                            </label>
+                            <label className='mb-2 mr-sm-2 mb-sm-0' key={'false'}>
+                                <input
+                                    checked={['false', false, 'f'].includes(this.state.emergency_generator)}
+                                    id={'emergency_generator'}
                                     className="form-check-input"
                                     type={'radio'}
                                     value={'false'}

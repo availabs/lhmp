@@ -42,6 +42,7 @@ const OCCUPANCY_INFO = [
 const STRUCTURAL_INFO = [
     'num_units',
     'basement',
+    'emergency_generator',
     'building_type',
     'roof_type',
     'height',
@@ -173,7 +174,7 @@ class AssetsView extends React.Component{
                     if(BASIC_INFO.includes(item)/* && typeof graph[item] !== 'object'*/){
                         let value =
                             item === 'shelter' ?
-                                graph[item] ? 'true' : 'false' :
+                                graph[item] ? 'Yes' : 'No' :
                                 item === 'critical' && graph[item] ?
                                     criticalFacilityMeta[graph[item]] :
                                     item === 'prop_class' || item === 'user_property_class' ?
@@ -396,6 +397,8 @@ class AssetsView extends React.Component{
                                 <tbody>
                                 {
                                     tableData.map((data)=>{
+                                        data.value = data.attribute === 'emergency_generator' ?
+                                            data.value === true ? 'Yes' : 'No' : data.value
                                         if(data.attribute === 'land_av' || data.attribute === 'total_av' || data.attribute === 'full_market_val'){
                                             return(
                                                 <tr>
