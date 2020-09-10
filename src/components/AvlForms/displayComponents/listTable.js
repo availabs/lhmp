@@ -144,6 +144,12 @@ class AvlFormsListTable extends React.Component {
                                     data[attribute] = graph[item].value.attributes[attribute] ||
                                         this.props.config[0].attributes[attribute].defaultValue;
                                 }
+
+                                if(graph[item].value.attributes['action_status_update']){
+
+                                    data['update status'] = `/action_status_update/edit/${graph[item].value.attributes['action_status_update'].slice(1,-1).split(',').slice(-1).pop()}`;
+                                }
+
                                 ['view', 'edit']
                                     .filter(f => this.props[f + 'Button'] === true || this.props[f + 'Button'] === undefined)
                                     .forEach(f => {
@@ -202,6 +208,10 @@ class AvlFormsListTable extends React.Component {
                                     if (initial_data['id'] === item)
                                         return initial_data[k]
                                 });
+                                if(graph[item].value.attributes['action_status_update']){
+
+                                    data['update status'] = `/action_status_update/edit/${graph[item].value.attributes['action_status_update'].slice(1,-1).split(',').slice(-1).pop()}`;
+                                }
                                 data[combine_list_attributes[0].result] = !value.includes("") ? value.join(",") : value;
                                 ['view', 'edit']
                                     .filter(f => this.props[f + 'Button'] === true || this.props[f + 'Button'] === undefined)
@@ -380,7 +390,7 @@ class AvlFormsListTable extends React.Component {
                         height={this.props.height ? this.props.height : ''}
                         width={this.props.width ? this.props.width : ''}
                         tableClass={this.props.tableClass ? this.props.tableClass : null}
-                        actions={{edit: true, view: true, delete: true}}
+                        actions={{'update status':true, edit: true, view: true, delete: true}}
                         csvDownload={this.props.config[0].csv_download}
                     />
                 </div>
