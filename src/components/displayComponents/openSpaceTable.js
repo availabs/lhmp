@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import _ from 'lodash'
 import get from 'lodash.get'
 import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
@@ -27,13 +26,13 @@ class inventoryTableViewer extends Component {
 
     fetchFalcorDeps() {
         this.setState({loading: true})
-        console.log('in ffd')
+
         return this.props.falcor.get(
             ['parcel', 'byGeoid', this.state.geoid, 'length']
         ).then(length => {
-            console.log('fetching data')
+            // console.log('fetching data')
             length = get(length, ['json', 'parcel', 'byGeoid', this.state.geoid, 'length'], 0)
-            length = 1000
+            // length = 1000
             let requests = [],
                 size = Math.min(length / 4, 7000);
             for (let i = 0; i < length + 1; i += size) {
@@ -42,20 +41,20 @@ class inventoryTableViewer extends Component {
                     to: Math.min(i + size - 1, length)
                 }, 'id'])
             }
-            return requests.reduce((a, c, cI) => a.then(() => {
-                return this.props.falcor.get(c)
-                    .then(parcelIds => {
-                        console.log('ci', cI)
 
-                        parcelIds = Object.values(get(parcelIds, ['json', 'parcel', 'byGeoid', this.state.geoid, 'byIndex'], {}))
-                            .filter(d => d)
-                            .map(d => d.id)
-                            .filter(d => d)
-                        return this.props.falcor.get(['parcel', 'byId', parcelIds, ATTRIBUTES])
-                    })
-            }), Promise.resolve())
+            return requests.reduce(async (a, c, cI) => {
+                // console.log('ci', cI, a)
+                let parcelIds = await this.props.falcor.get(c);
+                parcelIds = Object.values(get(parcelIds, ['json', 'parcel', 'byGeoid', this.state.geoid, 'byIndex'], {}))
+                    .map(d => get(d, `id`, null))
+                    .filter(d => d)
+                let parcelValues = await this.props.falcor.get(['parcel', 'byId', parcelIds, ATTRIBUTES])
+                // console.log('parcelvalues', parcelValues)
+                return a
+
+            }, [])
                 .then(res => {
-                    console.log('????????????????????')
+                    //console.log('????????????????????')
                     this.setState({loading: false})
                 })
         })
@@ -63,7 +62,7 @@ class inventoryTableViewer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
-            console.log('did update')
+            //console.log('did update')
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
         }
     }
@@ -77,11 +76,11 @@ class inventoryTableViewer extends Component {
                 'Flood Control',
                 'Wild, Forested, Conservation lands and Public parks'
             ]
-        console.log('processing...')
+        //console.log('processing...')
         let data = Object.values(this.props.parcelData)
             .filter(c => get(c, `prop_class`, null) &&
                 (['350', '580', '581', '590', '591', '592', '593', '821'].includes(get(c, `prop_class`, null)) ||
-                ['3', '9'].includes(get(c, `prop_class`, null).slice(0, 1)))
+                    ['3', '9'].includes(get(c, `prop_class`, null).slice(0, 1)))
             )
             .reduce((a, c) => {
                 let rowGroup = []
@@ -131,7 +130,7 @@ class inventoryTableViewer extends Component {
                         }), {})
                     }
                 }), {}));
-        console.log('came here')
+
         data = Object.keys(data).map(d => data[d])
         let columns = Object.keys(get(data, `[0]`, {}))
             .map(key => (
