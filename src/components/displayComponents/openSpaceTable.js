@@ -28,41 +28,14 @@ class inventoryTableViewer extends Component {
         this.setState({loading: true})
 
         return this.props.falcor.get(
-            ['parcel', 'byGeoid', this.state.geoid, 'length']
-        ).then(length => {
-            // console.log('fetching data')
-            length = get(length, ['json', 'parcel', 'byGeoid', this.state.geoid, 'length'], 0)
-            // length = 1000
-            let requests = [],
-                size = Math.min(length / 4, 7000);
-            for (let i = 0; i < length + 1; i += size) {
-                requests.push(['parcel', 'byGeoid', this.state.geoid, 'byIndex', {
-                    from: i,
-                    to: Math.min(i + size - 1, length)
-                }, 'id'])
-            }
-
-            return requests.reduce(async (a, c, cI) => {
-                // console.log('ci', cI, a)
-                let parcelIds = await this.props.falcor.get(c);
-                parcelIds = Object.values(get(parcelIds, ['json', 'parcel', 'byGeoid', this.state.geoid, 'byIndex'], {}))
-                    .map(d => get(d, `id`, null))
-                    .filter(d => d)
-                let parcelValues = await this.props.falcor.get(['parcel', 'byId', parcelIds, ATTRIBUTES])
-                // console.log('parcelvalues', parcelValues)
-                return a
-
-            }, [])
-                .then(res => {
-                    //console.log('????????????????????')
-                    this.setState({loading: false})
-                })
+            ['parcel', 'byGeoid', this.state.geoid, ATTRIBUTES]
+        ).then(data => {
+            this.setState({loading: false})
         })
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
-            //console.log('did update')
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
         }
     }
@@ -76,8 +49,7 @@ class inventoryTableViewer extends Component {
                 'Flood Control',
                 'Wild, Forested, Conservation lands and Public parks'
             ]
-        //console.log('processing...')
-        let data = Object.values(this.props.parcelData)
+        let data = get(this.props, `parcelData.value`, [])
             .filter(c => get(c, `prop_class`, null) &&
                 (['350', '580', '581', '590', '591', '592', '593', '821'].includes(get(c, `prop_class`, null)) ||
                     ['3', '9'].includes(get(c, `prop_class`, null).slice(0, 1)))
@@ -164,7 +136,7 @@ const mapStateToProps = (state, ownProps) => {
         activeGeoid: state.user.activeGeoid,
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         graph: state.graph,
-        parcelData: get(state.graph, `parcel.byId`),
+        parcelData: get(state.graph, `parcel.byGeoid.${state.user.activeGeoid}`),
     }
 };
 const mapDispatchToProps = ({authProjects});
