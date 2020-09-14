@@ -19,7 +19,7 @@ import ImageComponent from './imageComponent'
 import DevelopementZoneFilteredTable from "./developementZoneFilteredTable";
 import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 import sociallyVulnerableDemographicsMapViewer from './sociallyVulnerableDemographicsMap/index'
-
+import openSpaceTable from './openSpaceTable'
 
 const NA = ({ type, state, routes }) =>
 {
@@ -68,6 +68,8 @@ export default {
     developementZonesFilteredMapEditor: developementZoneFilteredMap,
     developementZonesFilteredMapViewer: developementZoneFilteredMap,
     sociallyVulnerableDemographicsMapEditor: sociallyVulnerableDemographicsMapViewer,
-    sociallyVulnerableDemographicsMapViewer
+    sociallyVulnerableDemographicsMapViewer,
+    openSpaceTableViewer: openSpaceTable,
+    openSpaceTableEditor: openSpaceTable,
 }
 

@@ -116,7 +116,7 @@ const config = {
                 ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
             icon: 'os-icon-alert-circle'
         },
-    ], 
+    ],
     
     'Changes in Development' : [
         {
@@ -154,7 +154,7 @@ const config = {
         {
             title: 'Open Space ',
             requirement: 'Req-E-1A',
-            type: 'content',
+            type: 'openSpaceTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
