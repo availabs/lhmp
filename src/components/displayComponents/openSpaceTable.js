@@ -49,6 +49,7 @@ class inventoryTableViewer extends Component {
                 'Flood Control',
                 'Wild, Forested, Conservation lands and Public parks'
             ]
+        // console.log('parcel', get(this.props, `parcelData.value`, []))
         let data = get(this.props, `parcelData.value`, [])
             .filter(c => get(c, `prop_class`, null) &&
                 (['350', '580', '581', '590', '591', '592', '593', '821'].includes(get(c, `prop_class`, null)) ||
@@ -136,7 +137,7 @@ const mapStateToProps = (state, ownProps) => {
         activeGeoid: state.user.activeGeoid,
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         graph: state.graph,
-        parcelData: get(state.graph, `parcel.byGeoid.${state.user.activeGeoid}`),
+        parcelData: get(state.graph, `parcel.byGeoid.${state.user.activeCousubid}`),
     }
 };
 const mapDispatchToProps = ({authProjects});
