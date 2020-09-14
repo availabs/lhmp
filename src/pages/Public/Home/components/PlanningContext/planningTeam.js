@@ -11,7 +11,7 @@ import {
     PageContainer,
     VerticalAlign
 } from 'pages/Public/theme/components'
-
+import styled from "styled-components";
 const COLS = [
     "id",
     "contact_name",
@@ -25,12 +25,30 @@ const COLS = [
     "contact_county",
     "associated_plan"
 ];
-
+const DIV = styled.div`
+${props => props.theme.scrollBar}
+overflow: auto;
+`
 class PlanningTeam extends Component {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
         this.state = {}
+
+        this.isMatch = this.isMatch.bind(this)
+    }
+    isMatch(matchee, matcher) {
+        matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
+            matchee.replace('[', '').replace(']', '').split(',') : matchee;
+        return (!matchee || !matcher) ? false :
+            typeof matchee === 'string' ?
+                matchee.toString().toLowerCase() === matcher.toString().toLowerCase() :
+                matchee.map(m => m.toString().toLowerCase()).includes(matcher.toString().toLowerCase())
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.activeCousubid !== this.props.activeCousubid){
+            this.fetchFalcorDeps()
+        }
     }
 
     fetchFalcorDeps() {
@@ -55,10 +73,18 @@ class PlanningTeam extends Component {
                 this.setState({
                     data:
                         Object.keys(response)
-                            .filter(f => f !== '$__path' && response[f].attributes.is_hazard_mitigation_representative === 'yes' &&
-                                (
-                                    // response[f].attributes.contact_county === this.props.activeGeoid ||
-                                response[f].attributes.contact_municipality === this.props.activeCousubid )
+                            .filter(f => {
+                                    return f !== '$__path' && response[f].attributes.is_hazard_mitigation_representative === 'yes' &&
+                                        (
+                                            get(this.props, `activeCousubid`, '').length > 5 &&
+                                            response[f].attributes.contact_municipality && response[f].attributes.contact_municipality !== '[]' ?
+                                                this.isMatch(response[f].attributes.contact_municipality, this.props.activeCousubid) :
+                                                get(this.props, `activeCousubid`, '').length === 5 &&
+                                                response[f].attributes.contact_county && response[f].attributes.contact_county !== '[]' &&
+                                                (!response[f].attributes.contact_municipality || response[f].attributes.contact_municipality === '[]') ?
+                                                    this.isMatch(response[f].attributes.contact_county, this.props.activeGeoid) : false
+                                        )
+                                }
                             )
                             .reduce((a, c) => [...a, response[c]], [])
                 })
@@ -123,11 +149,11 @@ class PlanningTeam extends Component {
                     </div>
                 </div>
                 <VerticalAlign>
-                    <div className='d-flex justify-content-center'>
+                    <DIV className='d-flex justify-content-center'>
 
                         {this.renderMainTable()}
 
-                    </div>
+                    </DIV>
                 </VerticalAlign>
 
             </PageContainer>

@@ -329,7 +329,7 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
         downloadData = downloadData.map(row => {
             let tmpRow = {}
             Object.keys(row)
-                .filter(f => !['edit', 'view', 'delete'].includes(f))
+                .filter(f => !['edit', 'view', 'delete', 'update status'].includes(f))
                 .forEach(key => {
                     if (csvDownload.includes(key)) {
                         tmpRow[

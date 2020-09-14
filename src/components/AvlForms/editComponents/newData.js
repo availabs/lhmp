@@ -9,6 +9,7 @@ import styled from "styled-components";
 import {falcorGraph} from "../../../store/falcorGraph";
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
+import attributes from "../../../pages/auth/megaAvlFormsConfig";
 
 var _ = require("lodash");
 
@@ -143,7 +144,7 @@ class AvlFormsNewData extends React.Component{
                             <div className="modal-header"><h6 className="modal-title">Prompt</h6>
                                 <button aria-label="Close" className="close" data-dismiss="modal" type="button"
                                         onClick={(e) => {
-                                            console.log('cancel button', e.target.closest(`#closeMe`+id).style.display = 'none')
+                                            e.target.closest(`#closeMe`+id).style.display = 'none'
                                         }}>
                                     <span aria-hidden="true"> ×</span></button>
                             </div>
@@ -177,14 +178,17 @@ class AvlFormsNewData extends React.Component{
     afterSubmitEdit(newId, attributes){
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                return this.state[c].reduce((a1,c1) => {
+                return get(this.state, [c], []).reduce((a1,c1) => {
                     return a1.then(resA1 => {
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {
                                 originalData = get(originalData, ['json', 'forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig], '')
+
                                 originalData = originalData.indexOf(']') > -1 ?
-                                    originalData.replace(']', `,${newId}]` ) :
-                                    originalData !== '' ?
+                                    `[${
+                                    _.uniqBy([...originalData.slice(1,-1).split(','), newId]).filter(od => od && od !== '').join(',')
+                                }]` :
+                                    originalData && originalData !== '' ?
                                     `[${originalData},${newId}]` : `[${newId}]`
 
                                 return this.props.falcor.set({
@@ -254,6 +258,7 @@ class AvlFormsNewData extends React.Component{
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
+                .then(response => this.props.onFinish ? this.props.onFinish : response)
 
         }else{
             let args = []
@@ -304,6 +309,7 @@ class AvlFormsNewData extends React.Component{
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully created.`, {type: "success"}))
                 })
+                .then(response => this.props.onFinish ? this.props.onFinish() : response)
         }
     }
 
@@ -383,6 +389,7 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type] && graph[form_type].meta){
                 graph[form_type].meta.value
                     .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                    .filter(f => this.props.config[0].attributes[f.form_type.split(`${form_type}-`)[1]].metaSource !== 'meta_file')
                     .map(f => {
                         let field = f.form_type.split(`${form_type}-`)[1]
                         if (fieldSpecificMeta[field]){
@@ -393,6 +400,26 @@ class AvlFormsNewData extends React.Component{
                     })
                 meta_data = graph[form_type].meta ? graph[form_type].meta.value.filter(f => f.form_type.split(`${form_type}-`).length === 1) : []
             }
+        }
+
+        // get meta from file
+        // for fields which have meta from file, meta from db will be overridden
+        if(this.props.meta){
+            this.props.meta
+                .filter(f => f.form_type.split(`${form_type}-`).length > 1)
+                .forEach(f => {
+                    f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
+                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .forEach(field => {
+                            if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
+                                fieldSpecificMeta[field].push(f)
+                            }else{
+                                fieldSpecificMeta[field] = f.value ? f.value : [f]
+                            }
+                        })
+
+                })
+            // meta_data = this.props.meta.filter(f => f.form_type.split(`-`).length === 1)
         }
 
         if (!countyData.length) return null;
@@ -458,7 +485,10 @@ class AvlFormsNewData extends React.Component{
                         type: 'multiselect', //item.attributes[attribute].edit_type,
                         addAll: item.attributes[attribute].addAll,
                         required: item.attributes[attribute].field_required,
-                        meta: fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
+                        meta: get(item, `attributes.${attribute}.meta_filter.value`, null) &&
+                        get(item, `attributes.${attribute}.meta_filter.filter_key`, null) === '' ?
+                            get(item, `attributes.${attribute}.meta_filter.value`, []) :
+                            fieldSpecificMeta[attribute] ? fieldSpecificMeta[attribute]: meta_data ? meta_data : [],
                         prompt: this.displayPrompt.bind(this),
                         depend_on : item.attributes[attribute].depend_on,
                         defaultValue: item.attributes[attribute].defaultValue
@@ -600,7 +630,9 @@ class AvlFormsNewData extends React.Component{
                         type:item.attributes[attribute].edit_type,
                         display_condition:item.attributes[attribute].display_condition,
                         defaultValue: item.attributes[attribute].defaultValue,
-                        parentConfig: item.attributes[attribute].parentConfig
+                        parentConfig: item.attributes[attribute].parentConfig,
+                        targetConfig: item.attributes[attribute].targetConfig,
+                        targetKey: item.attributes[attribute].targetKey,
                     })
                 }
                 else if(

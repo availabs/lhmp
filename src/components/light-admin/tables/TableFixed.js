@@ -195,7 +195,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
         downloadData = downloadData.map(row => {
             let tmpRow = {}
             Object.keys(row)
-                .filter(f => !['edit', 'view', 'delete'].includes(f))
+                .filter(f => !['edit', 'view', 'delete', 'update status'].includes(f))
                 .forEach(key => {
                     if (csvDownload.includes(key)){
                         tmpRow[
@@ -246,7 +246,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                             </th>
                         ))}
                         {csvDownload.length ?
-                            <th colSpan={3} key={i}>
+                            <th colSpan={4} key={i}>
                                 <CSVLink className='btn btn-secondary btn-sm'
                                          style={{width:'100%'}}
                                          data={downloadData} filename={'table_data.csv'}>Download CSV</CSVLink>

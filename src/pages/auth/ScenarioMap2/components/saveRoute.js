@@ -14,17 +14,18 @@ class ActionsWorksheetFormsNew extends React.Component{
 
     render(){
         let config = ViewConfig.config;
-        this.props.layer.doAction([
-            "dismissMessage",
-            {id:'evacuationRoutes'}
-        ])
-        this.props.layer.forceUpdate()
-        this.props.layer.map.resize()
+        // this.props.layer.doAction([
+        //     "dismissMessage",
+        //     {id:'evacuationRoutes'}
+        // ])
+        // this.props.layer.forceUpdate()
+        // this.props.layer.map.resize()
         return(
             <AvlFormsNewData
                 json = {config}
                 id = {[]}
                 data = {{geom: JSON.stringify(this.props.geom)}}
+                onFinish = {this.props.onSave ? this.props.onSave.bind(this) : null}
             />
         )
     }

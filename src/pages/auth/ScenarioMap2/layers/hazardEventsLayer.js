@@ -3,12 +3,16 @@ import * as d3scale from "d3-scale"
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
+import mapboxgl from "mapbox-gl";
+import mapbox from "mapbox";
 import {falcorChunkerNice, falcorGraph} from "store/falcorGraph"
 import * as turf from '@turf/turf'
 import COLOR_RANGES from "constants/color-ranges"
 import hazardcolors from "constants/hazardColors";
+import hazardIcons from 'pages/Public/Hazards/new_components/HazardMeta'
 import {EARLIEST_YEAR, LATEST_YEAR} from "../components/yearsOfSevereWeatherData";
 import {register, unregister} from "../../../../components/AvlMap/ReduxMiddleware";
+import {marker} from "leaflet/dist/leaflet-src.esm";
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -72,13 +76,12 @@ export class HazardEventsLayer extends MapLayer{
 
             if (!this.filters.hazard.value && this.hazardsFromFalcor)  this.filters.hazard.value = this.hazardsFromFalcor;
 
-            let colorScale = d3scale.scaleThreshold()
-                .domain(this.domain)
-                .range(this.range);
             let colorScaleFilter = [
                 'match',
                 ['get', 'property_damage']
             ];
+
+            this.markers.forEach(m => m.remove())
             Object.keys(events).forEach(geo => {
                 Object.keys(events[geo])
                     .filter(f => this.filters.hazard.value && this.filters.hazard.value.includes(f))
@@ -88,11 +91,15 @@ export class HazardEventsLayer extends MapLayer{
                             .forEach(year => {
                                 if (events[geo][haz][year].property_damage.value && events[geo][haz][year].property_damage.value.length > 0) {
                                     events[geo][haz][year].property_damage.value.forEach(data => {
+                                        let colorScale = d3scale.scaleThreshold()
+                                            .domain(this.domain)
+                                            .range(Object.keys(hazardcolors).includes(data.hazardid) ? hazardcolors[data.hazardid + '_range'] : hazardcolors['all_range']);
                                         if (JSON.parse(data.geom)) {
                                             if (!colorScaleFilter.includes(data.property_damage)){
                                                 colorScaleFilter.push(data.property_damage)
                                                 colorScaleFilter.push(colorScale(data.property_damage))
                                             }
+
                                             let circle = {
                                                 type: "Feature",
                                                 properties: {'circle-color': colorScale(data.property_damage)},
@@ -119,7 +126,94 @@ export class HazardEventsLayer extends MapLayer{
             })
 
             colorScaleFilter.push('#000')
-            let colors = [
+
+            if (map.getSource('events')){
+                map.removeLayer('events-layer')
+                map.removeSource('events')
+            }
+
+            if (!map.getSource('events')){
+                map.addSource("events", {
+                    'type': 'geojson',
+                    'data': eventsGeo
+                });
+                map.addLayer(
+                    {
+                        id: 'events-layer',
+                        type: 'circle',
+                        source: 'events',
+                        "paint": {
+                            'circle-radius': {
+                                'base': 3,
+                                'stops': [
+                                    [12, 3],
+                                    [22, 3]
+                                ]
+                            },
+                            "circle-color": colorScaleFilter.length > 3 ? colorScaleFilter : '#cbbebe',
+                            "circle-opacity": 0.3
+                        },
+                    }
+                );
+            }
+/*            let popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+            map.on('mouseenter', 'events-layer', function(e) {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                let coordinates = e.features[0].geometry.coordinates.slice();
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup
+                    .setLngLat(coordinates)
+                    .setHTML('<h3>' + 'Event' + '</h3><p>' +
+                        Object.keys(e.features[0].properties)
+                            .reduce((a, k) => a + '<p>' + k + ': <span style="max-width: 50px; overflow-wrap: break-spaces">' + e.features[0].properties[k] + '</span></p>', ''))
+                    //.addTo(map)
+            });
+
+            map.on('mouseleave', 'events-layer', function() {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });*/
+
+            eventsGeo.features.forEach(marker => {
+                // add icon
+                let el = document.createElement('div');
+                el.className = 'icon-w';
+                el.style.backgroundColor = marker.properties['circle-color']
+                // el.style.backgroundColor = hazardcolors[marker.properties.hazard]
+                el.style.color = '#ccc'
+                el.style.borderRadius = '50%'
+
+                let el2 = document.createElement('div');
+                el2.className = `fi fa-${get(hazardIcons[marker.properties.hazard], `icon`, 'wind')}`;
+                el.appendChild(el2)
+
+                this.markers.push(
+                    new mapboxgl.Marker(el)
+                        .setLngLat(marker.geometry.coordinates)
+                        /*.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                            .setHTML('<h3>' + 'Event' + '</h3><p>' +
+                                Object.keys(marker.properties)
+                                    .reduce((a, k) => a + '<p>' + k + ': ' + marker.properties[k] + '</p>', '')
+                            ))*/
+                        .addTo(this.map)
+                )
+            })
+
+/*            let colors = [
                 'match',
                 ['get', 'hazard']
             ];
@@ -157,7 +251,7 @@ export class HazardEventsLayer extends MapLayer{
                         },
                     }
                 );
-            }
+            }*/
 
         }
 
@@ -304,6 +398,7 @@ export class HazardEventsLayer extends MapLayer{
 
     }
     toggleVisibilityOff(){
+        this.markers.forEach(m => m.remove())
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',"none");
         })
@@ -373,6 +468,7 @@ export const HazardEventsOptions =  (options = {}) => {
             value: undefined
         }
     },
+        markers: [],
     popover: {
         layers: [/*'tracts-layer-line', */'events-layer'],
         dataFunc: feature => {

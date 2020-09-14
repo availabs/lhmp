@@ -147,6 +147,9 @@ class AssetsFilteredTable extends Component {
                                                                     count: parseInt(riskZoneIdData.count) || 0,
                                                                     value: parseInt(riskZoneIdData.sum) || 0
                                                                 };
+                                                            }else{
+                                                                riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
+                                                                riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
                                                             }
                                                             riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] ?
                                                                 riskZoneIdsAllValuesTotal[`${riskZoneIdData.name}` + ' #'] += parseInt(riskZoneIdData.count) || 0 :

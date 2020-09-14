@@ -122,7 +122,7 @@ class JurisdictionTable extends React.Component {
                                 get(this.props.zonesByActiveScenarioData,['places',`${item.geoid}`,'byRiskScenario',`${scenario_id}`,'byRiskZone','all','value'],[])
                             let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
                             let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
-                            if((graph_scenario_county.length > 0 || graph_scenario_jurisdiction.length > 0) && Object.keys(forms_zone).length > 0 && Object.keys(zone_buildings_data).length > 0){
+                            if((true || graph_scenario_county.length > 0 || graph_scenario_jurisdiction.length > 0) && Object.keys(forms_zone).length > 0 && Object.keys(zone_buildings_data).length > 0){
                                 data.push({
                                     zone_geoid : item.geoid,
                                     zone_id : item.zone_id,

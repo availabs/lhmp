@@ -13,12 +13,12 @@ class CheckboxComponent extends React.PureComponent{
         return (
             <React.Fragment>
                 <input
-                    // checked={this.props.state[this.props.title] === value}
+                    checked={this.props.state[this.props.title] === value}
                     id={this.props.title}
                     className="form-check-input"
                     type={this.props.type}
                     value={value}
-                    onChange={(e) => this.props.handleChange({target:{id: e.target.id, value: e.target.checked ? value : null}})}/><span><label>{value}</label></span>
+                    onChange={(e) => this.props.handleChange({target:{id: e.target.id, value: e.target.checked ? value : 'no'}})}/><span><label>{value}</label></span>
             </React.Fragment>
         )
     }

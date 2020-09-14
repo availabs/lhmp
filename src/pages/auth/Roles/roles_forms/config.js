@@ -134,7 +134,20 @@ module.exports = [
                 meta:'false',
                 hidden:'false',   
             },
-            //is_representitive: {}
+            //is_representitive: {},
+            participation:{
+                label:'Participation',
+                sub_type:'',
+                prompt:'',
+                edit_type:'AvlFormsJoin',
+                display_type:'AvlFormsJoin',
+                parentConfig: 'roles',
+                targetConfig: 'participation',
+                targetKey: 'title',
+                hidden:'false',
+                meta:'false',
+                section:'',
+            },
         }
 
     }
