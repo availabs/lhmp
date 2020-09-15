@@ -25,7 +25,7 @@ const config =  {
 	}],
 	'Planning Context' : [
 		{
-			title: 'The Process',
+			title: 'Local Orientation',
 			requirement: 'Req-A-1A',
 			type: 'content',
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
@@ -33,61 +33,50 @@ const config =  {
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
 			// hideNav: true // hides key from public nav. Displays on page.
-		},
+	}],
+	'Pre-Planning' : [
 		{
-			title: 'Meetings',
-			requirement: 'Req-A-1D',
-			type: 'formTable',
-			fontSize: '0.70em',
-			height: 'auto',
-			align: 'full',
-			config: {
-				type:'participation',
-        		columns : [
-        			{
-        				Header: 'Date',
-        				accessor: 'start_date',
-        				width: 60,
-						sort: true
-        			},
-        			{
-        				Header: 'Name',
-        				accessor: 'title',
-        			},
-        			{
-        				Header: 'Hours',
-        				accessor: 'hours',
-        				width: 40
-        			},
-        			{
-        				Header: 'Narrative',
-        				accessor: 'narrative',
-        				width: 400,
-						filter: 'default'
-        			}
-        		]
-        
-			},
+			title: 'Planning Teams',
+			requirement: `planning-team`,
+			type: 'image',
 			prompt: '',
-			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
-			icon: 'os-icon-user-check'
+			intent: '',
+			callout: '',
+			label:'Image', // Which you would like to see on the form
+			height: 250,
+			width: 500,
+			border: 1,
+			icon: 'os-icon-arrow-right7',
+			onlyAdmin: true
 		},
 
 		{
-			title: 'Public Participation',
-			requirement: 'Req-A-3',
+			title: 'Outreach Strategy',
+			requirement: 'Req-A-2',
 			type: 'content',
-			prompt: 'Document how the public was involved in the planning process during the drafting stage.',
-			intent: 'To ensure citizens understand what the community is doing on their behalf, and to provide a chance' +
-				' for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
-				' Public involvement is also an opportunity to educate the public about hazards and risks in the community,' +
-				' types of activities to mitigate those risks, and how these impact them.',
-				icon: 'os-icon-users'
+			prompt: 'Document outreach methods used to engage county representatives, jurisdictions, state and federal partners, the public, neighboring communities, and additional stakeholders.',
+			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise needed to develop the plan, with responsibility or authority to implement hazard mitigation activities, and who will be most affected by the plan’s outcomes.' +
+					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
+					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
+			icon: 'os-icon-rotate-cw'
 		},
 
 		{
-			title: 'Jurisdictional Participation',
+			title: 'Participants',
+			requirement: 'Req-A-1C'+'Req-A-2'+ 'Req-A-3',
+			type: 'content',
+			prompt: 'Provide an overview of participation of county representatives, jurisdictions, state and federal partners, the public, neighboring communities, regional stakeholders and additional stakeholders throughout the planning process. This summary will be supported by the tables that follow, which will display all participants and all meetings.',
+			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise needed to develop the plan, with responsibility or authority to implement hazard mitigation activities, and who will be most affected by the plan’s outcomes.' +
+					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.'+
+					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
+			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
+			icon: 'os-icon-user-plus'
+		},
+
+		{
+			title: '',
 			requirement: 'Req-A-1C',
+			hideNav: true,
 			type: 'formTable',
 			fontSize: '0.70em',
 			height: '600px',
@@ -130,20 +119,6 @@ const config =  {
 			icon: 'os-icon-user'
 		},
 
-		{
-			title: 'Regional Participation',
-			requirement: 'Req-A-2',
-			type: 'content',
-			prompt: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard' +
-				' mitigation activities, agencies that have the authority to regulate development as well as other interests' +
-				' to be involved in the planning process.',
-			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise' +
-				' needed to develop the plan, with responsibility or authority to implement hazard mitigation activities,' +
-				' and who will be most affected by the plan’s outcomes.',
-			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
-			icon: 'os-icon-user-plus'
-		},
-
 		// {
 		// 	title: 'Jurisdictional Participation',
 		// 	requirement: 'Req-A-1E',
@@ -152,13 +127,24 @@ const config =  {
 		// 	intent: 'Plan updates must include documentation of the current planning process undertaken to update the plan.'
 		// },
 
+
 	],
-	'Integration' : [
+	'Local Resources' : [
+		{
+			title: 'Technical Data',
+			requirement: 'Req-A-4A' + 'Req-A-4B',
+			type: 'content',
+			prompt: 'Provide an overview of the technical data sources solicited and used for the plan (e.g. LFAs, ACS, etc). These sources should be referenced more formally in corresponding tables and in a bibliography.',
+			intent: 'To demonstrate use of best available data for hazard analysis and risk assessment.',
+			icon: 'os-icon-rotate-cw'
+		},
+
 		{
 			title: 'Existing Resources',
 			requirement: 'revision-1',
 			type: 'content',
-			prompt: 'What existing plans, studies, reports, and technical information were reviewed?',
+			prompt: 'Summarize how existing resources (plans, studies, reports, data) were collected, reviewed and integrated into this Hazard Mitigation Plan throughout the Planning Process.' +
+			 		'How does reviewing and integrating existing resources help set a foundation for your communitys risk assessment and strategy development later in the planning process?',
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
@@ -220,66 +206,69 @@ const config =  {
 			intent: '',
 			icon: 'os-icon-tasks-checked'
 		},
-		{
-			title: 'Resources Integration',
-			requirement: 'Req-A-4B',
-			type: 'content',
-			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
-			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
-				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
-				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-rotate-cw'
-		},
-		{
-			title: 'Plans Integration',
-			requirement: 'Req-C-6',
-			type: 'content',
-			prompt: 'Describe the community’s process to integrate the data, information, and hazard mitigation goals' +
-				' and actions into other planning mechanisms.',
-			intent: 'To assist communities in capitalizing on all available mechanisms that they have at their disposal' +
-				' to accomplish hazard mitigation and reduce risk.',
-			icon: 'os-icon-layers'
-		},
+
 	],
-	'Maintenance' : [
+	'Engagement' : [
 		{
-			title: 'Public Maintenance',
-			requirement: 'Req-A-5A',
+			title: 'Public Participation',
+			requirement: 'Req-A-3',
 			type: 'content',
-			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
-			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s' +
-				' maintenance and implementation over time.',
-			icon: 'os-icon-command'
+			prompt: 'Document how the public was involved in the planning process during the drafting stage.',
+			intent: 'To ensure citizens understand what the community is doing on their behalf, and to provide a chance' +
+				' for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
+				' Public involvement is also an opportunity to educate the public about hazards and risks in the community,' +
+				' types of activities to mitigate those risks, and how these impact them.',
+				icon: 'os-icon-users'
 		},
-		// {
-		// 	title: 'Public Participation in Plan Maintenance Survey',
-		// 	requirement: 'Req-A-5A2',
-		// 	type: 'content',
-		// 	prompt: '',
-		// 	intent: 'The plan must describe how the jurisdiction(s) will continue to seek public participation after the' +
-		// 		' plan has been approved and during the plan’s implementation, monitoring and evaluation. Participation' +
-		// 		' means engaged and given the chance to provide feedback. Examples include, but are not limited to,' +
-		// 		' periodic presentations on the plan’s progress to elected officials, schools or other community groups,' +
-		// 		' annual questionnaires or surveys, public meetings, postings on social media and interactive websites.'
-		// },
 		{
-			title: 'Updating',
-			requirement: 'Req-A-6',
+			title: 'Meetings',
+			requirement: 'Req-A-1D',
+			type: 'formTable',
+			fontSize: '0.70em',
+			height: 'auto',
+			align: 'full',
+			config: {
+				type:'participation',
+        		columns : [
+        			{
+        				Header: 'Date',
+        				accessor: 'start_date',
+        				width: 60,
+						sort: true
+        			},
+        			{
+        				Header: 'Name',
+        				accessor: 'title',
+        			},
+        			{
+        				Header: 'Hours',
+        				accessor: 'hours',
+        				width: 40
+        			},
+        			{
+        				Header: 'Narrative',
+        				accessor: 'narrative',
+        				width: 400,
+						filter: 'default'
+        			}
+        		]
+        
+			},
+			prompt: '',
+			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
+			icon: 'os-icon-user-check'
+		},
+		{
+			title: 'Plan Review and Submittal',
+			requirement: 'Req-NYS-F-10',
 			type: 'content',
-			prompt: `Describe the method and schedule for keeping the plan current 
-			a. Monitoring/Evaluating/Updating: (Must include title of individual or name of dept or agency responsible for leading each of these efforts)
-				i.	Monitoring: How, when and by whom the plan will be monitored - tracking implementation of plan over time,
-				ii.	Evaluating: How when and by whom the plan will be evaluated - assessing the effectiveness of the plan at achieving its stated purpose and goals
-				iii.	Updating: How, when and by whom will update the mitigation plan within a 5-year cycle
-`,
-			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
-				' This also serves as the basis of the next plan update.',
-			icon: 'os-icon-battery-charging'
-		}
-	],
-	Adoption: [
+			prompt: 'Describe the process by which you offered all planning participants and the public an opportunity to review. Describe how you distributed the plan draft for review and feedback. Summarize the themes of any feedback that was received and describe how the feedback was incorporated into the plan. Provide an overview of the State/Federal submittal process.',
+			intent: 'To document 1) the solicitation and incorporation of feedback from the planning team, stakeholders, and the public in the final plan document prior to submittal to the state and FEMA for review and approval and' +
+			 		'2) notification from FEMA in the form of a "Requires Revisions", "Approvable Pending Adoption (APA)" or "Approval" letter to the State.',
+				icon: 'os-icon-users'
+		},
 		{
-			title: 'Documentation',
+			title: 'Adoption',
 			requirement: 'Req-E-1',
 			type: 'formTable',
 			align: 'full',
@@ -344,21 +333,92 @@ const config =  {
 				' the plan, and to authorize responsible agencies to execute their responsibilities. ',
 			icon: 'os-icon-check-circle'
 		},
-/*		{
-			title: 'Multi-Jurisdictional Mitigation Plan Milestones',
-			requirement: 'Req-A-1B',
-			type: 'date',
-			prompt: '',
-		},
-		
 		{
-			title: 'Formal Plan Adoption',
-			requirement: 'Req-E-2',
-			type: 'table',
-			prompt: 'Identify adopting authority and date of formal adoption.',
-			intent: 'Each jurisdiction that is included in the plan must have its governing body adopt the plan prior to' +
-				' FEMA approval, even when a regional agency has the authority to prepare such plans.'
-		},*/
+			title: 'Resources Integration',
+			requirement: 'Req-A-4B',
+			type: 'content',
+			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
+			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
+				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
+				' mechanisms to implement the mitigation strategy.',
+			icon: 'os-icon-rotate-cw'
+		},
+		{
+			title: 'Plans Integration',
+			requirement: 'Req-C-6',
+			type: 'content',
+			prompt: 'Describe the community’s process to integrate the data, information, and hazard mitigation goals' +
+				' and actions into other planning mechanisms.',
+			intent: 'To assist communities in capitalizing on all available mechanisms that they have at their disposal' +
+				' to accomplish hazard mitigation and reduce risk.',
+			icon: 'os-icon-layers'
+		},
+	],
+	'Plan Maintenance' : [
+		{
+			title: 'Monitoring and Evaluating the Plan',
+			requirement: 'Req-A-6',
+			type: 'content',
+			prompt: `Describe the method and schedule for keeping the plan current 
+			a. Monitoring/Evaluating/Updating: (Must include title of individual or name of dept or agency responsible for leading each of these efforts)
+				i.	Monitoring: How, when and by whom the plan will be monitored - tracking implementation of plan over time,
+				ii.	Evaluating: How when and by whom the plan will be evaluated - assessing the effectiveness of the plan at achieving its stated purpose and goals
+				iii.	Updating: How, when and by whom will update the mitigation plan within a 5-year cycle`,
+			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
+				' This also serves as the basis of the next plan update.',
+			icon: 'os-icon-battery-charging'
+		},
+		{
+			title: 'Public Maintenance',
+			requirement: 'Req-A-5A',
+			type: 'content',
+			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
+			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s' +
+				' maintenance and implementation over time.',
+			icon: 'os-icon-command'
+		},
+		{
+			title: 'Continued Public Engagement',
+			requirement: 'Req-A-5',
+			type: 'content',
+			prompt: `Describe how the community(ies) will continue to engage the public throughout the plan maintenance process described above. The plan must describe how the jurisdiction(s) will continue to seek public participation after the plan has been approved and during the plan’s maintenance.`,
+			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s maintenance and implementation over time.' +
+					'To establish a process for jurisdictions to track the progress of the plan’s implementation. This also serves as the basis of the next plan update',
+			icon: 'os-icon-battery-charging'
+		},
+		{
+			title: 'Updating The Plan',
+			requirement: 'Req-A-6',
+			type: 'content',
+			prompt: `Describe the method and schedule for keeping the plan current 
+			a. Monitoring/Evaluating/Updating: (Must include title of individual or name of dept or agency responsible for leading each of these efforts)
+				i.	Monitoring: How, when and by whom the plan will be monitored - tracking implementation of plan over time,
+				ii.	Evaluating: How when and by whom the plan will be evaluated - assessing the effectiveness of the plan at achieving its stated purpose and goals
+				iii.	Updating: How, when and by whom will update the mitigation plan within a 5-year cycle`,
+			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
+				' This also serves as the basis of the next plan update.',
+			icon: 'os-icon-battery-charging'
+		},
+	],
+	'Process Assessment' : [
+		{
+			title: 'Strengths',
+			requirement: 'revision-1',
+			type: 'content',
+			prompt: 'Describe planning process strengths: document successes the planning teams experienced in collecting information, soliciting and receiving input, gathering community resources, hazard risk and vulnerabilities assessment, mitigation strategies development, etc.', 
+			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
+					'Feedback and information on specific sections in the Plan where the community has gone above and beyond minimum requirements and suggested improvements to the planning process (via local, state or federal feedback/guidance) can record lessons learned and best practices for concurrent or future planning endeavors and plan implementation.',
+			icon: 'os-icon-battery-charging'
+		},
+		{
+			title: 'Opportunities',
+			requirement: 'revision-1',
+			type: 'content',
+			prompt: 'Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',
+			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
+					'Feedback and information on specific sections in the Plan where the community has gone above and beyond minimum requirements and suggested improvements to the planning process (via local, state or federal feedback/guidance) can record lessons learned and best practices for concurrent or future planning endeavors and plan implementation.',
+			icon: 'os-icon-command'
+		},
 	]
 }
 
