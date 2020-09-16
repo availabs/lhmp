@@ -158,7 +158,7 @@ module.exports = [
                 section:'2'
             },
             description_of_problem_being_mitigated: {
-                label:'Description of the Problem',
+                label:'Description of the Problem (Problem Statement)',
                 sub_type:'project',
                 prompt:'Provide a detailed narrative of the problem. Describe the natural' +
                     ' hazard you wish to mitigate, its impacts to the community, past damages and' +

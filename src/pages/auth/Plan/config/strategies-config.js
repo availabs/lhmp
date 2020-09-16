@@ -258,19 +258,6 @@ const config = {
             icon: 'os-icon-activity'
         },
         {
-            title: 'Updated Actions',
-            requirement: 'Req-D-2',
-            type: 'actionsFilteredListTable',
-            filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
-            align: 'full',
-            prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
-                ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
-                ' whether the action is no longer relevant or be included as part of the updated action plan.',
-            intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing' +
-                ' actions outlined in their mitigation strategy.',
-            icon: 'os-icon-tasks-checked'
-        },
-        {
             title: 'Prioritization Criteria',
             requirement: 'Req-C-5A',
             type: 'content',
