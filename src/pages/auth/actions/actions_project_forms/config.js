@@ -5,9 +5,9 @@ module.exports = [
         sub_type:'project',
         list_attributes:['action_description',
             {'action_jurisdiction': {filter: 'multi'}},
-            {'action_category': {filter: 'multi'}},
-            {'action_type': {filter: 'multi'}},
+            {'description_of_problem_being_mitigated': {filter: 'multi'}}, 
             {'action_name': {filter:'true'}},
+            {'associated_hazards': {filter:'true'}},
             'sub_type'], // to list the attributes on the main page
         default_title: 'Action', // in the case when page_title is invalid
         page_title: 'action_name', // page title in edit and view
