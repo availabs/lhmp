@@ -37,7 +37,7 @@ module.exports = [
                 label:'Zone Name',
                 prompt:'',
                 sub_type:'',
-                edit_type: 'hidden',
+                edit_type: 'text',
                 display_type:'text',
                 show:'true',
                 meta:'false',
@@ -53,7 +53,6 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'true',
-
                 meta_filter:{
                     filter_key:'',
                     value:[
