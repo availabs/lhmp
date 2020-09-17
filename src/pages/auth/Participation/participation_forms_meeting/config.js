@@ -6,10 +6,14 @@ module.exports = [
         attributes:{
             meetings:{
                 sub_type:'meeting',
-                label:'Meetings',
+                label:'Attendees',
                 prompt:'',
-                edit_type:'meeting_roles',
-                display_type:'text',
+                edit_type:'AvlFormsJoin',
+                display_type:'AvlFormsJoin',
+                parentConfig:'participation',
+                targetConfig:'roles',
+                hidden:'false',
+                meta:'false',
                 //hidden:'true', // if you don`t want to show it in view data
                 section:''
             },
@@ -41,16 +45,7 @@ module.exports = [
                 section:''
             },
             start_date:{
-                label:'Start Date',
-                sub_type:'meeting',
-                prompt:'',
-                edit_type:'date',
-                display_type:'text',
-                meta:'false',
-                section:''
-            },
-            end_date:{
-                label:'End Date',
+                label:'Date',
                 sub_type:'meeting',
                 prompt:'',
                 edit_type:'date',

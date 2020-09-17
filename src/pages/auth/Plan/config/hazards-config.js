@@ -46,7 +46,16 @@ const config =  {
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
             callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
         },
-		...HazardConfig
+
+		...HazardConfig,
+        {
+            title: 'Other Hazards',
+            requirement: `req-B1-other-hazards`,
+            type: 'content',
+            prompt: 'Talk about local context for hazard of concern for your area',
+            intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+        },
 	]
 }
 export default config;
