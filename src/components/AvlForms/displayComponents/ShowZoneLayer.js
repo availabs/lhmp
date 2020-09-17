@@ -1,6 +1,7 @@
 import React from "react"
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
+import turfBbox from '@turf/bbox'
 import get from 'lodash.get'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
@@ -22,9 +23,10 @@ class ShowZoneLayer extends MapLayer{
                 ['forms','byId',this.zoneId]
                 )
                 .then(response =>{
-                    let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
-                    let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                    // let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
+                    // let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                     let attributes = get(response,['json','forms','byId',[this.zoneId],'attributes'],{})
+                    let bbox = turfBbox(attributes.geojson)
                     let geojson = {
                         "type": "FeatureCollection",
                         "features": []
@@ -36,7 +38,7 @@ class ShowZoneLayer extends MapLayer{
                         }
                     )
                     map.resize();
-                    map.fitBounds(bbox);
+                    map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]]);
                     this.map.getSource("polygon").setData(geojson)
 
                 })

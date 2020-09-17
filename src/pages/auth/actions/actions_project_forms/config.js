@@ -5,9 +5,9 @@ module.exports = [
         sub_type:'project',
         list_attributes:['action_description',
             {'action_jurisdiction': {filter: 'multi'}},
-            {'action_category': {filter: 'multi'}},
-            {'action_type': {filter: 'multi'}},
+            {'description_of_problem_being_mitigated': {filter:'true'}}, 
             {'action_name': {filter:'true'}},
+            {'associated_hazards': {filter:'true'}},
             'sub_type'], // to list the attributes on the main page
         default_title: 'Action', // in the case when page_title is invalid
         page_title: 'action_name', // page title in edit and view
@@ -158,7 +158,7 @@ module.exports = [
                 section:'2'
             },
             description_of_problem_being_mitigated: {
-                label:'Description of the Problem',
+                label:'Description of the Problem (Problem Statement)',
                 sub_type:'project',
                 prompt:'Provide a detailed narrative of the problem. Describe the natural' +
                     ' hazard you wish to mitigate, its impacts to the community, past damages and' +
@@ -166,7 +166,7 @@ module.exports = [
                     ' (if applicable), adjacent streets, and easily identified landmarks such as water' +
                     ' bodies and well-known structures, and end with a brief description of existing' +
                     ' conditions (topography, terrain, hydrology) of the site.',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
                 section:'2'

@@ -19,6 +19,7 @@ class Home extends React.Component {
                     hideAttributes={true}
                     zoom={ 7 }
                     center={ [-75.7749, 42.6583] }
+                    showStyleControl={ true }
                     dragPan={true}
                     styles={[
                         { name: "Terrain", style: "mapbox://styles/am3081/cjhi0xntt5ul52snxcbsnaeii" },
