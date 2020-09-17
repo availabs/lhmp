@@ -84,7 +84,7 @@ const config =  {
 			width: 500,
 			border: 1,
 			icon: 'os-icon-arrow-right7',
-			onlyAdmin: true
+			onlyAdmin: true,
 		},
 
 		{
