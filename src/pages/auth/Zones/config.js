@@ -53,7 +53,22 @@ module.exports = [
                 display_type:'text',
                 show:'true',
                 meta:'true',
-                meta_filter:{filter_key:'',value:['Zone 1', 'Zone 2', 'Zone 3']}, // only used when metaSource is not meta_file
+
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Select All',
+                        'Recent Development Zone', 
+                        'Future Development Zone', 
+                        'Historic Distric',
+                        'Relocation Zone',
+                        'Jurisdiction',
+                        'Area of Concern',
+                        'Vulnerable Population',
+                        'Other'
+                    ]
+                },
+
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
