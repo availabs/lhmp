@@ -166,7 +166,7 @@ module.exports = [
                     ' (if applicable), adjacent streets, and easily identified landmarks such as water' +
                     ' bodies and well-known structures, and end with a brief description of existing' +
                     ' conditions (topography, terrain, hydrology) of the site.',
-                edit_type:'text',
+                edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
                 section:'2'
