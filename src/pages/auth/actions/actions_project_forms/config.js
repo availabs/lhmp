@@ -320,8 +320,8 @@ module.exports = [
                 meta:'false',
                 section:'3'
             },
-             is_proposed_project_located_in_sfha:{
-                label:'Is proposed project located in SFHA?',
+             does_action_have_associated_zone:{
+                label:'Does the project have an associated map zone from the scenario tools?',
                 sub_type:'project',
                 prompt:'if yes, select zone',
                 edit_type:'radio',
@@ -339,7 +339,7 @@ module.exports = [
                 display_type:'AvlFormsJoin',
                 parentConfig: 'actions', // this is the attribute name by which the data will be stored in target config
                 targetConfig: 'zones',
-                display_condition:{attribute:'is_proposed_project_located_in_sfha',check:['yes', 'true', true]},
+                display_condition:{attribute:'does_action_have_associated_zone',check:['yes', 'true', true]},
                 meta:'false',
                 section:'3'
             },
