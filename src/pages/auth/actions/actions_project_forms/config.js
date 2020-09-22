@@ -5,7 +5,8 @@ module.exports = [
         sub_type:'project',
         list_attributes:['action_description',
             {'action_jurisdiction': {filter: 'multi'}},
-            {'description_of_problem_being_mitigated': {filter:'true'}}, 
+            {'action_status_update': {filter: 'multi'}},
+            {'description_of_problem_being_mitigated': {filter:'true'}},
             {'action_name': {filter:'true'}},
             {'associated_hazards': {filter:'true'}},
             'sub_type'], // to list the attributes on the main page
