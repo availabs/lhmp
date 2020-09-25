@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import config from "pages/auth/Plan/config/strategies-config";
-import {RenderConfig} from 'pages/Public/theme/ElementFactory'
+import ElementFactory, {RenderConfig} from 'pages/Public/theme/ElementFactory'
 import GraphFactory from "components/displayComponents/graphFactory";
 import geoDropdown from 'pages/auth/Plan/functions'
 import {falcorGraph} from "store/falcorGraph";
@@ -137,12 +137,30 @@ class About extends React.Component {
                     </HeaderImageContainer>
                     
                     <ContentContainer>
-                        <RenderConfig
-                            config={config}
-                            user={this.props.user}
-                            filterAdmin={true}
-                            autoLoad={true}
-                        />
+                        {
+                            Object.keys(config)
+                                .filter(section => config[section].filter(item => !item.onlyAdmin).length > 0)
+                                .map(section => {
+                                    return (
+                                        <div>
+                                            <SectionHeader>{section}</SectionHeader>
+                                            {
+                                                config[section]
+                                                    .filter(item => !item.onlyAdmin)
+                                                    .map(requirement => {
+                                                        return (
+                                                            <ElementFactory
+                                                                element={requirement}
+                                                                user={this.props.user}
+                                                                autoLoad={true}
+                                                            />
+                                                        )
+                                                    })
+                                            }
+                                        </div>
+                                    )
+                                })
+                        }
                     </ContentContainer>
                 </div>
             </PageContainer>
