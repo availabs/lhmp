@@ -27,9 +27,9 @@ import HazardEvents from 'pages/Public/Hazards/components/hazardEvents/'
 
 import {
     PageContainer,
-    ContentContainer    
-} 
-from 'pages/Public/theme/components'
+    ContentContainer, HeaderImageContainer
+}
+    from 'pages/Public/theme/components'
 
 
 class Hazards extends React.Component {
@@ -39,17 +39,31 @@ class Hazards extends React.Component {
         //authGeoid(this.props.user);
         this.state = {
             geoid: this.props.geoid,
-            dataType: 'severeWeather'
+            dataType: 'severeWeather',
+            image: ' '
         }
     }
-
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.activeCousubid !== this.props.activeCousubid ||
+            prevProps.hazard !== this.props.hazard ||
+            prevProps.planId !== this.props.planId ||
+            prevProps.geoid !== this.props.geoid
+        ){
+            this.fetchFalcorDeps()
+        }
+    }
     fetchFalcorDeps(geoid, geoLevel, dataType) {
         if (!geoid) geoid = this.props.geoid; 
         let contentId =  `req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}`
-        
+        let contentIdImage =  `req-B1-${this.props.hazard}-image-${this.props.planId}-${this.props.geoid}`
+
         return this.props.falcor.get(
-            ['content', 'byId', contentId, ['body']]
-        )
+            ['content', 'byId', [contentId, contentIdImage], ['body']]
+        ).then(contentRes => {
+            this.setState({
+                image: get(contentRes, `json.content.byId.${contentIdImage}.body`, null),
+            })
+        })
             
     }
 
@@ -64,12 +78,16 @@ class Hazards extends React.Component {
                 <div className='row'>
                     <div>
                         <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Narrative</h5>
-                        <div
-                            dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
+                        <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
                         />
                     </div>
                 </div>
                 <div className='row'>
+                    <div style={{width: '100%'}}>
+                        {this.state.image ?  <HeaderImageContainer img={this.state.image}/> : null}
+                    </div>
+                </div>
+                {/*<div className='row'>
                     <div className='col-md-6'>
                         <h6>{HazardName} Loss by Year</h6>
                         <HazardBarChart
@@ -172,7 +190,7 @@ class Hazards extends React.Component {
                             year={1999}
                         />
                     </div>
-                </div>
+                </div>*/}
                
             </div>
 

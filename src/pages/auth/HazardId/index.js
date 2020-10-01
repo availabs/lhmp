@@ -48,7 +48,7 @@ export default [
         exact: true,
         name: 'Hazard ID',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             { name: 'Hazard ID', path: '/hazardid/' }

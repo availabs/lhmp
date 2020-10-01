@@ -268,7 +268,7 @@ class AvlFormsListTable extends React.Component {
                         {this.props.config.map((d, i) => {
                             if (d.type === 'actions') {
                                 if (this.props.createButtons === true || this.props.createButtons === undefined) {
-                                    return (
+                                    /*return (
                                         <Link
                                             key={i}
                                             className="btn btn-sm btn-primary"
@@ -276,7 +276,7 @@ class AvlFormsListTable extends React.Component {
                                             Create
                                             New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                                         </Link>
-                                    )
+                                    )*/
                                 } else {
                                     return null
                                 }

@@ -79,8 +79,9 @@ class Hazards extends React.Component {
         .then(response => {
            
             let hazards = response.json.riskIndex.hazards
-            let contentIds = hazards.map(req => {
-                return `req-B1-${req}-${this.props.planId}-${this.props.geoid}`
+            let contentIds = []
+                hazards.map(req => {
+                contentIds.push(`req-B1-${req}-${this.props.planId}-${this.props.geoid}`, `req-B1-${req}-${this.props.planId}-${this.props.geoid}-image`)
             })
             
             return this.props.falcor.get(
@@ -119,7 +120,6 @@ class Hazards extends React.Component {
     }
 
     setGeoLevel(geoid_len) {
-        console.log('geolevel?', geoid_len)
         return geoid_len === 2 ? 'state'
             : geoid_len === 5 ? 'counties'
                 : geoid_len === 7 ? 'villages'
@@ -130,7 +130,7 @@ class Hazards extends React.Component {
 
     getGeoidName() {
         try {
-            return this.props.geoGraph[this.state.geoid].name;
+            return this.props.geoGraph[this.props.geoid].name;
         } catch (e) {
             return "Loading...";
         }
@@ -163,7 +163,6 @@ class Hazards extends React.Component {
     }
 
     changeHazard(e, a) {
-        console.log('test', e.target.value, e , a)
         this.setState({hazard:e.target.value})
     }
     render() {

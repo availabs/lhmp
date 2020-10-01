@@ -44,10 +44,10 @@ class inventoryTableViewer extends Component {
         let data = Object.keys(shelters).map(shelterId => {
             return Object.keys(get(shelters, `[${shelterId}]`, {}))
                 .reduce((a,c) => {
-                    if (get(shelters[shelterId][c], `value`, '') !== null){
-                        a[c] = get(shelters[shelterId][c], `value`, '').toString();
+                    if (get(shelters[shelterId], [c], '') !== null){
+                        a[c] = get(shelters[shelterId], [c], '').toString();
                     }else {
-                        a[c] = get(shelters[shelterId][c], `value`, '');
+                        a[c] = get(shelters[shelterId], [c], '');
                     }
                     return a;
                 }, {})
