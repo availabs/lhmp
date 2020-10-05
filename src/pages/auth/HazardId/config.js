@@ -2,8 +2,8 @@ module.exports = [
     {
         type:'hazardid', // type is same as the route path for now
         list_attributes:[
-            'community_name',  
-            'hazard_concern',
+            {'community_name': {filter:'multi'}},  
+            {'hazard_concern': {filter:'multi'}},
             'previous_occurrence', 
             'future_occurrence', 
             'loss_life_property', 

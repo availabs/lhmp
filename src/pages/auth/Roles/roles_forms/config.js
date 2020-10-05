@@ -3,12 +3,12 @@ module.exports = [
         // TODO check the list view if no data
         type:'roles',
         list_attributes: [
-            'contact_name',
-            'contact_title_role',
+            {'contact_name':{filter:'true'}},
+            {'contact_title_role': {filter:'multi'}},
             'contact_department',
-            'contact_agency',
+            {'contact_agency': {filter:'true'}},
             'contact_county',
-            'contact_municipality'
+            {'contact_municipality': {filter:'true'}},
         ],
         // combine_list_attributes:{attributes:['contact_county','contact_municipality'],result:'Jurisidiction'},
         sub_type:'',
