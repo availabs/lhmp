@@ -89,6 +89,13 @@ class AvlFormsNewDataWizard extends React.Component{
                     let tmp_state = {}
                     if(graph){
                         attributes[0].forEach(attribute =>{
+                            if (
+                                typeof graph.attributes[attribute] === 'object' &&
+                                Object.keys(graph.attributes[attribute]).length === 1 &&
+                                Object.keys(graph.attributes[attribute])[0] === '$type'
+                            ){
+                                graph.attributes[attribute] = null
+                            }
                             if(attribute.includes('date') && !attribute.includes('update')){
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 if(d[0] && d[1] && d[2]){

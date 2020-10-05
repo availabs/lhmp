@@ -147,8 +147,15 @@ class AvlFormsListTable extends React.Component {
                                             graph[item].value.attributes[attribute];
                                     }
                                 } else {
-                                    data[attribute] = graph[item].value.attributes[attribute] ||
-                                        this.props.config[0].attributes[attribute].defaultValue;
+                                    if (typeof graph[item].value.attributes[attribute] === 'object' &&
+                                    Object.keys(graph[item].value.attributes[attribute]).length === 1 &&
+                                        Object.keys(graph[item].value.attributes[attribute])[0] === '$type'
+                                    ){
+                                        data[attribute] = null
+                                    }else{
+                                        data[attribute] = graph[item].value.attributes[attribute] ||
+                                            this.props.config[0].attributes[attribute].defaultValue;
+                                    }
                                 }
 
                                 if(graph[item].value.attributes['action_status_update']){

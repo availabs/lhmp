@@ -51,13 +51,16 @@ export const getAllGeo = (parentGeo) => {
     return (dispatch) => {
         falcorGraph.get(["geo", parentGeo, 'municipalities'])
             .then(response => {
-                return falcorGraph.get(
-                    ['geo',
-                        [parentGeo, ...get(response, `json.geo.${parentGeo}.municipalities`, [])],
-                        ['name']],
-                )
+                if (get(response, `json.geo.${parentGeo}.municipalities`, []).length){
+                    return falcorGraph.get(
+                        ['geo',
+                            [parentGeo, ...get(response, `json.geo.${parentGeo}.municipalities`, [])],
+                            ['name']],
+                    )
+                }
+                return null
             })
-            .then(response => dispatch(callGetAllGeo(get(response, `json.geo`, {}), parentGeo)))
+            .then(response => response ? dispatch(callGetAllGeo(get(response, `json.geo`, {}), parentGeo)) : null)
     }
 }
 
