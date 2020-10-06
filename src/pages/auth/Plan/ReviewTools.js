@@ -125,7 +125,7 @@ class PlanReview extends React.Component {
     render() {
         let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
 
-        return (
+        return get(this.props, `match.path`, '') === '/plan_review/' ? (
             <div className='container'>
                 <Element>
                     <h4 className='element-header'>Review Tools</h4>
@@ -136,7 +136,7 @@ class PlanReview extends React.Component {
                     </ElementBox>
                 </Element>
             </div>
-        )
+        ) : this.processTable(allowedGeos)
     }
 }
 

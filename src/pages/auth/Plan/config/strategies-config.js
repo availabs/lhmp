@@ -24,7 +24,7 @@ const config = {
         onlyAdmin: true
     }],
 
-    Objectives: [
+/*    Objectives: [
         {
             title: 'Goals',
             requirement: 'Req-C-3-A',
@@ -231,13 +231,13 @@ const config = {
         }
         
 
-    ],
+    ],*/
     Actions: [
         {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
-            filterBy: ['Proposed-New'],
+            filterBy: ['Proposed-New', 'Proposed-Carryover'],
             align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
                 ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +

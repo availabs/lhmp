@@ -74,6 +74,7 @@ class AvlFormsNewData extends React.Component{
                     if(graph && attributes[0]){
                         attributes[0].forEach(attribute =>{
                             if (
+                                graph.attributes[attribute] &&
                                 typeof graph.attributes[attribute] === 'object' &&
                                 Object.keys(graph.attributes[attribute]).length === 1 &&
                                 Object.keys(graph.attributes[attribute])[0] === '$type'
