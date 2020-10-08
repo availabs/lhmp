@@ -27,7 +27,7 @@ const config = {
     Objectives: [
         {
             title: 'Local Orientation',
-            requirement: '',
+            requirement: 'R-S-4A',
             type: 'content',
             prompt: 'Provide an overview of the Strategy Development Process.  Briefly describe the process by which your community used existing resources and risk assessments to identify problem statements.' +
                     'Then, describe how your community developed strategies to solve for those problems and how they were documented. Who was involved? Did you conduct site visits? Did you attend a Mitigation Strategy Workshop? Etc.',
@@ -149,15 +149,8 @@ const config = {
             icon: 'os-icon-tasks-checked'
         },
         {
-            title: 'Capacity to Assess Risk',
-            requirement: 'Req-C-1A' + 'Req-C-1B.1' + 'Req-C-2',
-            type: 'content',
-            hideNav: true,
-            prompt: ''
-        },
-        {
             title: 'Integration',
-            requirement: 'Req-A-4F',
+            requirement: 'Req-C-6',
             type: 'content',
             prompt: 'Review Existing Resources from Jurisdictions & outside stakeholders.' +
                     'Identify opportunities for integration of existing resources into HMP and mitigation strategies.' + 
@@ -169,7 +162,7 @@ const config = {
 
         {
             title: 'Capacity To Address Risk',
-            requirement: 'Req-C-1B',
+            requirement: 'Req-C-1A',
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
@@ -324,7 +317,7 @@ const config = {
         },
         {
             title: 'Shelter Table',
-            requirement: 'Req-NYS-F-4B',
+            requirement: 'Req-NYS-F-4D',
             type: 'shelterListTable',
             align: 'full',
             prompt: '',
