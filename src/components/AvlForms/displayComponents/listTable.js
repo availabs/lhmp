@@ -147,8 +147,16 @@ class AvlFormsListTable extends React.Component {
                                             graph[item].value.attributes[attribute];
                                     }
                                 } else {
-                                    data[attribute] = graph[item].value.attributes[attribute] ||
-                                        this.props.config[0].attributes[attribute].defaultValue;
+                                    let getAttribute =get(graph, `${item}.value.attributes[${attribute}]`, null)
+                                    //console.log(getAttribute, typeof getAttribute)
+                                    if (getAttribute && typeof getAttribute === 'object' && 
+                                        Object.keys(getAttribute).length === 1 && 
+                                        Object.keys(getAttribute)[0] === '$type'
+                                    ){
+                                        data[attribute] = null
+                                    }else{
+                                        data[attribute] =get(graph, `${item}.value.attributes[${attribute}]`,  this.props.config[0].attributes[attribute].defaultValue);
+                                    }
                                 }
 
                                 if(graph[item].value.attributes['action_status_update']){
