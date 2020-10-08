@@ -3,8 +3,8 @@ module.exports = [
         type:'capabilities', // type is same as the route path for now
         list_attributes:[
             'county',
-            {'municipality' : {filter:'true'}},
-            'capability_type',
+            {'municipality' : {filter:'multi'}},
+            {'capability_type': {filter:'true'}} ,
             {'capability_category': {filter:'true'}},
             'capability_name', 
             'jurisdiction_utilization'
