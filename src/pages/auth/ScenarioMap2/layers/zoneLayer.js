@@ -153,12 +153,10 @@ export class ZoneLayer extends MapLayer{
                     geojson.features.push(zone.geom)
                 }
                 if (zone.zone_id == id && get(geojson.features.slice(-1).pop(), `geometry`, null)) {
-                    console.log('in if', id)
                     let bbox = turfBbox(get(geojson.features.slice(-1).pop(), `geometry`, null))
                     this.map.resize();
                     this.map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]]);
                 }else if (!id && this.bbox){
-                    console.log('in else')
                     this.map.resize();
                     this.map.fitBounds(this.bbox);
                 }
