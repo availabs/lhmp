@@ -26,7 +26,7 @@ const config = {
     'Vulnerability' : [
         {
             title: 'Local Orientation',
-            requirement: 'Req-B-3B-1',
+            requirement: 'Req-B-3B-2',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
             intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified' +
@@ -36,11 +36,11 @@ const config = {
                 ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
                 ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
                 ' and that will be addressed in the mitigation strategy.',
-            icon: 'os-icon-alert-triangle'
+            icon: 'os-icon-globe'
         },
         {
             title: 'Social Vulnerability',
-            requirement: 'revision-1',
+            requirement: 'Req-B-3B-3',
             type: 'content',
             prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
                     'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
@@ -58,7 +58,7 @@ const config = {
         },
         {
             title: 'Built Environment',
-            requirement: '',
+            requirement: 'Req-B-3B-1', 
             type: 'content',
             prompt: 'Although all built assets may be affected by hazards, certain buildings or concentrations of buildings may be more vulnerable because of their location, age, construction type, condition, or use. Provide an overview of general land use and specific, vulnerable assets or areas in your community.' +
                     'Include description of Historic properties or districts if appropriate.',
@@ -97,7 +97,7 @@ const config = {
         },
         {
             title: 'Natural Environment',
-            requirement: '',
+            requirement: 'Req-B-3B-5',
             type: 'content',
             prompt: 'Identify critical natural areas and other environmental features that are vulnerable to hazard impact and are important to your communitys identity and quality of life and support the economy through agriculture, tourism and recreation, and a variety of other critical ecosystem services, such as clean air and water and vulnerable species and habitats and discussion of green infrastructure.',
             intent: 'Environmental assets and natural resources are important to community identity and quality of life and support the economy through agriculture, tourism and recreation, and a variety of other ecosystem services, such as clean air and water.' +
@@ -181,7 +181,7 @@ const config = {
         'Floodplain Management' : [
         {
             title: 'Overview',
-            requirement: 'Req-C-2',
+            requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
                 ' a. Describe FPMP for continued compliance, Adoption and enforcement of floodplain management requirements, including regulating new construction in Special Flood Hazard Areas (SFHAs);\n' +
@@ -210,7 +210,7 @@ const config = {
             icon: 'os-icon-home'
         },
         {
-            title: 'Problem Statements',
+            title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
             type: 'content',
             prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
@@ -261,7 +261,7 @@ const config = {
         'Process Assessment'  : [
         {
             title: 'Strengths',
-            requirement: '',
+            requirement: 'Req-R-2A',
             type: 'content',
             prompt: 'Describe Risk Assessment strengths.',
             intent: 'The purpose of hazard mitigation is to reduce potential losses from future disasters.' +
@@ -271,7 +271,7 @@ const config = {
         },
         {
             title: 'Opportunities',
-            requirement: '',
+            requirement: 'Req-R-2B',
             type: 'content',
             prompt: 'Describe the challenges associated with assessing risk.  Include limitations related to access to data, information, costs, technical expertise, mapping, etc.'+
                     'Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',

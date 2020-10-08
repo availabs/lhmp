@@ -220,6 +220,16 @@ const config =  {
 			intent: '',
 			icon: 'os-icon-tasks-checked'
 		},
+		{
+			title: 'Resources Integration',
+			requirement: 'Req-A-4B',
+			type: 'content',
+			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
+			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
+				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
+				' mechanisms to implement the mitigation strategy.',
+			icon: 'os-icon-rotate-cw'
+		},	
 
 	],
 	'Engagement' : [
@@ -347,27 +357,7 @@ const config =  {
 				' the plan, and to authorize responsible agencies to execute their responsibilities. ',
 			icon: 'os-icon-check-circle'
 		},
-		{
-			title: 'Resources Integration',
-			requirement: 'Req-A-4B',
-			type: 'content',
-			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
-			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
-				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
-				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-rotate-cw'
-		},
-		{
-			title: 'Plans Integration',
-			requirement: 'Req-C-6',
-			type: 'content',
-			prompt: 'Describe the community’s process to integrate the data, information, and hazard mitigation goals' +
-				' and actions into other planning mechanisms.',
-			intent: 'To assist communities in capitalizing on all available mechanisms that they have at their disposal' +
-				' to accomplish hazard mitigation and reduce risk.',
-			icon: 'os-icon-layers'
-		},
-	],
+	],	
 	'Plan Maintenance' : [
 		{
 			title: 'Monitoring and Evaluating the Plan',
@@ -381,15 +371,6 @@ const config =  {
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.',
 			icon: 'os-icon-battery-charging'
-		},
-		{
-			title: 'Public Maintenance',
-			requirement: 'Req-A-5A',
-			type: 'content',
-			prompt: 'Describe how the community(ies) will continue public participation in the plan maintenance process.',
-			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s' +
-				' maintenance and implementation over time.',
-			icon: 'os-icon-command'
 		},
 		{
 			title: 'Continued Public Engagement',
@@ -412,12 +393,12 @@ const config =  {
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.',
 			icon: 'os-icon-battery-charging'
-		},
+		},	
 	],
 	'Process Assessment' : [
 		{
 			title: 'Strengths',
-			requirement: 'revision-1',
+			requirement: '',
 			type: 'content',
 			prompt: 'Describe planning process strengths: document successes the planning teams experienced in collecting information, soliciting and receiving input, gathering community resources, hazard risk and vulnerabilities assessment, mitigation strategies development, etc.', 
 			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
