@@ -36,11 +36,11 @@ const config = {
                 ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
                 ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
                 ' and that will be addressed in the mitigation strategy.',
-            icon: 'os-icon-alert-triangle'
+            icon: 'os-icon-globe'
         },
         {
             title: 'Social Vulnerability',
-            requirement: 'revision-1',
+            requirement: '',
             type: 'content',
             prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
                     'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
@@ -58,7 +58,7 @@ const config = {
         },
         {
             title: 'Built Environment',
-            requirement: '',
+            requirement: null, 
             type: 'content',
             prompt: 'Although all built assets may be affected by hazards, certain buildings or concentrations of buildings may be more vulnerable because of their location, age, construction type, condition, or use. Provide an overview of general land use and specific, vulnerable assets or areas in your community.' +
                     'Include description of Historic properties or districts if appropriate.',
@@ -210,7 +210,7 @@ const config = {
             icon: 'os-icon-home'
         },
         {
-            title: 'Problem Statements',
+            title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
             type: 'content',
             prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
