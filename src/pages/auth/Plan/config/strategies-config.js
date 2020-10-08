@@ -301,6 +301,50 @@ const config = {
             intent: '',
             icon: 'os-icon-share-2',
             hideNav: true
+        }
+        
+
+    ],
+    Actions: [
+        {
+            title: 'Proposed Actions',
+            requirement: 'Req-C-4',
+            type: 'actionsFilteredListTable',
+            filterBy: ['Proposed-New', 'Proposed-Carryover'],
+            align: 'full',
+            prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
+                ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
+                ' assessment, and 2) identifies the actions and/or projects that the jurisdiction intends to implement.' +
+                ' a. Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction' +
+                ' that are based on the community’s risk and  vulnerabilities, as well as community priorities.' +
+                ' b. The plan must identify the position, office, department, or agency responsible for implementing and' +
+                ' administering the action (for each jurisdiction), and identify potential funding sources and expected' +
+                ' timeframes for completion. ',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within' +
+                ' the capability of each jurisdiction, and reduce or avoid future losses.  This is the heart of the' +
+                ' mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA,' +
+                ' “own” the hazard mitigation actions in the strategy.' +
+                ' a. Mitigation actions and projects means a hazard mitigation action, activity or process (for example,' +
+                '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
+                ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
+                ' b. Integrate elements of Req-C-5 and Req-C-6',
+            icon: 'os-icon-activity'
+        },
+        {
+            title: 'Prioritization Criteria',
+            requirement: 'Req-C-5A',
+            type: 'content',
+            prompt: 'Describe the criteria used for prioritizing implementation of the actions.' +
+                ' a. The plan must demonstrate when prioritizing hazard mitigation actions that the local jurisdictions' +
+                ' considered the benefits that would result from the hazard mitigation actions versus the cost of those' +
+                ' actions.  The requirement is met as long as the economic considerations are summarized in the plan as' +
+                ' part of the community’s analysis.  A complete benefit‐cost analysis is not required.  Qualitative benefits' +
+                ' (for example, quality of life, natural and beneficial values, or other “benefits”) can also be included' +
+                ' in how actions will be prioritized.',
+            intent: 'To identify how the plan will directly lead to implementation of the hazard mitigation actions.' +
+                '  As opportunities arise for actions or projects to be  implemented, the responsible entity will be able' +
+                ' to take action towards completion of the activities.',
+            icon: 'os-icon-edit-1'
         },
     ]
     
