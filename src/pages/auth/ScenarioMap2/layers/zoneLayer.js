@@ -5,6 +5,7 @@ import { update } from "utils/redux-falcor/components/duck"
 import { falcorGraph, falcorChunkerNice } from "store/falcorGraph"
 import MapLayer from "components/AvlMap/MapLayer.js"
 //import { register, unregister } from "../ReduxMiddleware"
+import turfBbox from '@turf/bbox'
 
 
 import { getColorRange } from "constants/color-ranges";
@@ -27,12 +28,12 @@ export class ZoneLayer extends MapLayer{
             return falcorGraph.get(['geo',activeGeoid,'boundingBox'])
                 .then(response =>{
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
-                    let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                    this.bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                     this.layers.forEach(layer => {
                         map.setLayoutProperty(layer.id, 'visibility',"none");
                     })
                     map.resize();
-                    map.fitBounds(bbox);
+                    map.fitBounds(this.bbox);
                 })
 
         }
@@ -150,6 +151,14 @@ export class ZoneLayer extends MapLayer{
                     }
                 }else{
                     geojson.features.push(zone.geom)
+                }
+                if (zone.zone_id == id && get(geojson.features.slice(-1).pop(), `geometry`, null)) {
+                    let bbox = turfBbox(get(geojson.features.slice(-1).pop(), `geometry`, null))
+                    this.map.resize();
+                    this.map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]]);
+                }else if (!id && this.bbox){
+                    this.map.resize();
+                    this.map.fitBounds(this.bbox);
                 }
             }
         })
