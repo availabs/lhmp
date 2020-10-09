@@ -77,7 +77,7 @@ const config =  {
 
 		{
 			title: 'Participants',
-			requirement: 'Req-A-1C'+'Req-A-2'+ 'Req-A-3',
+			requirement: 'Req-A-2A',
 			type: 'content',
 			prompt: 'Provide an overview of participation of county representatives, jurisdictions, state and federal partners, the public, neighboring communities, regional stakeholders and additional stakeholders throughout the planning process. This summary will be supported by the tables that follow, which will display all participants and all meetings.',
 			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise needed to develop the plan, with responsibility or authority to implement hazard mitigation activities, and who will be most affected by the plan’s outcomes.' +
@@ -146,7 +146,7 @@ const config =  {
 	'Local Resources' : [
 		{
 			title: 'Technical Data',
-			requirement: 'Req-A-4A' + 'Req-A-4B',
+			requirement: 'Req-A-4A',
 			type: 'content',
 			prompt: 'Provide an overview of the technical data sources solicited and used for the plan (e.g. LFAs, ACS, etc). These sources should be referenced more formally in corresponding tables and in a bibliography.',
 			intent: 'To demonstrate use of best available data for hazard analysis and risk assessment.',
@@ -155,7 +155,7 @@ const config =  {
 
 		{
 			title: 'Existing Resources',
-			requirement: 'revision-1',
+			requirement: 'Req-A-4B',
 			type: 'content',
 			prompt: 'Summarize how existing resources (plans, studies, reports, data) were collected, reviewed and integrated into this Hazard Mitigation Plan throughout the Planning Process.' +
 			 		'How does reviewing and integrating existing resources help set a foundation for your communitys risk assessment and strategy development later in the planning process?',
@@ -220,22 +220,11 @@ const config =  {
 			intent: '',
 			icon: 'os-icon-tasks-checked'
 		},
-		{
-			title: 'Resources Integration',
-			requirement: 'Req-A-4B',
-			type: 'content',
-			prompt: 'Describe the review and incorporation of existing plans, studies, reports, and technical information.',
-			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
-				' can help inform the mitigation plan. It also helps identify the existing capabilities and planning' +
-				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-rotate-cw'
-		},	
-
 	],
 	'Engagement' : [
 		{
 			title: 'Public Participation',
-			requirement: 'Req-A-3',
+			requirement: 'Req-A-3A',
 			type: 'content',
 			prompt: 'Document how the public was involved in the planning process during the drafting stage.',
 			intent: 'To ensure citizens understand what the community is doing on their behalf, and to provide a chance' +
@@ -383,7 +372,7 @@ const config =  {
 		},
 		{
 			title: 'Updating The Plan',
-			requirement: 'Req-A-6',
+			requirement: 'Req-A-6A',
 			type: 'content',
 			prompt: `Describe the method and schedule for keeping the plan current 
 			a. Monitoring/Evaluating/Updating: (Must include title of individual or name of dept or agency responsible for leading each of these efforts)
@@ -398,7 +387,7 @@ const config =  {
 	'Process Assessment' : [
 		{
 			title: 'Strengths',
-			requirement: '',
+			requirement: 'Req-R-1A',
 			type: 'content',
 			prompt: 'Describe planning process strengths: document successes the planning teams experienced in collecting information, soliciting and receiving input, gathering community resources, hazard risk and vulnerabilities assessment, mitigation strategies development, etc.', 
 			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
@@ -407,7 +396,7 @@ const config =  {
 		},
 		{
 			title: 'Opportunities',
-			requirement: 'revision-1',
+			requirement: 'Req-R-1B',
 			type: 'content',
 			prompt: 'Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',
 			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
