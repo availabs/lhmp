@@ -281,7 +281,7 @@ const config = {
             
         },
         {
-            title: 'Relocation Zone Table',
+            title: 'Relocation Zone Map',
             requirement: 'Req-NYS-F-3B-1',
             type: 'developementZonesFilteredMap',
             filterBy: {zone_type: ['Relocation Zone']},
