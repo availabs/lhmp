@@ -157,7 +157,7 @@ const config = {
         },
         {
             title: 'Previous Action Status',
-            requirement: '',
+            requirement: 'Req-D-1F',
             type: 'content',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan as well as mitigation efforts and accomplishments not documented in the last plan. For actions that have not been completed, the plan must either describe whether the action is no longer relevant or be included as part of the updated action plan.',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing actions and to to provide a context for the jurisdictions’ projects, act as a source of ideas for mitigation projects and evaluate the accuracy of assumptions and engineering solutions to inform future projects, and to support future mitigation planning and its coordination with other planning, zoning and environmental procedures within the jurisdiction.',
@@ -165,7 +165,7 @@ const config = {
         },
         {
             title: 'Previous Actions',
-            requirement: 'Req-D-2',
+            requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
             filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
             align: 'full',
@@ -225,7 +225,7 @@ const config = {
         'Dam Safety' : [  
         {
             title: '',
-            requirement: '',
+            requirement: 'Req-S-3A',
             type: '',
             prompt: '',
             intent: '',

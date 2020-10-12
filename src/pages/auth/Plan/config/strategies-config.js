@@ -70,7 +70,7 @@ const config = {
     Capabilities : [
         {
             title: 'Overview',
-            requirement: 'Req-C-1A',
+            requirement: 'Req-C-6',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
                 ' to expand on and improve these existing policies and programs ' +
@@ -83,7 +83,7 @@ const config = {
         },
         {
             title: 'Capabilities Table',
-            requirement: 'Req-C-1A-1',
+            requirement: 'Req-C-1A',
             type: 'formTable',
             activeGeoFilter: 'true',
             fontSize: '0.70em',
