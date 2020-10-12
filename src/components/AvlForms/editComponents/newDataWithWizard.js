@@ -764,7 +764,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             : null}
                     </h4>}
                 <Element>
-                    <Wizard steps={sections} submit={this.onSubmit}/>
+                    <Wizard steps={sections} submit={this.onSubmit} submitOnAll={this.props.config[0].submitOnAll === 'true'}/>
                 </Element>
             </div>
         )

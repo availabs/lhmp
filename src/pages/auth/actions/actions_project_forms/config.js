@@ -17,6 +17,7 @@ module.exports = [
         // if wizard
         title: 'action_name',
         guidance: '/guidance/guidance-actions/view', // guidance view page. if not given, uses default: /guidance/guidanceKey/view
+        submitOnAll: 'true', // show submit button on every step
         sections: [
             {title:'Step 1',sub_title:'General Action Information',id:'1'},
             {title:'Step 2',sub_title:'Prioritization',id:'2'},
