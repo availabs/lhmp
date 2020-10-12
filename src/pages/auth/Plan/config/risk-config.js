@@ -49,7 +49,7 @@ const config = {
         },   
         {
             title: '',
-            requirement: '',
+            requirement: 'Req-B-3B-4',
             type: 'sociallyVulnerableDemographicsMap',
             hideNav: true,
             prompt: '',
@@ -66,8 +66,8 @@ const config = {
             icon: 'os-icon-image'
         },   
         {
-            title: '',
-            requirement: 'Req-B-3B-1B' + 'Req-B-3B-2',
+            title: 'Built Environment Table',
+            requirement: 'Req-B-3B-2',
             type: 'inventoryTable',
             hideNav: true,
             //align: '',
@@ -140,7 +140,7 @@ const config = {
             icon: 'os-icon-globe'
         },
         {
-            title: 'Open Space ',
+            title: 'Open Space',
             requirement: 'Req-E-1A',
             type: 'openSpaceTable',
             prompt: '',
@@ -157,7 +157,7 @@ const config = {
         },
         {
             title: 'Previous Action Status',
-            requirement: '',
+            requirement: 'Req-D-1F',
             type: 'content',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan as well as mitigation efforts and accomplishments not documented in the last plan. For actions that have not been completed, the plan must either describe whether the action is no longer relevant or be included as part of the updated action plan.',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing actions and to to provide a context for the jurisdictions’ projects, act as a source of ideas for mitigation projects and evaluate the accuracy of assumptions and engineering solutions to inform future projects, and to support future mitigation planning and its coordination with other planning, zoning and environmental procedures within the jurisdiction.',
@@ -165,7 +165,7 @@ const config = {
         },
         {
             title: 'Previous Actions',
-            requirement: 'Req-D-2',
+            requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
             filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
             align: 'full',
@@ -221,37 +221,11 @@ const config = {
                 ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
             icon: 'os-icon-alert-circle'
         },
-    ], 
-    
-    'Changes in Development' : [
-        {
-            title: 'Development in the Floodplain',
-            requirement: 'Req-D-1A',
-            type: 'content',
-            prompt: 'The plan must describe changes in development that have occurred in hazard prone areas and increased' +
-                ' or decreased the vulnerability of each jurisdiction since the last plan was approved.  If no changes in' +
-                ' development impacted the jurisdiction’s overall vulnerability, plan updates may validate the information' +
-                ' in the previously approved plan. Was the plan revised to reflect changes in development?',
-            intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing' +
-                ' and potential development, and takes into consideration possible future conditions that can impact the' +
-                ' vulnerability of the community.',
-            icon: 'os-icon-repeat'
-        },
-       
-        {
-            title: 'Development Zones',
-            requirement: 'Req-D-1B',
-            type: 'developementZonesFilteredTable',
-            filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-grid-squares-2'
-        },
     ],
         'Dam Safety' : [  
         {
             title: '',
-            requirement: '',
+            requirement: 'Req-S-3A',
             type: '',
             prompt: '',
             intent: '',
