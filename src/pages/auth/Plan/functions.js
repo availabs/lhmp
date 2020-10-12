@@ -13,6 +13,7 @@ import {Pagers} from "@stickyroll/pagers";
 import CSS_CONFIG from 'pages/auth/css-config'
 import get from "lodash.get";
 import _ from 'lodash'
+import SearchableDropDown from "../../../components/filters/searchableDropDown";
 
 
 const DIV = styled.div`
@@ -28,9 +29,31 @@ class GD extends Component {
             setActiveCousubid = this.props.setActiveCousubid,
             activecousubId = this.props.activeCousubid,
             allowedGeos = Object.keys(get(this.props, `allGeo`, {}));
+
+        let list = geoInfo ? Object.keys(geoInfo)
+                    .filter(f => allowedGeos.includes(f))
+                    .map((county, county_i) =>
+                        ({
+                            'label': formatName(geoInfo[county].name || geoInfo[county], county),
+                            'value': county,
+                        })).sort((a,b) => a.label.localeCompare(b.label)) :
+            []
         return geoInfo ? (
-            <div>
-                <select
+            <div className={this.props.className || "ae-side-menu"}>
+                <SearchableDropDown
+                    style={this.props.pureElement ? null : {height: '5vh', width:'250px'}}
+                    className={this.props.className || "ae-side-menu"}
+                    id={this.props.id || 'contact_county'}
+
+                    data={list}
+                    placeholder={'Select a Municipality'}
+                    value={list.filter(f => f.value === (this.props.value || activecousubId))[0]}
+                    hideValue={false}
+                    onChange={(e) => {
+                        this.props.onChange ? this.props.onChange({target:{value: e, id: this.props.id || 'contact_county'}}) : setActiveCousubid(e)
+                    }}
+                />
+                {/*<select
                     style={this.props.pureElement ? null : {height: '5vh', width:'250px'}}
                     className={this.props.className || "ae-side-menu"}
                     id={this.props.id || 'contact_county'}
@@ -47,7 +70,7 @@ class GD extends Component {
                                     value={county}> {formatName(geoInfo[county].name || geoInfo[county], county)}
                             </option>
                         )}
-                </select>
+                </select>*/}
             </div>
         ) : <div></div>
     }

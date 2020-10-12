@@ -77,7 +77,7 @@ class Menu extends Component {
 
         const DROPDOWN = defaultOptions.scheme === 'color-scheme-dark' ? styled.div`
                         div > * {${props => props.theme.scrollBar};}
-                        div > select {
+                        * {
                         color: #fff;
                         border: none;
                         font-size: 0.81rem;
@@ -87,8 +87,9 @@ class Menu extends Component {
                         letter-spacing: 2px;
                         padding: 0px;
                         }
+                        [class*="Menu"] {background-color: #293145;}
                     ` : styled.div`
-                    div > select {
+                    * {
                     ${props => props.theme.scrollBar};
                     color: #3E4B5B;
                     border: none;
@@ -125,7 +126,7 @@ class Menu extends Component {
                     <MainMenu {...this.props} />
                     {!this.props.auth ?
                         <DROPDOWN>
-                            {<GeoDropdown />}
+                            {<GeoDropdown className={'manu-w color-scheme-dark'}/>}
                         </DROPDOWN>
                         : ''}
                 </div>
