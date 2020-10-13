@@ -67,7 +67,7 @@ class searchableDropDown extends Component {
                     onChange={this.onSelectChange}
                     options={this.props.data}
                     placeholder="Search..."
-                    styles={selectStyles}
+                    styles={{...selectStyles, ...this.props.style}}
                     tabSelectsValue={false}
                     value={value}
                     hideValue={this.props.hideValue}
