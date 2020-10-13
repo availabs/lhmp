@@ -535,7 +535,8 @@ class AvlFormsNewData extends React.Component{
                         defaultValue: item.attributes[attribute].defaultValue,
                         addText: item.attributes[attribute].add_text,
                         formType: item.attributes[attribute].form_type,
-                        columnMap: item.attributes[attribute].column_map
+                        columnMap: item.attributes[attribute].column_map,
+                        autoLoad: true
                     })
                 }
                 else if(item.attributes[attribute].edit_type === 'dropdown_no_meta' && item.attributes[attribute].disable_condition){
@@ -732,7 +733,7 @@ class AvlFormsNewData extends React.Component{
                                 return(<GraphFactory
                                     graph={{type: d.type }}
                                     {...d}
-                                    isVisible = {true}
+                                    autoLoad = {this.props.autoLoad}
                                 />)
                             }) :
                                  null

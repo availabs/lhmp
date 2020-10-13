@@ -579,7 +579,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             defaultValue: item.attributes[attribute].defaultValue,
                             addText: item.attributes[attribute].add_text,
                             formType: item.attributes[attribute].form_type,
-                            columnMap: item.attributes[attribute].column_map
+                            columnMap: item.attributes[attribute].column_map,
+                            autoLoad: true
                         })
                     }
                     else if(item.attributes[attribute].edit_type === 'imageEditor'){
@@ -666,7 +667,7 @@ class AvlFormsNewDataWizard extends React.Component{
                         (<GraphFactory
                             graph={{type: item.type }}
                             {...item}
-                            isVisible = {true}
+                            autoLoad = {this.props.autoLoad}
                         />)
                     )
                 }
