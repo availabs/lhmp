@@ -35,7 +35,6 @@ class ActionsWorksheetFormsNew extends React.Component{
                 json = {config}
                 meta = {ProjectMeta}
                 id = {[this.props.match.params.id]}
-                submitOnAll={true}
                 />
             </Element>
         )
