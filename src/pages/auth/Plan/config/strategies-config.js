@@ -70,7 +70,7 @@ const config = {
     Capabilities : [
         {
             title: 'Overview',
-            requirement: 'Req-C-6',
+            requirement: 'Req-C-6A',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
                 ' to expand on and improve these existing policies and programs ' +
@@ -181,6 +181,19 @@ const config = {
     
         Implementation: [
         {
+            title: 'Statement',
+            requirement: 'Req-NYS-F-7B',
+            type: 'content',
+            prompt: 'Describe how the risk and vulnerabilities assessment, as well as the communities priorities, guided the mitigation strategy development, including' +
+                    '1) actions and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk assessment, and' +
+                    '2) actions and/or projects that the jurisdiction intends to implement.',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +
+                    'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
+                    'Projects that are well developed and documented in one place are more quickly identifiable for selection when grants become available, making implementation that much more likely.',
+            icon: 'os-icon-globe',
+            hideNav: true,
+        },
+        {
             title: 'Actions',
             requirement: 'Req-NYS-F-7',
             type: 'content',
@@ -241,13 +254,23 @@ const config = {
             icon:'os-icon-cloud-drizzle',
         },
         {
-            title:'Resources',
+            title:'Implementation Resources',
             requirement:'Req-NYS-F-8',
-            type:'',
+            type:'content',
             prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
             intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
                     'The plan must include a list of potential local, State and Federal funding sources.',
             icon:'os-icon-folder',        
+        },
+        {
+            title:'',
+            requirement:'Req-NYS-F-8B',
+            type:'',
+            prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
+            intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
+                    'The plan must include a list of potential local, State and Federal funding sources.',
+            icon:'os-icon-folder',
+            hideNav: true        
         },
     ],
      

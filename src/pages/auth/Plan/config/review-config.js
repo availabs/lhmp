@@ -34,11 +34,11 @@ let config = {
                 'e. Plan updates must include documentation of the current planning\n' +
                 'process undertaken to update the plan.',
             municipal: 'true',
-            county: 'true'
+            county: 'true',
         },
         {
             element: 'A2',
-            requirements_from_software: `Req-A-2`,
+            requirements_from_software: `Req-A-2, Req-A-2A`,
             objective: 'Does the Plan document an opportunity for neighboring communities, local and regional agencies ' +
                 'involved in hazard mitigation activities, agencies that have the authority to regulate development as ' +
                 'well as other interests to be involved in the planning process? 44 CFR 201.6(b)(2)',
@@ -82,7 +82,7 @@ let config = {
         },
         {
             element: 'A3',
-            requirements_from_software: `Req-A-3`,
+            requirements_from_software: `Req-A-3A`,
             objective: 'Does the Plan document how the public was involved in the planning process during the drafting ' +
                 'stage? 44 CFR 201.6(b)(1) and 201.6(c)(1)',
             intent: 'To ensure citizens understand what the community is doing on their behalf, and to provide a chance ' +
@@ -103,7 +103,7 @@ let config = {
         },
         {
             element: 'A4',
-            requirements_from_software: `Req-A-4A, Req-A-4B`,
+            requirements_from_software: `Req-A-4A, Req-A-4B, Req-A-4C`,
             objective: 'Does the Plan document the review and incorporation of existing plans, studies, reports, and ' +
                 'technical information? 44 CFR 201.6(b)(3)',
             intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that ' +
@@ -121,7 +121,7 @@ let config = {
         },
         {
             element: 'A5',
-            requirements_from_software: `Req-A-5A`,
+            requirements_from_software: `Req-A-5`,
             objective: 'Is there discussion on how the community(ies) will continue public participation in the plan ' +
                 'maintenance process? 44 CFR 201.6(c)(4)(iii)',
             intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s ' +
@@ -139,7 +139,7 @@ let config = {
         },
         {
             element: 'A6',
-            requirements_from_software: `Req-A-6`,
+            requirements_from_software: `Req-A-6, Req-A-6A`,
             objective: 'Is there a description of the method and schedule for keeping the plan current (monitoring, ' +
                 'evaluating and updating the mitigation plan within a 5‐year cycle)? 44 CFR 201.6(c)(4)(i)',
             intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation. This ' +
@@ -161,7 +161,7 @@ let config = {
         },
         {
             element: 'B1',
-            requirements_from_software: `Req-B-3B-1B`,
+            requirements_from_software: `Req-A-3A, Req-B-3B-1B, req-B1-hazard-overview, req-B1-other-hazards`,
             objective: 'Does the Plan include a description of the type, location, and extent of all natural hazards ' +
                 'that can affect each jurisdiction? 44 CFR 201.6(c)(2)(i) and 44 CFR 201.6(c)(2)(iii)',
             intent: 'To understand the potential and chronic hazards affecting the planning area in order to identify ' +
@@ -263,7 +263,7 @@ let config = {
         },
         {
             element: 'B4',
-            requirements_from_software: `Req-B-4, Req-B-4A`,
+            requirements_from_software: `Req-B-4, Req-B-4A, Req-B-4B`,
             objective: 'Does the Plan address NFIP insured structures within each jurisdiction that have been repetitively ' +
                 'damaged by floods? 44 CFR 201.6(c)(2)(ii)',
             intent: 'To inform hazard mitigation actions for properties that have suffered repetitive damage due to ' +
@@ -295,7 +295,7 @@ let config = {
         },
         {
             element: 'C1',
-            requirements_from_software: `Req-C-1A, Req-C-1A-1, Req-C-1B`,
+            requirements_from_software: `Req-C-6, Req-C-1A`,
             objective: 'Does the plan document each jurisdiction’s existing authorities, policies, programs and resources, ' +
                 'and its ability to expand on and improve these existing policies and programs? 44 CFR 201.6(c)(3)',
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, ' +
@@ -314,7 +314,7 @@ let config = {
         },
         {
             element: 'C2',
-            requirements_from_software: `Req-C-2`,
+            requirements_from_software: `Req-C-2A`,
             objective: 'Does the Plan address each jurisdiction’s participation in the NFIP and continued compliance with ' +
                 'NFIP requirements, as appropriate? 44 CFR 201.6(c)(3)(ii)',
             intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA ' +
@@ -341,7 +341,7 @@ let config = {
         },
         {
             element: 'C3',
-            requirements_from_software: `Req-C-3-A`,
+            requirements_from_software: `Req-C-3-A, Req-D-3`,
             objective: 'Does the Plan include goals to reduce/avoid long‐term vulnerabilities to the identified hazards? 44 CFR 201.6(c)(3)(i)',
             intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies). ' +
                 'Goals are statements of the community’s visions for the future.',
@@ -426,7 +426,7 @@ let config = {
         },
         {
             element: 'C6',
-            requirements_from_software: `Req-C-6`,
+            requirements_from_software: `Req-C-6, Req-C-6A`,
             objective: 'Does the Plan describe a process by which local governments will integrate the requirements of ' +
                 'the mitigation plan into other planning mechanisms, such as comprehensive or capital improvement plans, ' +
                 'when appropriate? 44 CFR 201.6(c)(4)(ii)',
@@ -482,7 +482,7 @@ let config = {
         },
         {
             element: 'D2',
-            requirements_from_software: `Req-D-2`,
+            requirements_from_software: `Req-D-1F, Req-D-1G`,
             objective: 'Was the plan revised to reflect progress in local mitigation efforts? 44 CFR 201.6(d)(3)',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing ' +
                 'actions outlined in their mitigation strategy.',
@@ -539,7 +539,7 @@ let config = {
         },
         {
             element: 'E2',
-            requirements_from_software: ``,
+            requirements_from_software: `Req-E-2`,
             objective: 'For multi‐jurisdictional plans, has each jurisdiction requesting approval of the plan documented ' +
                 'formal plan adoption? 44 CFR 201.6(c)(5)',
             intent: 'To demonstrate the jurisdiction’s commitment to fulfilling the hazard mitigation goals outlined in the plan, ' +
@@ -558,7 +558,7 @@ let config = {
         },
         {
             element: 'F1',
-            requirements_from_software: `Req-NYS-F-1`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-1C, Req-A-3A`,
             objective: 'Does the plan document how stakeholders were invited to participate at each phase of the planning ' +
                 'process and provide a summary of feedback?',
             intent: 'Plans developed with the participation of the widest range of organizations and stakeholders personally ' +
@@ -570,7 +570,7 @@ let config = {
         },
         {
             element: 'F2',
-            requirements_from_software: `Req-NYS-F-2`,
+            requirements_from_software: `Req-B-3B-2, Req-NYS-F-2, Req-NYS-F-3`,
             objective: 'Do jurisdictions identify critical facilities, assess vulnerabilities and ensure protection to ' +
                 'a 500-year flood event or worst case scenario?',
             intent: 'Critical facilities must remain accessible and functional before, during and after disasters to meet ' +
@@ -608,7 +608,7 @@ let config = {
         },
         {
             element: 'F5',
-            requirements_from_software: `Req-NYS-F-5`,
+            requirements_from_software: `Req-D-1F`,
             objective: 'Do jurisdictions identify mitigation projects completed since the approval of the previous ' +
                 'mitigation plan (or within the last five years)?',
             intent: 'Past mitigation actions provide a context for the jurisdiction’s projects, and can help to evaluate ' +
@@ -628,7 +628,7 @@ let config = {
         },
         {
             element: 'F7',
-            requirements_from_software: `Req-NYS-F-7A, Req-NYS-F-7B`,
+            requirements_from_software: `Req-NYS-F-7A, Req-NYS-F-7B, Req-C-4`,
             objective: 'Within each jurisdictional annex, are:\n' +
                 'a. projects developed in accordance with the NYS DHSES Proposed Projects Table; and\n' +
                 'b. two (2) NYS DHSES Action Worksheets provided?',

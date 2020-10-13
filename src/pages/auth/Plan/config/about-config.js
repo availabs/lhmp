@@ -166,7 +166,7 @@ const config =  {
 		},
 		{
 			title: '',
-			requirement: 'Req-A-4A',
+			requirement: 'Req-A-4C',
 			//type: 'planningDocuments',
 
 			//align: 'full',
@@ -222,6 +222,14 @@ const config =  {
 		},
 	],
 	'Engagement' : [
+		{
+			title: 'Jurisdictional Participation',
+			requirement: 'Req-A-1E',
+			type: 'content',
+			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
+			intent: '',
+				icon: 'os-icon-users'
+		},
 		{
 			title: 'Public Participation',
 			requirement: 'Req-A-3A',
