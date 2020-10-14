@@ -26,7 +26,7 @@ const config = {
     'Vulnerability' : [
         {
             title: 'Local Orientation',
-            requirement: 'Req-B-3B-2',
+            requirement: 'Req-B-3B',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
             intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified' +
