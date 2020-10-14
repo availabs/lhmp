@@ -193,7 +193,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
                     }else{
-                        a[c] = this.state[c]
+                        a[c] = this.state[c].replaceAll('\'', '\'\'')
                     }
                 }
                 return a;
@@ -239,7 +239,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 if(typeof this.state[item] === "object"){
                     attributes[item] = "[" + this.state[item].toString() +"]"
                 }else{
-                    attributes[item] = this.state[item]
+                    attributes[item] = this.state[item]//.replaceAll('\'', '\'\'')
                 }
             });
 
@@ -381,7 +381,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 .filter(f => f.form_type.split(`${form_type}-`).length > 1)
                 .forEach(f => {
                     f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
-                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .filter(field => get(this.props.config[0], `attributes.${field}.metaSource`, '') === 'meta_file')
                         .forEach(field => {
                             if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
                                 fieldSpecificMeta[field].push(f)
