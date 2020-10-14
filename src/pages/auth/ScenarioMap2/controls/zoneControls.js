@@ -97,7 +97,9 @@ class ZoneControl extends React.Component{
 
     zoneDropDown(){
         if(this.props.zonesList){
-            let current_jurisdiction = Object.values(get(this.state, ['jurisdiction_data'], {})).filter(f => f.id && f.id === this.state.jurisdiction).pop()
+            let current_jurisdiction = Object.values(get(this.state, ['jurisdiction_data'], {}))
+                .filter(f => f)
+                .filter(f => f & f.id && f.id === this.state.jurisdiction).pop()
             current_jurisdiction = get(current_jurisdiction, ['attributes', 'geojson'], null);
             let zones_list  = []
             let graph = this.state.zones_data
