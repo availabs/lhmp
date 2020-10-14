@@ -1,22 +1,9 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','title','sub_type'],
+        list_attributes : ['id','title','start_date','sub_type'],
         sections:[],
         attributes:{
-            meetings:{
-                sub_type:'meeting',
-                label:'Attendees',
-                prompt:'',
-                edit_type:'AvlFormsJoin',
-                display_type:'AvlFormsJoin',
-                parentConfig:'participation',
-                targetConfig:'roles',
-                hidden:'false',
-                meta:'false',
-                //hidden:'true', // if you don`t want to show it in view data
-                section:''
-            },
             title:{
                 sub_type:'meeting',
                 label:'Title',

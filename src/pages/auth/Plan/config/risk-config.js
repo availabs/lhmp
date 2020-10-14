@@ -26,7 +26,7 @@ const config = {
     'Vulnerability' : [
         {
             title: 'Local Orientation',
-            requirement: 'Req-B-3B-2',
+            requirement: 'Req-B-3B',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
             intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified' +
@@ -138,11 +138,11 @@ const config = {
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
             icon: 'os-icon-globe'
-        },
+        }, 
         {
             title: 'Open Space',
             requirement: 'Req-E-1A',
-            type: 'openSpaceTable',
+            type: 'content',
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
@@ -150,7 +150,7 @@ const config = {
         {
             title: 'Open Space Statistics',
             requirement: 'Req-E-1B',
-            type: 'map?',
+            type: 'openSpaceTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
