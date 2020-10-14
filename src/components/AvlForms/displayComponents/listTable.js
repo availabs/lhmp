@@ -158,7 +158,18 @@ class AvlFormsListTable extends React.Component {
                                         data[attribute] =get(graph, `${item}.value.attributes[${attribute}]`,  this.props.config[0].attributes[attribute].defaultValue);
                                     }
                                 }
-
+                                if(this.props.config[0].attributes[attribute].meta_filter && this.props.config[0].attributes[attribute].meta_filter.groupName){
+                                    let currVal = get(graph, `${item}.value.attributes[${attribute}]`, null);
+                                    currVal = currVal && currVal.includes('[') ? currVal.slice(1,-1).split(',') : currVal
+                                    data[attribute] = Object.keys(this.props.config[0].attributes[attribute].meta_filter.groupName)
+                                        .reduce((a,c) => {
+                                            let group = this.props.config[0].attributes[attribute].meta_filter.groupName[c]
+                                            if (currVal && group.length === currVal.length && _.isEqual(currVal, group)){
+                                                a = c
+                                            }
+                                            return a
+                                        }, currVal ? currVal.join(',') : currVal)
+                                }
                                 if(graph[item].value.attributes['action_status_update']){
                                     let latestStatus = graph[item].value.attributes['action_status_update'].slice(1,-1).split(',').slice(-1).pop()
                                     data['update status'] = `/action_status_update/edit/${latestStatus}`;

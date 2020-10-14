@@ -43,6 +43,7 @@ const Styles = styled.div`
       overflow-y: auto;
       overflow-x: hidden;
       height: ${props => props.height ? props.height : 'auto'};
+      width: ${props => props.width ? props.width : 'auto'};
     }
 
     .tr {
@@ -419,7 +420,7 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                 ))}
             </div>
             <div {...getTableBodyProps()} className="tbody"
-                 style={{height: height ? height : 'auto'}}
+                 style={{height: height ? height : 'auto', width: width ? width : 'auto'}}
 
             >
                 {rows.map((row, i) => {

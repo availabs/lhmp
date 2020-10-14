@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import capability_config from "pages/Public/Home/components/Strategy/Capabilities/tempConfig.js"
 import get from "lodash.get";
-import Table from 'components/light-admin/tables/Table'
+import Table from 'components/light-admin/tables/tableSelector.js'
 import {HeaderContainer, PageContainer, PageHeader, VerticalAlign} from 'pages/Public/theme/components'
 import functions from "../../../../../auth/Plan/functions";
 var _ = require('lodash')
@@ -180,7 +180,7 @@ class CapabilityStrategy extends React.Component {
                         ).toFixed(0) + '%' : 0 + '%';
                     return a
                 }, {}),
-                'Population': get(this.props.acsData, [geo, 2016, 'B01003_001E'], '').toLocaleString()
+                'Population': get(this.props.acsData, [geo, 2016, 'B01003_001E'], '')
             })
         });
         return {
@@ -196,7 +196,8 @@ class CapabilityStrategy extends React.Component {
                     Header: 'Population',
                     accessor: 'Population',
                     align: 'center',
-                    width: 200
+                    width: 200,
+                    formatValue: d => d.toLocaleString()
                 },
                 {
                     Header: 'Education and outreach',
@@ -232,19 +233,20 @@ class CapabilityStrategy extends React.Component {
 
         return (
             <PageContainer style={{Height: '80vh'}}>
-                {this.props.showHeader ?
-                    <HeaderContainer>
-                        <PageHeader>Capabilities</PageHeader>
-                    </HeaderContainer> : null}
-                <VerticalAlign>
-                    <div className='d-flex justify-content-center' style={{fontSize: '1.5em'}}>
-                        {this.processData() ?
-                            (<Table {...this.processData()} />)
-                            : (<h4>Loading Capability Data ...</h4>)
-                        }
-
+                <HeaderContainer>
+                    <div className='row'>
+                        <div className='col-12'>
+                            {this.props.showHeader ?
+                                <HeaderContainer>
+                                    <PageHeader>Capabilities</PageHeader>
+                                </HeaderContainer> : null}
+                            {this.processData() ?
+                                (<Table {...this.processData()} flex={true} width={'80vw'}/>)
+                                : (<h4>Loading Capability Data ...</h4>)
+                            }
+                        </div>
                     </div>
-                </VerticalAlign>
+                </HeaderContainer>
             </PageContainer>
 
         )

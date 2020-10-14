@@ -62,6 +62,7 @@ class FormArrayComponent extends React.PureComponent {
         }, {})
         let Component =
             get(listNewComp, `${this.props.formType}[0].sections`, []).length ? AvlFormsNewDataWizard : AvlFormsNewData
+
         return (
             <div>
                 {this.state.renderNewComp ? this.cancelButton() : this.addButton()}
@@ -71,6 +72,7 @@ class FormArrayComponent extends React.PureComponent {
                         id={[]}
                         returnValue={this.addResult}
                         state={colummMapping}
+                        autoLoad={true}
                     />
                 </div>
                 <div>
