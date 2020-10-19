@@ -77,7 +77,7 @@ class Hazards extends React.Component {
             <div>
                 <div className='row'>
                     <div>
-                        <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Characteristics</h5>
+                        <h4>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Characteristics</h4>
                         <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
                         />
                     </div>
@@ -144,7 +144,7 @@ class Hazards extends React.Component {
                 </div>
                  <div className='row'>
                     <div className='col-md-12'>
-                        <h5>Events with Highest Reported Loss in Dollars</h5>
+                        <h4>Events with Highest Reported Loss in Dollars</h4>
                         <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                         <div>The table below lists individual events by loss in dollars.
                             Click on a row to view the event description.
@@ -161,7 +161,7 @@ class Hazards extends React.Component {
                 </div>
                 <div className='row'>
                     <div className='col-md-12'>
-                        <h5>Hazard Loss by Municipality</h5>
+                        <h4>Hazard Loss by Municipality</h4>
                         <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                         <h6>{HazardName} Loss by Month</h6>
                         <CousubTotalLossTable
@@ -176,7 +176,7 @@ class Hazards extends React.Component {
 
                 <div className='row'>
                     <div className='col-md-12'>
-                        <h5>Hazard Events</h5>
+                        <h4>Hazard Events</h4>
                         <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                         <h6>{HazardName} Events</h6>
 
