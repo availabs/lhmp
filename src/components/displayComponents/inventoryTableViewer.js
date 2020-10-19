@@ -50,6 +50,7 @@ class inventoryTableViewer extends Component {
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
                         public={this.props.public === true ? true : false}
+                        hideFloodValue={false}
                     />
                 </div>
                 <div>
@@ -62,6 +63,7 @@ class inventoryTableViewer extends Component {
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
                         public={this.props.public === true ? true : false}
+                        hideFloodValue={false}
                     />
                 </div>
             </div>
