@@ -236,7 +236,7 @@ let config = {
         },
         {
             element: 'B3',
-            requirements_from_software: ``,
+            requirements_from_software: `Req-B-3B, Req-B-3B-1, Req-B-3B-2, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3B-6`,
             objective: 'Is there a description of each identified hazard’s impact on the community as well as an overall ' +
                 'summary of the community’s vulnerability for each jurisdiction? 44 CFR 201.6(c)(2)(ii)',
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of ' +
