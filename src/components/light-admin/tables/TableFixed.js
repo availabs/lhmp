@@ -14,6 +14,8 @@ ${props => props.theme.panelDropdownScrollBar};
 .expandable {
         cursor: pointer;
     }
+.displayNone { display: none; }
+.displayTableRow { display: table-row;}
 `;
 const _MultiSelectFilter = styled.div`
     * {
@@ -266,9 +268,17 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                 className={row.cells
                                     .filter(cell => cell.column.expandable === 'true').length ? "expandable" : ""}
                                 onClick={(e) => {
-                                    if (document.getElementById(`expandable${i}`)){
-                                        document.getElementById(`expandable${i}`).style.display =
-                                            document.getElementById(`expandable${i}`).style.display === 'none' ? 'table-row' : 'none'
+                                    let siblings = e.target.parentNode.parentNode.children;
+                                    for(let s = i; s < siblings.length - 1; s++){
+                                        if (siblings[s] && siblings[s].id === `expandable${i}`){
+                                            if (siblings[s].classList.contains('displayNone')){
+                                                siblings[s].classList.remove('displayNone');
+                                                siblings[s].classList.add('displayTableRow');
+                                            }else{
+                                                siblings[s].classList.add('displayNone');
+                                                siblings[s].classList.remove('displayTableRow');
+                                            }
+                                        }
                                     }
                                 }}
                             >
@@ -307,24 +317,29 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                                         )
                                     : null}
                             </tr>
-                                <tr
-                                    id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
-                                    display: 'none'}}>
-                                    {row.cells
-                                        .filter(cell => cell.column.expandable === 'true')
-                                        .map(cell => {
-                                            return (
+                                {row.cells
+                                    .filter(cell => cell.column.expandable === 'true')
+                                    .map(cell => {
+                                        return (
+                                            <tr
+                                                className='displayNone'
+                                                id={`expandable${i}`} style={{backgroundColor: 'rgba(0,0,0,0.06)',
+                                                /*display: 'none'*/}}>
                                                 <td {...cell.getCellProps()}
                                                     colSpan={
                                                         row.cells.filter(cell => cell.column.expandable !== 'true').length +
                                                         (actions ? Object.keys(actions).length : 0)
                                                     } style={COL_SIZE_STYLE}>
+                                                    {cell.column.expandableHeader ?
+                                                        <div style={{paddingTop: '5px',paddingBottom: '5px'}}>{cell.column.Header}</div> :
+                                                        null}
                                                     {renderCell(cell)}
                                                 </td>
-                                            )
-                                        })
-                                    }
-                                </tr>
+                                            </tr>
+                                        )
+                                    })
+                                }
+
                             </React.Fragment>
                         )
                     }

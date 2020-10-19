@@ -638,13 +638,13 @@ class AssetsEdit extends React.Component {
                                     </label>
                                 </div>
                             </div>
-                            <div className="col-sm-12">
+                            {/*<div className="col-sm-12">
                                 <div className="form-group"><label htmlFor>Pet Accommodations</label>
                                     <input id='pet_accomodations' onChange={this.handleChange} className="form-control"
                                            placeholder="Pet Accommodations" type="text"
                                            value={this.state.pet_accomodations}
                                     /></div>
-                            </div>
+                            </div>*/}
                             <div className="col-sm-12">
                                 <div className="form-group form-inline"
                                      style={{gridArea: 'main', width: 'fit-content', float: 'left'}}>
@@ -694,7 +694,7 @@ class AssetsEdit extends React.Component {
                                     </label>
                                 </div>
                             </div>
-                            <div className="col-sm-12">
+                            {/*<div className="col-sm-12">
                                 <div className="form-group"><label htmlFor>Latitude</label>
                                     <input id='lat' onChange={this.handleChange} className="form-control"
                                            placeholder="Latitude" type="number" value={this.state.lat}
@@ -711,7 +711,7 @@ class AssetsEdit extends React.Component {
                                     <input id='shelter_code' onChange={this.handleChange} className="form-control"
                                            placeholder="Shelter Code" type="text" value={this.state.shelter_code}
                                     /></div>
-                            </div>
+                            </div>*/}
                         </React.Fragment> : null}
                 </div>)
             },

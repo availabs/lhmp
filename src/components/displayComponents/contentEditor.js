@@ -16,6 +16,11 @@ const DIV = styled.div`
     * {
         ${props => props.theme.scrollBar}
     }
+    .public-DraftStyleDefault-orderedListItem:before{content:counter(ol0) ". ";counter-increment:ol0}
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth1:before{content:counter(ol1,lower-alpha) ". ";counter-increment:ol1}
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth2:before{content:counter(ol2,lower-roman) ". ";counter-increment:ol2}
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth3:before{content:counter(ol3) ". ";counter-increment:ol3}
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth4:before{content:counter(ol4,lower-alpha) ". ";counter-increment:ol4}
 `
 class ContentEditor extends Component {
     constructor(props) {
@@ -145,7 +150,7 @@ class ContentEditor extends Component {
                                     value={this.state.status}
                                     onChange={(e)=> this.setState({status: e.target.value})}
                                 >
-                                    <option key={0} value={''}></option>
+                                    <option key={0} value={''}> </option>
                                     <option key={1} value={'Started'}>Started</option>
                                     <option key={2} value={'Ready for review'}>Ready for review</option>
                                 </select>

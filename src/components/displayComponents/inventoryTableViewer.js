@@ -36,8 +36,8 @@ class inventoryTableViewer extends Component {
     }
 
     render() {
-        console.log('passing', this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid,
-            this.state.geoid, this.props.activeCousubid, this.props.activeGeoid);
+        // console.log('passing', this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid,
+        //     this.state.geoid, this.props.activeCousubid, this.props.activeGeoid);
         return (
             <div >
                 <div>

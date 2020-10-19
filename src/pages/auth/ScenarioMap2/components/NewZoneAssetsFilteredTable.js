@@ -395,7 +395,7 @@ class NewZoneAssetsFilteredTable extends Component {
                 BuildingByLandUseConfig : get(this.props.parcelMeta, 'critical_infra.value', []))
         return (
             <div style={{width: this.props.width ? this.props.width : '', height: this.props.height ? this.props.height : ''}}>
-                *<TableSelector
+                <TableSelector
                     {...this.buildingTable(
                         this.props.groupBy === 'ownerType' ?
                             BuildingByOwnerTypeConfig :

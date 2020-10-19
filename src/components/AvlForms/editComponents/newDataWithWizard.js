@@ -89,6 +89,14 @@ class AvlFormsNewDataWizard extends React.Component{
                     let tmp_state = {}
                     if(graph){
                         attributes[0].forEach(attribute =>{
+                            if (
+                                graph.attributes[attribute] &&
+                                typeof graph.attributes[attribute] === 'object' &&
+                                Object.keys(graph.attributes[attribute]).length === 1 &&
+                                Object.keys(graph.attributes[attribute])[0] === '$type'
+                            ){
+                                graph.attributes[attribute] = null
+                            }
                             if(attribute.includes('date') && !attribute.includes('update')){
                                 let d = graph.attributes[attribute] ? graph.attributes[attribute].toString().split('-') : ''
                                 if(d[0] && d[1] && d[2]){
@@ -99,7 +107,7 @@ class AvlFormsNewDataWizard extends React.Component{
                                     tmp_state[attribute] = undefined
                                 }
                             }else{
-                                if(graph.attributes[attribute] && graph.attributes[attribute].includes("[")){
+                                if(graph.attributes[attribute] && typeof graph.attributes[attribute] === 'string' && graph.attributes[attribute].includes("[")){
                                     tmp_state[attribute] = graph.attributes[attribute].slice(1,-1).split(",")
                                 }else{
                                     tmp_state[attribute] = graph.attributes[attribute]
@@ -185,7 +193,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
                     }else{
-                        a[c] = this.state[c]
+                        a[c] = this.state[c].replaceAll('\'', '\'\'')
                     }
                 }
                 return a;
@@ -231,7 +239,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 if(typeof this.state[item] === "object"){
                     attributes[item] = "[" + this.state[item].toString() +"]"
                 }else{
-                    attributes[item] = this.state[item]
+                    attributes[item] = this.state[item]//.replaceAll('\'', '\'\'')
                 }
             });
 
@@ -373,7 +381,7 @@ class AvlFormsNewDataWizard extends React.Component{
                 .filter(f => f.form_type.split(`${form_type}-`).length > 1)
                 .forEach(f => {
                     f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
-                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .filter(field => get(this.props.config[0], `attributes.${field}.metaSource`, '') === 'meta_file')
                         .forEach(field => {
                             if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
                                 fieldSpecificMeta[field].push(f)
@@ -571,7 +579,8 @@ class AvlFormsNewDataWizard extends React.Component{
                             defaultValue: item.attributes[attribute].defaultValue,
                             addText: item.attributes[attribute].add_text,
                             formType: item.attributes[attribute].form_type,
-                            columnMap: item.attributes[attribute].column_map
+                            columnMap: item.attributes[attribute].column_map,
+                            autoLoad: true
                         })
                     }
                     else if(item.attributes[attribute].edit_type === 'imageEditor'){
@@ -658,7 +667,7 @@ class AvlFormsNewDataWizard extends React.Component{
                         (<GraphFactory
                             graph={{type: item.type }}
                             {...item}
-                            isVisible = {true}
+                            autoLoad = {this.props.autoLoad}
                         />)
                     )
                 }
@@ -756,7 +765,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             : null}
                     </h4>}
                 <Element>
-                    <Wizard steps={sections} submit={this.onSubmit}/>
+                    <Wizard steps={sections} submit={this.onSubmit} submitOnAll={this.props.config[0].submitOnAll === 'true'}/>
                 </Element>
             </div>
         )

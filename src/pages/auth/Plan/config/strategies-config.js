@@ -26,7 +26,18 @@ const config = {
 
     Objectives: [
         {
-            title: 'Goals',
+            title: 'Local Orientation',
+            requirement: 'R-S-4A',
+            type: 'content',
+            prompt: 'Provide an overview of the Strategy Development Process.  Briefly describe the process by which your community used existing resources and risk assessments to identify problem statements.' +
+                    'Then, describe how your community developed strategies to solve for those problems and how they were documented. Who was involved? Did you conduct site visits? Did you attend a Mitigation Strategy Workshop? Etc.',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +  
+                    'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
+                    'Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction that are based on the community’s risk and  vulnerabilities, as well as community priorities.',
+            icon: 'os-icon-globe'
+         },
+         {   
+            title: 'Goals & Objectives',
             requirement: 'Req-C-3-A',
             type: 'content',
             prompt: 'Include goals to reduce/avoid long-term vulnerabilities to the identified hazards. These goals are' +
@@ -59,7 +70,7 @@ const config = {
     Capabilities : [
         {
             title: 'Overview',
-            requirement: 'Req-C-1A',
+            requirement: 'Req-C-6A',
             type: 'content',
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
                 ' to expand on and improve these existing policies and programs ' +
@@ -72,7 +83,7 @@ const config = {
         },
         {
             title: 'Capabilities Table',
-            requirement: 'Req-C-1A-1',
+            requirement: 'Req-C-1A',
             type: 'formTable',
             activeGeoFilter: 'true',
             fontSize: '0.70em',
@@ -138,8 +149,8 @@ const config = {
             icon: 'os-icon-tasks-checked'
         },
         {
-            title: 'Capability Assessment and Resource Integration',
-            requirement: 'Req-A-4F',
+            title: 'Integration',
+            requirement: 'Req-C-6',
             type: 'content',
             prompt: 'Review Existing Resources from Jurisdictions & outside stakeholders.' +
                     'Identify opportunities for integration of existing resources into HMP and mitigation strategies.' + 
@@ -150,8 +161,8 @@ const config = {
         },
 
         {
-            title: 'Evaluation',
-            requirement: 'Req-C-1B',
+            title: 'Capacity To Address Risk',
+            requirement: 'Req-C-1B-1',
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
@@ -167,72 +178,33 @@ const config = {
             icon: 'os-icon-home'
         },
     ],
-     'Response' : [
+    
+        Implementation: [
         {
-            title: 'Temporary Housing',
-            requirement: 'Req-NYS-F-3A',
+            title: 'Statement',
+            requirement: 'Req-NYS-F-7B',
             type: 'content',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-email-forward'
+            prompt: 'Describe how the risk and vulnerabilities assessment, as well as the communities priorities, guided the mitigation strategy development, including' +
+                    '1) actions and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk assessment, and' +
+                    '2) actions and/or projects that the jurisdiction intends to implement.',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +
+                    'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
+                    'Projects that are well developed and documented in one place are more quickly identifiable for selection when grants become available, making implementation that much more likely.',
+            icon: 'os-icon-globe',
+            hideNav: true,
         },
         {
-            title: 'Relocation Zones',
-            requirement: 'Req-NYS-F-3B',
+            title: 'Actions',
+            requirement: 'Req-NYS-F-7',
             type: 'content',
-            prompt: 'Tell us about your relocation zones...',
-            intent: '',
-            icon: 'os-icon-documents-07',
-            
+            prompt: 'Describe how the risk and vulnerabilities assessment, as well as the communities priorities, guided the mitigation strategy development, including' +
+                    '1) actions and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk assessment, and' +
+                    '2) actions and/or projects that the jurisdiction intends to implement.',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +
+                    'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
+                    'Projects that are well developed and documented in one place are more quickly identifiable for selection when grants become available, making implementation that much more likely.',
+            icon: 'os-icon-globe'
         },
-        {
-            title: '',
-            requirement: 'Req-NYS-F-3B-1',
-            type: 'developementZonesFilteredMap',
-            filterBy: {zone_type: ['Relocation Zone']},
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-documents-07',
-            hideNav: true
-        },
-        {
-            title: 'Evacuation Routes',
-            requirement: 'Req-NYS-F-4A',
-            type: 'evacuationRoutes',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-alert-octagon'
-        },
-        {
-            title: 'Evacuation Procedues',
-            requirement: 'Req-NYS-F-4A-1',
-            type: 'content',
-            prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
-            intent: '',
-            icon: 'os-icon-alert-triangle'
-        },
-        {
-            title: 'Shelters',
-            requirement: 'Req-NYS-F-4B-2',
-            type: 'content',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-share-2'
-        },
-        {
-            title: '',
-            requirement: 'Req-NYS-F-4B',
-            type: 'shelterListTable',
-            align: 'full',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-share-2',
-            hideNav: true
-        }
-        
-
-    ],
-    Actions: [
         {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
@@ -271,7 +243,129 @@ const config = {
             intent: 'To identify how the plan will directly lead to implementation of the hazard mitigation actions.' +
                 '  As opportunities arise for actions or projects to be  implemented, the responsible entity will be able' +
                 ' to take action towards completion of the activities.',
-            icon: 'os-icon-edit-1'
+            icon: 'os-icon-edit-1'    
+        },    
+        {
+            title: 'NFIP Continued Compliance & Repetative Loss Strategy',
+            requirement:'Req-C-2A',
+            type: 'content',
+            prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate, describe how and why. Describe FPMP for continued compliance, Adoption and enforcement of floodplain management requirements, including regulating new construction in Special Flood Hazard Areas (SFHAs); Floodplain identification and mapping, including any local requests for map updates; or Description of community assistance and monitoring activities. If jurisdiction is not taking part in NFIP describe why.',
+            intent:'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA is the official administering Federal agency of the NFIP, participation in the program is a basic community capability and resource for flood hazard mitigation activities',
+            icon:'os-icon-cloud-drizzle',
+        },
+        {
+            title:'Implementation Resources',
+            requirement:'Req-NYS-F-8',
+            type:'content',
+            prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
+            intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
+                    'The plan must include a list of potential local, State and Federal funding sources.',
+            icon:'os-icon-folder',        
+        },
+        {
+            title:'',
+            requirement:'Req-NYS-F-8B',
+            type:'',
+            prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
+            intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
+                    'The plan must include a list of potential local, State and Federal funding sources.',
+            icon:'os-icon-folder',
+            hideNav: true        
+        },
+    ],
+     
+     Response : [
+       {
+        title:'Displaced Residents',
+        requirement:'Req-NYS-F-4B',
+        type: 'content',
+        prompt:'Identify sites for the placement of temporary housing units to house residents displaced by disaster. While sites can be coordinated county wide, it is critical that each jurisdiction identify a site. Residents may be accommodated by a temporary housing location that is outside of the jurisdiction in which they live as long as mutual aid agreements between municipalities are in place.',
+        intent:'Jurisdictions containing an SFHA must identify potential sites that are compliant with the NYS Uniform Fire Prevention and Building Code (with first flood elevation placed no less than 2’ above the Base Flood Elevation) for the placement of temporary housing units for residents displaced by disaster; and potential sites within the jurisdiction suitable for relocating houses out of the floodplain, or building new houses once properties in the floodplain are razed.' +
+                'The plan must document the location of viable sites, and include a letter from the local floodplain administrator certifying viability or listing any actions required to ensure conformance.' + 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.' +
+                'Jurisdictions must identify routes and procedures to evacuate citizens prior to and during an event, and identify shelters for evacuated citizens. Provisions must be included for a range of medical needs, accommodation for pets, and compliance with the Americans with Disabilities Act (ada.gov).'+ ' The plan must document (or refer back to such components in existing valid plan): Evacuation routes and procedures;' +
+                'Location of shelters (outside of the SFHA); Specific information about how these plans are accessible and available to the public, or include the related narrative from those plans in an appendix.',
+        icon:'os-icon-ui-90',        
+        },
+        {
+            title: 'Temporary Housing',
+            requirement: 'Req-NYS-F-3A',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-email-forward'
+        },
+        {
+            title: 'Relocation Zones',
+            requirement: 'Req-NYS-F-3B',
+            type: 'content',
+            prompt: 'Tell us about your relocation zones...',
+            intent: '',
+            icon: 'os-icon-documents-07',
+            
+        },
+        {
+            title: 'Relocation Zone Map',
+            requirement: 'Req-NYS-F-3B-1',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['Relocation Zone']},
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-documents-07',
+            hideNav: true
+        },
+        {
+            title: 'Evacuation Procedues',
+            requirement: 'Req-NYS-F-4A-1',
+            type: 'content',
+            prompt: 'Identify evacuation routes and how this information is accessible to the public. Identify plans, policies or procedures that outline evacuation routes and procedures to remove citizens from a vulnerable location prior to and during an incident. If plans for evacuation and sheltering are already in place, the mitigation planning jurisdiction should analyze and update these materials as needed. If such plans do not exist, they must be developed (see NYS Mitigation Plannging Standards Guide).',
+            intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
+            icon: 'os-icon-alert-triangle'
+        },    
+        {
+            title: 'Evacuation Routes',
+            requirement: 'Req-NYS-F-4A',
+            type: 'evacuationRoutes',
+            prompt: '',
+            intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
+            icon: 'os-icon-alert-octagon',
+            hideNav: true 
+        },
+        {
+            title: 'Shelters',
+            requirement: 'Req-NYS-F-4B-2',
+            type: 'content',
+            prompt: 'Identify shelters for evacuated citizens and how this information is accessible to the public leading up to and during an incident; explain provisions available to address medical needs, access and functional needs, accommodation for pets, and compliance with the Americans with Disabilities Act (see www.ada.gov); Outline pre-disaster actions required to make evacuation and shelter plans viable; Document evidence of coordination with adjoining jurisdictions (if applicable).',
+            intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
+            icon: 'os-icon-share-2'
+        },
+        {
+            title: 'Shelter Table',
+            requirement: 'Req-NYS-F-4D',
+            type: 'shelterListTable',
+            align: 'full',
+            prompt: '',
+            intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
+            icon: 'os-icon-share-2',
+            hideNav: true
+        },
+    ],
+     
+     'Process Assessment' : [
+        {
+            title: 'Strengths',
+            requirement:'Req-R-3A',
+            type:'content',
+            prompt:'Describe strengths of the process to develop a mitigation strategy and specific actions.',
+            intent:'',
+            icon:'os-icon-trending-up'
+        },
+        {
+            title:'Opportunities',
+            requirement:'Req-R-3B',
+            type:'content',
+            prompt:'Describe the challenges associated with developing the mitigation strategy and actions. Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',
+            intent:'',
+            icon:'os-icon-bar-chart-up'
         },
     ]
     

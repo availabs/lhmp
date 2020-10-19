@@ -41,7 +41,7 @@ class inventoryTableViewer extends Component {
     }
 
     processData() {
-        let cols = ['Land Type', '# of parcels', 'Total Area', 'Total Value'],
+        let cols = ['Land Type', '# of parcels', 'Total Area (Acres)', 'Total Value'],
             rows = [
                 'Vacant Land',
                 'Urban Renewal',
@@ -80,9 +80,9 @@ class inventoryTableViewer extends Component {
                                 get(a, [r, '# of parcels'], null) ?
                                     get(a, [r, '# of parcels'], 0) + 1 :
                                     1,
-                            'Total Area':
-                                get(a, [r, 'Total Area'], null) ?
-                                    get(a, [r, 'Total Area'], 0) + get(c, ['acres'], 0) :
+                            'Total Area (Acres)':
+                                get(a, [r, 'Total Area (Acres)'], null) ?
+                                    get(a, [r, 'Total Area (Acres)'], 0) + get(c, ['acres'], 0) :
                                     get(c, ['acres'], 0),
                             'Total Value':
                                 get(a, [r, 'Total Value'], null) ?
@@ -112,7 +112,8 @@ class inventoryTableViewer extends Component {
                     accessor: key,
                     sort: true,
                     formatValue: key === 'Total Value' ? fnum :
-                        key === 'Total Area' ? d => d.toFixed(2) : null
+                        key === 'Total Area (Acres)' ? d => parseFloat(d.toFixed(2)).toLocaleString() :
+                            key === '# of parcels' ? d => d.toLocaleString() : null
                 }))
         return {data, columns}
     }

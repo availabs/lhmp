@@ -26,7 +26,7 @@ const config = {
     'Vulnerability' : [
         {
             title: 'Local Orientation',
-            requirement: 'Req-B-3B-1',
+            requirement: 'Req-B-3B',
             type: 'content',
             prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
             intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified' +
@@ -36,11 +36,11 @@ const config = {
                 ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
                 ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
                 ' and that will be addressed in the mitigation strategy.',
-            icon: 'os-icon-alert-triangle'
+            icon: 'os-icon-globe'
         },
         {
             title: 'Social Vulnerability',
-            requirement: 'revision-1',
+            requirement: 'Req-B-3B-3',
             type: 'content',
             prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
                     'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
@@ -49,7 +49,7 @@ const config = {
         },   
         {
             title: '',
-            requirement: '',
+            requirement: 'Req-B-3B-4',
             type: 'sociallyVulnerableDemographicsMap',
             hideNav: true,
             prompt: '',
@@ -58,7 +58,7 @@ const config = {
         },
         {
             title: 'Built Environment',
-            requirement: '',
+            requirement: 'Req-B-3B-1', 
             type: 'content',
             prompt: 'Although all built assets may be affected by hazards, certain buildings or concentrations of buildings may be more vulnerable because of their location, age, construction type, condition, or use. Provide an overview of general land use and specific, vulnerable assets or areas in your community.' +
                     'Include description of Historic properties or districts if appropriate.',
@@ -66,8 +66,8 @@ const config = {
             icon: 'os-icon-image'
         },   
         {
-            title: '',
-            requirement: 'Req-B-3B-1B' + 'Req-B-3B-2',
+            title: 'Built Environment Table',
+            requirement: 'Req-B-3B-2',
             type: 'inventoryTable',
             hideNav: true,
             //align: '',
@@ -97,7 +97,7 @@ const config = {
         },
         {
             title: 'Natural Environment',
-            requirement: '',
+            requirement: 'Req-B-3B-5',
             type: 'content',
             prompt: 'Identify critical natural areas and other environmental features that are vulnerable to hazard impact and are important to your communitys identity and quality of life and support the economy through agriculture, tourism and recreation, and a variety of other critical ecosystem services, such as clean air and water and vulnerable species and habitats and discussion of green infrastructure.',
             intent: 'Environmental assets and natural resources are important to community identity and quality of life and support the economy through agriculture, tourism and recreation, and a variety of other ecosystem services, such as clean air and water.' +
@@ -138,11 +138,11 @@ const config = {
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
             icon: 'os-icon-globe'
-        },
+        }, 
         {
-            title: 'Open Space ',
+            title: 'Open Space',
             requirement: 'Req-E-1A',
-            type: 'openSpaceTable',
+            type: 'content',
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
@@ -150,14 +150,14 @@ const config = {
         {
             title: 'Open Space Statistics',
             requirement: 'Req-E-1B',
-            type: 'map?',
+            type: 'openSpaceTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-globe'
         },
         {
             title: 'Previous Action Status',
-            requirement: '',
+            requirement: 'Req-D-1F',
             type: 'content',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan as well as mitigation efforts and accomplishments not documented in the last plan. For actions that have not been completed, the plan must either describe whether the action is no longer relevant or be included as part of the updated action plan.',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing actions and to to provide a context for the jurisdictions’ projects, act as a source of ideas for mitigation projects and evaluate the accuracy of assumptions and engineering solutions to inform future projects, and to support future mitigation planning and its coordination with other planning, zoning and environmental procedures within the jurisdiction.',
@@ -165,7 +165,7 @@ const config = {
         },
         {
             title: 'Previous Actions',
-            requirement: 'Req-D-2',
+            requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
             filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
             align: 'full',
@@ -181,7 +181,7 @@ const config = {
         'Floodplain Management' : [
         {
             title: 'Overview',
-            requirement: 'Req-C-2',
+            requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
                 ' a. Describe FPMP for continued compliance, Adoption and enforcement of floodplain management requirements, including regulating new construction in Special Flood Hazard Areas (SFHAs);\n' +
@@ -210,7 +210,7 @@ const config = {
             icon: 'os-icon-home'
         },
         {
-            title: 'Problem Statements',
+            title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
             type: 'content',
             prompt: 'Using data visualizations and local knowledge add narrative content about the stock of properties' +
@@ -221,37 +221,11 @@ const config = {
                 ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
             icon: 'os-icon-alert-circle'
         },
-    ], 
-    
-    'Changes in Development' : [
-        {
-            title: 'Development in the Floodplain',
-            requirement: 'Req-D-1A',
-            type: 'content',
-            prompt: 'The plan must describe changes in development that have occurred in hazard prone areas and increased' +
-                ' or decreased the vulnerability of each jurisdiction since the last plan was approved.  If no changes in' +
-                ' development impacted the jurisdiction’s overall vulnerability, plan updates may validate the information' +
-                ' in the previously approved plan. Was the plan revised to reflect changes in development?',
-            intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing' +
-                ' and potential development, and takes into consideration possible future conditions that can impact the' +
-                ' vulnerability of the community.',
-            icon: 'os-icon-repeat'
-        },
-       
-        {
-            title: 'Development Zones',
-            requirement: 'Req-D-1B',
-            type: 'developementZonesFilteredTable',
-            filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-grid-squares-2'
-        },
     ],
         'Dam Safety' : [  
         {
             title: '',
-            requirement: '',
+            requirement: 'Req-S-3A',
             type: '',
             prompt: '',
             intent: '',
@@ -261,7 +235,7 @@ const config = {
         'Process Assessment'  : [
         {
             title: 'Strengths',
-            requirement: '',
+            requirement: 'Req-R-2A',
             type: 'content',
             prompt: 'Describe Risk Assessment strengths.',
             intent: 'The purpose of hazard mitigation is to reduce potential losses from future disasters.' +
@@ -271,7 +245,7 @@ const config = {
         },
         {
             title: 'Opportunities',
-            requirement: '',
+            requirement: 'Req-R-2B',
             type: 'content',
             prompt: 'Describe the challenges associated with assessing risk.  Include limitations related to access to data, information, costs, technical expertise, mapping, etc.'+
                     'Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',

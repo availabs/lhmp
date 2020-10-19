@@ -45,7 +45,7 @@ export default [
         exact: true,
         name: 'Zones',
         auth: true,
-        mainNav: true,
+        mainNav: false,
         icon: 'os-icon-pencil-2',
         breadcrumbs: [
             { name: 'zones', path: '/zones/' }

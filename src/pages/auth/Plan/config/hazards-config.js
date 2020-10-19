@@ -24,18 +24,31 @@ let HAZARD_META  = {
         // sealevel: {id: 'Sea Level', name: 'Sea Level'},
 
     }
-let HazardConfig = Object.keys(HAZARD_META).map(key => {
-	return {
+let HazardConfig = [];
+
+Object.keys(HAZARD_META).map(key => {
+	HazardConfig.push({
+        title: `${HAZARD_META[key].name} Image`,
+        requirement: `req-B1-${key}-image`,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 250,
+        width: 500,
+        border: 1,
+        onlyAdmin: true
+    },{
 			title: HAZARD_META[key].name,
 			requirement: `req-B1-${key}`,
 			type: 'content',
 			prompt: 'Talk about local context for hazard of concern for your area',
 			intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
 			callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
-		}
+		})
 })
 
-console.log('HazardConfig',)
 const config =  {
 	'Local Hazards' : [
         {

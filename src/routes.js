@@ -14,6 +14,7 @@ import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import CommentMap from 'pages/auth/CommentMap/index'
 //import TestAvlMap from 'pages/auth/testAvlMap/index'
 import Home from 'pages/auth/Home';
+import Forms from 'pages/auth/Forms/'
 // -- Actions
 import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
@@ -100,6 +101,7 @@ const routes = [
 
     ...Plans,
     ...Plan,
+    ...Forms,
     ...AdminAbout,
     ...PlanHazards,
     ...AdminRisk,

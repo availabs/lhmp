@@ -44,14 +44,19 @@ class AvlFormsListTable extends React.Component {
                         ['name']]
                 )
                     .then(response => {
-                        let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
+                        let length = get(response, ['json', 'forms', formType, 'byPlanId', this.props.activePlan, 'length'], 0);
                         if (length > 0) {
-                            this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                            return this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
                                 from: 0,
                                 to: length - 1
                             }], ...formAttributes])
-                                .then(response => {
+                                .then(async (response) => {
                                     let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
+                                    let colToMap = Object.values(graph).map(v => get(v, `attributes.action_status_update`, null))
+                                        .filter(f => f)
+                                        .map(v => v.slice(1,-1).split(',').slice(-1).pop())
+                                        .filter(f => f)
+                                    colToMap = await this.props.falcor.get(['forms', 'byId', colToMap])
                                     Object.keys(graph)
                                         .filter(d => {
                                                 if (this.props.filterBy) {
@@ -69,7 +74,8 @@ class AvlFormsListTable extends React.Component {
 
                                     })
                                     this.setState({
-                                        form_ids: ids
+                                        form_ids: ids,
+                                        colToMap: get(colToMap, `json.forms.byId`, {})
                                     })
                                     return response
                                 })
@@ -141,13 +147,37 @@ class AvlFormsListTable extends React.Component {
                                             graph[item].value.attributes[attribute];
                                     }
                                 } else {
-                                    data[attribute] = graph[item].value.attributes[attribute] ||
-                                        this.props.config[0].attributes[attribute].defaultValue;
+                                    let getAttribute =get(graph, `${item}.value.attributes[${attribute}]`, null)
+                                    //console.log(getAttribute, typeof getAttribute)
+                                    if (getAttribute && typeof getAttribute === 'object' && 
+                                        Object.keys(getAttribute).length === 1 && 
+                                        Object.keys(getAttribute)[0] === '$type'
+                                    ){
+                                        data[attribute] = null
+                                    }else{
+                                        data[attribute] =get(graph, `${item}.value.attributes[${attribute}]`,  this.props.config[0].attributes[attribute].defaultValue);
+                                    }
+                                }
+                                if(this.props.config[0].attributes[attribute].meta_filter && this.props.config[0].attributes[attribute].meta_filter.groupName){
+                                    let currVal = get(graph, `${item}.value.attributes[${attribute}]`, null);
+                                    currVal = currVal && currVal.includes('[') ? currVal.slice(1,-1).split(',') : currVal
+                                    data[attribute] = Object.keys(this.props.config[0].attributes[attribute].meta_filter.groupName)
+                                        .reduce((a,c) => {
+                                            let group = this.props.config[0].attributes[attribute].meta_filter.groupName[c]
+                                            if (currVal && group.length === currVal.length && _.isEqual(currVal, group)){
+                                                a = c
+                                            }
+                                            return a
+                                        }, currVal ? currVal.join(',') : currVal)
+                                }
+                                if(graph[item].value.attributes['action_status_update']){
+                                    let latestStatus = graph[item].value.attributes['action_status_update'].slice(1,-1).split(',').slice(-1).pop()
+                                    data['update status'] = `/action_status_update/edit/${latestStatus}`;
                                 }
 
-                                if(graph[item].value.attributes['action_status_update']){
-
-                                    data['update status'] = `/action_status_update/edit/${graph[item].value.attributes['action_status_update'].slice(1,-1).split(',').slice(-1).pop()}`;
+                                if(attribute === 'action_status_update'){
+                                    let latestStatus = get(graph, [item,'value','attributes','action_status_update'], '').slice(1,-1).split(',').slice(-1).pop()
+                                    data['action_status_update'] = get(this.state.colToMap, [latestStatus, 'attributes', 'status'], 'None')
                                 }
 
                                 ['view', 'edit']
@@ -257,7 +287,7 @@ class AvlFormsListTable extends React.Component {
                         {this.props.config.map((d, i) => {
                             if (d.type === 'actions') {
                                 if (this.props.createButtons === true || this.props.createButtons === undefined) {
-                                    return (
+                                    /*return (
                                         <Link
                                             key={i}
                                             className="btn btn-sm btn-primary"
@@ -265,7 +295,7 @@ class AvlFormsListTable extends React.Component {
                                             Create
                                             New {this.props.config.map(d => d.type.charAt(0).toUpperCase() + d.type.substr(1))}
                                         </Link>
-                                    )
+                                    )*/
                                 } else {
                                     return null
                                 }

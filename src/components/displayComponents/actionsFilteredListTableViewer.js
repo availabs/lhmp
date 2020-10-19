@@ -5,11 +5,7 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import {authProjects} from "store/modules/user";
 import TableSelector from "components/light-admin/tables/tableSelector"
 import _ from "lodash";
-import Element from "../light-admin/containers/Element";
-import config from "../../pages/auth/Plan/config/guidance-config";
 import ProjectConfig from 'pages/auth/actions/actions_project_forms/config.js'
-
-import {Link} from "react-router-dom";
 import {sendSystemMessage} from "../../store/modules/messages";
 
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
@@ -18,22 +14,21 @@ const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089",
     "36083", "36099", "36081", "36037", "36117", "36063", "36047", "36015", "36121", "36061", "36021", "36013", "36033", "36017",
     "36067", "36035", "36087", "36051", "36025", "36071", "36093", "36005"];
 
-const ATTRIBUTES = [
-    'shelter_id',
-    'shelter_name',
-    'evacuation_capacity',
-    'post_impact_capacity',
-    'ada_compliant',
-    'wheelchair_accessible',
-    'generator_onsite',
-    'self_suffienct_electricty',
-]
-
 class inventoryTableViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             geoid: this.props.activeGeoid,
+            formAttributes: ['action_jurisdiction',
+                'action_name',
+                'associated_hazards',
+                'priority_score',
+                'estimated_timeframe_for_action_implementation',
+                'estimated_cost_range',
+                'lead_agency_name_text',
+                'action_status_update'
+            ],
+            clickToOpen: ['action_description', 'description_of_problem_being_mitigated']
         };
         this.formsListTable = this.formsListTable.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
@@ -71,10 +66,9 @@ class inventoryTableViewer extends Component {
                                     .filter(f => get(this.props, `filterBy`, []).includes(f.status))
                                     .map(f => f.id)
                             Object.keys(graph).filter(d => d !== '$__path').forEach(id => {
-                                console.log('check??', typeof get(graph, `[${id}].attributes.action_status_update`, []))
                                 if (_.intersection(
-                                    get(graph, `[${id}].attributes.action_status_update`, "[]").slice(1,-1).split(","),
-                                    allowed_action_status).length){
+                                    get(graph, `[${id}].attributes.action_status_update`, "[]").slice(1, -1).split(",").slice(-1),
+                                    allowed_action_status).length) {
                                     ids.push(graph[id].id)
                                 }
 
@@ -129,7 +123,7 @@ class inventoryTableViewer extends Component {
     formsListTable() {
         let geo = this.props.geoData
         let graph = this.props.formsListData;
-        let formAttributes = Object.keys(get(ProjectConfig, `[0].attributes`, {}))
+        let formAttributes = [...this.state.formAttributes, ...this.state.clickToOpen];
         let combine_list_attributes = ProjectConfig.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = ProjectConfig.map(d => d.type);
@@ -142,7 +136,30 @@ class inventoryTableViewer extends Component {
                         if (graph[item].value && graph[item].value.attributes) {
                             if (this.state.form_ids && this.state.form_ids.includes(item)) {
                                 data['id'] = item;
-                                data[attribute] = graph[item].value.attributes[attribute] || ' ';
+
+                                data[attribute] = get(graph[item], ['value', 'attributes', attribute], null);
+                                data[attribute] =
+                                    typeof data[attribute] === 'string' &&
+                                    data[attribute].includes('[') ?
+                                        data[attribute].slice(1, -1).split(',') :
+                                        data[attribute]
+
+                                data[attribute] =
+                                    typeof data[attribute] === "string" ?
+                                        geo[data[attribute]] ?
+                                            geo[data[attribute]].name || '' :
+                                            data[attribute] :
+                                        data[attribute] && typeof data[attribute] === "object" ?
+                                            data[attribute].map(d => geo[d] ? geo[d].name || '' : d) :
+                                            data[attribute]
+
+                                if (attribute === 'action_status_update') {
+                                    data[attribute] = data[attribute].slice(-1).pop()
+                                    data[attribute] = get(this.props, ['formsListData', data[attribute], 'value', 'attributes', 'status'], data[attribute])
+                                }
+
+                                data[attribute] = data[attribute] && typeof data[attribute] === 'object' ? data[attribute].join(',') : data[attribute];
+
                                 ['view', 'edit']
                                     .filter(f => this.props[f + 'Button'] === true || this.props[f + 'Button'] === undefined)
                                     .forEach(f => {
@@ -217,19 +234,10 @@ class inventoryTableViewer extends Component {
     }
 
     render() {
-        let formAttributes = [];
-        let listViewData = [];
-        let listAttributes = Object.keys(get(ProjectConfig, `[0].attributes`, {}))
+        let formAttributes = [...this.state.formAttributes, ...this.state.clickToOpen];
         let data = this.formsListTable();
-        listViewData = data.filter(value => Object.keys(value).length !== 0)
-        let formType = ProjectConfig.map(d => d.type);
-        if (listViewData && listViewData.length > 0) {
-            if (!_.isEqual(Object.keys(...listViewData).sort(), listAttributes.sort())) {
-                formAttributes = Object.keys(...listViewData).filter(d => !['id', 'view', 'edit', 'delete'].includes(d))
-            } else {
-                formAttributes = listAttributes
-            }
-        }
+        let listViewData = data.filter(value => Object.keys(value).length !== 0)
+
         return (
             listViewData.length > 0 ?
                 <div className="element-box">
@@ -237,22 +245,15 @@ class inventoryTableViewer extends Component {
                         <TableSelector
                             data={listViewData}
                             columns={formAttributes
-                                .filter(f => get(ProjectConfig, `[0].list_attributes`, [])
-                                    .map(la => typeof la === 'object' ? Object.keys(la)[0].toString() : la)
-                                    .includes(f)
-                                )
                                 .map(f => {
-                                    let tmpAttr =
-                                        get(ProjectConfig, `[0].list_attributes`, [])
-                                            .filter(la => typeof la === 'object' && Object.keys(la)[0] === f)
-                                            .map(la => la[f])
+
                                     return ({
                                         Header: f,
                                         accessor: f,
-                                        filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' :
-                                            get(tmpAttr, `[0].filter`, null),
-                                        sort: get(tmpAttr, `[0].sort`, 'true') === 'true',
-                                        expandable: get(ProjectConfig, `[0].attributes.${f}.expandable`, null)
+                                        filter: 'default',
+                                        sort: true,
+                                        expandable: this.state.clickToOpen.includes(f).toString(),
+                                        expandableHeader: true
                                     })
                                 })}
                             flex={this.props.flex ? this.props.flex : false}

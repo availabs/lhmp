@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxFalcor } from 'utils/redux-falcor'
-import {falcorChunkerNice} from "store/falcorGraph"
 import ProjectBox from 'components/light-admin/containers/ProjectBox'
 import styled from 'styled-components'
 import get from 'lodash.get'
+import _ from 'lodash'
 
 import { format } from "d3-format"
 
@@ -29,6 +29,12 @@ let GraphIcon = styled.i`
 `;
 
 class CountyHeroStats extends React.Component {
+    componentDidUpdate(prevProps) {
+        if (prevProps.geoid !== this.props.geoid){
+            this.fetchFalcorDeps(this.props)
+        }
+    }
+
     fetchFalcorDeps({ dataType, geoid }=this.props) {
         const cols = ['num_events',
             'total_damage',
@@ -43,18 +49,7 @@ class CountyHeroStats extends React.Component {
             ['riskIndex', 'hazards']
         )
             .then(response => response.json.riskIndex.hazards)
-            .then(hazards =>
-                {
-                    hazards = this.props.hazard ?
-                        this.props.hazard :
-                        this.props.hazards && this.props.hazards.length > 0 ?
-                            this.props.hazards : hazards;
-
-                    return this.props.falcor.get(
-                        ['riskIndex', 'meta', hazards, 'name']).
-                    then(d => falcorChunkerNice([dataType, geoid, hazards, 'allTime', cols]))
-                }
-            )
+            .then(hazards => this.props.falcor.get(['riskIndex', 'meta', hazards, 'name'], [dataType, geoid, hazards, 'allTime', cols]))
     }
 
     getHazardName(hazard) {
@@ -69,6 +64,7 @@ class CountyHeroStats extends React.Component {
     processData() {
         const { dataType, geoid } = this.props;
         let data = [];
+
         try {
             for (const hazard in this.props[dataType][geoid]) {
                     const value = +this.props[dataType][geoid][hazard].allTime.annualized_damage;

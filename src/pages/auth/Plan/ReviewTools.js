@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import _ from 'lodash'
 import get from "lodash.get";
-import config from "./config/review-config";
+import config, {colors} from "./config/review-config";
 import styled from "styled-components";
 import functions from "./functions";
 import Element from "../../../components/light-admin/containers/Element";
@@ -106,8 +106,11 @@ class PlanReview extends React.Component {
                                             return <td
                                                 style={{
                                                     backgroundColor:
-                                                        allStatus.includes('Started') ? '#daebcf' :
-                                                            allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? '#f3f3d1' : 'grey'
+                                                        allStatus.includes('Started') ? colors.Started :
+                                                            allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready For Review"] :
+                                                            allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
+                                                            allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
+                                                                geo.length === 5 ? colors.county : colors.municipal
                                                 }}
                                                 onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}></td>
                                         }
@@ -125,7 +128,7 @@ class PlanReview extends React.Component {
     render() {
         let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
 
-        return (
+        return get(this.props, `match.path`, '') === '/plan_review/' ? (
             <div className='container'>
                 <Element>
                     <h4 className='element-header'>Review Tools</h4>
@@ -136,7 +139,7 @@ class PlanReview extends React.Component {
                     </ElementBox>
                 </Element>
             </div>
-        )
+        ) : this.processTable(allowedGeos)
     }
 }
 

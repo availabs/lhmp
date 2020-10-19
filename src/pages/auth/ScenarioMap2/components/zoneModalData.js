@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import get from "lodash.get";
 import {sendSystemMessage} from 'store/modules/messages';
-import { reduxFalcor, UPDATE as REDUX_UPDATE } from 'utils/redux-falcor'
+import {reduxFalcor} from 'utils/redux-falcor'
 import * as d3 from "d3";
 import styled from "styled-components";
 import AssetsFilteredTable from "../../Assets/components/AssetsFilteredTable";
@@ -11,25 +11,25 @@ import {setActiveCentroids} from "../../../../store/modules/centroids";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import {ListWithoutUrl} from 'pages/auth/Assets/components/AssetsListByTypeByHazard.js'
-import AvlModal from 'components/AvlStuff/DraggableModal'
+
 var _ = require("lodash")
-var format =  d3.format("~s")
+var format = d3.format("~s")
 const fmt = (d) => d < 1000 ? d : format(d)
 
 const ZoneContainer = styled.div`
-  color: ${ props => props.theme.textColor };
+  color: ${props => props.theme.textColor};
   padding-top: 15px;
   width: 100%;
   min-width: 700px;
 
   h4 {
-    color: ${ props => props.theme.textColorHl };
+    color: ${props => props.theme.textColorHl};
   }
 `;
 
 const DIV = styled.div`
   table { background-color: #efefef; }
-  ${ props => props.theme.scrollbar };
+  ${props => props.theme.scrollbar};
   max-height: 50vh;
   overflow: auto;
 `;
@@ -68,16 +68,16 @@ class ZoneModalData extends React.Component {
         ).then(res => {
             let buildings = get(this.props.formsData, `attributes.building_id`, [])
             if (!buildings.length) return Promise.resolve();
-            if (buildings.length > 100){
+            if (buildings.length > 100) {
                 let requests = [];
-                for (let i = 0; i < buildings.length; i+=100){
-                    requests.push(['building', 'geom' ,'byBuildingId', buildings.slice(i, i+100), 'centroid'])
+                for (let i = 0; i < buildings.length; i += 100) {
+                    requests.push(['building', 'geom', 'byBuildingId', buildings.slice(i, i + 100), 'centroid'])
                 }
 
-                return requests.reduce((a,c) => a.then(() => this.props.falcor.get(c)), Promise.resolve())
-            }else{
+                return requests.reduce((a, c) => a.then(() => this.props.falcor.get(c)), Promise.resolve())
+            } else {
                 return this.props.falcor.get(
-                    ['building', 'geom' ,'byBuildingId', buildings, 'centroid']
+                    ['building', 'geom', 'byBuildingId', buildings, 'centroid']
                 )
             }
 
@@ -95,39 +95,66 @@ class ZoneModalData extends React.Component {
         this.setState({filter: newFilter})
     }
 
-    renderLandUseMenu(){
+    renderLandUseMenu() {
         return (
             <div style={{backgroundColor: 'white'}}>
                 <MultiSelectFilter
-                    filter = {this.state.filter}
-                    setFilter = {this.handleMultiSelectFilterChange}
+                    filter={this.state.filter}
+                    setFilter={this.handleMultiSelectFilterChange}
                 />
             </div>
         )
     }
-    setLink(link){
-        this.setState({links: _.uniqBy([...this.state.links, link], 'link'), prevActiveLink: this.state.activeLink, activeLink: link.link})
+
+    setLink(link) {
+        this.setState({
+            links: _.uniqBy([...this.state.links, link], 'link'),
+            prevActiveLink: this.state.activeLink,
+            activeLink: link.link
+        })
     }
-    renderNav(){
+
+    renderNav() {
 
         return (
             <div className="os-tabs-controls">
                 <ul className="nav nav-tabs upper">
+                    {this.props.type === 'zones' ?
+                        <li className="nav-item" key={`info-0`}>
+                            <div aria-expanded="false"
+                                 className={this.state.activeLink === 'info-0' ? "nav-link active" : "nav-link"}
+                                 onClick={() => this.setState({
+                                     prevActiveLink: this.state.activeLink,
+                                     activeLink: 'info-0'
+                                 })}
+                                 data-toggle="tab"
+                            > Info
+                            </div>
+                        </li>
+                        : null}
+
                     <li className="nav-item" key={`nav-0`}>
                         <div aria-expanded="false"
-                           className={!this.state.activeLink ? "nav-link active" : "nav-link"}
-                           onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: undefined})}
-                           data-toggle="tab"
-                        > All</div>
+                             className={!this.state.activeLink ? "nav-link active" : "nav-link"}
+                             onClick={() => this.setState({
+                                 prevActiveLink: this.state.activeLink,
+                                 activeLink: undefined
+                             })}
+                             data-toggle="tab"
+                        > All
+                        </div>
                     </li>
                     {this.state.links.map((link, linkI) =>
-                        <li className="nav-item" key={`nav-${linkI+1}`}>
+                        <li className="nav-item" key={`nav-${linkI + 1}`}>
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <div aria-expanded="false"
-                                   style={{marginRight: 0}}
-                                   className={this.state.activeLink === link.link ? "nav-link active" : "nav-link"}
-                                   onClick={() => this.setState({prevActiveLink: this.state.activeLink, activeLink: link.link})}
-                                   > {`${link.header} x ${link.row0}`}</div>
+                                     style={{marginRight: 0}}
+                                     className={this.state.activeLink === link.link ? "nav-link active" : "nav-link"}
+                                     onClick={() => this.setState({
+                                         prevActiveLink: this.state.activeLink,
+                                         activeLink: link.link
+                                     })}
+                                > {`${link.header} x ${link.row0}`}</div>
                                 <div
                                     style={{padding: '0.5vw', cursor: 'pointer'}}
                                     className="nav-item"
@@ -137,8 +164,11 @@ class ZoneModalData extends React.Component {
                                             prevActiveLink: undefined,
                                             activeLink: this.state.prevActiveLink
                                         })
-                                        if (this.props.onCloseTab) {this.props.onCloseTab.bind(this, e)}
-                                    }}> x </div>
+                                        if (this.props.onCloseTab) {
+                                            this.props.onCloseTab.bind(this, e)
+                                        }
+                                    }}> x
+                                </div>
                             </div>
                         </li>
                     )}
@@ -147,7 +177,7 @@ class ZoneModalData extends React.Component {
         )
     }
 
-    renderAll(){
+    renderAll() {
         return (
             <React.Fragment>
                 {this.renderLandUseMenu()}
@@ -156,11 +186,11 @@ class ZoneModalData extends React.Component {
 
                         <NewZoneAssetsFilteredTable
                             geoid={[this.props.geoid]}
-                            zone_id ={[this.props.zone_id]}
+                            zone_id={[this.props.zone_id]}
                             groupBy={'propType'}
                             groupByFilter={this.state.filter.value}
                             scenarioId={this.props.scenario_id.map(d => d.id)}
-                            riskZoneId = {[this.props.risk_zone_id]}
+                            riskZoneId={[this.props.risk_zone_id]}
                             height={'fit-content'}
                             width={'100%'}
                             tableClass={`table table-sm table-lightborder table-hover`}
@@ -171,11 +201,11 @@ class ZoneModalData extends React.Component {
 
                         <AssetsFilteredTable
                             geoid={[this.props.geoid]}
-                            zone_id ={[this.props.zone_id]}
+                            zone_id={[this.props.zone_id]}
                             groupBy={'propType'}
                             groupByFilter={this.state.filter.value}
                             scenarioId={this.props.scenario_id.map(d => d.id)}
-                            riskZoneId = {[this.props.risk_zone_id]}
+                            riskZoneId={[this.props.risk_zone_id]}
                             height={'fit-content'}
                             width={'100%'}
                             tableClass={`table table-sm table-lightborder table-hover`}
@@ -187,19 +217,45 @@ class ZoneModalData extends React.Component {
         )
     }
 
-    getParam(link, param){
+    getParam(link, param) {
         return link.indexOf(param) > -1 ? link[link.indexOf(param) + 1] : undefined
     }
 
-    renderLink(){
+    renderInfo() {
+        return (
+            <div className='table-responsive'>
+                <table className='table table-sm table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        Object.keys(get(this.props, `formsData.attributes`, {}))
+                            .filter(key => ['zone_type', 'name', 'comment'].includes(key))
+                            .map(key =>
+                                <tr>
+                                    <td>{key}</td>
+                                    <td>{get(this.props, `formsData.attributes`, {})[key]}</td>
+                                </tr>)
+                    }
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+
+    renderLink() {
         let link = this.state.activeLink.split('/')
         return <ListWithoutUrl
             size={100}
-            zone_id ={[this.props.zone_id]}
+            zone_id={[this.props.zone_id]}
             groupBy={'propType'}
             groupByFilter={this.state.filter.value}
             scenarioId={this.props.scenario_id.map(d => d.id)}
-            riskZoneId = {[this.props.risk_zone_id]}
+            riskZoneId={[this.props.risk_zone_id]}
             match={
                 {
                     url: this.state.activeLink,
@@ -215,11 +271,11 @@ class ZoneModalData extends React.Component {
             }
             dataChange={(data) => {
                 let paginatedBuildings = data.map(d => parseInt(get(d, `building_id`, 0)))
-                if (this.props.centroidData && paginatedBuildings.length){
+                if (this.props.centroidData && paginatedBuildings.length) {
 
                     let newCentroids = Object.keys(this.props.centroidData)
-                        .reduce((a,building_id) => {
-                            if (paginatedBuildings.includes(parseInt(building_id))){
+                        .reduce((a, building_id) => {
+                            if (paginatedBuildings.includes(parseInt(building_id))) {
                                 a[building_id] = this.props.centroidData[building_id]
                             }
                             return a;
@@ -233,9 +289,18 @@ class ZoneModalData extends React.Component {
         />
     }
 
-    renderData(){
-        return <DIV>{this.state.activeLink ? this.renderLink() : this.renderAll()}</DIV>
+    renderData() {
+        return <DIV>
+            {
+                this.state.activeLink ?
+                    this.state.activeLink === 'info-0' ?
+                        this.renderInfo() :
+                        this.renderLink() :
+                    this.renderAll()
+            }
+        </DIV>
     }
+
     render() {
         return (
             <div style={{padding: '10px'}}>
@@ -250,16 +315,16 @@ class ZoneModalData extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        activePlan : state.user.activePlan,
-        activeScenarioId:state.scenario.activeRiskZoneId,
-        offRiskZoneId:state.scenario.offRiskZoneId,
-        activeGeoid:state.user.activeGeoid,
+        activePlan: state.user.activePlan,
+        activeScenarioId: state.scenario.activeRiskZoneId,
+        offRiskZoneId: state.scenario.offRiskZoneId,
+        activeGeoid: state.user.activeGeoid,
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
-        zonesData : get(state.graph,['zones','byPlanId']),
-        formsData : get(state.graph,['forms','byId', ownProps.zone_id, 'value']),
-        centroidData : get(state.graph,['building','geom', 'byBuildingId']),
-        scenarioByZonesData : get(state.graph,['building','byGeoid',`${state.user.activeGeoid}`]),
+        zonesData: get(state.graph, ['zones', 'byPlanId']),
+        formsData: get(state.graph, ['forms', 'byId', ownProps.zone_id, 'value']),
+        centroidData: get(state.graph, ['building', 'geom', 'byBuildingId']),
+        scenarioByZonesData: get(state.graph, ['building', 'byGeoid', `${state.user.activeGeoid}`]),
         riskZoneId: state.scenario.activeRiskZoneId
     }
 };

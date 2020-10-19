@@ -1,7 +1,12 @@
 module.exports = [
     {
         type: 'zones', // type is same as the route path for now
-        list_attributes: ['name','zone_type'],
+        list_attributes: [
+            {'action_jurisdiction': {filter: 'multi'}},
+            {'name': {filter: 'true'}},
+            {'zone_type': {filter: 'multi'}},
+            {'comment': {filter: 'true'}},
+        ],
         //csv_download: ['capability_category', 'capability_type', 'capability_name', 'regulatory_name', 'municipality', 'capability_description', 'adoption_date', 'development_update', 'jurisdiction_utilization', 'mitigation_contribution', 'adopting_authority', 'responsible_authority', 'support_authority', 'affiliated_agency', 'link_url', 'upload'],
         sub_type: '',
         // if wizard
