@@ -162,7 +162,7 @@ const config = {
 
         {
             title: 'Capacity To Address Risk',
-            requirement: 'Req-C-1A',
+            requirement: 'Req-C-1B-1',
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
@@ -171,7 +171,7 @@ const config = {
         
         {
             title: 'Environmental and Historic Preservation',
-            requirement: 'Req-B-4A',
+            requirement: 'Req-B-3A',
             type: 'content',
             prompt: '',
             intent: '',

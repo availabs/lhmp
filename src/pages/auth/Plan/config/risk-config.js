@@ -221,8 +221,16 @@ const config = {
                 ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
             icon: 'os-icon-alert-circle'
         },
+            {
+            title: 'Problem statement table',
+            requirement: 'Req-B-4A-1',
+            type: 'problemStatementTable',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-alert-circle'
+        },
     ],
-        'Dam Safety' : [  
+        'Dam Safety' : [
         {
             title: '',
             requirement: 'Req-S-3A',
