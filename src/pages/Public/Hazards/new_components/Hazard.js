@@ -77,7 +77,7 @@ class Hazards extends React.Component {
             <div>
                 <div className='row'>
                     <div>
-                        <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Narrative</h5>
+                        <h5>About {get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')}</h5>
                         <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
                         />
                     </div>
@@ -87,7 +87,7 @@ class Hazards extends React.Component {
                         {this.state.image ?  <HeaderImageContainer img={this.state.image}/> : null}
                     </div>
                 </div>
-                {/*<div className='row'>
+                <div className='row'>
                     <div className='col-md-6'>
                         <h6>{HazardName} Loss by Year</h6>
                         <HazardBarChart
@@ -190,7 +190,7 @@ class Hazards extends React.Component {
                             year={1999}
                         />
                     </div>
-                </div>*/}
+                </div>
                
             </div>
 
