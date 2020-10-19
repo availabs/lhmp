@@ -77,7 +77,7 @@ class Hazards extends React.Component {
             <div>
                 <div className='row'>
                     <div>
-                        <h5>About {get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')}</h5>
+                        <h5>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Characteristics</h5>
                         <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
                         />
                     </div>
