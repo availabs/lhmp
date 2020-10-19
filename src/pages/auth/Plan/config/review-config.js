@@ -1,6 +1,5 @@
 export const colors = {
-    'county' : 'gray',
-    'municipal' : 'none',
+    'municipalFalse' : 'gray',
     'Started' : '#f7f714',
     'Ready For Review': '#1f90f2',
     'Requirement not met': '#f2351f',

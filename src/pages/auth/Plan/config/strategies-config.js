@@ -162,7 +162,7 @@ const config = {
 
         {
             title: 'Capacity To Address Risk',
-            requirement: 'Req-C-1A',
+            requirement: 'Req-C-1B-1',
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
