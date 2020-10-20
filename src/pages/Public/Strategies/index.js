@@ -135,7 +135,7 @@ class About extends React.Component {
                     <HeaderImageContainer img={this.state.image}>
                         <div style={{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.4)', padding: 50}}>
                         
-                            <PageHeader>Strategies</PageHeader>
+                            <PageHeader style={{color: '#efefef'}}>Strategies</PageHeader>
                             <div className="row">
                                 <div className="col-12">
                                     <StatementText>
