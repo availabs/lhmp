@@ -33,6 +33,9 @@ const config =  {
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
 			// hideNav: true // hides key from public nav. Displays on page.
+			// pullCounty: true,
+			// nullMessage: `<i>No Data</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			// hideIfNull: true
 	}],
 	'Pre-Planning' : [
 		{
