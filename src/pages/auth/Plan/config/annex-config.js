@@ -20,7 +20,7 @@ const config = {
         prompt: '',
         intent: '',
         callout: '',
-        icon: 'os-icon-',
+        icon: 'os-icon-folder',
         onlyAdmin: true
     }],
         'Annex' : [
@@ -30,7 +30,7 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: 'os-icon-'
+            icon: 'os-icon-folder'
         },
         {
             title: 'Guiding Authorities and References',
@@ -38,7 +38,7 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: '' 
+            icon: 'os-icon-folder' 
         },
         {
             title: 'Acronmys',
@@ -46,7 +46,7 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: ''
+            icon: 'os-icon-folder'
 
         },
         {
@@ -55,7 +55,7 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: '',
+            icon: 'os-icon-folder'
         },
         {
             title: 'Change Log',
@@ -63,7 +63,7 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: '',
+            icon: 'os-icon-folder'
         },
         {
             title: 'Public Comment',
@@ -71,7 +71,7 @@ const config = {
             type: 'content',
             prompt:'',
             intent: '',
-            icon: '',
+            icon: 'os-icon-folder'
         }
     ]
 }       
