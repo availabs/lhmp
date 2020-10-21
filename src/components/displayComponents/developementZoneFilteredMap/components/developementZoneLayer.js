@@ -3,8 +3,10 @@ import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
 import _ from 'lodash'
+import turfCentroid from '@turf/centroid'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
+import mapboxgl from "mapbox-gl";
 
 const sources = {
     "_dfirm_500_100": {
@@ -72,6 +74,13 @@ class ShowZoneLayer extends MapLayer{
                         "type": "FeatureCollection",
                         "features": []
                     }
+
+                    if (this.markers.length){
+                        this.markers.map(m => {
+                            m.remove()
+                        });
+                    }
+
                     if (get(this.zoneId, `length`, null)){
                         this.zoneId.forEach(zid => {
                             let attributes = get(response,['json','forms','byId',zid,'attributes'],{})
@@ -80,12 +89,28 @@ class ShowZoneLayer extends MapLayer{
                                 properties:{},
                                 geometry: attributes.geojson.coordinates ? attributes.geojson : JSON.parse(attributes.geojson)
                             })
+                            try {
+                                new mapboxgl.Marker({
+                                    draggable: false
+                                })
+                                    .setLngLat(turfCentroid(geojson.features.slice(-1).pop().geometry).geometry.coordinates)
+                                    .addTo(map)
+                                     .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
+                                        '<div>'
+                                        + '<b>'+ 'Name: ' +'</b>'+ attributes.name + '<br>'
+                                        + '<b>'+ 'Comment: ' +'</b>'+ attributes.comment +
+                                        '</div>'
+                                     ))
+
+                            }catch (e){
+                                console.warn(e)
+                            }
                         })
                     }
                     this.addFloodPlane();
                     map.resize();
                     map.fitBounds(bbox);
-                    this.map.getSource("polygon").setData(geojson)
+                    // this.map.getSource("polygon").setData(geojson)
 
                 })
 
@@ -163,7 +188,8 @@ const showZoneLayer =  new ShowZoneLayer("ShowZoneLayer",{
             }
         }
 
-    ]
+    ],
+    markers: []
 })
 
 export default showZoneLayer
