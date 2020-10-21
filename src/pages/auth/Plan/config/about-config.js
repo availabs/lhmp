@@ -11,7 +11,8 @@ const config =  {
 		width: 500,
 		border: 1,
 		icon: 'os-icon-arrow-right7',
-		onlyAdmin: true
+		onlyAdmin: true,
+		pullCounty: true,
 	}],
 	'Header' : [{
 		title: 'Planning Process Quote',
@@ -33,9 +34,9 @@ const config =  {
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
 			// hideNav: true // hides key from public nav. Displays on page.
-			// pullCounty: true,
-			// nullMessage: `<i>No Data</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-			// hideIfNull: true
+			///*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 	}],
 	'Pre-Planning' : [
 		{
@@ -46,6 +47,10 @@ const config =  {
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-arrow-right7',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
 			title:`planning-image`,
@@ -71,7 +76,11 @@ const config =  {
 			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise needed to develop the plan, with responsibility or authority to implement hazard mitigation activities, and who will be most affected by the plan’s outcomes.' +
 					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
 					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
-			icon: 'os-icon-rotate-cw'
+			icon: 'os-icon-rotate-cw',
+			// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},
 
 		{
@@ -83,7 +92,11 @@ const config =  {
 					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.'+
 					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
 			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
-			icon: 'os-icon-user-plus'
+			icon: 'os-icon-user-plus',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 
 		{
@@ -149,7 +162,11 @@ const config =  {
 			type: 'content',
 			prompt: 'Provide an overview of the technical data sources solicited and used for the plan (e.g. LFAs, ACS, etc). These sources should be referenced more formally in corresponding tables and in a bibliography.',
 			intent: 'To demonstrate use of best available data for hazard analysis and risk assessment.',
-			icon: 'os-icon-rotate-cw'
+			icon: 'os-icon-rotate-cw',
+			// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},
 
 		{
@@ -161,7 +178,11 @@ const config =  {
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-rotate-cw'
+			icon: 'os-icon-rotate-cw',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
 			title: '',
@@ -227,7 +248,11 @@ const config =  {
 			type: 'content',
 			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
 			intent: '',
-				icon: 'os-icon-users'
+			icon: 'os-icon-users',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
 			title: 'Public Participation',
@@ -238,7 +263,11 @@ const config =  {
 				' for input on community vulnerabilities and mitigation activities that will inform the plan’s content.' +
 				' Public involvement is also an opportunity to educate the public about hazards and risks in the community,' +
 				' types of activities to mitigate those risks, and how these impact them.',
-				icon: 'os-icon-users'
+				icon: 'os-icon-users',
+				// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Meetings',
@@ -285,7 +314,11 @@ const config =  {
 			prompt: 'Describe the process by which you offered all planning participants and the public an opportunity to review. Describe how you distributed the plan draft for review and feedback. Summarize the themes of any feedback that was received and describe how the feedback was incorporated into the plan. Provide an overview of the State/Federal submittal process.',
 			intent: 'To document 1) the solicitation and incorporation of feedback from the planning team, stakeholders, and the public in the final plan document prior to submittal to the state and FEMA for review and approval and' +
 			 		'2) notification from FEMA in the form of a "Requires Revisions", "Approvable Pending Adoption (APA)" or "Approval" letter to the State.',
-				icon: 'os-icon-users'
+				icon: 'os-icon-users',
+				// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Adoption',
@@ -366,7 +399,11 @@ const config =  {
 				iii.	Updating: How, when and by whom will update the mitigation plan within a 5-year cycle`,
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.',
-			icon: 'os-icon-battery-charging'
+			icon: 'os-icon-battery-charging',
+			// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Continued Public Engagement',
@@ -375,7 +412,11 @@ const config =  {
 			prompt: `Describe how the community(ies) will continue to engage the public throughout the plan maintenance process described above. The plan must describe how the jurisdiction(s) will continue to seek public participation after the plan has been approved and during the plan’s maintenance.`,
 			intent: 'To identify how the public will continue to have an opportunity to participate in the plan’s maintenance and implementation over time.' +
 					'To establish a process for jurisdictions to track the progress of the plan’s implementation. This also serves as the basis of the next plan update',
-			icon: 'os-icon-battery-charging'
+			icon: 'os-icon-battery-charging',
+			// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Updating The Plan',
@@ -388,7 +429,11 @@ const config =  {
 				iii.	Updating: How, when and by whom will update the mitigation plan within a 5-year cycle`,
 			intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation.' +
 				' This also serves as the basis of the next plan update.',
-			icon: 'os-icon-battery-charging'
+			icon: 'os-icon-battery-charging',
+			// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
 		},	
 	],
 	'Process Assessment' : [
@@ -399,7 +444,11 @@ const config =  {
 			prompt: 'Describe planning process strengths: document successes the planning teams experienced in collecting information, soliciting and receiving input, gathering community resources, hazard risk and vulnerabilities assessment, mitigation strategies development, etc.', 
 			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
 					'Feedback and information on specific sections in the Plan where the community has gone above and beyond minimum requirements and suggested improvements to the planning process (via local, state or federal feedback/guidance) can record lessons learned and best practices for concurrent or future planning endeavors and plan implementation.',
-			icon: 'os-icon-battery-charging'
+			icon: 'os-icon-battery-charging',
+			// hideNav: true // hides key from public nav. Displays on page.
+			///*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			/*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Opportunities',
@@ -408,7 +457,11 @@ const config =  {
 			prompt: 'Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',
 			intent: 'The process is as important as the plan itself. Bringing together local officials, stakeholders and the public in a community‐driven planning process to develop the plan also helps build the community’s overall hazard mitigation program.' +
 					'Feedback and information on specific sections in the Plan where the community has gone above and beyond minimum requirements and suggested improvements to the planning process (via local, state or federal feedback/guidance) can record lessons learned and best practices for concurrent or future planning endeavors and plan implementation.',
-			icon: 'os-icon-command'
+			icon: 'os-icon-command',
+			// hideNav: true // hides key from public nav. Displays on page.
+			///*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			/*2-non-delete*/ hideIfNull: true
 		},
 	]
 }
