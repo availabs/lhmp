@@ -152,10 +152,7 @@ const config = {
             title: 'Integration',
             requirement: 'Req-C-6',
             type: 'content',
-            prompt: 'Review Existing Resources from Jurisdictions & outside stakeholders.' +
-                    'Identify opportunities for integration of existing resources into HMP and mitigation strategies.' + 
-                    'Review plans identified in existing resources for consistency and/or conflicts.' + 
-                    'Describe ability to expand capabilities, including floodplain management (identify specific steps to be taken)',
+            prompt: 'Describe the community’s process to integrate the data, information, and hazard mitigation goals and actions into other planning mechanisms',
             intent: '',
             icon: 'os-icon-home'
         },
