@@ -64,7 +64,23 @@ const config = {
                     'Include description of Historic properties or districts if appropriate.',
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
             icon: 'os-icon-image'
-        },   
+        }, 
+        {
+            title:`Built-Environment-image`,
+            requirement:'Req-B-3B-6',
+            type: 'image',
+            prompt: '',
+            intent: '',
+            callout: '',
+            label:'Image', // Which you would like to see on the form
+            height: 250,
+            width: 500,
+            border: 1,
+            icon: 'os-icon-arrow-right7',
+            onlyAdmin: true,
+            hideNav: true,
+            hideIfNull: true
+        },  
         {
             title: 'Built Environment Table',
             requirement: 'Req-B-3B-2',
@@ -74,6 +90,7 @@ const config = {
             intent: 'Overview of loss by asset type by scenario',
             icon: 'os-icon-alert-circle'
         },
+
         {
             title: 'Critical Infrastructure',
             requirement: 'Req-NYS-F-2',

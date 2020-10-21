@@ -11,7 +11,8 @@ const config =  {
 		width: 500,
 		border: 1,
 		icon: 'os-icon-arrow-right7',
-		onlyAdmin: true
+		onlyAdmin: true,
+		pullCounty: true,
 	}],
 	'Header' : [{
 		title: 'Planning Process Quote',
@@ -34,7 +35,7 @@ const config =  {
 			icon: 'os-icon-globe',
 			// hideNav: true // hides key from public nav. Displays on page.
 			// pullCounty: true,
-			// nullMessage: `<i>No Data</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			// nullMessage: `<i>No Content or Data</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
 			// hideIfNull: true
 	}],
 	'Pre-Planning' : [
