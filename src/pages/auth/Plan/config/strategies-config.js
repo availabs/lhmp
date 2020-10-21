@@ -34,7 +34,11 @@ const config = {
             intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +  
                     'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
                     'Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction that are based on the community’s risk and  vulnerabilities, as well as community priorities.',
-            icon: 'os-icon-globe'
+            icon: 'os-icon-globe',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true
          },
          {   
             title: 'Goals & Objectives',
@@ -44,7 +48,11 @@ const config = {
                 ' broad policy statements that explain what is to be achieved through mitigation plan implementation.',
             intent: 'To guide the development and implementation of hazard mitigation actions for the community(ies).' +
                 '  Goals are statements of the community’s visions for the future.',
-            icon: 'os-icon-target'
+            icon: 'os-icon-target',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Goals 3A-1',
@@ -240,7 +248,11 @@ const config = {
             intent: 'To identify how the plan will directly lead to implementation of the hazard mitigation actions.' +
                 '  As opportunities arise for actions or projects to be  implemented, the responsible entity will be able' +
                 ' to take action towards completion of the activities.',
-            icon: 'os-icon-edit-1'    
+            icon: 'os-icon-edit-1',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true    
         },    
         {
             title: 'NFIP Continued Compliance & Repetative Loss Strategy',
@@ -260,14 +272,20 @@ const config = {
             icon:'os-icon-folder',        
         },
         {
-            title:'',
+            title:'Resources',
             requirement:'Req-NYS-F-8B',
             type:'',
             prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
             intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
                     'The plan must include a list of potential local, State and Federal funding sources.',
             icon:'os-icon-folder',
-            hideNav: true        
+            hideNav: true,
+             // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true  
+        
+
         },
     ],
      
@@ -354,7 +372,11 @@ const config = {
             type:'content',
             prompt:'Describe strengths of the process to develop a mitigation strategy and specific actions.',
             intent:'',
-            icon:'os-icon-trending-up'
+            icon:'os-icon-trending-up',
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-delete*/ hideIfNull: true
         },
         {
             title:'Opportunities',
@@ -362,7 +384,11 @@ const config = {
             type:'content',
             prompt:'Describe the challenges associated with developing the mitigation strategy and actions. Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',
             intent:'',
-            icon:'os-icon-bar-chart-up'
+            icon:'os-icon-bar-chart-up',
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-delete*/ hideIfNull: true
         },
     ]
     

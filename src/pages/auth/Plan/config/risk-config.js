@@ -266,7 +266,11 @@ const config = {
             intent: 'The purpose of hazard mitigation is to reduce potential losses from future disasters.' +
                     'The intent of mitigation planning, therefore, is to maintain a process that leads to hazard mitigation actions.'+
                     'Identifying process strengths provides helpful context for understanding how the hazard mitigation strategy and actions were developed.',
-            icon: 'os-icon-trending-up'        
+            icon: 'os-icon-trending-up',
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-delete*/ hideIfNull: true        
         },
         {
             title: 'Opportunities',
@@ -276,7 +280,11 @@ const config = {
                     'Identify ways your community can improve upon the process during the 5-year life cycle of the plan and in preparation for the next update. Consider inclusion of significant Opportunities for Improvement identified by DHSES and FEMA reviewers.',
             intent: 'The purpose of hazard mitigation is to reduce potential losses from future disasters. The intent of mitigation planning, therefore, is to maintain a process that leads to hazard mitigation actions.'+
                     'Identifying process strengths provides helpful context for understanding how the hazard mitigation strategy and actions were developed.',
-            icon: 'os-icon-bar-chart-up'                
+            icon: 'os-icon-bar-chart-up',
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-delete*/ hideIfNull: true                
         }    
     ]
 }
