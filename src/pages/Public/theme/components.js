@@ -74,7 +74,7 @@ export const sidebarLayout = themes[selectedTheme].sidebarLayout
 
 export const ImageContainer = styled.div`
     background: #fafafa;
-    background-image: url(${props => props.image || '/img/sullivan2.jpg'});
+    background-image: url(${props => props.image});
     background-size: 100vw 100vh;
     background-attachment: fixed;
     display: flex;
@@ -99,7 +99,7 @@ export const StatementText = styled.div`
 export const HeaderImage = styled.div`
 	width: 100%;
 	height: 600px;
-	background: no-repeat url("${props => props.image || '/img/planning.jpg' }");
+	background: no-repeat url("${props => props.image}");
 	background-size: cover;
 	display: flex;
 	flex-direction: column;
@@ -156,7 +156,7 @@ export const HeaderContainer = styled.div`
 `
 
 export const HeaderImageContainer = styled.div`
-    background-image: url(${props => props.img ? props.img : "/img/planning.jpg"});
+    background-image: url(${props => props.img});
     background-size: cover;
     height: 90vh;
 `
