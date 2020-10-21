@@ -47,6 +47,10 @@ const config =  {
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-arrow-right7',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
 			title:`planning-image`,
@@ -88,7 +92,11 @@ const config =  {
 					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.'+
 					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
 			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
-			icon: 'os-icon-user-plus'
+			icon: 'os-icon-user-plus',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 
 		{
@@ -170,7 +178,11 @@ const config =  {
 			intent: 'To identify existing data and information, shared objectives, and past and ongoing activities that' +
 				' can help inform the mitigation plan.  It also helps identify the existing capabilities and planning' +
 				' mechanisms to implement the mitigation strategy.',
-			icon: 'os-icon-rotate-cw'
+			icon: 'os-icon-rotate-cw',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
 			title: '',
@@ -236,7 +248,11 @@ const config =  {
 			type: 'content',
 			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
 			intent: '',
-				icon: 'os-icon-users'
+			icon: 'os-icon-users',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
 			title: 'Public Participation',
