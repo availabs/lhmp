@@ -6,6 +6,7 @@ import {CSVLink, CSVDownload} from 'react-csv';
 import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
 import _ from 'lodash'
+import get from 'lodash.get'
 import MultiSelectFilter from "../../filters/multi-select-filter";
 import megaAvlFormsConfig from 'pages/auth/megaAvlFormsConfig.js';
 
@@ -201,7 +202,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                 .forEach(key => {
                     if (csvDownload.includes(key)){
                         tmpRow[
-                            megaAvlFormsConfig[key].label && megaAvlFormsConfig[key].label.length ?
+                            get(megaAvlFormsConfig, [key, 'label'], null) && megaAvlFormsConfig[key].label.length ?
                                 megaAvlFormsConfig[key].label : key
                             ] = row[key]
                     }

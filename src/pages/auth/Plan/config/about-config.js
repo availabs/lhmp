@@ -33,25 +33,23 @@ const config =  {
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
 			// hideNav: true // hides key from public nav. Displays on page.
+			// pullCounty: true,
+			// nullMessage: `<i>No Data</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			// hideIfNull: true
 	}],
 	'Pre-Planning' : [
 		{
 			title: 'Planning Teams',
-			requirement: `planning-team`,
-			type: 'image',
-			prompt: '',
-			intent: '',
-			callout: '',
-			label:'Image', // Which you would like to see on the form
-			height: 250,
-			width: 500,
-			border: 1,
+			requirement: `Req-A-1B`,
+			type: 'content',
+			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
+			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
+			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-arrow-right7',
-			onlyAdmin: true
 		},
 		{
-			title: 'Planning Teams',
-			requirement: `planning-image`,
+			title:`planning-image`,
+			requirement:'Req-A-1F',
 			type: 'image',
 			prompt: '',
 			intent: '',
@@ -62,6 +60,7 @@ const config =  {
 			border: 1,
 			icon: 'os-icon-arrow-right7',
 			onlyAdmin: true,
+			hideNav: true,
 		},
 
 		{

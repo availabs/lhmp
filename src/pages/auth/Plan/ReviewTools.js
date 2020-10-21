@@ -110,9 +110,13 @@ class PlanReview extends React.Component {
                                                             allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready For Review"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
-                                                                geo.length === 5 ? colors.county : colors.municipal
+                                                                geo.length > 5 && element.municipal === 'false' ? colors.municipalFalse :
+                                                                'none'
                                                 }}
-                                                onClick={() => window.location.href = `/review_requirement/${element.element}/${geo}`}></td>
+                                                onClick={() =>
+                                                    geo.length > 5 && element.municipal === 'false' ?
+                                                        null :
+                                                        window.location.href = `/review_requirement/${element.element}/${geo}`}></td>
                                         }
                                     )
                                 }

@@ -405,7 +405,7 @@ class AssetsFilteredTable extends Component {
                 },
                 ...riskZoneColNames
                     .map((name) => {
-                        if (name.includes('$') && this.props.public) {return null}
+                        if (name.includes('$') && this.props.public && this.props.hideFloodValue) {return null}
                         let a = {};
                         let riskZone = riskZoneToNameMapping[name.slice(0, name.length-2)];
                         let scenarioId = Object.keys(scenarioToRiskZoneMapping).filter(f => scenarioToRiskZoneMapping[f].includes(riskZone)).pop();
