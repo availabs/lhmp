@@ -176,15 +176,26 @@ const config = {
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-
         {
             title: 'Capacity To Address Risk',
+            requirement: 'Req-C-1B-1B',
+            type: 'content',
+            prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability to expand on and improve these existing policies and programs',
+            intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local capability varies widely.',
+            icon: 'os-icon-pie-chart-3',
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+        },
+        {
+            title: '',
             requirement: 'Req-C-1B-1',
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-pie-chart-3',
-            // hideNav: true // hides key from public nav. Displays on page.
+            hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
