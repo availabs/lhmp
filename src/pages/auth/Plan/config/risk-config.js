@@ -145,7 +145,7 @@ const config = {
     
     'Changes in Risk' : [
         {
-            title: 'Overview',
+            title: 'What Changed',
             requirement: 'Req-D-1A',
             type: 'content',
             prompt: 'Areas of recent and future growth and development are an important component when assessing the building environment.' +
@@ -229,7 +229,7 @@ const config = {
     ],
         'Floodplain Management' : [
         {
-            title: 'Overview',
+            title: 'NFIP Compliance',
             requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
