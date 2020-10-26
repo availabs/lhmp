@@ -127,6 +127,12 @@ const config = {
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {
+                        Header: 'Jurisdiction',
+                        accessor: 'municipality',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
                         Header: 'Name',
                         accessor: 'capability_name',
                         sort: true,
@@ -145,23 +151,23 @@ const config = {
                         filter: 'multi'
                     },
                     
-                    {
-                        Header: 'adopting authority',
-                        accessor: 'adopting_authority',
-                        sort: true,
-                        filter: 'default'
-                    },
-                    {
-                        Header: 'responsible authority',
-                        accessor: 'responsible_authority',
-                        sort: true,
-                        filter: 'default'
-                    },
-                    {
-                        Header: 'Link',
-                        accessor: 'upload',
-                        width: 50
-                    },
+                    // {
+                    //     Header: 'adopting authority',
+                    //     accessor: 'adopting_authority',
+                    //     sort: true,
+                    //     filter: 'default'
+                    // },
+                    // {
+                    //     Header: 'responsible authority',
+                    //     accessor: 'responsible_authority',
+                    //     sort: true,
+                    //     filter: 'default'
+                    // },
+                    // {
+                    //     Header: 'Link',
+                    //     accessor: 'upload',
+                    //     width: 50
+                    // },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',

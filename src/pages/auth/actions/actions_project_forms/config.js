@@ -140,7 +140,7 @@ module.exports = [
                 disable_condition: '',
                 display_type: 'text',
                 meta: 'true',
-                // metaSource: 'meta_file',
+                metaSource: 'meta_file',
                 meta_filter: {filter_key: 'actions_project', value: 'category'}, // if populated from forms_meta
                 section: '1'
             },
@@ -155,7 +155,7 @@ module.exports = [
                 disable_condition: '',
                 display_type: 'text',
                 meta: 'true',
-                // metaSource: 'meta_file',
+                metaSource: 'meta_file',
                 meta_filter: {filter_key: 'actions_project', value: 'type'},
                 depend_on: 'action_category',
                 section: '1',
