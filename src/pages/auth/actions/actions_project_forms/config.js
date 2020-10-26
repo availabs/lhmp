@@ -3,7 +3,7 @@ module.exports = [
         type: 'actions', // type is same as the route path for now
         sub_type: 'project',
         list_attributes: ['action_description',
-            {'action_jurisdiction': {filter: 'multi'}},
+            {'action_jurisdiction': {filter: 'true'}},
             {'action_status_update': {filter: 'multi'}},
             {'description_of_problem_being_mitigated': {filter: 'true'}},
             {'action_name': {filter: 'true'}},
