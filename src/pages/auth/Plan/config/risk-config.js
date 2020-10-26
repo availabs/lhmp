@@ -11,7 +11,8 @@ const config = {
         width: 500,
         border: 1,
         icon: 'os-icon-arrow-right7',
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: true
     }],
     'Header' : [{
         title: 'Risk Quote',
@@ -21,8 +22,29 @@ const config = {
         intent: '',
         callout: '',
         icon: 'os-icon-arrow-right7',
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: true
     }],
+    'Purpose' : [
+        {
+            title: 'About Risk and Vulnerability',
+            requirement: 'Req-B-3B-7',
+            type: 'content',
+            prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
+            intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified' +
+                ' hazards. The overall summary of vulnerability identifies structures, systems, populations or other' +
+                ' community assets as defined by the community that are susceptible to damage and loss from hazard events.' +
+                ' a. *Vulnerable assets and potential losses is more than a list of the total exposure of population,' +
+                ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
+                ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
+                ' and that will be addressed in the mitigation strategy.',
+            icon: 'os-icon-globe',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            // nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+        },
+    ],
     'Vulnerability' : [
         {
             title: 'Local Orientation',
