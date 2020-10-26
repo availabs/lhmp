@@ -3,8 +3,10 @@ import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
 import _ from 'lodash'
+import turfCentroid from '@turf/centroid'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
+import mapboxgl from "mapbox-gl";
 
 const sources = {
     "_dfirm_500_100": {
@@ -63,15 +65,26 @@ class ShowZoneLayer extends MapLayer{
         super.onAdd(map);
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid,
-                query = this.zoneId && this.zoneId.length ?  [['geo',activeGeoid,'boundingBox'], ['forms','byId',this.zoneId]] : [['geo',activeGeoid,'boundingBox']]
+                query = this.zoneId && this.zoneId.length ?
+                    [['geo',activeGeoid,'boundingBox'], ['geo', activeGeoid, 'municipalities'], ['forms','byId',this.zoneId]] :
+                    [['geo',activeGeoid,'boundingBox']]
             return falcorGraph.get(...query)
                 .then(response =>{
+                    map.setFilter('cousubs', ['all', ['in', 'geoid', ...get(response.json.geo, [activeGeoid, 'municipalities'], [])]])
+                    map.setFilter('places', ['all', ['in', 'geoid', ...get(response.json.geo, [activeGeoid, 'municipalities'], [])]])
                     let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                     let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                     let geojson = {
                         "type": "FeatureCollection",
                         "features": []
                     }
+
+                    if (this.markers.length){
+                        this.markers.map(m => {
+                            m.remove()
+                        });
+                    }
+
                     if (get(this.zoneId, `length`, null)){
                         this.zoneId.forEach(zid => {
                             let attributes = get(response,['json','forms','byId',zid,'attributes'],{})
@@ -80,12 +93,28 @@ class ShowZoneLayer extends MapLayer{
                                 properties:{},
                                 geometry: attributes.geojson.coordinates ? attributes.geojson : JSON.parse(attributes.geojson)
                             })
+                            try {
+                                new mapboxgl.Marker({
+                                    draggable: false
+                                })
+                                    .setLngLat(turfCentroid(geojson.features.slice(-1).pop().geometry).geometry.coordinates)
+                                    .addTo(map)
+                                     .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
+                                        '<div>'
+                                        + '<b>'+ 'Name: ' +'</b>'+ attributes.name + '<br>'
+                                        + '<b>'+ 'Comment: ' +'</b>'+ attributes.comment +
+                                        '</div>'
+                                     ))
+
+                            }catch (e){
+                                console.warn(e)
+                            }
                         })
                     }
                     this.addFloodPlane();
                     map.resize();
                     map.fitBounds(bbox);
-                    this.map.getSource("polygon").setData(geojson)
+                    // this.map.getSource("polygon").setData(geojson)
 
                 })
 
@@ -123,6 +152,12 @@ const showZoneLayer =  new ShowZoneLayer("ShowZoneLayer",{
                 'type': "vector",
                 'url': 'mapbox://am3081.dlnvkxdi'
             },
+        },
+        { id: "places",
+            source: {
+                'type': "vector",
+                'url': 'mapbox://am3081.6u9e7oi9'
+            },
         }
     ],
     layers: [
@@ -144,13 +179,24 @@ const showZoneLayer =  new ShowZoneLayer("ShowZoneLayer",{
             'source': 'cousubs',
             'source-layer': 'cousubs',
             'type': 'line',
-            'paint': {
-                'line-color': '#F31616',
-                'line-opacity': 0.5,
-                'line-width': 4
-            },
-            filter : ['in','geoid','']
-
+            // 'paint': {
+            //     'line-color': '#F31616',
+            //     'line-opacity': 0.5,
+            //     'line-width': 4
+            // },
+            //filter : ['in','geoid',store.getState().user.activeGeoid]
+        },
+        {
+            'id': 'places',
+            'source': 'places',
+            'source-layer': 'places',
+            'type': 'line',
+            // 'paint': {
+            //     'line-color': '#F31616',
+            //     'line-opacity': 0.5,
+            //     'line-width': 4
+            // },
+            //filter : ['in','geoid',store.getState().user.activeGeoid]
         },
         {
             'id': 'polygon-layer',
@@ -163,7 +209,8 @@ const showZoneLayer =  new ShowZoneLayer("ShowZoneLayer",{
             }
         }
 
-    ]
+    ],
+    markers: []
 })
 
 export default showZoneLayer

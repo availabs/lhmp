@@ -21,7 +21,7 @@ class ZonesFormsIndex extends React.Component{
                 createButtons = {false}
                 editButton = {true}
                 viewButton = {true}
-                deleteButton = {false}
+                deleteButton = {true}
             />
         )
     }
