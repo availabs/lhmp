@@ -11,7 +11,8 @@ const config = {
         width: 500,
         border: 1,
         icon: 'os-icon-arrow-right7',
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: true
     }],
     'Header' : [{
         title: 'Risk Quote',
@@ -21,9 +22,28 @@ const config = {
         intent: '',
         callout: '',
         icon: 'os-icon-arrow-right7',
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: true
     }],
-    'Vulnerability' : [
+    'Purpose' : [
+        {
+            title: 'About Risk and Vulnerability',
+            requirement: 'Req-B-3B-7',
+            type: 'content',
+            prompt: 'Provide an overall summary of each jurisdiction’s vulnerability to the identified hazards.',
+            intent: 'The plan must provide an overall summary of each jurisdiction’s vulnerability to the identified' +
+                ' hazards. The overall summary of vulnerability identifies structures, systems, populations or other' +
+                ' community assets as defined by the community that are susceptible to damage and loss from hazard events.' +
+                ' a. *Vulnerable assets and potential losses is more than a list of the total exposure of population,' +
+                ' structures, and critical facilities in the planning area. An example of an overall summary is a list' +
+                ' of key issues or problem statements that clearly describes the community’s greatest vulnerabilities' +
+                ' and that will be addressed in the mitigation strategy.',
+            icon: 'os-icon-globe',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            // nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+        },
         {
             title: 'Local Orientation',
             requirement: 'Req-B-3B',
@@ -42,6 +62,8 @@ const config = {
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
+    ],
+    'Vulnerability' : [
         {
             title: 'Social Vulnerability',
             requirement: 'Req-B-3B-3',
@@ -51,8 +73,8 @@ const config = {
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
             icon: 'os-icon-grid-squares-2',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },   
         {
@@ -73,8 +95,8 @@ const config = {
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
             icon: 'os-icon-image',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         }, 
         {
@@ -114,8 +136,8 @@ const config = {
                     '- The plan must document that critical facilities are protected to the 500-year flood event, or worst damage scenario. For those that do not meet this level of protection, the plan must include an action to meet this criteria, or explain why it is not feasible to do so',
             icon: 'os-icon-loader',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         
@@ -137,15 +159,27 @@ const config = {
                     'The natural environment also provides protective functions that reduce hazard impacts and increase resiliency: conservation of environmental assets may present opportunities to meet mitigation and other community objectives, such as protecting sensitive habitat, developing parks and trails, or contributing to the economy.',
             icon: 'os-icon-edit-3',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true         
-        }
+        },
+        {
+            title: 'Problem Areas',
+            requirement: 'Req-B-3B-8',
+            type: 'content',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-globe', 
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+        },
     ],
     
     'Changes in Risk' : [
         {
-            title: 'Overview',
+            title: 'What Changed',
             requirement: 'Req-D-1A',
             type: 'content',
             prompt: 'Areas of recent and future growth and development are an important component when assessing the building environment.' +
@@ -157,8 +191,8 @@ const config = {
                 ' vulnerability of the community.',
             icon: 'os-icon-repeat',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
        
@@ -188,8 +222,8 @@ const config = {
             intent: '',
             icon: 'os-icon-globe',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
@@ -229,7 +263,7 @@ const config = {
     ],
         'Floodplain Management' : [
         {
-            title: 'Overview',
+            title: 'NFIP Compliance',
             requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
@@ -278,23 +312,29 @@ const config = {
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-            {
-            title: 'Problem statement table',
-            requirement: 'Req-B-4A-1',
-            type: 'problemStatementTable',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-alert-circle'
-        },
+        
+        // {
+        //     title: '',
+        //     requirement: 'Req-B-4A-1',
+        //     type: 'problemStatementTable',
+        //     prompt: '',
+        //     intent: '',
+        //     icon: 'os-icon-alert-circle',
+        //     hideNav: true
+        // },
     ],
         'Dam Safety' : [
         {
-            title: '',
+            title: 'High Hazard Dams',
             requirement: 'Req-S-3A',
-            type: '',
+            type: 'content',
             prompt: '',
             intent: '',
-            icon: '', 
+            icon: 'os-icon-alert-circle', 
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
         },
     ],
         'Process Assessment'  : [

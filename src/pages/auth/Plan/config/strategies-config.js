@@ -23,10 +23,9 @@ const config = {
         icon: 'os-icon-arrow-right7',
         onlyAdmin: true
     }],
-
-    Objectives: [
+    Purpose: [
         {
-            title: 'Local Orientation',
+            title: 'About Strategies',
             requirement: 'R-S-4A',
             type: 'content',
             prompt: 'Provide an overview of the Strategy Development Process.  Briefly describe the process by which your community used existing resources and risk assessments to identify problem statements.' +
@@ -40,6 +39,24 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
          },
+         {
+            title: 'Local Orientation',
+            requirement: 'R-C-3',
+            type: 'content',
+            prompt: 'Provide an overview of the Strategy Development Process.  Briefly describe the process by which your community used existing resources and risk assessments to identify problem statements.' +
+                    'Then, describe how your community developed strategies to solve for those problems and how they were documented. Who was involved? Did you conduct site visits? Did you attend a Mitigation Strategy Workshop? Etc.',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +  
+                    'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
+                    'Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction that are based on the community’s risk and  vulnerabilities, as well as community priorities.',
+            icon: 'os-icon-globe',
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true
+         },
+    ],
+    Objectives: [
+        
          {   
             title: 'Goals & Objectives',
             requirement: 'Req-C-3-A',
@@ -50,9 +67,9 @@ const config = {
                 '  Goals are statements of the community’s visions for the future.',
             icon: 'os-icon-target',
             // hideNav: true // hides key from public nav. Displays on page.
-            /*2-non-county*/ pullCounty: true,
+            ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            /*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Goals 3A-1',
@@ -75,7 +92,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            /*2-non-delete*/ hideIfNull: true 
         },
     ],
 
@@ -93,8 +110,8 @@ const config = {
                 ' capability varies widely.',
             icon: 'os-icon-globe',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
@@ -109,6 +126,12 @@ const config = {
                 type: 'capabilities',
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
+                    {
+                        Header: 'Jurisdiction',
+                        accessor: 'municipality',
+                        sort: true,
+                        filter: 'default'
+                    },
                     {
                         Header: 'Name',
                         accessor: 'capability_name',
@@ -128,23 +151,23 @@ const config = {
                         filter: 'multi'
                     },
                     
-                    {
-                        Header: 'adopting authority',
-                        accessor: 'adopting_authority',
-                        sort: true,
-                        filter: 'default'
-                    },
-                    {
-                        Header: 'responsible authority',
-                        accessor: 'responsible_authority',
-                        sort: true,
-                        filter: 'default'
-                    },
-                    {
-                        Header: 'Link',
-                        accessor: 'upload',
-                        width: 50
-                    },
+                    // {
+                    //     Header: 'adopting authority',
+                    //     accessor: 'adopting_authority',
+                    //     sort: true,
+                    //     filter: 'default'
+                    // },
+                    // {
+                    //     Header: 'responsible authority',
+                    //     accessor: 'responsible_authority',
+                    //     sort: true,
+                    //     filter: 'default'
+                    // },
+                    // {
+                    //     Header: 'Link',
+                    //     accessor: 'upload',
+                    //     width: 50
+                    // },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',
@@ -172,19 +195,30 @@ const config = {
             intent: '',
             icon: 'os-icon-home',
             // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+        },
+        {
+            title: 'Capacity To Address Risk',
+            requirement: 'Req-C-1B-1B',
+            type: 'content',
+            prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability to expand on and improve these existing policies and programs',
+            intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local capability varies widely.',
+            icon: 'os-icon-pie-chart-3',
+            // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-
         {
-            title: 'Capacity To Address Risk',
+            title: '',
             requirement: 'Req-C-1B-1',
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
             icon: 'os-icon-pie-chart-3',
-            // hideNav: true // hides key from public nav. Displays on page.
+            hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
@@ -196,7 +230,10 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: 'os-icon-home'
+            icon: 'os-icon-home',
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
         },
     ],
     
@@ -213,6 +250,10 @@ const config = {
                     'Projects that are well developed and documented in one place are more quickly identifiable for selection when grants become available, making implementation that much more likely.',
             icon: 'os-icon-globe',
             hideNav: true,
+            // hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
         },
         {
             title: 'Actions',
@@ -252,7 +293,8 @@ const config = {
                 '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
                 ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
                 ' b. Integrate elements of Req-C-5 and Req-C-6',
-            icon: 'os-icon-activity'
+            icon: 'os-icon-activity',
+
         },
         {
             title: 'Prioritization Criteria',
@@ -275,7 +317,7 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true    
         },    
         {
-            title: 'NFIP Continued Compliance & Repetative Loss Strategy',
+            title: 'NFIP Continued Compliance & Repetitive Loss Strategy',
             requirement:'Req-C-2A',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate, describe how and why. Describe FPMP for continued compliance, Adoption and enforcement of floodplain management requirements, including regulating new construction in Special Flood Hazard Areas (SFHAs); Floodplain identification and mapping, including any local requests for map updates; or Description of community assistance and monitoring activities. If jurisdiction is not taking part in NFIP describe why.',
@@ -295,24 +337,24 @@ const config = {
                     'The plan must include a list of potential local, State and Federal funding sources.',
             icon:'os-icon-folder',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true         
         },
-        {
-            title:'Resources',
-            requirement:'Req-NYS-F-8B',
-            type:'',
-            prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
-            intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
-                    'The plan must include a list of potential local, State and Federal funding sources.',
-            icon:'os-icon-folder',
-            hideNav: true,
-             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true  
-        },
+        // {
+        //     title:'Resources',
+        //     requirement:'Req-NYS-F-8B',
+        //     type:'',
+        //     prompt:'Document a complete list of funding opportunities, resources and programs available for implementation.',
+        //     intent:'To identify resources to be used for implementation of the hazard mitigation actions including, but not limited to, funding sources, existing publications, or training opportunities.. States may add state and local resources, if available. Identifying strategic funding sources is integral to successful coordination and implementation of mitigation actions.' +
+        //             'The plan must include a list of potential local, State and Federal funding sources.',
+        //     icon:'os-icon-folder',
+        //     hideNav: true,
+        //      // hideNav: true // hides key from public nav. Displays on page.
+        //     ///*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true  
+        // },
     ],
      
      Response : [
@@ -327,8 +369,8 @@ const config = {
                 'Location of shelters (outside of the SFHA); Specific information about how these plans are accessible and available to the public, or include the related narrative from those plans in an appendix.',
         icon:'os-icon-ui-90',
         // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true         
         },
         {
@@ -339,8 +381,8 @@ const config = {
             intent: '',
             icon: 'os-icon-email-forward',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
@@ -351,8 +393,8 @@ const config = {
             intent: '',
             icon: 'os-icon-documents-07',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
             
         },
@@ -374,8 +416,8 @@ const config = {
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
             icon: 'os-icon-alert-triangle',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },    
         {
@@ -395,8 +437,8 @@ const config = {
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
             icon: 'os-icon-share-2',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {

@@ -22,6 +22,7 @@ const config =  {
 		intent: '',
 		callout: '',
 		icon: 'os-icon-arrow-right7',
+		pullCounty: true,
 		onlyAdmin: true // visible only in admin CMS by default. used if you want to load this key at a particular location on page.
 	}],
 	'Planning Context' : [
@@ -33,6 +34,7 @@ const config =  {
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
+			pullCounty: true,
 			// hideNav: true // hides key from public nav. Displays on page.
 			///*2-non-county*/ pullCounty: true,
 			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
@@ -47,9 +49,10 @@ const config =  {
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
 			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-arrow-right7',
+			pullCounty: true,
 			// hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>` // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
@@ -93,6 +96,18 @@ const config =  {
 					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
 			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
 			icon: 'os-icon-user-plus',
+			// hideNav: true // hides key from public nav. Displays on page.
+            ///*2-non-county*/ pullCounty: true,
+            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+		},
+		{
+			title: 'Jurisdictional Participation',
+			requirement: 'Req-A-1G',
+			type: 'content',
+			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
+			intent: '',
+			icon: 'os-icon-users',
 			// hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
@@ -243,7 +258,7 @@ const config =  {
 	],
 	'Engagement' : [
 		{
-			title: 'Jurisdictional Participation',
+			title: 'Jurisdictional Engagement',
 			requirement: 'Req-A-1E',
 			type: 'content',
 			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
