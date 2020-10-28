@@ -374,7 +374,7 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true         
         },
         {
-            title: 'Temporary Housing',
+            title: 'Temporary Housing and Relocation',
             requirement: 'Req-NYS-F-3A',
             type: 'content',
             prompt: '',
@@ -385,19 +385,19 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-        {
-            title: 'Relocation Zones',
-            requirement: 'Req-NYS-F-3B',
-            type: 'content',
-            prompt: 'Tell us about your relocation zones...',
-            intent: '',
-            icon: 'os-icon-documents-07',
-            // hideNav: true // hides key from public nav. Displays on page.
-            /*2-non-county*/ pullCounty: true,
-            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+        // {
+        //     title: 'Relocation Zones',
+        //     requirement: 'Req-NYS-F-3B',
+        //     type: 'content',
+        //     prompt: 'Tell us about your relocation zones...',
+        //     intent: '',
+        //     icon: 'os-icon-documents-07',
+        //     // hideNav: true // hides key from public nav. Displays on page.
+        //     /*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true 
             
-        },
+        // },
         {
             title: 'Relocation Zone Map',
             requirement: 'Req-NYS-F-3B-1',
