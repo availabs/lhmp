@@ -184,17 +184,21 @@ function DefaultColumnFilter({
 // a unique option from a list
 
 function MultiSelectColumnFilter({
-                                     column: {filterValue, setFilter, preFilteredRows, id},
+                                     column: {filterValue, setFilter, preFilteredRows, id, filterMeta},
                                  }) {
     // Calculate the options for filtering
     // using the preFilteredRows
     const options = React.useMemo(() => {
         const options = new Set()
+        if (filterMeta){
+            return filterMeta
+        }
         preFilteredRows.forEach(row => {
             options.add(row.values[id])
         })
         return [...options.values()]
     }, [id, preFilteredRows])
+        .filter(d => d)
     const count = preFilteredRows.length;
 
     // Render a multi-select box
@@ -286,7 +290,10 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                 return rows.filter(row => {
                     const rowValue = row.values[id];
                     return rowValue !== undefined && filterValue.length
-                        ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
+                        ? filterValue.filter(fv =>
+                            rowValue !== '' && fv !== '' && (String(fv).toLowerCase().includes(String(rowValue).toLowerCase()) ||
+                            String(rowValue).toLowerCase().includes(String(fv).toLowerCase()))
+                        ).length
                         : true
                 })
             },

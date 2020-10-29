@@ -125,6 +125,8 @@ class AvlFormsListTable extends React.Component {
         let combine_list_attributes = this.props.config.map(d => d.combine_list_attributes);
         let listViewData = [];
         let formType = this.props.config.map(d => d.type);
+        let geoMetaFilterColumns = {};
+
         if (graph) {
             if (combine_list_attributes[0] === undefined) {
                 Object.keys(graph).forEach(item => {
@@ -138,13 +140,27 @@ class AvlFormsListTable extends React.Component {
                                 if (graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string") {
                                     if (graph[item].value.attributes[attribute].includes("[")) {
                                         data[attribute] = graph[item].value.attributes[attribute].slice(1,-1).split(',')
-                                            .map(geoData =>  this.props.geoData[geoData] ?
-                                                functions.formatName(this.props.geoData[geoData].name, geoData) || '' :
-                                                geoData).join(', ');
+                                            .map(geoData => {
+                                                if (this.props.geoData[geoData]){
+                                                    let tmpVal = functions.formatName(this.props.geoData[geoData].name, geoData) || '';
+
+                                                    // geoMetaFilterColumns.push(attribute)
+                                                    geoMetaFilterColumns[attribute] =
+                                                        geoMetaFilterColumns[attribute] ? [...geoMetaFilterColumns[attribute], tmpVal] : [tmpVal]
+                                                    return tmpVal
+                                                }else{
+                                                    return geoData
+                                                }
+                                            }).join(', ');
                                     } else {
-                                        data[attribute] = geo[graph[item].value.attributes[attribute]] ?
-                                            functions.formatName(geo[graph[item].value.attributes[attribute]].name, graph[item].value.attributes[attribute]) || '' :
-                                            graph[item].value.attributes[attribute];
+                                        if (geo[graph[item].value.attributes[attribute]]){
+                                            let tmpVal = functions.formatName(geo[graph[item].value.attributes[attribute]].name, graph[item].value.attributes[attribute]) || ''
+                                            geoMetaFilterColumns[attribute] =
+                                                geoMetaFilterColumns[attribute] ? [...geoMetaFilterColumns[attribute], tmpVal] : [tmpVal]
+                                            data[attribute] = tmpVal
+                                        }else{
+                                            data[attribute] = graph[item].value.attributes[attribute]
+                                        }
                                     }
                                 } else {
                                     let getAttribute =get(graph, `${item}.value.attributes[${attribute}]`, null)
@@ -225,9 +241,17 @@ class AvlFormsListTable extends React.Component {
                                 if (graph[item].value.attributes[attribute] && typeof graph[item].value.attributes[attribute] === "string") {
                                     if (graph[item].value.attributes[attribute].includes("[")) {
                                         data[attribute] = graph[item].value.attributes[attribute].slice(1,-1).split(',')
-                                            .map(geoData =>  this.props.geoData[geoData] ?
-                                                functions.formatName(this.props.geoData[geoData].name, geoData) || '' :
-                                                geoData).join(', ')
+                                            .map(geoData => {
+                                                if (this.props.geoData[geoData]){
+                                                    let tmpVal = functions.formatName(this.props.geoData[geoData].name, geoData) || '';
+                                                    // geoMetaFilterColumns.push(attribute)
+                                                    geoMetaFilterColumns[attribute] =
+                                                        geoMetaFilterColumns[attribute] ? [...geoMetaFilterColumns[attribute], tmpVal] : [tmpVal]
+                                                    return tmpVal
+                                                }else{
+                                                    return geoData
+                                                }
+                                            }).join(', ')
                                     } else {
                                         data[attribute] = graph[item].value.attributes[attribute]
                                     }
@@ -264,7 +288,7 @@ class AvlFormsListTable extends React.Component {
 
                 })
             }
-            return listViewData
+            return {listViewData, geoMetaFilterColumns}
         }
 
     }
@@ -391,7 +415,7 @@ class AvlFormsListTable extends React.Component {
             </h4>
     }
 
-    renderBody(listViewData, formAttributes) {
+    renderBody(listViewData, formAttributes, geoMetaFilterColumns) {
         return listViewData.length > 0 ?
             <div className="element-box">
                 <div className="table-responsive">
@@ -412,6 +436,8 @@ class AvlFormsListTable extends React.Component {
                                     accessor: f,
                                     filter: get(tmpAttr, `[0].filter`, null) === 'true' ? 'default' :
                                         get(tmpAttr, `[0].filter`, null),
+                                    filterMeta: geoMetaFilterColumns && geoMetaFilterColumns[f] ?
+                                        _.uniqBy(geoMetaFilterColumns[f]) : null,
                                     sort: get(tmpAttr, `[0].sort`, 'true') === 'true',
                                     expandable: get(this.props.config, `[0].attributes.${f}.expandable`, null)
                                 })
@@ -432,10 +458,9 @@ class AvlFormsListTable extends React.Component {
     render() {
 
         let formAttributes = [];
-        let listViewData = [];
         let listAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
-        let data = this.formsListTable();
-        listViewData = data.filter(value => Object.keys(value).length !== 0)
+        let {listViewData, geoMetaFilterColumns} = this.formsListTable();
+        listViewData = listViewData.filter(value => Object.keys(value).length !== 0)
         let formType = this.props.config.map(d => d.type);
         if (listViewData && listViewData.length > 0) {
             if (!_.isEqual(Object.keys(...listViewData).sort(), listAttributes.sort())) {
@@ -447,14 +472,14 @@ class AvlFormsListTable extends React.Component {
         return this.props.pureElement ? (
                 <React.Fragment>
                     {this.renderHeader()}
-                    {this.renderBody(listViewData, formAttributes)}
+                    {this.renderBody(listViewData, formAttributes, geoMetaFilterColumns)}
                 </React.Fragment>
             ) :
             (
                 <div className='container'>
                     <Element>
                         {this.renderHeader()}
-                        {this.renderBody(listViewData, formAttributes)}
+                        {this.renderBody(listViewData, formAttributes, geoMetaFilterColumns)}
                     </Element>
                 </div>
             )

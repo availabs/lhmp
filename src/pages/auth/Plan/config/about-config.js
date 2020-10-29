@@ -87,7 +87,7 @@ const config =  {
 		},
 
 		{
-			title: 'Participants',
+			title: 'Federal/State/County Representation',
 			requirement: 'Req-A-2A',
 			type: 'content',
 			prompt: 'Provide an overview of participation of county representatives, jurisdictions, state and federal partners, the public, neighboring communities, regional stakeholders and additional stakeholders throughout the planning process. This summary will be supported by the tables that follow, which will display all participants and all meetings.',
@@ -97,20 +97,20 @@ const config =  {
 			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
 			icon: 'os-icon-user-plus',
 			// hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
-			title: 'Jurisdictional Participation',
+			title: 'Jurisdictional Representation',
 			requirement: 'Req-A-1G',
 			type: 'content',
 			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
 			intent: '',
 			icon: 'os-icon-users',
 			// hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
 		},
 
@@ -259,6 +259,18 @@ const config =  {
 	'Engagement' : [
 		{
 			title: 'Jurisdictional Engagement',
+			requirement: 'Req-A-1H',
+			type: 'content',
+			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
+			intent: '',
+			icon: 'os-icon-users',
+			// hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+		},
+		{
+			title: 'Jurisdictional Participation',
 			requirement: 'Req-A-1E',
 			type: 'content',
 			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
