@@ -53,7 +53,7 @@ const config =  {
 			// hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>` // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title:`planning-image`,
@@ -157,6 +157,11 @@ const config =  {
 			//align: 'full',
 			prompt: 'Identify who represented each jurisdiction.',
 			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
+			activeGeoFilter: 'true',
+			defaultSortCol: 'contact_agency',
+			// defaultSortOrder: 'desc',
+			colOrder: ['Agency', 'Name', 'Role'],
+			minHeight: '80vh',
 			icon: 'os-icon-user'
 		},
 
@@ -197,7 +202,7 @@ const config =  {
 			// hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: '',
@@ -253,6 +258,11 @@ const config =  {
 			},
 			prompt: '',
 			intent: '',
+			activeGeoFilter: 'true',
+			defaultSortCol: 'adopting_authority',
+			// defaultSortOrder: 'desc',
+			colOrder: ['Name', 'capability type', 'adopting authority', 'responsible authority', 'Link'],
+			minHeight: '80vh',
 			icon: 'os-icon-tasks-checked'
 		},
 	],
@@ -267,7 +277,7 @@ const config =  {
 			// hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Jurisdictional Participation',
@@ -279,7 +289,7 @@ const config =  {
 			// hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
 		},
 		{
 			title: 'Public Participation',
@@ -332,6 +342,11 @@ const config =  {
 			},
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
+			// activeGeoFilter: 'true',
+			defaultSortCol: 'start_date',
+			defaultSortOrder: 'desc',
+			colOrder: ['Date', 'Name', 'Hours', 'Narrative'],
+			minHeight: '80vh',
 			icon: 'os-icon-user-check'
 		},
 		{
@@ -411,6 +426,11 @@ const config =  {
 			`,
 			intent: 'To demonstrate the jurisdiction’s commitment to fulfilling the hazard mitigation goals outlined in' +
 				' the plan, and to authorize responsible agencies to execute their responsibilities. ',
+			activeGeoFilter: 'true',
+			defaultSortCol: 'municipality',
+			// defaultSortOrder: 'desc',
+			colOrder: ['Municipality', 'adopting authority', 'responsible authority', 'Adoption Date'],
+			// minHeight: '80vh',
 			icon: 'os-icon-check-circle'
 		},
 	],	

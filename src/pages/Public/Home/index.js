@@ -62,11 +62,19 @@ let sideMenuConfig = {
         {
             title:'NFIP',
             component:NFIP,
+            defaultSortCol: 'Jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Jurisdiction', 'total claims', 'paid claims', 'total payments'],
+            // minHeight: '80vh',
             icon: 'os-icon-phone-21'
         },
         {
             title:'Assets',
             component:Assets,
+            defaultSortCol: 'Municipality',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Municipality', 'Total #', 'Total Replacement $', 'Flood 100 #', 'Flood 100 Replacement $', 'Flood 500 #', 'Flood 500 Replacement $'],
+            minHeight: '80vh',
             icon: 'os-icon-home'
         }
     ],
@@ -89,11 +97,19 @@ let sideMenuConfig = {
         {
             title:'Capabilities Table',
             component:Capabilities,
+            defaultSortCol: 'Capability Region',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Capability Region', 'Population', 'Education and outreach',	'Planning/Regulatory', 'Financial', 'Administrative and Technical'],
+            // minHeight: '80vh',
             icon:'os-icon-donut-chart-1'
         },
         {
             title:'Actions',
             component:Actions,
+            defaultSortCol: 'Jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Jurisdiction', 'Approved', 'Finished', 'Completed'],
+            minHeight: '80vh',
             icon:'os-icon-grid-circles'
         }
     ]
@@ -120,7 +136,7 @@ class Public extends React.Component {
                                 let Comp = item.component
                                 return (
                                     <Element name={item.title} key={item.title}>
-                                        <Comp />
+                                        <Comp {...item}/>
                                     </Element>
                                 )
                             })

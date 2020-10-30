@@ -70,6 +70,10 @@ class NFIP extends Component {
                                 <div  >
                                     <NfipLossesTable
                                         title={ "NFIP Losses by Jurisdiction" }
+                                        defaultSortCol={this.props.defaultSortCol}
+                                        defaultSortOrder={this.props.defaultSortOrder}
+                                        colOrder={this.props.colOrder}
+                                        minHeight={this.props.minHeight}
                                     />
                                 </div>
                         </VerticalAlign>
