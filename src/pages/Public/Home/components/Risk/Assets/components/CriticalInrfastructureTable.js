@@ -51,7 +51,12 @@ class NfipTable extends React.Component {
             })
         })
         return {
-            data: data.sort((a, b) => b["total payments"] - a["total payments"]),
+            data: data.sort((a, b) =>
+                this.props.defaultSortCol ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                        a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                        b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    b['total payments'] - b['total payments']),
             columns: [
                 {
                     Header: label,
@@ -100,7 +105,14 @@ class NfipTable extends React.Component {
                     sort: true,
                     formatValue: fnum
                 },
-            ]
+            ].reduce((a,c, cI, src) => {
+                if (this.props.colOrder){
+                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                }else{
+                    a.push(c)
+                }
+                return a;
+            }, [])
         }
     }
 
@@ -125,7 +137,7 @@ class NfipTable extends React.Component {
                 <div>
                     <TableSelector
                         { ...this.processData() }
-                        height={'80vh'}
+                        height={this.props.minHeight || '60vh'}
                         //width={'100vw'}
                         flex={false}
                     />

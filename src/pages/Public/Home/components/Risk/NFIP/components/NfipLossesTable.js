@@ -32,18 +32,24 @@ class NfipTable extends React.Component {
         geoids.forEach(geoid => {
             const graph = this.props.nfip.losses.byGeoid[geoid].allTime,
                 name = this.props.geoGraph[geoid].name;
-
             data.push({
                 [label]: this.formatName(name, geoid),
                 "total claims": graph.total_losses,
                 //"closed losses": graph.closed_losses,
                 //"open losses": graph.open_losses,
                 "paid claims": (+graph.total_losses - +graph.cwop_losses),
-                "total payments": fnum(graph.total_payments)
+                "total payments": graph.total_payments
             })
         })
+        console.log('data', data)
         return {
-            data: data.sort((a, b) => b["total payments"] - a["total payments"]),
+            data: data.sort((a, b) =>
+                this.props.defaultSortCol ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                        a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                        b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    b['total payments'] - b['total payments']
+                    ),
             columns: [ 
                 {
                     Header: label, 
@@ -55,16 +61,24 @@ class NfipTable extends React.Component {
                     align: 'center'
                 },
                 {
-                    Header: 'paid claims', 
+                    Header: 'paid claims',
                     accessor: 'paid claims',
                     align: 'center'
                 },
                 {
                     Header: 'total payments', 
                     accessor: 'total payments',
-                    align: 'center'
+                    align: 'center',
+                    formatValue: fnum
                 }
-            ]
+            ].reduce((a,c, cI, src) => {
+                if (this.props.colOrder){
+                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                }else{
+                    a.push(c)
+                }
+                return a;
+            }, [])
         }
     }
 
@@ -87,23 +101,9 @@ class NfipTable extends React.Component {
         try {
             return (
                 <div>
-                {/* 
-                <TableBox { ...this.processData() }
-                          pageSize={ 100 }
-                          tableScroll={true}
-                          maxHeight={'60vh'}
-                          showControls={false}
-                          widths={['41%','19%','19%','18%']}
-                          columnFormats= { {
-                              "total claims": ",d",
-                             // "closed losses": ",d",
-                              //"open losses": ",d",
-                              "cwop claims": ",d",
-                              "total payments": fnum
-                          } }/>
-                */}
+
                 <Table  { ...this.processData() } 
-                    height={'60vh'}
+                    height={this.props.minHeight || '60vh'}
                 />
                 
                 </div>

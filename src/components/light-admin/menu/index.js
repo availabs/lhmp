@@ -87,7 +87,7 @@ class Menu extends Component {
                         letter-spacing: 2px;
                         padding: 0px;
                         }
-                        [class*="Menu"] {background-color: #293145;}
+                        #[class*="Menu"] {background-color: #293145;}
                     ` : styled.div`
                     * {
                     ${props => props.theme.scrollBar};
@@ -126,7 +126,10 @@ class Menu extends Component {
                     <MainMenu {...this.props} />
                     {!this.props.auth ?
                         <DROPDOWN>
-                            {<GeoDropdown className={'manu-w color-scheme-dark'}/>}
+                            {<GeoDropdown
+                                className={'manu-w color-scheme-dark'}
+                                colorScheme={defaultOptions.scheme === 'color-scheme-dark' ? {backgroundColor: '#293145'} : null}
+                            />}
                         </DROPDOWN>
                         : ''}
                 </div>
