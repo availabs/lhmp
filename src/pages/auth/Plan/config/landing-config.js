@@ -12,6 +12,10 @@ let config = {
         width: 500,
         border: 1,
         icon: 'os-icon-arrow-right7',
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     }],
     'Landing Quote': [{
         title: 'Landing Quote',
@@ -20,7 +24,11 @@ let config = {
         prompt: '',
         intent: '',
         callout: '',
-        icon: 'os-icon-arrow-right7'
+        icon: 'os-icon-arrow-right7',
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     }],
     'County Description': [{
         title: 'County Description',
@@ -30,7 +38,11 @@ let config = {
         intent: '',
         
         icon: 'os-icon-arrow-right7',
-        'align': 'full'
+        'align': 'full',
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     }],
 /*    'Roles': [{
         title: 'Roles',
@@ -70,7 +82,11 @@ let config = {
         prompt: '',
         intent: '',
         callout: '',
-        icon: 'os-icon-arrow-right7'
+        icon: 'os-icon-arrow-right7',
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     }],
     'Goals and Objectives Text': [{
         title: 'Goals and Objectives Text',
@@ -79,7 +95,11 @@ let config = {
         prompt: '',
         intent: '',
         callout: '',
-        icon: 'os-icon-arrow-right7'
+        icon: 'os-icon-arrow-right7',
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     }],
 
 }

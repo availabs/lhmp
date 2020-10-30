@@ -4,7 +4,7 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import capability_config from "pages/Public/Home/components/Strategy/Capabilities/tempConfig.js"
 import get from "lodash.get";
 import Table from 'components/light-admin/tables/tableSelector.js'
-import {HeaderContainer, PageContainer, PageHeader, VerticalAlign} from 'pages/Public/theme/components'
+import {HeaderContainer, ContentContainer, PageContainer, PageHeader, VerticalAlign} from 'pages/Public/theme/components'
 import functions from "../../../../../auth/Plan/functions";
 var _ = require('lodash')
 
@@ -240,6 +240,9 @@ class CapabilityStrategy extends React.Component {
                                 <HeaderContainer>
                                     <PageHeader>Capabilities</PageHeader>
                                 </HeaderContainer> : null}
+                               {/* <ContentContainer>
+                                    Hello
+                                </ContentContainer>*/}
                             {this.processData() ?
                                 (<Table {...this.processData()} flex={true} width={'80vw'}/>)
                                 : (<h4>Loading Capability Data ...</h4>)
