@@ -42,7 +42,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             // nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Local Orientation',
@@ -60,7 +60,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
     ],
     'Vulnerability' : [
@@ -75,7 +75,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },   
         {
             title: '',
@@ -97,7 +97,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         }, 
         {
             title:`Built-Environment-image`,
@@ -114,7 +114,7 @@ const config = {
             onlyAdmin: true,
             hideNav: true,
             hideIfNull: true
-        },  
+        },
         {
             title: 'Built Environment Table',
             requirement: 'Req-B-3B-2',
@@ -138,7 +138,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         
         {
@@ -147,6 +147,7 @@ const config = {
             type: 'criticalFacilitiesTable',
             prompt: '',
             intent: '',
+            defaultSortCol: 'critical',
             icon: 'os-icon-loader',
             hideNav: true
         },
@@ -161,7 +162,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true         
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Problem Areas',
@@ -173,7 +174,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
     ],
     
@@ -193,9 +194,9 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
-       
+
         {
             title: 'Development Zones',
             requirement: 'Req-D-1B',
@@ -203,6 +204,9 @@ const config = {
             filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            defaultSortCol: 'name',
+            activeGeoFilter: 'true',
+            minHeight: '80vh',
             icon: 'os-icon-grid-squares-2'
         },
         {
@@ -224,7 +228,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Open Space Statistics',
@@ -244,7 +248,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Previous Actions',
@@ -285,7 +289,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'NFIP Statistics',
@@ -310,7 +314,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         
         // {
@@ -334,7 +338,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
     ],
         'Process Assessment'  : [
@@ -350,7 +354,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true        
+            /*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Opportunities',
@@ -364,7 +368,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true                
+            /*2-non-delete*/ hideIfNull: true
         }    
     ]
 }

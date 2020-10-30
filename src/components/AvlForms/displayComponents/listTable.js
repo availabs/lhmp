@@ -31,6 +31,16 @@ class AvlFormsListTable extends React.Component {
         this.renderBody = this.renderBody.bind(this)
     }
 
+    isMatch(matchee, matcher){
+        matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
+            matchee.slice(1,-1).split(',') : matchee;
+
+        return (!matchee || !matcher) ? false :
+            typeof matchee === 'string' ?
+                matchee.toString() === matcher.toString() :
+                matchee.map(m => m.toString()).includes(matcher.toString())
+    }
+
     fetchFalcorDeps() {
         let formType = this.props.config.map(d => d.type)
         let formAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
@@ -117,7 +127,21 @@ class AvlFormsListTable extends React.Component {
             }
         )
     }
-
+    filterByGeo(d, graph){
+        return this.props.activeGeoFilter === 'true' ?
+            this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
+                this.isMatch(
+                    get(graph[d], `value.attributes.cousub`) ||
+                    get(graph[d], `value.attributes.municipality`) ||
+                    get(graph[d], `value.attributes.contact_municipality`) ||
+                    get(graph[d], `value.attributes.action_jurisdiction`),
+                    this.props.activeCousubid) :
+                this.isMatch(
+                    get(graph[d], `value.attributes.county`) ||
+                    get(graph[d], `value.attributes.contact_county`) ||
+                    get(graph[d], `value.attributes.action_county`),
+                    this.props.activeGeoid) : true
+    }
     formsListTable() {
         let geo = this.props.geoData
         let graph = this.props.formsListData;
@@ -129,7 +153,9 @@ class AvlFormsListTable extends React.Component {
 
         if (graph) {
             if (combine_list_attributes[0] === undefined) {
-                Object.keys(graph).forEach(item => {
+                Object.keys(graph)
+                    .filter(d => this.filterByGeo(d, graph))
+                    .forEach(item => {
 
                     let data = {};
 
@@ -219,7 +245,9 @@ class AvlFormsListTable extends React.Component {
 
                 });
             } else {
-                Object.keys(graph).forEach(item => {
+                Object.keys(graph)
+                    .filter(d => this.filterByGeo(d, graph))
+                    .forEach(item => {
                     let initial_data = {}
                     let data = {};
                     combine_list_attributes[0].attributes.forEach((attribute, i) => {
@@ -420,7 +448,15 @@ class AvlFormsListTable extends React.Component {
             <div className="element-box">
                 <div className="table-responsive">
                     <TableSelector
-                        data={listViewData}
+                        data={
+                            listViewData
+                                .sort((a, b) =>
+                                    this.props.defaultSortCol ?
+                                        (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                                        a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                                        b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                                        1)
+                        }
                         columns={formAttributes
                             .filter(f => get(this.props.config, `[0].list_attributes`, [])
                                 .map(la => typeof la === 'object' ? Object.keys(la)[0].toString() : la)
@@ -490,6 +526,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
         config: ownProps.json,
         formsListData: get(state.graph, ['forms', 'byId'], {}),
         geoData: get(state.graph, ['geo'], {}),
