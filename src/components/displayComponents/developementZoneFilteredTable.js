@@ -27,6 +27,9 @@ class developementZonesFilteredTable extends Component {
                 deleteButton={edit}
                 title={false}
                 pureElement={true}
+                defaultSortCol={this.props.defaultSortCol}
+                activeGeoFilter={this.props.activeGeoFilter}
+                height={this.props.minHeight}
             />
         )
     }

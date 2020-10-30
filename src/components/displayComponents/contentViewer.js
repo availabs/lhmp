@@ -36,10 +36,10 @@ class ContentViewer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.getCurrentKey = this.getCurrentKey.bind(this)
     }
-    getCurrentKey = () =>
+    getCurrentKey = (county = false) =>
         this.props.scope === 'global' ?
             this.props.requirement :
-            this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
+            this.props.requirement + '-' + this.props.user.activePlan + '-' + `${county ? this.props.user.activeGeoid : this.props.user.activeCousubid}`
 
     componentDidUpdate(prevProps, prevState){
         if (prevProps.activeCousubid !== this.props.activeCousubid ||
@@ -52,17 +52,31 @@ class ContentViewer extends Component {
     fetchFalcorDeps() {
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.activeCousubid) return Promise.resolve();
         let contentId = this.getCurrentKey();
+        let countyContentId = this.getCurrentKey(true);
+        let emptyBody = ['<p></p>', '']
         return this.props.falcor.get(
-            ['content', 'byId', [contentId], COLS]
+            ['content', 'byId', [contentId], COLS],
+            ['content', 'byId', [countyContentId], COLS],
         ).then(contentRes => {
-            if (contentRes.json.content.byId[contentId]) {
+            let contentBody = get(contentRes, ['json', 'content', 'byId', contentId,'body'], null);
+            let countyContentBody = get(contentRes, ['json', 'content', 'byId', countyContentId,'body'], null);
+
+            if (contentBody && !emptyBody.includes(contentBody.trim())) {
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
                 this.setState({'currentKey': contentId,
                     contentFromDB: contentRes.json.content.byId[contentId].body,
                     status: status, statusFromDb: status})
                 return contentRes.json.content.byId[contentId].body
-            }else{
+            }else if (this.props.pullCounty && countyContentBody && !emptyBody.includes(countyContentBody.trim())){
+                let status = get(contentRes.json.content.byId[countyContentId], `attributes.status`, '');
+                this.setState({'currentKey': contentId,
+                    contentFromDB: contentRes.json.content.byId[countyContentId].body,
+                    status: status, statusFromDb: status})
+                return contentRes.json.content.byId[countyContentId].body
+            }else if(this.props.hideIfNull){
                 this.setState({'currentKey': contentId, contentFromDB: null, status: '', statusFromDb: ''})
+            }else{
+                this.setState({'currentKey': contentId, contentFromDB: this.props.nullMessage || null, status: '', statusFromDb: ''})
             }
             return null
         })

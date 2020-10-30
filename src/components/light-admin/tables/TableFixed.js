@@ -6,6 +6,7 @@ import {CSVLink, CSVDownload} from 'react-csv';
 import matchSorter from 'match-sorter'
 import {Link} from "react-router-dom";
 import _ from 'lodash'
+import get from 'lodash.get'
 import MultiSelectFilter from "../../filters/multi-select-filter";
 import megaAvlFormsConfig from 'pages/auth/megaAvlFormsConfig.js';
 
@@ -65,17 +66,22 @@ function DefaultColumnFilter({
 // This is a custom filter UI for selecting
 // a unique option from a list
 function MultiSelectColumnFilter({
-                                     column: { filterValue, setFilter, preFilteredRows, id },
+                                     column: { filterValue, setFilter, preFilteredRows, id , filterMeta},
                                  }) {
     // Calculate the options for filtering
     // using the preFilteredRows
     const options = React.useMemo(() => {
         const options = new Set()
+        if (filterMeta){
+            return filterMeta
+        }
         preFilteredRows.forEach(row => {
             options.add(row.values[id])
         })
         return [...options.values()]
     }, [id, preFilteredRows])
+        .filter(d => d)
+
     const count = preFilteredRows.length;
 
     // Render a multi-select box
@@ -157,7 +163,10 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                 return rows.filter(row => {
                     const rowValue = row.values[id];
                     return rowValue !== undefined && filterValue.length
-                        ? filterValue.map(fv => String(fv).toLowerCase()).includes(String(rowValue).toLowerCase())
+                        ? filterValue.filter(fv =>
+                            rowValue !== '' && fv !== '' && (String(fv).toLowerCase().includes(String(rowValue).toLowerCase()) ||
+                            String(rowValue).toLowerCase().includes(String(fv).toLowerCase()))
+                        ).length
                         : true
                 })
             },
@@ -201,7 +210,7 @@ function Table({columns, data, height, tableClass, actions, csvDownload}) {
                 .forEach(key => {
                     if (csvDownload.includes(key)){
                         tmpRow[
-                            megaAvlFormsConfig[key].label && megaAvlFormsConfig[key].label.length ?
+                            get(megaAvlFormsConfig, [key, 'label'], null) && megaAvlFormsConfig[key].label.length ?
                                 megaAvlFormsConfig[key].label : key
                             ] = row[key]
                     }

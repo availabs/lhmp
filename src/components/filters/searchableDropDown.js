@@ -20,10 +20,13 @@ const options = [
 
 const { colors } = defaultTheme;
 
-const selectStyles = {
+const selectStyles = (style) => ({
     control: provided => ({ ...provided, minWidth: 240, margin: 8}),
-    menu: () => ({ boxShadow: 'inset 0 1px 0 rgba(0, 0, 0, 0.1)'}),
-};
+    menu: () => ({
+        ...style,
+        boxShadow: 'inset 0 1px 0 rgba(0, 0, 0, 0.1)',
+    }),
+});
 
 class searchableDropDown extends Component {
     state = { isOpen: false, value: this.props.value };
@@ -56,22 +59,24 @@ class searchableDropDown extends Component {
                     </Button>
                 }
             >
-                <Select
-                    autoFocus
-                    backspaceRemovesValue={false}
-                    components={{ DropdownIndicator, IndicatorSeparator: null }}
-                    controlShouldRenderValue={false}
-                    hideSelectedOptions={false}
-                    isClearable={this.props.isClearable}
-                    menuIsOpen
-                    onChange={this.onSelectChange}
-                    options={this.props.data}
-                    placeholder="Search..."
-                    styles={{...selectStyles, ...this.props.style}}
-                    tabSelectsValue={false}
-                    value={value}
-                    hideValue={this.props.hideValue}
-                />
+                <div>
+                    <Select
+                        autoFocus
+                        backspaceRemovesValue={false}
+                        components={{ DropdownIndicator, IndicatorSeparator: null }}
+                        controlShouldRenderValue={false}
+                        hideSelectedOptions={false}
+                        isClearable={this.props.isClearable}
+                        menuIsOpen
+                        onChange={this.onSelectChange}
+                        options={this.props.data}
+                        placeholder="Search..."
+                        styles={{...selectStyles(this.props.style)}}
+                        tabSelectsValue={false}
+                        value={value}
+                        hideValue={this.props.hideValue}
+                    />
+                </div>
             </Dropdown>
         );
     }

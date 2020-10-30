@@ -35,7 +35,7 @@ Object.keys(HAZARD_META).map(key => {
         intent: '',
         callout: '',
         label:'Image', // Which you would like to see on the form
-        height: 250,
+        height: 400,
         width: 500,
         border: 1,
         onlyAdmin: true

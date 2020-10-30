@@ -4,7 +4,7 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import capability_config from "pages/Public/Home/components/Strategy/Capabilities/tempConfig.js"
 import get from "lodash.get";
 import Table from 'components/light-admin/tables/tableSelector.js'
-import {HeaderContainer, PageContainer, PageHeader, VerticalAlign} from 'pages/Public/theme/components'
+import {HeaderContainer, ContentContainer, PageContainer, PageHeader, VerticalAlign} from 'pages/Public/theme/components'
 import functions from "../../../../../auth/Plan/functions";
 var _ = require('lodash')
 
@@ -168,6 +168,7 @@ class CapabilityStrategy extends React.Component {
         });
         Object.keys(result)
             .filter(geo => geo !== 'Countywide')
+            .filter(geo => this.props.activeCousubid.length > 5 ? geo === this.props.activeCousubid : true)
             .forEach(geo => {
             data.push({
                 'Capability Region': functions.formatName(get(this.props.geoData, [geo, 'name'], geo), geo),
@@ -184,7 +185,12 @@ class CapabilityStrategy extends React.Component {
             })
         });
         return {
-            data: data.sort((a,b) => b.Population - a.Population),
+            data: data.sort((a,b) =>
+                this.props.defaultSortCol ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                    a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                    b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    b.Population - a.Population),
             columns: [
                 {
                     Header: 'Capability Region',
@@ -223,7 +229,14 @@ class CapabilityStrategy extends React.Component {
                     align: 'center',
                     width: 200
                 },
-            ]
+            ].reduce((a,c, cI, src) => {
+                if (this.props.colOrder){
+                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                }else{
+                    a.push(c)
+                }
+                return a;
+            }, [])
         }
 
     }
@@ -232,16 +245,19 @@ class CapabilityStrategy extends React.Component {
     render() {
 
         return (
-            <PageContainer style={{Height: '80vh'}}>
+            <PageContainer>
                 <HeaderContainer>
                     <div className='row'>
-                        <div className='col-12'>
+                        <div className='col-lg-12'>
                             {this.props.showHeader ?
                                 <HeaderContainer>
-                                    <PageHeader>Capabilities</PageHeader>
+                                    <PageHeader>Capabilities Table</PageHeader>
                                 </HeaderContainer> : null}
+                               {/* <ContentContainer>
+                                    Hello
+                                </ContentContainer>*/}
                             {this.processData() ?
-                                (<Table {...this.processData()} flex={true} width={'80vw'}/>)
+                                (<Table {...this.processData()} flex={true} width={this.props.minHeight || '60vw'}/>)
                                 : (<h4>Loading Capability Data ...</h4>)
                             }
                         </div>
@@ -268,6 +284,7 @@ const mapStateToProps = state => {
         geoGraph: state.graph.geo,
         activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
         geoData: get(state.graph, ['geo']),
         allData: state.graph,
         capabilityData: get(state.graph, `forms.byId`, {}),

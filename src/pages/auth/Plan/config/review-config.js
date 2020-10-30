@@ -1,6 +1,5 @@
 export const colors = {
-    'county' : 'gray',
-    'municipal' : 'none',
+    'municipalFalse' : 'gray',
     'Started' : '#f7f714',
     'Ready For Review': '#1f90f2',
     'Requirement not met': '#f2351f',
@@ -169,7 +168,7 @@ let config = {
         },
         {
             element: 'B1',
-            requirements_from_software: `Req-A-3A, Req-B-3B-1B, req-B1-hazard-overview, req-B1-other-hazards`,
+            requirements_from_software: 'Req-B-3B-1B, req-B1-hazard-overview, req-B1-other-hazards, req-B1-riverine, req-B1-hurricane, req-B1-tornado, req-B1-landslide',
             objective: 'Does the Plan include a description of the type, location, and extent of all natural hazards ' +
                 'that can affect each jurisdiction? 44 CFR 201.6(c)(2)(i) and 44 CFR 201.6(c)(2)(iii)',
             intent: 'To understand the potential and chronic hazards affecting the planning area in order to identify ' +
@@ -237,7 +236,7 @@ let config = {
         },
         {
             element: 'B3',
-            requirements_from_software: `Req-B-3B, Req-B-3B-1, Req-B-3B-2, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3B-6`,
+            requirements_from_software: `Req-B-3A, Req-B-3B, Req-B-3B-1, Req-B-3B-2, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3B-6`,
             objective: 'Is there a description of each identified hazard’s impact on the community as well as an overall ' +
                 'summary of the community’s vulnerability for each jurisdiction? 44 CFR 201.6(c)(2)(ii)',
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of ' +
@@ -303,7 +302,7 @@ let config = {
         },
         {
             element: 'C1',
-            requirements_from_software: `Req-C-6, Req-C-1A`,
+            requirements_from_software: `Req-C-6, Req-C-1A, Req-C-1B-1, Req-C-1B-1B`,
             objective: 'Does the plan document each jurisdiction’s existing authorities, policies, programs and resources, ' +
                 'and its ability to expand on and improve these existing policies and programs? 44 CFR 201.6(c)(3)',
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, ' +

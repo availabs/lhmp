@@ -13,6 +13,32 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
+            contact_county:{
+                label:'County', // Which you would like to see on the form
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                data_error:"Please select county",
+                //field_required:"required",
+                validation : "true",
+                area:'true',
+                meta: 'true',
+                section: '',
+                list_attribute: 'true'
+            },
+            contact_municipality:{
+                label:'Jurisdiction(optional)',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                meta: 'true',
+                area:'true',
+                depend_on:'contact_county',
+                section: '',
+                list_attribute: 'true'
+            },
             sub_type:{
                 label:'Sub type',
                 prompt:'',

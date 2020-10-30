@@ -50,6 +50,8 @@ class inventoryTableViewer extends Component {
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
                         public={this.props.public === true ? true : false}
+                        hideFloodValue={true}
+                        defaultSortCol={this.props.defaultSortCol || 'jurisdiction'}
                     />
                 </div>
                 <div>
@@ -62,6 +64,8 @@ class inventoryTableViewer extends Component {
                         width={'100%'}
                         tableClass={`table table-sm table-lightborder table-hover`}
                         public={this.props.public === true ? true : false}
+                        hideFloodValue={true}
+                        defaultSortCol={this.props.defaultSortCol || 'propType'}
                     />
                 </div>
             </div>

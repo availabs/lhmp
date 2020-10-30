@@ -16,10 +16,12 @@ import shelterListTableViewer from "./shelterListTableViewer";
 import actionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
+import imageViewer from "../AvlForms/displayComponents/imageViewer";
 import DevelopementZoneFilteredTable from "./developementZoneFilteredTable";
 import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 import sociallyVulnerableDemographicsMapViewer from './sociallyVulnerableDemographicsMap/index'
 import openSpaceTable from './openSpaceTable'
+import ProblemStatementTableViewer from "./problemStatementTableViewer";
 
 const NA = ({ type, state, routes }) =>
 {
@@ -37,6 +39,7 @@ const ActionsFilteredListTableViewerFunc = (rest) => <ActionsFilteredListTableVi
 const ImageEditor = (rest) => <ImageComponent edit={true} {...rest}/>
 const CriticalFacilitiesTableEditor = (rest) => <CriticalFacilitiesTableViewer public={false} {...rest}/>
 const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...rest}/>
+const problemStatementTableEditor = (rest) => <ProblemStatementTableViewer edit={true} {...rest}/>
 export default {
     NA,
     NE,
@@ -62,7 +65,7 @@ export default {
     inventoryTableEditor: InventoryTableEditor,
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
-    imageViewer: ImageComponent,
+    imageViewer: imageViewer,
     developementZonesFilteredTableEditor: (rest) => <DevelopementZoneFilteredTable edit={true} {...rest}/>,
     developementZonesFilteredTableViewer: DevelopementZoneFilteredTable,
     developementZonesFilteredMapEditor: developementZoneFilteredMap,
@@ -71,5 +74,7 @@ export default {
     sociallyVulnerableDemographicsMapViewer,
     openSpaceTableViewer: openSpaceTable,
     openSpaceTableEditor: openSpaceTable,
+    problemStatementTableViewer: ProblemStatementTableViewer,
+    problemStatementTableEditor,
 }
 

@@ -69,6 +69,10 @@ class NFIP extends Component {
                             <div  >
                                 <NfipLossesTable
                                     title={ "Critical assets" }
+                                    defaultSortCol={this.props.defaultSortCol}
+                                    defaultSortOrder={this.props.defaultSortOrder}
+                                    colOrder={this.props.colOrder}
+                                    minHeight={this.props.minHeight}
                                 />
                             </div>
                         </VerticalAlign>

@@ -57,6 +57,7 @@ class StormEvents extends React.Component {
             })
             .then(hazardids => {
                 return this.props.falcor.get(
+                    ['riskIndex', 'meta', hazardids, ['id', 'name', 'description']],
                     ['severeWeather', 'events', this.props.geoid, hazardids, 'top', 'property_damage']
                 )
                     .then(response => {
@@ -116,7 +117,8 @@ class StormEvents extends React.Component {
             } = graphEventsById[event_id];
             data.push({
                 "property damage": fnum(+property_damage),
-                'hazard': hazardid ? hazardid.toUpperCase() : hazardid,
+                'hazard': hazardid && get(this.props, ['riskIndex', 'meta', hazardid, 'name'], null) ?
+                    get(this.props, ['riskIndex', 'meta', hazardid, 'name'], null) : hazardid,
                 property_damage: +property_damage,
                 "municipality": municipality ? `${municipality}, ${county}` : county,
                 "date": new Date(date).toLocaleString(),
@@ -158,7 +160,9 @@ class StormEvents extends React.Component {
                                             return ({
                                                 Header: f,
                                                 accessor: f,
-                                                expandable: f === 'narrative' ? 'true' : 'false'
+                                                expandable: f === 'narrative' ? 'true' : 'false',
+                                                sort: true,
+                                                filter: ['hazard'].includes(f) ? 'multi' : false
                                             })
                                         })}
                                 flex={this.props.flex ? this.props.flex : false}
@@ -166,6 +170,7 @@ class StormEvents extends React.Component {
                                 width={this.props.width ? this.props.width : ''}
                                 tableClass={this.props.tableClass ? this.props.tableClass : null}
                                 actions={{edit: true, view: true, delete: true}}
+                                csvDownload={data.columns}
                             />
                         </div>
 

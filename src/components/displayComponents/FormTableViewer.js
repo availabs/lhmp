@@ -5,6 +5,7 @@ import get from "lodash.get";
 import { Link } from "react-router-dom"
 
 import Table from 'components/light-admin/tables/tableSelector'
+import {match} from "fuzzy";
 
 var _ = require('lodash')
 
@@ -41,7 +42,7 @@ class FormTableViewer extends React.Component{
 
     isMatch(matchee, matcher){
         matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
-            matchee.replace('[', '').replace(']', '').split(',') : matchee;
+            matchee.slice(1,-1).split(',') : matchee;
 
         return (!matchee || !matcher) ? false :
             typeof matchee === 'string' ?
@@ -51,15 +52,29 @@ class FormTableViewer extends React.Component{
     render(){
         // process data from
         let tableData = Object.values(this.props.tableList)
-            .filter(d =>
-                this.props.activeGeoFilter === 'true' ?
-                    this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
-                        this.isMatch(this.props.formData[d.value[2]].value.attributes.cousub || this.props.formData[d.value[2]].value.attributes.municipality, this.props.activeCousubid) :
-                        this.isMatch(this.props.formData[d.value[2]].value.attributes.county, this.props.activeGeoid) : true
+            .filter(d => {
+                    return this.props.activeGeoFilter === 'true' ?
+                        this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
+                            this.isMatch(
+                                this.props.formData[d.value[2]].value.attributes.cousub ||
+                                this.props.formData[d.value[2]].value.attributes.municipality ||
+                                this.props.formData[d.value[2]].value.attributes.contact_municipality,
+                                this.props.activeCousubid) :
+                            this.isMatch(
+                                this.props.formData[d.value[2]].value.attributes.county ||
+                                this.props.formData[d.value[2]].value.attributes.contact_county,
+                                this.props.activeGeoid) : true
+                }
             )
             .map(d => {
             return this.props.formData[d.value[2]].value.attributes
         })
+            .sort((a, b) =>
+                this.props.defaultSortCol ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                    a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                    b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    1)
 
         // filter data is there are filters
         // can we move this to the server? seems tricky
@@ -73,8 +88,18 @@ class FormTableViewer extends React.Component{
             <div style={{fontSize: this.props.fontSize ? this.props.fontSize : 'inherit'}}>
                 <Table 
                     data={tableData} 
-                    columns={this.props.config.columns} 
-                    height={this.props.height}
+                    columns={
+                        this.props.config.columns
+                            .reduce((a,c, cI, src) => {
+                                if (this.props.colOrder){
+                                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                                }else{
+                                    a.push(c)
+                                }
+                                return a;
+                            }, [])
+                    }
+                    height={this.props.minHeight}
                     flex={true}
                 />
             </div>

@@ -20,6 +20,7 @@ import {
     FeatureName,
     PageHeader
 } from 'pages/Public/theme/components'
+import NfipLossesTable from "../../Risk/Assets/components/CriticalInrfastructureTable";
 
 
 
@@ -57,25 +58,27 @@ class PlanningTeam extends Component {
             <PageContainer style={{height: '80vh'}}>
                 <HeaderContainer>
                     <PageHeader>Actions</PageHeader>
-                </HeaderContainer>
-                
-                    
-                    <div className = 'd-flex justify-content-center' style={{paddingTop: '50px'}}>
-                            
-                       
-                            <HMGPTable
-                            geoid={
-                                !this.props.activeCousubid || this.props.activeCousubid === "undefined" ? this.props.activeGeoid
-                                    : this.props.activeCousubid
-                            }
-                            hazard={'all'}
-                            pageSize={100}
-                            
-                        />
-                       
+                    <div className='row'>
+                        <div className='col-12'>
+                            <VerticalAlign>
+                                <div>
+                                    <HMGPTable
+                                        geoid={
+                                            !this.props.activeCousubid || this.props.activeCousubid === "undefined" ? this.props.activeGeoid
+                                                : this.props.activeCousubid
+                                        }
+                                        hazard={'all'}
+                                        pageSize={100}
+                                        defaultSortCol={this.props.defaultSortCol}
+                                        defaultSortOrder={this.props.defaultSortOrder}
+                                        colOrder={this.props.colOrder}
+                                        minHeight={this.props.minHeight}
+                                    />
+                                </div>
+                            </VerticalAlign>
+                        </div>
                     </div>
-                
-                
+                </HeaderContainer>
             </PageContainer>
         )
     }

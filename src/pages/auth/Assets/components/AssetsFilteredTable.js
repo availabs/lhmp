@@ -380,7 +380,13 @@ class AssetsFilteredTable extends Component {
                         linkBase + config.map(f => f.value).join('-')
             })
         }
-        return {data: BuildingTypeData,
+        return {data:
+            BuildingTypeData.sort((a,b) =>
+                this.props.defaultSortCol && a[this.props.defaultSortCol] !== 'TOTAL' ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                    a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                    b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    1),
             columns: [
                 {
                     Header: primeColName,
@@ -405,7 +411,7 @@ class AssetsFilteredTable extends Component {
                 },
                 ...riskZoneColNames
                     .map((name) => {
-                        if (name.includes('$') && this.props.public) {return null}
+                        if (name.includes('$') && this.props.public && this.props.hideFloodValue) {return null}
                         let a = {};
                         let riskZone = riskZoneToNameMapping[name.slice(0, name.length-2)];
                         let scenarioId = Object.keys(scenarioToRiskZoneMapping).filter(f => scenarioToRiskZoneMapping[f].includes(riskZone)).pop();

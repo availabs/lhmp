@@ -36,7 +36,7 @@ module.exports = [
                 label:'Update Status',
                 prompt:'Select the current status of the project: discontinued, completed, in-progress, unchanged, proposed.',
                 edit_type:'dropdown_no_meta',
-                edit_type_values : ['Proposed-New','Proposed-Carryover','In-progress','Completed','Discontinued',],
+                edit_type_values : ['Proposed-HMP', 'Proposed-New','Proposed-Carryover','In-progress','Completed','Discontinued',],
                 // disable_condition:{attribute:'new_or_update',check:'update'},// check is when you want to show this
                 display_condition : '',
                 display_type:'text',
