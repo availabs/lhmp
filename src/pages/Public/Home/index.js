@@ -14,7 +14,7 @@ import LocalContext from './components/PlanningContext/localContext/'
 import HazardEvents from 'pages/Public/Hazards/components/hazardEvents/'
 import NFIP from './components/Risk/NFIP'
 import Assets from './components/Risk/Assets/'
-
+import CapabilitiesOverview from './components/Strategy/Capabilities-Overview'
 import Narrative from './components/Strategy/Narrative'
 import Goals from './components/Strategy/Goals'
 import Capabilities from './components/Strategy/Capabilities'
@@ -89,8 +89,13 @@ let sideMenuConfig = {
             component:Goals,
             icon:'os-icon-tasks-checked'
         },
+        // {
+        //     title:'Capabilities Overview',
+        //     component:CapabilitiesOverview,
+        //     icon:'os-icon-donut-chart-1'
+        // },
         {
-            title:'Capabilities',
+            title:'Capabilities Table',
             component:Capabilities,
             defaultSortCol: 'Capability Region',
             // defaultSortOrder: 'desc',

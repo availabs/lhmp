@@ -42,7 +42,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             // nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
         {
             title: 'Local Orientation',
@@ -60,7 +60,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
     ],
     'Vulnerability' : [
@@ -75,7 +75,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },   
         {
             title: '',
@@ -97,7 +97,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         }, 
         {
             title:`Built-Environment-image`,
@@ -114,7 +114,7 @@ const config = {
             onlyAdmin: true,
             hideNav: true,
             hideIfNull: true
-        },
+        },  
         {
             title: 'Built Environment Table',
             requirement: 'Req-B-3B-2',
@@ -138,7 +138,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
         
         {
@@ -162,7 +162,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true         
         },
         {
             title: 'Problem Areas',
@@ -174,7 +174,16 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
+        },
+        {
+            title: '',
+            requirement: 'Req-B-4A-1',
+            type: 'problemStatementTable',
+            prompt: '',
+            intent: '',
+            icon: 'os-icon-alert-circle',
+            hideNav: true
         },
     ],
     
@@ -194,9 +203,9 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
-
+       
         {
             title: 'Development Zones',
             requirement: 'Req-D-1B',
@@ -228,7 +237,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
         {
             title: 'Open Space Statistics',
@@ -248,7 +257,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
         {
             title: 'Previous Actions',
@@ -287,9 +296,9 @@ const config = {
                 ' capability and resource for flood hazard mitigation activities.',
             icon: 'os-icon-bar-chart-up',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
         },
         {
             title: 'NFIP Statistics',
@@ -312,20 +321,11 @@ const config = {
                 ' loss properties helps inform FEMA hazard  mitigation assistance programs under the National Flood Insurance Act.',
             icon: 'os-icon-alert-circle',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
         },
-        
-        // {
-        //     title: '',
-        //     requirement: 'Req-B-4A-1',
-        //     type: 'problemStatementTable',
-        //     prompt: '',
-        //     intent: '',
-        //     icon: 'os-icon-alert-circle',
-        //     hideNav: true
-        // },
+
     ],
         'Dam Safety' : [
         {
@@ -338,7 +338,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
+            ///*2-non-delete*/ hideIfNull: true 
         },
     ],
         'Process Assessment'  : [
@@ -354,7 +354,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true
+            /*2-non-delete*/ hideIfNull: true        
         },
         {
             title: 'Opportunities',
@@ -368,7 +368,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true
+            /*2-non-delete*/ hideIfNull: true                
         }    
     ]
 }
