@@ -41,7 +41,7 @@ class GD extends Component {
         return geoInfo ? (
             <div className={this.props.className || "ae-side-menu"}>
                 <SearchableDropDown
-                    style={this.props.pureElement ? null : {height: '5vh', width:'250px'}}
+                    style={this.props.pureElement ? null : {/*...{height: '5vh', width:'250px'},*/ ...this.props.colorScheme}}
                     className={this.props.className || "ae-side-menu"}
                     id={this.props.id || 'contact_county'}
 

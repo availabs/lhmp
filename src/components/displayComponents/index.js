@@ -16,6 +16,7 @@ import shelterListTableViewer from "./shelterListTableViewer";
 import actionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
+import imageViewer from "../AvlForms/displayComponents/imageViewer";
 import DevelopementZoneFilteredTable from "./developementZoneFilteredTable";
 import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 import sociallyVulnerableDemographicsMapViewer from './sociallyVulnerableDemographicsMap/index'
@@ -64,7 +65,7 @@ export default {
     inventoryTableEditor: InventoryTableEditor,
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
-    imageViewer: ImageComponent,
+    imageViewer: imageViewer,
     developementZonesFilteredTableEditor: (rest) => <DevelopementZoneFilteredTable edit={true} {...rest}/>,
     developementZonesFilteredTableViewer: DevelopementZoneFilteredTable,
     developementZonesFilteredMapEditor: developementZoneFilteredMap,

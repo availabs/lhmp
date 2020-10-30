@@ -52,7 +52,12 @@ class HMAP_Table extends React.Component {
 
         tableData = Object.keys(data)
             .map(d => this.createRow(d, data[d]))
-            .sort((a,b) => (b.Approved-a.Approved));
+            .sort((a,b) =>
+                this.props.defaultSortCol ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                    a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                    b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    (b.Approved-a.Approved));
         return { data:tableData, columns: [ 
                    
                     {
@@ -76,7 +81,14 @@ class HMAP_Table extends React.Component {
                         accessor: 'Completed',
                         align: 'center'
                     }
-                ]
+                ].reduce((a,c, cI, src) => {
+                if (this.props.colOrder){
+                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                }else{
+                    a.push(c)
+                }
+                return a;
+            }, [])
 
             };
     }
@@ -88,7 +100,7 @@ class HMAP_Table extends React.Component {
                     <h4> FEMA Funded Hazard Mitigation Assistance Projects</h4>
                     { 
                         this.processData() ? 
-                        (<Table { ...this.processData() } />)
+                        (<Table { ...this.processData() } height={this.props.minHeight || '60vh'}/>)
                             : (<h4>Loading Capability Data ...</h4>)
                     }
                 </div>
