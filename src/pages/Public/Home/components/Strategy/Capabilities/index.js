@@ -238,7 +238,7 @@ class CapabilityStrategy extends React.Component {
                         <div className='col-12'>
                             {this.props.showHeader ?
                                 <HeaderContainer>
-                                    <PageHeader>Capabilities</PageHeader>
+                                    <PageHeader>Capabilities Table</PageHeader>
                                 </HeaderContainer> : null}
                                {/* <ContentContainer>
                                     Hello
