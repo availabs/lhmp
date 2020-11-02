@@ -118,7 +118,6 @@ const config = {
             title: 'Capabilities Table',
             requirement: 'Req-C-1A',
             type: 'formTable',
-            activeGeoFilter: 'true',
             fontSize: '0.70em',
             height: '600px',
             align: 'full',
@@ -126,12 +125,12 @@ const config = {
                 type: 'capabilities',
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
-                    {
-                        Header: 'Jurisdiction',
-                        accessor: 'municipality',
-                        sort: true,
-                        filter: 'default'
-                    },
+                    // {
+                    //     Header: 'Jurisdiction',
+                    //     accessor: 'municipality',
+                    //     sort: true,
+                    //     filter: 'default'
+                    // },
                     {
                         Header: 'Name',
                         accessor: 'capability_name',
@@ -151,23 +150,23 @@ const config = {
                         filter: 'multi'
                     },
                     
-                    // {
-                    //     Header: 'adopting authority',
-                    //     accessor: 'adopting_authority',
-                    //     sort: true,
-                    //     filter: 'default'
-                    // },
-                    // {
-                    //     Header: 'responsible authority',
-                    //     accessor: 'responsible_authority',
-                    //     sort: true,
-                    //     filter: 'default'
-                    // },
-                    // {
-                    //     Header: 'Link',
-                    //     accessor: 'upload',
-                    //     width: 50
-                    // },
+                    {
+                        Header: 'adopting authority',
+                        accessor: 'adopting_authority',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'responsible authority',
+                        accessor: 'responsible_authority',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'Link',
+                        accessor: 'upload',
+                        width: 50
+                    },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',
@@ -185,6 +184,11 @@ const config = {
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                 ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
                 ' capability varies widely.',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'adopting_authority',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+            minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },
         {
@@ -217,11 +221,17 @@ const config = {
             type: 'capabilityEvaluationTable',
             prompt: '',
             intent: '',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'Capability Region',
+            // defaultSortOrder: 'desc',
+            //colOrder: ['Agency', 'Name', 'Role'],
+            minHeight: '80vh',
+            // flex: 'false',
             icon: 'os-icon-pie-chart-3',
             hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         
         {
@@ -293,6 +303,11 @@ const config = {
                 '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
                 ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
                 ' b. Integrate elements of Req-C-5 and Req-C-6',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            minHeight: '80vh',
             icon: 'os-icon-activity',
 
         },
@@ -448,6 +463,10 @@ const config = {
             align: 'full',
             prompt: '',
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
+            defaultSortCol: 'evacuation_capacity',
+            // defaultSortOrder: 'desc',
+            colOrder: ['shelter_name', 'evacuation_capacity', 'post_impact_capacity', 'ada_compliant', 'wheelchair_accessible', 'generator_onsite', 'self_suffienct_electricty',],
+            minHeight: '80vh',
             icon: 'os-icon-share-2',
             hideNav: true
         },
