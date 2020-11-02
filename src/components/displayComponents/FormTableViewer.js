@@ -43,11 +43,7 @@ class FormTableViewer extends React.Component{
     isMatch(matchee, matcher){
         matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
             matchee.slice(1,-1).split(',') : matchee;
-        console.log('match?', typeof matchee,
-            (!matchee || !matcher) ? false :
-            typeof matchee === 'string' ?
-                matchee.toString() === matcher.toString() :
-                matchee.map(m => m.toString()).includes(matcher.toString()),  matcher, matchee)
+
         return (!matchee || !matcher) ? false :
             typeof matchee === 'string' ?
             matchee.toString() === matcher.toString() :

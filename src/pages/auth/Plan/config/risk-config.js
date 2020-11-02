@@ -147,6 +147,7 @@ const config = {
             type: 'criticalFacilitiesTable',
             prompt: '',
             intent: '',
+            defaultSortCol: 'critical',
             icon: 'os-icon-loader',
             hideNav: true
         },
@@ -212,6 +213,9 @@ const config = {
             filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            defaultSortCol: 'name',
+            activeGeoFilter: 'true',
+            minHeight: '80vh',
             icon: 'os-icon-grid-squares-2'
         },
         {
@@ -321,7 +325,7 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-        
+
     ],
         'Dam Safety' : [
         {
