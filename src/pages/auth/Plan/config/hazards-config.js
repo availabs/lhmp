@@ -17,6 +17,7 @@ let HAZARD_META  = {
         'winterweat':{id:'winterweat', name:'Snow Storm', description: '', sheldus: "Winter Weather", zones: [], icon: 'os-icon-edit-1'},
         'volcano':{id:'volcano', name:'Volcano', description: '', zones: [], icon: 'os-icon-edit-1'},
         'coastal': {id:'coastal', name:'Coastal Hazards', description:'',sheldus: "Coastal Hazards", zones: [], icon: 'os-icon-edit-1'},
+        //'allHaz': {id:'allHaz', name:'All Hazards', description:'',sheldus: "All Hazards", zones: [], icon: ''},
 
         // --------- No Data ---------------//
         // expansive_soil: {id: 'expansive_soil', name: 'Expansive Soil', sheldus: '' },
@@ -62,7 +63,8 @@ Object.keys(HAZARD_META).map(key => {
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+            callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            pullCounty: true
         })
 })
 
