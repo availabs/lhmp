@@ -99,7 +99,7 @@ class Hazards extends React.Component {
                 if(!this.state.hazard){
                     this.setState({
                         hazards,
-                        hazard : hazards[0]
+                        hazard : '',//hazards[0]
                     })
                 }else{
                     this.setState({hazards})
