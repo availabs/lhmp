@@ -201,6 +201,10 @@ class inventoryTableViewer extends Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
+                                data['viewLink'] =
+                                    <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
+                                        <i className="os-icon os-icon-mail-19"></i>
+                                    </a>
                             }
 
                         }
@@ -250,6 +254,10 @@ class inventoryTableViewer extends Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
+                                data['viewLink'] =
+                                    <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
+                                        <i className="os-icon os-icon-mail-19"></i>
+                                    </a>
                             }
                         }
                     })
@@ -263,7 +271,7 @@ class inventoryTableViewer extends Component {
     }
 
     render() {
-        let formAttributes = [...this.state.formAttributes, ...this.state.clickToOpen];
+        let formAttributes = [...this.state.formAttributes, ...this.state.clickToOpen, 'viewLink'];
         let data = this.formsListTable();
         let listViewData =
             data.filter(value => Object.keys(value).length !== 0)
