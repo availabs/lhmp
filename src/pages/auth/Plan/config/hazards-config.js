@@ -44,7 +44,6 @@ Object.keys(HAZARD_META).map(key => {
         /*2-non-county*/ pullCounty: true,
         ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
         ///*2-non-delete*/ hideIfNull: true 
-
     },{
         title: HAZARD_META[key].name,
         requirement: `req-B1-${key}`,
