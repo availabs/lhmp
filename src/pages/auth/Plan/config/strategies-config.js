@@ -352,8 +352,8 @@ const config = {
             intent:'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA is the official administering Federal agency of the NFIP, participation in the program is a basic community capability and resource for flood hazard mitigation activities',
             icon:'os-icon-cloud-drizzle',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
