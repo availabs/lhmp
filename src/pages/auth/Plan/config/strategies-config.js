@@ -303,6 +303,7 @@ const config = {
                 '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
                 ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
                 ' b. Integrate elements of Req-C-5 and Req-C-6',
+            viewLink: true,
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',

@@ -201,10 +201,12 @@ class inventoryTableViewer extends Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
-                                data['viewLink'] =
-                                    <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
-                                        <i className="os-icon os-icon-mail-19"></i>
-                                    </a>
+                                if (this.props.viewLink){
+                                    data['viewLink'] =
+                                        <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
+                                            <i className="os-icon os-icon-mail-19"></i>
+                                        </a>
+                                }
                             }
 
                         }
@@ -254,10 +256,12 @@ class inventoryTableViewer extends Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
-                                data['viewLink'] =
-                                    <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
-                                        <i className="os-icon os-icon-mail-19"></i>
-                                    </a>
+                                if (this.props.viewLink){
+                                    data['viewLink'] =
+                                        <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
+                                            <i className="os-icon os-icon-mail-19"></i>
+                                        </a>
+                                }
                             }
                         }
                     })
@@ -271,7 +275,9 @@ class inventoryTableViewer extends Component {
     }
 
     render() {
-        let formAttributes = [...this.state.formAttributes, ...this.state.clickToOpen, 'viewLink'];
+        let formAttributes =
+        this.props.viewLink ? [...this.state.formAttributes, ...this.state.clickToOpen, 'viewLink'] :
+            [...this.state.formAttributes, ...this.state.clickToOpen];
         let data = this.formsListTable();
         let listViewData =
             data.filter(value => Object.keys(value).length !== 0)
@@ -301,7 +307,7 @@ class inventoryTableViewer extends Component {
                                     })
                                 })
                                 .reduce((a,c, cI, src) => {
-                                    if (this.props.colOrder){
+                                    if (this.props.colOrder && this.props.colOrder.includes(c.Header)){
                                         a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
                                     }else{
                                         a.push(c)

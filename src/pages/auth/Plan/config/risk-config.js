@@ -314,7 +314,7 @@ const config = {
         {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
-            type: 'Visualizations - NFIP',
+            type: 'nfipStatistics',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',

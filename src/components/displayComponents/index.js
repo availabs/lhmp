@@ -10,6 +10,7 @@ import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer
 import formTableViewer from './FormTableViewer'
 import CriticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
 import InventoryTableViewer from './inventoryTableViewer'
+import NfipStatisticsViewer from './nfipStatisticsViewer'
 import evacuationRoutesViewer from "./evacuationRoutesViewer";
 import capabilityEvaluationTableViewer from "./capabilityEvaluationTableViewer";
 import ShelterListTableViewer from "./shelterListTableViewer";
@@ -39,6 +40,7 @@ const ActionsFilteredListTableViewerFunc = (rest) => <ActionsFilteredListTableVi
 const ImageEditor = (rest) => <ImageComponent edit={true} {...rest}/>
 const CriticalFacilitiesTableEditor = (rest) => <CriticalFacilitiesTableViewer public={false} {...rest}/>
 const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...rest}/>
+const NfipStatisticsEditor = (rest) => <NfipStatisticsViewer public={false} {...rest}/>
 const problemStatementTableEditor = (rest) => <ProblemStatementTableViewer edit={true} {...rest}/>
 const shelterListTableEditor = (rest) => <ShelterListTableViewer edit={true} {...rest}/>
 export default {
@@ -65,6 +67,8 @@ export default {
     criticalFacilitiesTableEditor: CriticalFacilitiesTableEditor,
     inventoryTableViewer: InventoryTableViewer,
     inventoryTableEditor: InventoryTableEditor,
+    nfipStatisticsViewer: NfipStatisticsViewer,
+    nfipStatisticsEditor: NfipStatisticsEditor,
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
     imageViewer: imageViewer,
