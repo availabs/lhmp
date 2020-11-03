@@ -248,6 +248,9 @@ const config = {
             type: 'problemStatementTable',
             prompt: '',
             intent: '',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            minHeight: '80vh',
             icon: 'os-icon-alert-circle',
             hideNav: true
         },
@@ -311,6 +314,9 @@ const config = {
             type: 'openSpaceTable',
             prompt: '',
             intent: '',
+            defaultSortCol: 'Land Type',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Land Type', '# of parcels', 'Total Area (Acres)', 'Total Value'],
             icon: 'os-icon-globe'
         },
         {
@@ -336,6 +342,11 @@ const config = {
                 ' whether the action is no longer relevant or be included as part of the updated action plan.',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing' +
                 ' actions outlined in their mitigation strategy.',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            minHeight: '80vh',
             icon: 'os-icon-tasks-checked',
             hideNav: true
         },
@@ -369,7 +380,7 @@ const config = {
         {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
-            type: 'Visualizations - NFIP',
+            type: 'nfipStatistics',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',

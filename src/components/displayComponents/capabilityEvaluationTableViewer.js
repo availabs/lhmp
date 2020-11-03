@@ -18,10 +18,15 @@ class capabilityEvaluationTable extends Component {
     render() {
 
         return(
-            <div>
                 <Capabilities
-                showHeader={false}/>
-            </div>
+                    activeGeoFilter={this.props.activeGeoFilter}
+                    defaultSortCol={this.props.defaultSortCol}
+                    defaultSortOrder={this.props.defaultSortOrder}
+                    colOrder={this.props.colOrder}
+                    minHeight={this.props.minHeight}
+                    flex={this.props.flex}
+                    showHeader={false}
+                />
         )
     }
 }

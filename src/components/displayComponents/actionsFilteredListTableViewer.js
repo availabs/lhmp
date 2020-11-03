@@ -102,6 +102,7 @@ class inventoryTableViewer extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
+            this.fetchFalcorDeps()
         }
     }
 
@@ -119,6 +120,30 @@ class inventoryTableViewer extends Component {
             }
         )
     }
+    isMatch(matchee, matcher){
+        matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
+            matchee.slice(1,-1).split(',') : matchee;
+
+        return (!matchee || !matcher) ? false :
+            typeof matchee === 'string' ?
+                matchee.toString() === matcher.toString() :
+                matchee.map(m => m.toString()).includes(matcher.toString())
+    }
+    filterByGeo(d, graph){
+        return this.props.activeGeoFilter === 'true' ?
+            this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
+                this.isMatch(
+                    get(graph[d], `value.attributes.cousub`) ||
+                    get(graph[d], `value.attributes.municipality`) ||
+                    get(graph[d], `value.attributes.contact_municipality`) ||
+                    get(graph[d], `value.attributes.action_jurisdiction`),
+                    this.props.activeCousubid) :
+                this.isMatch(
+                    get(graph[d], `value.attributes.county`) ||
+                    get(graph[d], `value.attributes.contact_county`) ||
+                    get(graph[d], `value.attributes.action_county`),
+                    this.props.activeGeoid) : true
+    }
 
     formsListTable() {
         let geo = this.props.geoData
@@ -130,7 +155,9 @@ class inventoryTableViewer extends Component {
 
         if (graph) {
             if (combine_list_attributes[0] === undefined) {
-                Object.keys(graph).forEach(item => {
+                Object.keys(graph)
+                    .filter(d => this.filterByGeo(d, graph))
+                    .forEach(item => {
                     let data = {};
                     formAttributes.forEach(attribute => {
                         if (graph[item].value && graph[item].value.attributes) {
@@ -174,6 +201,12 @@ class inventoryTableViewer extends Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
+                                if (this.props.viewLink){
+                                    data['viewLink'] =
+                                        <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
+                                            <i className="os-icon os-icon-mail-19"></i>
+                                        </a>
+                                }
                             }
 
                         }
@@ -182,7 +215,9 @@ class inventoryTableViewer extends Component {
 
                 });
             } else {
-                Object.keys(graph).forEach(item => {
+                Object.keys(graph)
+                    .filter(d => this.filterByGeo(d, graph))
+                    .forEach(item => {
                     let initial_data = {}
                     let data = {};
                     combine_list_attributes[0].attributes.forEach((attribute, i) => {
@@ -221,6 +256,12 @@ class inventoryTableViewer extends Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
+                                if (this.props.viewLink){
+                                    data['viewLink'] =
+                                        <a href={`/${formType[0]}/view/${item}`} target={'_blank'}>
+                                            <i className="os-icon os-icon-mail-19"></i>
+                                        </a>
+                                }
                             }
                         }
                     })
@@ -234,9 +275,18 @@ class inventoryTableViewer extends Component {
     }
 
     render() {
-        let formAttributes = [...this.state.formAttributes, ...this.state.clickToOpen];
+        let formAttributes =
+        this.props.viewLink ? [...this.state.formAttributes, ...this.state.clickToOpen, 'viewLink'] :
+            [...this.state.formAttributes, ...this.state.clickToOpen];
         let data = this.formsListTable();
-        let listViewData = data.filter(value => Object.keys(value).length !== 0)
+        let listViewData =
+            data.filter(value => Object.keys(value).length !== 0)
+                .sort((a, b) =>
+                    this.props.defaultSortCol ?
+                        (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                        a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                        b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                        1)
 
         return (
             listViewData.length > 0 ?
@@ -255,9 +305,18 @@ class inventoryTableViewer extends Component {
                                         expandable: this.state.clickToOpen.includes(f).toString(),
                                         expandableHeader: true
                                     })
-                                })}
+                                })
+                                .reduce((a,c, cI, src) => {
+                                    if (this.props.colOrder && this.props.colOrder.includes(c.Header)){
+                                        a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                                    }else{
+                                        a.push(c)
+                                    }
+                                    return a;
+                                }, [])
+                            }
                             flex={this.props.flex ? this.props.flex : false}
-                            height={this.props.height ? this.props.height : ''}
+                            height={this.props.minHeight ? this.props.minHeight : ''}
                             width={this.props.width ? this.props.width : ''}
                             tableClass={this.props.tableClass ? this.props.tableClass : null}
                             actions={

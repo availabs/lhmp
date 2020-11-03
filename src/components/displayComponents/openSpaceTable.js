@@ -37,6 +37,7 @@ class inventoryTableViewer extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
+            this.fetchFalcorDeps()
         }
     }
 
@@ -104,7 +105,16 @@ class inventoryTableViewer extends Component {
                     }
                 }), {}));
 
-        data = Object.keys(data).map(d => data[d])
+        data =
+            Object.keys(data)
+                .map(d => data[d]);
+        data = data.sort((a, b) =>
+                    this.props.defaultSortCol ?
+                        (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                        a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                        b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                        1)
+
         let columns = Object.keys(get(data, `[0]`, {}))
             .map(key => (
                 {
@@ -115,6 +125,14 @@ class inventoryTableViewer extends Component {
                         key === 'Total Area (Acres)' ? d => parseFloat(d.toFixed(2)).toLocaleString() :
                             key === '# of parcels' ? d => d.toLocaleString() : null
                 }))
+            .reduce((a,c, cI, src) => {
+                if (this.props.colOrder){
+                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                }else{
+                    a.push(c)
+                }
+                return a;
+            }, [])
         return {data, columns}
     }
 

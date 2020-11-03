@@ -30,7 +30,7 @@ const config = {
             type: 'content',
             prompt: '',
             intent: '',
-            icon: 'os-icon-folder'
+            icon: 'os-icon-folder',
         },
         {
             title: 'Guiding Authorities and References',
@@ -74,4 +74,6 @@ const config = {
             icon: 'os-icon-folder'
         }
     ]
-}       
+}
+
+export default config
