@@ -40,7 +40,10 @@ Object.keys(HAZARD_META).map(key => {
         width: 500,
         border: 1,
         onlyAdmin: true,
-        pullCounty: true,
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     },{
         title: HAZARD_META[key].name,
         requirement: `req-B1-${key}`,
@@ -48,7 +51,10 @@ Object.keys(HAZARD_META).map(key => {
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
         callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        pullCounty: true
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true 
     },
         {
             title: `${HAZARD_META[key].name} Local Impact`,
