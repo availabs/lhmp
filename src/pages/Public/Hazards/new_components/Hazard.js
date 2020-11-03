@@ -19,6 +19,7 @@ import {EARLIEST_YEAR, LATEST_YEAR} from "./yearsOfSevereWeatherData"
 //import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
 import {HeaderImageContainer} from 'pages/Public/theme/components'
 
+const emptyBody = ['<p></p>', '']
 
 class Hazards extends React.Component {
 
@@ -49,12 +50,19 @@ class Hazards extends React.Component {
         let contentIdLocalImpact = `req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.geoid}`
         let contentIdLocalImpactCounty = `req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.activeGeoid}`
         let contentIdImage = `req-B1-${this.props.hazard}-image-${this.props.planId}-${this.props.geoid}`
+        let contentIdImageCounty = `req-B1-${this.props.hazard}-image-${this.props.planId}-${this.props.activeGeoid}`
 
         return this.props.falcor.get(
-            ['content', 'byId', [contentId, contentIdCounty, contentIdLocalImpact, contentIdLocalImpactCounty, contentIdImage], ['body']]
+            ['content', 'byId', [contentId, contentIdCounty, contentIdLocalImpact, contentIdLocalImpactCounty, contentIdImage, contentIdImageCounty], ['body']]
         ).then(contentRes => {
+            let tmpImg = get(contentRes, `json.content.byId.${contentIdImage}.body`, null);
+
+            tmpImg = tmpImg && !emptyBody.includes(tmpImg.trim()) ? tmpImg :
+                get(hazardsConfig["Local Hazards"].filter(h => h.requirement === `req-B1-${this.props.hazard}-image`).pop(), `pullCounty`) ?
+                    get(contentRes, `json.content.byId.${contentIdImageCounty}.body`, null) :
+                    tmpImg
             this.setState({
-                image: get(contentRes, `json.content.byId.${contentIdImage}.body`, null),
+                image: tmpImg
             })
         })
 
@@ -65,8 +73,6 @@ class Hazards extends React.Component {
             return <React.Fragment/>
         }
         let HazardName = get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')
-
-        let emptyBody = ['<p></p>', '']
 
         let contentCharacteristics =
             get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, null)

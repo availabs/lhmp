@@ -39,7 +39,8 @@ Object.keys(HAZARD_META).map(key => {
         height: 400,
         width: 500,
         border: 1,
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: true,
     },{
         title: HAZARD_META[key].name,
         requirement: `req-B1-${key}`,
