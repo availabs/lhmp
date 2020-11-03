@@ -38,7 +38,7 @@ class Hazards extends React.Component {
         super(props);
         //authGeoid(this.props.user);
         this.state = {
-            geoid: this.props.geoid,
+            geoid: this.props.activeGeoid,
             dataType: 'severeWeather',
             image: ' '
         }
@@ -47,18 +47,19 @@ class Hazards extends React.Component {
         if (prevProps.activeCousubid !== this.props.activeCousubid ||
             prevProps.hazard !== this.props.hazard ||
             prevProps.planId !== this.props.planId ||
-            prevProps.geoid !== this.props.geoid
+            prevProps.activeGeoid !== this.props.activeGeoid
         ){
             this.fetchFalcorDeps()
         }
     }
     fetchFalcorDeps(geoid, geoLevel, dataType) {
-        if (!geoid) geoid = this.props.geoid; 
+        if (!geoid) geoid = this.props.geoid;
         let contentId =  `req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}`
+        let contentIdLocalImpact =  `req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.geoid}`
         let contentIdImage =  `req-B1-${this.props.hazard}-image-${this.props.planId}-${this.props.geoid}`
 
         return this.props.falcor.get(
-            ['content', 'byId', [contentId, contentIdImage], ['body']]
+            ['content', 'byId', [contentId, contentIdLocalImpact, contentIdImage], ['body']]
         ).then(contentRes => {
             this.setState({
                 image: get(contentRes, `json.content.byId.${contentIdImage}.body`, null),
@@ -68,7 +69,7 @@ class Hazards extends React.Component {
     }
 
     render() {
-        if(!this.props.geoid) {
+        if(!this.props.activeGeoid) {
             return <React.Fragment />
         }
         let HazardName = get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')
@@ -76,23 +77,11 @@ class Hazards extends React.Component {
         return (
             <div>
                 <div className='row'>
-                    <div>
-                        <h4>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Characteristics</h4>
-                        <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
-                        />
-                    </div>
-                </div>
-                <div className='row'>
-                    <div style={{width: '100%'}}>
-                        {this.state.image ?  <HeaderImageContainer img={this.state.image}/> : null}
-                    </div>
-                </div>
-                <div className='row'>
                     <div className='col-md-6'>
                         <h6>{HazardName} Loss by Year</h6>
                         <HazardBarChart
                             hazard={this.props.hazard}
-                            geoid={this.props.geoid}
+                            geoid={this.props.activeGeoid}
                             geoLevel={this.props.geoLevel}
                             format={"~s"}
                             height={300}
@@ -104,7 +93,7 @@ class Hazards extends React.Component {
                          <HazardBarChart
                             lossType={'num_events'}
                             hazard={this.props.hazard}
-                            geoid={this.props.geoid}
+                            geoid={this.props.activeGeoid}
                             geoLevel={this.props.geoLevel}
                             height={300}
                         />
@@ -117,7 +106,7 @@ class Hazards extends React.Component {
                             showYlabel={false}
                             showXlabel={false}
                             lossType={'property_damage'}
-                            geoid={this.props.geoid}
+                            geoid={this.props.activeGeoid}
                             geoLevel={this.props.geoLevel}
                             dataType='severeWeather'
                             hazards={this.props.hazards}
@@ -133,7 +122,7 @@ class Hazards extends React.Component {
                             showYlabel={false}
                             showXlabel={false}
                             lossType={'num_events'}
-                            geoid={this.props.geoid}
+                            geoid={this.props.activeGeoid}
                             geoLevel={this.props.geoLevel}
                             dataType='severeWeather'
                             hazards={this.props.hazards}
@@ -142,6 +131,26 @@ class Hazards extends React.Component {
                         />
                     </div>
                 </div>
+
+                <div className='row'>
+                    <div>
+                        <h4>{get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')} Characteristics</h4>
+                        <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
+                        />
+                    </div>
+
+                    <div>
+                        <h4>Local Impacts - {get(this.props.graph,`riskIndex.meta[${this.props.hazard}].name`,'')}</h4>
+                        <div dangerouslySetInnerHTML={{ __html: get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.geoid}].body.value`, '<span/>')}}
+                        />
+                    </div>
+                </div>
+                <div className='row'>
+                    <div style={{width: '100%'}}>
+                        {this.state.image ?  <HeaderImageContainer img={this.state.image}/> : null}
+                    </div>
+                </div>
+
                  <div className='row'>
                     <div className='col-md-12'>
                         <h4>Events with Highest Reported Loss in Dollars</h4>
@@ -152,7 +161,7 @@ class Hazards extends React.Component {
                         <HazardEventsTable
                             hazards={this.props.hazards}
                             hazard={this.props.hazard}
-                            geoid={this.state.geoid}
+                            geoid={this.props.activeGeoid}
                         />
                         <i style={{color: '#afafaf'}}>Source: <a
                             href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
@@ -165,7 +174,7 @@ class Hazards extends React.Component {
                         <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                         <h6>{HazardName} Loss by Month</h6>
                         <CousubTotalLossTable
-                            geoid={this.props.geoid}
+                            geoid={this.props.activeGeoid}
                             geoLevel={this.props.geoLevel}
                             dataType='severeWeather'
                             hazards={this.props.hazards}
@@ -181,7 +190,7 @@ class Hazards extends React.Component {
                         <h6>{HazardName} Events</h6>
 
                         <HazardEventsMapController
-                            geoid={this.props.geoid}
+                            geoid={this.props.activeGeoid}
                             geoLevel={this.props.geoLevel}
                             dataType='severeWeather'
                             hazards={this.props.hazards}
@@ -203,6 +212,7 @@ class Hazards extends React.Component {
 const mapStateToProps = (state,ownProps) => {
     return {
         graph: state.graph,
+        activeGeoid: state.user.activeGeoid,
         planId: state.user.activePlan
     };
 };
