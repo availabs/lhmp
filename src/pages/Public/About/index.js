@@ -32,7 +32,7 @@ import {
 from 'pages/Public/theme/components'
 import get from "lodash.get";
 const COLS = ['body'];
-
+const emptyBody = ['<p></p>', '']
 class About extends React.Component {
 
     constructor(props) {
@@ -43,10 +43,10 @@ class About extends React.Component {
         this.getCurrentImageKey = this.getCurrentImageKey.bind(this)
         this.getCurrentKey = this.getCurrentKey.bind(this)
     }
-    getCurrentImageKey = (requirement) =>
+    getCurrentImageKey = (requirement, county = false) =>
         this.props.scope === 'global' ?
             requirement :
-            requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
+            requirement + '-' + this.props.user.activePlan + '-' + `${county ? this.props.user.activeGeoid : this.props.user.activeCousubid}`
 
     getCurrentKey = (requirement, county = false) =>
         this.props.scope === 'global' ?
@@ -56,6 +56,7 @@ class About extends React.Component {
     fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined' || !this.props.user.activePlan) return Promise.resolve();
         let contentId = this.getCurrentImageKey(this.state.imageReq);
+        let contentIdCounty = this.getCurrentImageKey(this.state.imageReq, true);
         let allRequirements = [];
 
         Object.keys(config)
@@ -67,10 +68,17 @@ class About extends React.Component {
         return this.props.falcor.get(
             ['geo', parseInt(this.props.activeCousubid), 'name'],
             ['content', 'byId', [contentId], COLS],
+            ['content', 'byId', [contentIdCounty], COLS],
             ...allRequirements
         ).then(contentRes => {
+            let tmpImg = get(contentRes, `json.content.byId.${contentId}.body`, null)
+            tmpImg = tmpImg && !emptyBody.includes(tmpImg.trim()) ? tmpImg :
+                get(config["Annex Image"][0], `pullCounty`) ?
+                    get(contentRes, `json.content.byId.${contentIdCounty}.body`, '/img/sullivan-min.png') :
+                    tmpImg || '/img/sullivan-min.png'
+
             this.setState({
-                image: get(contentRes, `json.content.byId.${contentId}.body`, '/img/sullivan-min.png'),
+                image: tmpImg,
                 'currentKey': contentId,
                 status: get(contentRes.json.content.byId[contentId], `attributes.status`, ''),
             })

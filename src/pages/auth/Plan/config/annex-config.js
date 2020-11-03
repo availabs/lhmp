@@ -11,7 +11,8 @@ const config = {
         width: 500,
         border: 1,
         icon: 'os-icon-',
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: false
     }],
     'Header' : [{
         title: 'Annex Quote',
