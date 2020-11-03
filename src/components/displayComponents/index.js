@@ -10,9 +10,10 @@ import planningDocumentsViewer from "./planningDocuments/planningDocumentsViewer
 import formTableViewer from './FormTableViewer'
 import CriticalFacilitiesTableViewer from './criticalFacilitiesTableViewer'
 import InventoryTableViewer from './inventoryTableViewer'
+import NfipStatisticsViewer from './nfipStatisticsViewer'
 import evacuationRoutesViewer from "./evacuationRoutesViewer";
 import capabilityEvaluationTableViewer from "./capabilityEvaluationTableViewer";
-import shelterListTableViewer from "./shelterListTableViewer";
+import ShelterListTableViewer from "./shelterListTableViewer";
 import actionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ActionsFilteredListTableViewer from "./actionsFilteredListTableViewer";
 import ImageComponent from './imageComponent'
@@ -39,7 +40,9 @@ const ActionsFilteredListTableViewerFunc = (rest) => <ActionsFilteredListTableVi
 const ImageEditor = (rest) => <ImageComponent edit={true} {...rest}/>
 const CriticalFacilitiesTableEditor = (rest) => <CriticalFacilitiesTableViewer public={false} {...rest}/>
 const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...rest}/>
+const NfipStatisticsEditor = (rest) => <NfipStatisticsViewer public={false} {...rest}/>
 const problemStatementTableEditor = (rest) => <ProblemStatementTableViewer edit={true} {...rest}/>
+const shelterListTableEditor = (rest) => <ShelterListTableViewer edit={true} {...rest}/>
 export default {
     NA,
     NE,
@@ -54,7 +57,8 @@ export default {
     formTableViewer,
     evacuationRoutesViewer,
     capabilityEvaluationTableViewer,
-    shelterListTableViewer,
+    shelterListTableViewer: ShelterListTableViewer,
+    shelterListTableEditor,
     actionsFilteredListTableViewer,
     actionsFilteredListTableEditor: ActionsFilteredListTableViewerFunc,
     capabilityEvaluationTableEditor: capabilityEvaluationTableViewer,
@@ -63,6 +67,8 @@ export default {
     criticalFacilitiesTableEditor: CriticalFacilitiesTableEditor,
     inventoryTableViewer: InventoryTableViewer,
     inventoryTableEditor: InventoryTableEditor,
+    nfipStatisticsViewer: NfipStatisticsViewer,
+    nfipStatisticsEditor: NfipStatisticsEditor,
     formTableEditor: formTableViewer,
     imageEditor: ImageEditor,
     imageViewer: imageViewer,

@@ -256,7 +256,11 @@ class CapabilityStrategy extends React.Component {
                                     Hello
                                 </ContentContainer>*/}
                             {this.processData() ?
-                                (<Table {...this.processData()} flex={true} width={this.props.minHeight || '60vw'}/>)
+                                (<Table {...this.processData()}
+                                        flex={this.props.flex  !== 'false'}
+                                        width={this.props.minHeight}
+                                        height={this.props.minHeight}
+                                />)
                                 : (<h4>Loading Capability Data ...</h4>)
                             }
                         </div>

@@ -90,7 +90,7 @@ class CountyHeroStats extends React.Component {
             data = [];
         }
         finally {
-            return data.sort((a, b) => b.sort - a.sort);
+            return data.sort((a, b) => a.hazard !== '' ? b.sort - a.sort : 1);
         }
     }
 

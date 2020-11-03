@@ -34,7 +34,7 @@ class ActionsWorkSheetFormsView extends React.Component{
             <div className='container'>
                 <Element>
                     <AvlFormsViewData
-                        json = {config}
+                        json = {config || ViewConfig.project_config}
                         id = {[this.props.match.params.id]}
                     />
 
@@ -72,6 +72,25 @@ export default [
             scheme: 'color-scheme-light',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsWorkSheetFormsView))
+    },
+    {
+        path: `/actions/view/:id`,
+        exact: true,
+        name: 'Action',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'actions', path: '/actions/' },
+            { param: 'id', path: '/actions/view/' },
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ActionsWorkSheetFormsView))

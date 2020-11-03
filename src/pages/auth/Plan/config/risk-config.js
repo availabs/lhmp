@@ -73,10 +73,24 @@ const config = {
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
             icon: 'os-icon-grid-squares-2',
             // hideNav: true // hides key from public nav. Displays on page.
-            /*2-non-county*/ pullCounty: true,
+            ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
-        },   
+            /*2-non-delete*/ hideIfNull: true 
+        },
+        // {
+        //     title: '',
+        //     requirement: 'Req-B-3B-3B',
+        //     hideNav: true,
+        //     type: 'content',
+        //     prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
+        //             'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
+        //     intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
+        //     icon: 'os-icon-grid-squares-2',
+        //     // hideNav: true // hides key from public nav. Displays on page.
+        //     /*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true 
+        // },      
         {
             title: '',
             requirement: 'Req-B-3B-4',
@@ -86,6 +100,43 @@ const config = {
             intent: '',
             icon: 'os-icon-grid-squares-2'
         },
+        // {
+        //     title: '',
+        //     requirement: 'Req-B-3B-3C',
+        //     hideNav: true,
+        //     type: 'content',
+        //     prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
+        //             'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
+        //     intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
+        //     icon: 'os-icon-grid-squares-2',
+        //     // hideNav: true // hides key from public nav. Displays on page.
+        //     /*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true 
+        // },      
+
+        // // {
+        // //     title: 'Vulnerable Populations Map',
+        // //     requirement: 'Req-B-3B-3D',
+        // //     type: 'developementZonesFilteredMap',
+        // //     filterBy: {zone_type: ['Area of Concern']},
+        // //     prompt: '',
+        // //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+        // //     icon: 'os-icon-globe'
+        // // }, 
+        // {
+        //     title: 'Vulnerable Population Zones',
+        //     requirement: 'Req-B-3B-3D',
+        //     type: 'developementZonesFilteredTable',
+        //     filterBy: {zone_type: ['Area of Concern']},
+        //     prompt: '',
+        //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+        //     defaultSortCol: 'name',
+        //     activeGeoFilter: 'true',
+        //     minHeight: '80vh',
+        //     icon: 'os-icon-grid-squares-2'
+        // },    
+
         {
             title: 'Built Environment',
             requirement: 'Req-B-3B-1', 
@@ -136,17 +187,33 @@ const config = {
                     '- The plan must document that critical facilities are protected to the 500-year flood event, or worst damage scenario. For those that do not meet this level of protection, the plan must include an action to meet this criteria, or explain why it is not feasible to do so',
             icon: 'os-icon-loader',
             // hideNav: true // hides key from public nav. Displays on page.
-            /*2-non-county*/ pullCounty: true,
+            ///*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            /*2-non-delete*/ hideIfNull: true 
         },
+        // {
+        //     title: 'Critical Infrastructure Table',
+        //     requirement: 'Req-NYS-F-2B',
+        //     type: 'content',
+        //     prompt: 'Describe local vulnerability in terms of existing critical infrastructure and facilities in identified hazard areas/areas with known hazard risk.' +
+        //             'Critical Infrastructure systems are depended upon for life safety and economic viability and include transportation, power, communication, and water and wastewater systems. Many critical facilities depend on infrastructure to function.',
+        //     intent: 'Jurisdictions must identify all critical facilities, assess vulnerabilities and ensure protection to a 500-year flood event. Critical facilities located in an SFHA, or having ever sustained previous flooding, must be protected to the 500-year flood event, or worst case scenario.' +
+        //             '- The plan must document the name of facility, type of facility, jurisdictional location, and exposure to a 100- and 500-year event.' +
+        //             '- The plan must document that critical facilities are protected to the 500-year flood event, or worst damage scenario. For those that do not meet this level of protection, the plan must include an action to meet this criteria, or explain why it is not feasible to do so',
+        //     icon: 'os-icon-loader',
+        //     // hideNav: true // hides key from public nav. Displays on page.
+        //     /*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true 
+        // },
         
         {
-            title: 'Critical Infrastructure Table',
+            title: '',
             requirement: 'Req-NYS-F-3',
             type: 'criticalFacilitiesTable',
             prompt: '',
             intent: '',
+            defaultSortCol: 'critical',
             icon: 'os-icon-loader',
             hideNav: true
         },
@@ -168,7 +235,7 @@ const config = {
             requirement: 'Req-B-3B-8',
             type: 'content',
             prompt: '',
-            intent: '',
+            intent: 'The table below includes a list of problem areas identified during the Jurisdictional Interview Process',
             icon: 'os-icon-globe', 
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
@@ -181,6 +248,9 @@ const config = {
             type: 'problemStatementTable',
             prompt: '',
             intent: '',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            minHeight: '80vh',
             icon: 'os-icon-alert-circle',
             hideNav: true
         },
@@ -212,6 +282,9 @@ const config = {
             filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            defaultSortCol: 'name',
+            activeGeoFilter: 'true',
+            minHeight: '80vh',
             icon: 'os-icon-grid-squares-2'
         },
         {
@@ -241,6 +314,9 @@ const config = {
             type: 'openSpaceTable',
             prompt: '',
             intent: '',
+            defaultSortCol: 'Land Type',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Land Type', '# of parcels', 'Total Area (Acres)', 'Total Value'],
             icon: 'os-icon-globe'
         },
         {
@@ -266,6 +342,11 @@ const config = {
                 ' whether the action is no longer relevant or be included as part of the updated action plan.',
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing' +
                 ' actions outlined in their mitigation strategy.',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            minHeight: '80vh',
             icon: 'os-icon-tasks-checked',
             hideNav: true
         },
@@ -299,7 +380,7 @@ const config = {
         {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
-            type: 'Visualizations - NFIP',
+            type: 'nfipStatistics',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
@@ -321,7 +402,7 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-        
+
     ],
         'Dam Safety' : [
         {

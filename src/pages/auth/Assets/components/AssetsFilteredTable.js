@@ -380,7 +380,13 @@ class AssetsFilteredTable extends Component {
                         linkBase + config.map(f => f.value).join('-')
             })
         }
-        return {data: BuildingTypeData,
+        return {data:
+            BuildingTypeData.sort((a,b) =>
+                this.props.defaultSortCol && a[this.props.defaultSortCol] !== 'TOTAL' ?
+                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                    a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                    b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                    1),
             columns: [
                 {
                     Header: primeColName,

@@ -2,7 +2,8 @@
 import Landing from './pages/Landing'
 // -- Public Pages
 import Public from './pages/Public/Home/'
-import About from './pages/Public/PlanningProcess/'
+import About from './pages/Public/About/'
+import PlanningProcess from './pages/Public/PlanningProcess/'
 import Hazards from './pages/Public/Hazards/'
 import Hazards2 from './pages/Public/Hazards/new'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
@@ -26,7 +27,8 @@ import Plans from 'pages/auth/plans/view'
 import PlanPage from 'pages/auth/plans/planPage'
 
 import Plan from 'pages/auth/Plan/' // admin plan page
-import AdminAbout from 'pages/auth/Plan/about' // admin plan page - submenu
+import AdminAbout from 'pages/auth/Plan/About' // admin plan page - submenu
+import AdminPlanningProcess from 'pages/auth/Plan/PlanningProcess' // admin plan page - submenu
 import AdminRisk from 'pages/auth/Plan/risk' // admin plan page - submenu
 import PlanHazards from 'pages/auth/Plan/hazards' // admin plan page - submenu
 import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
@@ -103,6 +105,7 @@ const routes = [
     ...Plan,
     ...Forms,
     ...AdminAbout,
+    ...AdminPlanningProcess,
     ...PlanHazards,
     ...AdminRisk,
     ...AdminStrategies,
@@ -133,11 +136,12 @@ const routes = [
     ...MunicipalitiesFormView,
     ...MunicipalitiesFormNew,
     ...Public,
-    ...About,
+    ...PlanningProcess,
     ...Hazards,
     ...Hazards2,
     ...Risk,
     ...Strategies,
+    ...About,
     ...User,
     ...Admin,
     ...FormEditOrNew,
