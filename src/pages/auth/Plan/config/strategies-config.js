@@ -297,7 +297,7 @@ const config = {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
-            filterBy: ['Proposed-New'],
+            filterBy: ['Proposed-HMP'],
             align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
                 ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
@@ -319,7 +319,7 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',
-            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated', 'viewLink'],
+            colOrder: ['viewLink','action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
             minHeight: '80vh',
             icon: 'os-icon-activity',
 
