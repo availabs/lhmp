@@ -12,7 +12,7 @@ const config = {
         border: 1,
         icon: 'os-icon-',
         onlyAdmin: true,
-
+        pullCounty: false
     }],
     'Header' : [{
         title: 'Annex Quote',
@@ -35,7 +35,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Public Comment',
@@ -47,7 +47,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Glossary',
@@ -59,7 +59,7 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     ///*2-non-county*/ pullCounty: true,
         //     /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
+        //     ///*2-non-delete*/ hideIfNull: true
         // },
         // {
         //     title: 'Guiding Authorities and References',
@@ -71,7 +71,7 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     ///*2-non-county*/ pullCounty: true,
         //     /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
+        //     ///*2-non-delete*/ hideIfNull: true
         // },
         // {
         //     title: 'Acronmys',
@@ -83,7 +83,7 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     ///*2-non-county*/ pullCounty: true,
         //     /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
+        //     ///*2-non-delete*/ hideIfNull: true
 
         // },
         // {
@@ -96,7 +96,7 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     ///*2-non-county*/ pullCounty: true,
         //     /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
+        //     ///*2-non-delete*/ hideIfNull: true
         // },
         // {
         //     title: 'Change Log',
@@ -108,7 +108,7 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     ///*2-non-county*/ pullCounty: true,
         //     /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
+        //     ///*2-non-delete*/ hideIfNull: true
         // },
     ]
 }

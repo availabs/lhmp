@@ -64,7 +64,8 @@ class Hazards extends React.Component {
             dataType: 'severeWeather',
             colorScale: getColorScale([1, 2]),
             hazards: [],
-            hazard: undefined
+            hazard: undefined,
+            firstLoad: true
         }
         this.changeHazard = this.changeHazard.bind(this)
     }
@@ -163,7 +164,7 @@ class Hazards extends React.Component {
 
     changeHazard(e, a) {
         console.log('haz changed', e, a)
-        this.setState({hazard:e.target.value})
+        this.setState({hazard:e.target.value, firstLoad: false})
     }
     render() {
         if(!this.props.geoid) {
