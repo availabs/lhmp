@@ -320,8 +320,8 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',
-            renameCols: {'viewLink': 'view'}, // new name should match colOrder names.
-            colOrder: ['view','action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            renameCols: {'action_jurisdiction':'jurisdiction', 'viewLink': 'view', 'estimated_timeframe_for_action_implementation': 'timeframe', 'description_of_problem_being_mitigated':'problem statement', 'estimated_cost_range':'estimated cost', 'lead_agency_name_text':'lead agency', 'action_status_update':'status','action_description':'description' }, // new name should match colOrder names.
+            colOrder: ['view','jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'timeframe', 'estimated cost', 'lead agency', 'status', 'description', 'problem statement'],
             minHeight: '80vh',
             icon: 'os-icon-activity',
 
