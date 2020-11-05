@@ -115,15 +115,15 @@ const config = {
         //     ///*2-non-delete*/ hideIfNull: true 
         // },      
 
-        // // {
-        // //     title: 'Vulnerable Populations Map',
-        // //     requirement: 'Req-B-3B-3D',
-        // //     type: 'developementZonesFilteredMap',
-        // //     filterBy: {zone_type: ['Area of Concern']},
-        // //     prompt: '',
-        // //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
-        // //     icon: 'os-icon-globe'
-        // // }, 
+        // {
+        //     title: 'Vulnerable Populations Map',
+        //     requirement: 'Req-B-3B-3D',
+        //     type: 'developementZonesFilteredMap',
+        //     filterBy: {zone_type: ['Area of Concern']},
+        //     prompt: '',
+        //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+        //     icon: 'os-icon-globe'
+        // }, 
         // {
         //     title: 'Vulnerable Population Zones',
         //     requirement: 'Req-B-3B-3D',
