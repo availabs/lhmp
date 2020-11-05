@@ -116,7 +116,7 @@ const config = {
         },
 
         {
-            title: 'Vulnerable Populations Map',
+            title: 'Vulnerable Populations Zones',
             requirement: 'Req-B-3B-3D',
             type: 'developementZonesFilteredMap',
             filterBy: {zone_type: ['Vulnerable Population']},
