@@ -74,11 +74,11 @@ class AvlFormsListTable extends React.Component {
                                                         .reduce((a, c) =>
                                                             a &&
                                                             _.intersectionBy(
-                                                                this.props.filterBy[c].includes,
+                                                                this.props.filterBy[c],
                                                                 get(graph[d], `attributes.${c}`, '').includes('[') ?
                                                                     get(graph[d], `attributes.${c}`, '').slice(1,-1).split(',') :
                                                                     [get(graph[d], `attributes.${c}`, '')]
-                                                            ), true)
+                                                            ).length, true)
                                                 }
                                                 return true
                                             }

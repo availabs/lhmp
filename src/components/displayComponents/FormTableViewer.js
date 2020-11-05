@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 
 import Table from 'components/light-admin/tables/tableSelector'
 import {match} from "fuzzy";
+import functions from "../../pages/auth/Plan/functions";
 
 var _ = require('lodash')
 
@@ -29,12 +30,18 @@ class FormTableViewer extends React.Component{
         }
         // console.log('form attributes', formAttributes, this.props.activePlan)
         
-        return this.props.falcor.get(['forms',formType,'byPlanId',this.props.activePlan,'length'])
+        return this.props.falcor.get(
+            ['forms',formType,'byPlanId',this.props.activePlan,'length'],
+            ["geo", this.props.activeGeoid, 'municipalities']
+        )
             .then(response =>{
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
                 if(length > 0){
                     return this.props.falcor.get(
-                        ['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes]
+                        ['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes],
+                        ['geo',
+                            [this.props.activeGeoid, ...get(this.props.geoData, `${this.props.activeGeoid}.municipalities.value`, [])],
+                            ['name']]
                     )
                 }
             })
@@ -67,7 +74,20 @@ class FormTableViewer extends React.Component{
                 }
             )
             .map(d => {
-            return this.props.formData[d.value[2]].value.attributes
+            return Object.keys(this.props.formData[d.value[2]].value.attributes)
+                .reduce((a,c) => {
+                    a[c] = this.props.formData[d.value[2]].value.attributes[c]
+
+                    a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split('[') : a[c]
+
+                    if(['cousub', 'municipality', 'contact_municipality', 'county', 'contact_county'].includes(c)){
+                        a[c] = typeof a[c] === 'string' ? functions.formatName(get(this.props.geoData, [a[c], 'name'], a[c]), a[c]) :
+                            a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC))
+                    }
+
+                    a[c] = typeof a[c] === "string" ? a[c] : a[c].join(',')
+                    return a;
+                }, {})
         })
             .sort((a, b) =>
                 this.props.defaultSortCol ?
@@ -114,7 +134,7 @@ const mapStateToProps = (state,ownProps) => {
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),
-        
+        geoData: get(state.graph, ['geo'], {}),
         graph : state.graph
 
     }

@@ -44,12 +44,14 @@ class developementZonesFilteredTable extends Component {
                                     if (this.props.filterBy){
                                         return Object.keys(this.props.filterBy)
                                             .reduce((a,c) =>
-                                                a && _.intersectionBy(
-                                                    this.props.filterBy[c].includes,
-                                                get(graph[d], `attributes.${c}`, '').includes('[') ?
-                                                get(graph[d], `attributes.${c}`, '').slice(1,-1).split(',') :
-                                                [get(graph[d], `attributes.${c}`, '')]
-                                                ), true)
+                                            {
+                                                return a && _.intersectionBy(
+                                                    this.props.filterBy[c],
+                                                    get(graph[d], `attributes.${c}`, '').includes('[') ?
+                                                        get(graph[d], `attributes.${c}`, '').slice(1,-1).split(',') :
+                                                        [get(graph[d], `attributes.${c}`, '')]
+                                                ).length
+                                            }, true)
                                     }
                                     return true
                                 }
