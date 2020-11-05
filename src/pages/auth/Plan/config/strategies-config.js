@@ -239,7 +239,7 @@ const config = {
             // defaultSortOrder: 'desc',
             //colOrder: ['Agency', 'Name', 'Role'],
             minHeight: '80vh',
-            // flex: 'false',
+            flex: 'false',
             icon: 'os-icon-pie-chart-3',
             hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
