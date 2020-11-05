@@ -143,6 +143,7 @@ class ZoneTable extends React.Component {
     }
 
     render(){
+        // localStorage.removeItem('zone')
         return (
             <div style={{'overflowX':'auto'}}>
                 <table className='table table-sm table-hover'>

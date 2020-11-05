@@ -364,6 +364,9 @@ export class ControlLayers extends MapLayer {
         if (layerName.includes("hazardEvents")) {
             if (Object.keys(hazardEventsLayer).length > 0) {
                 hazardEventsLayer.toggleVisibilityOn()
+                if (this.map.getLayer('events-layer')){
+                    this.map.moveLayer('events-layer','buildings-layer')
+                }
             }
         }
         if (layerName.includes("criticalInfrastructure")) {
