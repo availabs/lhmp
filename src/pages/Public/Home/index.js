@@ -85,12 +85,14 @@ let sideMenuConfig = {
         {
             title:'Overview',
             component:Narrative,
-            icon:'os-icon-newspaper'
+            icon:'os-icon-newspaper',
+            showOnlyOnCounty: true
         },
         {
             title:'Goals & Objectives',
             component:Goals,
-            icon:'os-icon-tasks-checked'
+            icon:'os-icon-tasks-checked',
+            showOnlyOnCounty: true
         },
         // {
         //     title:'Capabilities Overview',
@@ -109,6 +111,7 @@ let sideMenuConfig = {
         {
             title: 'Capabilities Table',
             icon:'os-icon-donut-chart-1',
+            showOnlyOnCounty: true,
             component:
                 () => (
                     <PageContainer>
@@ -298,7 +301,8 @@ let sideMenuConfig = {
                         </HeaderContainer>
                     </PageContainer>
                 ),
-            icon:'os-icon-grid-circles'
+            icon:'os-icon-grid-circles',
+            showOnlyOnCounty: true
         }
     ]
 }
@@ -319,8 +323,12 @@ class Public extends React.Component {
                 </div>
                 <div style={{marginLeft: 220}}>
                     {
-                        Object.keys(sideMenuConfig).map(section => {
-                            return sideMenuConfig[section].map(item=>{
+                        Object.keys(sideMenuConfig)
+                            .filter(section => this.props.activeCousubid.length > 5 ? sideMenuConfig[section].filter(item => !item.showOnlyOnCounty).length > 0 : true)
+                            .map(section => {
+                            return sideMenuConfig[section]
+                                .filter(f => this.props.activeCousubid.length > 5 ? !f.showOnlyOnCounty : true)
+                                .map(item=>{
                                 let Comp = item.component
                                 return (
                                     <Element name={item.title} key={item.title}>
@@ -342,6 +350,7 @@ const mapStateToProps = (state, ownProps) => {
         graph: state.graph.plans || {},
         router: state.router,
         activePlan:state.user.activePlan,
+        activeCousubid:state.user.activeCousubid,
         user: state.user
     };
 };

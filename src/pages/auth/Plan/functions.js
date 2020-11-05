@@ -22,16 +22,67 @@ ${props => props.theme.panelDropdownScrollBar};
 class GD extends Component {
     constructor(props) {
         super(props);
+        this.state={
+            geoToFilter: []
+        }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(this.state.geoToFilter !== prevState.geoToFilter){
+            this.forceUpdate()
+        }
+    }
+
+    fetchFalcorDeps(){
+        let formType = 'filterJurisdictions',
+            formAttributes = ['county', 'municipality']
+        return this.props.falcor.get(
+            ['forms', formType, 'byPlanId', this.props.activePlan, 'length']
+                )
+                    .then(response => {
+                        let length = get(response, ['json', 'forms', formType, 'byPlanId', this.props.activePlan, 'length'], 0);
+                        if (length > 0) {
+                            return this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                                from: 0,
+                                to: length - 1
+                            }], ...formAttributes])
+                        }
+                    })
+    }
+    getGeoToFilter(){
+        let formType = 'filterJurisdictions'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {})
+        if(id){
+            id = Object.keys(id)
+                    .map(i => get(id[i], ['value', 2], null))
+                    .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                let geoToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpGeos = get(data[g], `value.attributes.municipality`, null)
+                            tmpGeos = tmpGeos && typeof tmpGeos === "string" && tmpGeos.includes('[') ?
+                                tmpGeos.slice(1,-1).split(',') : tmpGeos
+                            if(tmpGeos) a.push(...tmpGeos)
+                            return a;
+                        }, [])
+                return geoToFilter;
+            }
+        }
+
+        return []
+    }
     render(){
         const geoInfo = this.props.allGeo,
             setActiveCousubid = this.props.setActiveCousubid,
             activecousubId = this.props.activeCousubid,
             allowedGeos = Object.keys(get(this.props, `allGeo`, {}));
-
+        let geoToFilter = this.getGeoToFilter(this.props.formData);
         let list = geoInfo ? Object.keys(geoInfo)
                     .filter(f => allowedGeos.includes(f))
+                    .filter(f => !geoToFilter.includes(f))
                     .map((county, county_i) =>
                         ({
                             'label': formatName(geoInfo[county].name || geoInfo[county], county),
@@ -79,9 +130,11 @@ const mapStateToProps = (state, ownProps) => {
     return {
         geoGraph: state.graph.geo,
         router: state.router,
+        activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
-        allGeo: state.geo.allGeos
+        allGeo: state.geo.allGeos,
+        formData: get(state.graph, [`forms`, 'filterJurisdictions'], null)
     };
 };
 const mapDispatchToProps = {setActiveCousubid, getAllGeo};

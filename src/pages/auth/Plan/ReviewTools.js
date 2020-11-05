@@ -41,8 +41,25 @@ class PlanReview extends React.Component {
 
     fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
-        return this.props.falcor.get(["geo", this.props.activeGeoid, 'municipalities'])
+        let formType = 'filterJurisdictions',
+            formAttributes = ['county', 'municipality']
+
+        return this.props.falcor.get(
+            ["geo", this.props.activeGeoid, 'municipalities'],
+            ['forms', formType, 'byPlanId', this.props.activePlan, 'length'])
             .then(response => {
+                let length = get(response, ['json', 'forms', formType, 'byPlanId', this.props.activePlan, 'length'], 0);
+                if (length > 0) {
+                    return this.props.falcor.get(
+                        ['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                        from: 0,
+                        to: length - 1
+                    }], ...formAttributes],
+                        ['geo',
+                            [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
+                            ['name']])
+                }
+
                 return this.props.falcor.get(
                     ['geo',
                         [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
@@ -73,7 +90,31 @@ class PlanReview extends React.Component {
                 }))
             })
     }
+    getGeoToFilter(){
+        let formType = 'filterJurisdictions'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {})
+        if(id){
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                let geoToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpGeos = get(data[g], `value.attributes.municipality`, null)
+                            tmpGeos = tmpGeos && typeof tmpGeos === "string" && tmpGeos.includes('[') ?
+                                tmpGeos.slice(1,-1).split(',') : tmpGeos
+                            if(tmpGeos) a.push(...tmpGeos)
+                            return a;
+                        }, [])
+                return geoToFilter;
+            }
+        }
 
+        return []
+    }
     processTable(allowedGeos) {
         return (
             <DIV>
@@ -130,7 +171,9 @@ class PlanReview extends React.Component {
     }
 
     render() {
-        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])];
+        let geoToFilter = this.getGeoToFilter(this.props.formData);
+        let allowedGeos = [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])]
+            .filter(f => !geoToFilter.includes(f))
 
         return get(this.props, `match.path`, '') === '/plan_review/' ? (
             <div className='container'>
