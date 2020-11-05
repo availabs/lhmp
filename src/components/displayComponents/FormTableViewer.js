@@ -82,10 +82,10 @@ class FormTableViewer extends React.Component{
 
                     if(['cousub', 'municipality', 'contact_municipality', 'county', 'contact_county'].includes(c)){
                         a[c] = typeof a[c] === 'string' ? functions.formatName(get(this.props.geoData, [a[c], 'name'], a[c]), a[c]) :
-                            a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC))
+                            a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC)) : a[c]
                     }
 
-                    a[c] = typeof a[c] === "string" ? a[c] : a[c].join(',')
+                    a[c] = typeof a[c] !== "object" ? a[c] : a[c] ? a[c].join(',') : a[c]
                     return a;
                 }, {})
         })
