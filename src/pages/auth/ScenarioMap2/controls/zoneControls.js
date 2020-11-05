@@ -49,6 +49,7 @@ class ZoneControl extends React.Component{
     }
 
     fetchFalcorDeps(){
+        console.log('??', ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'])
         return this.props.falcor.get(
             ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
@@ -56,6 +57,10 @@ class ZoneControl extends React.Component{
                 let length = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],1) === null ?
                     1 :  get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0)
                 let jurisdictionsLength = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0);
+                // if (length <= 1 || jurisdictionsLength <= 0) return Promise.resolve();
+
+                console.log('??', ['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']],
+                    ['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:jurisdictionsLength-1}],['name','geom','building']])
                 this.props.falcor.get(
                     ['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']],
                     ['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:jurisdictionsLength-1}],['name','geom','building']]
@@ -197,7 +202,6 @@ class ZoneControl extends React.Component{
         let jurisdictions_list = this.jurisdictionDropDown()
         let zones = JSON.parse(localStorage.getItem('zone')) || []
 
-        if(zones_list){
             return (
                 <div>
                     <div style={{marginTop: '-30px', display: 'flex', justifyContent: 'flex-end'}}>
@@ -211,41 +215,45 @@ class ZoneControl extends React.Component{
                         >Add New Zone</button>
                     </div>
                     <div style={{display:'table-row'}}>
-                        <SearchableDropDown
-                            data={jurisdictions_list}
-                            placeholder={'Select a Municipality'}
-                            value={jurisdictions_list.filter(f => f.value === this.state.jurisdiction)[0]}
-                            hideValue={false}
-                            onChange={(value) => {
-                                this.setState({jurisdiction:value})
-                            }}
-                        />
-                        <div style={{paddingTop: '5px'}}>
-                            <SearchableDropDown
-                                data={zones_list}
-                                placeholder={'Select a Type'}
-                                value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
-                                hideValue={false}
-                                onChange={(value) => {
-                                    this.setState({zone_id:value})
-                                    zones_list.forEach(zone =>{
-                                        if(zone.value === value){
-                                            zones.push({
-                                                zone_id:value,
-                                                geoid:zone.geoid || null,
-                                                geom: zone.geom,
-                                                name:zone.label,
-                                                geojson: zone.geojson,
-                                                bbox: zone.bbox
-                                            });
-                                        }
-                                    })
-                                    localStorage.setItem('zone', JSON.stringify(zones));
-                                    this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
-                                    this.selectedZones()
-                                }}
-                            />
-                        </div>
+                        {
+                            jurisdictions_list && jurisdictions_list.length ?
+                                <SearchableDropDown
+                                    data={jurisdictions_list}
+                                    placeholder={'Select a Municipality'}
+                                    value={jurisdictions_list.filter(f => f.value === this.state.jurisdiction)[0]}
+                                    hideValue={false}
+                                    onChange={(value) => {
+                                        this.setState({jurisdiction:value})
+                                    }}
+                                /> : null
+                        }
+                        {zones_list && zones_list.length ?
+                            <div style={{paddingTop: '5px'}}>
+                                <SearchableDropDown
+                                    data={zones_list}
+                                    placeholder={'Select a Type'}
+                                    value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
+                                    hideValue={false}
+                                    onChange={(value) => {
+                                        this.setState({zone_id:value})
+                                        zones_list.forEach(zone =>{
+                                            if(zone.value === value){
+                                                zones.push({
+                                                    zone_id:value,
+                                                    geoid:zone.geoid || null,
+                                                    geom: zone.geom,
+                                                    name:zone.label,
+                                                    geojson: zone.geojson,
+                                                    bbox: zone.bbox
+                                                });
+                                            }
+                                        })
+                                        localStorage.setItem('zone', JSON.stringify(zones));
+                                        this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
+                                        this.selectedZones()
+                                    }}
+                                />
+                            </div> : null}
 
                     </div>
                     <div>
@@ -255,13 +263,6 @@ class ZoneControl extends React.Component{
                     </div>
                 </div>
             )
-        }else{
-            return(
-                <div>
-                    Loading..
-                </div>
-            )
-        }
     }
 }
 
