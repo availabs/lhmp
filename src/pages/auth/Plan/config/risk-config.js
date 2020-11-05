@@ -252,7 +252,9 @@ const config = {
             defaultSortCol: 'action_jurisdiction',
             minHeight: '80vh',
             icon: 'os-icon-alert-circle',
-            hideNav: true
+            hideNav: true,
+            renameCols: {'action_jurisdiction':'jurisdiction', 'description_of_problem_being_mitigated':'problem statement',}, // new name should match colOrder names.
+        
         },
     ],
     
