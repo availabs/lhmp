@@ -26,9 +26,8 @@ class inventoryTableViewer extends Component {
                 'estimated_timeframe_for_action_implementation',
                 'estimated_cost_range',
                 'lead_agency_name_text',
-                'action_status_update'
             ],
-            clickToOpen: ['action_description', 'description_of_problem_being_mitigated']
+            clickToOpen: ['action_description', 'description_of_problem_being_mitigated',  'action_status_update']
         };
         this.formsListTable = this.formsListTable.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
@@ -302,7 +301,7 @@ class inventoryTableViewer extends Component {
                                         accessor: f,
                                         filter: 'default',
                                         sort: true,
-                                        expandable: this.state.clickToOpen.includes(f).toString(),
+                                        expandable: [...this.state.clickToOpen, 'viewLink'].includes(f).toString(),
                                         expandableHeader: true
                                     })
                                 })
