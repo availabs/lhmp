@@ -36,8 +36,8 @@ Object.keys(HAZARD_META).map(key => {
         intent: '',
         callout: '',
         label:'Image', // Which you would like to see on the form
-        height: 400,
-        width: 500,
+        height: 500,
+        width: 900,
         border: 1,
         onlyAdmin: true,
         // hideNav: true // hides key from public nav. Displays on page.

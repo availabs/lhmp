@@ -320,8 +320,8 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',
-            //renameCols: {'viewLink': 'view'}, // new name should match colOrder names.
-            colOrder: ['viewLink','action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated', 'problem_statement'],
+            renameCols: {'action_jurisdiction':'jurisdiction', 'viewLink': 'view', 'estimated_timeframe_for_action_implementation': 'timeframe', 'description_of_problem_being_mitigated':'problem statement', 'estimated_cost_range':'estimated cost', 'lead_agency_name_text':'lead agency', 'action_status_update':'status','action_description':'description' }, // new name should match colOrder names.
+            colOrder: ['view','jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'timeframe', 'estimated cost', 'lead agency', 'status', 'description', 'problem statement'],
             minHeight: '80vh',
             icon: 'os-icon-activity',
 
@@ -354,8 +354,8 @@ const config = {
             intent:'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA is the official administering Federal agency of the NFIP, participation in the program is a basic community capability and resource for flood hazard mitigation activities',
             icon:'os-icon-cloud-drizzle',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
