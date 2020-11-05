@@ -126,12 +126,12 @@ const config = {
                 type: 'capabilities',
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
-                    // {
-                    //     Header: 'Jurisdiction',
-                    //     accessor: 'municipality',
-                    //     sort: true,
-                    //     filter: 'default'
-                    // },
+                    {
+                        Header: 'Jurisdiction',
+                        accessor: 'municipality',
+                        sort: true,
+                        filter: 'default'
+                    },
                     {
                         Header: 'Name',
                         accessor: 'capability_name',
@@ -188,7 +188,7 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'adopting_authority',
             // defaultSortOrder: 'desc',
-            colOrder: ['Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+            colOrder: ['Jurisdiction', 'Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },
