@@ -36,8 +36,8 @@ Object.keys(HAZARD_META).map(key => {
         intent: '',
         callout: '',
         label:'Image', // Which you would like to see on the form
-        height: 400,
-        width: 500,
+        height: 500,
+        width: 900,
         border: 1,
         onlyAdmin: true,
         // hideNav: true // hides key from public nav. Displays on page.
@@ -66,6 +66,44 @@ Object.keys(HAZARD_META).map(key => {
             pullCounty: true
         })
 })
+
+HazardConfig.push({
+        title: `All Hazards Image`,
+        requirement: `req-B1--image`,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 400,
+        width: 500,
+        border: 1,
+        onlyAdmin: true,
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true
+    },{
+        title: 'All Hazards',
+        requirement: `req-B1-`,
+        type: 'content',
+        prompt: 'Talk about local context for hazard of concern for your area',
+        intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true
+    },
+    {
+        title: `All Hazards Local Impact`,
+        requirement: `req-B1--local-impact`,
+        type: 'content',
+        prompt: 'Talk about local context for hazard of concern for your area',
+        intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        pullCounty: true
+    })
 
 const config =  {
 	'Local Hazards' : [

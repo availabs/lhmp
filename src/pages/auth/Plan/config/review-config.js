@@ -364,7 +364,7 @@ let config = {
         },
         {
             element: 'C4',
-            requirements_from_software: `Req-C-4`,
+            requirements_from_software: `Req-NYS-F-7B, Req-NYS-F-7, Req-C-4`,
             objective: 'Does the Plan identify and analyze a comprehensive range of specific mitigation actions and projects ' +
                 'for each jurisdiction being considered to reduce the effects of hazards, with emphasis on new and existing ' +
                 'buildings and infrastructure? 44 CFR 201.6(c)(3)(ii) and 44 CFR 201.6(c)(3)(iv)',
