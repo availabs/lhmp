@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
-import config from "pages/auth/Plan/config/strategies-config";
-import ElementFactory, {RenderConfig} from 'pages/Public/theme/ElementFactory'
+import config from "pages/auth/Plan/config/annex-config";
+import {RenderConfig} from 'pages/Public/theme/ElementFactory'
+
 import GraphFactory from "components/displayComponents/graphFactory";
 import geoDropdown from 'pages/auth/Plan/functions'
 import {falcorGraph} from "store/falcorGraph";
@@ -10,6 +11,8 @@ import {setActiveCousubid} from 'store/modules/user'
 
 import { Element } from 'react-scroll'
 import SideMenu from 'pages/Public/theme/SideMenu'
+
+import ElementFactory from 'pages/Public/theme/ElementFactory'
 
 import {
     PageContainer,
@@ -25,7 +28,6 @@ import {
     SectionBoxSidebar,
     SidebarCallout,
     HeaderImageContainer
-    
 } 
 from 'pages/Public/theme/components'
 import get from "lodash.get";
@@ -36,7 +38,7 @@ class About extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageReq: 'strategies-image'
+            imageReq: 'annex-image'
         }
         this.getCurrentImageKey = this.getCurrentImageKey.bind(this)
         this.getCurrentKey = this.getCurrentKey.bind(this)
@@ -65,12 +67,13 @@ class About extends React.Component {
 
         return this.props.falcor.get(
             ['geo', parseInt(this.props.activeCousubid), 'name'],
-            ['content', 'byId', [contentId, contentIdCounty], COLS],
+            ['content', 'byId', [contentId], COLS],
+            ['content', 'byId', [contentIdCounty], COLS],
             ...allRequirements
         ).then(contentRes => {
             let tmpImg = get(contentRes, `json.content.byId.${contentId}.body`, null)
             tmpImg = tmpImg && !emptyBody.includes(tmpImg.trim()) ? tmpImg :
-                get(config["Strategies Image"][0], `pullCounty`) ?
+                get(config["Annex Image"][0], `pullCounty`) ?
                     get(contentRes, `json.content.byId.${contentIdCounty}.body`, '/img/sullivan-min.png') :
                     tmpImg || '/img/sullivan-min.png'
 
@@ -87,51 +90,23 @@ class About extends React.Component {
             this.fetchFalcorDeps()
         }
     }
-    renderElement (element) {
-        return (
-            <Element name={element.title}>
-                <SectionBox>
-                    {['right'].includes(element.align) ? 
-                        <SectionBoxSidebar >
-                            {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
-                        </SectionBoxSidebar>
-                        : React.fragment
-                    }
-                    <SectionBoxMain>
-                        <ContentHeader>{element.title}</ContentHeader>
-                        <GraphFactory
-                            graph={{type: element.type + 'Viewer'}}
-                            {...element}
-                            user={this.props.user}/>
-                    </SectionBoxMain>
-                    {['right', 'full'].includes(element.align) ? 
-                        React.fragment :
-                        <SectionBoxSidebar >
-                            {element.callout ? <SidebarCallout>{element.callout}</SidebarCallout> : <span/>}
-                        </SectionBoxSidebar>
-                    }
-                </SectionBox>
-            </Element>
-        )
-    }
-
     render() {
         let emptyBody = ['<p></p>', ''];
         let updatedConfig =
             Object.keys(config)
                 .reduce((aS,section) => {
                     aS[section] = config[section]
-                        .reduce((aR, requirement) => {
-                            let tmpBody =
-                                get(this.props.contentGraph,
-                                    [this.getCurrentKey(requirement.requirement), 'body', 'value'],
-                                    null)
-                            let shouldHide = requirement.hideIfNull ? !(tmpBody && !emptyBody.includes(tmpBody.trim())) : false
-                            aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
-                            return aR
-                        }, [])
+                                    .reduce((aR, requirement) => {
+                                        let tmpBody =
+                                                    get(this.props.contentGraph,
+                                                        [this.getCurrentKey(requirement.requirement), 'body', 'value'],
+                                                        null)
+                                        let shouldHide = requirement.hideIfNull ? !(tmpBody && !emptyBody.includes(tmpBody.trim())) : false
+                                        aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
+                                        return aR
+                                    }, [])
                     return aS
-                }, {})
+            }, {})
 
         return (
             <PageContainer>
@@ -141,13 +116,12 @@ class About extends React.Component {
                 <div style={{marginLeft: 220}}>
                     <HeaderImageContainer img={this.state.image}>
                         <div style={{width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.4)', padding: 50}}>
-                        
-                            <PageHeader style={{color: '#efefef'}}>Strategies</PageHeader>
+                            <PageHeader style={{color: '#efefef'}}>About</PageHeader>
                             <div className="row">
                                 <div className="col-12">
                                     <StatementText>
                                         <RenderConfig
-                                            config={{'Strategies Quote':updatedConfig['Header'].filter(f => f.title === 'Strategies Quote')}}
+                                            config={{'Annex Quote':updatedConfig['Header'].filter(f => f.title === 'Annex Quote')}}
                                             user={this.props.user}
                                             showTitle={false}
                                             showHeader={false}
@@ -159,32 +133,40 @@ class About extends React.Component {
                             </div>
                         </div>
                     </HeaderImageContainer>
-                    
                     <ContentContainer>
-                        {
-                            Object.keys(updatedConfig)
-                                .filter(section => updatedConfig[section].filter(item => !item.onlyAdmin).length > 0)
-                                .map(section => {
-                                    return (
-                                        <div>
-                                            <SectionHeader>{section}</SectionHeader>
-                                            {
-                                                updatedConfig[section]
-                                                    .filter(item => !item.onlyAdmin)
-                                                    .map(requirement => {
-                                                        return (
-                                                            <ElementFactory
-                                                                element={requirement}
-                                                                user={this.props.user}
-                                                                autoLoad={true}
-                                                            />
-                                                        )
-                                                    })
-                                            }
-                                        </div>
-                                    )
-                                })
-                        }
+                            
+                            
+                            <div className="row">
+                                <div className="col-12">
+                                    <div className="element-wrapper">
+                                        {
+                                            Object.keys(updatedConfig)
+                                                .filter(section => updatedConfig[section].filter(item => !item.onlyAdmin).length > 0)
+                                                .map(section => {
+                                                return (
+                                                    <div>
+                                                        <SectionHeader>{section}</SectionHeader>
+                                                        {
+                                                            updatedConfig[section]
+                                                                .filter(item => !item.onlyAdmin)
+                                                                .map(requirement => {
+                                                                return (
+                                                                    <ElementFactory 
+                                                                        element={requirement} 
+                                                                        user={this.props.user}
+                                                                        autoLoad={true}
+                                                                    />
+                                                                )
+                                                            })
+                                                        }
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        
                     </ContentContainer>
                 </div>
             </PageContainer>
@@ -206,9 +188,9 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {setActiveCousubid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/strategies',
+    path: '/about',
     exact: true,
-    name: 'Strategies',
+    name: 'About',
     auth: false,
     mainNav: true,
     menuSettings: {
@@ -220,6 +202,4 @@ export default [{
     },
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(About))
 }];
-
-
 

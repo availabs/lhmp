@@ -11,7 +11,8 @@ const config = {
         width: 500,
         border: 1,
         icon: 'os-icon-arrow-right7',
-        onlyAdmin: true
+        onlyAdmin: true,
+        pullCounty: true
     }],
     'Header' : [{
         title: 'Strategies Quote',
@@ -118,7 +119,6 @@ const config = {
             title: 'Capabilities Table',
             requirement: 'Req-C-1A',
             type: 'formTable',
-            activeGeoFilter: 'true',
             fontSize: '0.70em',
             height: '600px',
             align: 'full',
@@ -151,23 +151,23 @@ const config = {
                         filter: 'multi'
                     },
                     
-                    // {
-                    //     Header: 'adopting authority',
-                    //     accessor: 'adopting_authority',
-                    //     sort: true,
-                    //     filter: 'default'
-                    // },
-                    // {
-                    //     Header: 'responsible authority',
-                    //     accessor: 'responsible_authority',
-                    //     sort: true,
-                    //     filter: 'default'
-                    // },
-                    // {
-                    //     Header: 'Link',
-                    //     accessor: 'upload',
-                    //     width: 50
-                    // },
+                    {
+                        Header: 'adopting authority',
+                        accessor: 'adopting_authority',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'responsible authority',
+                        accessor: 'responsible_authority',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'Link',
+                        accessor: 'upload',
+                        width: 50
+                    },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',
@@ -185,6 +185,11 @@ const config = {
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                 ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
                 ' capability varies widely.',
+            activeGeoFilter: 'true',
+            defaultSortCol: 'adopting_authority',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Jurisdiction', 'Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+            minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },
         {
@@ -211,18 +216,36 @@ const config = {
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-        {
-            title: '',
-            requirement: 'Req-C-1B-1',
-            type: 'capabilityEvaluationTable',
-            prompt: '',
-            intent: '',
-            icon: 'os-icon-pie-chart-3',
-            hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
-        },
+        // {
+        //     title: 'Capacity Assessment Table',
+        //     requirement: 'Req-C-1B-1C',
+        //     type: 'content',
+        //     prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability to expand on and improve these existing policies and programs',
+        //     intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local capability varies widely.',
+        //     icon: 'os-icon-pie-chart-3',
+        //     // hideNav: true // hides key from public nav. Displays on page.
+        //     /*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true 
+        // },
+        // {
+        //     title: '',
+        //     requirement: 'Req-C-1B-1',
+        //     type: 'capabilityEvaluationTable',
+        //     prompt: '',
+        //     intent: '',
+        //     activeGeoFilter: 'true',
+        //     defaultSortCol: 'Capability Region',
+        //     // defaultSortOrder: 'desc',
+        //     //colOrder: ['Agency', 'Name', 'Role'],
+        //     minHeight: '80vh',
+        //     flex: 'false',
+        //     icon: 'os-icon-pie-chart-3',
+        //     hideNav: true // hides key from public nav. Displays on page.
+        //     ///*2-non-county*/ pullCounty: true,
+        //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        //     ///*2-non-delete*/ hideIfNull: true
+        // },
         
         {
             title: 'Environmental and Historic Preservation',
@@ -251,8 +274,8 @@ const config = {
             icon: 'os-icon-globe',
             hideNav: true,
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
@@ -275,7 +298,7 @@ const config = {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
-            filterBy: ['Proposed-New'],
+            filterBy: ['Proposed-HMP'],
             align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
                 ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
@@ -293,6 +316,13 @@ const config = {
                 '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
                 ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
                 ' b. Integrate elements of Req-C-5 and Req-C-6',
+            viewLink: true,
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            // defaultSortOrder: 'desc',
+            renameCols: {'action_jurisdiction':'jurisdiction', 'viewLink': 'view', 'estimated_timeframe_for_action_implementation': 'timeframe', 'description_of_problem_being_mitigated':'problem statement', 'estimated_cost_range':'estimated cost', 'lead_agency_name_text':'lead agency', 'action_status_update':'status','action_description':'description' }, // new name should match colOrder names.
+            colOrder: ['view','jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'timeframe', 'estimated cost', 'lead agency', 'status', 'description', 'problem statement'],
+            minHeight: '80vh',
             icon: 'os-icon-activity',
 
         },
@@ -324,8 +354,8 @@ const config = {
             intent:'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA is the official administering Federal agency of the NFIP, participation in the program is a basic community capability and resource for flood hazard mitigation activities',
             icon:'os-icon-cloud-drizzle',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
@@ -448,6 +478,10 @@ const config = {
             align: 'full',
             prompt: '',
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
+            defaultSortCol: 'evacuation_capacity',
+            // defaultSortOrder: 'desc',
+            colOrder: ['shelter_name', 'evacuation_capacity', 'post_impact_capacity', 'ada_compliant', 'wheelchair_accessible', 'generator_onsite', 'self_suffienct_electricty',],
+            minHeight: '80vh',
             icon: 'os-icon-share-2',
             hideNav: true
         },

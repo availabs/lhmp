@@ -27,8 +27,11 @@ import {
     ContentHeader,
     PageContainer,
     HeaderContainer,
-    backgroundColor
+    backgroundColor, PageHeader, SectionBox, SectionBoxMain, ContentContainer
 } from 'pages/Public/theme/components'
+import ElementFactory, {RenderConfig} from "../theme/ElementFactory";
+import HMGPTable from "./components/Strategy/Actions/HMGPTable";
+import config from "../../auth/Plan/config/landing-config";
 
 let sideMenuConfig = {
     'Planning Context' : [
@@ -82,35 +85,224 @@ let sideMenuConfig = {
         {
             title:'Overview',
             component:Narrative,
-            icon:'os-icon-newspaper'
+            icon:'os-icon-newspaper',
+            showOnlyOnCounty: true
         },
         {
             title:'Goals & Objectives',
             component:Goals,
-            icon:'os-icon-tasks-checked'
+            icon:'os-icon-tasks-checked',
+            showOnlyOnCounty: true
         },
         // {
         //     title:'Capabilities Overview',
         //     component:CapabilitiesOverview,
         //     icon:'os-icon-donut-chart-1'
         // },
+        // {
+        //     title:'Capabilities Table',
+        //     component:Capabilities,
+        //     defaultSortCol: 'Capability Region',
+        //     // defaultSortOrder: 'desc',
+        //     colOrder: ['Capability Region', 'Population', 'Education and outreach',	'Planning/Regulatory', 'Financial', 'Administrative and Technical'],
+        //     // minHeight: '80vh',
+        //     icon:'os-icon-donut-chart-1'
+        // },
         {
-            title:'Capabilities Table',
-            component:Capabilities,
-            defaultSortCol: 'Capability Region',
-            // defaultSortOrder: 'desc',
-            colOrder: ['Capability Region', 'Population', 'Education and outreach',	'Planning/Regulatory', 'Financial', 'Administrative and Technical'],
-            // minHeight: '80vh',
-            icon:'os-icon-donut-chart-1'
+            title: 'Capabilities Table',
+            icon:'os-icon-donut-chart-1',
+            showOnlyOnCounty: true,
+            component:
+                () => (
+                    <PageContainer>
+                        <HeaderContainer>
+                            {/*<ContentContainer>
+                                <SectionBox>
+
+                                    <SectionBoxMain>
+                                        <RenderConfig
+                                            config={{'Goals and Objectives Text':config['Goals and Objectives Text']}}
+                                            user={this.props.user}
+                                            showTitle={false}
+                                            showHeader={false}
+                                        />
+                                    </SectionBoxMain>
+
+                                </SectionBox>
+                            </ContentContainer>*/}
+                            <div className='row'>
+                                <div className='col-12'>
+                                    <VerticalAlign>
+                                        <div>
+                                            <ElementFactory
+                                                element={
+                                                    {
+                                                        title: 'Capabilities Table',
+                                                        requirement: 'Req-C-1A',
+                                                        type: 'formTable',
+                                                        fontSize: '0.70em',
+                                                        height: '600px',
+                                                        align: 'full',
+                                                        config: {
+                                                            type: 'capabilities',
+                                                            //filters:[{column:'capability_category',value:'planning and regulatory'}],
+                                                            columns : [
+                                                                // {
+                                                                //     Header: 'Jurisdiction',
+                                                                //     accessor: 'municipality',
+                                                                //     sort: true,
+                                                                //     filter: 'default'
+                                                                // },
+                                                                {
+                                                                    Header: 'Name',
+                                                                    accessor: 'capability_name',
+                                                                    sort: true,
+                                                                    filter: 'default'
+                                                                },
+                                                                {
+                                                                    Header: 'category',
+                                                                    accessor: 'capability_category',
+                                                                    sort: true,
+                                                                    filter: 'multi'
+                                                                },
+                                                                {
+                                                                    Header: 'type',
+                                                                    accessor: 'capability_type',
+                                                                    sort: true,
+                                                                    filter: 'multi'
+                                                                },
+
+                                                                {
+                                                                    Header: 'adopting authority',
+                                                                    accessor: 'adopting_authority',
+                                                                    sort: true,
+                                                                    filter: 'default'
+                                                                },
+                                                                {
+                                                                    Header: 'responsible authority',
+                                                                    accessor: 'responsible_authority',
+                                                                    sort: true,
+                                                                    filter: 'default'
+                                                                },
+                                                                {
+                                                                    Header: 'Link',
+                                                                    accessor: 'upload',
+                                                                    width: 50
+                                                                },
+                                                                {
+                                                                    Header: 'jurisdiction_utilization',
+                                                                    accessor: 'jurisdiction_utilization',
+                                                                    width: 50,
+                                                                    expandable: 'true'
+                                                                },
+
+                                                            ]
+                                                        },
+                                                        prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
+                                                            ' to expand on and improve these existing policies and program ' +
+                                                            ' a. Examples: Staff involved local planning activities,' +
+                                                            ' public works/emergency management, funding through taxing authority and annual budgets, regulatory authorities' +
+                                                            ' for comp. Planning building codes and ordinances',
+                                                        intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
+                                                            ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
+                                                            ' capability varies widely.',
+                                                        activeGeoFilter: 'true',
+                                                        defaultSortCol: 'adopting_authority',
+                                                        // defaultSortOrder: 'desc',
+                                                        colOrder: ['Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+                                                        minHeight: '80vh',
+                                                        icon: 'os-icon-tasks-checked'
+                                                    }
+                                                }
+                                                autoLoad={true}
+                                            />
+                                        </div>
+                                    </VerticalAlign>
+                                </div>
+                            </div>
+                        </HeaderContainer>
+                    </PageContainer>
+                )
         },
+        // {
+        //     title:'Actions',
+        //     component:Actions,
+        //     defaultSortCol: 'Jurisdiction',
+        //     // defaultSortOrder: 'desc',
+        //     colOrder: ['Jurisdiction', 'Approved', 'Finished', 'Completed'],
+        //     minHeight: '80vh',
+        //     icon:'os-icon-grid-circles'
+        // }
         {
             title:'Actions',
-            component:Actions,
-            defaultSortCol: 'Jurisdiction',
-            // defaultSortOrder: 'desc',
-            colOrder: ['Jurisdiction', 'Approved', 'Finished', 'Completed'],
-            minHeight: '80vh',
-            icon:'os-icon-grid-circles'
+            component:
+                () => (
+                    <PageContainer>
+                        <HeaderContainer>
+                            {/*<ContentContainer>
+                                <SectionBox>
+
+                                    <SectionBoxMain>
+                                        <RenderConfig
+                                            config={{'Goals and Objectives Text':config['Goals and Objectives Text']}}
+                                            user={this.props.user}
+                                            showTitle={false}
+                                            showHeader={false}
+                                        />
+                                    </SectionBoxMain>
+
+                                </SectionBox>
+                            </ContentContainer>*/}
+                            <div className='row'>
+                                <div className='col-12'>
+                                    <VerticalAlign>
+                                        <div>
+                                            <ElementFactory
+                                                element={
+                                                    {
+                                                        title: 'Proposed Actions',
+                                                        requirement: 'Req-C-4',
+                                                        type: 'actionsFilteredListTable',
+                                                        filterBy: ['Proposed-HMP'],
+                                                        align: 'full',
+                                                        prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
+                                                            ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
+                                                            ' assessment, and 2) identifies the actions and/or projects that the jurisdiction intends to implement.' +
+                                                            ' a. Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction' +
+                                                            ' that are based on the community’s risk and  vulnerabilities, as well as community priorities.' +
+                                                            ' b. The plan must identify the position, office, department, or agency responsible for implementing and' +
+                                                            ' administering the action (for each jurisdiction), and identify potential funding sources and expected' +
+                                                            ' timeframes for completion. ',
+                                                        intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within' +
+                                                            ' the capability of each jurisdiction, and reduce or avoid future losses.  This is the heart of the' +
+                                                            ' mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA,' +
+                                                            ' “own” the hazard mitigation actions in the strategy.' +
+                                                            ' a. Mitigation actions and projects means a hazard mitigation action, activity or process (for example,' +
+                                                            '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
+                                                            ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
+                                                            ' b. Integrate elements of Req-C-5 and Req-C-6',
+                                                        viewLink: true,
+                                                        activeGeoFilter: 'true',
+                                                        defaultSortCol: 'action_jurisdiction',
+                                                        // defaultSortOrder: 'desc',
+                                                        //renameCols: {'viewLink': 'view'}, // new name should match colOrder names.
+                                                        colOrder: ['viewLink','action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated', 'problem_statement'],
+                                                        minHeight: '80vh',
+                                                        icon: 'os-icon-activity',
+
+                                                    }
+                                                }
+                                                autoLoad={true}
+                                            />
+                                        </div>
+                                    </VerticalAlign>
+                                </div>
+                            </div>
+                        </HeaderContainer>
+                    </PageContainer>
+                ),
+            icon:'os-icon-grid-circles',
+            showOnlyOnCounty: true
         }
     ]
 }
@@ -131,12 +323,16 @@ class Public extends React.Component {
                 </div>
                 <div style={{marginLeft: 220}}>
                     {
-                        Object.keys(sideMenuConfig).map(section => {
-                            return sideMenuConfig[section].map(item=>{
+                        Object.keys(sideMenuConfig)
+                            .filter(section => this.props.activeCousubid.length > 5 ? sideMenuConfig[section].filter(item => !item.showOnlyOnCounty).length > 0 : true)
+                            .map(section => {
+                            return sideMenuConfig[section]
+                                .filter(f => this.props.activeCousubid.length > 5 ? !f.showOnlyOnCounty : true)
+                                .map(item=>{
                                 let Comp = item.component
                                 return (
                                     <Element name={item.title} key={item.title}>
-                                        <Comp {...item}/>
+                                        <Comp {...item} user={this.props.user}/>
                                     </Element>
                                 )
                             })
@@ -153,7 +349,9 @@ const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph.plans || {},
         router: state.router,
-        activePlan:state.user.activePlan
+        activePlan:state.user.activePlan,
+        activeCousubid:state.user.activeCousubid,
+        user: state.user
     };
 };
 

@@ -90,7 +90,7 @@ class CountyHeroStats extends React.Component {
             data = [];
         }
         finally {
-            return data.sort((a, b) => b.sort - a.sort);
+            return data.sort((a, b) => a.hazard !== '' ? b.sort - a.sort : 1);
         }
     }
 
@@ -101,6 +101,7 @@ class CountyHeroStats extends React.Component {
                 rows={ rows }
                 changeHazard={this.props.changeHazard}
                 activeHazard={this.props.hazard}
+                firstLoad={this.props.firstLoad}
             />
         )
     }
@@ -148,7 +149,7 @@ const BoxRow = ({ value, label, hazard, changeHazard, onClick, i , activeHazard}
     </div>
 )
 
-const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null, activeHazard }) => (
+const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null, activeHazard, firstLoad }) => (
     <ProjectBox title={ title } style={ {  width:'100%' } }>
         <div className="row align-items-center">
             { rows.length ?
@@ -165,6 +166,7 @@ const SideInfoProjectBox =  ({ title, rows, changeHazard, content=null, activeHa
                         changeHazard={changeHazard} i={'allHaz'} activeHazard={activeHazard}/>
                 : content
             }
+            {firstLoad ? changeHazard({target:{value:''}}) : null}
         </div>
     </ProjectBox>
 )

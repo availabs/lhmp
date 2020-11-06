@@ -128,6 +128,7 @@ export class ZoneLayer extends MapLayer{
     }
 
     showTownBoundary(data,id,zones_data){
+        //localStorage.removeItem("zone")
         let zones = JSON.parse("[" + data + "]")[0] || [];
         let geojson = {
             "type": "FeatureCollection",

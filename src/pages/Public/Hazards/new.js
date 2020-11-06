@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import {authGeoid} from "store/modules/user";
 import {getColorScale} from 'utils/sheldusUtils'
+import get from 'lodash.get'
 import {falcorChunkerNice} from "store/falcorGraph"
 import ElementBox from "components/light-admin/containers/ElementBox";
 import GraphFactory from "components/displayComponents/graphFactory";
@@ -59,18 +60,18 @@ class Hazards extends React.Component {
         super(props);
         authGeoid(this.props.user);
         this.state = {
-            geoid: this.props.geoid,
-            geoLevel: this.setGeoLevel(this.props.geoid.length),
+            geoLevel: this.setGeoLevel(this.props.activeGeoid.length),
             dataType: 'severeWeather',
             colorScale: getColorScale([1, 2]),
             hazards: [],
-            hazard: undefined
+            hazard: undefined,
+            firstLoad: true
         }
         this.changeHazard = this.changeHazard.bind(this)
     }
 
 
-    fetchFalcorDeps(geoid, geoLevel, dataType) {
+    fetchFalcorDeps(geoLevel, dataType,geoid) {
         if (!geoid) geoid = this.props.geoid;
         if (!dataType) dataType = this.state.dataType;
         return this.props.falcor.get(
@@ -98,7 +99,7 @@ class Hazards extends React.Component {
                 if(!this.state.hazard){
                     this.setState({
                         hazards,
-                        hazard : hazards[0]
+                        hazard : '',//hazards[0]
                     })
                 }else{
                     this.setState({hazards})
@@ -112,7 +113,6 @@ class Hazards extends React.Component {
         if (prevProps.geoid !== this.props.geoid) {
             this.setState(
                 {
-                    geoid: this.props.geoid,
                     geoLevel: this.setGeoLevel(this.props.geoid.length)
                 });
             this.fetchFalcorDeps(this.props.geoLevel, this.props.dataType, this.props.geoid)
@@ -163,7 +163,8 @@ class Hazards extends React.Component {
     }
 
     changeHazard(e, a) {
-        this.setState({hazard:e.target.value})
+        console.log('haz changed', e, a)
+        this.setState({hazard:e.target.value, firstLoad: false})
     }
     render() {
         if(!this.props.geoid) {
@@ -183,12 +184,18 @@ class Hazards extends React.Component {
                             
                         </section>
                         <section>
-                            <SectionHeader>Hazards of Concern</SectionHeader>
-                            <HazardHeroStats {...this.state} changeHazard={this.changeHazard}/>
+                            <SectionHeader>
+                                {get(this.props.geoGraph, [this.props.activeGeoid, 'name'])} Hazards of Concern</SectionHeader>
+                            <HazardHeroStats
+                                {...this.state}
+                                geoid={this.props.activeGeoid}
+                                changeHazard={this.changeHazard}
+                            />
                             <Hazard 
-                                geoid={this.props.geoid} 
+                                geoid={this.props.geoid}
+                                activeGeoid={this.props.activeGeoid}
                                 hazard={this.state.hazard}
-                                geoLevel={this.state.geoLevel}
+                                geoLevel={/*this.state.geoLevel*/ 'counties'}
                                 hazards={this.state.hazards}
                             />
                         </section>
@@ -206,6 +213,7 @@ const mapStateToProps = (state,ownProps) => {
         geoGraph: state.graph.geo,
         router: state.router,
         planId: state.user.activePlan,
+        activeGeoid: state.user.activeGeoid,
         geoid: ownProps.computedMatch.params.geoid ?
             ownProps.computedMatch.params.geoid
             : state.user.activeCousubid && state.user.activeCousubid !== 'undefined' ?

@@ -6,7 +6,7 @@ module.exports = [
             {'municipality' : {filter:'multi'}},
             {'capability_type': {filter:'true'}} ,
             {'capability_category': {filter:'true'}},
-            'capability_name', 
+            'capability_name',
             'jurisdiction_utilization'
             ],
         csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
@@ -69,7 +69,7 @@ module.exports = [
                 hidden:'false',
                 section: '',
                 list_attribute: 'true',
-                example:''         
+                example:''
             },
             capability_type :{
                 label:'Capability',
@@ -120,13 +120,13 @@ module.exports = [
                 hidden:'false',
                 section:'',
                 list_attribute: 'true'
-            },    
+            },
             status:{
                 label:'Update Status',
                 prompt:'Select the current status of the capability.' +
-                   'New-Since-Last-Plan: capability was newly established since the last Hazard Mitigation Plan.' + 
-                   'On-going-Since-Last-Plan: capability was established and documented in your last Hazard Mitigation Plan.' + 
-                   'In-Development: capability is currently being developed.' + 
+                   'New-Since-Last-Plan: capability was newly established since the last Hazard Mitigation Plan.' +
+                   'On-going-Since-Last-Plan: capability was established and documented in your last Hazard Mitigation Plan.' +
+                   'In-Development: capability is currently being developed.' +
                    'No-Longer-Relevant: capability has been discontinued or has ended its useful life.',
                 edit_type:'dropdown_no_meta',
                 edit_type_values : ['New-Since-Last-Plan','On-Going-Since-Last-Plan','In-Development','No-Longer-Relevant',],
@@ -135,7 +135,7 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 section:'',
-            },       
+            },
             development_update:{
                 label:'Description of Status',
                 prompt:'If appropriate, provide additional information related to the status of this capability. For instance, if In-Development, describe how your jurisdiction is currently working towards implementing or enhancing the status of this capability; if No-Longer-Relevant, please describe why.',
@@ -167,7 +167,7 @@ module.exports = [
                 meta:'false',
                 hidden:'false',
                 section:'',
-            },    
+            },
             mitigation_contribution:{
                 label:'Integration: What capacity does Mitigation planning provide this Capability?',
                 prompt:'Describe how mitigation planning supports and contributes to building, maintaining or enhancing capacity for this capability',
@@ -177,7 +177,7 @@ module.exports = [
                 meta:'false',
                 hidden:'false',
                 section:'',
-            },   
+            },
             capacity_explanation:{
                 label:'Capacity: What is the jurisdictional capacity for implementing this Capability?',
                 prompt: 'For planning and Regulatory consider if the plan, policy, code, or ordinance is robust enough to support effective mitigation. For Administrative and Technical consider if the staffing and tools are sufficient for implementing the mitigation plan. For Financial consider if the funding mechanism is effective for implementation of hazard mitigation planning. For Education/Outreach consider if the programs and methods communicate effectively and are implemented as designed for mitigation planning purposes.',
@@ -185,7 +185,7 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 section:''
-            }, 
+            },
             adoption_date:{
                 label:'Date of adoption',
                 prompt:'Provide the date (mm/dd/yyyy) capability was originally adopted by governing body/authority.',
@@ -269,7 +269,7 @@ module.exports = [
                 meta:'false',
                 hidden:'false',
                 section:''
-            },   
+            },
             // upload:{
             //     label:'Upload',
             //     prompt:'If applicable, provide a PDF upload of any and all supporting documents related to capability and its assessment. Examples include; meeting minutes, public participation surveys, regulatory documents, studies pertaining to development and updates.',

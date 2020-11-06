@@ -39,7 +39,7 @@ import {
 
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
-
+const emptyBody = ['<p></p>', '']
 class Introduction extends Component {
     constructor(props) {
         super(props);
@@ -60,22 +60,29 @@ class Introduction extends Component {
     fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined' || !this.props.user.activePlan) return Promise.resolve();
         let contentId = this.getCurrentKey('landing-image');
+        let contentIdCounty = this.getCurrentKey('landing-image', true);
 
         return this.props.falcor.get(
             ['geo', parseInt(this.props.activeCousubid), 'name'],
-            ['content', 'byId', [contentId], COLS]
+            ['content', 'byId', [contentId, contentIdCounty], COLS]
         ).then(contentRes => {
+            let tmpImg = get(contentRes, `json.content.byId.${contentId}.body`, null)
+            tmpImg = tmpImg && !emptyBody.includes(tmpImg.trim()) ? tmpImg :
+                get(config["Landing Image"][0], `pullCounty`) ?
+                    get(contentRes, `json.content.byId.${contentIdCounty}.body`, '/img/sullivan-min.png') :
+                    tmpImg || '/img/sullivan-min.png'
+
             this.setState({
-                image: get(contentRes, `json.content.byId.${contentId}.body`, '/img/sullivan-min.png'),
+                image: tmpImg,
                 'currentKey': contentId,
                 status: get(contentRes.json.content.byId[contentId], `attributes.status`, ''),
             })
         })
     }
-    getCurrentKey = (requirement) =>
+    getCurrentKey = (requirement, county=false) =>
         this.props.scope === 'global' ?
             requirement :
-            requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
+            requirement + '-' + this.props.user.activePlan + '-' + `${county ? this.props.user.activeGeoid : this.props.user.activeCousubid}`
 
     priceTest () {
         let info = [

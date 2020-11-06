@@ -2,7 +2,8 @@
 import Landing from './pages/Landing'
 // -- Public Pages
 import Public from './pages/Public/Home/'
-import About from './pages/Public/PlanningProcess/'
+import About from './pages/Public/About/'
+import PlanningProcess from './pages/Public/PlanningProcess/'
 import Hazards from './pages/Public/Hazards/'
 import Hazards2 from './pages/Public/Hazards/new'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
@@ -20,13 +21,17 @@ import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
 import ActionsWorksheetFormNew from 'pages/auth/actions/new'
 import ActionsStatusUpdateForms from 'pages/auth/actions/actions_statusupdate_forms'
+import FilterJurisdictions from 'pages/auth/FilterJurisdictions/'
+import FilterJurisdictionsNew from 'pages/auth/FilterJurisdictions/filterJurisdictions/new'
+import FilterJurisdictionsView from 'pages/auth/FilterJurisdictions/filterJurisdictions/view'
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
 import PlanPage from 'pages/auth/plans/planPage'
 
 import Plan from 'pages/auth/Plan/' // admin plan page
-import AdminAbout from 'pages/auth/Plan/about' // admin plan page - submenu
+import AdminAbout from 'pages/auth/Plan/About' // admin plan page - submenu
+import AdminPlanningProcess from 'pages/auth/Plan/PlanningProcess' // admin plan page - submenu
 import AdminRisk from 'pages/auth/Plan/risk' // admin plan page - submenu
 import PlanHazards from 'pages/auth/Plan/hazards' // admin plan page - submenu
 import AdminStrategies from 'pages/auth/Plan/strategies' // admin plan page - submenu
@@ -103,6 +108,7 @@ const routes = [
     ...Plan,
     ...Forms,
     ...AdminAbout,
+    ...AdminPlanningProcess,
     ...PlanHazards,
     ...AdminRisk,
     ...AdminStrategies,
@@ -125,6 +131,9 @@ const routes = [
     //...CapabilitiesFormsIndex,
     ...CapabilitiesFormsView,
     ...CapabilitiesFormsNew,
+    ...FilterJurisdictions,
+    ...FilterJurisdictionsNew,
+    ...FilterJurisdictionsView,
     //...RolesIndex,
     ...RolesFormsList,
     ...RolesFormView,
@@ -133,11 +142,12 @@ const routes = [
     ...MunicipalitiesFormView,
     ...MunicipalitiesFormNew,
     ...Public,
-    ...About,
+    ...PlanningProcess,
     ...Hazards,
     ...Hazards2,
     ...Risk,
     ...Strategies,
+    ...About,
     ...User,
     ...Admin,
     ...FormEditOrNew,
