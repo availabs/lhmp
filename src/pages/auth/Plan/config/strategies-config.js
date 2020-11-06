@@ -39,6 +39,7 @@ const config = {
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
+            // showOnlyOnCounty: true
          },
          {
             title: 'Local Orientation',

@@ -38,7 +38,8 @@ const config =  {
 			// hideNav: true // hides key from public nav. Displays on page.
 			///*2-non-county*/ pullCounty: true,
 			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-			///*2-non-delete*/ hideIfNull: true
+			///*2-non-delete*/ hideIfNull: true,
+			// showOnlyOnCounty: true
 	}],
 	'Pre-Planning' : [
 		{
