@@ -1,6 +1,6 @@
 import React from 'react';
 import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
-import config from 'pages/auth/Capabilities/capability_forms/config.js'
+import config from 'pages/auth/FilterJurisdictions/filterJurisdictions/config'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
