@@ -86,13 +86,13 @@ let sideMenuConfig = {
             title:'Overview',
             component:Narrative,
             icon:'os-icon-newspaper',
-            showOnlyOnCounty: true
+            // showOnlyOnCounty: true
         },
         {
             title:'Goals & Objectives',
             component:Goals,
             icon:'os-icon-tasks-checked',
-            showOnlyOnCounty: true
+            // showOnlyOnCounty: true
         },
         // {
         //     title:'Capabilities Overview',
@@ -111,7 +111,7 @@ let sideMenuConfig = {
         {
             title: 'Capabilities Table',
             icon:'os-icon-donut-chart-1',
-            showOnlyOnCounty: true,
+            // showOnlyOnCounty: true,
             component:
                 () => (
                     <PageContainer>
@@ -302,7 +302,7 @@ let sideMenuConfig = {
                     </PageContainer>
                 ),
             icon:'os-icon-grid-circles',
-            showOnlyOnCounty: true
+            // showOnlyOnCounty: true
         }
     ]
 }
