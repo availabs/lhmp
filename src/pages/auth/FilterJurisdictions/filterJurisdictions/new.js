@@ -1,0 +1,88 @@
+import {connect} from "react-redux";
+import { reduxFalcor } from 'utils/redux-falcor'
+import {sendSystemMessage} from 'store/modules/messages';
+import Element from 'components/light-admin/containers/Element'
+import React from 'react';
+import config from 'pages/auth/FilterJurisdictions/filterJurisdictions/config'
+import meta from 'pages/auth/Capabilities/capability_forms/meta.js'
+import AvlFormsNewData from 'components/AvlForms/editComponents/newData.js'
+import get from "lodash.get";
+
+class CapabilitiesFormsNew extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        let geomData = 'blah'
+        return(
+            <Element>
+                <AvlFormsNewData
+                    json = {config}
+                    //meta = {meta}
+                    id = {[this.props.match.params.id]}
+                    //data = {{upload: geomData}}
+
+                />
+            </Element>
+        )
+    }
+}
+
+const mapDispatchToProps = {
+    sendSystemMessage
+};
+
+const mapStateToProps = state => {
+    return {
+        activePlan: state.user.activePlan,
+        isAuthenticated: !!state.user.authed,
+        attempts: state.user.attempts, // so componentWillReceiveProps will get called.
+        capabilitiesMeta : get(state.graph,'capabilitiesLHMP.meta',{}),
+        countyData: get(state.graph,'geo',{})
+
+    };
+};
+
+export default [
+    {
+        icon: 'os-icon',
+        path: '/filterJurisdictions/new',
+        exact: true,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'Filter Jurisdictions', path: '/filterJurisdictions/' },
+            { name: 'Create Filter', path: '/filterJurisdictions/new' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        name: 'Create Filter',
+        auth: true,
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsNew))
+    },
+    {
+        path: '/filterJurisdictions/edit/:id',
+        name: 'Edit Filter',
+        mainNav: false,
+        auth: true,
+        exact: true,
+        breadcrumbs: [
+            { name: 'Filter Jurisdictions', path: '/filterJurisdictions/' },
+            { param: 'id', path: '/filterJurisdictions/edit/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsNew))
+    }
+
+]

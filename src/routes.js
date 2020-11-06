@@ -21,6 +21,9 @@ import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
 import ActionsWorksheetFormNew from 'pages/auth/actions/new'
 import ActionsStatusUpdateForms from 'pages/auth/actions/actions_statusupdate_forms'
+import FilterJurisdictions from 'pages/auth/FilterJurisdictions/'
+import FilterJurisdictionsNew from 'pages/auth/FilterJurisdictions/filterJurisdictions/new'
+import FilterJurisdictionsView from 'pages/auth/FilterJurisdictions/filterJurisdictions/view'
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
@@ -128,6 +131,9 @@ const routes = [
     //...CapabilitiesFormsIndex,
     ...CapabilitiesFormsView,
     ...CapabilitiesFormsNew,
+    ...FilterJurisdictions,
+    ...FilterJurisdictionsNew,
+    ...FilterJurisdictionsView,
     //...RolesIndex,
     ...RolesFormsList,
     ...RolesFormView,

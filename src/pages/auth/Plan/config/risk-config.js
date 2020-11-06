@@ -112,18 +112,18 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     /*2-non-county*/ pullCounty: true,
         //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
-        // },      
+        //     ///*2-non-delete*/ hideIfNull: true
+        // },
 
         // {
-        //     title: 'Vulnerable Populations Map',
+        //     title: 'Vulnerable Populations Zones',
         //     requirement: 'Req-B-3B-3D',
         //     type: 'developementZonesFilteredMap',
         //     filterBy: {zone_type: ['Vulnerable Population']},
         //     prompt: '',
         //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
         //     icon: 'os-icon-globe'
-        // }, 
+        // },
         // {
         //     title: 'Vulnerable Population Zones',
         //     requirement: 'Req-B-3B-3E',
@@ -135,7 +135,7 @@ const config = {
         //     activeGeoFilter: 'true',
         //     minHeight: '80vh',
         //     icon: 'os-icon-grid-squares-2'
-        // },    
+        // },
 
         {
             title: 'Built Environment',
@@ -252,7 +252,9 @@ const config = {
             defaultSortCol: 'action_jurisdiction',
             minHeight: '80vh',
             icon: 'os-icon-alert-circle',
-            hideNav: true
+            hideNav: true,
+            renameCols: {'action_jurisdiction':'jurisdiction', 'description_of_problem_being_mitigated':'problem statement',}, // new name should match colOrder names.
+        
         },
     ],
     

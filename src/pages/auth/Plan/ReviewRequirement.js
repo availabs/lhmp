@@ -123,10 +123,17 @@ class ReviewRequirement extends React.Component {
         let element = config.elements.filter(element => element.element === this.props.match.params.req).pop(),
             requirements = element ? element.requirements_from_software : null;
         if (!requirements) return null;
+
         return (
             <div className='container'>
                 <Element>
-                    <h4 className='element-header'>Review Requirement</h4>
+                    <h4 className='element-header'>Review Requirement - {element.element}</h4>
+                    <ElementBox>
+                        <h6>Element Requirements</h6>
+                        <div className='text-justify'>
+                            {element.element_requirements}
+                        </div>
+                    </ElementBox>
                     {requirements.split(',').map(r => {
                         r = r.trim();
                         let fullElement = megaConfig.filter(mc => {

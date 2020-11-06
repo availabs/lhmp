@@ -88,10 +88,12 @@ class ShowZoneLayer extends MapLayer{
                     if (get(this.zoneId, `length`, null)){
                         this.zoneId.forEach(zid => {
                             let attributes = get(response,['json','forms','byId',zid,'attributes'],{})
+                            console.log('??', attributes)
+
                             geojson.features.push({
                                 type : "Feature",
                                 properties:{},
-                                geometry: attributes.geojson.coordinates ? attributes.geojson : JSON.parse(attributes.geojson)
+                                geometry: get(attributes, `geojson.coordinates`, null) ? attributes.geojson : JSON.parse(get(attributes, `geojson`, {}))
                             })
                             try {
                                 new mapboxgl.Marker({

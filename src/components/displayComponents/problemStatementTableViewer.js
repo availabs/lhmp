@@ -260,7 +260,7 @@ class inventoryTableViewer extends Component {
                                 .map(f => {
 
                                     return ({
-                                        Header: f,
+                                        Header: get(this.props.renameCols, f, f),
                                         accessor: f,
                                         filter: 'default',
                                         sort: true,
