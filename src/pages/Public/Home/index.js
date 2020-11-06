@@ -32,6 +32,7 @@ import {
 import ElementFactory, {RenderConfig} from "../theme/ElementFactory";
 import HMGPTable from "./components/Strategy/Actions/HMGPTable";
 import config from "../../auth/Plan/config/landing-config";
+import get from "lodash.get";
 
 let sideMenuConfig = {
     'Planning Context' : [
@@ -316,17 +317,29 @@ class Public extends React.Component {
     }
 
     render() {
+        let updatedConfig =
+            Object.keys(sideMenuConfig)
+                .reduce((aS,section) => {
+                    aS[section] = sideMenuConfig[section]
+                        .reduce((aR, requirement) => {
+
+                            let shouldHide = this.props.activeCousubid.length > 5 ? requirement.showOnlyOnCounty : false
+                            aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
+                            return aR
+                        }, [])
+                    return aS
+                }, {})
         return (
             <div style={{backgroundColor: backgroundColor}}>
                 <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
-                    <SideMenu config={sideMenuConfig}/>
+                    <SideMenu config={updatedConfig} filterAdmin={true}/>
                 </div>
                 <div style={{marginLeft: 220}}>
                     {
-                        Object.keys(sideMenuConfig)
-                            .filter(section => this.props.activeCousubid.length > 5 ? sideMenuConfig[section].filter(item => !item.showOnlyOnCounty).length > 0 : true)
+                        Object.keys(updatedConfig)
+                            .filter(section => this.props.activeCousubid.length > 5 ? updatedConfig[section].filter(item => !item.showOnlyOnCounty).length > 0 : true)
                             .map(section => {
-                            return sideMenuConfig[section]
+                            return updatedConfig[section]
                                 .filter(f => this.props.activeCousubid.length > 5 ? !f.showOnlyOnCounty : true)
                                 .map(item=>{
                                 let Comp = item.component
