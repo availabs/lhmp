@@ -49,6 +49,7 @@ class ZoneControl extends React.Component{
     }
 
     fetchFalcorDeps(){
+
         return this.props.falcor.get(
             ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{

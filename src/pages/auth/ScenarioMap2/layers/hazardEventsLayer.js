@@ -155,6 +155,7 @@ export class HazardEventsLayer extends MapLayer{
                         },
                     }
                 );
+
             }
 /*            let popup = new mapboxgl.Popup({
                 closeButton: false,
@@ -320,6 +321,7 @@ export class HazardEventsLayer extends MapLayer{
     }
 
     toggleVisibilityOn() {
+
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility',  "visible");
         })

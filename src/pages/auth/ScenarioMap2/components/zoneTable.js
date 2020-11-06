@@ -93,7 +93,6 @@ class ZoneTable extends React.Component {
         if(this.props.zones){
             let data = []
             let scenario_id = this.props.activeScenarioId.map(d => d.id)
-
             return this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'county',this.props.activeGeoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'])
                 .then(response =>{
                     this.props.zones.forEach(item =>{
@@ -105,6 +104,7 @@ class ZoneTable extends React.Component {
                             .then(response =>{
                                 return response
                             })
+                        console.log('check',this.props.zonesByBuildingsData)
                         let graph_scenario_new_zone = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','byRiskScenario',`${scenario_id}`,'byRiskZone','all','value'],[])
                         let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
                         let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
@@ -121,6 +121,7 @@ class ZoneTable extends React.Component {
                             })
                         }
                     })
+                    console.log('data',data)
                     this.setState({
                         data : _.uniqBy(data,'zone_id')
                     })
@@ -143,6 +144,7 @@ class ZoneTable extends React.Component {
     }
 
     render(){
+        //localStorage.removeItem("zone")
         return (
             <div style={{'overflowX':'auto'}}>
                 <table className='table table-sm table-hover'>

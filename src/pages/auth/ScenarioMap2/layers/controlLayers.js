@@ -100,7 +100,6 @@ export class ControlLayers extends MapLayer {
     }
 
     visibilityToggleModeOn(source, layerName) {
-        //console.log('in visibility toggle mode on',source,layerName)
         let activePlan = store.getState().user.activePlan;
         let opacity = 0
         if(activePlan === '10' || activePlan === '56'){
@@ -364,6 +363,7 @@ export class ControlLayers extends MapLayer {
         if (layerName.includes("hazardEvents")) {
             if (Object.keys(hazardEventsLayer).length > 0) {
                 hazardEventsLayer.toggleVisibilityOn()
+
             }
         }
         if (layerName.includes("criticalInfrastructure")) {
