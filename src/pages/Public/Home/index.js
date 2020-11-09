@@ -148,12 +148,12 @@ let sideMenuConfig = {
                                                             type: 'capabilities',
                                                             //filters:[{column:'capability_category',value:'planning and regulatory'}],
                                                             columns : [
-                                                                // {
-                                                                //     Header: 'Jurisdiction',
-                                                                //     accessor: 'municipality',
-                                                                //     sort: true,
-                                                                //     filter: 'default'
-                                                                // },
+                                                                {
+                                                                    Header: 'Jurisdiction',
+                                                                    accessor: 'municipality',
+                                                                    sort: true,
+                                                                    filter: 'default'
+                                                                },
                                                                 {
                                                                     Header: 'Name',
                                                                     accessor: 'capability_name',
@@ -210,7 +210,7 @@ let sideMenuConfig = {
                                                         activeGeoFilter: 'true',
                                                         defaultSortCol: 'adopting_authority',
                                                         // defaultSortOrder: 'desc',
-                                                        colOrder: ['Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
                                                         minHeight: '80vh',
                                                         icon: 'os-icon-tasks-checked'
                                                     }
@@ -323,7 +323,7 @@ class Public extends React.Component {
                     aS[section] = sideMenuConfig[section]
                         .reduce((aR, requirement) => {
 
-                            let shouldHide = this.props.activeCousubid.length > 5 ? requirement.showOnlyOnCounty : false
+                            let shouldHide = this.props.activeCousubid.length > 5 && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty : false
                             aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
                             return aR
                         }, [])

@@ -5,6 +5,7 @@ import { fnum } from "utils/sheldusUtils"
 import get from 'lodash.get'
 import {falcorGraph} from "store/falcorGraph"
 import COLOR_RANGES from "constants/color-ranges"
+import mapboxgl from "mapbox-gl";
 
 const getColor = (name) => COLOR_RANGES[5].reduce((a, c) => c.name === name ? c.colors : a).slice();
 
@@ -141,10 +142,16 @@ class TractLayer extends MapLayer {
         };
 
         if (!graph) return Promise.resolve();
+        if (this.markers.length){
+            this.markers.map(m => {
+                m.remove()
+            });
+        }
+
         Object.keys(graph)
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
-
+                console.log('??', allBuildings)
                 /*if (owner_type === '3') {
                     [...allBuildings.true.value.map(f => f.id), ...allBuildings.false.value.map(f => f.id)]
                         .forEach(buildingId => {
@@ -180,6 +187,14 @@ class TractLayer extends MapLayer {
                             "properties":{id:buildingId, color:'#cc1e0a'},
                             "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
                         })
+                        this.markers.push(
+                         new mapboxgl.Marker({
+                            draggable: false
+                        })
+                            .setLngLat(get(centroidGraph, `${buildingId}.centroid.value.coordinates`, null))
+                            .addTo(this.map)
+                        )
+
                     });
 
             });
@@ -303,6 +318,7 @@ const tractLayer = new TractLayer("Assets Layer", {
             filter: ["in", "id", "none"]
         }*/
     ],
+    markers: [],
     displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
 /*    legend: {
         active: false,

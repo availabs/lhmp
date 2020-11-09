@@ -440,7 +440,7 @@ const config = {
             hideNav: true
         },
         {
-            title: 'Evacuation Procedues',
+            title: 'Evacuation Procedures',
             requirement: 'Req-NYS-F-4A-1',
             type: 'content',
             prompt: 'Identify evacuation routes and how this information is accessible to the public. Identify plans, policies or procedures that outline evacuation routes and procedures to remove citizens from a vulnerable location prior to and during an incident. If plans for evacuation and sheltering are already in place, the mitigation planning jurisdiction should analyze and update these materials as needed. If such plans do not exist, they must be developed (see NYS Mitigation Plannging Standards Guide).',
