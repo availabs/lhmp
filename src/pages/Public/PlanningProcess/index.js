@@ -101,7 +101,7 @@ class About extends React.Component {
                                                         [this.getCurrentKey(requirement.requirement), 'body', 'value'],
                                                         null)
                                         let shouldHide =
-                                            this.props.activeCousubid.length > 5 ? requirement.showOnlyOnCounty :
+                                            this.props.activeCousubid.length > 5 && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty :
                                                 requirement.hideIfNull ? !(tmpBody && !emptyBody.includes(tmpBody.trim())) : false
                                         aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
                                         return aR

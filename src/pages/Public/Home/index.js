@@ -323,7 +323,7 @@ class Public extends React.Component {
                     aS[section] = sideMenuConfig[section]
                         .reduce((aR, requirement) => {
 
-                            let shouldHide = this.props.activeCousubid.length > 5 ? requirement.showOnlyOnCounty : false
+                            let shouldHide = this.props.activeCousubid.length > 5 && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty : false
                             aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
                             return aR
                         }, [])
