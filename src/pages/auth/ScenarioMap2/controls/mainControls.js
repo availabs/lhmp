@@ -44,6 +44,7 @@ const AllBlocks = [
     {id:'evacuationRoutes_block',title:'Evacuation Routes'},
     {id:'vulnerableDemographics_block',title:'Vulnerable Demographics'},
     {id:'hazardEvents_block',title:'Hazard Events'},
+    {id:'criticalInfrastructure_block',title:'Critical Infrastructure'},
     {id:'nfip_block',title:'NFIP'}
     ]
 

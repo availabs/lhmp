@@ -10,7 +10,7 @@ import functions from "../../Plan/functions";
 
 var _ = require("lodash")
 
-class HazardEventsControl extends React.Component {
+class NfipControl extends React.Component {
     constructor(props) {
         super(props);
 
@@ -49,4 +49,4 @@ const
         sendSystemMessage, setActiveYear, setActiveHazard
     };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(HazardEventsControl))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(NfipControl))

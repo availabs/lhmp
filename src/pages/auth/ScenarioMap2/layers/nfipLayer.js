@@ -150,7 +150,7 @@ export class NfipLayer extends MapLayer {
                 if (tracts && tracts.value) {
                     this.tracts = tracts.value;
                     // show tracts
-                    this.map.setFilter('tracts-layer-critical', ['all', ['in', 'geoid', ...tracts.value]]);
+                    this.map.setFilter('tracts-layer-nfip', ['all', ['in', 'geoid', ...tracts.value]]);
                 }
 
                 // show cousubs or counties
@@ -158,7 +158,7 @@ export class NfipLayer extends MapLayer {
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
                     null);
                 if (countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0) {
-                    this.map.setFilter('tracts-layer-line-critical', ['all', ['in', 'geoid', ...countiesOrCousubs.value]])
+                    this.map.setFilter('tracts-layer-line-nfip', ['all', ['in', 'geoid', ...countiesOrCousubs.value]])
                 }
 
                 // get data and paint map
@@ -209,7 +209,7 @@ export const NfipOptions = (options = {}) => {
         ],
         layers: [
             {
-                'id': 'tracts-layer-critical',
+                'id': 'tracts-layer-nfip',
                 'source': 'tracts',
                 'source-layer': 'tracts',
                 'type': 'fill',
@@ -219,7 +219,7 @@ export const NfipOptions = (options = {}) => {
                 }
             },
             {
-                'id': 'tracts-layer-line-critical',
+                'id': 'tracts-layer-line-nfip',
                 'source': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                 'source-layer': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                 'type': 'fill',
@@ -231,7 +231,6 @@ export const NfipOptions = (options = {}) => {
         ],
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
         markers: [],
-        criticalCodes: {},
         geoFilter: [],
 
         popover: {
