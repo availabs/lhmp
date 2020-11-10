@@ -67,7 +67,7 @@ class ZoneModalData extends React.Component {
             //['actions', 'assets','byId',[this.props.id],['action_name','action_type']]
         ).then(res => {
             let buildings = get(this.props.formsData, `attributes.building_id`, [])
-            console.log('???', res, buildings)
+
             if (!(buildings && buildings.length)) return Promise.resolve();
             if (buildings.length > 100) {
                 let requests = [];
