@@ -66,6 +66,7 @@ class ZoneControl extends React.Component{
                     ['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:jurisdictionsLength-1}],['name','geom','building']]
                 )
                     .then(response =>{
+                        console.log('response',response)
                         let graph = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'byIndex'],{})
                         let jurisdiction_data = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'byIndex'],{})
                         let ids = [], jurisdictionIds = [];
@@ -185,6 +186,7 @@ class ZoneControl extends React.Component{
                 })
             })
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id')
+
             return (
                 <ZoneTable
                     zone_id = {this.state.zone_id}
