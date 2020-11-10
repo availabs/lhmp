@@ -108,7 +108,6 @@ class ZoneTable extends React.Component {
                             ]
                         )
                             .then(response =>{
-                                console.log('res?', response)
                                 let graph_scenario_new_zone = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','byRiskScenario',`${scenario_id}`,'byRiskZone','all','value'],[])
                                 let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
                                 // let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
@@ -117,13 +116,12 @@ class ZoneTable extends React.Component {
                                     zone_id : item.zone_id,
                                     zone_name : item.name || '',
                                     geom:item.geom ||'',
-                                    num_buildings : zone_buildings_data.num_buildings ? fmt(zone_buildings_data.num_buildings.value) :0,
-                                    replacement_value : zone_buildings_data.replacement_value ? fnum(zone_buildings_data.replacement_value.value) : 0,
+                                    num_buildings : fmt(get(zone_buildings_data,['num_buildings','value'],'0')),
+                                    replacement_value : fnum(get(zone_buildings_data,['replacement_value','value'],'0')),
                                     count_buildings_scenarios:graph_scenario_new_zone.length > 0 ? fmt(graph_scenario_new_zone.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,0)) : 0,
                                     sum_buildings_value : graph_scenario_new_zone.length > 0 ? fnum(graph_scenario_new_zone.reduce((a, c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,0)) : 0
                                 })
                             })
-                        console.log('setting data', data)
                         this.setState({
                             data : _.uniqBy(data,'zone_id')
                         })
