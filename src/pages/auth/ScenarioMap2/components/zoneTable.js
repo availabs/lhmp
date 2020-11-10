@@ -96,7 +96,9 @@ class ZoneTable extends React.Component {
 
             return this.props.falcor.get(['building', 'byGeoid', this.props.activeGeoid, 'county',this.props.activeGeoid, 'byRiskScenario',scenario_id, 'byRiskZone', 'all'])
                 .then(response =>{
-                    return this.props.zones.forEach(async (item) =>{
+                    return this.props.zones
+                        .filter(item => item && item.zone_id && item.zone_id !== '')
+                        .forEach(async (item) =>{
 
                         await this.props.falcor.get(
                             ['form_zones',['zones'],'byPlanId',this.props.activePlan,'byId',item.zone_id,['none'],['none'],
@@ -106,7 +108,7 @@ class ZoneTable extends React.Component {
                             ]
                         )
                             .then(response =>{
-
+                                console.log('res?', response)
                                 let graph_scenario_new_zone = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','byRiskScenario',`${scenario_id}`,'byRiskZone','all','value'],[])
                                 let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
                                 // let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
