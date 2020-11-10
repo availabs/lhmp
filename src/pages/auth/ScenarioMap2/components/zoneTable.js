@@ -108,7 +108,6 @@ class ZoneTable extends React.Component {
                             ]
                         )
                             .then(response =>{
-                                console.log('res?', response)
                                 let graph_scenario_new_zone = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','byRiskScenario',`${scenario_id}`,'byRiskZone','all','value'],[])
                                 let zone_buildings_data = get(this.props.zonesByBuildingsData,[`${item.zone_id}`,'none','none','sum'],{})
                                 // let forms_zone= get(this.props.zonesFormsList ,[`${item.zone_id}`,'value','attributes'],{})
@@ -123,7 +122,6 @@ class ZoneTable extends React.Component {
                                     sum_buildings_value : graph_scenario_new_zone.length > 0 ? fnum(graph_scenario_new_zone.reduce((a, c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseFloat(c['sum']) || 0 : a,0)) : 0
                                 })
                             })
-                        console.log('setting data', data)
                         this.setState({
                             data : _.uniqBy(data,'zone_id')
                         })

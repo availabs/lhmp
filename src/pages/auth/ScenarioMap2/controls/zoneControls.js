@@ -49,7 +49,6 @@ class ZoneControl extends React.Component{
     }
 
     fetchFalcorDeps(){
-        console.log('??', ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'])
         return this.props.falcor.get(
             ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
@@ -59,8 +58,6 @@ class ZoneControl extends React.Component{
                 let jurisdictionsLength = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0);
                 // if (length <= 1 || jurisdictionsLength <= 0) return Promise.resolve();
 
-                console.log('??', ['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']],
-                    ['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:jurisdictionsLength-1}],['name','geom','building']])
                 this.props.falcor.get(
                     ['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']],
                     ['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:jurisdictionsLength-1}],['name','geom','building']]
@@ -96,7 +93,6 @@ class ZoneControl extends React.Component{
     }
 
     handleChange(e) {
-        console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
 
     };
