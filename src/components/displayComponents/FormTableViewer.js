@@ -65,11 +65,13 @@ class FormTableViewer extends React.Component{
                             this.isMatch(
                                 this.props.formData[d.value[2]].value.attributes.cousub ||
                                 this.props.formData[d.value[2]].value.attributes.municipality ||
-                                this.props.formData[d.value[2]].value.attributes.contact_municipality,
+                                this.props.formData[d.value[2]].value.attributes.contact_municipality ||
+                                this.props.formData[d.value[2]].value.attributes.community_name,
                                 this.props.activeCousubid) :
                             this.isMatch(
                                 this.props.formData[d.value[2]].value.attributes.county ||
-                                this.props.formData[d.value[2]].value.attributes.contact_county,
+                                this.props.formData[d.value[2]].value.attributes.contact_county ||
+                                this.props.formData[d.value[2]].value.attributes.community_name,
                                 this.props.activeGeoid) : true
                 }
             )
@@ -78,9 +80,9 @@ class FormTableViewer extends React.Component{
                 .reduce((a,c) => {
                     a[c] = this.props.formData[d.value[2]].value.attributes[c]
 
-                    a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split('[') : a[c]
+                    a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split(',') : a[c]
 
-                    if(['cousub', 'municipality', 'contact_municipality', 'county', 'contact_county'].includes(c)){
+                    if(['cousub', 'municipality', 'contact_municipality', 'county', 'contact_county', 'community_name'].includes(c)){
                         a[c] = typeof a[c] === 'string' ? functions.formatName(get(this.props.geoData, [a[c], 'name'], a[c]), a[c]) :
                             a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC)) : a[c]
                     }
@@ -100,10 +102,11 @@ class FormTableViewer extends React.Component{
         // can we move this to the server? seems tricky
         if(this.props.config.filters) {
             this.props.config.filters.forEach(f => {
-                tableData = tableData.filter(d => d[f.column] === f.value)
+                tableData = tableData.filter(d =>
+                typeof f.value === 'string' ? d[f.column].toLowerCase().includes(f.value.toLowerCase()) :
+                f.value.filter(oldF => oldF.toLowerCase().includes(d[f.column].toLowerCase())).length)
             })
         }
-        
         return (
             <div style={{fontSize: this.props.fontSize ? this.props.fontSize : 'inherit'}}>
                 <Table 
@@ -120,7 +123,7 @@ class FormTableViewer extends React.Component{
                             }, [])
                     }
                     height={this.props.minHeight}
-                    flex={true}
+                    flex={Boolean(this.props.flex) ? this.props.flex === 'true' : true}
                 />
             </div>
         )
