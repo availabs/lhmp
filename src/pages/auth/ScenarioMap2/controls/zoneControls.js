@@ -132,7 +132,7 @@ class ZoneControl extends React.Component{
                         return  d !== '$__path'
                     })
                     .forEach(item =>{
-                    if(graph[item] && this.state.zone_ids.includes(graph[item].id)){
+                        if(graph[item] /*&& this.state.zone_ids.includes(graph[item].id)*/){
                         zones_list.push({
                             'label': graph[item].attributes ? graph[item].attributes.name : 'None',
                             'value': graph[item] ? graph[item].id : '',
