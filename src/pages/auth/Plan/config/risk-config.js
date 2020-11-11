@@ -73,14 +73,14 @@ const config = {
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
             icon: 'os-icon-grid-squares-2',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true 
         },
         // {
-        //     title: '',
+        //     title: 'Social Vulnerability Map',
         //     requirement: 'Req-B-3B-3B',
-        //     hideNav: true,
+        //     //hideNav: true,
         //     type: 'content',
         //     prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
         //             'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
