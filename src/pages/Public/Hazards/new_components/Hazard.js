@@ -163,58 +163,6 @@ class Hazards extends React.Component {
                         />
                     </div>
                 </div>
-                <div className='row'>
-                </div>
-
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <h4>Events with Highest Reported Loss in Dollars</h4>
-                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
-                        <div>The table below lists individual events by loss in dollars.
-                            Click on a row to view the event description.
-                        </div>
-                        <HazardEventsTable
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                            geoid={this.props.activeGeoid}
-                        />
-                        <i style={{color: '#afafaf'}}>Source: <a
-                            href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
-                            Storm Events Dataset</a></i>
-                    </div>
-                </div>
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <h4>Hazard Loss by Municipality</h4>
-                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
-                        <h6>{HazardName} Loss by Month</h6>
-                        <CousubTotalLossTable
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                        />
-                    </div>
-                </div>
-
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <h4>Hazard Events</h4>
-                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
-                        <h6>{HazardName} Events</h6>
-
-                        <HazardEventsMapController
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                            zoomPadding={150}
-                            year={1999}
-                        />
-                    </div>
-                </div>
                 <PageContainer>
                     <HeaderContainer>
                         <div className='row'>
@@ -224,7 +172,7 @@ class Hazards extends React.Component {
                                         <ElementFactory
                                             element={
                                                 {
-                                                    title: 'Hazard Table',
+                                                    title: 'Local Hazards of Concern Table',
                                                     //requirement: 'Req-C-1A',
                                                     type: 'formTable',
                                                     //fontSize: '0.70em',
@@ -305,6 +253,56 @@ class Hazards extends React.Component {
                         </div>
                     </HeaderContainer>
                 </PageContainer>
+
+                <div className='row'>
+                    <div className='col-md-12'>
+                        <h4>Events with Highest Reported Loss in Dollars</h4>
+                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                        <div>The table below lists individual events by loss in dollars.
+                            Click on a row to view the event description.
+                        </div>
+                        <HazardEventsTable
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
+                            geoid={this.props.activeGeoid}
+                        />
+                        <i style={{color: '#afafaf'}}>Source: <a
+                            href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                            Storm Events Dataset</a></i>
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className='col-md-12'>
+                        <h4>Hazard Loss by Municipality</h4>
+                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                        <h6>{HazardName} Loss by Month</h6>
+                        <CousubTotalLossTable
+                            geoid={this.props.activeGeoid}
+                            geoLevel={this.props.geoLevel}
+                            dataType='severeWeather'
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
+                        />
+                    </div>
+                </div>
+
+                <div className='row'>
+                    <div className='col-md-12'>
+                        <h4>Hazard Events</h4>
+                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                        <h6>{HazardName} Events</h6>
+
+                        <HazardEventsMapController
+                            geoid={this.props.activeGeoid}
+                            geoLevel={this.props.geoLevel}
+                            dataType='severeWeather'
+                            hazards={this.props.hazards}
+                            hazard={this.props.hazard}
+                            zoomPadding={150}
+                            year={1999}
+                        />
+                    </div>
+                </div>
             </div>
 
         )
