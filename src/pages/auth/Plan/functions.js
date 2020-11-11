@@ -228,6 +228,20 @@ const renderElement = function(element, section, index, user) {
                     </DIV>
                 </div>
             </div>
+                <i>
+                    {
+                        element.pullCounty ?
+                            `This element allows you to enter jurisdiction specific content when necessary. When no jurisdiction content is entered this element pulls content from the county.` : null
+                    }
+                    {
+                        element.nullMessage ?
+                            `This element requires jurisdiction specific content.` : null
+                    }
+                    {
+                        element.hideIfNull ?
+                            `This element only applies to the county, it does not require jurisdiction specific content` : null
+                    }
+                </i>
                 <ElementBox>
                 <GraphFactory
                     graph={{type: element.type + 'Editor'}}

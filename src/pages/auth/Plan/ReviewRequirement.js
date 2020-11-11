@@ -15,6 +15,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import AvlFormsNewData from 'components/AvlForms/editComponents/newData.js'
 import get from "lodash.get";
 import AvlFormsViewData from "../../../components/AvlForms/displayComponents/viewData";
+import functions from "./functions";
 
 const format_with_time = {
     sameDay: 'YYYY-MM-DD HH:mm:ss',
@@ -127,7 +128,11 @@ class ReviewRequirement extends React.Component {
         return (
             <div className='container'>
                 <Element>
-                    <h4 className='element-header'>Review Requirement - {element.element}</h4>
+                    <h4 className='element-header'>Review Requirement - {element.element}
+                    <span className='text-muted'> Jurisdiction: {
+                        functions.formatName(get(this.props.allGeo, [this.props.match.params.geo], ''), this.props.match.params.geo)
+                    }</span>
+                    </h4>
                     <ElementBox>
                         <h6>Element Requirements</h6>
                         <div className='text-justify'>
@@ -155,6 +160,8 @@ class ReviewRequirement extends React.Component {
                                     }
                                     user={{...this.props.user, activeCousubid: this.props.match.params.geo}}
                                     showTitle={true}
+                                    showLocation={true}
+                                    showCMSFlagNotes={true}
                                     showEdit={true}
                                     showStatusTracker={true}
                                     showHeader={false}
@@ -189,7 +196,8 @@ const mapStateToProps = (state, ownProps) => {
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
         activePlan: state.user.activePlan,
-        user: state.user
+        user: state.user,
+        allGeo: state.geo.allGeos
     };
 };
 
