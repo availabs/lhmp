@@ -84,6 +84,14 @@ class Hazards extends React.Component {
 
         let contentLocalImpacts =
             get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.geoid}].body.value`, null)
+        let contentLocalImpactsTitle =
+            `${contentLocalImpacts && !emptyBody.includes(contentLocalImpacts.trim()) ?
+                                    functions.formatName(get(this.props.geoGraph, [this.props.activeCousubid, 'name']), this.props.activeCousubid) :
+                                    get(hazardsConfig["Local Hazards"].filter(h => h.requirement === `req-B1-${this.props.hazard}-local-impact`).pop(), `pullCounty`) ?
+                                        functions.formatName(get(this.props.geoGraph, [this.props.activeGeoid, 'name']), this.props.activeGeoid) :
+                                        functions.formatName(get(this.props.geoGraph, [this.props.activeCousubid, 'name']), this.props.activeCousubid)}
+                                         - Local Impacts - 
+                                        ${get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, 'All Hazards')}`;
 
         contentLocalImpacts = contentLocalImpacts && !emptyBody.includes(contentLocalImpacts.trim()) ? contentLocalImpacts :
             get(hazardsConfig["Local Hazards"].filter(h => h.requirement === `req-B1-${this.props.hazard}-local-impact`).pop(), `pullCounty`) ?
@@ -157,8 +165,9 @@ class Hazards extends React.Component {
                         {this.state.image ? <HeaderImageContainer img={this.state.image}/> : null}
                     </div>
                     <div>
-                        <h4>Local Impacts
-                            - {get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')}</h4>
+                        <h4>
+                            {contentLocalImpactsTitle}
+                        </h4>
                         <div dangerouslySetInnerHTML={{__html: contentLocalImpacts}}
                         />
                     </div>
