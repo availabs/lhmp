@@ -19,7 +19,7 @@ import {
 from 'pages/Public/theme/components'
 import {Link} from "react-router-dom";
 
-const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, pureElement, ...rest }) => {
+const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, showLocation, pureElement, ...rest }) => {
     if(element.title === 'County Description') {
         console.log('element county desc', element)
     }
@@ -27,9 +27,12 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
         (
             <React.Fragment>
                 <div>
-                    {showTitle ? element.title : null}
-                    {showEdit ? <span style={{float: 'right'}}>
-                    <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                        {showTitle ? <span className='text-bright'>Element: {element.title} </span> : null}
+                        {showLocation ? <i className='text-muted'> Location: {element.pageName}</i> : null}
+                    {showEdit ?
+                        <span style={{float: 'right'}}>
+                            <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link>
+                        </span> : null}
                 </div>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
@@ -66,9 +69,12 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                         : React.fragment
                     }
                     <SectionBoxMain>
-                        {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
-                        {showEdit ? <span style={{float: 'right'}}>
+                        <div>
+                            {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
+                            {showLocation ? <i className='text-muted'> Location: {element.pageName}</i> : null}
+                            {showEdit ? <span style={{float: 'right'}}>
                             <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                        </div>
                         <GraphFactory
                             graph={{type: element.type + 'Viewer'}}
                             user={user}

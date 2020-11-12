@@ -70,6 +70,7 @@ class ContentViewer extends Component {
             }else if (this.props.pullCounty && countyContentBody && !emptyBody.includes(countyContentBody.trim())){
                 let status = get(contentRes.json.content.byId[countyContentId], `attributes.status`, '');
                 this.setState({'currentKey': contentId,
+                    pulledFromCounty: true,
                     contentFromDB: contentRes.json.content.byId[countyContentId].body,
                     status: status, statusFromDb: status})
                 return contentRes.json.content.byId[countyContentId].body
@@ -159,6 +160,11 @@ class ContentViewer extends Component {
         return (
             //this.props.type === 'contentEditor' ? (
                 <React.Fragment>
+                    {this.props.showCMSFlagNotes ?
+                        this.state.pulledFromCounty ?
+                        <i className='text-muted'> The content in this element is pulled from the county because  no unique jurisdictional context was required. </i> :
+                        <i className='text-muted'> Content in this element is unique to the selected jurisdiction. </i>
+                        : null}
                     {this.props.showStatusTracker && this.props.requirement.slice(-7) !== 'callout' ? this.renderStatusTracker() :
                         this.props.requirement.slice(-7) === 'callout' ? this.renderCallout() : null
                     }

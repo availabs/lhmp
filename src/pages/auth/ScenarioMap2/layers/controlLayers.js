@@ -15,6 +15,7 @@ import {HazardEventsLayer, HazardEventsOptions} from "./hazardEventsLayer";
 import {CriticalInfrastructureLayer, CriticalInfrastructureOptions} from "./criticalInfrastructureLayer";
 import {EvacuationRoutesLayer, EvacuationRoutesOptions} from "./evacuationLayer";
 import {VulnerableDemographicsLayer, VulnerableDemographicsOptions} from "./vulnerableDemographicsLayer";
+import {NfipLayer, NfipOptions} from "./nfipLayer";
 import {getColorRange} from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -26,7 +27,7 @@ const COLORS = getColorRange(12, "Set3");
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${++UNIQUE}`
 let culvertsLayer, landUseLayer, commentMapLayer, evacuationRoutesLayer, vulnerableDemographicsLayer, hazardEventsLayer,
-    criticalInfrastructureLayer = {}
+    criticalInfrastructureLayer, nfipLayer = {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -71,6 +72,10 @@ const DynamicCriticalInfrastructureLayerFactory = (callingLayer, ...args) => {
     return new CriticalInfrastructureLayer('criticalInfrastructure', CriticalInfrastructureOptions())
 }
 
+const DynamicNfipLayerFactory = (callingLayer, ...args) => {
+    return new NfipLayer('nfip', NfipOptions())
+}
+
 
 export class ControlLayers extends MapLayer {
     onAdd(map) {
@@ -85,7 +90,8 @@ export class ControlLayers extends MapLayer {
                     this.boundingBox = bbox
                     map.resize();
                     map.fitBounds(bbox);
-                    if (this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer && this.vulnerableDemographicsLayer && this.hazardEventsLayer && this.criticalInfrastructureLayer) {
+                    if (this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer && this.vulnerableDemographicsLayer && this.hazardEventsLayer && this.criticalInfrastructureLayer
+                    && this.nfipLayer) {
                         this.landUseLayer.toggleVisibilityOff()
                         this.commentMapLayer.toggleVisibilityOff()
                         this.culvertsLayer.toggleVisibilityOff()
@@ -93,6 +99,7 @@ export class ControlLayers extends MapLayer {
                         this.vulnerableDemographicsLayer.toggleVisibilityOff()
                         this.hazardEventsLayer.toggleVisibilityOff()
                         this.criticalInfrastructureLayer.toggleVisibilityOff()
+                        this.nfipLayer.toggleVisibilityOff()
                     }
                 })
         }
@@ -315,6 +322,13 @@ export class ControlLayers extends MapLayer {
                                             ]).then(hel => {
                                                 criticalInfrastructureLayer = hel
                                                 this.criticalInfrastructureLayer = hel
+                                                this.doAction([
+                                                    "addDynamicLayer",
+                                                    DynamicNfipLayerFactory
+                                                ]).then(hel => {
+                                                    nfipLayer = hel
+                                                    this.nfipLayer = hel
+                                                })
                                             })
                                         })
                                     })
@@ -374,6 +388,11 @@ export class ControlLayers extends MapLayer {
                 criticalInfrastructureLayer.toggleVisibilityOn()
             }
         }
+        if (layerName.includes("nfip")) {
+            if (Object.keys(nfipLayer).length > 0) {
+                nfipLayer.toggleVisibilityOn()
+            }
+        }
         if (layerName.includes("jurisdiction")) {
             this.jurisdictonLayer.toggleVisibilityOn()
         }
@@ -421,6 +440,11 @@ export class ControlLayers extends MapLayer {
         if (layerName.includes("criticalInfrastructure")) {
             if (Object.keys(criticalInfrastructureLayer).length > 0) {
                 criticalInfrastructureLayer.toggleVisibilityOff()
+            }
+        }
+        if (layerName.includes("nfip")) {
+            if (Object.keys(nfipLayer).length > 0) {
+                nfipLayer.toggleVisibilityOff()
             }
         }
         if (layerName.includes('jurisdiction')) {

@@ -197,6 +197,7 @@ class Hazards extends React.Component {
                                 hazard={this.state.hazard}
                                 geoLevel={/*this.state.geoLevel*/ 'counties'}
                                 hazards={this.state.hazards}
+                                riskIndexMeta={this.props.riskIndexMeta}
                             />
                         </section>
                     </ContentContainer>
@@ -220,7 +221,8 @@ const mapStateToProps = (state,ownProps) => {
                 state.user.activeCousubid :
                 state.user.activeGeoid ?
                 state.user.activeGeoid :
-                localStorage.getItem('geoId')
+                localStorage.getItem('geoId'),
+        riskIndexMeta: get(state.graph, `riskIndex.meta`, {})
     };
 };
 
