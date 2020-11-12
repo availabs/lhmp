@@ -61,5 +61,24 @@ export default [
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsView))
+    },
+    {
+        path: `/capabilities/view/:id/p`,
+        exact: true,
+        name: 'Capabilities',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'capabilities', path: '/capabilities/' },
+            { param: 'id', path: '/capabilities/view/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(CapabilitiesFormsView))
     }
 ]

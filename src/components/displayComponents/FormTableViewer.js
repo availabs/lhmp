@@ -28,8 +28,7 @@ class FormTableViewer extends React.Component{
                 
             })
         }
-        // console.log('form attributes', formAttributes, this.props.activePlan)
-        
+
         return this.props.falcor.get(
             ['forms',formType,'byPlanId',this.props.activePlan,'length'],
             ["geo", this.props.activeGeoid, 'municipalities']
@@ -76,8 +75,18 @@ class FormTableViewer extends React.Component{
                 }
             )
             .map(d => {
-            return Object.keys(this.props.formData[d.value[2]].value.attributes)
+
+            return [...Object.keys(this.props.formData[d.value[2]].value.attributes), 'viewLink']
                 .reduce((a,c) => {
+
+                    if (this.props.viewLink && c === 'viewLink'){
+                        a['viewLink'] =
+                            <a href={`/${this.props.config.type}/view/${this.props.formData[d.value[2]].value.id}/p`} target={'_blank'}>
+                                <i className="os-icon os-icon-mail-19"></i>
+                            </a>
+                        return a;
+                    }
+
                     a[c] = this.props.formData[d.value[2]].value.attributes[c]
 
                     a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split(',') : a[c]

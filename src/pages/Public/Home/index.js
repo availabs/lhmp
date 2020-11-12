@@ -194,9 +194,16 @@ let sideMenuConfig = {
                                                                     Header: 'jurisdiction_utilization',
                                                                     accessor: 'jurisdiction_utilization',
                                                                     width: 50,
-                                                                    expandable: 'true'
+                                                                    expandable: 'true',
+                                                                    expandableHeader: true
                                                                 },
-
+                                                                {
+                                                                    Header: 'viewLink',
+                                                                    accessor: 'viewLink',
+                                                                    width: 50,
+                                                                    expandable: 'true',
+                                                                    expandableHeader: true
+                                                                },
                                                             ]
                                                         },
                                                         prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -207,10 +214,12 @@ let sideMenuConfig = {
                                                         intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                                                             ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
                                                             ' capability varies widely.',
+                                                        viewLink: true,
+                                                        flex: false,
                                                         activeGeoFilter: 'true',
                                                         defaultSortCol: 'adopting_authority',
                                                         // defaultSortOrder: 'desc',
-                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization', 'viewLink'],
                                                         minHeight: '80vh',
                                                         icon: 'os-icon-tasks-checked'
                                                     }
