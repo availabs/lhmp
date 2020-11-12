@@ -31,7 +31,8 @@ class ContentViewer extends Component {
         super(props);
         this.state = {
             contentFromDB: null,
-            currentKey: null
+            currentKey: null,
+            pulledFromCounty: false
         };
         this.handleSubmit = this.handleSubmit.bind(this)
         this.getCurrentKey = this.getCurrentKey.bind(this)
@@ -54,6 +55,9 @@ class ContentViewer extends Component {
         let contentId = this.getCurrentKey();
         let countyContentId = this.getCurrentKey(true);
         let emptyBody = ['<p></p>', '']
+        if(this.state.pulledFromCounty){
+            this.setState({pulledFromCounty: false})
+        }
         return this.props.falcor.get(
             ['content', 'byId', [contentId], COLS],
             ['content', 'byId', [countyContentId], COLS],
@@ -164,7 +168,15 @@ class ContentViewer extends Component {
                         this.state.pulledFromCounty ?
                         <i className='text-muted'> The content in this element is pulled from the county because  no unique jurisdictional context was required. </i> :
                         <i className='text-muted'> Content in this element is unique to the selected jurisdiction. </i>
-                        : null}
+                        : null
+                    }
+
+                        {
+                            this.props.showCMSFlagNotesPublic ?
+                                this.state.pulledFromCounty ? null :
+                                <i className='text-muted'> This content is unique to the selected jurisdiction. </i> : null
+                        }
+
                     {this.props.showStatusTracker && this.props.requirement.slice(-7) !== 'callout' ? this.renderStatusTracker() :
                         this.props.requirement.slice(-7) === 'callout' ? this.renderCallout() : null
                     }

@@ -77,13 +77,29 @@ class Hazards extends React.Component {
 
         let contentCharacteristics =
             get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, null)
+
+        let contentCharacteristicsStatus = contentCharacteristics && !emptyBody.includes(contentCharacteristics.trim()) ?
+            `this content is unique to the selected jurisdiction` :
+            get(hazardsConfig["Local Hazards"].filter(h => h.requirement === `req-B1-${this.props.hazard}`).pop(), `pullCounty`) ?
+                null :
+                `this content is unique to the selected jurisdiction`
+
         contentCharacteristics = contentCharacteristics && !emptyBody.includes(contentCharacteristics.trim()) ? contentCharacteristics :
             get(hazardsConfig["Local Hazards"].filter(h => h.requirement === `req-B1-${this.props.hazard}`).pop(), `pullCounty`) ?
                 get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.activeGeoid}].body.value`, '<span/>') :
                 contentCharacteristics
 
+
         let contentLocalImpacts =
-            get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.geoid}].body.value`, null)
+            get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.geoid}].body.value`, null);
+
+        let contentLocalImpactsStatus =
+            contentLocalImpacts && !emptyBody.includes(contentLocalImpacts.trim()) ?
+                                    `this content is unique to the selected jurisdiction` :
+                                    get(hazardsConfig["Local Hazards"].filter(h => h.requirement === `req-B1-${this.props.hazard}-local-impact`).pop(), `pullCounty`) ?
+                                        null :
+                                        `this content is unique to the selected jurisdiction`;
+
         let contentLocalImpactsTitle =
             `${contentLocalImpacts && !emptyBody.includes(contentLocalImpacts.trim()) ?
                                     functions.formatName(get(this.props.geoGraph, [this.props.activeCousubid, 'name']), this.props.activeCousubid) :
@@ -158,6 +174,7 @@ class Hazards extends React.Component {
                 <div className='row'>
                     <div>
                         <h4>{get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')} Characteristics</h4>
+                        <i>{contentCharacteristicsStatus}</i>
                         <div dangerouslySetInnerHTML={{__html: contentCharacteristics}}
                         />
                     </div>
@@ -168,6 +185,7 @@ class Hazards extends React.Component {
                         <h4>
                             {contentLocalImpactsTitle}
                         </h4>
+                        <i>{contentLocalImpactsStatus}</i>
                         <div dangerouslySetInnerHTML={{__html: contentLocalImpacts}}
                         />
                     </div>
