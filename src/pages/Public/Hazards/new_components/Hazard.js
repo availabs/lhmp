@@ -14,11 +14,11 @@ import HazardEventsMapController from "../components/HazardEventsMapController";
 import get from "lodash.get"
 
 import {EARLIEST_YEAR, LATEST_YEAR} from "./yearsOfSevereWeatherData"
-
-
+import LocalHazardsOfConcernTable from "../../../../components/displayComponents/localHazardsOfConcernTable";
 //import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
 import {HeaderContainer, HeaderImageContainer, PageContainer, VerticalAlign} from 'pages/Public/theme/components'
 import ElementFactory from "../../theme/ElementFactory";
+import functions from "../../../auth/Plan/functions";
 
 const emptyBody = ['<p></p>', '']
 
@@ -163,96 +163,83 @@ class Hazards extends React.Component {
                         />
                     </div>
                 </div>
-                <PageContainer>
-                    <HeaderContainer>
-                        <div className='row'>
-                            <div className='col-12'>
-                                <VerticalAlign>
-                                    <div>
-                                        <ElementFactory
-                                            element={
-                                                {
-                                                    title: 'Local Hazards of Concern Table',
-                                                    //requirement: 'Req-C-1A',
-                                                    type: 'formTable',
-                                                    //fontSize: '0.70em',
-                                                    height: '600px',
-                                                    align: 'full',
-                                                    config: {
-                                                        type: 'hazardid',
-                                                        filters:[{column:'hazard_concern',value:
-                                                                get(this.props.riskIndexMeta,
-                                                                    [this.props.hazard, 'name'],
-                                                                    null) ?
-                                                                    [this.props.hazard,
-                                                                    get(this.props.riskIndexMeta,
-                                                                        [this.props.hazard, 'name'],
-                                                                        'n/a')] : this.props.hazard
-                                                        }],
-                                                        columns : [
-                                                            {
-                                                                Header: 'COMMUNITY_NAME', // make it lower case
-                                                                accessor: 'community_name',
-                                                                sort: true,
-                                                                filter: 'default'
-                                                            },
-                                                            {
-                                                                Header: 'HAZARD_CONCERN',
-                                                                accessor: 'hazard_concern',
-                                                                sort: true,
-                                                                filter: 'default'
-                                                            },
-                                                            {
-                                                                Header: 'PREVIOUS_OCCURRENCE',
-                                                                accessor: 'previous_occurrence',
-                                                                sort: true,
-                                                                filter: 'multi'
-                                                            },
-                                                            {
-                                                                Header: 'FUTURE_OCCURRENCE',
-                                                                accessor: 'future_occurrence',
-                                                                sort: true,
-                                                                filter: 'multi'
-                                                            },
+                <LocalHazardsOfConcernTable
+                    config={
+                        {
+                            title: `${functions.formatName(get(this.props.geoGraph, [this.props.activeCousubid, 'name']), this.props.activeCousubid)} 
+                            - Local Hazards of Concern Table - ${get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, 'All Hazards')}`,
+                            //requirement: 'Req-C-1A',
+                            type: 'formTable',
+                            //fontSize: '0.70em',
+                            height: '600px',
+                            align: 'full',
+                            config: {
+                                type: 'hazardid',
+                                filters:[{column:'hazard_concern',value:
+                                        get(this.props.riskIndexMeta,
+                                            [this.props.hazard, 'name'],
+                                            null) ?
+                                            [this.props.hazard,
+                                                get(this.props.riskIndexMeta,
+                                                    [this.props.hazard, 'name'],
+                                                    'n/a')] : this.props.hazard
+                                }],
+                                columns : [
+                                    {
+                                        Header: 'COMMUNITY_NAME', // make it lower case
+                                        accessor: 'community_name',
+                                        sort: true,
+                                        filter: 'default'
+                                    },
+                                    {
+                                        Header: 'HAZARD_CONCERN',
+                                        accessor: 'hazard_concern',
+                                        sort: true,
+                                        filter: 'default'
+                                    },
+                                    {
+                                        Header: 'PREVIOUS_OCCURRENCE',
+                                        accessor: 'previous_occurrence',
+                                        sort: true,
+                                        filter: 'multi'
+                                    },
+                                    {
+                                        Header: 'FUTURE_OCCURRENCE',
+                                        accessor: 'future_occurrence',
+                                        sort: true,
+                                        filter: 'multi'
+                                    },
 
-                                                            {
-                                                                Header: 'LOSS_LIFE_PROPERTY',
-                                                                accessor: 'loss_life_property',
-                                                                sort: true,
-                                                                filter: 'default'
-                                                            },
-                                                            {
-                                                                Header: 'EXTENT_DESCRIPTION',
-                                                                accessor: 'extent_description',
-                                                                sort: true,
-                                                                filter: 'default'
-                                                            },
-                                                            {
-                                                                Header: 'LOCATION_DESCRIPTION',
-                                                                accessor: 'location_description',
-                                                                width: 50
-                                                            },
-                                                        ]
-                                                    },
-                                                    prompt: '',
-                                                    intent: '',
-                                                    activeGeoFilter: 'true',
-                                                    defaultSortCol: 'COMMUNITY_NAME',
-                                                    // defaultSortOrder: 'desc',
-                                                    colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
-                                                    minHeight: '80vh',
-                                                    icon: 'os-icon-tasks-checked',
-                                                    flex: 'false'
-                                                }
-                                            }
-                                            autoLoad={true}
-                                        />
-                                    </div>
-                                </VerticalAlign>
-                            </div>
-                        </div>
-                    </HeaderContainer>
-                </PageContainer>
+                                    {
+                                        Header: 'LOSS_LIFE_PROPERTY',
+                                        accessor: 'loss_life_property',
+                                        sort: true,
+                                        filter: 'default'
+                                    },
+                                    {
+                                        Header: 'EXTENT_DESCRIPTION',
+                                        accessor: 'extent_description',
+                                        sort: true,
+                                        filter: 'default'
+                                    },
+                                    {
+                                        Header: 'LOCATION_DESCRIPTION',
+                                        accessor: 'location_description',
+                                        width: 50
+                                    },
+                                ]
+                            },
+                            prompt: '',
+                            intent: '',
+                            activeGeoFilter: 'true',
+                            defaultSortCol: 'COMMUNITY_NAME',
+                            // defaultSortOrder: 'desc',
+                            colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
+                            minHeight: '80vh',
+                            icon: 'os-icon-tasks-checked',
+                            flex: 'false'
+                        }
+                    } />
 
                 <div className='row'>
                     <div className='col-md-12'>
@@ -315,7 +302,9 @@ const mapStateToProps = (state, ownProps) => {
     return {
         graph: state.graph,
         activeGeoid: state.user.activeGeoid,
-        planId: state.user.activePlan
+        activeCousubid: state.user.activeCousubid,
+        planId: state.user.activePlan,
+        geoGraph: state.graph.geo,
     };
 };
 

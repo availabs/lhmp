@@ -1,3 +1,5 @@
+import get from "lodash.get";
+
 let HAZARD_META  = {
         'wind':{id:'wind', name:'Wind', description: '', sheldus: "Wind", zones: [], icon: 'os-icon-edit-1'},
         'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire", zones: [], icon: 'os-icon-edit-1'},
@@ -124,6 +126,78 @@ const config =  {
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
             callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+        },
+        {
+            title: 'Local Hazards of Concern Table',
+            requirement: `req-B1-local-haz-concern-table`,
+            type: 'localHazardsOfConcernTable',
+            config: {
+                title: 'Local Hazards of Concern Table',
+                //requirement: 'Req-C-1A',
+                type: 'formTable',
+                //fontSize: '0.70em',
+                height: '600px',
+                align: 'full',
+                config: {
+                    type: 'hazardid',
+                    columns : [
+                        {
+                            Header: 'COMMUNITY_NAME', // make it lower case
+                            accessor: 'community_name',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        {
+                            Header: 'HAZARD_CONCERN',
+                            accessor: 'hazard_concern',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        {
+                            Header: 'PREVIOUS_OCCURRENCE',
+                            accessor: 'previous_occurrence',
+                            sort: true,
+                            filter: 'multi'
+                        },
+                        {
+                            Header: 'FUTURE_OCCURRENCE',
+                            accessor: 'future_occurrence',
+                            sort: true,
+                            filter: 'multi'
+                        },
+
+                        {
+                            Header: 'LOSS_LIFE_PROPERTY',
+                            accessor: 'loss_life_property',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        {
+                            Header: 'EXTENT_DESCRIPTION',
+                            accessor: 'extent_description',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        {
+                            Header: 'LOCATION_DESCRIPTION',
+                            accessor: 'location_description',
+                            width: 50
+                        },
+                    ]
+                },
+                prompt: '',
+                intent: '',
+                activeGeoFilter: 'true',
+                defaultSortCol: 'COMMUNITY_NAME',
+                // defaultSortOrder: 'desc',
+                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
+                minHeight: '80vh',
+                icon: 'os-icon-tasks-checked',
+                flex: 'false'
+            },
+            prompt: '',
+            intent: '',
+            callout: ''
         },
 	]
 }
