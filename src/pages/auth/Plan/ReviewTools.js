@@ -138,20 +138,29 @@ class PlanReview extends React.Component {
                                                 element.requirements_from_software.split(',')
                                                     .map(r => r.trim())
                                                     .filter(r => r.length)
-                                                    .filter(r => get(megaConfig.filter(mc => {
-                                                            return mc.requirement === r
-                                                        }),
+                                                    .filter(r =>
+                                                        get(megaConfig.filter(mc =>  mc.requirement === r),
                                                         `[0].type`, null) === 'content')
-                                                    .map(r => get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '')
+                                                    .map(r => {
+                                                        let tmpPullCounty =
+                                                            get(megaConfig.filter(mc => {
+                                                                return mc.requirement === r
+                                                            }), [0, 'pullCounty'], false);
+                                                        let tmpStatus = get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '')
+
+                                                            return tmpPullCounty && !(tmpStatus && tmpStatus.length) ?
+                                                                get(this.state.contentData, `${r}-${this.props.activePlan}-${this.props.activeGeoid}.attributes.status`, '') :
+                                                                tmpStatus
+                                                        }
                                                     )
                                             return <td
                                                 style={{
                                                     backgroundColor:
+                                                        geo.length > 5 && element.municipal === 'false' ? colors.municipalFalse :
                                                         allStatus.includes('Started') ? colors.Started :
                                                             allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready For Review"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
-                                                                geo.length > 5 && element.municipal === 'false' ? colors.municipalFalse :
                                                                 'none'
                                                 }}
                                                 onClick={() =>
