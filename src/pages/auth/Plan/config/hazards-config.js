@@ -199,6 +199,15 @@ const config =  {
             intent: '',
             callout: ''
         },
+
+        {
+            title: 'Local Hazards of Concern Table',
+            requirement: `req-B1-hazard-events-table`,
+            type: 'HazardEventsTable',
+            prompt: '',
+            intent: '',
+            callout: ''
+        },
 	]
 }
 export default config;

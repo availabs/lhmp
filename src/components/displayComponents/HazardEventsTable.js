@@ -10,8 +10,8 @@ import { fnum } from 'utils/sheldusUtils'
 import {
     EARLIEST_YEAR,
     LATEST_YEAR
-} from "./yearsOfSevereWeatherData"
-
+} from "../../pages/Public/Hazards/new_components/yearsOfSevereWeatherData"
+import get from 'lodash.get'
 class HazardEventsTable extends React.Component {
     constructor(props) {
         super(props);
@@ -29,14 +29,17 @@ class HazardEventsTable extends React.Component {
         let hazard = this.props.hazard ?
             [this.props.hazard] :
             this.props.hazards && this.props.hazards.length > 0 ?
-                this.props.hazards : null;
+                this.props.hazards : [];
+
         if (!hazard) return Promise.resolve()
+
         this.setState({hazards: hazard})
         return this.props.falcor.get(['riskIndex', 'hazards'])
                 .then(response => {
-                    return hazard ? hazard : response.json.riskIndex.hazards;
+                    return hazard && hazard.length ? hazard : response.json.riskIndex.hazards;
                 })
             .then(hazardids => {
+
                 return this.props.falcor.get(
                     ['riskIndex', 'meta', hazardids, ['id', 'name', 'description']],
                     [this.props.dataType, 'events', this.props.geoid, hazardids, 'top', 'property_damage']
@@ -135,11 +138,14 @@ HazardEventsTable.defaultProps = {
     hazards: []
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
         router: state.router,
         riskIndex: state.graph.riskIndex,
-        severeWeather: state.graph.severeWeather
+        severeWeather: state.graph.severeWeather,
+        geoid: ownProps.geoid ? ownProps.geoid : state.user.activeGeoid,
+        hazards: /*ownProps.hazards && ownProps.hazards.length ?
+            ownProps.hazards : */get(state.graph, ['riskIndex', 'hazards', 'value'])
     };
 };
 
