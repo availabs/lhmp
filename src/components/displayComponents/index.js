@@ -23,6 +23,7 @@ import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 import sociallyVulnerableDemographicsMapViewer from './sociallyVulnerableDemographicsMap/index'
 import openSpaceTable from './openSpaceTable'
 import ProblemStatementTableViewer from "./problemStatementTableViewer";
+import localHazardsOfConcernTable from "./localHazardsOfConcernTable";
 
 const NA = ({ type, state, routes }) =>
 {
@@ -82,5 +83,7 @@ export default {
     openSpaceTableEditor: openSpaceTable,
     problemStatementTableViewer: ProblemStatementTableViewer,
     problemStatementTableEditor,
+    localHazardsOfConcernTableViewer: localHazardsOfConcernTable,
+    localHazardsOfConcernTableEditor: localHazardsOfConcernTable
 }
 

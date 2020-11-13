@@ -129,6 +129,7 @@ class About extends React.Component {
                                             showHeader={false}
                                             pureElement={true}
                                             autoLoad={true}
+                                            showCMSFlagNotesPublic={true}
                                         />
                                     </StatementText>
                                 </div>

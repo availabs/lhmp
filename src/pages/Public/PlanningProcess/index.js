@@ -156,6 +156,7 @@ class About extends React.Component {
                                                                         element={requirement} 
                                                                         user={this.props.user}
                                                                         autoLoad={true}
+                                                                        showCMSFlagNotesPublic={true}
                                                                     />
                                                                 )
                                                             })
