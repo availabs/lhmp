@@ -168,7 +168,7 @@ let config = {
         },
         {
             element: 'B1',
-            requirements_from_software: 'Req-B-3B-1B, req-B1-hazard-overview, req-B1-other-hazards, req-B1-riverine, req-B1-hurricane, req-B1-tornado, req-B1-landslide',
+            requirements_from_software: 'Req-B-3B-1B, req-B1-hazard-overview, req-B1-riverine, req-B1-riverine-local-impact, req-B1-hurricane, req-B1-hurricane-local-impact, req-B1-tornado, req-B1-tornado-local-impact, req-B1-landslide, req-B1-landslide-local-impact',
             objective: 'Does the Plan include a description of the type, location, and extent of all natural hazards ' +
                 'that can affect each jurisdiction? 44 CFR 201.6(c)(2)(i) and 44 CFR 201.6(c)(2)(iii)',
             intent: 'To understand the potential and chronic hazards affecting the planning area in order to identify ' +

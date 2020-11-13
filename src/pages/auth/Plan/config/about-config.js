@@ -69,7 +69,7 @@ const config =  {
 			border: 1,
 			icon: 'os-icon-arrow-right7',
 			onlyAdmin: true,
-			hideNav: true,
+			// hideNav: true,
 		},
 
 		{
