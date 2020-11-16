@@ -56,21 +56,21 @@ const config =  {
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>` // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
 		},
-		{
-			title:`planning-image`,
-			requirement:'Req-A-1F',
-			type: 'image',
-			prompt: '',
-			intent: '',
-			callout: '',
-			label:'Image', // Which you would like to see on the form
-			height: 250,
-			width: 500,
-			border: 1,
-			icon: 'os-icon-arrow-right7',
-			onlyAdmin: true,
-			hideNav: true,
-		},
+		// {
+		// 	title:`planning-teams-image`,
+		// 	requirement:'Req-A-1F',
+		// 	type: 'image',
+		// 	prompt: '',
+		// 	intent: '',
+		// 	callout: '',
+		// 	label:'Image', // Which you would like to see on the form
+		// 	height: 150,
+		// 	width: 350,
+		// 	border: 1,
+		// 	icon: 'os-icon-arrow-right7',
+		// 	// onlyAdmin: true,
+		// 	// hideNav: true,
+		// },
 
 		{
 			title: 'Outreach Strategy',
