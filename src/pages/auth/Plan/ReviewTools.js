@@ -138,20 +138,30 @@ class PlanReview extends React.Component {
                                                 element.requirements_from_software.split(',')
                                                     .map(r => r.trim())
                                                     .filter(r => r.length)
-                                                    .filter(r =>
-                                                        get(megaConfig.filter(mc =>  mc.requirement === r),
-                                                        `[0].type`, null) === 'content')
+                                                    // .filter(r =>
+                                                    //     get(megaConfig.filter(mc =>  mc.requirement === r),
+                                                    //     `[0].type`, null) === 'content')
                                                     .map(r => {
-                                                        let tmpPullCounty =
-                                                            get(megaConfig.filter(mc => {
-                                                                return mc.requirement === r
-                                                            }), [0, 'pullCounty'], false);
-                                                        let tmpStatus = get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '')
+
+                                                        if(
+                                                            get(megaConfig.filter(mc =>  mc.requirement === r),
+                                                                `[0].type`, null) === 'content'
+                                                        ){
+                                                            // for content, check status
+                                                            let tmpPullCounty =
+                                                                get(megaConfig.filter(mc => {
+                                                                    return mc.requirement === r
+                                                                }), [0, 'pullCounty'], false);
+                                                            let tmpStatus = get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '')
 
                                                             return tmpPullCounty && !(tmpStatus && tmpStatus.length) ?
                                                                 get(this.state.contentData, `${r}-${this.props.activePlan}-${this.props.activeGeoid}.attributes.status`, '') :
                                                                 tmpStatus
+                                                        }else{
+                                                            // for non-content, return "Ready for review"
+                                                            return "Ready for review"
                                                         }
+                                            }
                                                     )
                                             return <td
                                                 style={{

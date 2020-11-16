@@ -7,7 +7,7 @@ import hazardsConfig from 'pages/auth/Plan/config/hazards-config.js'
 import HazardBarChart from 'components/displayComponents/hazardComponents/HazardBarChart'
 
 import NumberOfHazardsMonthStackedBarGraph from './NumberOfHazardsMonthStackedBarGraph'
-import HazardEventsTable from './HazardEventsTable'
+import HazardEventsTable from '../../../../components/displayComponents/HazardEventsTable'
 
 import CousubTotalLossTable from "../components/CousubTotalLossTable";
 import HazardEventsMapController from "../components/HazardEventsMapController";
