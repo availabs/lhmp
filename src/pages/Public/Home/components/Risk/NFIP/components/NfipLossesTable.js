@@ -77,13 +77,11 @@ class NfipTable extends React.Component {
                     Header: 'Repetitive Loss',
                     accessor: 'repetitive loss',
                     align: 'center',
-                    formatValue: fnum
                 },
                 {
                     Header: 'Severe Repetitive Loss',
                     accessor: 'severe repetitive loss',
                     align: 'center',
-                    formatValue: fnum
                 },
 
             ].reduce((a,c, cI, src) => {
