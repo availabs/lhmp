@@ -280,18 +280,18 @@ const config =  {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
 		},
-		{
-			title: 'Jurisdictional Participation',
-			requirement: 'Req-A-1E',
-			type: 'content',
-			prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
-			intent: '',
-			icon: 'os-icon-users',
-			// hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true
-		},
+		// {
+		// 	title: 'Jurisdictional Participation',
+		// 	requirement: 'Req-A-1E',
+		// 	type: 'content',
+		// 	prompt: 'Plan updates must include documentation of the current planning process undertaken to update the plan.',
+		// 	intent: '',
+		// 	icon: 'os-icon-users',
+		// 	// hideNav: true // hides key from public nav. Displays on page.
+  //           ///*2-non-county*/ pullCounty: true,
+  //           ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+  //           /*2-non-delete*/ hideIfNull: true
+		// },
 		{
 			title: 'Public Participation',
 			requirement: 'Req-A-3A',

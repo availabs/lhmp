@@ -420,6 +420,22 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
+        {
+         title:``,
+         requirement:'Req-S-3B',
+         type: 'image',
+         prompt: '',
+         intent: '',
+         callout: '',
+         label:'Image', // Which you would like to see on the form
+         height: 150,
+         width: 350,
+         border: 1,
+         icon: 'os-icon-arrow-right7',
+         // onlyAdmin: true,
+         hideNav: true,
+         pullCounty: true,
+        },
     ],
         'Process Assessment'  : [
         {
