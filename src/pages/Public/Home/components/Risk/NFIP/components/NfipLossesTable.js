@@ -13,12 +13,14 @@ import Table from 'components/light-admin/tables/Table'
 class NfipTable extends React.Component {
 
     fetchFalcorDeps({ geoid, geoLevel }=this.props) {
+        if(!this.props.allGeo || !Object.keys(this.props.allGeo).length) return Promise.resolve();
+
         return this.props.falcor.get(
             ["geo", geoid, [geoLevel, 'name']],
         )
             .then(response => response.json.geo[geoid][geoLevel])
             .then(geoids => {
-                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', geoids, 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss']])
+                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', Object.keys(this.props.allGeo), 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss']])
                     .then(() => this.props.falcor.get(['geo', geoids, 'name']))
             })
     }
@@ -86,7 +88,8 @@ class NfipTable extends React.Component {
 
             ].reduce((a,c, cI, src) => {
                 if (this.props.colOrder){
-                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                    let tmpCOl = src.filter(s => s.Header === this.props.colOrder[cI]).pop()
+                    if (tmpCOl) a.push(tmpCOl)
                 }else{
                     a.push(c)
                 }
@@ -140,7 +143,8 @@ const mapStateToProps = state => {
     router: state.router,
     geoGraph: state.graph.geo,
     nfip: state.graph.nfip,
-    geoid: state.user.activeGeoid || '36'
+    geoid: state.user.activeGeoid || '36',
+        allGeo: state.geo.allGeos,
     }}
 
 const mapDispatchToProps = {
