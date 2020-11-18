@@ -387,7 +387,8 @@ const config = {
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
-            icon: 'os-icon-home'
+            icon: 'os-icon-home',
+            defaultSortCol: 'Jurisdiction'
         },
         {
             title: 'NFIP Problem Areas',
