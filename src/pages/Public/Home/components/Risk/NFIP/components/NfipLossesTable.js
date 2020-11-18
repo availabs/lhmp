@@ -9,6 +9,7 @@ import get from "lodash.get";
 
 import TableBox from 'components/light-admin/tables/TableBox3'
 import Table from 'components/light-admin/tables/Table'
+import functions from "../../../../../../auth/Plan/functions";
 
 class NfipTable extends React.Component {
 
@@ -16,7 +17,7 @@ class NfipTable extends React.Component {
         if(!this.props.allGeo || !Object.keys(this.props.allGeo).length) return Promise.resolve();
 
         return this.props.falcor.get(
-            ["geo", geoid, [geoLevel, 'name']],
+            ["geo", Object.keys(this.props.allGeo), [geoLevel, 'name']],
         )
             .then(response => response.json.geo[geoid][geoLevel])
             .then(geoids => {
@@ -28,14 +29,14 @@ class NfipTable extends React.Component {
     processData() {
         const { geoid, geoLevel } = this.props,
             label = geoLevel === 'counties' ? 'county' : 'Jurisdiction',
-            geoids = this.props.geoGraph[geoid][geoLevel].value,
+            geoids = Object.keys(this.props.allGeo),
             data = [];
 
         geoids.forEach(geoid => {
             const graph = this.props.nfip.losses.byGeoid[geoid].allTime,
-                name = this.props.geoGraph[geoid].name;
+                name = this.props.allGeo[geoid];
             data.push({
-                [label]: this.formatName(name, geoid),
+                [label]: functions.formatName(name, geoid),
                 "total claims": graph.total_losses,
                 //"closed losses": graph.closed_losses,
                 //"open losses": graph.open_losses,
@@ -45,7 +46,7 @@ class NfipTable extends React.Component {
                 'severe repetitive loss': +graph.severe_repetitive_loss
             })
         })
-        console.log('data', data)
+
         return {
             data: data.sort((a, b) =>
                 this.props.defaultSortCol ?
