@@ -111,7 +111,9 @@ class FormTableViewer extends React.Component{
         // can we move this to the server? seems tricky
         if(this.props.config.filters) {
             this.props.config.filters.forEach(f => {
-                tableData = tableData.filter(d =>
+                tableData = tableData
+                    .filter(d => d[f.column])
+                    .filter(d =>
                 typeof f.value === 'string' ? d[f.column].toLowerCase().includes(f.value.toLowerCase()) :
                 f.value.filter(oldF => oldF.toLowerCase().includes(d[f.column].toLowerCase())).length)
             })

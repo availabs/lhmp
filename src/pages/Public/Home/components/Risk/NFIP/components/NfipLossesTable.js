@@ -18,7 +18,7 @@ class NfipTable extends React.Component {
         )
             .then(response => response.json.geo[geoid][geoLevel])
             .then(geoids => {
-                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', geoids, 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments']])
+                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', geoids, 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss']])
                     .then(() => this.props.falcor.get(['geo', geoids, 'name']))
             })
     }
@@ -38,7 +38,9 @@ class NfipTable extends React.Component {
                 //"closed losses": graph.closed_losses,
                 //"open losses": graph.open_losses,
                 "paid claims": (+graph.total_losses - +graph.cwop_losses),
-                "total payments": graph.total_payments
+                "total payments": graph.total_payments,
+                'repetitive loss': +graph.repetitive_loss,
+                'severe repetitive loss': +graph.severe_repetitive_loss
             })
         })
         console.log('data', data)
@@ -70,7 +72,18 @@ class NfipTable extends React.Component {
                     accessor: 'total payments',
                     align: 'center',
                     formatValue: fnum
-                }
+                },
+                {
+                    Header: 'Repetitive Loss',
+                    accessor: 'repetitive loss',
+                    align: 'center',
+                },
+                {
+                    Header: 'Severe Repetitive Loss',
+                    accessor: 'severe repetitive loss',
+                    align: 'center',
+                },
+
             ].reduce((a,c, cI, src) => {
                 if (this.props.colOrder){
                     a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
