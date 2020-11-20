@@ -93,7 +93,7 @@ class ShowZoneLayer extends MapLayer{
                             geojson.features.push({
                                 type : "Feature",
                                 properties:{},
-                                geometry: get(attributes, `geojson.coordinates`, null) ? attributes.geojson : JSON.parse(get(attributes, `geojson`, {}))
+                                geometry: get(attributes, `geojson.coordinates`, null) ? attributes.geojson : attributes.geojson
                             })
                             try {
                                 new mapboxgl.Marker({
