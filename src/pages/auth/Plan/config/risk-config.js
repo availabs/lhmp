@@ -187,9 +187,9 @@ const config = {
                     '- The plan must document that critical facilities are protected to the 500-year flood event, or worst damage scenario. For those that do not meet this level of protection, the plan must include an action to meet this criteria, or explain why it is not feasible to do so',
             icon: 'os-icon-loader',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            // 2-non-delete hideIfNull: true 
         },
         // {
         //     title: 'Critical Infrastructure Table',
