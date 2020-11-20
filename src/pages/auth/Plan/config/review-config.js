@@ -169,12 +169,12 @@ let config = {
         {
             element: 'B1',
             requirements_from_software:
-                'Req-B-3B-1B, req-B1-hazard-overview, req-B1-other-hazards, ' +
+                'req-B1-, req-B1--local-impact,' +
                 'req-B1-riverine, req-B1-riverine-local-impact, req-B1-hurricane, req-B1-hurricane-local-impact, req-B1-tornado, req-B1-tornado-local-impact,' +
                 'req-B1-landslide, req-B1-landslide-local-impact, req-B1-wind, req-B1-wind-local-impact, req-B1-wildfire, req-B1-wildfire-local-impact,' +
                 'req-B1-tsunami, req-B1-tsunami-local-impact, req-B1-lightning, req-B1-lightning-local-impact, req-B1-icestorm, req-B1-icestorm-local-impact,'+ 
                 'req-B1-coastal, req-B1-coastal-local-impact, req-B1-heatwave, req-B1-heatwave-local-impact, req-B1-hail, req-B1-hail-local-impact,' +
-                'req-B1-earthquake, req-B1-earthquake-local-impact, req-B1-draught, req-B1-draught-local-impact,  req-B1-avalanche, req-B1-avalanche-local-impact,' +
+                'req-B1-earthquake, req-B1-earthquake-local-impact, req-B1-drought, req-B1-drought-local-impact,  req-B1-avalanche, req-B1-avalanche-local-impact,' +
                 'req-B1-coldwave, req-B1-coldwave-local-impact, req-B1-winterweat, req-B1-winterweat-local-impact, req-B1-volcano, req-B1-volcano-local-impact,',          
             objective: 'Does the Plan include a description of the type, location, and extent of all natural hazards ' +
                 'that can affect each jurisdiction? 44 CFR 201.6(c)(2)(i) and 44 CFR 201.6(c)(2)(iii)',

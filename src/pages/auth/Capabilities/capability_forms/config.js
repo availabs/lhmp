@@ -2,11 +2,12 @@ module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
         list_attributes:[
-            'county',
+            // 'county',
             {'municipality' : {filter:'multi'}},
             {'capability_type': {filter:'true'}} ,
             {'capability_category': {filter:'true'}},
             'capability_name',
+            'responsible_authority',
             'jurisdiction_utilization', 'capability_description'
             ],
         csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
