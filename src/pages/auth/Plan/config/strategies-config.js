@@ -69,9 +69,9 @@ const config = {
                 '  Goals are statements of the community’s visions for the future.',
             icon: 'os-icon-target',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true
+            // /*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Goals 3A-1',
@@ -92,9 +92,9 @@ const config = {
                 ' as well as post‐disaster conditions.',
             icon: 'os-icon-mail-19',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete hideIfNull: true 
         },
     ],
 
@@ -308,8 +308,8 @@ const config = {
                     'Projects that are well developed and documented in one place are more quickly identifiable for selection when grants become available, making implementation that much more likely.',
             icon: 'os-icon-globe',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            // /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
