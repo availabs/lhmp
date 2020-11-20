@@ -151,13 +151,13 @@ const config = {
                         sort: true,
                         filter: 'multi'
                     },
-                    
-                    {
-                        Header: 'adopting authority',
-                        accessor: 'adopting_authority',
-                        sort: true,
-                        filter: 'default'
-                    },
+
+                    /*  {
+                          Header: 'adopting authority',
+                          accessor: 'adopting_authority',
+                          sort: true,
+                          filter: 'default'
+                      },*/
                     {
                         Header: 'responsible authority',
                         accessor: 'responsible_authority',
@@ -167,18 +167,20 @@ const config = {
                     {
                         Header: 'Link',
                         accessor: 'upload',
-                        width: 50
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
                     },
-                    // {
-                    //     Header: 'description',
-                    //     accessor: 'capability_description',
-                    //     width: 50,
-                    //     expandable: 'true',
-                    //     expandableHeader: true
-                    // },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                    {
+                        Header: 'capability_description',
+                        accessor: 'capability_description',
                         width: 50,
                         expandable: 'true',
                         expandableHeader: true
@@ -190,7 +192,6 @@ const config = {
                         expandable: 'true',
                         expandableHeader: true
                     },
-                    
                 ]
             },
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -205,7 +206,7 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'adopting_authority',
             // defaultSortOrder: 'desc',
-            colOrder: ['Jurisdiction', 'Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization', 'viewLink'],
+            colOrder: ['Jurisdiction','Name', 'category', 'type', 'Link', 'responsible authority', 'jurisdiction_utilization', 'capability_description', 'viewLink'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },

@@ -126,7 +126,8 @@ class FormTableViewer extends React.Component{
                         this.props.config.columns
                             .reduce((a,c, cI, src) => {
                                 if (this.props.colOrder){
-                                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                                    let tmpCol = src.filter(s => s.Header === this.props.colOrder[cI]).pop()
+                                    if (tmpCol) a.push(tmpCol)
                                 }else{
                                     a.push(c)
                                 }
