@@ -169,6 +169,13 @@ const config = {
                         accessor: 'upload',
                         width: 50
                     },
+                    // {
+                    //     Header: 'description',
+                    //     accessor: 'capability_description',
+                    //     width: 50,
+                    //     expandable: 'true',
+                    //     expandableHeader: true
+                    // },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',

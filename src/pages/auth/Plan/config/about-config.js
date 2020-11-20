@@ -5,7 +5,7 @@ const config =  {
 		type: 'image',
 		prompt: '',
 		intent: '',
-		callout: '',
+		// callout: '',
 		label:'Image', // Which you would like to see on the form
 		height: 250,
 		width: 500,
@@ -20,7 +20,7 @@ const config =  {
 		type: 'content',
 		prompt: '',
 		intent: '',
-		callout: '',
+		// callout: '',
 		icon: 'os-icon-arrow-right7',
 		pullCounty: true,
 		onlyAdmin: true // visible only in admin CMS by default. used if you want to load this key at a particular location on page.
@@ -32,7 +32,7 @@ const config =  {
 			type: 'content',
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
-			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
+			// callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
 			pullCounty: true,
 			// hideNav: true // hides key from public nav. Displays on page.
@@ -48,7 +48,7 @@ const config =  {
 			type: 'content',
 			prompt: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction.',
 			intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made and who was involved. This record is also useful for the next plan update.',
-			callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
+			// callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-arrow-right7',
 			pullCounty: true,
 			// hideNav: true // hides key from public nav. Displays on page.
@@ -95,7 +95,7 @@ const config =  {
 			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise needed to develop the plan, with responsibility or authority to implement hazard mitigation activities, and who will be most affected by the plan’s outcomes.' +
 					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.'+
 					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
-			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
+			// callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
 			icon: 'os-icon-user-plus',
 			// hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,

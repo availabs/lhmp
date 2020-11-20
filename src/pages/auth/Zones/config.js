@@ -68,6 +68,7 @@ module.exports = [
                         'Relocation Zone',
                         'Jurisdiction',
                         'Area of Concern',
+                        'NFIP Problem Area',
                         'Vulnerable Population',
                         'Other'
                     ]

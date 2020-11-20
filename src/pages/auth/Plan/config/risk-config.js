@@ -347,8 +347,8 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',
-            //exclude: ['action_name'],
-            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            exclude: ['priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'description_of_problem_being_mitigated'],
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'action_status_update', 'action_description'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked',
             hideNav: true
