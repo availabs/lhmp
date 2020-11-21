@@ -142,12 +142,13 @@ const mapDispatchToProps = {setActiveCousubid, getAllGeo};
 export const GeoDropdown = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(GD));
 
 const formatName = function(name= 'no name', geoid){
+    if ( name.toLowerCase() === 'countywide') return name
     let jurisdiction =
-        geoid.length === 2 ? 'State' :
-            geoid.length === 5 ? 'County' :
-                geoid.length === 7 ? 'Village' :
-                    geoid.length === 10 ? name.toLowerCase().includes('city') ? ' City' : 'Town' :
-                        geoid.length === 11 ? 'Tract' : '';
+            geoid.length === 2 ? 'State' :
+                geoid.length === 5 ? 'County' :
+                    geoid.length === 7 ? 'Village' :
+                        geoid.length === 10 ? name.toLowerCase().includes('city') ? ' City' : 'Town' :
+                            geoid.length === 11 ? 'Tract' : '';
 
     if (name.toLowerCase().includes(` ${jurisdiction.toLowerCase()}`)){
         name = name.toLowerCase().replace(` ${jurisdiction.toLowerCase()}`, ' (' + jurisdiction + ')')

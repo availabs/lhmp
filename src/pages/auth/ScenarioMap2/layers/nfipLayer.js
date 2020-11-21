@@ -141,7 +141,7 @@ export class NfipLayer extends MapLayer {
                         .slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
                 this.map.resize();
-                this.map.fitBounds(bbox);
+                // this.map.fitBounds(bbox);
 
                 // get tracts
                 let tracts = get(graph,

@@ -294,6 +294,7 @@ class inventoryTableViewer extends Component {
                         <TableSelector
                             data={listViewData}
                             columns={formAttributes
+                                .filter(f => !get(this.props, `exclude`, []).includes(f) )
                                 .map(f => {
 
                                     return ({
@@ -307,7 +308,8 @@ class inventoryTableViewer extends Component {
                                 })
                                 .reduce((a,c, cI, src) => {
                                     if (this.props.colOrder && this.props.colOrder.includes(c.Header)){
-                                        a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                                        let tmpCol = src.filter(s => s.Header === this.props.colOrder[cI]).pop()
+                                        if (tmpCol) a.push(tmpCol)
                                     }else{
                                         a.push(c)
                                     }
