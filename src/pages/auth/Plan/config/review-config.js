@@ -277,7 +277,7 @@ let config = {
         },
         {
             element: 'B4',
-            requirements_from_software: `Req-B-4, Req-B-4A, Req-B-4B`,
+            requirements_from_software: `Req-B-4, Req-B-4A, Req-B-4B, Req-B-B-4C`,
             objective: 'Does the Plan address NFIP insured structures within each jurisdiction that have been repetitively ' +
                 'damaged by floods? 44 CFR 201.6(c)(2)(ii)',
             intent: 'To inform hazard mitigation actions for properties that have suffered repetitive damage due to ' +

@@ -187,9 +187,9 @@ const config = {
                     '- The plan must document that critical facilities are protected to the 500-year flood event, or worst damage scenario. For those that do not meet this level of protection, the plan must include an action to meet this criteria, or explain why it is not feasible to do so',
             icon: 'os-icon-loader',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            // 2-non-delete hideIfNull: true 
         },
         // {
         //     title: 'Critical Infrastructure Table',
@@ -406,29 +406,29 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-        // {
-        //     title: 'NFIP Problem Areas Map',
-        //     requirement: 'Req-B-B-4B',
-        //     type: 'developementZonesFilteredMap',
-        //     filterBy: {zone_type: ['NFIP Problem Area']},
-        //     prompt: '',
-        //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
-        //     icon: 'os-icon-globe',
-        //     hideNav: true,
-        // },
-        // {
-        //     title: 'NFIP Problem Areas List',
-        //     requirement: 'Req-B-B-4C',
-        //     type: 'developementZonesFilteredTable',
-        //     filterBy: {zone_type: ['NFIP Problem Area']},
-        //     prompt: '',
-        //     intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
-        //     defaultSortCol: 'name',
-        //     activeGeoFilter: 'true',
-        //     minHeight: '80vh',
-        //     icon: 'os-icon-grid-squares-2',
-        //     hideNav: true,
-        // },
+        {
+            title: 'NFIP Problem Areas Map',
+            requirement: 'Req-B-B-4B',
+            type: 'developementZonesFilteredMap',
+            filterBy: {zone_type: ['NFIP Problem Area']},
+            prompt: '',
+            intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            icon: 'os-icon-globe',
+            hideNav: true,
+        },
+        {
+            title: 'NFIP Problem Areas List',
+            requirement: 'Req-B-B-4C',
+            type: 'developementZonesFilteredTable',
+            filterBy: {zone_type: ['NFIP Problem Area']},
+            prompt: '',
+            intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            defaultSortCol: 'name',
+            activeGeoFilter: 'true',
+            minHeight: '80vh',
+            icon: 'os-icon-grid-squares-2',
+            hideNav: true,
+        },
 
     ],
         'Dam Safety' : [
