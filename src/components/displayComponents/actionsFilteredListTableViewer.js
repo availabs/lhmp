@@ -19,7 +19,7 @@ class inventoryTableViewer extends Component {
         super(props);
         this.state = {
             geoid: this.props.activeGeoid,
-            formAttributes: ['action_jurisdiction',
+            formAttributes: props.generalCols || ['action_jurisdiction',
                 'action_name',
                 'associated_hazards',
                 'priority_score',
@@ -27,7 +27,7 @@ class inventoryTableViewer extends Component {
                 'estimated_cost_range',
                 'lead_agency_name_text',
             ],
-            clickToOpen: ['action_description', 'description_of_problem_being_mitigated',  'action_status_update']
+            clickToOpen: props.expandableCols || ['action_description', 'description_of_problem_being_mitigated',  'action_status_update']
         };
         this.formsListTable = this.formsListTable.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
