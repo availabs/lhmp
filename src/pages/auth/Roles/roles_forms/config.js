@@ -96,6 +96,28 @@ module.exports = [
                 section: '',
                 list_attribute: 'true'
             },
+            contact_planning_team:{
+                label:'HMP Participation',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                // field_required:'required', // optional if you want the field to be required
+                // validation: "true",
+                meta: 'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Core Planning Group',
+                        'Steering Committee', 
+                        'Stakeholder', 
+                        'Jurisdictional Representative',
+                        'Public/Citizen',
+                    ],
+                },
+                section: '',
+                list_attribute: 'true'
+            },
             is_hazard_mitigation_representative:{
                 label:'Is Hazard Mitigation Representative?',
                 sub_type:'',
