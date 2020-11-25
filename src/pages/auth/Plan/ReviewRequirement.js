@@ -113,16 +113,35 @@ class ReviewRequirement extends React.Component {
                                 <div>
                                     <label>You:</label>
                                     <span style={{float: 'right'}}>
+                                        <button id= {id.id} className="btn btn-sm btn-outline-primary"
+                                                onClick={() => this.setState({editComment: id.id})}> Edit </button>
                                         <button id= {id.id} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                     </span>
                                 </div> : null
                         }
-                        <AvlFormsViewData
-                            json = {commentsConfig}
-                            id = {[id.id]}
-                            showHeader={false}
-                        />
+                        {
+                            this.state.editComment === id.id ?
+                                <AvlFormsNewData
+                                    json={commentsConfig}
+                                    id={[id.id]}
+                                    data = {{
+                                        user: this.props.user.id,
+                                        element: this.props.match.params.req,
+                                        geoid: this.props.match.params.geo,
+                                        created_at: moment().calendar(null,format_with_time),
+                                    }}
+                                    returnValue= {(e) => {
+                                        this.setState({editComment: null})
+                                    }}
+                                /> :
+                                <AvlFormsViewData
+                                    json = {commentsConfig}
+                                    id = {[id.id]}
+                                    showHeader={false}
+                                />
+                        }
+
                     </React.Fragment>
                     )}
             </div>
