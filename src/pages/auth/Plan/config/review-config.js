@@ -9,7 +9,7 @@ let config = {
     elements: [
         {
             element: 'A1',
-            requirements_from_software: `Req-A-1A, Req-A-1D, Req-A-1C`,
+            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, Req-A-1C, Req-A-1G, Req-A-1H`,
             objective: 'Does the Plan document the planning process, including how it was prepared and who was involved in ' +
                 'the process for each jurisdiction? 44 CFR 201.6(c)(1)',
             intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve ' +
@@ -45,7 +45,7 @@ let config = {
         },
         {
             element: 'A2',
-            requirements_from_software: `Req-A-2, Req-A-2A`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-1C`,
             objective: 'Does the Plan document an opportunity for neighboring communities, local and regional agencies ' +
                 'involved in hazard mitigation activities, agencies that have the authority to regulate development as ' +
                 'well as other interests to be involved in the planning process? 44 CFR 201.6(b)(2)',
@@ -89,7 +89,7 @@ let config = {
         },
         {
             element: 'A3',
-            requirements_from_software: `Req-A-3A`,
+            requirements_from_software: `Req-A-3A, Req-A-2`,
             objective: 'Does the Plan document how the public was involved in the planning process during the drafting ' +
                 'stage? 44 CFR 201.6(b)(1) and 201.6(c)(1)',
             intent: 'To ensure citizens understand what the community is doing on their behalf, and to provide a chance ' +
