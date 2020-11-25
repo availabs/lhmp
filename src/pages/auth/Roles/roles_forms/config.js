@@ -7,7 +7,7 @@ module.exports = [
             {'contact_title_role': {filter:'multi'}},
             'contact_department',
             {'contact_agency': {filter:'true'}},
-            'contact_county',
+            'contact_planning_team',
             {'contact_municipality': {filter:'true'}},
         ],
         // combine_list_attributes:{attributes:['contact_county','contact_municipality'],result:'Jurisidiction'},

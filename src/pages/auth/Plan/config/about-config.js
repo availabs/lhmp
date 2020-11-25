@@ -127,7 +127,7 @@ const config =  {
 				type:'roles',
         		columns : [
 					{
-						Header: 'County',
+						Header: 'Jurisdiction',
 						accessor: 'contact_municipality',
 						sort: true,
 						filter: 'default'
@@ -155,6 +155,12 @@ const config =  {
         				accessor: 'contact_title_role',
 						sort: true,
 						filter: 'multi'
+        			},
+        			{
+        				Header: 'Participation',
+        				accessor: 'contact_planning_team',
+						sort: true,
+						filter: 'multi'
         			}
         		]
         
@@ -165,61 +171,61 @@ const config =  {
 			activeGeoFilter: 'true',
 			defaultSortCol: 'contact_agency',
 			// defaultSortOrder: 'desc',
-			colOrder: ['County', 'Name', 'Agency', 'Department', 'Role'],
+			colOrder: ['Jurisdiction', 'Name', 'Agency', 'Department', 'Role', 'Participation'],
 			minHeight: '80vh',
 			icon: 'os-icon-user'
 		},
 
-		{
-			title: '',
-			requirement: 'Req-A-1C',
-			hideNav: true,
-			type: 'formTable',
-			fontSize: '0.70em',
-			height: '600px',
-			align: 'full',
-			config: {
-				type:'roles',
-        		columns : [
-        			{
-        				Header: 'Name',
-        				accessor: 'contact_name',
-						sort: true,
-						filter: 'default'
-        			},
-        			// {
-        			// 	Header: 'County',
-        			// 	accessor: 'contact_county'
-        			// },
-        			// {
-        			// 	Header: 'County',
-        			// 	accessor: 'contact_municipality'
-        			// },
-        			{
-        				Header: 'Agency',
-        				accessor: 'contact_agency',
-						sort: true,
-						filter: 'default'
-        			},
-        			{
-        				Header: 'Role',
-        				accessor: 'contact_title_role',
-						sort: true,
-						filter: 'multi'
-        			}
-        		]
+		// {
+		// 	title: '',
+		// 	requirement: 'Req-A-1C',
+		// 	hideNav: true,
+		// 	type: 'formTable',
+		// 	fontSize: '0.70em',
+		// 	height: '600px',
+		// 	align: 'full',
+		// 	config: {
+		// 		type:'roles',
+  //       		columns : [
+  //       			{
+  //       				Header: 'Name',
+  //       				accessor: 'contact_name',
+		// 				sort: true,
+		// 				filter: 'default'
+  //       			},
+  //       			// {
+  //       			// 	Header: 'County',
+  //       			// 	accessor: 'contact_county'
+  //       			// },
+  //       			// {
+  //       			// 	Header: 'County',
+  //       			// 	accessor: 'contact_municipality'
+  //       			// },
+  //       			{
+  //       				Header: 'Agency',
+  //       				accessor: 'contact_agency',
+		// 				sort: true,
+		// 				filter: 'default'
+  //       			},
+  //       			{
+  //       				Header: 'Role',
+  //       				accessor: 'contact_title_role',
+		// 				sort: true,
+		// 				filter: 'multi'
+  //       			}
+  //       		]
 
-			},
-			//align: 'full',
-			prompt: 'Identify who represented each jurisdiction.',
-			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
-			activeGeoFilter: 'true',
-			defaultSortCol: 'contact_agency',
-			// defaultSortOrder: 'desc',
-			colOrder: ['Agency', 'Name', 'Role'],
-			minHeight: '80vh',
-			icon: 'os-icon-user'
-		},
+		// 	},
+		// 	//align: 'full',
+		// 	prompt: 'Identify who represented each jurisdiction.',
+		// 	intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
+		// 	activeGeoFilter: 'true',
+		// 	defaultSortCol: 'contact_agency',
+		// 	// defaultSortOrder: 'desc',
+		// 	colOrder: ['Agency', 'Name', 'Role'],
+		// 	minHeight: '80vh',
+		// 	icon: 'os-icon-user'
+		// },
 
 		// {
 		// 	title: 'Jurisdictional Participation',
