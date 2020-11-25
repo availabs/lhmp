@@ -127,37 +127,41 @@ class ContentEditor extends Component {
 
     loadEditor(editorState){
         return (
-            <DIV>
-                <Editor
-                    spellCheck={true}
-                    editorState={editorState}
-                    toolbarClassName="toolbar"
-                    wrapperClassName="wrapper"
-                    editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
-                    onEditorStateChange={this.onEditorStateChange}
-                />
-                <a className='hoverable btn btn-primary step-trigger-btn'
-                   onClick={this.handleSubmit}
-                >Submit</a>
-                {
-                    this.props.requirement.slice(-7) !== 'callout' ?
-                        <React.Fragment>
-                            <div style={{width: 'fit-content', float: 'right'}}>
-                                <label className='selectLabel'>Status: </label>
-                                <select
-                                    className='dropdownSelect hoverable btn btn-outline-primary btn-primary step-trigger-btn'
-                                    id={'status'}
-                                    value={this.state.status}
-                                    onChange={(e)=> this.setState({status: e.target.value})}
-                                >
-                                    <option key={0} value={''}> </option>
-                                    <option key={1} value={'Started'}>Started</option>
-                                    <option key={2} value={'Ready for review'}>Ready for review</option>
-                                </select>
-                            </div>
-                        </React.Fragment> : null
-                }
-            </DIV>
+            <div>
+                <DIV>
+                    <Editor
+                        spellCheck={true}
+                        editorState={editorState}
+                        toolbarClassName="toolbar"
+                        wrapperClassName="wrapper"
+                        editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
+                        onEditorStateChange={this.onEditorStateChange}
+                    />
+                </DIV>
+                <div className='row' style={{display: 'flex', justifyContent: 'flex-end', marginTop: '5px', marginRight: '1px'}}>
+                    {
+                        this.props.requirement.slice(-7) !== 'callout' ?
+                            <React.Fragment>
+                                <div style={{width: 'fit-content'}}>
+                                    <label className='selectLabel'>Status: </label>
+                                    <select
+                                        className='dropdownSelect hoverable btn btn-outline-primary btn-primary step-trigger-btn'
+                                        id={'status'}
+                                        value={this.state.status}
+                                        onChange={(e)=> this.setState({status: e.target.value})}
+                                    >
+                                        <option key={0} value={''}> </option>
+                                        <option key={1} value={'Started'}>Started</option>
+                                        <option key={2} value={'Ready for review'}>Ready for review</option>
+                                    </select>
+                                </div>
+                            </React.Fragment> : null
+                    }
+                    <a className='hoverable btn btn-primary step-trigger-btn'
+                       onClick={this.handleSubmit}
+                    >Submit</a>
+                </div>
+            </div>
         )
     }
     render() {

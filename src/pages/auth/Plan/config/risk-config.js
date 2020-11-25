@@ -337,7 +337,7 @@ const config = {
             title: 'Previous Actions',
             requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
-            filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
+            filterBy: [ 'In-progress', 'Completed', 'Discontinued', 'Proposed-Carryover'],
             align: 'full',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
                 ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
@@ -347,8 +347,10 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',
-            exclude: ['priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'description_of_problem_being_mitigated'],
             colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'action_status_update', 'action_description'],
+            generalCols: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update'],
+            expandableCols: ['action_description', 'description_of_problem_being_mitigated'],
+            exclude: ['priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'description_of_problem_being_mitigated'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked',
             hideNav: true
@@ -408,7 +410,7 @@ const config = {
         },
         {
             title: 'NFIP Problem Areas Map',
-            requirement: 'Req-B-B-4B',
+            requirement: 'Req-B-B-4D',
             type: 'developementZonesFilteredMap',
             filterBy: {zone_type: ['NFIP Problem Area']},
             prompt: '',
