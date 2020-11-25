@@ -242,7 +242,7 @@ class AvlFormsNewData extends React.Component{
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
                     }else{
-                        a[c] = this.state[c].replaceAll('\'', '\'\'')
+                        a[c] = typeof this.state[c] === "string" ? this.state[c].replaceAll('\'', '\'\'') : this.state[c]
                     }
                 }
                 return a;
@@ -263,6 +263,9 @@ class AvlFormsNewData extends React.Component{
                 }
             })
                 .then(response => {
+                    if (this.props.returnValue){
+                        this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
+                    }
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
