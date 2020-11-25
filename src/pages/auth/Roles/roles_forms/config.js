@@ -46,6 +46,7 @@ module.exports = [
                 display_type:'text',
                 meta: 'true',
                 area:'true',
+                defaultValue: ['Countywide'],
                 depend_on:'contact_county',
                 section: '',
                 list_attribute: 'true'
