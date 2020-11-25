@@ -337,7 +337,7 @@ const config = {
             title: 'Previous Actions',
             requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
-            filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
+            filterBy: [ 'In-progress', 'Completed', 'Discontinued', 'Proposed-Carryover'],
             align: 'full',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
                 ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
@@ -410,7 +410,7 @@ const config = {
         },
         {
             title: 'NFIP Problem Areas Map',
-            requirement: 'Req-B-B-4B',
+            requirement: 'Req-B-B-4D',
             type: 'developementZonesFilteredMap',
             filterBy: {zone_type: ['NFIP Problem Area']},
             prompt: '',
