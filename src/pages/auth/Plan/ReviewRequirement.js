@@ -15,7 +15,8 @@ import {sendSystemMessage} from 'store/modules/messages';
 import AvlFormsNewData from 'components/AvlForms/editComponents/newData.js'
 import get from "lodash.get";
 import AvlFormsViewData from "../../../components/AvlForms/displayComponents/viewData";
-import functions from "./functions";
+import functions, {GeoDropdown} from "./functions";
+import SearchableDropDown from "../../../components/filters/searchableDropDown";
 
 const format_with_time = {
     sameDay: 'YYYY-MM-DD HH:mm:ss',
@@ -27,10 +28,17 @@ const format_with_time = {
 };
 
 const DIV = styled.div`
-${(props) => props.theme.scrollBar};
-overflow: auto;
-width: 100%;
-height: 50%;
+* {
+                      
+                        border: none;
+                        font-size: 1.3rem;
+                        font-weight: 500;
+                        text-transform: uppercase;
+                        white-space: nowrap;
+                        letter-spacing: 2px;
+                        padding: 0px;
+                        background-color: none;
+                        }
 `
 class ReviewRequirement extends React.Component {
 
@@ -128,11 +136,28 @@ class ReviewRequirement extends React.Component {
         return (
             <div className='container'>
                 <Element>
-                    <h4 className='element-header'>Review Requirement - {element.element}
-                    <span className='text-muted'> Jurisdiction: {
-                        functions.formatName(get(this.props.allGeo, [this.props.match.params.geo], ''), this.props.match.params.geo)
-                    }</span>
-                    </h4>
+                    <DIV>
+                        <h4 className='element-header' style={{display: 'flex', justifyContent: 'start'}}>
+                            <span style={{'paddingTop': '0.5em'}}> Review Requirement - </span>
+                            <SearchableDropDown
+                                style={ {fontSize: 'small'} }
+                                className={'element-header'}
+                                id={'requirement'}
+                                data={config.elements.map(e => ({label: e.element, value: e.element}))}
+                                placeholder={'Select a Requirement'}
+                                value={{label: element.element, value: element.element}}
+                                hideValue={false}
+                                onChange={(e) => window.location.href = `/review_requirement/${e}/${this.props.match.params.geo}`}
+                            />
+                            <span className='text-muted' style={{'paddingTop': '0.5em', 'paddingLeft': '0.5em'}}> Jurisdiction:</span>
+                            <GeoDropdown
+                                className={'text-muted'}
+                                pureElement={true}
+                                value={this.props.match.params.geo}
+                                onChange={(e) => window.location.href = `/review_requirement/${this.props.match.params.req}/${e.target.value}`}
+                            />
+                        </h4>
+                    </DIV>
                     <ElementBox>
                         <h6>Element Requirements</h6>
                         <div className='text-justify'>
