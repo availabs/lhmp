@@ -116,7 +116,7 @@ const config =  {
 		},
 
 		{
-			title: 'New Roles',
+			title: '',
 			requirement: 'new-roles',
 			hideNav: true,
 			type: 'formTable',
