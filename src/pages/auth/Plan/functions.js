@@ -104,24 +104,7 @@ class GD extends Component {
                         this.props.onChange ? this.props.onChange({target:{value: e, id: this.props.id || 'contact_county'}}) : setActiveCousubid(e)
                     }}
                 />
-                {/*<select
-                    style={this.props.pureElement ? null : {height: '5vh', width:'250px'}}
-                    className={this.props.className || "ae-side-menu"}
-                    id={this.props.id || 'contact_county'}
-                    data-error="Please select county"
-                    onChange={(e) => {
-                        this.props.onChange ? this.props.onChange(e) : setActiveCousubid(e.target.value)
-                    }}
-                    value={this.props.value || activecousubId}
-                >
-                    {Object.keys(geoInfo)
-                        .filter(f => allowedGeos.includes(f))
-                        .map((county, county_i) =>
-                            <option className="ae-side-menu" key={county_i + 1}
-                                    value={county}> {formatName(geoInfo[county].name || geoInfo[county], county)}
-                            </option>
-                        )}
-                </select>*/}
+
             </div>
         ) : <div></div>
     }
@@ -140,6 +123,108 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {setActiveCousubid, getAllGeo};
 
 export const GeoDropdown = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(GD));
+
+
+// toggle visibility begin
+class TV extends Component {
+    constructor(props) {
+        super(props);
+        this.toggleVisibility = this.toggleVisibility.bind(this)
+    }
+    async fetchFalcorDeps(){
+        let formType = 'filterRequirements',
+            formAttributes = ['municipality', 'hiddenRequirements']
+
+        let response = await this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'length'])
+        let length = get(response, ['json', 'forms', formType, 'byPlanId', this.props.activePlan, 'length'], 0);
+        if (length > 0) {
+            await this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                from: 0,
+                to: length - 1
+            }], ...formAttributes])
+        }
+    }
+
+    async toggleVisibility(id, reqToFilter, element){
+        let formType = 'filterRequirements'
+        let edit_attributes = {
+            [this.props.activeCousubid]:
+                `"[${
+                    reqToFilter.includes(element.requirement) ?
+                        reqToFilter.length === 1 ? [] :
+                            reqToFilter.filter(f => f!== element.requirement).toString()
+                        : [...reqToFilter, element.requirement].toString()
+                }]"`
+        }
+
+        if(!edit_attributes[this.props.activeCousubid]) return;
+
+        let args = [formType, parseInt(this.props.activePlan), edit_attributes]
+        let res = id && id.length ? await this.props.falcor.set({
+                                                paths: [
+                                                    ['forms', 'byId',id[0],'attributes',Object.keys(edit_attributes)]
+                                                ],
+                                                jsonGraph: {
+                                                    forms:{
+                                                        byId:{
+                                                            [id[0]] : {
+                                                                attributes : edit_attributes
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }) :
+                     this.props.falcor.call(['forms','insert'], args, [], [])
+        return res
+    }
+    render() {
+        let formType = 'filterRequirements'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {});
+        let reqToFilter;
+
+        if(id){
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                reqToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpReqs = get(data[g], `value.attributes`, {})
+                            Object.keys(tmpReqs)
+                                .filter(tr => tr === this.props.activeCousubid && tmpReqs[tr])
+                                .forEach(tr => a.push(...tmpReqs[tr].slice(2,-2).split(',').filter(r => r!== "")))
+                            return a
+                        }, [])
+            }
+        }
+
+        // add visible property in all for
+        return <button className="mr-2 mb-2 btn btn-sm btn-outline-primary disabled"
+                       style={{float: 'right'}}
+                       onClick={() => this.toggleVisibility(id, reqToFilter, this.props.element)}
+        > {id && reqToFilter.includes(this.props.element.requirement) ? `Hidden` : `Visible`}</button>
+    }
+}
+const mapStateToPropsTV = (state, ownProps) => {
+    return {
+        geoGraph: state.graph.geo,
+        router: state.router,
+        activePlan: state.user.activePlan,
+        activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
+        allGeo: state.geo.allGeos,
+        formData: get(state.graph, [`forms`, 'filterRequirements'], null)
+    };
+};
+
+const mapDispatchToPropsTV = {setActiveCousubid, getAllGeo};
+
+export const ToggleVisibility = connect(mapStateToPropsTV, mapDispatchToPropsTV)(reduxFalcor(TV));
+// toggle visibility end
+
 
 const formatName = function(name= 'no name', geoid){
     if ( name.toLowerCase() === 'countywide') return name
@@ -172,6 +257,7 @@ const renderReqNav = function(allRequirenments, pageIndex){
 }
 
 const renderElement = function(element, section, index, user) {
+
     return (
         <div
              style={{
@@ -191,6 +277,9 @@ const renderElement = function(element, section, index, user) {
                     </button>
                     </span>
                 </small>
+                <ToggleVisibility
+                    element={element}
+                />
             </h4>
             </label>
             <div aria-labelledby="mySmallModalLabel"

@@ -38,9 +38,47 @@ class PlanReview extends React.Component {
             this.forceUpdate()
         }
     }
+    getReqsToFilter(geo){
+        let formType = 'filterRequirements'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {});
+        let reqToFilter;
 
-    fetchFalcorDeps() {
+        if(id){
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                reqToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpReqs = get(data[g], `value.attributes`, {})
+                            Object.keys(tmpReqs)
+                                .filter(tr => tr === geo && tmpReqs[tr])
+                                .forEach(tr => a.push(...tmpReqs[tr].slice(2,-2).split(',').filter(r => r!== "")))
+                            return a
+                        }, [])
+            }
+        }
+        return reqToFilter
+    }
+    async fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
+
+        // get reqs to filter by jurisdictions
+        let formTypeFR = 'filterRequirements',
+            formAttributesFR = ['municipality', 'hiddenRequirements']
+
+        let response = await this.props.falcor.get(['forms', formTypeFR, 'byPlanId', this.props.activePlan, 'length'])
+        let length = get(response, ['json', 'forms', formTypeFR, 'byPlanId', this.props.activePlan, 'length'], 0);
+        if (length > 0) {
+            await this.props.falcor.get(['forms', formTypeFR, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                from: 0,
+                to: length - 1
+            }], ...formAttributesFR])
+        }
+
         let formType = 'filterJurisdictions',
             formAttributes = ['county', 'municipality']
 
@@ -116,6 +154,11 @@ class PlanReview extends React.Component {
         return []
     }
     processTable(allowedGeos) {
+        let reqToFilter =
+            allowedGeos.reduce((a,c) => {
+                a[c] = this.getReqsToFilter(c);
+                return a;
+            }, {})
         return (
             <DIV>
                 <table className='table table-bordered table-sm table-striped'>
@@ -142,7 +185,10 @@ class PlanReview extends React.Component {
                                                     //     get(megaConfig.filter(mc =>  mc.requirement === r),
                                                     //     `[0].type`, null) === 'content')
                                                     .map(r => {
-
+                                                        // if a req is hidden for this geo, show it as ready to review
+                                                        if (reqToFilter && reqToFilter[geo].includes(r)){
+                                                            return "Ready for review"
+                                                        }
                                                         if(
                                                             get(megaConfig.filter(mc =>  mc.requirement === r),
                                                                 `[0].type`, null) === 'content'
@@ -216,6 +262,7 @@ const mapStateToProps = (state, ownProps) => {
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
         activePlan: state.user.activePlan,
+        formData: get(state.graph, [`forms`, 'filterRequirements'], null)
     };
 };
 
