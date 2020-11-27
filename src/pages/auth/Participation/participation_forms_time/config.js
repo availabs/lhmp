@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','title', 'sub_type'],
+        list_attributes : ['id','title', 'narrative'],
         sections:[],
         attributes:{
             owner_type:{
@@ -65,7 +65,8 @@ module.exports = [
                 edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
+                // expandable: 'true',
             }
         }
     }
