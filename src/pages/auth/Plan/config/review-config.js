@@ -1,5 +1,5 @@
 export const colors = {
-    'municipalFalse' : 'gray',
+    'Does not Apply' : 'gray',
     'Started' : '#f7f714',
     'Ready For Review': '#1f90f2',
     'Requirement not met': '#f2351f',

@@ -212,7 +212,7 @@ class PlanReview extends React.Component {
                                             return <td
                                                 style={{
                                                     backgroundColor:
-                                                        geo.length > 5 && element.municipal === 'false' ? colors.municipalFalse :
+                                                        geo.length > 5 && element.municipal === 'false' ? colors["Does not Apply"] :
                                                         allStatus.includes('Started') ? colors.Started :
                                                             allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready For Review"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
@@ -247,6 +247,22 @@ class PlanReview extends React.Component {
                     <ElementBox>
                         <h6>Jurisdictional Review Table. <small className='text-muted'>Click on the box to review the
                             requirement.</small></h6>
+                        <h6>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    {Object.keys(colors).map(status =>
+                                        <React.Fragment>
+                                            <td
+                                                style={{backgroundColor: colors[status], width: '15px', height: '15px', paddingLeft: '10px'}}></td>
+                                            <td style={{paddingLeft: '5px', paddingRight: '10px'}}>
+                                                <small className='text-muted'>{status}</small>
+                                            </td>
+                                        </React.Fragment>)}
+                                </tr>
+                                </tbody>
+                            </table>
+                        </h6>
                         {this.processTable(allowedGeos)}
                     </ElementBox>
                 </Element>
