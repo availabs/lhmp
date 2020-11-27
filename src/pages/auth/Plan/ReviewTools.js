@@ -254,7 +254,9 @@ class PlanReview extends React.Component {
                                     {Object.keys(colors).map(status =>
                                         <React.Fragment>
                                             <td
-                                                style={{backgroundColor: colors[status], width: '15px', height: '15px', paddingLeft: '10px'}}></td>
+                                                style={{width: '15px', height: '15px', paddingLeft: '10px'}}>
+                                                <div style={{backgroundColor: colors[status], width: '15px', height: '15px', paddingLeft: '10px'}}> </div>
+                                            </td>
                                             <td style={{paddingLeft: '5px', paddingRight: '10px'}}>
                                                 <small className='text-muted'>{status}</small>
                                             </td>
