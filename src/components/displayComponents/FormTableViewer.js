@@ -58,7 +58,6 @@ class FormTableViewer extends React.Component{
     }
     render(){
         // process data from
-        console.log('FormTableViewer', this.props.config)
         let tableData = Object.values(this.props.tableList)
             .filter(d => {
                     return this.props.activeGeoFilter === 'true' ?

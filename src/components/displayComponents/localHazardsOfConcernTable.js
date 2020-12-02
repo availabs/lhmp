@@ -42,7 +42,6 @@ class FormTableViewer extends React.Component{
 }
 
 const mapStateToProps = (state,ownProps) => {
-    console.log('??', ownProps)
     return {
         activePlan: state.user.activePlan,
         activeGeoid: ownProps.geoId ? ownProps.geoId : state.user.activeGeoid,

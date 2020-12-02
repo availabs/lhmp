@@ -112,7 +112,11 @@ class SideMenu extends React.Component {
 
     render(){
         let counter = 1;
-        const rows = this.processData();
+        const rows = this.processData().sort((a,b) => {
+            if(a.label < b.label) { return -1; }
+            if(a.label > b.label) { return 1; }
+            return 0;
+        });
         const allHazards = {
             main: rows.reduce((a,c) => {
                 //console.log('hi', c, c.value.main, a, get(c, `value.main`,'$0').substr(1).replace(/,/g, ''))
@@ -152,6 +156,7 @@ class SideMenu extends React.Component {
                 </li>
                 {
                     rows
+
                         .map((hazard,i) => {
                         return (
 
