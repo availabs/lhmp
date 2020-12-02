@@ -111,7 +111,7 @@ class Menu extends Component {
             ? <AvatarUserMobile user={this.props.user}/>
             : <LoginMenuMobile/>;
 
-        return (
+        return this.props.menuSettings.noMenu === true ? null : (
             <React.Fragment>
                 <div className={displayOptions} style={dynamicStyle}>
                     {/*web menu*/}

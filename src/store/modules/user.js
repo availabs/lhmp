@@ -7,7 +7,8 @@ import withRouter from "react-router/es/withRouter";
 // ------------------------------------
 // Constants
 // ------------------------------------
-const PROJECT_HOST = 'mitigateny.org'
+const PROJECT_HOST = window.location.hostname.split('.').length > 1?
+    window.location.hostname.split('.')[1].toLowerCase() + ':3000' :'mitigateny.org'
 let SUBDOMAIN = 'www'
 const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
@@ -326,14 +327,18 @@ export const auth = () => dispatch => {
 };
 
 export const signup = ({email, group}) => dispatch => {
-  if (!group) group = DEFAULT_GROUP;
+    SUBDOMAIN =  window.location.hostname.split('.').length > 1?
+        window.location.hostname.split('.')[0].toLowerCase() : 'www';
+
+    if (!group) group = DEFAULT_GROUP;
+
     return fetch(`${AUTH_HOST}/signup/request`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, project: AUTH_PROJECT_NAME , addToGroup: group, host: 'http://' + SUBDOMAIN + '.' + PROJECT_HOST, url: '/password/set'})
+    body: JSON.stringify({ email, addToGroup: group, project: AUTH_PROJECT_NAME , host: 'http://' + SUBDOMAIN + '.' + PROJECT_HOST, url: '/password/set'})
   })
     .then(res => res.json())
     .then(res => {
@@ -369,7 +374,7 @@ export const resetPassword = ({ email }) => dispatch => {
 };
 
 export const setPassword = ({ token, password }) => dispatch => {
-  return fetch(`${AUTH_HOST}/password/set`, {
+  return fetch(`${AUTH_HOST}/signup/request/verify`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
