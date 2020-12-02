@@ -131,8 +131,8 @@ const config =  {
 		},
 
 		{
-			title: '',
-			requirement: 'new-roles',
+			title: 'Mitigation Reps',
+			requirement: 'new-roles-2',
 			hideNav: true,
 			type: 'formTable',
 			fontSize: '0.70em',
@@ -140,6 +140,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'roles',
+				filters:[{column:'is_hazard_mitigation_representative',value:'yes'}],
         		columns : [
 					{
 						Header: 'Jurisdiction',
@@ -281,6 +282,8 @@ const config =  {
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
 		},
+		
+		
 		{
 			title: '',
 			requirement: 'Req-A-4C',
@@ -355,6 +358,66 @@ const config =  {
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
+		},
+		{
+			title: 'Jurisdictional Participants',
+			requirement: 'new-roles',
+			hideNav: true,
+			type: 'formTable',
+			fontSize: '0.70em',
+			height: '600px',
+			align: 'full',
+			config: {
+				type:'roles',
+        		columns : [
+					{
+						Header: 'Jurisdiction',
+						accessor: 'contact_municipality',
+						sort: true,
+						filter: 'default'
+					},
+        			{
+        				Header: 'Name',
+        				accessor: 'contact_name',
+						sort: true,
+						filter: 'default'
+        			},
+        			{
+        				Header: 'Agency',
+        				accessor: 'contact_agency',
+						sort: true,
+						filter: 'default'
+        			},
+					{
+						Header: 'Department',
+						accessor: 'contact_department',
+						sort: true,
+						filter: 'default'
+					},
+        			{
+        				Header: 'Role',
+        				accessor: 'contact_title_role',
+						sort: true,
+						filter: 'multi'
+        			},
+        			{
+        				Header: 'Participation',
+        				accessor: 'contact_planning_team',
+						sort: true,
+						filter: 'multi'
+        			}
+        		]
+        
+			},
+			//align: 'full',
+			prompt: 'Identify who represented each jurisdiction.',
+			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
+			activeGeoFilter: 'true',
+			defaultSortCol: 'contact_agency',
+			// defaultSortOrder: 'desc',
+			colOrder: ['Jurisdiction', 'Name', 'Agency', 'Department', 'Role', 'Participation'],
+			minHeight: '80vh',
+			icon: 'os-icon-user'
 		},
 		// {
 		// 	title: 'Jurisdictional Participation',
