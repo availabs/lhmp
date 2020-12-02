@@ -9,7 +9,7 @@ let config = {
     elements: [
         {
             element: 'A1',
-            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, new-roles, Req-A-1G, Req-A-1H`,
+            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, Req-A-1E, Req-A-1F, Req-A-1G, Req-A-1H`,
             objective: 'Does the Plan document the planning process, including how it was prepared and who was involved in ' +
                 'the process for each jurisdiction? 44 CFR 201.6(c)(1)',
             intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve ' +

@@ -132,7 +132,7 @@ const config =  {
 
 		{
 			title: 'Mitigation Reps',
-			requirement: 'new-roles-2',
+			requirement: 'Req-A-1E',
 			hideNav: true,
 			type: 'formTable',
 			fontSize: '0.70em',
@@ -361,7 +361,7 @@ const config =  {
 		},
 		{
 			title: 'Jurisdictional Participants',
-			requirement: 'new-roles',
+			requirement: 'Req-A-1F',
 			hideNav: true,
 			type: 'formTable',
 			fontSize: '0.70em',
