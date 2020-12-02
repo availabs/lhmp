@@ -241,7 +241,6 @@ class CapabilityStrategy extends React.Component {
 
     }
 
-
     render() {
 
         return (

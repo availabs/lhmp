@@ -105,8 +105,8 @@ let config = {
                 'b. The opportunity for participation must occur during the plan\n' +
                 'development, which is prior to the comment period on the final\n' +
                 'plan and prior to the plan approval / adoption.',
-            municipal: 'false',
-            county: 'true'
+            municipal: false,
+            county: true
         },
         {
             element: 'A4',

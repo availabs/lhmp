@@ -74,6 +74,7 @@ class Hazards extends React.Component {
             return <React.Fragment/>
         }
         let HazardName = get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')
+        let HazardTotal = get(this.props.graph, ['severeWeather', this.props.geoid, this.props.hazard, 'allTime', 'total_damage'], 0)
 
         let contentCharacteristics =
             get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-${this.props.planId}-${this.props.geoid}].body.value`, null)
@@ -115,62 +116,64 @@ class Hazards extends React.Component {
                 contentLocalImpacts
         return (
             <div>
-                <div className='row'>
-                    <div className='col-md-6'>
-                        <h6>{HazardName} Loss by Year</h6>
-                        <HazardBarChart
-                            hazard={this.props.hazard}
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            format={"~s"}
-                            height={300}
-                            maxValueButtons={true}
-                        />
+                {this.props.hazard === '' || HazardTotal > 0 ?
+                <div>
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <h6>{HazardName} Loss by Year</h6>
+                            <HazardBarChart
+                                hazard={this.props.hazard}
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                format={"~s"}
+                                height={300}
+                                maxValueButtons={true}
+                            />
+                        </div>
+                        <div className='col-md-6'>
+                            <h6 style={{paddingBottom:29}}>{HazardName} Events by Year</h6>
+                            <HazardBarChart
+                                lossType={'num_events'}
+                                hazard={this.props.hazard}
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                height={300}
+                            />
+                        </div>
                     </div>
-                    <div className='col-md-6'>
-                        <h6>{HazardName} Events by Year</h6>
-                        <HazardBarChart
-                            lossType={'num_events'}
-                            hazard={this.props.hazard}
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            height={300}
-                        />
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <h6>{HazardName} Loss by Month</h6>
+                            <NumberOfHazardsMonthStackedBarGraph
+                                showYlabel={false}
+                                showXlabel={false}
+                                lossType={'property_damage'}
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                dataType='severeWeather'
+                                hazards={this.props.hazards}
+                                format={"~s"}
+                                hazard={this.props.hazard}
+                                height={300}
+                                maxValueButtons={true}
+                            />
+                        </div>
+                        <div className='col-md-6'>
+                            <h6 style={{paddingBottom:29}}>{HazardName} Events by Month</h6>
+                            <NumberOfHazardsMonthStackedBarGraph
+                                showYlabel={false}
+                                showXlabel={false}
+                                lossType={'num_events'}
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                dataType='severeWeather'
+                                hazards={this.props.hazards}
+                                hazard={this.props.hazard}
+                                height={300}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className='row'>
-                    <div className='col-md-6'>
-                        <h6>{HazardName} Loss by Month</h6>
-                        <NumberOfHazardsMonthStackedBarGraph
-                            showYlabel={false}
-                            showXlabel={false}
-                            lossType={'property_damage'}
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            format={"~s"}
-                            hazard={this.props.hazard}
-                            height={300}
-                            maxValueButtons={true}
-                        />
-                    </div>
-                    <div className='col-md-6'>
-                        <h6>{HazardName} Events by Month</h6>
-                        <NumberOfHazardsMonthStackedBarGraph
-                            showYlabel={false}
-                            showXlabel={false}
-                            lossType={'num_events'}
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                            height={300}
-                        />
-                    </div>
-                </div>
-
+                </div> : ''}
                 <div className='row'>
                     <div>
                         <h4>{get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')} Characteristics</h4>
