@@ -45,7 +45,7 @@ let config = {
         },
         {
             element: 'A2',
-            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-1C`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-2B, new-roles`,
             objective: 'Does the Plan document an opportunity for neighboring communities, local and regional agencies ' +
                 'involved in hazard mitigation activities, agencies that have the authority to regulate development as ' +
                 'well as other interests to be involved in the planning process? 44 CFR 201.6(b)(2)',

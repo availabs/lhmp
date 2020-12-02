@@ -130,6 +130,17 @@ module.exports = [
                 section: '1',
                 list_attribute: 'true'
             },
+            previous_plan_action: {
+                label: 'Is this action from the previous Hazard Mitigation Plan?',
+                sub_type: 'project',
+                prompt: 'All actions from the previous plan must be reviewed during the Hazard Mitigation Plan update. You can provide a status update in the last tab of this form.',
+                edit_type: 'radio',
+                edit_type_values: ['yes', 'no'],
+                display_type: 'text',
+                meta: 'false',
+                inline: 'true',
+                section: '1'
+            },
             action_category: {
                 label: 'Action Category',
                 sub_type: 'project',
