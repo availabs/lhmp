@@ -7,7 +7,7 @@ module.exports = [
             {'contact_title_role': {filter:'multi'}},
             'contact_department',
             {'contact_agency': {filter:'true'}},
-            'contact_county',
+            'contact_planning_team',
             {'contact_municipality': {filter:'true'}},
         ],
         // combine_list_attributes:{attributes:['contact_county','contact_municipality'],result:'Jurisidiction'},
@@ -94,6 +94,28 @@ module.exports = [
                 validation: "true",
                 meta: 'true',
                 meta_filter:{filter_key:'roles',value:'category'},
+                section: '',
+                list_attribute: 'true'
+            },
+            contact_planning_team:{
+                label:'HMP Participation',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                // field_required:'required', // optional if you want the field to be required
+                // validation: "true",
+                meta: 'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Core Planning Group',
+                        'Steering Committee', 
+                        'Stakeholder', 
+                        'Jurisdictional Representative',
+                        'Public/Citizen',
+                    ],
+                },
                 section: '',
                 list_attribute: 'true'
             },

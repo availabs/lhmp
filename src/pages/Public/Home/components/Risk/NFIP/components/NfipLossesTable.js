@@ -13,17 +13,55 @@ import functions from "../../../../../../auth/Plan/functions";
 
 class NfipTable extends React.Component {
 
-    fetchFalcorDeps({ geoid, geoLevel }=this.props) {
+    async fetchFalcorDeps({ geoid, geoLevel }=this.props) {
         if(!this.props.allGeo || !Object.keys(this.props.allGeo).length) return Promise.resolve();
 
+        let formType = 'filterJurisdictions',
+            formAttributes = ['county', 'municipality']
+        let response = await this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'length'])
+        let length = get(response, ['json', 'forms', formType, 'byPlanId', this.props.activePlan, 'length'], 0);
+
+        let queries = [["geo", Object.keys(this.props.allGeo), [geoLevel, 'name']]]
+        if (length > 0) {
+            queries.push(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                from: 0,
+                to: length - 1
+            }], ...formAttributes])
+        }
+
         return this.props.falcor.get(
-            ["geo", Object.keys(this.props.allGeo), [geoLevel, 'name']],
+            ...queries
         )
             .then(response => response.json.geo[geoid][geoLevel])
             .then(geoids => {
-                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', Object.keys(this.props.allGeo), 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss']])
-                    .then(() => this.props.falcor.get(['geo', geoids, 'name']))
+                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', Object.keys(this.props.allGeo)/*.filter(g => g.length === 7)*/, 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss']])
             })
+    }
+
+    getGeoToFilter(){
+        let formType = 'filterJurisdictions'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {})
+        if(id){
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                let geoToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpGeos = get(data[g], `value.attributes.municipality`, null)
+                            tmpGeos = tmpGeos && typeof tmpGeos === "string" && tmpGeos.includes('[') ?
+                                tmpGeos.slice(1,-1).split(',') : tmpGeos
+                            if(tmpGeos) a.push(...tmpGeos)
+                            return a;
+                        }, [])
+                return geoToFilter;
+            }
+        }
+
+        return []
     }
 
     processData() {
@@ -31,20 +69,26 @@ class NfipTable extends React.Component {
             label = geoLevel === 'counties' ? 'county' : 'Jurisdiction',
             geoids = Object.keys(this.props.allGeo),
             data = [];
+        let geoToFilter = this.getGeoToFilter(this.props.formData);
 
-        geoids.forEach(geoid => {
+        geoids
+            .filter(geoid => !geoToFilter.includes(geoid))
+            .forEach(geoid => {
             const graph = this.props.nfip.losses.byGeoid[geoid].allTime,
                 name = this.props.allGeo[geoid];
-            data.push({
-                [label]: functions.formatName(name, geoid),
-                "total claims": graph.total_losses,
-                //"closed losses": graph.closed_losses,
-                //"open losses": graph.open_losses,
-                "paid claims": (+graph.total_losses - +graph.cwop_losses),
-                "total payments": graph.total_payments,
-                'repetitive loss': +graph.repetitive_loss,
-                'severe repetitive loss': +graph.severe_repetitive_loss
-            })
+            console.log('g?', this.props.nfip.losses.byGeoid)
+            if(graph.total_losses > 0 || true){
+                data.push({
+                    [label]: functions.formatName(name, geoid),
+                    "total claims": graph.total_losses,
+                    //"closed losses": graph.closed_losses,
+                    //"open losses": graph.open_losses,
+                    "paid claims": (+graph.total_losses - +graph.cwop_losses),
+                    "total payments": graph.total_payments,
+                    'repetitive loss': +graph.repetitive_loss,
+                    'severe repetitive loss': +graph.severe_repetitive_loss
+                })
+            }
         })
 
         return {
@@ -145,7 +189,11 @@ const mapStateToProps = state => {
     geoGraph: state.graph.geo,
     nfip: state.graph.nfip,
     geoid: state.user.activeGeoid || '36',
+        activePlan: state.user.activePlan,
+        activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
         allGeo: state.geo.allGeos,
+        formData: get(state.graph, [`forms`, 'filterJurisdictions'], null)
     }}
 
 const mapDispatchToProps = {

@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','title','start_date','sub_type'],
+        list_attributes : ['title','start_date','narrative'],
         sections:[],
         attributes:{
             title:{
@@ -73,7 +73,8 @@ module.exports = [
                 edit_type:'number',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
+                
             },
             narrative:{
                 label:'Narrative',

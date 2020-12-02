@@ -1,5 +1,5 @@
 export const colors = {
-    'municipalFalse' : 'gray',
+    'Does not Apply' : 'gray',
     'Started' : '#f7f714',
     'Ready For Review': '#1f90f2',
     'Requirement not met': '#f2351f',
@@ -9,7 +9,7 @@ let config = {
     elements: [
         {
             element: 'A1',
-            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, Req-A-1C, Req-A-1G, Req-A-1H`,
+            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, new-roles, Req-A-1G, Req-A-1H`,
             objective: 'Does the Plan document the planning process, including how it was prepared and who was involved in ' +
                 'the process for each jurisdiction? 44 CFR 201.6(c)(1)',
             intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve ' +
