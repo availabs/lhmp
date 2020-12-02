@@ -125,6 +125,7 @@ const config = {
             align: 'full',
             config: {
                 type: 'capabilities',
+                description: 'This is the description of the capabilities table.', 
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {

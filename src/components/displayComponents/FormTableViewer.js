@@ -4,6 +4,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import { Link } from "react-router-dom"
 
+import {SectionBox} from 'pages/Public/theme/components'
 import Table from 'components/light-admin/tables/tableSelector'
 import {match} from "fuzzy";
 import functions from "../../pages/auth/Plan/functions";
@@ -57,6 +58,7 @@ class FormTableViewer extends React.Component{
     }
     render(){
         // process data from
+        console.log('FormTableViewer', this.props.config)
         let tableData = Object.values(this.props.tableList)
             .filter(d => {
                     return this.props.activeGeoFilter === 'true' ?
@@ -120,6 +122,9 @@ class FormTableViewer extends React.Component{
         }
         return (
             <div style={{fontSize: this.props.fontSize ? this.props.fontSize : 'inherit'}}>
+                {get(this.props.config, 'description', null) ? 
+                    <SectionBox>{this.props.config.description}</SectionBox> : ''
+                }
                 <Table 
                     data={tableData} 
                     columns={
@@ -137,6 +142,7 @@ class FormTableViewer extends React.Component{
                     height={this.props.minHeight}
                     flex={Boolean(this.props.flex) ? this.props.flex === 'true' : true}
                 />
+                
             </div>
         )
     }
