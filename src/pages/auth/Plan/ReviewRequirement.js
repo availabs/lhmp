@@ -52,8 +52,49 @@ class ReviewRequirement extends React.Component {
         this.deleteItem = this.deleteItem.bind(this)
     }
 
-    fetchFalcorDeps() {
+    getReqsToFilter(){
+        let formType = 'filterRequirements'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {});
+        let reqToFilter;
+
+        if(id){
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                reqToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpReqs = get(data[g], `value.attributes`, {})
+                            Object.keys(tmpReqs)
+                                .filter(tr => tr === this.props.match.params.geo && tmpReqs[tr])
+                                .forEach(tr => a.push(...tmpReqs[tr].slice(2,-2).split(',').filter(r => r!== "")))
+                            return a
+                        }, [])
+            }
+        }
+        return reqToFilter
+    }
+    async fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
+
+        // get reqs to filter by jurisdictions
+        let formTypeFR = 'filterRequirements',
+            formAttributesFR = ['municipality', 'hiddenRequirements']
+
+        let response = await this.props.falcor.get(['forms', formTypeFR, 'byPlanId', this.props.activePlan, 'length'])
+        let length = get(response, ['json', 'forms', formTypeFR, 'byPlanId', this.props.activePlan, 'length'], 0);
+        if (length > 0) {
+            await this.props.falcor.get(['forms', formTypeFR, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                from: 0,
+                to: length - 1
+            }], ...formAttributesFR])
+        }
+
+
+
         let formType = commentsConfig[0].type,
             formAttributes = Object.keys(get(commentsConfig, `[0].attributes`, {})),
             ids = [];
@@ -151,7 +192,7 @@ class ReviewRequirement extends React.Component {
         let element = config.elements.filter(element => element.element === this.props.match.params.req).pop(),
             requirements = element ? element.requirements_from_software : null;
         if (!requirements) return null;
-
+        let reqToFilter = this.getReqsToFilter();
         return (
             <div className='container'>
                 <Element>
@@ -183,7 +224,9 @@ class ReviewRequirement extends React.Component {
                             {element.element_requirements}
                         </div>
                     </ElementBox>
-                    {requirements.split(',').map(r => {
+                    {requirements.split(',')
+                        .filter(r => !reqToFilter.includes(r))
+                        .map(r => {
                         r = r.trim();
                         let fullElement = megaConfig.filter(mc => {
                             return mc.requirement === r
@@ -241,7 +284,8 @@ const mapStateToProps = (state, ownProps) => {
         activeCousubid: state.user.activeCousubid,
         activePlan: state.user.activePlan,
         user: state.user,
-        allGeo: state.geo.allGeos
+        allGeo: state.geo.allGeos,
+        formData: get(state.graph, [`forms`, 'filterRequirements'], null)
     };
 };
 
