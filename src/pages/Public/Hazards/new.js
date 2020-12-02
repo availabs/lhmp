@@ -18,6 +18,7 @@ import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData"
 import ElementFactory, {RenderConfig}  from 'pages/Public/theme/ElementFactory'
 
 import SideMenu from 'pages/Public/theme/SideMenu'
+import HazardSideMenu from './new_components/HazardSideMenu'
 import Hazard from './new_components/Hazard'
 import HazardHeroStats from './new_components/HazardHeroStats'
 
@@ -136,7 +137,7 @@ class Hazards extends React.Component {
         }
     }
 
-    stickyHazards(){
+  /*  stickyHazards(){
         return this.state.hazards && this.state.hazards.length > 0 ?
             (
                 <StickySelect>
@@ -161,7 +162,7 @@ class Hazards extends React.Component {
                 </StickySelect>
             ) : null
     }
-
+*/
     changeHazard(e, a) {
         console.log('haz changed', e, a)
         this.setState({hazard:e.target.value, firstLoad: false})
@@ -172,12 +173,15 @@ class Hazards extends React.Component {
         }
         return (
             <PageContainer>
-                {/*
-                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
-                    {this.stickyHazards()}
-                    <SideMenu config={hazardConfig}/>
+                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '260px', height: '100%'}}>
+                   
+                    <HazardSideMenu 
+                        config={hazardConfig}
+                        geoid={this.props.activeGeoid}
+                        changeHazard={this.changeHazard}
+                        {...this.state}
+                    />
                 </div>
-                */}
                 <div >
                     <ContentContainer>
                         <section>
@@ -191,14 +195,15 @@ class Hazards extends React.Component {
                                 geoid={this.props.activeGeoid}
                                 changeHazard={this.changeHazard}
                             />
-                            <Hazard 
+                           <Hazard 
                                 geoid={this.props.geoid}
                                 activeGeoid={this.props.activeGeoid}
                                 hazard={this.state.hazard}
-                                geoLevel={/*this.state.geoLevel*/ 'counties'}
+                                geoLevel={'counties'} 
                                 hazards={this.state.hazards}
                                 riskIndexMeta={this.props.riskIndexMeta}
                             />
+                        {/*this.state.geoLevel*/ }
                         </section>
                     </ContentContainer>
                 </div>

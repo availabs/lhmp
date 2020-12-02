@@ -103,6 +103,21 @@ const config =  {
             ///*2-non-delete*/ hideIfNull: true 
 		},
 		{
+			title: 'Regional Representation',
+			requirement: 'Req-A-2B',
+			type: 'content',
+			prompt: 'Provide an overview of participation of county representatives, jurisdictions, state and federal partners, the public, neighboring communities, regional stakeholders and additional stakeholders throughout the planning process. This summary will be supported by the tables that follow, which will display all participants and all meetings.',
+			intent: 'To demonstrate a deliberative planning process that involves stakeholders with the data and expertise needed to develop the plan, with responsibility or authority to implement hazard mitigation activities, and who will be most affected by the plan’s outcomes.' +
+					'To ensure citizens understand what the community is doing on their behalf, and to provide a chance for input on community vulnerabilities and mitigation activities that will inform the plan’s content.'+
+					'Public involvement is also an opportunity to educate the public about hazards and risks in the community, types of activities to mitigate those risks, and how these impact them.',
+			callout: 'Document opportunities for neighboring communities, local and regional agencies involved in hazard',
+			icon: 'os-icon-user-plus',
+			// hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true 
+		},
+		{
 			title: 'Jurisdictional Representation',
 			requirement: 'Req-A-1G',
 			type: 'content',

@@ -45,7 +45,7 @@ let config = {
         },
         {
             element: 'A2',
-            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-1C`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-2B, new-roles`,
             objective: 'Does the Plan document an opportunity for neighboring communities, local and regional agencies ' +
                 'involved in hazard mitigation activities, agencies that have the authority to regulate development as ' +
                 'well as other interests to be involved in the planning process? 44 CFR 201.6(b)(2)',
@@ -105,8 +105,8 @@ let config = {
                 'b. The opportunity for participation must occur during the plan\n' +
                 'development, which is prior to the comment period on the final\n' +
                 'plan and prior to the plan approval / adoption.',
-            municipal: 'false',
-            county: 'true'
+            municipal: false,
+            county: true
         },
         {
             element: 'A4',

@@ -125,6 +125,7 @@ const config = {
             align: 'full',
             config: {
                 type: 'capabilities',
+                description: 'Capabilities are the tools and resources used by a community to minimize hazard impacts. Capabilities are categorized as: Planning and Regulatory, Administrative and Technical, Education and Outreach, and Financial assets. The information displayed in the table below includes the selected jurisdiction’s hazard mitigation capabilities. When the county is selected, the table includes capabilities for all jurisdictions in the plan, otherwise the table filters to the selected jurisdiction.', 
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {
