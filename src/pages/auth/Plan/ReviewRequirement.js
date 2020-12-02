@@ -150,7 +150,8 @@ class ReviewRequirement extends React.Component {
                 {this.state.form_ids.map((id,idI) =>
                     <React.Fragment>
                         {
-                            get(this.state.form_ids[idI], `attributes.user`, null) === this.props.user.id ?
+                            get(this.state.form_ids[idI], `attributes.user`, null) === this.props.user.id ||
+                            get(this.state.form_ids[idI], `attributes.user`, null) === this.props.user.email ?
                                 <div>
                                     <label>You:</label>
                                     <span style={{float: 'right'}}>
@@ -159,7 +160,10 @@ class ReviewRequirement extends React.Component {
                                         <button id= {id.id} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                     </span>
-                                </div> : null
+                                </div> :
+                                <div>
+                                    <label>{get(this.state.form_ids[idI], `attributes.user`, null)}:</label>
+                                </div>
                         }
                         {
                             this.state.editComment === id.id ?
@@ -167,7 +171,7 @@ class ReviewRequirement extends React.Component {
                                     json={commentsConfig}
                                     id={[id.id]}
                                     data = {{
-                                        user: this.props.user.id,
+                                        user: this.props.user.email,
                                         element: this.props.match.params.req,
                                         geoid: this.props.match.params.geo,
                                         created_at: moment().calendar(null,format_with_time),
@@ -263,7 +267,7 @@ class ReviewRequirement extends React.Component {
                             json={commentsConfig}
                             id={[]}
                             data = {{
-                                user: this.props.user.id,
+                                user: this.props.user.email,
                                 element: this.props.match.params.req,
                                 geoid: this.props.match.params.geo,
                                 created_at: moment().calendar(null,format_with_time),
