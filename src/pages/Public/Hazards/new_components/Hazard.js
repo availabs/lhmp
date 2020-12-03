@@ -115,7 +115,7 @@ class Hazards extends React.Component {
                 get(this.props.graph, `content.byId[req-B1-${this.props.hazard}-local-impact-${this.props.planId}-${this.props.activeGeoid}].body.value`, '<span/>') :
                 contentLocalImpacts
         return (
-            <div>
+            <div style={{minHeight: '100vh'}}>
                 {this.props.hazard === '' || HazardTotal > 0 ?
                 <div>
                     <div className='row'>
@@ -193,133 +193,136 @@ class Hazards extends React.Component {
                         />
                     </div>
                 </div>
-                <LocalHazardsOfConcernTable
-                    config={
-                        {
-                            title: `${functions.formatName(get(this.props.geoGraph, [this.props.activeCousubid, 'name']), this.props.activeCousubid)} 
-                            - Local Hazards of Concern Table - ${get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, 'All Hazards')}`,
-                            //requirement: 'Req-C-1A',
-                            type: 'formTable',
-                            //fontSize: '0.70em',
-                            height: '600px',
-                            align: 'full',
-                            config: {
-                                type: 'hazardid',
-                                filters:[{column:'hazard_concern',value:
-                                        get(this.props.riskIndexMeta,
-                                            [this.props.hazard, 'name'],
-                                            null) ?
-                                            [this.props.hazard,
-                                                get(this.props.riskIndexMeta,
-                                                    [this.props.hazard, 'name'],
-                                                    'n/a')] : this.props.hazard
-                                }],
-                                columns : [
-                                    {
-                                        Header: 'COMMUNITY_NAME', // make it lower case
-                                        accessor: 'community_name',
-                                        sort: true,
-                                        filter: 'default'
-                                    },
-                                    {
-                                        Header: 'HAZARD_CONCERN',
-                                        accessor: 'hazard_concern',
-                                        sort: true,
-                                        filter: 'default'
-                                    },
-                                    {
-                                        Header: 'PREVIOUS_OCCURRENCE',
-                                        accessor: 'previous_occurrence',
-                                        sort: true,
-                                        filter: 'multi'
-                                    },
-                                    {
-                                        Header: 'FUTURE_OCCURRENCE',
-                                        accessor: 'future_occurrence',
-                                        sort: true,
-                                        filter: 'multi'
-                                    },
+                {this.props.hazard === '' || HazardTotal > 0 ?
+                <div>
+                    <LocalHazardsOfConcernTable
+                        config={
+                            {
+                                title: `${functions.formatName(get(this.props.geoGraph, [this.props.activeCousubid, 'name']), this.props.activeCousubid)} 
+                                - Local Hazards of Concern Table - ${get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, 'All Hazards')}`,
+                                //requirement: 'Req-C-1A',
+                                type: 'formTable',
+                                //fontSize: '0.70em',
+                                height: '600px',
+                                align: 'full',
+                                config: {
+                                    type: 'hazardid',
+                                    filters:[{column:'hazard_concern',value:
+                                            get(this.props.riskIndexMeta,
+                                                [this.props.hazard, 'name'],
+                                                null) ?
+                                                [this.props.hazard,
+                                                    get(this.props.riskIndexMeta,
+                                                        [this.props.hazard, 'name'],
+                                                        'n/a')] : this.props.hazard
+                                    }],
+                                    columns : [
+                                        {
+                                            Header: 'COMMUNITY_NAME', // make it lower case
+                                            accessor: 'community_name',
+                                            sort: true,
+                                            filter: 'default'
+                                        },
+                                        {
+                                            Header: 'HAZARD_CONCERN',
+                                            accessor: 'hazard_concern',
+                                            sort: true,
+                                            filter: 'default'
+                                        },
+                                        {
+                                            Header: 'PREVIOUS_OCCURRENCE',
+                                            accessor: 'previous_occurrence',
+                                            sort: true,
+                                            filter: 'multi'
+                                        },
+                                        {
+                                            Header: 'FUTURE_OCCURRENCE',
+                                            accessor: 'future_occurrence',
+                                            sort: true,
+                                            filter: 'multi'
+                                        },
 
-                                    {
-                                        Header: 'LOSS_LIFE_PROPERTY',
-                                        accessor: 'loss_life_property',
-                                        sort: true,
-                                        filter: 'default'
-                                    },
-                                    {
-                                        Header: 'EXTENT_DESCRIPTION',
-                                        accessor: 'extent_description',
-                                        sort: true,
-                                        filter: 'default'
-                                    },
-                                    {
-                                        Header: 'LOCATION_DESCRIPTION',
-                                        accessor: 'location_description',
-                                        width: 50
-                                    },
-                                ]
-                            },
-                            prompt: '',
-                            intent: '',
-                            activeGeoFilter: 'true',
-                            defaultSortCol: 'COMMUNITY_NAME',
-                            // defaultSortOrder: 'desc',
-                            colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
-                            minHeight: '80vh',
-                            icon: 'os-icon-tasks-checked',
-                            flex: 'false'
-                        }
-                    } />
+                                        {
+                                            Header: 'LOSS_LIFE_PROPERTY',
+                                            accessor: 'loss_life_property',
+                                            sort: true,
+                                            filter: 'default'
+                                        },
+                                        {
+                                            Header: 'EXTENT_DESCRIPTION',
+                                            accessor: 'extent_description',
+                                            sort: true,
+                                            filter: 'default'
+                                        },
+                                        {
+                                            Header: 'LOCATION_DESCRIPTION',
+                                            accessor: 'location_description',
+                                            width: 50
+                                        },
+                                    ]
+                                },
+                                prompt: '',
+                                intent: '',
+                                activeGeoFilter: 'true',
+                                defaultSortCol: 'COMMUNITY_NAME',
+                                // defaultSortOrder: 'desc',
+                                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
+                                minHeight: '80vh',
+                                icon: 'os-icon-tasks-checked',
+                                flex: 'false'
+                            }
+                        } /> :
 
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <h4>Events with Highest Reported Loss in Dollars</h4>
-                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
-                        <div>The table below lists individual events by loss in dollars.
-                            Click on a row to view the event description.
+                    <div className='row'>
+                        <div className='col-md-12'>
+                            <h4>Events with Highest Reported Loss in Dollars</h4>
+                            <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                            <div>The table below lists individual events by loss in dollars.
+                                Click on a row to view the event description.
+                            </div>
+                            <HazardEventsTable
+                                hazards={this.props.hazards}
+                                hazard={this.props.hazard}
+                                geoid={this.props.activeGeoid}
+                            />
+                            <i style={{color: '#afafaf'}}>Source: <a
+                                href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                                Storm Events Dataset</a></i>
                         </div>
-                        <HazardEventsTable
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                            geoid={this.props.activeGeoid}
-                        />
-                        <i style={{color: '#afafaf'}}>Source: <a
-                            href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
-                            Storm Events Dataset</a></i>
                     </div>
-                </div>
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <h4>Hazard Loss by Municipality</h4>
-                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
-                        <h6>{HazardName} Loss by Month</h6>
-                        <CousubTotalLossTable
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                        />
+                    <div className='row'>
+                        <div className='col-md-12'>
+                            <h4>Hazard Loss by Municipality</h4>
+                            <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                            <h6>{HazardName} Loss by Month</h6>
+                            <CousubTotalLossTable
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                dataType='severeWeather'
+                                hazards={this.props.hazards}
+                                hazard={this.props.hazard}
+                            />
+                        </div>
                     </div>
-                </div>
 
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <h4>Hazard Events</h4>
-                        <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
-                        <h6>{HazardName} Events</h6>
+                    <div className='row'>
+                        <div className='col-md-12'>
+                            <h4>Hazard Events</h4>
+                            <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                            <h6>{HazardName} Events</h6>
 
-                        <HazardEventsMapController
-                            geoid={this.props.activeGeoid}
-                            geoLevel={this.props.geoLevel}
-                            dataType='severeWeather'
-                            hazards={this.props.hazards}
-                            hazard={this.props.hazard}
-                            zoomPadding={150}
-                            year={1999}
-                        />
+                            <HazardEventsMapController
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                dataType='severeWeather'
+                                hazards={this.props.hazards}
+                                hazard={this.props.hazard}
+                                zoomPadding={150}
+                                year={1999}
+                            />
+                        </div>
                     </div>
-                </div>
+                </div> : ''}
             </div>
 
         )

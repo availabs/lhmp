@@ -21,6 +21,68 @@ const D3_CATEGORY20 = [
     "#9edae5",
     "#F1B0A7"
 ];
+
+const D3_CATEGORY20B = [
+    // blues
+    '#393b79',
+    '#5254a4',
+    '#6b6ecf',
+    '#9c9ede',
+    // green
+    '#637939',
+    '#8ca252',
+    '#b5cf6b',
+    '#cedb9c',
+    // yellows
+    '#8c6d31',
+    '#bd9e39',
+    '#e7ba52',
+    '#e7cb94',
+    // reds
+    '#843c39',
+    '#ad494a',
+    '#d6616b',
+    '#e7969c',
+    // purple
+    '#7b4173',
+    '#a55194',
+    '#ce6dbd',
+    '#de9ed6',
+
+]
+
+const D3_CATEGORY20B_RANGE = [
+    [
+     // '#393b79',
+     '#f5f5f8', 
+     '#ebebf2', 
+     '#cecede', 
+     '#b0b1c9', 
+     '#7476a1', 
+     '#393b79', 
+     '#33356d', 
+     '#2b2c5b', 
+     '#222349', 
+     '#1c1d3b'
+    ],
+    [
+    // '#5254a4'
+    '#f6f6fa', 
+    '#eeeef6', 
+    '#d4d4e8', 
+    '#babbdb', 
+    '#8687bf', 
+    '#5254a4', 
+    '#4a4c94', 
+    '#3e3f7b', 
+    '#313262', 
+    '#282950'
+    ]
+
+]
+
+
+
 const D3_CATEGORY20_RANGE = [
     [
         "#219bde",
