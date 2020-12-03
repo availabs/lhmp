@@ -97,7 +97,7 @@ class FormTableViewer extends React.Component{
                             a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC)) : a[c]
                     }
 
-                    a[c] = typeof a[c] !== "object" ? a[c] : a[c] ? a[c].join(',') : a[c]
+                    a[c] = typeof a[c] !== "object" ? a[c] : a[c] && a[c].length ? a[c].join(',') : a[c]
                     return a;
                 }, {})
         })

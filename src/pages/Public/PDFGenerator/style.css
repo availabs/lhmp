@@ -1,0 +1,16 @@
+@media print{
+    @page {
+        #margin: 20mm 30mm;
+        bleed: 6mm;
+        @bottom-left {
+            content: counter(page);
+        }
+    }
+    .pdfContent{
+        color: #000;
+    }
+    .pdfHeader{
+        break-before: page;
+        color: red;
+    }
+}

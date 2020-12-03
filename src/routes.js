@@ -1,6 +1,7 @@
 // -- Landing Routes
 import Landing from './pages/Landing'
 // -- Public Pages
+import PDF from './pages/Public/PDFGenerator/'
 import Public from './pages/Public/Home/'
 import About from './pages/Public/About/'
 import PlanningProcess from './pages/Public/PlanningProcess/'
@@ -94,6 +95,8 @@ import test from './pages/Test'
 const routes = [
     test,
     Landing,
+    ...PDF,
+
     Home,
     Login,
     Signup,
