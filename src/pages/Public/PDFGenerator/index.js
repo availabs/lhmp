@@ -187,7 +187,7 @@ export default [{
     exact: true,
     name: 'PDF',
     auth: false,
-    mainNav: true,
+    mainNav: false,
     menuSettings: {
         noMenu: true
     },
