@@ -400,7 +400,7 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type] && graph[form_type].meta){
                 graph[form_type].meta.value
                     .filter(f => f.form_type.split(`${form_type}-`).length > 1)
-                    .filter(f => this.props.config[0].attributes[f.form_type.split(`${form_type}-`)[1]].metaSource !== 'meta_file')
+                    .filter(f => get(this.props.config[0],[ 'attributes', f.form_type.split(`${form_type}-`)[1], 'metaSource'], null) !== 'meta_file')
                     .map(f => {
                         let field = f.form_type.split(`${form_type}-`)[1]
                         if (fieldSpecificMeta[field]){
@@ -420,7 +420,7 @@ class AvlFormsNewData extends React.Component{
                 .filter(f => f.form_type.split(`${form_type}-`).length > 1)
                 .forEach(f => {
                     f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
-                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .filter(field => get(this.props.config[0], ['attributes', field, 'metaSource'], null) === 'meta_file')
                         .forEach(field => {
                             if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
                                 fieldSpecificMeta[field].push(f)
