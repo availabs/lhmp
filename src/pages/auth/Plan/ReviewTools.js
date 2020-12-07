@@ -229,7 +229,7 @@ class PlanReview extends React.Component {
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
                                                                 'none',
                                                     opacity:
-                                                        allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
+                                                        // allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
                                                         allPullCountyStatus.total_pullCounty === allPullCountyStatus.pulledFromCounty &&
                                                             element.municipal !== 'false' ? 0.5 : 1
                                                 }}
