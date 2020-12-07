@@ -369,6 +369,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'roles',
+        		description: '',
         		columns : [
 					{
 						Header: 'Jurisdiction',
@@ -455,6 +456,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'participation',
+				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. The Narrative section can be searched for keywords using the search bar at the top of the table.',
         		columns : [
         			{
         				Header: 'Date',
