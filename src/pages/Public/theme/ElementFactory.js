@@ -34,6 +34,9 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                             <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link>
                         </span> : null}
                 </div>
+                <div>
+                    {element.description ? <i className='text-muted'>{element.description}</i> : null}
+                </div>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
                     user={user}
@@ -74,6 +77,9 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                             {showLocation ? <i className='text-muted'> Location: {element.pageName}</i> : null}
                             {showEdit ? <span style={{float: 'right'}}>
                             <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                        </div>
+                        <div>
+                            {element.description ? <i className='text-muted'>{element.description}</i> : null}
                         </div>
                         <GraphFactory
                             graph={{type: element.type + 'Viewer'}}

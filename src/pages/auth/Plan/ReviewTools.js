@@ -177,38 +177,48 @@ class PlanReview extends React.Component {
                                 <td style={{width: 'max-content'}}>{functions.formatName(get(this.props.geoGraph, `${geo}.name`, 'N/A'), geo)}</td>
                                 {
                                     config.elements.map(element => {
-                                            let allStatus =
-                                                element.requirements_from_software.split(',')
-                                                    .map(r => r.trim())
-                                                    .filter(r => r.length)
-                                                    // .filter(r =>
-                                                    //     get(megaConfig.filter(mc =>  mc.requirement === r),
-                                                    //     `[0].type`, null) === 'content')
-                                                    .map(r => {
-                                                        // if a req is hidden for this geo, show it as ready to review
-                                                        if (reqToFilter && reqToFilter[geo].includes(r)){
-                                                            return "Ready for review"
-                                                        }
-                                                        if(
-                                                            get(megaConfig.filter(mc =>  mc.requirement === r),
-                                                                `[0].type`, null) === 'content'
-                                                        ){
-                                                            // for content, check status
-                                                            let tmpPullCounty =
-                                                                get(megaConfig.filter(mc => {
-                                                                    return mc.requirement === r
-                                                                }), [0, 'pullCounty'], false);
-                                                            let tmpStatus = get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '')
+                                        let allPullCountyStatus = {
+                                            total_req: 0,
+                                            total_pullCounty: 0,
+                                            pulledFromCounty: 0
+                                        };
+                                        let allStatus =
+                                            element.requirements_from_software.split(',')
+                                                .map(r => r.trim())
+                                                .filter(r => r.length)
+                                                // .filter(r =>
+                                                //     get(megaConfig.filter(mc =>  mc.requirement === r),
+                                                //     `[0].type`, null) === 'content')
+                                                .map(r => {
+                                                    allPullCountyStatus.total_req += 1;
 
-                                                            return tmpPullCounty && !(tmpStatus && tmpStatus.length) ?
-                                                                get(this.state.contentData, `${r}-${this.props.activePlan}-${this.props.activeGeoid}.attributes.status`, '') :
-                                                                tmpStatus
-                                                        }else{
-                                                            // for non-content, return "Ready for review"
-                                                            return "Ready for review"
-                                                        }
-                                            }
-                                                    )
+                                                    // if a req is hidden for this geo, show it as ready to review
+                                                    if (reqToFilter && reqToFilter[geo].includes(r)){
+                                                        return "Ready for review"
+                                                    }
+                                                    if(
+                                                        get(megaConfig.filter(mc =>  mc.requirement === r),
+                                                            `[0].type`, null) === 'content'
+                                                    ){
+                                                        // for content, check status
+                                                        let tmpPullCounty =
+                                                            get(megaConfig.filter(mc => {
+                                                                return mc.requirement === r
+                                                            }), [0, 'pullCounty'], false);
+                                                        let tmpStatus = get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '');
+
+                                                        allPullCountyStatus.total_pullCounty += tmpPullCounty ? 1 : 0;
+                                                        allPullCountyStatus.pulledFromCounty += tmpPullCounty && !(tmpStatus && tmpStatus.length) ? 1 : 0;
+
+                                                        return tmpPullCounty && !(tmpStatus && tmpStatus.length) ?
+                                                            get(this.state.contentData, `${r}-${this.props.activePlan}-${this.props.activeGeoid}.attributes.status`, '') :
+                                                            tmpStatus
+                                                    }else{
+                                                        // for non-content, return "Ready for review"
+                                                        return "Ready for review"
+                                                    }
+                                                })
+
                                             return <td
                                                 style={{
                                                     backgroundColor:
@@ -217,7 +227,11 @@ class PlanReview extends React.Component {
                                                             allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready For Review"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
-                                                                'none'
+                                                                'none',
+                                                    opacity:
+                                                        allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
+                                                        allPullCountyStatus.total_pullCounty === allPullCountyStatus.pulledFromCounty &&
+                                                            element.municipal !== 'false' ? 0.5 : 1
                                                 }}
                                                 onClick={() =>
                                                     geo.length > 5 && element.municipal === 'false' ?
@@ -269,7 +283,27 @@ class PlanReview extends React.Component {
                     </ElementBox>
                 </Element>
             </div>
-        ) : this.processTable(allowedGeos)
+        ) : <React.Fragment>
+            <h6>
+                <table>
+                    <tbody>
+                    <tr>
+                        {Object.keys(colors).map(status =>
+                            <React.Fragment>
+                                <td
+                                    style={{width: '15px', height: '15px', paddingLeft: '10px'}}>
+                                    <div style={{backgroundColor: colors[status], width: '15px', height: '15px', paddingLeft: '10px'}}> </div>
+                                </td>
+                                <td style={{paddingLeft: '5px', paddingRight: '10px'}}>
+                                    <small className='text-muted'>{status}</small>
+                                </td>
+                            </React.Fragment>)}
+                    </tr>
+                    </tbody>
+                </table>
+            </h6>
+            {this.processTable(allowedGeos)}
+        </React.Fragment>
     }
 }
 
