@@ -224,7 +224,7 @@ class PlanReview extends React.Component {
                                                     backgroundColor:
                                                         geo.length > 5 && element.municipal === 'false' ? colors["Does not Apply"] :
                                                         allStatus.includes('Started') ? colors.Started :
-                                                            allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready For Review"] :
+                                                            allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready for review"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
                                                             allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
                                                                 'none',
