@@ -3,15 +3,32 @@ import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import {convertFromHTML, convertToRaw} from 'draft-js';
+import Editor from '@draft-js-plugins/editor';
+
+import 'draft-js/dist/Draft.css';
+import {
+    EditorState,
+    CompositeDecorator,
+    convertToRaw,
+    convertFromRaw
+} from 'draft-js';
+import { useTheme, imgLoader, showLoading } from "@availabs/avl-components"
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import styled from "styled-components";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import './contentEditor.css'
+import './contentEditor/contentEditor.css'
 import get from "lodash.get";
-import './contentEditor.css'
+import './contentEditor/contentEditor.css'
 import ElementBox from "../light-admin/containers/ElementBox";
+import makeButtonPlugin from './contentEditor/buttons';
+import makeImagePlugin from "./contentEditor/image"
+import makeLinkItPlugin from "./contentEditor/linkify-it"
+import makeSuperSubScriptPlugin from "./contentEditor/super-sub-script"
+import makePositionablePlugin from "./contentEditor/positionable"
+import makeStuffPlugin from "./contentEditor/stuff"
+import makeResizablePlugin from "./contentEditor/resizable"
+
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 
 const DIV = styled.div`
@@ -27,6 +44,33 @@ const CONTENTDIV = styled.div`
     margin: 0px;
     
 `
+
+
+const positionablePlugin = makePositionablePlugin();
+const resizablePlugin = makeResizablePlugin();
+
+const imagePlugin = makeImagePlugin({
+    wrappers: [
+        positionablePlugin.wrapper,
+        resizablePlugin.wrapper
+    ]
+});
+
+const linkItPlugin = makeLinkItPlugin();
+
+const plugins = [
+    makeButtonPlugin(),
+    imagePlugin,
+    linkItPlugin,
+    makeSuperSubScriptPlugin(),
+    positionablePlugin,
+    resizablePlugin,
+    makeStuffPlugin()
+];
+const decorator = new CompositeDecorator(
+    linkItPlugin.decorators
+)
+
 class ContentViewer extends Component {
     constructor(props) {
         super(props);
@@ -50,7 +94,14 @@ class ContentViewer extends Component {
             this.fetchFalcorDeps()
         }
     }
-
+    isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
     fetchFalcorDeps() {
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.activeCousubid) return Promise.resolve();
         let contentId = this.getCurrentKey();
@@ -65,12 +116,15 @@ class ContentViewer extends Component {
         ).then(contentRes => {
             let contentBody = get(contentRes, ['json', 'content', 'byId', contentId,'body'], null);
             let countyContentBody = get(contentRes, ['json', 'content', 'byId', countyContentId,'body'], null);
+            // countyContentBody = convertFromRaw(JSON.parse(countyContentBody))
 
             if (contentBody && !emptyBody.includes(contentBody.trim())) {
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
                 this.setState(
                     {'currentKey': contentId,
-                        contentFromDB: contentRes.json.content.byId[contentId].body,
+                        contentFromDB: this.isJsonString(contentBody) ?
+                            EditorState.createWithContent(convertFromRaw(JSON.parse(contentBody)), decorator) : contentBody,
+                        simpleText: !this.isJsonString(contentBody),
                         status: status, statusFromDb: status
                 })
                 return contentRes.json.content.byId[contentId].body
@@ -82,11 +136,18 @@ class ContentViewer extends Component {
                     status: status, statusFromDb: status})
                 return contentRes.json.content.byId[countyContentId].body
             }*/else if(this.props.hideIfNull){
-                this.setState({'currentKey': contentId, contentFromDB: null, status: '', statusFromDb: ''})
+                this.setState({'currentKey': contentId, contentFromDB: null, simpleText: true, status: '', statusFromDb: ''})
             }else{
-                this.setState({'currentKey': contentId, contentFromDB: this.props.nullMessage || null, status: '', statusFromDb: ''})
+                this.setState({'currentKey': contentId, contentFromDB: this.props.nullMessage || null, simpleText: true, status: '', statusFromDb: ''})
             }
-            this.setState({countyContentFromDB: countyContentBody})
+            if (countyContentBody){
+                console.log('county content?', countyContentBody)
+                this.setState({
+                    countyContentFromDB: this.isJsonString(countyContentBody) ?
+                        EditorState.createWithContent(convertFromRaw(JSON.parse(countyContentBody)), decorator) :
+                        countyContentBody,
+                simpleText: !this.isJsonString(countyContentBody)})
+            }
             return null
         })
     }
@@ -156,15 +217,38 @@ class ContentViewer extends Component {
         )
     }
     renderContent(renderCounty = false){
+        console.log('this.state', this.state)
         return (
+            this.state.simpleText ?
             <div style={{display:'inline-block', textAlign: 'justify'}}
                  dangerouslySetInnerHTML={{ __html:
-                     renderCounty ?
-                         this.state.countyContentFromDB :
-                         this.state.contentFromDB ? this.state.contentFromDB :
-                         this.props.requirement.includes('callout') ? null : ''
-                 }} />
-        )
+                         renderCounty ?
+                             this.state.countyContentFromDB :
+                             this.state.contentFromDB ? this.state.contentFromDB :
+                                 this.props.requirement.includes('callout') ? null : ''
+                 }} /> :
+        renderCounty && this.state.countyContentFromDB ?
+            <Editor
+                spellCheck={true}
+                editorState={this.state.countyContentFromDB}
+                plugins={plugins}
+                toolbarClassName="toolbar"
+                wrapperClassName="wrapper"
+                editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
+                readOnly={ true }
+            /> :
+            this.state.contentFromDB ?
+                <Editor
+                    spellCheck={true}
+                    editorState={this.state.contentFromDB}
+                    plugins={plugins}
+                    toolbarClassName="toolbar"
+                    wrapperClassName="wrapper"
+                    editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
+                    readOnly={ true }
+                /> :
+                this.props.requirement.includes('callout') ? null : '')
+
     }
     render() {
         let {editorState} = this.state;
@@ -205,7 +289,10 @@ class ContentViewer extends Component {
         )
     }
 }
-
+const LoadingOptions = {
+    position: "absolute",
+    className: "rounded"
+}
 const mapDispatchToProps = {sendSystemMessage};
 
 const mapStateToProps = (state, ownProps) => {
@@ -217,4 +304,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ContentViewer))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(imgLoader(showLoading(ContentViewer, LoadingOptions))))

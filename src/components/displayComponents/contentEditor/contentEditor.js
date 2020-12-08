@@ -2,14 +2,31 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import get from 'lodash.get'
-import {Editor} from 'react-draft-wysiwyg';
-import {ContentState, convertToRaw, EditorState} from 'draft-js';
+import Editor from '@draft-js-plugins/editor';
+
+import 'draft-js/dist/Draft.css';
+import {
+    EditorState,
+    CompositeDecorator,
+    convertToRaw,
+    convertFromRaw
+} from 'draft-js';
+import { useTheme, imgLoader, showLoading } from "@availabs/avl-components"
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import {sendSystemMessage} from 'store/modules/messages';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './contentEditor.css'
 import styled from "styled-components";
+
+import makeButtonPlugin from './buttons';
+import makeToolbarPlugin from "./toolbar"
+import makeImagePlugin from "./image"
+import makeLinkItPlugin from "./linkify-it"
+import makeSuperSubScriptPlugin from "./super-sub-script"
+import makePositionablePlugin from "./positionable"
+import makeStuffPlugin from "./stuff"
+import makeResizablePlugin from "./resizable"
 
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 const DIV = styled.div`
@@ -22,6 +39,60 @@ const DIV = styled.div`
 .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth3:before{content:counter(ol3) ". ";counter-increment:ol3}
 .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth4:before{content:counter(ol4,lower-alpha) ". ";counter-increment:ol4}
 `
+const buttonPlugin = makeButtonPlugin(),
+    { BlockQuoteButton,
+        CodeBlockButton,
+        HeaderOneButton,
+        HeaderTwoButton,
+        HeaderThreeButton,
+        OrderedListButton,
+        UnorderedListButton,
+        BoldButton,
+        CodeButton,
+        ItalicButton,
+        StrikeThroughButton,
+        SubScriptButton,
+        SuperScriptButton,
+        UnderlineButton,
+        LeftAlignButton,
+        CenterAlignButton,
+        JustifyAlignButton,
+        RightAlignButton,
+        TextIndentButton,
+        TextOutdentButton
+    } = buttonPlugin;
+
+const toolbarPlugin = makeToolbarPlugin(),
+    { Toolbar, Separator } = toolbarPlugin;
+
+const positionablePlugin = makePositionablePlugin(),
+    resizablePlugin = makeResizablePlugin();
+
+const imagePlugin = makeImagePlugin({
+        wrappers: [
+            positionablePlugin.wrapper,
+            resizablePlugin.wrapper
+        ]
+    }),
+    { addImage } = imagePlugin;
+
+const linkItPlugin = makeLinkItPlugin();
+
+const plugins = [
+    buttonPlugin,
+    toolbarPlugin,
+    imagePlugin,
+    linkItPlugin,
+    makeSuperSubScriptPlugin(),
+
+    positionablePlugin,
+    resizablePlugin,
+
+    makeStuffPlugin()
+];
+const decorator = new CompositeDecorator(
+    linkItPlugin.decorators
+)
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +100,7 @@ class ContentEditor extends Component {
         // while setting the state, first filter then assign new value / append new obj
         // while getting the state, filter by current content id
         this.state = {
-            editorState: EditorState.createEmpty(),
+            editorState: EditorState.createEmpty(decorator),
             contentFromDB: null,
             currentKey: null
         };
@@ -37,6 +108,7 @@ class ContentEditor extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.loadEditor = this.loadEditor.bind(this)
         this.getCurrentKey = this.getCurrentKey.bind(this)
+        this.handleDroppedFiles = this.handleDroppedFiles.bind(this)
 
     }
     getCurrentKey = () =>
@@ -54,19 +126,19 @@ class ContentEditor extends Component {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 this.setState({'currentKey': contentId});
 
-                let content = contentRes.json.content.byId[contentId].body;
+                let content = JSON.parse(contentRes.json.content.byId[contentId].body);
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
 
                 if (content) {
-                    const contentBlock = htmlToDraft(content);
-                    if (contentBlock) {
-                        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                        let editorState = EditorState.createWithContent(contentState);
+                    //const contentBlock = htmlToDraft(content);
+                    if (/*contentBlock*/ true) {
+                        //const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+                        let editorState = EditorState.createWithContent(convertFromRaw(content), decorator);
                         this.setState({'editorState': editorState, status: status, statusFromDb: status})
                     }
                 }
             }else{
-                this.setState({'editorState': EditorState.createEmpty(), status: '', statusFromDb: ''})
+                this.setState({'editorState': EditorState.createEmpty(decorator), status: '', statusFromDb: ''})
                 this.setState({contentFromDB: null})
                 this.setState({'currentKey': contentId});
             }
@@ -88,7 +160,7 @@ class ContentEditor extends Component {
     handleSubmit(e) {
         e.preventDefault()
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
-        let html = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
+        let html = JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()));
         let contentId = this.getCurrentKey();
         let attributes = this.state.status ? '{"status": "' + this.state.status +'"}' : '{}';
         if (html !== this.state.contentFromDB || this.state.statusFromDb !== this.state.status) {
@@ -125,19 +197,69 @@ class ContentEditor extends Component {
         }
     }
 
+    handleDroppedFiles(selection, files, { getEditorState }) {
+        if (this.props.disabled || !files.length) return "not-handled";
+
+        const file = files[0];
+
+        if (!/^image[/]/.test(file.type)) {
+            return "not-handled";
+        }
+
+        this.props.uploadImage(file)
+            .then(({ filename, url }) => {
+                console.log('img?', filename, url)
+                this.onEditorStateChange(addImage(url, getEditorState()));
+                // this.handleChange(addImage(getEditorState(), url));
+            });
+        return "handled";
+    }
+
     loadEditor(editorState){
         return (
             <div>
-                <DIV>
+                <EditorWrapper>
+
                     <Editor
                         spellCheck={true}
                         editorState={editorState}
+                        handleDroppedFiles={ this.handleDroppedFiles }
+                        plugins={ plugins }
                         toolbarClassName="toolbar"
                         wrapperClassName="wrapper"
                         editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
-                        onEditorStateChange={this.onEditorStateChange}
+                        onChange={this.onEditorStateChange}
                     />
-                </DIV>
+
+                    <Toolbar>
+                        <BoldButton />
+                        <ItalicButton />
+                        <StrikeThroughButton />
+                        <UnderlineButton />
+                        <SubScriptButton />
+                        <SuperScriptButton />
+                        <CodeButton />
+
+                        <HeaderOneButton />
+                        <HeaderTwoButton />
+                        <HeaderThreeButton />
+
+                        <BlockQuoteButton />
+                        <CodeBlockButton />
+                        <OrderedListButton />
+                        <UnorderedListButton />
+
+                        <LeftAlignButton />
+                        <CenterAlignButton />
+                        <JustifyAlignButton />
+                        <RightAlignButton />
+
+                        <TextOutdentButton />
+                        <TextIndentButton />
+                    </Toolbar>
+                    { this.props.children }
+
+                </EditorWrapper>
                 <div className='row' style={{display: 'flex', justifyContent: 'flex-end', marginTop: '5px', marginRight: '1px'}}>
                     {
                         this.props.requirement.slice(-7) !== 'callout' ?
@@ -179,6 +301,21 @@ class ContentEditor extends Component {
     }
 }
 
+const LoadingOptions = {
+    position: "absolute",
+    className: "rounded"
+}
+const EditorWrapper = ({ children, hasFocus, id, ...props }) => {
+    const theme = useTheme();
+    return (
+        <div className={ `pt-16 relative rounded draft-js-editor
+      ${ theme.inputBg.replace("cursor-pointer", "cursor-auto") } w-full
+      ${ hasFocus ? theme.inputBorderFocus : theme.inputBorder }
+    ` } { ...props }>
+            { children }
+        </div>
+    )
+}
 const mapDispatchToProps = {sendSystemMessage};
 
 const mapStateToProps = state => {
@@ -188,4 +325,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ContentEditor))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(imgLoader(showLoading(ContentEditor, LoadingOptions))))
