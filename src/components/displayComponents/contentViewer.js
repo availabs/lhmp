@@ -11,6 +11,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './contentEditor.css'
 import get from "lodash.get";
 import './contentEditor.css'
+import ElementBox from "../light-admin/containers/ElementBox";
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 
 const DIV = styled.div`
@@ -67,22 +68,25 @@ class ContentViewer extends Component {
 
             if (contentBody && !emptyBody.includes(contentBody.trim())) {
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
-                this.setState({'currentKey': contentId,
-                    contentFromDB: contentRes.json.content.byId[contentId].body,
-                    status: status, statusFromDb: status})
+                this.setState(
+                    {'currentKey': contentId,
+                        contentFromDB: contentRes.json.content.byId[contentId].body,
+                        status: status, statusFromDb: status
+                })
                 return contentRes.json.content.byId[contentId].body
-            }else if (this.props.pullCounty && countyContentBody && !emptyBody.includes(countyContentBody.trim())){
+            }/*else if (this.props.pullCounty && countyContentBody && !emptyBody.includes(countyContentBody.trim())){
                 let status = get(contentRes.json.content.byId[countyContentId], `attributes.status`, '');
                 this.setState({'currentKey': contentId,
                     pulledFromCounty: true,
                     contentFromDB: contentRes.json.content.byId[countyContentId].body,
                     status: status, statusFromDb: status})
                 return contentRes.json.content.byId[countyContentId].body
-            }else if(this.props.hideIfNull){
+            }*/else if(this.props.hideIfNull){
                 this.setState({'currentKey': contentId, contentFromDB: null, status: '', statusFromDb: ''})
             }else{
                 this.setState({'currentKey': contentId, contentFromDB: this.props.nullMessage || null, status: '', statusFromDb: ''})
             }
+            this.setState({countyContentFromDB: countyContentBody})
             return null
         })
     }
@@ -125,12 +129,12 @@ class ContentViewer extends Component {
                     >
                         <option key={0} value={''}></option>
                         <option key={1} value={'Not Started'}>Not Started</option>
-                        <option key={1} value={'Started'}>Started</option>
-                        <option key={2} value={'Ready for review'}>Ready for review</option>
+                        <option key={2} value={'Started'}>Started</option>
+                        <option key={3} value={'Ready for review'}>Ready for review</option>
                         {this.props.user.authLevel > 5 ?
                             <React.Fragment>
-                                <option key={3} value={'Requirement not met'}>Requirement not met</option>
-                                <option key={4} value={'Requirement met'}>Requirement met</option>
+                                <option key={4} value={'Requirement not met'}>Requirement not met</option>
+                                <option key={5} value={'Requirement met'}>Requirement met</option>
                             </React.Fragment> : null
                         }
                     </select>
@@ -151,10 +155,13 @@ class ContentViewer extends Component {
             </React.Fragment>
         )
     }
-    renderContent(){
+    renderContent(renderCounty = false){
         return (
             <div style={{display:'inline-block', textAlign: 'justify'}}
-                 dangerouslySetInnerHTML={{ __html: this.state.contentFromDB ? this.state.contentFromDB :
+                 dangerouslySetInnerHTML={{ __html:
+                     renderCounty ?
+                         this.state.countyContentFromDB :
+                         this.state.contentFromDB ? this.state.contentFromDB :
                          this.props.requirement.includes('callout') ? null : ''
                  }} />
         )
@@ -171,18 +178,28 @@ class ContentViewer extends Component {
                         : null
                     }
 
-                        {
-                            this.props.showCMSFlagNotesPublic ?
-                                this.state.pulledFromCounty ? null :
-                                <i className='text-muted'> This content is unique to the selected jurisdiction. </i> : null
-                        }
+                        {/*{*/}
+                        {/*    this.props.showCMSFlagNotesPublic ?*/}
+                        {/*        this.state.pulledFromCounty ? null :*/}
+                        {/*        <i className='text-muted'> This content is unique to the selected jurisdiction. </i> : null*/}
+                        {/*}*/}
 
                     {this.props.showStatusTracker && this.props.requirement.slice(-7) !== 'callout' ? this.renderStatusTracker() :
                         this.props.requirement.slice(-7) === 'callout' ? this.renderCallout() : null
                     }
-                    <CONTENTDIV>
-                        {this.renderContent()}
-                    </CONTENTDIV>
+                    {
+                        !this.props.hideCounty || this.props.user.activeCousubid.length === 5 ?
+                            <CONTENTDIV>
+                                {this.renderContent(true)}
+                            </CONTENTDIV> : null
+                    }
+                    {
+                        !this.props.hideJurisdictionAnnex && this.props.user.activeCousubid.length > 5 ?
+                            <ElementBox>
+                                <span className='text-muted' style={{float: 'right'}}> Jurisdiction Town Annex</span>
+                                {this.renderContent()}
+                            </ElementBox> : null
+                    }
                 </React.Fragment>
             //) : ''
         )

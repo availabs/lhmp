@@ -20,6 +20,7 @@ const config =  {
 		type: 'content',
 		prompt: '',
 		intent: '',
+		hideJurisdictionAnnex: true, // to hide jurisdiction annex
 		// callout: '',
 		icon: 'os-icon-arrow-right7',
 		pullCounty: true,
@@ -35,6 +36,7 @@ const config =  {
 			// callout: 'To inform the public and other readers about the overall approach to the plan’s development and serve as a permanent record of how decisions were made.',
 			icon: 'os-icon-globe',
 			pullCounty: true,
+			hideCounty: false, // when true, hides county content on selecting jurisdiction
 			// hideNav: true // hides key from public nav. Displays on page.
 			///*2-non-county*/ pullCounty: true,
 			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
