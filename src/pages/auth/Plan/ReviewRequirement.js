@@ -18,6 +18,7 @@ import AvlFormsViewData from "../../../components/AvlForms/displayComponents/vie
 import functions, {GeoDropdown} from "./functions";
 import SearchableDropDown from "../../../components/filters/searchableDropDown";
 
+const COLS = ['content_id', 'attributes', 'body'];
 const format_with_time = {
     sameDay: 'YYYY-MM-DD HH:mm:ss',
     nextDay: 'YYYY-MM-DD HH:mm:ss',
@@ -40,6 +41,33 @@ const DIV = styled.div`
                         background-color: none;
                         }
 `
+
+const DIVSTATUS = styled.div`
+.hoverable {
+    float: right;
+
+    position: relative;
+    opacity: 0.5;
+    z-index: 100;
+    color: #fafafa !important;
+}
+.hoverable:hover {
+    opacity: 1;
+    color: #fafafa !important;
+}
+.dropdownSelect {
+    padding: 5px !important;
+    margin-left: 5px !important;
+    color: black !important;
+}
+
+.selectLabel {
+    padding: 5px !important;
+    margin-right: 1px !important;
+    margin-bottom: 0px;
+    color: black !important;
+}
+`
 class ReviewRequirement extends React.Component {
 
     constructor(props) {
@@ -50,6 +78,8 @@ class ReviewRequirement extends React.Component {
         }
         this.renderComments = this.renderComments.bind(this)
         this.deleteItem = this.deleteItem.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.renderStatusTracker = this.renderStatusTracker.bind(this)
     }
 
     getReqsToFilter(){
@@ -93,15 +123,21 @@ class ReviewRequirement extends React.Component {
             }], ...formAttributesFR])
         }
 
-
+        // get element status
+        let contentId = this.props.match.params.req + '-' + this.props.user.activePlan + '-' + this.props.match.params.geo
 
         let formType = commentsConfig[0].type,
             formAttributes = Object.keys(get(commentsConfig, `[0].attributes`, {})),
             ids = [];
 
-        return this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'length'])
+        return this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'length'], ['content', 'byId', [contentId], COLS])
             .then(response => {
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
+
+                let status = get(response.json.content.byId[contentId], `attributes`, null); //"{"status": "Requirement not met"}"
+                status = typeof status === 'string' ? get(JSON.parse(status), `status`, null) : get(status, `status`, null);
+                this.setState({statusFromDb: status, status: status || ''});
+
                 if (length) {
                     this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
                         from: 0,
@@ -192,6 +228,76 @@ class ReviewRequirement extends React.Component {
             </div>
         ) : null
     }
+
+    handleSubmit(e) {
+        e.preventDefault()
+
+        if (this.state.statusFromDb !== this.state.status) {
+            let contentId = this.props.match.params.req + '-' + this.props.user.activePlan + '-' + this.props.match.params.geo;
+
+            if (this.state.statusFromDb || this.state.statusFromDb === ""){
+
+                let attributes = this.state.status ? JSON.stringify({status: this.state.status}) : JSON.stringify({status: ''});
+                let args = {'content_id': `${contentId}`, 'attributes': attributes, 'body': null};
+                this.props.falcor.set({
+                    paths: [
+                        ['content', 'byId', [contentId], COLS]
+                    ],
+                    jsonGraph: {
+                        content: {
+                            byId: {
+                                [contentId]: args
+                            }
+                        }
+                    }
+                }).then(response => {
+                    response.error ?
+                        this.props.sendSystemMessage(`Error occurred during editing. Please try again later.`, {type: "danger"}) :
+                        this.props.sendSystemMessage(`Content successfully edited.`, {type: "success"});
+                })
+            }else{
+                // insert
+
+                let attributes = this.state.status ? JSON.stringify({status: this.state.status}) : JSON.stringify({status: ''});
+                this.props.falcor.call(
+                    ['content', 'insert'], [contentId, attributes, 'null'], [], []
+                ).then(response => {
+                        response.error ?
+                            this.props.sendSystemMessage(`Error occurred. Please try again later.`, {type: "danger"}) :
+                            this.props.sendSystemMessage(`Content successfully added.`, {type: "success"})
+                    this.forceUpdate()
+                    }
+                )
+            }
+        }
+    }
+    renderStatusTracker(){
+        return (
+            <React.Fragment>
+                <DIVSTATUS style={{ paddingRight: '0', display:'flex'}}>
+                    <select
+                        className='dropdownSelect hoverable quarterToFullWidth left btn btn-outline-primary btn-primary step-trigger-btn'
+                        id={'status'}
+                        value={this.state.status}
+                        onChange={(e)=> this.setState({status: e.target.value})}
+                    >
+                        <option key={0} value={''}>Set Status</option>
+                        {this.props.user.authLevel > 5 ?
+                            <React.Fragment>
+                                <option key={1} value={'Requirement not met'}>Requirement not met</option>
+                                <option key={2} value={'Requirement met'}>Requirement met</option>
+                            </React.Fragment> : null
+                        }
+                    </select>
+                    <a className='hoverable left quarterWidth btn btn-primary step-trigger-btn'
+                       onClick={this.handleSubmit}
+                       style={{paddingTop: '1em'}}
+                    >Submit</a>
+                </DIVSTATUS>
+            </React.Fragment>
+        )
+    }
+
     render() {
         let element = config.elements.filter(element => element.element === this.props.match.params.req).pop(),
             requirements = element ? element.requirements_from_software : null;
@@ -220,6 +326,7 @@ class ReviewRequirement extends React.Component {
                                 value={this.props.match.params.geo}
                                 onChange={(e) => window.location.href = `/review_requirement/${this.props.match.params.req}/${e.target.value}`}
                             />
+                            {this.renderStatusTracker()}
                         </h4>
                     </DIV>
                     <ElementBox>

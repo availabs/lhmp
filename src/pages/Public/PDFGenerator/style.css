@@ -1,9 +1,12 @@
 @media print{
     @page {
-        #margin: 20mm 30mm;
         bleed: 6mm;
-        @bottom-left {
+        size: auto;
+        @bottom-right-corner {
             content: counter(page);
+        }
+        @bottom-center {
+            content: string(title)
         }
     }
     .pdfContent{
@@ -11,6 +14,9 @@
     }
     .pdfHeader{
         break-before: page;
+        break-after: avoid;
         color: red;
+        string-set: title content(text)
     }
+
 }
