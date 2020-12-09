@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@atlaskit/button": "^13.3.7",
+    "@availabs/avl-components": "^1.0.17",
+    "@draft-js-plugins/editor": "^4.0.0-beta4",
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojson-extent": "^0.3.2",
     "@mapbox/mapbox-gl-draw": "^1.1.2",
@@ -38,6 +40,7 @@
     "install": "^0.13.0",
     "keymirror": "^0.1.1",
     "leaflet": "^1.6.0",
+    "linkify-it": "^3.0.2",
     "loader-runner": "^3.1.0",
     "lodash": "^4.17.15",
     "lodash.debounce": "^4.0.8",
@@ -91,6 +94,7 @@
     "simple-statistics": "^7.0.7",
     "styled-components": "^4.4.1",
     "superagent": "^5.2.1",
+    "tlds": "^1.214.0",
     "topojson": "^3.0.2",
     "viewport-mercator-project": "^6.2.3"
   },

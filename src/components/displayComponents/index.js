@@ -1,5 +1,5 @@
 import React from 'react'
-import contentEditor from "./contentEditor";
+import ContentEditor from "./contentEditor/contentEditor";
 import contentViewer from "./contentViewer";
 import rolesTableViewer from "./jurisdictionRepresentatives/rolesTableViewer";
 import rolesTableEditor from "./rolesTableEditor";
@@ -45,6 +45,7 @@ const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...
 const NfipStatisticsEditor = (rest) => <NfipStatisticsViewer public={false} {...rest}/>
 const problemStatementTableEditor = (rest) => <ProblemStatementTableViewer edit={true} {...rest}/>
 const shelterListTableEditor = (rest) => <ShelterListTableViewer edit={true} {...rest}/>
+const contentEditor = (rest) => <ContentEditor imgUploadUrl={ process.env.NODE_ENV === 'production' ? 'http://graph.availabs.org/img/new' : 'http://localhost:4444/img/new'} {...rest} />
 export default {
     NA,
     NE,
