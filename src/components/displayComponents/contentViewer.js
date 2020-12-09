@@ -28,7 +28,7 @@ import makeSuperSubScriptPlugin from "./contentEditor/super-sub-script"
 import makePositionablePlugin from "./contentEditor/positionable"
 import makeStuffPlugin from "./contentEditor/stuff"
 import makeResizablePlugin from "./contentEditor/resizable"
-
+import functions from "../../pages/auth/Plan/functions";
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 
 const DIV = styled.div`
@@ -42,7 +42,12 @@ const DIV = styled.div`
 `
 const CONTENTDIV = styled.div`
     margin: 0px;
-    
+`
+
+const ANNEX_DIV = styled.div`
+    float: right;
+    color: blue !important;
+    fontWeight: 500;
 `
 
 
@@ -217,7 +222,6 @@ class ContentViewer extends Component {
         )
     }
     renderContent(renderCounty = false){
-        console.log('this.state', this.state)
         return (
             this.state.simpleText ?
             <div style={{display:'inline-block', textAlign: 'justify'}}
@@ -278,9 +282,9 @@ class ContentViewer extends Component {
                             </CONTENTDIV> : null
                     }
                     {
-                        !this.props.hideJurisdictionAnnex && this.props.user.activeCousubid.length > 5 ?
+                        !this.props.hideJurisdictionAnnex && this.props.user.activeCousubid.length > 5 && this.state.contentFromDB ?
                             <ElementBox>
-                                <span className='text-muted' style={{float: 'right'}}> Jurisdiction Town Annex</span>
+                                <ANNEX_DIV> {functions.formatName(get(this.props.allGeo, [this.props.user.activeCousubid]), this.props.user.activeCousubid)} Jurisdictional Annex</ANNEX_DIV>
                                 {this.renderContent()}
                             </ElementBox> : null
                     }
@@ -299,8 +303,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         isAuthenticated: !!state.user.authed,
         geoGraph: state.graph,
-        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid
-
+        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
+        allGeo: state.geo.allGeos,
     };
 };
 
