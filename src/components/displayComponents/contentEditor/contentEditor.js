@@ -6,6 +6,7 @@ import Editor from '@draft-js-plugins/editor';
 
 import 'draft-js/dist/Draft.css';
 import {
+    ContentState,
     EditorState,
     CompositeDecorator,
     convertToRaw,
@@ -115,7 +116,14 @@ class ContentEditor extends Component {
         this.props.scope === 'global' ?
         this.props.requirement :
         this.props.requirement + '-' + this.props.user.activePlan + '-' + this.props.user.activeCousubid
-
+    isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
     fetchFalcorDeps() {
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return Promise.resolve();
         let contentId = this.getCurrentKey();
@@ -126,16 +134,12 @@ class ContentEditor extends Component {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 this.setState({'currentKey': contentId});
 
-                let content = JSON.parse(contentRes.json.content.byId[contentId].body);
+                let content = contentRes.json.content.byId[contentId].body;
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
 
                 if (content) {
-                    //const contentBlock = htmlToDraft(content);
-                    if (/*contentBlock*/ true) {
-                        //const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                        let editorState = EditorState.createWithContent(convertFromRaw(content), decorator);
-                        this.setState({'editorState': editorState, status: status, statusFromDb: status})
-                    }
+                    let editorState = this.isJsonString(content) ? EditorState.createWithContent(convertFromRaw(JSON.parse(content)), decorator) : content;
+                    this.setState({'editorState': editorState, status: status, statusFromDb: status})
                 }
             }else{
                 this.setState({'editorState': EditorState.createEmpty(decorator), status: '', statusFromDb: ''})
@@ -208,7 +212,6 @@ class ContentEditor extends Component {
 
         this.props.uploadImage(file)
             .then(({ filename, url }) => {
-                console.log('img?', filename, url)
                 this.onEditorStateChange(addImage(url, getEditorState()));
                 // this.handleChange(addImage(getEditorState(), url));
             });
@@ -216,6 +219,13 @@ class ContentEditor extends Component {
     }
 
     loadEditor(editorState){
+        if (typeof editorState === "string"){
+            const contentBlock = htmlToDraft(editorState);
+            if (contentBlock) {
+                const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+                editorState = EditorState.createWithContent(contentState);
+            }
+        }
         return (
             <div>
                 <EditorWrapper>
@@ -288,10 +298,9 @@ class ContentEditor extends Component {
     }
     render() {
         let currentKey = this.getCurrentKey();
-        console.log('props?', this.props)
 
         let editorState;
-        console.log('??', this.state.currentKey, currentKey)
+
         if (this.state.currentKey !== currentKey){
             this.fetchFalcorDeps();
             return <div> Loading... </div>
