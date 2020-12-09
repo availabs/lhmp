@@ -146,7 +146,7 @@ class ContentViewer extends Component {
                 this.setState({'currentKey': contentId, contentFromDB: this.props.nullMessage || null, simpleText: true, status: '', statusFromDb: ''})
             }
             if (countyContentBody){
-                console.log('county content?', countyContentBody)
+
                 this.setState({
                     countyContentFromDB: this.isJsonString(countyContentBody) ?
                         EditorState.createWithContent(convertFromRaw(JSON.parse(countyContentBody)), decorator) :
@@ -159,7 +159,7 @@ class ContentViewer extends Component {
     handleSubmit(e) {
         e.preventDefault()
         if (!this.props.requirement || !this.props.user.activePlan || !this.props.user.activeCousubid) return null;
-        let html = this.state.contentFromDB;
+        let html = typeof this.state.contentFromDB === 'string' ? this.state.contentFromDB : JSON.stringify(convertToRaw(this.state.contentFromDB.getCurrentContent()));
         let contentId = this.getCurrentKey();
         let attributes = this.state.status ? '{"status": "' + this.state.status +'"}' : '{}';
         if (this.state.statusFromDb !== this.state.status) {
@@ -197,12 +197,12 @@ class ContentViewer extends Component {
                         <option key={1} value={'Not Started'}>Not Started</option>
                         <option key={2} value={'Started'}>Started</option>
                         <option key={3} value={'Ready for review'}>Ready for review</option>
-                        {this.props.user.authLevel > 5 ?
-                            <React.Fragment>
-                                <option key={4} value={'Requirement not met'}>Requirement not met</option>
-                                <option key={5} value={'Requirement met'}>Requirement met</option>
-                            </React.Fragment> : null
-                        }
+                        {/*{this.props.user.authLevel > 5 ?*/}
+                        {/*    <React.Fragment>*/}
+                        {/*        <option key={4} value={'Requirement not met'}>Requirement not met</option>*/}
+                        {/*        <option key={5} value={'Requirement met'}>Requirement met</option>*/}
+                        {/*    </React.Fragment> : null*/}
+                        {/*}*/}
                     </select>
                     <a className='hoverable left quarterWidth btn btn-primary step-trigger-btn'
                        onClick={this.handleSubmit}
