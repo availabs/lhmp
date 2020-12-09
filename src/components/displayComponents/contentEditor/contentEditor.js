@@ -291,6 +291,7 @@ class ContentEditor extends Component {
         console.log('props?', this.props)
 
         let editorState;
+        console.log('??', this.state.currentKey, currentKey)
         if (this.state.currentKey !== currentKey){
             this.fetchFalcorDeps();
             return <div> Loading... </div>

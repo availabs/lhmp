@@ -14,6 +14,8 @@ import FormArrayComponent from "./FormArrayComponent";
 import ImageEditor from "./imageComponent/index"
 import AvlFormsJoin from './AvlFormsJoin'
 import CheckboxComponent from './checkboxComponent'
+import ContentEditor from "../../displayComponents/contentEditor/contentEditor";
+import contentViewer from "../../displayComponents/contentViewer";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -33,10 +35,14 @@ const HIDDEN = ({ type, state, routes }) =>
     )
 }
 
-const NE = ((props) => (<div>{props.type} Doesn't Exist</div>))
+const NE = ((props) => (<div>{props.type} Doesn't Exist</div>));
+const contentEditor = (rest) => <ContentEditor imgUploadUrl={ process.env.NODE_ENV === 'production' ? 'http://graph.availabs.org/img/new' : 'http://localhost:4444/img/new'} {...rest} />
+
 export default {
     NA,
     NE,
+    contentEditor,
+    contentViewer,
     hidden: HIDDEN,
     text: TextComponent,
     dropdown: DropDownComponent,
