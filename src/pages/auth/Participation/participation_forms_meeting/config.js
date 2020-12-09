@@ -85,6 +85,15 @@ module.exports = [
                 meta:'false',
                 section:''
             },
+            minutes:{
+                label:'Agenda and Minutes',
+                sub_type:'meeting',
+                prompt:'',
+                edit_type:'textarea',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
             roles:{
                 label:'Roles',
                 sub_type:'',

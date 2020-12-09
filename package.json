@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@atlaskit/button": "^13.3.7",
-    "@availabs/avl-components": "^1.0.17",
+    "@availabs/avl-components": "^1.0.20",
     "@draft-js-plugins/editor": "^4.0.0-beta4",
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojson-extent": "^0.3.2",
