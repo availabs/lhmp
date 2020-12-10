@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import get from 'lodash.get'
 import Editor from '@draft-js-plugins/editor';
-
+import { RichUtils } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
     ContentState,
@@ -20,10 +20,10 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './contentEditor.css'
 import styled from "styled-components";
 
+import addLinkPlugin from './addLink'
 import makeButtonPlugin from './buttons';
 import makeToolbarPlugin from "./toolbar"
 import makeImagePlugin from "./image"
-import makeLinkItPlugin from "./linkify-it"
 import makeSuperSubScriptPlugin from "./super-sub-script"
 import makePositionablePlugin from "./positionable"
 import makeStuffPlugin from "./stuff"
@@ -77,13 +77,11 @@ const imagePlugin = makeImagePlugin({
     }),
     { addImage } = imagePlugin;
 
-const linkItPlugin = makeLinkItPlugin();
-
 const plugins = [
     buttonPlugin,
     toolbarPlugin,
     imagePlugin,
-    linkItPlugin,
+    addLinkPlugin,
     makeSuperSubScriptPlugin(),
 
     positionablePlugin,
@@ -91,9 +89,7 @@ const plugins = [
 
     makeStuffPlugin()
 ];
-const decorator = new CompositeDecorator(
-    linkItPlugin.decorators
-)
+
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
@@ -101,7 +97,7 @@ class ContentEditor extends Component {
         // while setting the state, first filter then assign new value / append new obj
         // while getting the state, filter by current content id
         this.state = {
-            editorState: EditorState.createEmpty(decorator),
+            editorState: EditorState.createEmpty(),
             contentFromDB: null,
             currentKey: null
         };
@@ -138,11 +134,11 @@ class ContentEditor extends Component {
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
 
                 if (content) {
-                    let editorState = this.isJsonString(content) ? EditorState.createWithContent(convertFromRaw(JSON.parse(content)), decorator) : content;
+                    let editorState = this.isJsonString(content) ? EditorState.createWithContent(convertFromRaw(JSON.parse(content))) : content;
                     this.setState({'editorState': editorState, status: status, statusFromDb: status})
                 }
             }else{
-                this.setState({'editorState': EditorState.createEmpty(decorator), status: '', statusFromDb: ''})
+                this.setState({'editorState': EditorState.createEmpty(), status: '', statusFromDb: ''})
                 this.setState({contentFromDB: null})
                 this.setState({'currentKey': contentId});
             }
@@ -217,6 +213,32 @@ class ContentEditor extends Component {
             });
         return "handled";
     }
+    onChange = editorState => {
+        this.setState({
+            editorState
+        });
+    };
+    onAddLink = () => {
+        const editorState = this.state.editorState;
+        const selection = editorState.getSelection();
+        const link = window.prompt("link:");
+        if (!link) {
+            this.onChange(RichUtils.toggleLink(editorState, selection, null));
+            return "handled";
+        }
+        const content = editorState.getCurrentContent();
+        const contentWithEntity = content.createEntity("LINK", "MUTABLE", {
+            url: link
+        });
+        const newEditorState = EditorState.push(
+            editorState,
+            contentWithEntity,
+            "create-entity"
+        );
+        const entityKey = contentWithEntity.getLastCreatedEntityKey();
+        this.onChange(RichUtils.toggleLink(newEditorState, selection, entityKey));
+        return "handled";
+    };
 
     loadEditor(editorState){
         if (typeof editorState === "string"){
@@ -266,6 +288,9 @@ class ContentEditor extends Component {
 
                         <TextOutdentButton />
                         <TextIndentButton />
+                        <button id="link_url" onClick={this.onAddLink} className="add-link">
+                            <i className="fa fa-link"></i>
+                        </button>
                     </Toolbar>
                     { this.props.children }
 

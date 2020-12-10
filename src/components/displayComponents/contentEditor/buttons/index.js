@@ -13,6 +13,7 @@ export default () => {
   };
 
   const getBlockMap = editorState => {
+    console.log('editorState?', editorState)
     const selection = editorState.getSelection(),
       startKey = selection.getStartKey(),
       endKey = selection.getEndKey();
@@ -59,6 +60,7 @@ export default () => {
     SubScriptButton: makeInlineStyleButton("SUBSCRIPT", store),
     SuperScriptButton: makeInlineStyleButton("SUPERSCRIPT", store),
     UnderlineButton: makeInlineStyleButton("UNDERLINE", store),
+    LinkButton: makeInlineStyleButton("LINK", store),
 
     LeftAlignButton: makeBlockDataButton("textAlign", "text-left", store),
     CenterAlignButton: makeBlockDataButton("textAlign", "text-center", store),

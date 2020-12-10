@@ -148,6 +148,9 @@ export default ({
   ),
   "outdent": (
     <Icon><span className="fa fa-outdent" style={ { fontSize: "1.25em" } }/></Icon>
+  ),
+  "LINK": (
+    <Icon><span className="fa fa-link" style={ { fontSize: "1.25em" } }/></Icon>
   )
 })
 
