@@ -22,8 +22,17 @@ import {HeaderContainer, HeaderImageContainer, PageContainer, VerticalAlign} fro
 import ElementFactory from "../../theme/ElementFactory";
 import functions from "../../../auth/Plan/functions";
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
+import styled from "styled-components";
 
 const emptyBody = ['<p></p>', '']
+
+const ANNEX_DIV = styled.div`
+    text-align: right;
+    color: #047bf8 !important;
+    font-weight: 600;
+    border-bottom: 1px solid #9dc9ea;
+    padding-bottom: 4px;
+`
 
 class Hazards extends React.Component {
 
@@ -190,8 +199,8 @@ class Hazards extends React.Component {
                         }
                         {
                             !contentLocalImpactsFlags.hideJurisdictionAnnex && this.props.user.activeCousubid.length > 5 ?
-                                <ElementBox>
-                                    <span className='text-muted' style={{float: 'right'}}> Jurisdiction Town Annex</span>
+                                <ElementBox style={{backgroundColor: 'aliceblue'}}>
+                                    <ANNEX_DIV>Jurisdictional Annex</ANNEX_DIV>
                                     <div dangerouslySetInnerHTML={{__html: contentLocalImpacts}}/>
                                 </ElementBox> : null
                         }
