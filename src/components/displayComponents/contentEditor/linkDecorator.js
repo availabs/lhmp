@@ -3,7 +3,7 @@ import { CompositeDecorator } from "draft-js";
 
 const Link = ({ entityKey, contentState, children }) => {
     const { url } = contentState.getEntity(entityKey).getData();
-    return <a href={url}>{children}</a>;
+    return <a href={url} target={'_blank'}>{children}</a>;
 };
 
 const findLinkEntities = (contentBlock, callback, contentState) => {
