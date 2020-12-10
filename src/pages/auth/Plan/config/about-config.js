@@ -133,7 +133,7 @@ const config =  {
 		},
 
 		{
-			title: 'Mitigation Reps',
+			title: 'Mitigation Representatives',
 			requirement: 'Req-A-1E',
 			hideNav: true,
 			type: 'formTable',
@@ -142,6 +142,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'roles',
+				description: 'The table below lists all of the agencies, representatives, and their respective roles held during the planning process and development of this Hazard Mitigation Plan.',
 				filters:[{column:'is_hazard_mitigation_representative',value:'yes'}],
         		columns : [
 					{
@@ -514,6 +515,7 @@ const config =  {
 			fontSize: '.7em',
 			config: {
 				type:'capabilities', // type is same as the route path for now
+				description:'The table below lists the municipalities that have adopted this hazard mitigation plan, the name of the authorities that adopted the plan, and the date of adoption.',
 				filters:[{column:'capability_type',value:'Hazard mitigation plan'}],
 				columns : [
         			// {
