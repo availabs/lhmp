@@ -57,6 +57,23 @@ module.exports = [
                 hidden:'true', // if you don`t want to show it in view data
                 section:''
             },
+            meeting_format:{
+                label:'Meeting Format',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Virtual',
+                        'In-Person',
+                        'Phone Call', 
+                    ],
+                },
+            },
             start_date:{
                 label:'Date',
                 sub_type:'meeting',
@@ -75,6 +92,24 @@ module.exports = [
                 meta:'false',
                 section:'',
 
+            },
+            invite_method:{
+                label:'Invitation Method',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Email',
+                        'Outlook Invitation',
+                        'Phone Call',
+                        'Mailed Letter',
+                    ],
+                },
             },
             narrative:{
                 label:'Narrative',
