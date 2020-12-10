@@ -13,6 +13,8 @@ import CousubTotalLossTable from "../components/CousubTotalLossTable";
 import HazardEventsMapController from "../components/HazardEventsMapController";
 import get from "lodash.get"
 
+import FemaDisasterDeclarationsTable from './FemaDisasterDeclarationsTable.js'
+
 import {EARLIEST_YEAR, LATEST_YEAR} from "./yearsOfSevereWeatherData"
 import LocalHazardsOfConcernTable from "../../../../components/displayComponents/localHazardsOfConcernTable";
 //import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
@@ -307,7 +309,22 @@ class Hazards extends React.Component {
                             />
                         </div>
                     </div>
+                    
+                    <div className='row'>
+                        <div className='col-md-12' style={{paddingBottom: 20}}>
+                            <h4>Presidential Disaster Declrations</h4>
+                            
 
+                            <FemaDisasterDeclarationsTable
+                                geoid={this.props.activeGeoid}
+                                geoLevel={this.props.geoLevel}
+                                hazards={this.props.hazards}
+                                hazard={this.props.hazard}
+                              
+                                
+                            />
+                        </div>
+                    </div>
                     <div className='row'>
                         <div className='col-md-12'>
                             <h4>Hazard Events</h4>

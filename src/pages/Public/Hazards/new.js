@@ -137,34 +137,8 @@ class Hazards extends React.Component {
         }
     }
 
-  /*  stickyHazards(){
-        return this.state.hazards && this.state.hazards.length > 0 ?
-            (
-                <StickySelect>
-                    <select
-                        style={{right:10}}
-                        className="ae-side-menu"
-                        id='hazard'
-                        data-error="Please select county"
-                        onChange={(e) => {
-                            if (e.target.value !== 'none'){
-                                e.target.value === 'all' ?
-                                    this.setState({hazard: undefined}) :
-                                    this.setState({hazard: e.target.value})
-                            }
-                        }}
-                        value={this.state.hazard}
-                    >
-                        <option key={0} value={'none'}>--Select Hazard--</option>
-                        <option key={1} value={'all'}> All Hazards </option>
-                        {this.state.hazards.map((h,h_i) => <option key={h_i+2} value={h}>{h}</option>)}
-                    </select>
-                </StickySelect>
-            ) : null
-    }
-*/
     changeHazard(e, a) {
-        console.log('haz changed', e, a)
+        console.log('haz changed', e.target.value, a)
         this.setState({hazard:e.target.value, firstLoad: false})
     }
     render() {
@@ -185,7 +159,7 @@ class Hazards extends React.Component {
                 <div >
                     <ContentContainer>
                         <section>
-                            
+                          {this.state.hazard}  
                         </section>
                         <section>
                             <SectionHeader>
