@@ -142,6 +142,7 @@ const config =  {
             requirement: `req-B1-local-haz-concern-table`,
             type: 'localHazardsOfConcernTable',
             config: {
+                // description: 'This table identifies hazard events specific to each jurisdiction with a primary focus on occurrence, severity and impact. This information was obtained directly from jurisdictional representatives during community-specific interviews.',
                 title: 'Local Hazards of Concern Table',
                 //requirement: 'Req-C-1A',
                 type: 'formTable',

@@ -18,7 +18,7 @@ import FemaDisasterDeclarationsTable from './FemaDisasterDeclarationsTable.js'
 import {EARLIEST_YEAR, LATEST_YEAR} from "./yearsOfSevereWeatherData"
 import LocalHazardsOfConcernTable from "../../../../components/displayComponents/localHazardsOfConcernTable";
 //import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData";
-import {HeaderContainer, HeaderImageContainer, PageContainer, VerticalAlign} from 'pages/Public/theme/components'
+import {HeaderContainer, HeaderImageContainer, PageContainer, ContentHeader, VerticalAlign} from 'pages/Public/theme/components'
 import ElementFactory from "../../theme/ElementFactory";
 import functions from "../../../auth/Plan/functions";
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
@@ -114,6 +114,23 @@ class Hazards extends React.Component {
                 {this.props.hazard === '' || HazardTotal > 0 ?
                 <div>
                     <div className='row'>
+                    <ContentHeader>About the NOAA Storm Events Dataset</ContentHeader>
+                    <PageContainer style={{paddingTop:20}}>The following charts, as well as the visualizations above, display storm events from the<i style={{color: '#afafaf'}}><a
+                                href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                                Storm Events Dataset</a></i>. 
+                            This data relates to the occurrence and magnitude of severe or unusual weather 
+                            events and other significant meteorological events. The data is color coordinated with 
+                            the associated hazard which can be found at the top of the page. Using your mouse tooltip, 
+                            hover over a bar to see exact amounts as recorded in the data. The NOAA Storm Events data dates back to 1996 when the modern data format was introduced.
+                            <li>The Loss by Year bar chart shows the loss in dollar value annually based on hazard events. 
+                            Data can be scaled based on dollar amounts listed at the top of the chart.</li>
+                            <li>The Events by Year bar chart shows the number of events during the given years. 
+                            Events are separated by hazard types.</li>
+                            <li>The Loss by Month bar chart shows the loss in dollar value monthly based on hazard events. 
+                            Data can be scaled based on dollar amounts listed at the top of the chart.</li>
+                            <li>The Events by Month bar chart shows the number of events during the given months. 
+                            Events are separated by hazard types.</li>
+                            </PageContainer>
                         <div className='col-md-6'>
                             <h6>{HazardName} Loss by Year</h6>
                             <HazardBarChart
@@ -124,6 +141,7 @@ class Hazards extends React.Component {
                                 height={300}
                                 maxValueButtons={true}
                             />
+                            
                         </div>
                         <div className='col-md-6'>
                             <h6 style={{paddingBottom:29}}>{HazardName} Events by Year</h6>
@@ -134,6 +152,7 @@ class Hazards extends React.Component {
                                 geoLevel={this.props.geoLevel}
                                 height={300}
                             />
+                            
                         </div>
                     </div>
                     <div className='row'>
@@ -152,6 +171,7 @@ class Hazards extends React.Component {
                                 height={300}
                                 maxValueButtons={true}
                             />
+                           
                         </div>
                         <div className='col-md-6'>
                             <h6 style={{paddingBottom:29}}>{HazardName} Events by Month</h6>
@@ -166,10 +186,14 @@ class Hazards extends React.Component {
                                 hazard={this.props.hazard}
                                 height={300}
                             />
+                           
                         </div>
+                        <i style={{color: '#afafaf'}}>Source: <a
+                                href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                                Storm Events Dataset</a></i>
                     </div>
                 </div> : ''}
-                <div className='row'>
+                <div className='row' style={{paddingTop:20}}>
                     <div>
                         <h4>{get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')} Characteristics</h4>
                         {/*<i>{contentCharacteristicsStatus}</i>*/}
@@ -287,7 +311,7 @@ class Hazards extends React.Component {
                             }
                         } /> :
 
-                    <div className='row'>
+                    <div className='row' style={{paddingTop:20}}>
                         <div className='col-md-12'>
                             <h4>Events with Highest Reported Loss in Dollars</h4>
                             <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
@@ -304,11 +328,15 @@ class Hazards extends React.Component {
                                 Storm Events Dataset</a></i>
                         </div>
                     </div>
-                    <div className='row'>
+                    <div className='row' style={{paddingTop:20}}>
                         <div className='col-md-12'>
                             <h4>Hazard Loss by Municipality</h4>
                             <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                             <h6>{HazardName} Loss by Month</h6>
+                            <div>This table displays the total damage amount in dollars and number 
+                            of fatalities for all recorded hazards between the years of 1996-2018. 
+                            Viewers can access individual jurisdiction-specific statistics by clicking on the jurisdiction name. 
+                            </div>
                             <CousubTotalLossTable
                                 geoid={this.props.activeGeoid}
                                 geoLevel={this.props.geoLevel}
@@ -316,10 +344,13 @@ class Hazards extends React.Component {
                                 hazards={this.props.hazards}
                                 hazard={this.props.hazard}
                             />
+                            <i style={{color: '#afafaf'}}>Source: <a
+                                href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                                Storm Events Dataset</a></i>
                         </div>
                     </div>
                     
-                    <div className='row'>
+                    <div className='row' style={{paddingTop:20}}>
                         <div className='col-md-12' style={{paddingBottom: 20}}>
                             <h4>Presidential Disaster Declrations</h4>
                             
@@ -334,12 +365,16 @@ class Hazards extends React.Component {
                             />
                         </div>
                     </div>
-                    <div className='row'>
+                    <div className='row' style={{paddingTop:20}}>
                         <div className='col-md-12'>
                             <h4>Hazard Events</h4>
                             <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
                             <h6>{HazardName} Events</h6>
-
+                            <div>This map shows hazard events geographically between the years of 1996-2018. The size of the circles correspond to 
+                            the dollar amount of event damage; a larger circle indicates more dollar damage. The circle is color coordinated with 
+                            the associated hazard which can be found at the top of the page. Hovering over
+                             a circle will show exact amounts as recorded in the data. To filter this map click on the specific hazard above. 
+                            </div>
                             <HazardEventsMapController
                                 geoid={this.props.activeGeoid}
                                 geoLevel={this.props.geoLevel}
@@ -349,6 +384,9 @@ class Hazards extends React.Component {
                                 zoomPadding={150}
                                 year={1999}
                             />
+                            <i style={{color: '#afafaf'}}>Source: <a
+                                href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                                Storm Events Dataset</a></i>
                         </div>
                     </div>
                 </div> : ''}

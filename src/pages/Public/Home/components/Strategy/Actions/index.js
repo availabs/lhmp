@@ -25,7 +25,7 @@ import NfipLossesTable from "../../Risk/Assets/components/CriticalInrfastructure
 
 
 
-class PlanningTeam extends Component {
+class Actions extends Component {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
@@ -98,4 +98,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(PlanningTeam))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Actions))

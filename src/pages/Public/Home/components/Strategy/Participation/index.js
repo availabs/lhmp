@@ -24,7 +24,7 @@ import {
 
 
 
-class PlanningTeam extends Component {
+class Participation extends Component {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
@@ -81,4 +81,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(PlanningTeam))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Participation))
