@@ -46,9 +46,9 @@ const CONTENTDIV = styled.div`
 `
 
 const ANNEX_DIV = styled.div`
-    float: right;
-    color: blue !important;
-    fontWeight: 500;
+    text-align: right;
+    color: #047bf8 !important;
+    font-weight: 600;
 `
 
 const decorator = createLinkDecorator();
@@ -271,7 +271,7 @@ class ContentViewer extends Component {
                     }
                     {
                         !this.props.hideJurisdictionAnnex && this.props.activeCousubid.length > 5 && this.state.contentFromDB ?
-                            <ElementBox>
+                            <ElementBox style={{backgroundColor: 'aliceblue'}}>
                                 <ANNEX_DIV> {functions.formatName(get(this.props.allGeo, [this.props.user.activeCousubid]), this.props.user.activeCousubid)} Jurisdictional Annex</ANNEX_DIV>
                                 {this.renderContent()}
                             </ElementBox> : null
