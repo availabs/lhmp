@@ -499,8 +499,8 @@ const config =  {
 						filter: 'default'
         			},
         			{
-                        Header: 'Link',
-                        accessor: 'upload',
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
                         width: 50,
                         expandable: 'true',
                         expandableHeader: true

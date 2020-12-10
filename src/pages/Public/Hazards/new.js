@@ -49,7 +49,7 @@ const StickySelect = styled.div`
    select {
    
    height: 5vh;
-   width: 100%;
+   width: 90%;
    z-index:100;
    
    }
@@ -147,7 +147,7 @@ class Hazards extends React.Component {
         }
         return (
             <PageContainer>
-                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '260px', height: '100%'}}>
+                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '230px', height: '100%'}}>
                    
                     <HazardSideMenu 
                         config={hazardConfig}
@@ -157,7 +157,7 @@ class Hazards extends React.Component {
                     />
                 </div>
                 <div >
-                    <ContentContainer>
+                    <ContentContainer style={{maxWidth:900}}>
                         <section>
                           {this.state.hazard}  
                         </section>
