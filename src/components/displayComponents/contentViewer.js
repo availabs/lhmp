@@ -49,6 +49,8 @@ const ANNEX_DIV = styled.div`
     text-align: right;
     color: #047bf8 !important;
     font-weight: 600;
+    border-bottom: 1px solid #9dc9ea;
+    padding-bottom: 4px;
 `
 
 const decorator = createLinkDecorator();
