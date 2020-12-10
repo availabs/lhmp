@@ -737,6 +737,7 @@ class AvlFormsNewData extends React.Component{
                                     graph={{type: d.type }}
                                     {...d}
                                     autoLoad = {this.props.autoLoad}
+                                    user={this.props.user}
                                 />)
                             }) :
                                  null
@@ -770,6 +771,7 @@ class AvlFormsNewData extends React.Component{
 
 const mapStateToProps = (state,ownProps) => {
     return {
+        user: state.user,
         userEmail:state.user.email,
         activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
