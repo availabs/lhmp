@@ -10,7 +10,7 @@ import {
     EditorState,
     CompositeDecorator,
     convertToRaw,
-    convertFromRaw
+    convertFromRaw, ContentState
 } from 'draft-js';
 import { useTheme, imgLoader, showLoading } from "@availabs/avl-components"
 import Element from 'components/light-admin/containers/Element'
@@ -19,9 +19,9 @@ import styled from "styled-components";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './contentEditor/contentEditor.css'
 import get from "lodash.get";
-import './contentEditor/contentEditor.css'
 import ElementBox from "../light-admin/containers/ElementBox";
 import makeButtonPlugin from './contentEditor/buttons';
+import createLinkDecorator from './contentEditor/linkDecorator'
 import makeImagePlugin from "./contentEditor/image"
 import makeLinkItPlugin from "./contentEditor/linkify-it"
 import makeSuperSubScriptPlugin from "./contentEditor/super-sub-script"
@@ -29,6 +29,7 @@ import makePositionablePlugin from "./contentEditor/positionable"
 import makeStuffPlugin from "./contentEditor/stuff"
 import makeResizablePlugin from "./contentEditor/resizable"
 import functions from "../../pages/auth/Plan/functions";
+import addLinkPlugin from "./contentEditor/addLink";
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];
 
 const DIV = styled.div`
@@ -50,7 +51,7 @@ const ANNEX_DIV = styled.div`
     fontWeight: 500;
 `
 
-
+const decorator = createLinkDecorator();
 const positionablePlugin = makePositionablePlugin();
 const resizablePlugin = makeResizablePlugin();
 
@@ -61,20 +62,15 @@ const imagePlugin = makeImagePlugin({
     ]
 });
 
-const linkItPlugin = makeLinkItPlugin();
-
 const plugins = [
-    makeButtonPlugin(),
+    // makeButtonPlugin(),
     imagePlugin,
-    linkItPlugin,
+    addLinkPlugin,
     makeSuperSubScriptPlugin(),
     positionablePlugin,
     resizablePlugin,
     makeStuffPlugin()
 ];
-const decorator = new CompositeDecorator(
-    linkItPlugin.decorators
-)
 
 class ContentViewer extends Component {
     constructor(props) {
@@ -122,7 +118,6 @@ class ContentViewer extends Component {
             let contentBody = get(contentRes, ['json', 'content', 'byId', contentId,'body'], null);
             let countyContentBody = get(contentRes, ['json', 'content', 'byId', countyContentId,'body'], null);
             // countyContentBody = convertFromRaw(JSON.parse(countyContentBody))
-
             if (contentBody && !emptyBody.includes(contentBody.trim())) {
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
                 this.setState(
@@ -132,7 +127,7 @@ class ContentViewer extends Component {
                         simpleText: !this.isJsonString(contentBody),
                         status: status, statusFromDb: status
                 })
-                return contentRes.json.content.byId[contentId].body
+                // return contentRes.json.content.byId[contentId].body
             }/*else if (this.props.pullCounty && countyContentBody && !emptyBody.includes(countyContentBody.trim())){
                 let status = get(contentRes.json.content.byId[countyContentId], `attributes.status`, '');
                 this.setState({'currentKey': contentId,
@@ -146,7 +141,6 @@ class ContentViewer extends Component {
                 this.setState({'currentKey': contentId, contentFromDB: this.props.nullMessage || null, simpleText: true, status: '', statusFromDb: ''})
             }
             if (countyContentBody){
-
                 this.setState({
                     countyContentFromDB: this.isJsonString(countyContentBody) ?
                         EditorState.createWithContent(convertFromRaw(JSON.parse(countyContentBody)), decorator) :
@@ -222,40 +216,34 @@ class ContentViewer extends Component {
         )
     }
     renderContent(renderCounty = false){
+        let editorState =
+            renderCounty ? this.state.countyContentFromDB :
+                this.state.contentFromDB ? this.state.contentFromDB : null
+
+        if (typeof editorState === "string"){
+            const contentBlock = htmlToDraft(editorState);
+            if (contentBlock) {
+                const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+                editorState = EditorState.createWithContent(contentState);
+            }
+        }
         return (
-            this.state.simpleText ?
-            <div style={{display:'inline-block', textAlign: 'justify'}}
-                 dangerouslySetInnerHTML={{ __html:
-                         renderCounty ?
-                             this.state.countyContentFromDB :
-                             this.state.contentFromDB ? this.state.contentFromDB :
-                                 this.props.requirement.includes('callout') ? null : ''
-                 }} /> :
-        renderCounty && this.state.countyContentFromDB ?
+        editorState ?
             <Editor
                 spellCheck={true}
-                editorState={this.state.countyContentFromDB}
+                editorState={editorState}
                 plugins={plugins}
                 toolbarClassName="toolbar"
                 wrapperClassName="wrapper"
                 editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
                 readOnly={ true }
             /> :
-            this.state.contentFromDB ?
-                <Editor
-                    spellCheck={true}
-                    editorState={this.state.contentFromDB}
-                    plugins={plugins}
-                    toolbarClassName="toolbar"
-                    wrapperClassName="wrapper"
-                    editorClassName={this.props.requirement.includes('callout') ? 'editorSmall' : 'editor'}
-                    readOnly={ true }
-                /> :
-                this.props.requirement.includes('callout') ? null : '')
+            this.props.requirement.includes('callout') ? null : '')
 
     }
     render() {
         let {editorState} = this.state;
+
         return (
             //this.props.type === 'contentEditor' ? (
                 <React.Fragment>
@@ -276,13 +264,13 @@ class ContentViewer extends Component {
                         this.props.requirement.slice(-7) === 'callout' ? this.renderCallout() : null
                     }
                     {
-                        !this.props.hideCounty || this.props.user.activeCousubid.length === 5 ?
+                        !this.props.hideCounty || this.props.activeCousubid.length === 5 ?
                             <CONTENTDIV>
                                 {this.renderContent(true)}
                             </CONTENTDIV> : null
                     }
                     {
-                        !this.props.hideJurisdictionAnnex && this.props.user.activeCousubid.length > 5 && this.state.contentFromDB ?
+                        !this.props.hideJurisdictionAnnex && this.props.activeCousubid.length > 5 && this.state.contentFromDB ?
                             <ElementBox>
                                 <ANNEX_DIV> {functions.formatName(get(this.props.allGeo, [this.props.user.activeCousubid]), this.props.user.activeCousubid)} Jurisdictional Annex</ANNEX_DIV>
                                 {this.renderContent()}
