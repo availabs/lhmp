@@ -224,7 +224,7 @@ class ContentViewer extends Component {
             const contentBlock = htmlToDraft(editorState);
             if (contentBlock) {
                 const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                editorState = EditorState.createWithContent(contentState);
+                editorState = EditorState.createWithContent(contentState, decorator);
             }
         }
         return (
