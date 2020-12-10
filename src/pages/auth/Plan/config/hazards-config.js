@@ -130,6 +130,14 @@ const config =  {
             callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
         },
         {
+            title: 'Other Hazards Local Impact',
+            requirement: `req-B1-other-hazards-local-impact`,
+            type: 'content',
+            prompt: 'Talk about local context for hazard of concern for your area',
+            intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+        },
+        {
             title: 'Local Hazards of Concern Table',
             requirement: `req-B1-local-haz-concern-table`,
             type: 'localHazardsOfConcernTable',
