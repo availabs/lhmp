@@ -32,6 +32,7 @@ module.exports = [
                 prompt:'',
                 sub_type:'',
                 edit_type:'dropdown',
+                defaultValue: ['Countywide'],
                 display_type:'text',
                 meta: 'true',
                 area:'true',
