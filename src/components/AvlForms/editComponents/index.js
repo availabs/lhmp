@@ -15,7 +15,6 @@ import ImageEditor from "./imageComponent/index"
 import AvlFormsJoin from './AvlFormsJoin'
 import CheckboxComponent from './checkboxComponent'
 import ContentEditor from "../../displayComponents/contentEditor/contentEditor";
-import contentViewer from "../../displayComponents/contentViewer";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -42,7 +41,6 @@ export default {
     NA,
     NE,
     contentEditor,
-    contentViewer,
     hidden: HIDDEN,
     text: TextComponent,
     dropdown: DropDownComponent,

@@ -77,5 +77,25 @@ export default [
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationFormsView))
+    },
+    {
+        path: `/participation/view/:sub_type/:id/p`,
+        exact: true,
+        name: 'Actions',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'participation', path: '/participation/' },
+            { param: 'id', path: '/participation/view/:sub_type' },
+            { param: 'sub_type',path:'/participation/view/'}
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationFormsView))
     }
 ]

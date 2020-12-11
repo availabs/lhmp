@@ -459,6 +459,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'participation',
+				subType: 'meeting',
 				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. The Narrative section can be searched for keywords using the search bar at the top of the table.',
         		columns : [
         			{
@@ -511,9 +512,10 @@ const config =  {
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
 			// activeGeoFilter: 'true',
+			viewLink: 'true',
 			defaultSortCol: 'start_date',
 			defaultSortOrder: 'desc',
-			colOrder: ['Date', 'Name', 'Hours', 'Narrative'],
+			colOrder: ['Date', 'Jurisdiction', 'Name', 'Meeting Format', 'Milestones', 'Hours', 'Narrative', 'viewLink'],
 			minHeight: '80vh',
 			icon: 'os-icon-user-check'
 		},

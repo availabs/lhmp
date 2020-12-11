@@ -82,7 +82,11 @@ class FormTableViewer extends React.Component{
 
                     if (this.props.viewLink && c === 'viewLink'){
                         a['viewLink'] =
-                            <a href={`/${this.props.config.type}/view/${this.props.formData[d.value[2]].value.id}/p`} target={'_blank'}>
+                            <a href={
+                                this.props.config.subType ?
+                                `/${this.props.config.type}/view/${this.props.config.subType}/${this.props.formData[d.value[2]].value.id}/p` :
+                                `/${this.props.config.type}/view/${this.props.formData[d.value[2]].value.id}/p`
+                            } target={'_blank'}>
                                 <i className="os-icon os-icon-mail-19"></i>
                             </a>
                         return a;
