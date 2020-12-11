@@ -24,6 +24,7 @@ import functions from "../../../auth/Plan/functions";
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
 import styled from "styled-components";
 
+import ContentViewer from "../../../../components/displayComponents/contentViewer";
 const emptyBody = ['<p></p>', '']
 
 const ANNEX_DIV = styled.div`
@@ -196,8 +197,12 @@ class Hazards extends React.Component {
                 <div className='row' style={{paddingTop:20}}>
                     <div>
                         <h4>{get(this.props.graph, `riskIndex.meta[${this.props.hazard}].name`, '')} Characteristics</h4>
+                        <ContentViewer
+                            requirement={ `req-B1-${this.props.hazard}` }
+                            user={ this.props.user }
+                        />
                         {/*<i>{contentCharacteristicsStatus}</i>*/}
-                        {
+                       {/* {
                             !contentCharacteristicsFlags.hideCounty || this.props.user.activeCousubid.length === 5 ?
                                 <div dangerouslySetInnerHTML={{__html: countyContentCharacteristics}}/> : null
                         }
@@ -207,7 +212,7 @@ class Hazards extends React.Component {
                                     <span className='text-muted' style={{float: 'right'}}> Jurisdiction Town Annex</span>
                                     <div dangerouslySetInnerHTML={{__html: contentCharacteristics}}/>
                                 </ElementBox> : null
-                        }
+                        }*/}
                     </div>
                     <div style={{width: '100%'}}>
                         {this.state.image ? <HeaderImageContainer img={this.state.image}/> : null}
@@ -216,8 +221,12 @@ class Hazards extends React.Component {
                         <h4>
                             {contentLocalImpactsTitle}
                         </h4>
+                        <ContentViewer
+                            requirement={ `req-B1-${this.props.hazard}-local-impact` }
+                            user={ this.props.user }
+                        />
                         {/*<i>{contentLocalImpactsStatus}</i>*/}
-                        {
+                        {/*{
                             !contentLocalImpactsFlags.hideCounty || this.props.user.activeCousubid.length === 5 ?
                                 <div dangerouslySetInnerHTML={{__html: countyContentLocalImpacts}}/> : null
                         }
@@ -227,7 +236,7 @@ class Hazards extends React.Component {
                                     <ANNEX_DIV>Jurisdictional Annex</ANNEX_DIV>
                                     <div dangerouslySetInnerHTML={{__html: contentLocalImpacts}}/>
                                 </ElementBox> : null
-                        }
+                        }*/}
 
                     </div>
                 </div>
