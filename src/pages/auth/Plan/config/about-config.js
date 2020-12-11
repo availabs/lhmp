@@ -468,8 +468,24 @@ const config =  {
 						sort: true
         			},
         			{
+        				Header: 'Jurisdiction',
+        				accessor: 'contact_municipality',
+        				width: 40
+        			},
+        			{
         				Header: 'Name',
         				accessor: 'title',
+        			},
+        			{
+        				Header: 'Meeting Format',
+        				accessor: 'meeting_format',
+        				width: 60,
+						sort: true
+        			},
+        			{
+        				Header: 'Milestones',
+        				accessor: 'milestones',
+        				width: 100,
         			},
         			{
         				Header: 'Hours',
@@ -479,9 +495,16 @@ const config =  {
         			{
         				Header: 'Narrative',
         				accessor: 'narrative',
-        				width: 400,
+        				width: 300,
 						filter: 'default'
-        			}
+        			},
+        			{
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
         		]
         
 			},

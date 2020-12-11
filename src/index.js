@@ -11,6 +11,15 @@ import store, { history } from './store'
 import App from './App';
 
 import registerServiceWorker from './registerServiceWorker';
+import {
+	Themes,
+	
+	ThemeContext,
+	//falcorGraph,
+	// addComponents,
+	// addWrappers
+} from "@availabs/avl-components"
+
 
 const rootElement = document.getElementById('root')
 
@@ -18,7 +27,9 @@ const app =
 	<Provider store={store}>
 		<FalcorProvider store={store} falcor={falcorGraph}>
 			<ConnectedRouter history={history}>
-				<App />
+				<ThemeContext.Provider value={  Themes["light"] }>
+					<App />
+				</ThemeContext.Provider>
 			</ConnectedRouter>
 		</FalcorProvider>
 	</Provider>

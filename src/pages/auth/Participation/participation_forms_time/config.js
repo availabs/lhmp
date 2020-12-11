@@ -1,19 +1,34 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','title', 'contact_municipality','start_date', 'narrative', /*'roles'*/],
+        list_attributes : ['id','title', 'contact_municipality','start_date', 'milestones', 'narrative', /*'roles'*/],
+        csv_download: [
+                'title',
+                'contact_county',
+                'contact_municipality',
+                'sub_type',
+                'owner_type',
+                'meeting_format',
+                'start_date',
+                'hours',
+                'invite_method',
+                'narrative',
+                'minutes',
+                'milestones',
+                'roles'
+        ],
         sections:[],
         attributes:{
-            owner_type:{
-                sub_type:'time',
-                label:'Owner Id',
+            title:{
+                sub_type:'meeting',
+                label:'Title',
                 prompt:'',
-                edit_type:'integer',
+                edit_type:'text',
                 display_type:'text',
-                hidden:'true', // if you don`t want to show it in view data
-                section:''
+                section:'',
+                list_attribute: 'true'
             },
-             contact_county:{
+            contact_county:{
                 label:'County', // Which you would like to see on the form
                 prompt:'',
                 sub_type:'',
@@ -39,15 +54,6 @@ module.exports = [
                 section: '',
                 list_attribute: 'true'
             },
-             title:{
-                sub_type:'meeting',
-                label:'Title',
-                prompt:'',
-                edit_type:'text',
-                display_type:'text',
-                section:'',
-                 list_attribute: 'true'
-             },
             sub_type:{
                 label:'Sub type',
                 prompt:'',
@@ -57,42 +63,120 @@ module.exports = [
                 section:'',
                 list_attribute: 'true'
             },
+            owner_type:{
+                sub_type:'meeting',
+                label:'Owner Id',
+                prompt:'',
+                edit_type:'integer',
+                display_type:'text',
+                hidden:'true', // if you don`t want to show it in view data
+                section:''
+            },
+            meeting_format:{
+                label:'Meeting Format',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Virtual',
+                        'In-Person',
+                        'Phone Call', 
+                    ],
+                },
+            },
             start_date:{
-                label:'Start Date',
-                sub_type:'time',
+                label:'Date',
+                sub_type:'meeting',
                 prompt:'',
                 edit_type:'date',
                 display_type:'text',
                 meta:'false',
                 section:''
             },
-            // end_date:{
-            //     label:'End Date',
-            //     sub_type:'time',
-            //     prompt:'',
-            //     edit_type:'date',
-            //     display_type:'text',
-            //     meta:'false',
-            //     section:''
-            // },
             hours:{
                 label:'Hours',
-                sub_type:'time',
+                sub_type:'meeting',
                 prompt:'',
                 edit_type:'number',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
+
+            },
+            invite_method:{
+                label:'Invitation Method',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Email',
+                        'Outlook Invitation',
+                        'Phone Call',
+                        'Mailed Letter',
+                    ],
+                },
             },
             narrative:{
                 label:'Narrative',
-                sub_type:'time',
+                sub_type:'meeting',
                 prompt:'',
                 edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
-                section:'',
-                // expandable: 'true',
+                section:''
+            },
+            minutes:{
+                label:'Agenda and Minutes',
+                sub_type:'meeting',
+                prompt:'',
+                edit_type:'textarea',
+                display_type:'text',
+                meta:'false',
+                section:''
+            },
+            milestones:{
+                label:'Participation Milestones',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Core Planning Group Meeting',
+                        'Ad Hoc Meeting or Phone Call',
+                        'Steering Committee Meeting',
+                        'Completed Information Gathering or Surveys',
+                        'Provided Data or Information',
+                        'Jurisdictional Information Meeting',
+                        'Identified Vulnerabilities',
+                        'Identified Capabilities',
+                        'Conducted Risk Assessment', 
+                        'Inventoried - Critical Infrastructure, Shelters, etc.',
+                        'Progress on Previous Mitigation Strategies',
+                        'Mitigation Strategy Development',
+                        'Mitigation Strategy Workshop',
+                        'Input on Goals and Objectives',
+                        'Facilitated or Supported Public Outreach Initiative',
+                        'Integration with Other Planning Mechanisms',
+                        'Reviewed/Approved Draft and Final Plan Sections',
+                        'Plan Draft Review Meeting',
+                        'Adoption Support',
+                        'Maintenance', 
+                    ],
+                },
             },
             roles:{
                 label:'Roles',

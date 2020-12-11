@@ -129,7 +129,6 @@ class SideMenu extends React.Component {
             }
             
         }
-        console.log('render', rows)
         return(
          <DIV style={{height: '100%', paddingTop: 20, overflow: 'auto'}}
             className={`menu-w 
@@ -180,7 +179,23 @@ class SideMenu extends React.Component {
                 
                         )
                     })
-                } 
+                }
+
+                <li 
+                    onClick={this.props.changeHazard.bind(this,{target:{value:'other-hazards'}})} 
+                    style={{cursor:'pointer',  backgroundColor: this.props.hazard === 'other-hazards' ? 'red' : '#fff'}}
+                >
+                               
+                        <div style={{display:'flex'}}>
+                            
+                            <GraphIcon 
+                                color='red'
+                                className={`fi fa-hole`}
+                            /> 
+
+                            <span style={{fontSize: '1em', letterSpacing: '2px', paddingTop:10}}>Other Hazards</span>
+                        </div>
+                </li> 
             </ul>
 
         </DIV>
