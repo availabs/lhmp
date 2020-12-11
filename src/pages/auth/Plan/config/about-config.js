@@ -439,6 +439,7 @@ const config =  {
 			activeGeoFilter: 'true',
 			defaultSortCol: 'contact_agency',
 			// defaultSortOrder: 'desc',
+			viewLink: 'true',
 			colOrder: ['Jurisdiction', 'Name', 'Agency', 'Department', 'Role', 'Participation', 'viewLink'],
 			minHeight: '80vh',
 			icon: 'os-icon-user'
@@ -479,6 +480,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'participation',
+				subType: 'meeting',
 				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. These can be accessed by clicking on the row in the table. To view all details of the meeting click the View Link. Planning milestones met during that meeting are available in the table and can be searched for keywords using the search bar at the top of the table.',
         		columns : [
         			{
