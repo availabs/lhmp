@@ -57,5 +57,24 @@ export default [
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsView))
+    },
+    {
+        path: `/roles/view/:id/p`,
+        exact: true,
+        name: 'Roles',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'roles', path: '/roles/' },
+            { param: 'id', path: '/roles/view/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsView))
     }
 ]

@@ -269,7 +269,7 @@ class AvlFormsViewData extends React.Component{
 
         return(
             <GraphFactory
-                graph={{type: this.props.config[0].type === 'comments' ? 'comments' : 'text'}}
+                graph={{type: (get(this.props.config, [0, 'type']) || get(this.props.config, ['type'])) === 'comments' ? 'comments' : 'text'}}
                 data={data}
                 config={this.props.config}
                 isVisible = {true}

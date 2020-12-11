@@ -479,7 +479,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'participation',
-				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. These can be accessed by clicking on the row in the table. Planning milestones met during that meeting are available in the table and can be searched for keywords using the search bar at the top of the table.',
+				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. These can be accessed by clicking on the row in the table. To view all details of the meeting click the View Link. Planning milestones met during that meeting are available in the table and can be searched for keywords using the search bar at the top of the table.',
         		columns : [
         			{
         				Header: 'Date',
@@ -533,8 +533,8 @@ const config =  {
                         Header: 'viewLink',
                         accessor: 'viewLink',
                         width: 50,
-                        // expandable: 'true',
-                        // expandableHeader: true
+                        expandable: 'true',
+                        expandableHeader: true
                     },
         		]
         
@@ -542,9 +542,10 @@ const config =  {
 			prompt: '',
 			intent: 'For each jurisdiction seeking plan approval, the plan must document how they were involved in the planning process.',
 			// activeGeoFilter: 'true',
+			viewLink: 'true',
 			defaultSortCol: 'start_date',
 			defaultSortOrder: 'desc',
-			colOrder: ['Date','Jurisdiction', 'Name', 'Meeting Format', 'Invitation Methods', 'Milestones', 'Hours', 'Narrative', ],
+			colOrder: ['Date','Jurisdiction', 'Name', 'Meeting Format', 'Invitation Methods', 'Milestones', 'Hours', 'Narrative', 'viewLink' ],
 			minHeight: '80vh',
 			icon: 'os-icon-user-check'
 		},
