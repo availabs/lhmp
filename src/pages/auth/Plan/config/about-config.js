@@ -180,7 +180,13 @@ const config =  {
         				accessor: 'contact_planning_team',
 						sort: true,
 						filter: 'multi'
-        			}
+        			},
+        			{
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                    },
         		]
         
 			},
@@ -281,8 +287,8 @@ const config =  {
 				' mechanisms to implement the mitigation strategy.',
 			icon: 'os-icon-rotate-cw',
 			// hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true
 		},
 		
@@ -335,6 +341,13 @@ const config =  {
 						filter: 'default',
 						link: true
         			},
+        			{
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                        // expandableHeader: true
+                    },
         			
         		]
         
@@ -409,7 +422,14 @@ const config =  {
         				accessor: 'contact_planning_team',
 						sort: true,
 						filter: 'multi'
-        			}
+        			},
+        			{
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
         		]
         
 			},
@@ -419,7 +439,7 @@ const config =  {
 			activeGeoFilter: 'true',
 			defaultSortCol: 'contact_agency',
 			// defaultSortOrder: 'desc',
-			colOrder: ['Jurisdiction', 'Name', 'Agency', 'Department', 'Role', 'Participation'],
+			colOrder: ['Jurisdiction', 'Name', 'Agency', 'Department', 'Role', 'Participation', 'viewLink'],
 			minHeight: '80vh',
 			icon: 'os-icon-user'
 		},
@@ -459,32 +479,41 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'participation',
-				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. The Narrative section can be searched for keywords using the search bar at the top of the table.',
+				description: 'The table below chronologically lists all of the meetings that occurred within the planning process to generate this Hazard Mitigation Plan with the most recent at the top. Each meeting has a Narrative section that describes major discussion points and anticipated deliverables from each meeting. These can be accessed by clicking on the row in the table. Planning milestones met during that meeting are available in the table and can be searched for keywords using the search bar at the top of the table.',
         		columns : [
         			{
         				Header: 'Date',
         				accessor: 'start_date',
-        				width: 60,
+        				width: 50,
 						sort: true
         			},
         			{
         				Header: 'Jurisdiction',
         				accessor: 'contact_municipality',
-        				width: 40
+        				width: 80,
+        				filter: 'default',
         			},
         			{
         				Header: 'Name',
         				accessor: 'title',
+        				filter: 'default',
         			},
         			{
         				Header: 'Meeting Format',
         				accessor: 'meeting_format',
-        				width: 60,
+        				width: 50,
+						sort: true
+        			},
+        			{
+        				Header: 'Invitation Methods',
+        				accessor: 'invite_method',
+        				width: 50,
 						sort: true
         			},
         			{
         				Header: 'Milestones',
         				accessor: 'milestones',
+        				filter: 'default',
         				width: 100,
         			},
         			{
@@ -496,14 +525,16 @@ const config =  {
         				Header: 'Narrative',
         				accessor: 'narrative',
         				width: 300,
-						filter: 'default'
+						filter: 'default',
+						expandable: 'true',
+                        expandableHeader: true
         			},
         			{
                         Header: 'viewLink',
                         accessor: 'viewLink',
                         width: 50,
-                        expandable: 'true',
-                        expandableHeader: true
+                        // expandable: 'true',
+                        // expandableHeader: true
                     },
         		]
         
@@ -513,7 +544,7 @@ const config =  {
 			// activeGeoFilter: 'true',
 			defaultSortCol: 'start_date',
 			defaultSortOrder: 'desc',
-			colOrder: ['Date', 'Name', 'Hours', 'Narrative'],
+			colOrder: ['Date','Jurisdiction', 'Name', 'Meeting Format', 'Invitation Methods', 'Milestones', 'Hours', 'Narrative', ],
 			minHeight: '80vh',
 			icon: 'os-icon-user-check'
 		},

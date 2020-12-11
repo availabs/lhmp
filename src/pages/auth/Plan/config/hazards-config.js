@@ -135,7 +135,8 @@ const config =  {
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+            callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            hideIfNull: true
         },
         {
             title: 'Local Hazards of Concern Table',

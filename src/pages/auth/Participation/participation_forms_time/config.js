@@ -1,7 +1,15 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','title', 'contact_municipality','start_date', 'milestones', 'narrative', /*'roles'*/],
+        list_attributes : [
+                'id',
+                'title', 
+                'contact_municipality',
+                'start_date', 
+                {'milestones' : {filter:'true'}}, 
+                'narrative', 
+                /*'roles'*/
+        ],
         csv_download: [
                 'title',
                 'contact_county',
