@@ -169,7 +169,7 @@ let config = {
         {
             element: 'B1',
             requirements_from_software:
-                'req-B1-, req-B1--local-impact,' +
+                'req-B1-local-haz-concern-table, req-B1-, req-B1--local-impact,' +
                 'req-B1-riverine, req-B1-riverine-local-impact, req-B1-hurricane, req-B1-hurricane-local-impact, req-B1-tornado, req-B1-tornado-local-impact,' +
                 'req-B1-landslide, req-B1-landslide-local-impact, req-B1-wind, req-B1-wind-local-impact, req-B1-wildfire, req-B1-wildfire-local-impact,' +
                 'req-B1-tsunami, req-B1-tsunami-local-impact, req-B1-lightning, req-B1-lightning-local-impact, req-B1-icestorm, req-B1-icestorm-local-impact,'+ 
