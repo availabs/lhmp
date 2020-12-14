@@ -348,7 +348,8 @@ const config = {
             'In-progress - This action is still being actively pursued. This may mean that the action is not completed or that it is an ongoing action, like an outreach program, that will remain In-progress as long as it continues.' + 
             'Proposed-Carryover - These are actions that were proposed in the previous plan that are being brought forward to be included into this current hazard mitigation plan' + 
             'Discontinued - These actions are no longer relevant and have been discontinued.',
-            filterBy: [ 'In-progress', 'Completed', 'Discontinued', 'Proposed-Carryover'],
+            filterCol: ['action_status_update', 'previous_plan_action'],
+            filterBy: [ 'In-progress', 'Completed', 'Discontinued', 'Proposed-Carryover', 'yes'],
             align: 'full',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
                 ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
