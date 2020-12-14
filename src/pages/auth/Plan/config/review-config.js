@@ -311,7 +311,7 @@ let config = {
         },
         {
             element: 'C1',
-            requirements_from_software: `Req-C-6, Req-C-1A, Req-C-1B-1, Req-C-1B-1B`,
+            requirements_from_software: `Req-C-6, Req-C-1A, Req-C-1B-1B, Req-A-4C`,
             objective: 'Does the plan document each jurisdiction’s existing authorities, policies, programs and resources, ' +
                 'and its ability to expand on and improve these existing policies and programs? 44 CFR 201.6(c)(3)',
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, ' +
@@ -442,7 +442,7 @@ let config = {
         },
         {
             element: 'C6',
-            requirements_from_software: `Req-C-6, Req-C-6A`,
+            requirements_from_software: `Req-C-6, Req-C-6A, Req-C-1B-1B`,
             objective: 'Does the Plan describe a process by which local governments will integrate the requirements of ' +
                 'the mitigation plan into other planning mechanisms, such as comprehensive or capital improvement plans, ' +
                 'when appropriate? 44 CFR 201.6(c)(4)(ii)',
@@ -574,7 +574,7 @@ let config = {
         },
         {
             element: 'F1',
-            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-1C, Req-A-3A`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-3A`,
             objective: 'Does the plan document how stakeholders were invited to participate at each phase of the planning ' +
                 'process and provide a summary of feedback?',
             intent: 'Plans developed with the participation of the widest range of organizations and stakeholders personally ' +
@@ -598,7 +598,7 @@ let config = {
         },
         {
             element: 'F3',
-            requirements_from_software: `Req-NYS-F-3A, Req-NYS-F-3B-1, Req-NYS-F-3B`,
+            requirements_from_software: `Req-NYS-F-4B, Req-NYS-F-3A, Req-NYS-F-3B-1`,
             objective: 'Do jurisdictions containing an SFHA identify:\n' +
                 'a. potential sites for the placement of temporary housing units for residents displaced by disaster; and\n' +
                 'b. potential sites within the jurisdiction suitable for relocating houses out of the floodplain, ' +
@@ -611,7 +611,7 @@ let config = {
         },
         {
             element: 'F4',
-            requirements_from_software: `Req-NYS-F-4A, Req-NYS-F-4A-1, Req-NYS-F-4B-2, Req-NYS-F-4B`,
+            requirements_from_software: `Req-NYS-F-4B, Req-NYS-F-4A, Req-NYS-F-4A-1, Req-NYS-F-4B-2`,
             objective: 'Do jurisdictions identify:\n' +
                 'a. routes and procedures to evacuate citizens prior to and during an event; and\n' +
                 'b. shelters for evacuated citizens, to include provisions for a range of medical needs, accommodation ' +
@@ -624,7 +624,7 @@ let config = {
         },
         {
             element: 'F5',
-            requirements_from_software: `Req-D-1F`,
+            requirements_from_software: `Req-D-1F, Req-D-1G`,
             objective: 'Do jurisdictions identify mitigation projects completed since the approval of the previous ' +
                 'mitigation plan (or within the last five years)?',
             intent: 'Past mitigation actions provide a context for the jurisdiction’s projects, and can help to evaluate ' +
@@ -635,7 +635,7 @@ let config = {
         },
         {
             element: 'F6',
-            requirements_from_software: `Req-NYS-F-6`,
+            requirements_from_software: `Req-A-1G`,
             objective: 'Does the plan include an annex for every jurisdiction within the County’s boundaries?',
             intent: 'Jurisdictional annexes provide a unique, stand-alone guide to mitigation planning for each jurisdiction.',
             element_requirements: '',
@@ -676,7 +676,7 @@ let config = {
         },
         {
             element: 'F10',
-            requirements_from_software: `Req-NYS-F-10`,
+            requirements_from_software: `Req-A-2`,
             objective: 'Was the draft plan posted for public comment?',
             intent: '',
             element_requirements: '',
