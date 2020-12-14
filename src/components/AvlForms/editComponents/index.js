@@ -14,7 +14,7 @@ import FormArrayComponent from "./FormArrayComponent";
 import ImageEditor from "./imageComponent/index"
 import AvlFormsJoin from './AvlFormsJoin'
 import CheckboxComponent from './checkboxComponent'
-import ContentEditor from "../../displayComponents/contentEditor/contentEditor";
+import ContentEditor from "./contentEditor/contentEditor";
 const NA = ({ type, state, routes }) =>
 {
     return (

@@ -65,9 +65,21 @@ class inventoryTableViewer extends Component {
                                     .filter(f => get(this.props, `filterBy`, []).includes(f.status))
                                     .map(f => f.id)
                             Object.keys(graph).filter(d => d !== '$__path').forEach(id => {
-                                if (_.intersection(
+                                if (
+                                    (get(this.props, `filterCol`, []).includes('action_status_update') && _.intersection(
                                     get(graph, `[${id}].attributes.action_status_update`, "[]").slice(1, -1).split(",").slice(-1),
-                                    allowed_action_status).length) {
+                                    allowed_action_status).length)
+                                    ||
+                                    (
+                                        get(this.props, `filterCol`, []).length &&
+                                        get(this.props, `filterCol`, []).reduce((a, col) => {
+                                            let tmpVal = get(graph, `[${id}].attributes.${col}`, null);
+                                            tmpVal = typeof tmpVal === "string" && tmpVal.includes('[') ? tmpVal.slice(1, -1).split(",") : tmpVal
+
+                                            return a && _.intersection(typeof tmpVal === "string" ? [tmpVal] : tmpVal, get(this.props, `filterBy`, [])).length
+                                        }, true)
+                                    )
+                                ) {
                                     ids.push(graph[id].id)
                                 }
 
@@ -179,7 +191,7 @@ class inventoryTableViewer extends Component {
                                             data[attribute].map(d => geo[d] ? geo[d].name || '' : d) :
                                             data[attribute]
 
-                                if (attribute === 'action_status_update') {
+                                if (attribute === 'action_status_update' && data[attribute]) {
                                     data[attribute] = data[attribute].slice(-1).pop()
                                     data[attribute] = get(this.props, ['formsListData', data[attribute], 'value', 'attributes', 'status'], data[attribute])
                                 }
