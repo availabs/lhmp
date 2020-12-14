@@ -183,12 +183,12 @@ const config =  {
                             sort: true,
                             filter: 'default'
                         },
-                        {
-                            Header: 'EXTENT_DESCRIPTION',
-                            accessor: 'extent_description',
-                            sort: true,
-                            filter: 'default'
-                        },
+                        // {
+                        //     Header: 'EXTENT_DESCRIPTION',
+                        //     accessor: 'extent_description',
+                        //     sort: true,
+                        //     filter: 'default'
+                        // },
                         {
                             Header: 'LOCATION_DESCRIPTION',
                             accessor: 'location_description',
@@ -201,7 +201,7 @@ const config =  {
                 activeGeoFilter: 'true',
                 defaultSortCol: 'COMMUNITY_NAME',
                 // defaultSortOrder: 'desc',
-                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
+                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'LOCATION_DESCRIPTION'],
                 minHeight: '80vh',
                 icon: 'os-icon-tasks-checked',
                 flex: 'false'
