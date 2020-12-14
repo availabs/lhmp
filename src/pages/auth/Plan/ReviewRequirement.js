@@ -147,8 +147,8 @@ class ReviewRequirement extends React.Component {
                             let graph = response.json.forms[formType].byPlanId[this.props.activePlan].byIndex;
                             Object.keys(graph).filter(d => d !== '$__path').forEach(id => {
                                 if (graph[id] &&
-                                    get(graph[id], `attributes.element`, null) === this.props.match.params.req &&
-                                    get(graph[id], `attributes.geoid`, null) === this.props.match.params.geo
+                                    get(graph[id], `attributes.element`, null) === this.props.match.params.req
+                                    // && get(graph[id], `attributes.geoid`, null) === this.props.match.params.geo
                                 ) {
                                     ids.push(graph[id])
                                 }
