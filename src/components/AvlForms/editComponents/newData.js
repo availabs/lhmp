@@ -63,7 +63,14 @@ class AvlFormsNewData extends React.Component{
     handleChange(e){
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
-
+    isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
     componentDidMount(){
         if(this.props.id[0]){
             let attributes = this.props.config.map(d => Object.keys(d.attributes));
@@ -92,7 +99,7 @@ class AvlFormsNewData extends React.Component{
                                     tmp_state[attribute] = undefined
                                 }
                             }else{
-                                if(graph.attributes[attribute] && typeof graph.attributes[attribute] === "string" && graph.attributes[attribute].includes("[")){
+                                if(graph.attributes[attribute] && typeof graph.attributes[attribute] === "string" && !this.isJsonString(graph.attributes[attribute]) && graph.attributes[attribute].includes("[")){
                                     tmp_state[attribute] = graph.attributes[attribute].slice(1,-1).split(",")
                                 }else{
                                     tmp_state[attribute] = graph.attributes[attribute]
