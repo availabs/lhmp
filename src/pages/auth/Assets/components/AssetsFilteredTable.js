@@ -76,7 +76,7 @@ class AssetsFilteredTable extends Component {
         let digitsToMatch = this.props.groupBy === 'propType' ? 1 : this.props.groupBy === 'critical' ? 2 : 0;
         let moduloBy = this.props.groupBy === 'propType' ? 100 : this.props.groupBy === 'critical' ? 1000 : 1;
         let primeColName = this.props.groupBy.split('T').join(' T');
-        let linkBase = `${this.props.public ? 'risk' : ``}/assets/list/${this.props.groupBy}/`;
+        let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/${this.props.groupBy}/`;
         let linkTrail = `/geo/${this.props.geoid}`
         let graph = this.props.groupBy === 'critical' ?
             Object.keys(get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy + 'Grouped'}`, {}))

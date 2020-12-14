@@ -48,7 +48,6 @@ const DIVSTATUS = styled.div`
 
     position: relative;
     opacity: 0.5;
-    z-index: 100;
     color: #fafafa !important;
 }
 .hoverable:hover {
@@ -197,6 +196,14 @@ class ReviewRequirement extends React.Component {
                                                 onClick={this.deleteItem}> Delete </button>
                                     </span>
                                 </div> :
+                                ['AVAIL', 'DHSES'].includes(this.props.user.activeGroup) ?
+                                    <div>
+                                        <label>{get(this.state.form_ids[idI], `attributes.user`, null)}:</label>
+                                        <span style={{float: 'right'}}>
+                                            <button id= {id.id} className="btn btn-sm btn-outline-danger"
+                                                    onClick={this.deleteItem}> Delete </button>
+                                        </span>
+                                    </div> :
                                 <div>
                                     <label>{get(this.state.form_ids[idI], `attributes.user`, null)}:</label>
                                 </div>
