@@ -48,7 +48,6 @@ const DIVSTATUS = styled.div`
 
     position: relative;
     opacity: 0.5;
-    z-index: 100;
     color: #fafafa !important;
 }
 .hoverable:hover {
