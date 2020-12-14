@@ -7,7 +7,7 @@ module.exports = [
             'previous_occurrence', 
             'future_occurrence', 
             'loss_life_property', 
-            'extent_description', 
+            // 'extent_description', 
             'location_description'],
         csv_download: ['county', 'community_name','hazard_concern','previous_occurrence', 'future_occurrence', 'loss_life_property', 'extent_description', 'location_description'],
         default_title: 'Hazard ID', // in the case when page_title is invalid

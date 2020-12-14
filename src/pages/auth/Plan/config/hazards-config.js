@@ -52,7 +52,7 @@ Object.keys(HAZARD_META).map(key => {
         type: 'content',
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
         // hideNav: true // hides key from public nav. Displays on page.
          /*2-non-county*/ pullCounty: true,
         ///*2-non-not-provided nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
@@ -64,7 +64,7 @@ Object.keys(HAZARD_META).map(key => {
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
             pullCounty: true,
             hideCounty: false,
             hideJurisdictionAnnex: false
@@ -77,7 +77,7 @@ HazardConfig.push({
         type: 'image',
         prompt: '',
         intent: '',
-        callout: '',
+        // callout: '',
         label:'Image', // Which you would like to see on the form
         height: 400,
         width: 500,
@@ -93,7 +93,7 @@ HazardConfig.push({
         type: 'content',
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
         // hideNav: true // hides key from public nav. Displays on page.
         /*2-non-county*/ pullCounty: true,
         ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
@@ -105,7 +105,7 @@ HazardConfig.push({
         type: 'content',
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
         pullCounty: true
     })
 
@@ -117,7 +117,7 @@ const config =  {
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+            // callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
         },
 
 		...HazardConfig,
@@ -134,7 +134,7 @@ const config =  {
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
             hideIfNull: true
         },
         {
@@ -183,12 +183,12 @@ const config =  {
                             sort: true,
                             filter: 'default'
                         },
-                        {
-                            Header: 'EXTENT_DESCRIPTION',
-                            accessor: 'extent_description',
-                            sort: true,
-                            filter: 'default'
-                        },
+                        // {
+                        //     Header: 'EXTENT_DESCRIPTION',
+                        //     accessor: 'extent_description',
+                        //     sort: true,
+                        //     filter: 'default'
+                        // },
                         {
                             Header: 'LOCATION_DESCRIPTION',
                             accessor: 'location_description',
@@ -201,7 +201,7 @@ const config =  {
                 activeGeoFilter: 'true',
                 defaultSortCol: 'COMMUNITY_NAME',
                 // defaultSortOrder: 'desc',
-                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'EXTENT_DESCRIPTION', 'LOCATION_DESCRIPTION'],
+                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'LOCATION_DESCRIPTION'],
                 minHeight: '80vh',
                 icon: 'os-icon-tasks-checked',
                 flex: 'false'

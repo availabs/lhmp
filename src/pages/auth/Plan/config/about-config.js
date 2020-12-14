@@ -301,65 +301,100 @@ const config =  {
 			//align: 'full',
 			type: 'formTable',
 			hideNav: true,
-			fontSize: '0.70em',
-			height: '600px',
-			align: 'full',
-			config: {
-				type: 'capabilities',
+            height: '600px',
+            align: 'full',
+            config: {
+                type: 'capabilities',
+                description: 'Existing Resources Capabilities (plans, studies, reports, data) were collected, reviewed and integrated into this Hazard Mitigation Plan throughout the planning process. Existing resources capabilities are categorized as: Planning and Regulatory and Administrative and Technical, Education and Outreach, and Financial assets. The information displayed in the table below includes the selected jurisdiction’s capabilities. When the county is selected, the table includes capabilities for all jurisdictions in the plan, otherwise the table filters to the selected jurisdiction.', 
 				filters:[{column:'capability_category',value:'planning and regulatory'}],
-        		columns : [
-        			{
-        				Header: 'Name',
-        				accessor: 'capability_name',
-						sort: true,
-						filter: 'default'
-        			},
-        			{
-        				Header: 'capability type',
-        				accessor: 'capability_type',
-						sort: true,
-						filter: 'multi'
-        			},
-        			
-        			{
-        				Header: 'adopting authority',
-        				accessor: 'adopting_authority',
-						sort: true,
-						filter: 'default'
-        			},
-        			{
-        				Header: 'responsible authority',
-        				accessor: 'responsible_authority',
-						sort: true,
-						filter: 'default'
-        			},
-        			{
-        				Header: 'Link',
-        				accessor: 'upload',
-        				width: 50,
-						sort: true,
-						filter: 'default',
-						link: true
-        			},
-        			{
+                columns : [
+                    {
+                        Header: 'Jurisdiction',
+                        accessor: 'municipality',
+                        width: 80,
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'Name',
+                        accessor: 'capability_name',
+                        sort: true,
+                        width: 120,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'category',
+                        accessor: 'capability_category',
+                        sort: true,
+                        width: 100,
+                        filter: 'multi'
+                    },
+                    {
+                        Header: 'type',
+                        accessor: 'capability_type',
+                        sort: true,
+                        width: 120,
+                        filter: 'multi'
+                    },
+
+                    /*  {
+                          Header: 'adopting authority',
+                          accessor: 'adopting_authority',
+                          sort: true,
+                          filter: 'default'
+                      },*/
+                    {
+                        Header: 'responsible authority',
+                        accessor: 'responsible_authority',
+                        sort: true,
+                        width: 200,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'Link',
+                        accessor: 'upload',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                    {
+                        Header: 'jurisdiction_utilization',
+                        accessor: 'jurisdiction_utilization',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                    {
+                        Header: 'capability_description',
+                        accessor: 'capability_description',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                    {
                         Header: 'viewLink',
                         accessor: 'viewLink',
                         width: 50,
                         expandable: 'true',
-                        // expandableHeader: true
+                        expandableHeader: true
                     },
-        			
-        		]
-        
-			},
-			prompt: '',
-			intent: '',
-			activeGeoFilter: 'true',
-			defaultSortCol: 'adopting_authority',
-			// defaultSortOrder: 'desc',
-			colOrder: ['Name', 'capability type', 'adopting authority', 'responsible authority', 'Link'],
-			minHeight: '80vh',
-			icon: 'os-icon-tasks-checked'
+                ]
+            },
+            prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
+                ' to expand on and improve these existing policies and program ' +
+                ' a. Examples: Staff involved local planning activities,' +
+                ' public works/emergency management, funding through taxing authority and annual budgets, regulatory authorities' +
+                ' for comp. Planning building codes and ordinances',
+            intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
+                ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
+                ' capability varies widely.',
+            viewLink: true,
+            activeGeoFilter: 'true',
+            defaultSortCol: 'adopting_authority',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Jurisdiction','Name', 'category', 'type', 'Link', 'responsible authority', 'jurisdiction_utilization', 'capability_description', 'viewLink'],
+            minHeight: '80vh',
+            icon: 'os-icon-tasks-checked'
 		},
 	],
 	'Engagement' : [

@@ -169,7 +169,7 @@ let config = {
         {
             element: 'B1',
             requirements_from_software:
-                'req-B1-, req-B1--local-impact,' +
+                'req-B1-local-haz-concern-table, req-B1-, req-B1--local-impact,' +
                 'req-B1-riverine, req-B1-riverine-local-impact, req-B1-hurricane, req-B1-hurricane-local-impact, req-B1-tornado, req-B1-tornado-local-impact,' +
                 'req-B1-landslide, req-B1-landslide-local-impact, req-B1-wind, req-B1-wind-local-impact, req-B1-wildfire, req-B1-wildfire-local-impact,' +
                 'req-B1-tsunami, req-B1-tsunami-local-impact, req-B1-lightning, req-B1-lightning-local-impact, req-B1-icestorm, req-B1-icestorm-local-impact,'+ 
@@ -243,7 +243,7 @@ let config = {
         },
         {
             element: 'B3',
-            requirements_from_software: `Req-B-3B, Req-B-3B-1, Req-B-3B-2, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3A, Req-B-3B-6`,
+            requirements_from_software: `Req-B-3B, Req-B-3B-1, Req-B-3B-2, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3A, Req-B-3B-6, Req-B-3B-8, Req-B-4A-1`,
             objective: 'Is there a description of each identified hazard’s impact on the community as well as an overall ' +
                 'summary of the community’s vulnerability for each jurisdiction? 44 CFR 201.6(c)(2)(ii)',
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of ' +
