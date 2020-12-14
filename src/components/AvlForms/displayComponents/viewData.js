@@ -67,8 +67,9 @@ class AvlFormsViewData extends React.Component{
                             this.setState({county: value})
                         }
                         if(value &&
-                            ((get(this.props.geoRelations, [this.state.county], null) &&
-                                this.props.geoRelations[this.state.county].includes(value)) ||
+                            ((
+                                get(this.props.geoRelations, [this.state.county], []).includes(value)) ||
+                                (this.props.config[0].type === 'comments' && get(this.props.geoRelations, [this.props.activeGeoid], []).includes(value)) ||
                                 (value.toString().substring(0,5) === this.state.county && value.length === 10))
                         ){
                             this.setState({cousub: value})
@@ -93,6 +94,14 @@ class AvlFormsViewData extends React.Component{
             })
     }
 
+    isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
 
     formsViewData(){
         let graph = this.props.formsViewData[this.state.id];
@@ -113,8 +122,8 @@ class AvlFormsViewData extends React.Component{
                         targetKey = get(config[0][d], `targetKey`, null);
 
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
-                    value = value ? value.toString() : value;
-                    value = value && value.includes('[') ?
+                    value = value && !this.isJsonString(value) ? value.toString() : value;
+                    value = value && !this.isJsonString(value) && value.includes('[') ?
                         value.replace('[', '').replace(']', '').split(',') : value;
 
                     if(config_attributes[0].includes(d)){
@@ -266,10 +275,10 @@ class AvlFormsViewData extends React.Component{
 
     render(){
         let data = this.formsViewData();
-
+        let graphType = get(this.props.config, [0, 'type']) || get(this.props.config, ['type'])
         return(
             <GraphFactory
-                graph={{type: (get(this.props.config, [0, 'type']) || get(this.props.config, ['type'])) === 'comments' ? 'comments' : 'text'}}
+                graph={{type: ['comments', 'contentViewer'].includes(graphType) ? graphType : 'text'}}
                 data={data}
                 config={this.props.config}
                 isVisible = {true}
