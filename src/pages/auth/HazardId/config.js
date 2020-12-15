@@ -9,7 +9,7 @@ module.exports = [
             'loss_life_property', 
             // 'extent_description', 
             'location_description'],
-        csv_download: ['county', 'community_name','hazard_concern','previous_occurrence', 'future_occurrence', 'loss_life_property', 'extent_description', 'location_description'],
+        csv_download: ['county', 'community_name','hazard_concern','previous_occurrence', 'future_occurrence', 'loss_life_property', 'extent_description', 'location_description', 'affected_climate_change', 'impact_climate_change'],
         default_title: 'Hazard ID', // in the case when page_title is invalid
         page_title: 'community_name', // page title in edit and view
         sub_title: '', // sub title in edit and view

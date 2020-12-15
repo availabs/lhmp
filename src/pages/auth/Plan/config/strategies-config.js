@@ -318,6 +318,7 @@ const config = {
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
             description: 'The table below includes all of the hazard impact problem statements and their corresponding actions that were identified during the strategy development process by the jurisdictional representatives. The jurisdictions completed the DHSES Action worksheet as part of the strategy development process for select prioritized actions listed below. The actions prioritized for the Plan update are labeled with the status ‘Proposed - HMP’. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
+            filterCol: ['action_status_update'],
             filterBy: ['Proposed-HMP'],
             align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +

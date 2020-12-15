@@ -219,7 +219,7 @@ let config = {
         },
         {
             element: 'B2',
-            requirements_from_software: `req-B1-hazard-events-table`,
+            requirements_from_software: `req-B1-hazard-events-table, req-B1-local-haz-concern-table`,
             objective: 'Does the Plan include information on previous occurrences of hazard events and on the probability ' +
                 'of future hazard events for each jurisdiction? 44 CFR 201.6(c)(2)(i)',
             intent: 'To understand potential impacts to the community based on information on the hazard events that have ' +
@@ -317,7 +317,8 @@ let config = {
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, ' +
                 'through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local capability ' +
                 'varies widely.',
-            element_requirements: 'a. The plan must describe each jurisdiction’s existing authorities,\n' +
+            element_requirements: 'Does the plan document each jurisdiction’s existing authorities, policies, programs and resources and its ability to expand on and improve these existing policies and programs? (Requirement §201.6(c)(3))'+
+                'a. The plan must describe each jurisdiction’s existing authorities,\n' +
                 'policies, programs and resources available to accomplish hazard\n' +
                 'mitigation.\n' +
                 'Examples include, but are not limited to: staff involved in local\n' +
@@ -415,7 +416,7 @@ let config = {
         },
         {
             element: 'C5',
-            requirements_from_software: `Req-C-5A`,
+            requirements_from_software: `Req-C-5A, Req-C-4`,
             objective: 'Does the Plan contain an action plan that  describes how the actions identified will be prioritized ' +
                 '(including cost benefit review), implemented, and administered by each jurisdiction? 44 CFR 201.6(c)(3)(iii) ' +
                 'and 44 CFR (c)(3)(iv)',
@@ -548,8 +549,7 @@ let config = {
                 'adoption of the measure,” with an official signature.\n' +
                 'If adopted after FEMA review, adoption must take place within\n' +
                 'one calendar year of receipt of FEMA’s “Approval Pending\n' +
-                'Adoption.” See Section 5, Plan Review Procedure for more\n' +
-                'information on “Approvable Pending Adoption.”',
+                'Adoption.”',
             municipal: '',
             county: ''
         },
