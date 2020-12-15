@@ -133,7 +133,8 @@ class Hazards extends React.Component {
                             left side navigation panel. Using your mouse tooltip, hover over a bar to see exact amounts as recorded in the data.</li> 
                             <h5>Notes on Visualizations</h5>
                             <li>The statistics listed at the top of the page include overall loss damages in U.S. dollars, average loss damages 
-                            per year, annual probability and daily probability.</li>
+                            per year, annual probability and daily probability. Annual probabilities are calculated based on the total number of events in the Storm Events dataset (From 1996) divided by the number of years in the dataset. 
+                            The daily probability calculation takes the total number of events and divides it by the total number of days in the dataset. </li>
                             <li>The Loss by Year bar chart shows the loss in dollar value annually based on hazard events. 
                             Data can be scaled based on dollar amounts listed at the top of the chart.</li>
                             <li>The Events by Year bar chart shows the number of events during the given years. 
