@@ -212,7 +212,7 @@ const config =  {
         },
 
         {
-            title: 'Local Hazards of Concern Table',
+            title: 'Events with Highest Reported Loss in Dollars',
             requirement: `req-B1-hazard-events-table`,
             type: 'HazardEventsTable',
             prompt: '',

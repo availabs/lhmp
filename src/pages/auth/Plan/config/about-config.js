@@ -601,7 +601,26 @@ const config =  {
 		},
 		{
 			title: 'Adoption',
+			requirement: 'Req-E-2',
+			type: 'content',
+			prompt: `The plan must include documentation of plan adoption, usually a resolution by the governing body or other authority.
+			a.   Upload Prompts: 
+				i.	Meeting minutes
+				ii.	Formal resolution by governing body or other authority 
+				iii.	Written proof of the adoption by clerk, attorney or highest elected official 
+			`,
+			intent: 'To demonstrate the jurisdiction’s commitment to fulfilling the hazard mitigation goals outlined in' +
+				' the plan, and to authorize responsible agencies to execute their responsibilities.',
+				icon: 'os-icon-users',
+				// hideNav: true // hides key from public nav. Displays on page.
+			/*2-non-county*/ pullCounty: true,
+			///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+			///*2-non-delete*/ hideIfNull: true
+		},
+		{
+			title: '',
 			requirement: 'Req-E-1',
+			hideNav: true,
 			type: 'formTable',
 			align: 'full',
 			fontSize: '.7em',
