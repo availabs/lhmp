@@ -46,6 +46,9 @@ const buttonPlugin = makeButtonPlugin(),
         HeaderOneButton,
         HeaderTwoButton,
         HeaderThreeButton,
+        HeaderFourButton,
+        HeaderFiveButton,
+        HeaderSixButton,
         OrderedListButton,
         UnorderedListButton,
         BoldButton,
@@ -275,6 +278,9 @@ class ContentEditor extends Component {
                         <HeaderOneButton />
                         <HeaderTwoButton />
                         <HeaderThreeButton />
+                        <HeaderFourButton />
+                        <HeaderFiveButton />
+                        <HeaderSixButton />
 
                         <BlockQuoteButton />
                         <CodeBlockButton />
