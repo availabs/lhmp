@@ -119,18 +119,22 @@ class Hazards extends React.Component {
                     <PageContainer style={{paddingTop:20}}>The following charts, as well as the visualizations above, display storm events from the<i style={{color: '#afafaf'}}><a
                                 href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
                                 Storm Events Dataset</a></i>. 
-                            The Storm Events Database contains the records used to create the official NOAA Storm Data publication, documenting:
+                            The Storm Events Database contains the records used to create the official NOAA Storm Data publication. The The NOAA NCEI storm events database contains data dating back to January 1950, as entered by NOAA's National Weather Service (NWS). 
+                            The NCEI Storm Events data provides information about the the occurrence and magnitude of severe or unusual weather 
+                            events and other significant meteorological events. The Storm Events data documents the following event types:
                             <li>The occurrence of storms and other significant weather phenomena having sufficient intensity to cause loss of life, injuries, significant property damage, and/or disruption to commerce;</li>
                             <li>Rare, unusual, weather phenomena that generate media attention, such as snow flurries in South Florida or the San Diego coastal area; and</li>
-                            <li>Other significant meteorological events, such as record maximum or minimum temperatures or precipitation that occur in connection with another event.</li>
-                            The database currently contains data from January 1950 to July 2020, as entered by NOAA's National Weather Service (NWS). Due to changes in the data collection and processing procedures over time, 
-                            there are unique periods of record available depending on the event type. NCEI has performed data reformatting and standardization of event types but has not changed any data values for locations, 
-                            fatalities, injuries, damage, narratives and any other event specific information. 
-                            The NCEI Storm Events data provides information about the the occurrence and magnitude of severe or unusual weather 
-                            events and other significant meteorological events. 
-                            <p>The data is color coordinated with 
-                            the associated hazard which can be found at the top of the page. Using your mouse tooltip, 
-                            hover over a bar to see exact amounts as recorded in the data. The NOAA Storm Events data dates back to 1996 when the modern data format was introduced.
+                            <li>Other significant meteorological events, such as record maximum or minimum temperatures or precipitation that occur in connection with another event.</li> 
+                            <h5>On How the MitigateNY Software displays NCEI Storm Events Data</h5>
+                            <li>The MitigateNY software utilizes data dating back to 1996 when the current Storm Events data formatting was standardized. </li>
+                            <li>Storm Events calculations, tables and visualizations in the MitigateNY software are at the geographic level of the County. While some events are identified specific to jurisdictions, the majority of the data is 
+                            not jurisdiction specific. Therefore, the MitigateNY software is designed to show the county aggregations even when a jurisdiction is selected.</li> 
+                            <li>The NCEI Storm Events data is color coordinated with the associated hazard which can be found at the top of the page and on the 
+                            left side navigation panel. Using your mouse tooltip, hover over a bar to see exact amounts as recorded in the data.</li> 
+                            <h5>Notes on Visualizations</h5>
+                            <li>The statistics listed at the top of the page include overall loss damages in U.S. dollars, average loss damages 
+                            per year, annual probability and daily probability. Annual probabilities are calculated based on the total number of events in the Storm Events dataset (From 1996) divided by the number of years in the dataset. 
+                            The daily probability calculation takes the total number of events and divides it by the total number of days in the dataset. </li>
                             <li>The Loss by Year bar chart shows the loss in dollar value annually based on hazard events. 
                             Data can be scaled based on dollar amounts listed at the top of the chart.</li>
                             <li>The Events by Year bar chart shows the number of events during the given years. 
@@ -138,7 +142,7 @@ class Hazards extends React.Component {
                             <li>The Loss by Month bar chart shows the loss in dollar value monthly based on hazard events. 
                             Data can be scaled based on dollar amounts listed at the top of the chart.</li>
                             <li>The Events by Month bar chart shows the number of events during the given months. 
-                            Events are separated by hazard types.</li></p>
+                            Events are separated by hazard types.</li>
                             </PageContainer>
                         <div className='col-md-6'>
                             <h6>{HazardName} Loss by Year</h6>
