@@ -665,7 +665,7 @@ let config = {
         },
         {
             element: 'F9',
-            requirements_from_software: `Req-NYS-F-9`,
+            requirements_from_software: `req-B1-, req-B1--local-impact`,
             objective: 'Does the plan assess how climate change may affect vulnerability to hazards, propose actions to ' +
                 'address this, and discuss sea level rise (if applicable)?',
             intent: 'Acknowledging and planning for climate change protects residents, avoids or reduces damage to property ' +
