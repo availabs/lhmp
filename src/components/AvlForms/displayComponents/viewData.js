@@ -123,7 +123,7 @@ class AvlFormsViewData extends React.Component{
 
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value && !this.isJsonString(value) ? value.toString() : value;
-                    value = value && !this.isJsonString(value) && value.includes('[') ?
+                    value = value && value.indexOf('[') === 0 && value.indexOf(']') === value.length - 1 ?
                         value.replace('[', '').replace(']', '').split(',') : value;
 
                     if(config_attributes[0].includes(d)){
