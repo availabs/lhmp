@@ -380,6 +380,89 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
+            title: 'NFIP Compliance Table',
+            requirement: 'Req-C-2B',
+            type: 'formTable',
+            fontSize: '0.70em',
+            height: '600px',
+            hideNav: true,
+            align: 'full',
+            config: {
+                type: 'municipalities',
+                description: '', 
+                //filters:[{column:'capability_category',value:'planning and regulatory'}],
+                columns : [
+                    {
+                        Header: 'Jurisdiction',
+                        accessor: 'community_name',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'CID Number',
+                        accessor: 'cid',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'Initial Flood Insurance Rate Map',
+                        accessor: 'initial_firm_date',
+                        sort: true,
+                        filter: 'multi'
+                    },
+                    {
+                        Header: 'Current Effective FIRM',
+                        accessor: 'current_map_date',
+                        sort: true,
+                        filter: 'multi'
+                    },
+
+                    /*  {
+                          Header: 'adopting authority',
+                          accessor: 'adopting_authority',
+                          sort: true,
+                          filter: 'default'
+                      },*/
+                    {
+                        Header: 'NFIP Standing',
+                        accessor: 'nfip_standing',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'CAV',
+                        accessor: 'community_assistance_visit',
+                        width: 50,
+                        // expandable: 'true',
+                        // expandableHeader: true
+                    },
+                    {
+                        Header: 'NFIP Administrator',
+                        accessor: 'nfip_administrator_name',
+                        // expandable: 'true',
+                        // expandableHeader: true
+                    },
+                    {
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                ]
+            },
+            prompt: '',
+            intent: '',
+            viewLink: true,
+            activeGeoFilter: 'true',
+            defaultSortCol: 'community_name',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Jurisdiction', 'CID Number','Initial Flood Insurance Rate Map','Current Effective FIRM','NFIP Standing','CAV','NFIP Administrator','viewLink'],
+            minHeight: '80vh',
+            icon: 'os-icon-tasks-checked'
+        },
+
+        {
             title:'Implementation Resources',
             requirement:'Req-NYS-F-8',
             type:'content',
