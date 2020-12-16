@@ -398,7 +398,7 @@ const config = {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
             type: 'nfipStatistics',
-            description:'The following table provides a snapshot of the National Flood Insurance Program (NFIP) in the county. At the top, a total number of NFIP Claims and the Total Payments for those claims is displayed. The table shows the total amount of NFIP claims, how many claims were paid, the total amount paid, and how many repetitive/severe repetitive loss properties were involved for each jurisdiction in the county.',
+            description:'The following table provides a snapshot of the National Flood Insurance Program (NFIP) in the county. At the top, a total number of NFIP Claims and the Total Payments for those claims is displayed. The table shows the total amount of NFIP claims, how many claims were paid, the total amount paid, number of repetitive/severe repetitive loss properties, and number of NFIP policies for each jurisdiction in the County. Due to the structure of the NFIP data there were complicatons in associating the repetitive loss and severe repetitive loss properties with landuse types (e.g., residential/commercial). This information is available to NFIP Adminstrators via the MitigateNY administrative access portal for use in their NFIP compliance code enforcement practices.',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
