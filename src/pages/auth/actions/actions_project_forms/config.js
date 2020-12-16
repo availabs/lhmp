@@ -432,6 +432,19 @@ module.exports = [
                 meta: 'false',
                 section: '3'
             },
+            relates_to_protects_critical_facility_infrastructure: {
+                label: 'Relates to/ Protects Critical Facility/ Infrastructure',
+                sub_type: 'project',
+                prompt: 'Is the action directly related to any critical facilities or infrastructure?' +
+                    ' Critical facilities include; utilities, emergency services, governmental structures,' +
+                    ' bridges, transportation corridors, etc.',
+                edit_type: 'radio',
+                edit_type_values: ['yes', 'no'],
+                display_type: 'text',
+                meta: 'false',
+                inline: 'true',
+                section: '3'
+            },
             does_action_have_associated_zone: {
                 label: 'Does the project have an associated map zone from the scenario tools?',
                 sub_type: 'project',
@@ -763,19 +776,7 @@ module.exports = [
                 meta: 'false',
                 section: '6'
             },
-            relates_to_protects_critical_facility_infrastructure: {
-                label: 'Relates to/ Protects Critical Facility/ Infrastructure',
-                sub_type: 'project',
-                prompt: 'Is the action directly related to any critical facilities or infrastructure?' +
-                    ' Critical facilities include; utilities, emergency services, governmental structures,' +
-                    ' bridges, transportation corridors, etc.',
-                edit_type: 'radio',
-                edit_type_values: ['yes', 'no'],
-                display_type: 'text',
-                meta: 'false',
-                inline: 'true',
-                section: '6'
-            },
+            
             relates_to_protects_community_lifeline_by_fema: {
                 label: 'Select the Community Lifelines(s) associated with this action:',
                 sub_type: 'project',
