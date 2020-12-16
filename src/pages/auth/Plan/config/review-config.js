@@ -443,7 +443,7 @@ let config = {
         },
         {
             element: 'C6',
-            requirements_from_software: `Req-C-6, Req-C-6A, Req-C-1B-1B`,
+            requirements_from_software: `Req-C-6, Req-C-6A, Req-C-1B-1B, R-C-3, Req-A-6`,
             objective: 'Does the Plan describe a process by which local governments will integrate the requirements of ' +
                 'the mitigation plan into other planning mechanisms, such as comprehensive or capital improvement plans, ' +
                 'when appropriate? 44 CFR 201.6(c)(4)(ii)',

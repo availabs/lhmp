@@ -267,6 +267,16 @@ module.exports = [
                 meta: 'false',
                 section: '1'
             },
+            estimated_benefits: {
+                label: 'Estimated Benefits',
+                sub_type: 'project',
+                prompt: 'Describe the estimated benefits of implementing this action.',
+                edit_type: 'text',
+                display_type: 'text',
+                display_condition: '',
+                meta: 'false',
+                section: '1',
+            },
             primary_or_potential_funding_sources_name: {
                 label: 'Potential primary funding sources',
                 sub_type: 'project',
