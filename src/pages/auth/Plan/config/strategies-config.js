@@ -389,7 +389,7 @@ const config = {
             align: 'full',
             config: {
                 type: 'municipalities',
-                description: '', 
+                description: 'The information in the table below was compiled for MitigateNY using the Community Status Book Report provided by FEMA which includes map dates and Community Identification (CID) numbers for communities participating in the national flood program, NYSDEC Community Assistance Visits (CAVs), and jurisdictional input from the Hazard Mitigation Plan interview process.', 
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {
@@ -430,9 +430,8 @@ const config = {
                         filter: 'default'
                     },
                     {
-                        Header: 'CAV',
+                        Header: 'CAV Date',
                         accessor: 'community_assistance_visit',
-                        width: 50,
                         // expandable: 'true',
                         // expandableHeader: true
                     },
@@ -457,7 +456,7 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'community_name',
             // defaultSortOrder: 'desc',
-            colOrder: ['Jurisdiction', 'CID Number','Initial Flood Insurance Rate Map','Current Effective FIRM','NFIP Standing','CAV','NFIP Administrator','viewLink'],
+            colOrder: ['Jurisdiction', 'CID Number','Initial Flood Insurance Rate Map','Current Effective FIRM','NFIP Standing','CAV Date','NFIP Administrator','viewLink'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },

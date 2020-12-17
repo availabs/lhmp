@@ -267,6 +267,16 @@ module.exports = [
                 meta: 'false',
                 section: '1'
             },
+            estimated_benefits: {
+                label: 'Estimated Benefits',
+                sub_type: 'project',
+                prompt: 'Describe the estimated benefits of implementing this action.',
+                edit_type: 'text',
+                display_type: 'text',
+                display_condition: '',
+                meta: 'false',
+                section: '1',
+            },
             primary_or_potential_funding_sources_name: {
                 label: 'Potential primary funding sources',
                 sub_type: 'project',
@@ -420,6 +430,19 @@ module.exports = [
                 edit_type: 'file',
                 display_type: 'text',
                 meta: 'false',
+                section: '3'
+            },
+            relates_to_protects_critical_facility_infrastructure: {
+                label: 'Relates to/ Protects Critical Facility/ Infrastructure',
+                sub_type: 'project',
+                prompt: 'Is the action directly related to any critical facilities or infrastructure?' +
+                    ' Critical facilities include; utilities, emergency services, governmental structures,' +
+                    ' bridges, transportation corridors, etc.',
+                edit_type: 'radio',
+                edit_type_values: ['yes', 'no'],
+                display_type: 'text',
+                meta: 'false',
+                inline: 'true',
                 section: '3'
             },
             does_action_have_associated_zone: {
@@ -753,19 +776,7 @@ module.exports = [
                 meta: 'false',
                 section: '6'
             },
-            relates_to_protects_critical_facility_infrastructure: {
-                label: 'Relates to/ Protects Critical Facility/ Infrastructure',
-                sub_type: 'project',
-                prompt: 'Is the action directly related to any critical facilities or infrastructure?' +
-                    ' Critical facilities include; utilities, emergency services, governmental structures,' +
-                    ' bridges, transportation corridors, etc.',
-                edit_type: 'radio',
-                edit_type_values: ['yes', 'no'],
-                display_type: 'text',
-                meta: 'false',
-                inline: 'true',
-                section: '6'
-            },
+            
             relates_to_protects_community_lifeline_by_fema: {
                 label: 'Select the Community Lifelines(s) associated with this action:',
                 sub_type: 'project',
