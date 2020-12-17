@@ -1,6 +1,6 @@
 import React from 'react';
 import AvlFormsListTable from 'components/AvlForms/displayComponents/listTable.js';
-import config from 'pages/auth/Participation/participation_forms_time/config.js'
+import config from 'pages/auth/Participation/participation_forms_meeting/config.js'
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";

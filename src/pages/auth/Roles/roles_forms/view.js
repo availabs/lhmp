@@ -1,6 +1,7 @@
 import React from 'react';
 import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import config from 'pages/auth/Roles/roles_forms/config.js'
+import participationTableSubConfig from "./participationTableSubConfig";
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
@@ -18,6 +19,7 @@ class RolesFormsView extends React.Component{
                 <Element>
                     <AvlFormsViewData
                         json = {config}
+                        subJson = {participationTableSubConfig}
                         id = {[this.props.match.params.id]}
                     />
                 </Element>

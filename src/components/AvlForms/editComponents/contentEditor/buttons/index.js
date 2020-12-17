@@ -49,6 +49,9 @@ export default () => {
     HeaderOneButton: makeBlockStyleButton("header-one", store),
     HeaderTwoButton: makeBlockStyleButton("header-two", store),
     HeaderThreeButton: makeBlockStyleButton("header-three", store),
+    HeaderFourButton: makeBlockStyleButton("header-four", store),
+    HeaderFiveButton: makeBlockStyleButton("header-five", store),
+    HeaderSixButton: makeBlockStyleButton("header-six", store),
     OrderedListButton: makeBlockStyleButton("ordered-list-item", store),
     UnorderedListButton: makeBlockStyleButton("unordered-list-item", store),
 

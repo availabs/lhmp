@@ -6,6 +6,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import GraphFactory from 'components/AvlForms/displayComponents/graphFactory.js'
 import {getAllGeo} from 'store/modules/geo'
 import functions from "../../../pages/auth/Plan/functions";
+import ElementFactory from "../../../pages/Public/theme/ElementFactory";
 var _ = require('lodash')
 
 const counties = ["36","36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
@@ -123,7 +124,7 @@ class AvlFormsViewData extends React.Component{
 
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value && !this.isJsonString(value) ? value.toString() : value;
-                    value = value && value.indexOf('[') === 0 && value.indexOf(']') === value.length - 1 ?
+                    value = value && typeof value !== "number" && value.indexOf('[') === 0 && value.indexOf(']') === value.length - 1 ?
                         value.replace('[', '').replace(']', '').split(',') : value;
 
                     if(config_attributes[0].includes(d)){
@@ -277,14 +278,34 @@ class AvlFormsViewData extends React.Component{
         let data = this.formsViewData();
         let graphType = get(this.props.config, [0, 'type']) || get(this.props.config, ['type'])
         return(
-            <GraphFactory
-                graph={{type: ['comments', 'contentViewer'].includes(graphType) ? graphType : 'text'}}
-                data={data}
-                config={this.props.config}
-                isVisible = {true}
-                showHeader={this.props.showHeader}
-            >
-            </GraphFactory>
+            <React.Fragment>
+                <GraphFactory
+                    graph={{type: ['comments', 'contentViewer'].includes(graphType) ? graphType : 'text'}}
+                    data={data}
+                    config={this.props.config}
+                    isVisible = {true}
+                    showHeader={this.props.showHeader}
+                >
+                </GraphFactory>
+                {
+                    this.props.subJson && data && data.length ?
+                        <div className='element-box'>
+                            <ElementFactory
+                                element={
+                                    Object.keys(this.props.subJson)
+                                        .reduce((a,c) => {
+                                            if(c === 'config' && !this.props.subJson[c].filters && this.props.subJson[c].filterCol){
+                                                a[c] = {...this.props.subJson[c], ...{filters: [{column:'id',value:get(data.filter(d => d.attribute === this.props.subJson[c].filterCol), [0, 'value'])}] }}
+                                                return a;
+                                            }
+                                            a[c] = this.props.subJson[c];
+                                            return a;
+                                        },{})
+                                }
+                            />
+                        </div>: null
+                }
+            </React.Fragment>
         )
     }
 }
