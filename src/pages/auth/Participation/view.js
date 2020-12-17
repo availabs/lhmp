@@ -5,7 +5,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import ViewConfig from 'pages/auth/Participation/view_config.js'
-
+import rolesTableSubConfig from "./rolesTableSubConfig";
 class ParticipationFormsView extends React.Component{
     constructor(props){
         super(props);
@@ -37,6 +37,7 @@ class ParticipationFormsView extends React.Component{
                 <Element>
                     <AvlFormsViewData
                         json = {config}
+                        subJson = {rolesTableSubConfig}
                         id = {[this.props.match.params.id]}
                     />
 

@@ -36,6 +36,9 @@ const buttonPlugin = makeButtonPlugin(),
         HeaderOneButton,
         HeaderTwoButton,
         HeaderThreeButton,
+        HeaderFourButton,
+        HeaderFiveButton,
+        HeaderSixButton,
         OrderedListButton,
         UnorderedListButton,
         BoldButton,
@@ -87,7 +90,7 @@ class ContentEditor extends Component {
         // while setting the state, first filter then assign new value / append new obj
         // while getting the state, filter by current content id
         this.state = {
-            editorState: EditorState.createEmpty(),
+            editorState: EditorState.createEmpty(decorator),
             contentFromDB: null,
         };
         this.onEditorStateChange = this.onEditorStateChange.bind(this);
@@ -119,39 +122,16 @@ class ContentEditor extends Component {
             editorState:
                 content ?
                     this.isJsonString(content) ? EditorState.createWithContent(convertFromRaw(JSON.parse(content)), decorator) : content
-                    :  EditorState.createEmpty()
+                    :  EditorState.createEmpty(decorator)
         })
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.state[this.props.title] !== prevProps.state[prevProps.title]){
-            let content = this.props.state[this.props.title]
-            console.log('isJson didupdate', this.props, prevProps)
-            if (!this.isJsonString(content) && typeof content === "string"){
-                const contentBlock = htmlToDraft(content);
-                if (contentBlock) {
-                    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                    content = EditorState.createWithContent(contentState, decorator);
-                }
-            }
-            this.setState({
-                contentFromDB: content,
-                editorState:
-                    content ?
-                        this.isJsonString(content) ? EditorState.createWithContent(convertFromRaw(JSON.parse(content)), decorator) : content
-                        :  EditorState.createEmpty()
-            })
-
-        }
     }
 
     onEditorStateChange(editorState) {
         if(this.props.handleChange){
-            console.log('submitting:', JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())))
             this.props.handleChange({
                 target: {
                     id: this.props.title,
-                    value: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())),
+                    value: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
                 }});
         }
 
@@ -234,6 +214,9 @@ class ContentEditor extends Component {
                                 <HeaderOneButton />
                                 <HeaderTwoButton />
                                 <HeaderThreeButton />
+                                <HeaderFourButton />
+                                <HeaderFiveButton />
+                                <HeaderSixButton />
 
                                 <BlockQuoteButton />
                                 <CodeBlockButton />

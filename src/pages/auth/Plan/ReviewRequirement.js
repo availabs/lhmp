@@ -190,8 +190,13 @@ class ReviewRequirement extends React.Component {
                                 <div>
                                     <label>You:</label>
                                     <span style={{float: 'right'}}>
-                                        <button id= {id.id} className="btn btn-sm btn-outline-primary"
-                                                onClick={() => this.setState({editComment: id.id})}> Edit </button>
+                                        {
+                                            this.state.editComment === id.id ?
+                                                <button id= {id.id} className="btn btn-sm btn-outline-danger"
+                                                        onClick={() => this.setState({editComment: null})}> Close </button> :
+                                                <button id= {id.id} className="btn btn-sm btn-outline-primary"
+                                                        onClick={() => this.setState({editComment: id.id})}> Edit </button>
+                                        }
                                         <button id= {id.id} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                     </span>

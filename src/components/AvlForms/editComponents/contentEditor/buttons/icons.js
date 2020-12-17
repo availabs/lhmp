@@ -36,6 +36,9 @@ export default ({
   "header-one": <Text>H1</Text>,
   "header-two": <Text>H2</Text>,
   "header-three": <Text>H3</Text>,
+  "header-four": <Text>H4</Text>,
+  "header-five": <Text>H5</Text>,
+  "header-six": <Text>H6</Text>,
   // "ordered-list-item": (
   //   <svg viewBox="0 0 24 24"
   //     height="24" width="24"

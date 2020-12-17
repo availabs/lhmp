@@ -274,8 +274,11 @@ class Hazards extends React.Component {
                                                 [this.props.hazard,
                                                     get(this.props.riskIndexMeta,
                                                         [this.props.hazard, 'name'],
-                                                        'n/a')] : this.props.hazard
+                                                        'n/a')] :
+                                                this.props.hazard === '' ? Object.keys(get(this.props.graph, `riskIndex.meta`, {})).map(haz => get(this.props.graph, `riskIndex.meta.${haz}.name`, '')) :
+                                                    this.props.hazard
                                     }],
+                                    matchSubString: true,
                                     columns : [
                                         {
                                             Header: 'COMMUNITY_NAME', // make it lower case
