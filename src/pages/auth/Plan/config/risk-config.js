@@ -370,7 +370,7 @@ const config = {
     ],
         'Floodplain Management' : [
         {
-            title: 'NFIP Compliance',
+            title: 'National Flood Insurance Program',
             requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
@@ -395,6 +395,24 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
+            title:`Floodplain Image`,
+            description: 'The image below shows the Flood Insurance Rate Map (FIRM) 500-Year (0.2% Annual) Floodplain geography in blue and all building footprints that intersect with the floodplain in green.',
+            requirement:'Req-B-4E',
+            type: 'image',
+            prompt: '',
+            intent: '',
+            callout: '',
+            label:'Image', // Which you would like to see on the form
+            height: 250,
+            width: 500,
+            border: 1,
+            icon: 'os-icon-arrow-right7',
+            // onlyAdmin: true,
+            hideNav: true,
+            hideIfNull: true,
+            pullCounty:true
+        },
+        {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
             type: 'nfipStatistics',
@@ -404,7 +422,7 @@ const config = {
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
             icon: 'os-icon-home',
             defaultSortCol: 'Jurisdiction'
-        },
+        },  
         {
             title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
