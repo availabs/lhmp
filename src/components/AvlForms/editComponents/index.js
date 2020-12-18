@@ -35,7 +35,7 @@ const HIDDEN = ({ type, state, routes }) =>
 }
 
 const NE = ((props) => (<div>{props.type} Doesn't Exist</div>));
-const contentEditor = (rest) => <ContentEditor imgUploadUrl={  'http://graph.availabs.org/img/new'} {...rest} />
+const contentEditor = (rest) => <ContentEditor imgUploadUrl={  'https://graph.availabs.org/img/new'} {...rest} />
 
 export default {
     NA,
