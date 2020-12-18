@@ -567,6 +567,14 @@ const config =  {
                         expandableHeader: true
         			},
         			{
+        				Header: 'Participants',
+        				accessor: 'roles',
+        				width: 300,
+						filter: 'default',
+						expandable: 'true',
+                        expandableHeader: true
+        			},
+        			{
                         Header: 'viewLink',
                         accessor: 'viewLink',
                         width: 50,
@@ -582,7 +590,7 @@ const config =  {
 			viewLink: 'true',
 			defaultSortCol: 'start_date',
 			defaultSortOrder: 'desc',
-			colOrder: ['Date','Jurisdiction', 'Name', 'Meeting Format', 'Invitation Methods', 'Milestones', 'Hours', 'Narrative', 'viewLink' ],
+			colOrder: ['Date','Jurisdiction', 'Name', 'Meeting Format', 'Invitation Methods', 'Milestones', 'Hours', 'Narrative', 'Participants', 'viewLink' ],
 			minHeight: '80vh',
 			icon: 'os-icon-user-check'
 		},
