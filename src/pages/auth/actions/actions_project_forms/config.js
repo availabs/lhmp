@@ -2,7 +2,7 @@ module.exports = [
     {
         type: 'actions', // type is same as the route path for now
         sub_type: 'project',
-        list_attributes: ['action_description',
+        list_attributes: ['action_description', 'action_number',
             {'action_jurisdiction': {filter: 'true'}},
             {'action_category': {filter: 'true'}},
             {'action_status_update': {filter: 'multi'}},
@@ -711,6 +711,46 @@ module.exports = [
                 meta: 'false',
                 section: '5'
             },
+            associated_goals: {
+                label: 'Associated Goals/Obejectives',
+                sub_type: 'project',
+                prompt: 'Provide the Goals/Objectives from this Hazard Mitigation Plan that this action supports.',
+                edit_type: 'text',
+                display_type: 'text',
+                meta: 'false',
+                section: '6',
+            },
+            relates_to_protects_community_lifeline_by_fema: {
+                label: 'Select the Community Lifelines(s) associated with this action:',
+                sub_type: 'project',
+                prompt: 'Categories include: Safety & Security, Food/Water/Sheltering, Health & Medical,' +
+                    'Energy, Communications, Transportation, and Hazardous Material.',
+                edit_type: 'dropdown_no_meta',
+                edit_type_values: ['Safety & Security', 'Food/Water/Sheltering', 'Health & Medical', 'Energy', 'Communications', 'Transportation', 'Hazardous Material'],
+                display_type: 'text',
+                meta: 'false',
+                section: '6'
+            },
+            relates_to_mitigation_sectors_by_fema: {
+                label: 'Select the FEMA designated Mitigation Sector(s) associated with this action: ',
+                sub_type: 'project',
+                prompt: 'Categories include: Emergency Management, Economic Development, Land Use Development, Housing, Health and Social Services, Infrastructure, Natural & Cultural Resources',
+                edit_type: 'dropdown_no_meta',
+                edit_type_values: ['Emergency Management', 'Economic Development', 'Land Use Development', 'Housing', 'Health and Social Services', 'Infrastructure', 'Natural & Cultural Resources'],
+                display_type: 'text',
+                meta: 'false',
+                section: '6'
+            },
+            associated_mitigation_capability_2: {
+                label: 'Select the Capability Type that this Action will be used and/or contribute to:',
+                sub_type: 'project',
+                prompt: 'Categories include: Planning & Regulatory, Administrative & Technical, Financial, Education & Outreach',
+                edit_type: 'dropdown_no_meta',
+                edit_type_values: ['Planning & Regulatory', 'Administrative & Technical', 'Financial', 'Education & Outreach'],
+                display_type: 'text',
+                meta: 'false',
+                section: '6'
+            },
             is_protects_repetitive_loss_property: {
                 label: 'Protects Repetitive Loss (RL) Property?',
                 sub_type: 'project',
@@ -777,37 +817,6 @@ module.exports = [
                 section: '6'
             },
             
-            relates_to_protects_community_lifeline_by_fema: {
-                label: 'Select the Community Lifelines(s) associated with this action:',
-                sub_type: 'project',
-                prompt: 'Categories include: Safety & Security, Food/Water/Sheltering, Health & Medical,' +
-                    'Energy, Communications, Transportation, and Hazardous Material.',
-                edit_type: 'dropdown_no_meta',
-                edit_type_values: ['Safety & Security', 'Food/Water/Sheltering', 'Health & Medical', 'Energy', 'Communications', 'Transportation', 'Hazardous Material'],
-                display_type: 'text',
-                meta: 'false',
-                section: '6'
-            },
-            relates_to_mitigation_sectors_by_fema: {
-                label: 'Select the FEMA designated Mitigation Sector(s) associated with this action: ',
-                sub_type: 'project',
-                prompt: 'Categories include: Emergency Management, Economic Development, Land Use Development, Housing, Health and Social Services, Infrastructure, Natural & Cultural Resources',
-                edit_type: 'dropdown_no_meta',
-                edit_type_values: ['Emergency Management', 'Economic Development', 'Land Use Development', 'Housing', 'Health and Social Services', 'Infrastructure', 'Natural & Cultural Resources'],
-                display_type: 'text',
-                meta: 'false',
-                section: '6'
-            },
-            associated_mitigation_capability_2: {
-                label: 'Select the Capability Type that this Action will be used and/or contribute to:',
-                sub_type: 'project',
-                prompt: 'Categories include: Planning & Regulatory, Administrative & Technical, Financial, Education & Outreach',
-                edit_type: 'dropdown_no_meta',
-                edit_type_values: ['Planning & Regulatory', 'Administrative & Technical', 'Financial', 'Education & Outreach'],
-                display_type: 'text',
-                meta: 'false',
-                section: '6'
-            },
             // associated_mitigation_capability: {
             //     label:'Select the Capability Type that this Action will be used and/or contribute to:',
             //     sub_type:'project',

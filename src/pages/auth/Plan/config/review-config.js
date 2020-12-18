@@ -331,7 +331,7 @@ let config = {
         },
         {
             element: 'C2',
-            requirements_from_software: `Req-C-2A, Req-C-2B, Req-B-4B, Req-B-4, Req-B-4A, Req-B-B-4C`,
+            requirements_from_software: `Req-C-2A, Req-C-2B, Req-B-4B, Req-B-4E, Req-B-4, Req-B-4A, Req-B-B-4C`,
             objective: 'Does the Plan address each jurisdiction’s participation in the NFIP and continued compliance with ' +
                 'NFIP requirements, as appropriate? 44 CFR 201.6(c)(3)(ii)',
             intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA ' +

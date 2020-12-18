@@ -343,11 +343,12 @@ const config = {
             title: 'Previous Actions',
             requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
-            description:'The table below contains each jurisdiction’s previous actions that were listed in the previous hazard mitigation plan. The table shows the jurisdiction where the action was assigned, the name of the action, a list of hazards associated with the action, and a status update on the action.The list can be sorted alphabetically by clicking the column titles or narrowed by entering text in the search bars beneath the column titles. The status updates and their meanings are:' + 
-            'Completed - This action has been completed'+
-            'In-progress - This action is still being actively pursued. This may mean that the action is not completed or that it is an ongoing action, like an outreach program, that will remain In-progress as long as it continues.' + 
-            'Proposed-Carryover - These are actions that were proposed in the previous plan that are being brought forward to be included into this current hazard mitigation plan' + 
-            'Discontinued - These actions are no longer relevant and have been discontinued.',
+            description:'The table below contains each jurisdiction’s previous actions that were listed in the previous hazard mitigation plan. The table shows the jurisdiction where the action was assigned, the name of the action, a list of hazards associated with the action, and a status update on the action.The list can be sorted alphabetically by clicking the column titles or narrowed by entering text in the search bars beneath the column titles. The status updates and their meanings are: ' + 
+            'Completed - This action has been completed. '+
+            'In-progress - This action is still being actively pursued. This may mean that the action is not completed or that it is an ongoing action, like an outreach program, that will remain In-progress as long as it continues. ' + 
+            'Proposed-Carryover - These are actions that were proposed in the previous plan that are being brought forward to be included in the inventory of actions in this hazard mitigation plan. ' + 
+            'Proposed-HMP - These are actions that were proposed in the previous plan that are being brought forward to be included into this current hazard mitigation plan and also meet minimum requirements for actions for review by DHSES and FEMA. ' + 
+            'Discontinued - These actions are no longer relevant and have been discontinued. ',
             filterCol: ['previous_plan_action'],
             filterBy: ['yes'],
             align: 'full',
@@ -370,7 +371,7 @@ const config = {
     ],
         'Floodplain Management' : [
         {
-            title: 'NFIP Compliance',
+            title: 'National Flood Insurance Program',
             requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
@@ -395,6 +396,24 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
+            title:`Floodplain Image`,
+            description: 'The image below shows the Flood Insurance Rate Map (FIRM) 500-Year (0.2% Annual) Floodplain geography in blue and all building footprints that intersect with the floodplain in green.',
+            requirement:'Req-B-4E',
+            type: 'image',
+            prompt: '',
+            intent: '',
+            callout: '',
+            label:'Image', // Which you would like to see on the form
+            height: 250,
+            width: 500,
+            border: 1,
+            icon: 'os-icon-arrow-right7',
+            // onlyAdmin: true,
+            hideNav: true,
+            hideIfNull: true,
+            pullCounty:true
+        },
+        {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
             type: 'nfipStatistics',
@@ -404,7 +423,7 @@ const config = {
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
             icon: 'os-icon-home',
             defaultSortCol: 'Jurisdiction'
-        },
+        },  
         {
             title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
