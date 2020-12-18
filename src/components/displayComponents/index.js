@@ -45,7 +45,7 @@ const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...
 const NfipStatisticsEditor = (rest) => <NfipStatisticsViewer public={false} {...rest}/>
 const problemStatementTableEditor = (rest) => <ProblemStatementTableViewer edit={true} {...rest}/>
 const shelterListTableEditor = (rest) => <ShelterListTableViewer edit={true} {...rest}/>
-const contentEditor = (rest) => <ContentEditor imgUploadUrl={ process.env.NODE_ENV === 'production' ? 'http://graph.availabs.org/img/new' : 'http://localhost:4444/img/new'} {...rest} />
+const contentEditor = (rest) => <ContentEditor imgUploadUrl={  'http://graph.availabs.org/img/new'} {...rest} />
 export default {
     NA,
     NE,
