@@ -227,7 +227,8 @@ export const ToggleVisibility = connect(mapStateToPropsTV, mapDispatchToPropsTV)
 
 
 const formatName = function(name= 'no name', geoid){
-    if (typeof name !== "string" || name.toLowerCase() === 'countywide') return name
+    if(typeof name !== "string") return ''
+    if (name.toLowerCase() === 'countywide') return name
     let jurisdiction =
             geoid.length === 2 ? 'State' :
                 geoid.length === 5 ? 'County' :
