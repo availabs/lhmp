@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
+import createReactClass from 'create-react-class';
+
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
@@ -8,6 +11,8 @@ import {SectionBox} from 'pages/Public/theme/components'
 import Table from 'components/light-admin/tables/tableSelector'
 import {match} from "fuzzy";
 import functions from "../../pages/auth/Plan/functions";
+import DisplayComps from 'components/AvlForms/displayComponents'
+import AvlFormsViewData from "../AvlForms/displayComponents/viewData";
 
 var _ = require('lodash')
 
@@ -85,6 +90,7 @@ class FormTableViewer extends React.Component{
     }
     render(){
         // process data from
+        let falcorCache = this.props.falcor.getCache()
         let tableData = Object.values(this.props.tableList)
             .filter(d => {
                     return this.props.activeGeoFilter === 'true' ?
@@ -105,6 +111,7 @@ class FormTableViewer extends React.Component{
             .map(d => {
             return [...Object.keys(this.props.formData[d.value[2]].value.attributes), 'viewLink', 'id']
                 .reduce((a,c) => {
+                    let configSettings = get(this.props.config, ['columns'], []).filter(cc => cc.accessor === c)[0]
                     if(c === 'id'){
                         a[c] = d.value[2];
                         return a;
@@ -130,6 +137,18 @@ class FormTableViewer extends React.Component{
                             a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC)) : a[c]
                     }
 
+                    if (configSettings && configSettings.displayType === 'AvlFormsJoin'){
+
+                        if(typeof a[c] === "string") { a[c] = [a[c]]}
+                        a[c].reduce((acc,newC) => {
+                            return acc.then((resAcc) => {
+                                return this.props.falcor.get(['forms', 'byId', newC])
+                            })
+                        },Promise.resolve())
+                        a[c] = a[c].map(newC => get(this.props.falcor.getCache(), [ 'forms', 'byId', newC, 'value', 'attributes', configSettings.formAttribute]) )
+                            .filter(newC => newC)
+                    }
+
                     a[c] = typeof a[c] !== "object" ? a[c] : a[c] && a[c].length ? a[c].join(',') : a[c]
 
                     if(this.props.config.combineCols){
@@ -147,6 +166,7 @@ class FormTableViewer extends React.Component{
                     a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
                     b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
                     1)
+
         // filter data is there are filters
         // can we move this to the server? seems tricky
         if(this.props.config.filters && tableData) {

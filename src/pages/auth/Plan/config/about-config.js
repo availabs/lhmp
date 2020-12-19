@@ -572,7 +572,9 @@ const config =  {
         				width: 300,
 						filter: 'default',
 						expandable: 'true',
-                        expandableHeader: true
+                        expandableHeader: true,
+						displayType: 'AvlFormsJoin',
+						formAttribute: 'contact_name',
         			},
         			{
                         Header: 'viewLink',
