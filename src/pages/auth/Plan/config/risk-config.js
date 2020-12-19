@@ -395,29 +395,33 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
-        {
-            title:`Floodplain Image`,
-            description: 'The image below shows the Flood Insurance Rate Map (FIRM) 500-Year (0.2% Annual) Floodplain geography in blue and all building footprints that intersect with the floodplain in green.',
-            requirement:'Req-B-4E',
-            type: 'image',
-            prompt: '',
-            intent: '',
-            callout: '',
-            label:'Image', // Which you would like to see on the form
-            height: 250,
-            width: 500,
-            border: 1,
-            icon: 'os-icon-arrow-right7',
-            // onlyAdmin: true,
-            hideNav: true,
-            hideIfNull: true,
-            pullCounty:true
-        },
+        // {
+        //     title:`Floodplain Image`,
+        //     description: 'The image below shows the Flood Insurance Rate Map (FIRM) 500-Year (0.2% Annual) Floodplain geography in blue and all building footprints that intersect with the floodplain in green.',
+        //     requirement:'Req-B-4E',
+        //     type: 'image',
+        //     prompt: '',
+        //     intent: '',
+        //     callout: '',
+        //     label:'Image', // Which you would like to see on the form
+        //     height: 250,
+        //     width: 500,
+        //     border: 1,
+        //     icon: 'os-icon-arrow-right7',
+        //     // onlyAdmin: true,
+        //     hideNav: true,
+        //     hideIfNull: true,
+        //     pullCounty:true
+        // },
         {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
             type: 'nfipStatistics',
-            description:'The following table provides a snapshot of the National Flood Insurance Program (NFIP) in the county. At the top, a total number of NFIP Claims and the Total Payments for those claims is displayed. The table shows the total amount of NFIP claims, how many claims were paid, the total amount paid, number of repetitive/severe repetitive loss properties, and number of NFIP policies for each jurisdiction in the County. Due to the structure of the NFIP data there were complicatons in associating the repetitive loss and severe repetitive loss properties with landuse types (e.g., residential/commercial). This information is available to NFIP Adminstrators via the MitigateNY administrative access portal for use in their NFIP compliance code enforcement practices.',
+            description:'The following table provides a snapshot of the National Flood Insurance Program (NFIP) in the county. Due to the nature of the NFIP data, the NFIP information for Villages is included within their respective Towns (in New York State, Villages are included within Towns). '+ 
+            'At the top, a total number of NFIP Claims and the Total Payments for those claims is displayed. '+ 
+            'The table shows the total amount of NFIP claims, how many claims were paid, the total amount paid, number of repetitive/severe repetitive loss properties, and number of NFIP policies for '+ 
+            'each Town in the County. Addtionally, due to the structure of the NFIP data there were complicatons in associating the repetitive loss and severe repetitive loss '+ 
+            'properties with landuse types (e.g., residential/commercial) in this table. RL/SRL property-type information is provided above and is available to NFIP Adminstrators via the MitigateNY administrative access portal for use in their NFIP compliance code enforcement practices.',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',

@@ -2,13 +2,14 @@ module.exports = [
     {
         type: 'actions', // type is same as the route path for now
         sub_type: 'project',
-        list_attributes: ['action_description', 'action_number',
+        list_attributes: ['action_number',
             {'action_jurisdiction': {filter: 'true'}},
             {'action_category': {filter: 'true'}},
             {'action_status_update': {filter: 'multi'}},
-            {'description_of_problem_being_mitigated': {filter: 'true'}},
+            {'action_description': {filter: 'true'}},
             {'action_name': {filter: 'true'}},
             {'associated_hazards': {filter: 'true'}},
+            'description_of_problem_being_mitigated',
             'sub_type'], // to list the attributes on the main page
         default_title: 'Action', // in the case when page_title is invalid
         page_title: 'action_name', // page title in edit and view
@@ -71,6 +72,7 @@ module.exports = [
                 edit_type: 'textarea',
                 display_type: 'text',
                 meta: 'false',
+                expandable: 'true',
                 section: '1'
             },
             associated_hazards: {
@@ -106,7 +108,6 @@ module.exports = [
                     ' etc., the extent of any analyses or studies performed (attach any reports or studies).',
                 edit_type: 'textarea',
                 display_type: 'text',
-                expandable: 'true',
                 meta: 'false',
                 section: '1'
             },
