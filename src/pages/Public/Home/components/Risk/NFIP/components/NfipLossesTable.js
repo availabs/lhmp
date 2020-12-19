@@ -34,7 +34,7 @@ class NfipTable extends React.Component {
         )
             .then(response => response.json.geo[geoid][geoLevel])
             .then(geoids => {
-                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', Object.keys(this.props.allGeo)/*.filter(g => g.length === 7)*/, 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss', 'number_policies']])
+                return this.props.falcor.get(['nfip', 'losses', 'byGeoid', Object.keys(this.props.allGeo).filter(g => g.length === 10), 'allTime', ['total_losses', 'closed_losses', 'open_losses', 'cwop_losses', 'total_payments', 'repetitive_loss', 'severe_repetitive_loss', 'number_policies']])
             })
     }
 
@@ -67,7 +67,7 @@ class NfipTable extends React.Component {
     processData() {
         const { geoid, geoLevel } = this.props,
             label = geoLevel === 'counties' ? 'county' : 'Jurisdiction',
-            geoids = Object.keys(this.props.allGeo),
+            geoids = Object.keys(this.props.allGeo).filter(geo => geo.length === 10),
             data = [];
         let geoToFilter = this.getGeoToFilter(this.props.formData);
 
