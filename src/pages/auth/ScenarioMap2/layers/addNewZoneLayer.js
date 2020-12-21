@@ -320,9 +320,9 @@ class ShowNewZoneModal extends React.Component{
                                 geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
                                 attributes['geom'] = geom
                                 attributes['bbox'] = zone_boundary
-                                attributes['name'] = name || 'None'
+                                attributes['name'] = typeof name === "string" ? name.replaceAll('\'', '\'\'') : name  || 'None'
                                 attributes['zone_type'] = this.state.zone_type || 'None'
-                                attributes['comment'] = this.state.comment || 'None'
+                                attributes['comment'] = typeof this.state.comment === "string" ? this.state.comment.replaceAll('\'', '\'\'') : this.state.comment  || 'None'
                                 attributes['geojson'] = result_polygon
                                 attributes['geoid'] = geoid
                                 args.push('zones',plan_id,attributes);
