@@ -373,7 +373,9 @@ class Hazards extends React.Component {
                     <div className='row' style={{paddingTop:20}}>
                         <div className='col-md-12' style={{paddingBottom: 20}}>
                             <h4>Presidential Disaster Declrations</h4>
-                            
+                            <p>
+                            The table below lists all of the presidentially declared disasters, their unique identification number, and the date that a declaration was made. The amounts of funding provided for each disaster are delineated by program. IHP is the Individual and Household Program that provides temporary housing assistance or grants for repair and replacement of impacted homes. PA is the Public Assistance program that provides supplemental grants for response, recovery, and mitigation projects. HMGP is the Hazard Mitigation Grant Program available after Presidential Disaster Declarations to help communities reduce the impacts of future hazards.</p>
+<p>Presidential Disaster Declarations are made through a joint governmental process where the total extent of the disaster damage is identified and a determination is made that the impacts exceed the affected jurisdictions’ capabilities. To learn more about Presidential Disaster Declarations, please visit: <a href="https://www.fema.gov/disasters/how-declared">https://www.fema.gov/disasters/how-declared</a>.</p>
 
                             <FemaDisasterDeclarationsTable
                                 geoid={this.props.activeGeoid}
