@@ -109,7 +109,7 @@ class ContentEditor extends Component {
     }
     componentDidMount() {
         let content = this.props.state[this.props.title]
-        console.log('isJson', content, this.props.state)
+
         if (!this.isJsonString(content) && typeof content === "string"){
             const contentBlock = htmlToDraft(content);
             if (contentBlock) {
@@ -180,6 +180,7 @@ class ContentEditor extends Component {
         );
         const entityKey = contentWithEntity.getLastCreatedEntityKey();
         this.onChange(RichUtils.toggleLink(newEditorState, selection, entityKey));
+        this.onEditorStateChange(RichUtils.toggleLink(newEditorState, selection, entityKey))
         return "handled";
     };
 
