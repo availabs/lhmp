@@ -317,7 +317,7 @@ const config = {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
-            description: 'The table below includes all of the hazard impact problem statements and their corresponding actions that were identified during the strategy development process by the jurisdictional representatives. The jurisdictions completed the DHSES Action worksheet as part of the strategy development process for select prioritized actions listed below. The actions prioritized for the Plan update are labeled with the status ‘Proposed - HMP’. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
+            description: 'The table below includes the Mitigation Actions that were identified during the strategy development process by the jurisdictional representatives. The jurisdictions completed the DHSES Action worksheet as part of the strategy development process for select prioritized actions listed below. The actions prioritized for the Plan update are labeled with the status ‘Proposed - HMP’. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
             filterCol: ['action_status_update'],
             filterBy: ['Proposed-HMP'],
             align: 'full',
@@ -366,6 +366,43 @@ const config = {
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true    
+        },
+        {
+            title: 'Additional Actions Inventory',
+            requirement: 'Req-C-4',
+            type: 'actionsFilteredListTable',
+            description: 'The table below includes additional identified actions that are inventoried for further development in the future. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
+            filterCol: ['action_status_update'],
+            filterBy: ['Proposed-New','Proposed-Carryover'],
+            align: 'full',
+            prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
+                ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
+                ' assessment, and 2) identifies the actions and/or projects that the jurisdiction intends to implement.' +
+                ' a. Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction' +
+                ' that are based on the community’s risk and  vulnerabilities, as well as community priorities.' +
+                ' b. The plan must identify the position, office, department, or agency responsible for implementing and' +
+                ' administering the action (for each jurisdiction), and identify potential funding sources and expected' +
+                ' timeframes for completion. ',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within' +
+                ' the capability of each jurisdiction, and reduce or avoid future losses.  This is the heart of the' +
+                ' mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA,' +
+                ' “own” the hazard mitigation actions in the strategy.' +
+                ' a. Mitigation actions and projects means a hazard mitigation action, activity or process (for example,' +
+                '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
+                ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
+                ' b. Integrate elements of Req-C-5 and Req-C-6',
+            viewLink: true,
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            generalCols: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'description_of_problem_being_mitigated'],
+            expandableCols: ['action_description', 'description_of_problem_being_mitigated'],
+            exclude: ['priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text'],
+            minHeight: '80vh',
+            icon: 'os-icon-activity',
+            hideNav: true,
+
         },    
         {
             title: 'NFIP Continued Compliance & Repetitive Loss Strategy',
