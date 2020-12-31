@@ -26,6 +26,8 @@ export const header = (caller, geoGraph,setActiveCousubid, activeCousubid,allowe
                                             href="/assets">Assets</a></li>
                 <li className="nav-item"><a aria-expanded="false" className= {caller === 'search' ? "nav-link active" : "nav-link"} data-toggle="tab"
                                             href="/assets/search">Search</a></li>
+                <li className="nav-item"><a aria-expanded="false" className= {caller === 'state' ? "nav-link active" : "nav-link"} data-toggle="tab"
+                                            href="/assets/state">State Assets</a></li>
                 <li>
                     {config['assets'] ?
                         <Link

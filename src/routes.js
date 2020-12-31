@@ -52,6 +52,7 @@ import ReviewRequirement from 'pages/auth/Plan/ReviewRequirement'
 
 
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
+import AssetsStateAssets from 'pages/auth/Assets/indexStateAssets'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
@@ -129,6 +130,7 @@ const routes = [
     ...ReviewTools,
     ...ReviewRequirement,
     ...AssetsSearch,
+    ...AssetsStateAssets,
     ...AssetsView,
     ...AssetsEdit,
     ...AssetsListByTypeByHazard,
