@@ -25,7 +25,11 @@ import openSpaceTable from './openSpaceTable'
 import ProblemStatementTableViewer from "./problemStatementTableViewer";
 import localHazardsOfConcernTable from "./localHazardsOfConcernTable";
 import HazardEventsTable from './HazardEventsTable'
-
+import HazardHeroStatsViewer from "./hazardComponents/HazardHeroStatsViewer";
+import HazardCharts from "./hazardComponents/HazardCharts";
+import HazardLossByMunicipality from "./hazardComponents/HazardLossByMunicipality";
+import PresidentialDisasterDeclarations from "./hazardComponents/PresidentialDisasterDeclarations";
+import HazardEventsPublicMap from "./hazardComponents/HazardEventsPublicMap";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -88,6 +92,16 @@ export default {
     localHazardsOfConcernTableViewer: localHazardsOfConcernTable,
     localHazardsOfConcernTableEditor: localHazardsOfConcernTable,
     HazardEventsTableViewer: HazardEventsTable,
-    HazardEventsTableEditor: HazardEventsTable
+    HazardEventsTableEditor: HazardEventsTable,
+    HazardHeroStatsViewer,
+    HazardHeroStatsEditor: HazardHeroStatsViewer,
+    HazardChartsViewer: HazardCharts,
+    HazardChartsEditor: HazardCharts,
+    HazardLossByMunicipalityViewer: HazardLossByMunicipality,
+    HazardLossByMunicipalityEditor: HazardLossByMunicipality,
+    PresidentialDisasterDeclarationsViewer: PresidentialDisasterDeclarations,
+    PresidentialDisasterDeclarationsEditor: PresidentialDisasterDeclarations,
+    HazardEventsPublicMapViewer: HazardEventsPublicMap,
+    HazardEventsPublicMapEditor: HazardEventsPublicMap
 }
 

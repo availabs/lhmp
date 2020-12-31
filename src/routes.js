@@ -7,6 +7,7 @@ import About from './pages/Public/About/'
 import PlanningProcess from './pages/Public/PlanningProcess/'
 import Hazards from './pages/Public/Hazards/'
 import Hazards2 from './pages/Public/Hazards/new'
+import HazardsConfig from './pages/Public/Hazards/indexConfig'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
 import Strategies from './pages/Public/Strategies/'
 // import PublicPlan from './pages/PublicPlan'
@@ -148,6 +149,7 @@ const routes = [
     ...PlanningProcess,
     ...Hazards,
     ...Hazards2,
+    ...HazardsConfig,
     ...Risk,
     ...Strategies,
     ...About,
