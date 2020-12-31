@@ -162,7 +162,7 @@ class TextComponent extends React.PureComponent{
     }
 
     renderElement() {
-        let zones_list = this.zoneDropDown().map(f => ({value: f.value, name: f.label}));
+        let zones_list = this.zoneDropDown().map(f => ({value: f.value, name: f.label})).filter(f => f.name);
         let tmpVal =
             typeof this.props.state[this.props.title] === 'string' &&
             this.props.state[this.props.title].indexOf('[') === 0 &&
