@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['id','title','start_date','sub_type'],
+        list_attributes : ['title','start_date','narrative', 'roles'],
         sections:[],
         attributes:{
             title:{
@@ -32,6 +32,7 @@ module.exports = [
                 prompt:'',
                 sub_type:'',
                 edit_type:'dropdown',
+                defaultValue: ['Countywide'],
                 display_type:'text',
                 meta: 'true',
                 area:'true',
@@ -57,6 +58,23 @@ module.exports = [
                 hidden:'true', // if you don`t want to show it in view data
                 section:''
             },
+            meeting_format:{
+                label:'Meeting Format',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Virtual',
+                        'In-Person',
+                        'Phone Call', 
+                    ],
+                },
+            },
             start_date:{
                 label:'Date',
                 sub_type:'meeting',
@@ -73,16 +91,80 @@ module.exports = [
                 edit_type:'number',
                 display_type:'text',
                 meta:'false',
-                section:''
+                section:'',
+
+            },
+            invite_method:{
+                label:'Invitation Method',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Email',
+                        'Outlook Invitation',
+                        'Phone Call',
+                        'Mailed Letter',
+                        'Press Release',
+                    ],
+                },
             },
             narrative:{
                 label:'Narrative',
+                sub_type:'meeting',
+                prompt:'',
+                edit_type:'contentEditor',
+                display_type:'contentViewer',
+                meta:'false',
+                section:''
+            },
+            minutes:{
+                label:'Agenda and Minutes',
                 sub_type:'meeting',
                 prompt:'',
                 edit_type:'textarea',
                 display_type:'text',
                 meta:'false',
                 section:''
+            },
+            milestones:{
+                label:'Participation Milestones',
+                prompt:'',
+                sub_type:'',
+                edit_type:'dropdown',
+                display_type:'text',
+                show:'true',
+                meta:'true',
+                meta_filter:{
+                    filter_key:'',
+                    value:[
+                        'Core Planning Group Meeting',
+                        'Ad Hoc Meeting or Phone Call',
+                        'Steering Committee Meeting',
+                        'Completed Information Gathering or Surveys',
+                        'Provided Data or Information',
+                        'Jurisdictional Information Meeting',
+                        'Identified Vulnerabilities',
+                        'Identified Capabilities',
+                        'Conducted Risk Assessment', 
+                        'Inventoried - Critical Infrastructure, Shelters, etc.',
+                        'Progress on Previous Mitigation Strategies',
+                        'Mitigation Strategy Development',
+                        'Mitigation Strategy Workshop',
+                        'Input on Goals and Objectives',
+                        'Facilitated or Supported Public Outreach Initiative',
+                        'Integration with Other Planning Mechanisms',
+                        'Drafted Plan Sections or Provided Feedback',
+                        'Reviewed/Approved Draft and Final Plan Sections',
+                        'Plan Draft Review Meeting',
+                        'Adoption Support',
+                        'Maintenance', 
+                    ],
+                },
             },
             roles:{
                 label:'Roles',

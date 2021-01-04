@@ -63,7 +63,14 @@ class AvlFormsNewData extends React.Component{
     handleChange(e){
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
-
+    isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
     componentDidMount(){
         if(this.props.id[0]){
             let attributes = this.props.config.map(d => Object.keys(d.attributes));
@@ -92,7 +99,7 @@ class AvlFormsNewData extends React.Component{
                                     tmp_state[attribute] = undefined
                                 }
                             }else{
-                                if(graph.attributes[attribute] && typeof graph.attributes[attribute] === "string" && graph.attributes[attribute].includes("[")){
+                                if(graph.attributes[attribute] && typeof graph.attributes[attribute] === "string" && !this.isJsonString(graph.attributes[attribute]) && graph.attributes[attribute].includes("[")){
                                     tmp_state[attribute] = graph.attributes[attribute].slice(1,-1).split(",")
                                 }else{
                                     tmp_state[attribute] = graph.attributes[attribute]
@@ -186,7 +193,16 @@ class AvlFormsNewData extends React.Component{
     afterSubmitEdit(newId, attributes){
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                return get(this.state, [c], []).reduce((a1,c1) => {
+                let tmpVal =
+                typeof get(this.state, [c], []) === 'string' &&
+                get(this.state, [c], []).indexOf('[') === 0 &&
+                get(this.state, [c], []).indexOf(']') === get(this.state, [c], []).length - 1 ?
+                    get(this.state, [c], []).slice(1,-1).split(',') :
+                    get(this.state, [c], [])
+                tmpVal = typeof tmpVal === "string" ? [tmpVal] : tmpVal
+
+                console.log('tmpVal', tmpVal)
+                return tmpVal.reduce((a1,c1) => {
                     return a1.then(resA1 => {
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {
@@ -242,7 +258,7 @@ class AvlFormsNewData extends React.Component{
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
                     }else{
-                        a[c] = this.state[c].replaceAll('\'', '\'\'')
+                        a[c] = typeof this.state[c] === "string" ? this.state[c].replaceAll('\'', '\'\'') : this.state[c]
                     }
                 }
                 return a;
@@ -263,6 +279,9 @@ class AvlFormsNewData extends React.Component{
                 }
             })
                 .then(response => {
+                    if (this.props.returnValue){
+                        this.props.returnValue(Object.keys(get(response, `json.forms.${type[0]}.byId`, {[null]:null}))[0])
+                    }
                     this.afterSubmitEdit(Object.keys(get(response, `json.forms.byId`, {[null]:null}))[0], editAfterSubmitAttributes)
                         .then(r => this.props.sendSystemMessage(`${type[0]} was successfully edited.`, {type: "success"}))
                 })
@@ -397,7 +416,7 @@ class AvlFormsNewData extends React.Component{
             if(graph[form_type] && graph[form_type].meta){
                 graph[form_type].meta.value
                     .filter(f => f.form_type.split(`${form_type}-`).length > 1)
-                    .filter(f => this.props.config[0].attributes[f.form_type.split(`${form_type}-`)[1]].metaSource !== 'meta_file')
+                    .filter(f => get(this.props.config[0],[ 'attributes', f.form_type.split(`${form_type}-`)[1], 'metaSource'], null) !== 'meta_file')
                     .map(f => {
                         let field = f.form_type.split(`${form_type}-`)[1]
                         if (fieldSpecificMeta[field]){
@@ -417,7 +436,7 @@ class AvlFormsNewData extends React.Component{
                 .filter(f => f.form_type.split(`${form_type}-`).length > 1)
                 .forEach(f => {
                     f.form_type.split(`-`).slice(1, f.form_type.split(`-`).length)
-                        .filter(field => this.props.config[0].attributes[field].metaSource === 'meta_file')
+                        .filter(field => get(this.props.config[0], ['attributes', field, 'metaSource'], null) === 'meta_file')
                         .forEach(field => {
                             if (fieldSpecificMeta[field] && !fieldSpecificMeta[field].includes(f)){
                                 fieldSpecificMeta[field].push(f)
@@ -734,6 +753,7 @@ class AvlFormsNewData extends React.Component{
                                     graph={{type: d.type }}
                                     {...d}
                                     autoLoad = {this.props.autoLoad}
+                                    user={this.props.user}
                                 />)
                             }) :
                                  null
@@ -767,6 +787,7 @@ class AvlFormsNewData extends React.Component{
 
 const mapStateToProps = (state,ownProps) => {
     return {
+        user: state.user,
         userEmail:state.user.email,
         activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,

@@ -193,7 +193,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
                     }else{
-                        a[c] = this.state[c].replaceAll('\'', '\'\'')
+                        a[c] = typeof this.state[c] === "number" ? this.state[c] : this.state[c].replaceAll('\'', '\'\'')
                     }
                 }
                 return a;

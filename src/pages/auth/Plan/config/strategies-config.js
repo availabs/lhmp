@@ -69,9 +69,9 @@ const config = {
                 '  Goals are statements of the community’s visions for the future.',
             icon: 'os-icon-target',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true
+            // /*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Goals 3A-1',
@@ -92,9 +92,9 @@ const config = {
                 ' as well as post‐disaster conditions.',
             icon: 'os-icon-mail-19',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete hideIfNull: true 
         },
     ],
 
@@ -125,6 +125,7 @@ const config = {
             align: 'full',
             config: {
                 type: 'capabilities',
+                description: 'Capabilities are the tools and resources used by a community to minimize hazard impacts. Capabilities are categorized as: Planning and Regulatory, Administrative and Technical, Education and Outreach, and Financial assets. The information displayed in the table below includes the selected jurisdiction’s hazard mitigation capabilities. When the county is selected, the table includes capabilities for all jurisdictions in the plan, otherwise the table filters to the selected jurisdiction.', 
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {
@@ -151,13 +152,13 @@ const config = {
                         sort: true,
                         filter: 'multi'
                     },
-                    
-                    {
-                        Header: 'adopting authority',
-                        accessor: 'adopting_authority',
-                        sort: true,
-                        filter: 'default'
-                    },
+
+                    /*  {
+                          Header: 'adopting authority',
+                          accessor: 'adopting_authority',
+                          sort: true,
+                          filter: 'default'
+                      },*/
                     {
                         Header: 'responsible authority',
                         accessor: 'responsible_authority',
@@ -167,15 +168,31 @@ const config = {
                     {
                         Header: 'Link',
                         accessor: 'upload',
-                        width: 50
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
                     },
                     {
                         Header: 'jurisdiction_utilization',
                         accessor: 'jurisdiction_utilization',
                         width: 50,
-                        expandable: 'true'
+                        expandable: 'true',
+                        expandableHeader: true
                     },
-                    
+                    {
+                        Header: 'capability_description',
+                        accessor: 'capability_description',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                    {
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
                 ]
             },
             prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -186,10 +203,11 @@ const config = {
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                 ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
                 ' capability varies widely.',
+            viewLink: true,
             activeGeoFilter: 'true',
             defaultSortCol: 'adopting_authority',
             // defaultSortOrder: 'desc',
-            colOrder: ['Jurisdiction', 'Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+            colOrder: ['Jurisdiction','Name', 'category', 'type', 'Link', 'responsible authority', 'jurisdiction_utilization', 'capability_description', 'viewLink'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },
@@ -291,14 +309,16 @@ const config = {
                     'Projects that are well developed and documented in one place are more quickly identifiable for selection when grants become available, making implementation that much more likely.',
             icon: 'os-icon-globe',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            // /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
             title: 'Proposed Actions',
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
+            description: 'The table below includes the Mitigation Actions that were identified during the strategy development process by the jurisdictional representatives. The jurisdictions completed the DHSES Action worksheet as part of the strategy development process for select prioritized actions listed below. The actions prioritized for the Plan update are labeled with the status ‘Proposed - HMP’. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
+            filterCol: ['action_status_update'],
             filterBy: ['Proposed-HMP'],
             align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
@@ -346,6 +366,43 @@ const config = {
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true    
+        },
+        {
+            title: 'Additional Actions Inventory',
+            requirement: 'Req-C-4',
+            type: 'actionsFilteredListTable',
+            description: 'The table below includes additional identified actions that are inventoried for further development in the future. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
+            filterCol: ['action_status_update'],
+            filterBy: ['Proposed-New','Proposed-Carryover'],
+            align: 'full',
+            prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
+                ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
+                ' assessment, and 2) identifies the actions and/or projects that the jurisdiction intends to implement.' +
+                ' a. Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction' +
+                ' that are based on the community’s risk and  vulnerabilities, as well as community priorities.' +
+                ' b. The plan must identify the position, office, department, or agency responsible for implementing and' +
+                ' administering the action (for each jurisdiction), and identify potential funding sources and expected' +
+                ' timeframes for completion. ',
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within' +
+                ' the capability of each jurisdiction, and reduce or avoid future losses.  This is the heart of the' +
+                ' mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA,' +
+                ' “own” the hazard mitigation actions in the strategy.' +
+                ' a. Mitigation actions and projects means a hazard mitigation action, activity or process (for example,' +
+                '  adopting a building code) or it can be a physical project (for example, elevating structures or retrofitting' +
+                ' critical  infrastructure) designed to reduce or eliminate the long term risks from hazards.' +
+                ' b. Integrate elements of Req-C-5 and Req-C-6',
+            viewLink: true,
+            activeGeoFilter: 'true',
+            defaultSortCol: 'action_jurisdiction',
+            // defaultSortOrder: 'desc',
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            generalCols: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'description_of_problem_being_mitigated'],
+            expandableCols: ['action_description', 'description_of_problem_being_mitigated'],
+            exclude: ['priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text'],
+            minHeight: '80vh',
+            icon: 'os-icon-activity',
+            hideNav: true,
+
         },    
         {
             title: 'NFIP Continued Compliance & Repetitive Loss Strategy',
@@ -359,6 +416,88 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
+        {
+            title: 'NFIP Compliance Table',
+            requirement: 'Req-C-2B',
+            type: 'formTable',
+            fontSize: '0.70em',
+            height: '600px',
+            hideNav: true,
+            align: 'full',
+            config: {
+                type: 'municipalities',
+                description: 'The information in the table below was compiled for MitigateNY using the Community Status Book Report provided by FEMA which includes map dates and Community Identification (CID) numbers for communities participating in the national flood program, NYSDEC Community Assistance Visits (CAVs), and jurisdictional input from the Hazard Mitigation Plan interview process.', 
+                //filters:[{column:'capability_category',value:'planning and regulatory'}],
+                columns : [
+                    {
+                        Header: 'Jurisdiction',
+                        accessor: 'community_name',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'CID Number',
+                        accessor: 'cid',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'Initial Flood Insurance Rate Map',
+                        accessor: 'initial_firm_date',
+                        sort: true,
+                        filter: 'multi'
+                    },
+                    {
+                        Header: 'Current Effective FIRM',
+                        accessor: 'current_map_date',
+                        sort: true,
+                        filter: 'multi'
+                    },
+
+                    /*  {
+                          Header: 'adopting authority',
+                          accessor: 'adopting_authority',
+                          sort: true,
+                          filter: 'default'
+                      },*/
+                    {
+                        Header: 'NFIP Standing',
+                        accessor: 'nfip_standing',
+                        sort: true,
+                        filter: 'default'
+                    },
+                    {
+                        Header: 'CAV Date',
+                        accessor: 'community_assistance_visit',
+                        // expandable: 'true',
+                        // expandableHeader: true
+                    },
+                    {
+                        Header: 'NFIP Administrator',
+                        accessor: 'nfip_administrator_name',
+                        // expandable: 'true',
+                        // expandableHeader: true
+                    },
+                    {
+                        Header: 'viewLink',
+                        accessor: 'viewLink',
+                        width: 50,
+                        expandable: 'true',
+                        expandableHeader: true
+                    },
+                ]
+            },
+            prompt: '',
+            intent: '',
+            viewLink: true,
+            activeGeoFilter: 'true',
+            defaultSortCol: 'community_name',
+            // defaultSortOrder: 'desc',
+            colOrder: ['Jurisdiction', 'CID Number','Initial Flood Insurance Rate Map','Current Effective FIRM','NFIP Standing','CAV Date','NFIP Administrator','viewLink'],
+            minHeight: '80vh',
+            icon: 'os-icon-tasks-checked'
+        },
+
         {
             title:'Implementation Resources',
             requirement:'Req-NYS-F-8',
@@ -433,6 +572,7 @@ const config = {
             title: 'Relocation Zone Map',
             requirement: 'Req-NYS-F-3B-1',
             type: 'developementZonesFilteredMap',
+            description: 'The following map depicts the geographic location of potential Relocation Zones identified during the jurisdictional interviews. Clicking the blue pins on the map will display a tooltip identifying the name of the zone and any comments associated with it.',
             filterBy: {zone_type: ['Relocation Zone']},
             prompt: '',
             intent: '',
@@ -455,6 +595,7 @@ const config = {
             title: 'Evacuation Routes',
             requirement: 'Req-NYS-F-4A',
             type: 'evacuationRoutes',
+            description: 'The map below depicts all of the evacuation routes identified by jurisdictional representatives and during the hazard mitigation planning process. Jurisdictional boundaries are displayed in green and evacuation routes are displayed in pink. A list of all routes is displayed in a collapsable table in the top right corner of the map. Clicking the “View” button next to a route will zoom the map to that route’s location. Clicking “View All” will zoom the map out so that every recorded evacuation route will be visible on the map. Clicking “Hide All” will remove all of the evacuation routes so that the underlying road maps are more visible.',
             prompt: '',
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
             icon: 'os-icon-alert-octagon',
@@ -476,6 +617,7 @@ const config = {
             title: 'Shelter Table',
             requirement: 'Req-NYS-F-4D',
             type: 'shelterListTable',
+            description: 'The table below lists all of the shelters with the community and their approximate evacuation capacity, the post-impact capacity, if the site is ADA compliant,  wheelchair accessible, and has a generator on site or is self-sufficient for providing electricity. Evacuation Capacity refers to how many people could fit in the shelter when displaced from a hazard for three (3) days or less while the post-impact capacity is how many people can stay at the shelter for longer than three (3) days.',
             align: 'full',
             prompt: '',
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',

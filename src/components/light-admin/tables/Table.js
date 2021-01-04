@@ -439,9 +439,12 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                                  className={row.cells
                                      .filter(cell => cell.column.expandable === 'true').length ? "tr expandable" : "tr"}
                                  onClick={(e) => {
-                                     if (document.getElementById(`expandable${i}`)) {
-                                         document.getElementById(`expandable${i}`).style.display =
-                                             document.getElementById(`expandable${i}`).style.display === 'none' ? 'flex' : 'none'
+                                     let siblings = e.target.parentNode.parentNode.children;
+                                     for(let s = i; s < siblings.length - 1; s++){
+                                         if (siblings[s] && siblings[s].id === `expandable${i}`){
+                                             siblings[s].style.display =
+                                                 siblings[s].style.display === 'none' ? 'flex' : 'none'
+                                         }
                                      }
                                  }}
                             >
@@ -482,25 +485,28 @@ function Table({columns, data, tableClass, height, width, actions, csvDownload})
                                     : null}
                             </div>
 
-                            <tr className="tr"
-                                id={`expandable${i}`} style={{
-                                backgroundColor: 'rgba(0,0,0,0.06)',
-                                display: 'none', flex: '0 1 auto', width: '100%', minWidth: '100%'
-                            }}>
-                                {row.cells
-                                    .filter(cell => cell.column.expandable === 'true')
-                                    .map(cell => {
-                                        return (
+                            {row.cells
+                                .filter(cell => cell.column.expandable === 'true')
+                                .map(cell => {
+                                    return (
+                                        <tr className="tr"
+                                            id={`expandable${i}`} style={{
+                                            backgroundColor: 'rgba(0,0,0,0.06)',
+                                            display: 'none', flex: '0 1 auto', width: '100%', minWidth: '100%'
+                                        }}>
                                             <td
                                                 className="td"
                                                 {...cell.getCellProps(cellProps)}
                                                 colSpan={row.cells.filter(cell => cell.column.expandable !== 'true').length}>
+                                                {cell.column.expandableHeader ?
+                                                    cell.column.Header :
+                                                    null}<br/>
                                                 {renderCell(cell)}
                                             </td>
-                                        )
-                                    })
-                                }
-                            </tr>
+                                        </tr>
+                                    )
+                                })
+                            }
                         </React.Fragment>
                     )
                 })}

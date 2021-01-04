@@ -4,6 +4,7 @@ import moment from "moment";
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
+import ContentEditor from "../displayComponents/contentViewer";
 
 const DIV = styled.div`
     .type {font-weight: bold;}
@@ -53,9 +54,7 @@ class TextComponent extends React.PureComponent {
 
     render() {
         const data = this.props.data;
-        console.log('data?', data)
         if (!data.length) return null;
-
         return (
             <React.Fragment>
                 {this.renderHeader(data)}
@@ -70,6 +69,11 @@ class TextComponent extends React.PureComponent {
                                                 {
                                                     data[d].attribute === 'created_at' ?
                                                         moment(data[d].value).calendar() :
+                                                        data[d].attribute === 'comment' ?
+                                                            <ContentEditor
+                                                                title={data[d].attribute}
+                                                                state={{[data[d].attribute]: data[d].value}}
+                                                                viewOnly={true} /> :
                                                         data[d].value
                                                 }
                                             </div>

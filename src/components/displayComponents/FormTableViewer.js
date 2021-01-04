@@ -1,12 +1,18 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
+import createReactClass from 'create-react-class';
+
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
 import { Link } from "react-router-dom"
 
+import {SectionBox} from 'pages/Public/theme/components'
 import Table from 'components/light-admin/tables/tableSelector'
 import {match} from "fuzzy";
 import functions from "../../pages/auth/Plan/functions";
+import DisplayComps from 'components/AvlForms/displayComponents'
+import AvlFormsViewData from "../AvlForms/displayComponents/viewData";
 
 var _ = require('lodash')
 
@@ -28,8 +34,7 @@ class FormTableViewer extends React.Component{
                 
             })
         }
-        // console.log('form attributes', formAttributes, this.props.activePlan)
-        
+
         return this.props.falcor.get(
             ['forms',formType,'byPlanId',this.props.activePlan,'length'],
             ["geo", this.props.activeGeoid, 'municipalities']
@@ -47,17 +52,45 @@ class FormTableViewer extends React.Component{
             })
     }
 
-    isMatch(matchee, matcher){
-        matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
-            matchee.slice(1,-1).split(',') : matchee;
+
+    isMatch(matchee, matcher, matchSubstring = false) {
+        matchee = matchee && typeof matchee === "string" ?
+            matchee.indexOf('[') !== -1 ? matchee.slice(1,-1).split(',') :
+                matchee.indexOf(',') !== -1 ? matchee.split(',') : matchee : matchee;
+        matcher = matcher && typeof matcher === "string" ?
+            matcher.indexOf('[') !== -1 ? matcher.slice(1,-1).split(',') :
+                matcher.indexOf(',') !== -1 ? matcher.split(',') : matcher : matcher;
+
+        if (matchSubstring){
+            return (!matchee || !matcher) ? false :
+                typeof matchee === 'string' && typeof matcher === 'string' ?
+                    matchee.toString().toLowerCase().includes(matcher.toString().toLowerCase()) ||
+                    matcher.toString().toLowerCase().includes(matchee.toString().toLowerCase()):
+                    typeof matchee === 'string' && typeof matcher === 'object' ?
+                        matcher.filter(m =>
+                            m.toString().toLowerCase().includes(matchee.toString().toLowerCase()) ||
+                            matchee.toString().toLowerCase().includes(m.toString().toLowerCase())
+                        ).length :
+                        typeof matchee === 'object' && typeof matcher === 'string' ?
+                            matchee.filter(m =>
+                                m.toString().toLowerCase().includes(matcher.toString().toLowerCase()) ||
+                                matcher.toString().toLowerCase().includes(m.toString().toLowerCase())
+                            ).length :
+                            _.intersection(matchee.map(m => m.toString().toLowerCase()), matcher.map(m => m.toString().toLowerCase())).length
+        }
 
         return (!matchee || !matcher) ? false :
-            typeof matchee === 'string' ?
-            matchee.toString() === matcher.toString() :
-            matchee.map(m => m.toString()).includes(matcher.toString())
+            typeof matchee === 'string' && typeof matcher === 'string' ?
+                matchee.toString().toLowerCase() === matcher.toString().toLowerCase() :
+                typeof matchee === 'string' && typeof matcher === 'object' ?
+                    matcher.map(m => m.toString().toLowerCase()).includes(matchee.toString().toLowerCase()) :
+                    typeof matchee === 'object' && typeof matcher === 'string' ?
+                        matchee.map(m => m.toString().toLowerCase()).includes(matcher.toString().toLowerCase()) :
+                        _.intersection(matchee.map(m => m.toString().toLowerCase()), matcher.map(m => m.toString().toLowerCase())).length
     }
     render(){
         // process data from
+        let falcorCache = this.props.falcor.getCache()
         let tableData = Object.values(this.props.tableList)
             .filter(d => {
                     return this.props.activeGeoFilter === 'true' ?
@@ -76,8 +109,25 @@ class FormTableViewer extends React.Component{
                 }
             )
             .map(d => {
-            return Object.keys(this.props.formData[d.value[2]].value.attributes)
+            return [...Object.keys(this.props.formData[d.value[2]].value.attributes), 'viewLink', 'id']
                 .reduce((a,c) => {
+                    let configSettings = get(this.props.config, ['columns'], []).filter(cc => cc.accessor === c)[0]
+                    if(c === 'id'){
+                        a[c] = d.value[2];
+                        return a;
+                    }
+                    if (this.props.viewLink && c === 'viewLink'){
+                        a['viewLink'] =
+                            <a href={
+                                this.props.config.subType ?
+                                `/${this.props.config.type}/view/${this.props.config.subType}/${this.props.formData[d.value[2]].value.id}/p` :
+                                `/${this.props.config.type}/view/${this.props.formData[d.value[2]].value.id}/p`
+                            } target={'_blank'}>
+                                <i className="os-icon os-icon-mail-19"></i>
+                            </a>
+                        return a;
+                    }
+
                     a[c] = this.props.formData[d.value[2]].value.attributes[c]
 
                     a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split(',') : a[c]
@@ -87,7 +137,26 @@ class FormTableViewer extends React.Component{
                             a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC)) : a[c]
                     }
 
-                    a[c] = typeof a[c] !== "object" ? a[c] : a[c] ? a[c].join(',') : a[c]
+                    if (configSettings && configSettings.displayType === 'AvlFormsJoin'){
+
+                        if(typeof a[c] === "string") { a[c] = [a[c]]}
+                        a[c].reduce((acc,newC) => {
+                            return acc.then((resAcc) => {
+                                return this.props.falcor.get(['forms', 'byId', newC])
+                            })
+                        },Promise.resolve())
+                        a[c] = a[c].map(newC => get(this.props.falcor.getCache(), [ 'forms', 'byId', newC, 'value', 'attributes', configSettings.formAttribute]) )
+                            .filter(newC => newC)
+                    }
+
+                    a[c] = typeof a[c] !== "object" ? a[c] : a[c] && a[c].length ? a[c].join(',') : a[c]
+
+                    if(this.props.config.combineCols){
+                        let combinationKey = Object.keys(this.props.config.combineCols).filter(cc => this.props.config.combineCols[cc].includes(c))[0]
+                        if (combinationKey){
+                            a[combinationKey] = a[combinationKey] ? `${a[combinationKey]} ${a[c]}` : a[c]
+                        }
+                    }
                     return a;
                 }, {})
         })
@@ -100,22 +169,38 @@ class FormTableViewer extends React.Component{
 
         // filter data is there are filters
         // can we move this to the server? seems tricky
-        if(this.props.config.filters) {
+        if(this.props.config.filters && tableData) {
             this.props.config.filters.forEach(f => {
-                tableData = tableData.filter(d =>
-                typeof f.value === 'string' ? d[f.column].toLowerCase().includes(f.value.toLowerCase()) :
-                f.value.filter(oldF => oldF.toLowerCase().includes(d[f.column].toLowerCase())).length)
+                tableData = tableData
+                    .filter(d => d[f.column])
+                    .filter(d => this.isMatch(f.value, d[f.column], this.props.config.matchSubString))
             })
         }
+
+        let columns = this.props.config.combineCols ?
+            [
+                ...Object.keys(this.props.config.combineCols)
+                    .map(col => ({
+                        'Header': col,
+                        accessor: col,
+                        sort: this.props.config.combineCols[col].reduce((a,c) => a || c.sort, false),
+                        filter: this.props.config.combineCols[col].reduce((a,c) => a || c.filter, null)
+                    })),
+                ...this.props.config.columns
+            ] : this.props.config.columns
         return (
             <div style={{fontSize: this.props.fontSize ? this.props.fontSize : 'inherit'}}>
+                {get(this.props.config, 'description', null) ? 
+                    <SectionBox>{this.props.config.description}</SectionBox> : ''
+                }
                 <Table 
                     data={tableData} 
                     columns={
-                        this.props.config.columns
+                        columns
                             .reduce((a,c, cI, src) => {
                                 if (this.props.colOrder){
-                                    a.push(src.filter(s => s.Header === this.props.colOrder[cI]).pop())
+                                    let tmpCol = src.filter(s => s.Header === this.props.colOrder[cI]).pop()
+                                    if (tmpCol) a.push(tmpCol)
                                 }else{
                                     a.push(c)
                                 }
@@ -125,6 +210,7 @@ class FormTableViewer extends React.Component{
                     height={this.props.minHeight}
                     flex={Boolean(this.props.flex) ? this.props.flex === 'true' : true}
                 />
+                
             </div>
         )
     }

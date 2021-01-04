@@ -25,13 +25,9 @@ class inventoryTableViewer extends Component {
     }
 
     fetchFalcorDeps() {
-        this.setState({loading: true})
-
         return this.props.falcor.get(
             ['parcel', 'byGeoid', this.state.geoid, ATTRIBUTES]
-        ).then(data => {
-            this.setState({loading: false})
-        })
+        )
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -42,6 +38,7 @@ class inventoryTableViewer extends Component {
     }
 
     processData() {
+        if (!get(this.props, `parcelData.value`, null)) return null
         let cols = ['Land Type', '# of parcels', 'Total Area (Acres)', 'Total Value'],
             rows = [
                 'Vacant Land',
@@ -50,7 +47,7 @@ class inventoryTableViewer extends Component {
                 'Flood Control',
                 'Wild, Forested, Conservation lands and Public parks'
             ]
-        // console.log('parcel', get(this.props, `parcelData.value`, []))
+
         let data = get(this.props, `parcelData.value`, [])
             .filter(c => get(c, `prop_class`, null) &&
                 (['350', '580', '581', '590', '591', '592', '593', '821'].includes(get(c, `prop_class`, null)) ||
@@ -137,16 +134,16 @@ class inventoryTableViewer extends Component {
     }
 
     render() {
+        let {data, columns} = {...this.processData()}
         return (
-            this.props.parcelData && !this.state.loading ?
+            data && columns ?
                 <TableSelector
                     {...this.processData()}
                     flex={this.props.flex ? this.props.flex : false}
                     height={this.props.height ? this.props.height : ''}
                     width={this.props.width ? this.props.width : '100%'}
                     tableClass={this.props.tableClass ? this.props.tableClass : null}
-                /> :
-                this.props.parcelData && this.state.loading ? 'Loading...' : null
+                /> : 'Loading...'
         )
     }
 }

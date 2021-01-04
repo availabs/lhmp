@@ -73,14 +73,14 @@ const config = {
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of future hazard events and the vulnerabilities that could be reduced through hazard mitigation actions.',
             icon: 'os-icon-grid-squares-2',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true 
         },
         // {
-        //     title: '',
+        //     title: 'Social Vulnerability Map',
         //     requirement: 'Req-B-3B-3B',
-        //     hideNav: true,
+        //     //hideNav: true,
         //     type: 'content',
         //     prompt: 'Identify vulnerable populations within the community to highlight groups of people that will need additional considerations when establishing mitigation plans and actions.' +
         //             'Vulnerable populations are people identified as being at higher risk to natural hazards and include social and physical vulnerabilities: the economically disadvantaged, racial and ethnic minorities, the uninsured, low-income individuals and families, the elderly, the homeless, those in high population density areas, those with chronic health conditions, including severe mental illness.',
@@ -170,6 +170,7 @@ const config = {
             title: 'Built Environment Table',
             requirement: 'Req-B-3B-2',
             type: 'inventoryTable',
+            description:'The table below lists the inventory of structures for the Towns in the county and how many are located within the 100 and 500 year flood plains. In New York State, Villages are included within Town boundaries. Villages are not included in this table so as to not double count buildings. Clicking on each number will navigate to a new page with a list view of that category’s  structures containing their addresses, property classes, and the owner types. These lists can be downloaded as spreadsheets using the “Download CSV” button in the top right of the new window.',
             hideNav: true,
             //align: '',
             intent: 'Overview of loss by asset type by scenario',
@@ -187,9 +188,9 @@ const config = {
                     '- The plan must document that critical facilities are protected to the 500-year flood event, or worst damage scenario. For those that do not meet this level of protection, the plan must include an action to meet this criteria, or explain why it is not feasible to do so',
             icon: 'os-icon-loader',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
+            /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            /*2-non-delete*/ hideIfNull: true 
+            // 2-non-delete hideIfNull: true 
         },
         // {
         //     title: 'Critical Infrastructure Table',
@@ -208,9 +209,10 @@ const config = {
         // },
         
         {
-            title: '',
+            title: 'Critical Facilities Table',
             requirement: 'Req-NYS-F-3',
             type: 'criticalFacilitiesTable',
+            description:'Clicking on each number will navigate to a new page with a list view of that category’s  structures containing their addresses, property classes, and the owner types. These lists can be downloaded as spreadsheets using the “Download CSV” button in the top right of the new window.',
             prompt: '',
             intent: '',
             defaultSortCol: 'critical',
@@ -243,9 +245,10 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
-            title: '',
+            title: 'Problem Statements Table',
             requirement: 'Req-B-4A-1',
             type: 'problemStatementTable',
+            description:'The table below is a list of each jurisdictions’ problem statements gathered and developed through the hazard mitigation planning process. Each problem statement is accompanied by a list of hazards that may be associated with the problem. The list can be sorted alphabetically by clicking the column titles or narrowed by entering text in the search bars beneath the column titles.',
             prompt: '',
             intent: '',
             activeGeoFilter: 'true',
@@ -281,6 +284,7 @@ const config = {
             title: 'Development Zones',
             requirement: 'Req-D-1B',
             type: 'developementZonesFilteredTable',
+            description:'The following table lists all of the Recent or Future Development Zones that were created as a result of the jurisdictional interviews and any additional comments that were noted during the zone creation. The list can be sorted alphabetically by clicking the column titles.',
             filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
@@ -293,6 +297,7 @@ const config = {
             title: 'Development Map',
             requirement: 'Req-D-1C',
             type: 'developementZonesFilteredMap',
+            description:'The following map depicts the geographic location of the Recent and Future Development Zones identified during the jurisdictional interviews. Clicking the blue pins on the map will display a tooltip identifying the name of the zone and any comments associated with it.',
             filterBy: {zone_type: ['Future Development Zone', 'Recent Development Zone']},
             prompt: '',
             intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
@@ -314,6 +319,7 @@ const config = {
             title: 'Open Space Statistics',
             requirement: 'Req-E-1B',
             type: 'openSpaceTable',
+            description:'The table below lists the different types of open space, the quantity of parcels that are classified as each, the total area in acres of each type, and the recorded value of that open space type. The open space classifications in this table were pulled from New York State’s Parcel Code and these figures were generated using parcel data.',
             prompt: '',
             intent: '',
             defaultSortCol: 'Land Type',
@@ -337,7 +343,14 @@ const config = {
             title: 'Previous Actions',
             requirement: 'Req-D-1G',
             type: 'actionsFilteredListTable',
-            filterBy: [ 'In-progress', 'Completed', 'Discontinued'],
+            description:'The table below contains each jurisdiction’s previous actions that were listed in the previous hazard mitigation plan. The table shows the jurisdiction where the action was assigned, the name of the action, a list of hazards associated with the action, and a status update on the action.The list can be sorted alphabetically by clicking the column titles or narrowed by entering text in the search bars beneath the column titles. The status updates and their meanings are: ' + 
+            'Completed - This action has been completed. '+
+            'In-progress - This action is still being actively pursued. This may mean that the action is not completed or that it is an ongoing action, like an outreach program, that will remain In-progress as long as it continues. ' + 
+            'Proposed-Carryover - These are actions that were proposed in the previous plan that are being brought forward to be included in the inventory of actions in this hazard mitigation plan. ' + 
+            'Proposed-HMP - These are actions that were proposed in the previous plan that are being brought forward to be included into this current hazard mitigation plan and also meet minimum requirements for actions for review by DHSES and FEMA. ' + 
+            'Discontinued - These actions are no longer relevant and have been discontinued. ',
+            filterCol: ['previous_plan_action'],
+            filterBy: ['yes'],
             align: 'full',
             prompt: 'Describe the status of hazard mitigation actions in the previous plan by identifying those that have' +
                 ' been completed or not completed. For actions that have not been completed, the plan must either describe' +
@@ -347,7 +360,10 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'action_jurisdiction',
             // defaultSortOrder: 'desc',
-            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update', 'action_description', 'description_of_problem_being_mitigated'],
+            colOrder: ['action_jurisdiction', 'action_name', 'associated_hazards', 'action_status_update', 'action_description'],
+            generalCols: ['action_jurisdiction', 'action_name', 'associated_hazards', 'priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'action_status_update'],
+            expandableCols: ['action_description', 'description_of_problem_being_mitigated'],
+            exclude: ['priority_score', 'estimated_timeframe_for_action_implementation', 'estimated_cost_range', 'lead_agency_name_text', 'description_of_problem_being_mitigated'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked',
             hideNav: true
@@ -355,7 +371,7 @@ const config = {
     ],
         'Floodplain Management' : [
         {
-            title: 'NFIP Compliance',
+            title: 'National Flood Insurance Program',
             requirement: 'Req-B-4B',
             type: 'content',
             prompt: 'Address each jurisdiction’s participation in the NFIP and continued compliance with NFIP requirements, as appropriate.' +
@@ -379,15 +395,39 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
+        // {
+        //     title:`Floodplain Image`,
+        //     description: 'The image below shows the Flood Insurance Rate Map (FIRM) 500-Year (0.2% Annual) Floodplain geography in blue and all building footprints that intersect with the floodplain in green.',
+        //     requirement:'Req-B-4E',
+        //     type: 'image',
+        //     prompt: '',
+        //     intent: '',
+        //     callout: '',
+        //     label:'Image', // Which you would like to see on the form
+        //     height: 250,
+        //     width: 500,
+        //     border: 1,
+        //     icon: 'os-icon-arrow-right7',
+        //     // onlyAdmin: true,
+        //     hideNav: true,
+        //     hideIfNull: true,
+        //     pullCounty:true
+        // },
         {
             title: 'NFIP Statistics',
             requirement: 'Req-B-4',
             type: 'nfipStatistics',
+            description:'The following table provides a snapshot of the National Flood Insurance Program (NFIP) in the county. Due to the nature of the NFIP data, the NFIP information for Villages is included within their respective Towns (in New York State, Villages are included within Towns). '+ 
+            'At the top, a total number of NFIP Claims and the Total Payments for those claims is displayed. '+ 
+            'The table shows the total amount of NFIP claims, how many claims were paid, the total amount paid, number of repetitive/severe repetitive loss properties, and number of NFIP policies for '+ 
+            'each Town in the County. Addtionally, due to the structure of the NFIP data there were complicatons in associating the repetitive loss and severe repetitive loss '+ 
+            'properties with landuse types (e.g., residential/commercial) in this table. RL/SRL property-type information is provided above and is available to NFIP Adminstrators via the MitigateNY administrative access portal for use in their NFIP compliance code enforcement practices.',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
-            icon: 'os-icon-home'
-        },
+            icon: 'os-icon-home',
+            defaultSortCol: 'Jurisdiction'
+        },  
         {
             title: 'NFIP Problem Areas',
             requirement: 'Req-B-4A',
@@ -404,6 +444,31 @@ const config = {
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
+        {
+            title: 'NFIP Problem Areas Map',
+            requirement: 'Req-B-B-4D',
+            type: 'developementZonesFilteredMap',
+            description:'The following map depicts the geographic location of the NFIP Problem Area Zones identified during the jurisdictional interviews. Clicking the blue pins on the map will display a tooltip identifying the name of the zone and any comments associated with it.',
+            filterBy: {zone_type: ['NFIP Problem Area']},
+            prompt: '',
+            intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            icon: 'os-icon-globe',
+            hideNav: true,
+        },
+        {
+            title: 'NFIP Problem Areas List',
+            requirement: 'Req-B-B-4C',
+            type: 'developementZonesFilteredTable',
+            description:'The following table lists all of the NFIP Problem Area Zones that were created as a result of the jurisdictional interviews and any additional comments that were noted during the zone creation. The list can be sorted alphabetically by clicking the column titles.',
+            filterBy: {zone_type: ['NFIP Problem Area']},
+            prompt: '',
+            intent: 'To ensure that the mitigation strategy continues to address the risk and vulnerabilities to existing and potential development, and takes into consideration possible future conditions that can impact the vulnerability of the community.',
+            defaultSortCol: 'name',
+            activeGeoFilter: 'true',
+            minHeight: '80vh',
+            icon: 'os-icon-grid-squares-2',
+            hideNav: true,
+        },
 
     ],
         'Dam Safety' : [
@@ -418,6 +483,22 @@ const config = {
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
+        },
+        {
+         title:``,
+         requirement:'Req-S-3B',
+         type: 'image',
+         prompt: '',
+         intent: '',
+         callout: '',
+         label:'Image', // Which you would like to see on the form
+         height: 150,
+         width: 350,
+         border: 1,
+         icon: 'os-icon-arrow-right7',
+         // onlyAdmin: true,
+         hideNav: true,
+         pullCounty: true,
         },
     ],
         'Process Assessment'  : [

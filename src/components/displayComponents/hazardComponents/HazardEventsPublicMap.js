@@ -11,34 +11,29 @@ import {
     EARLIEST_YEAR,
     LATEST_YEAR
 } from "./yearsOfSevereWeatherData"
+import get from "lodash.get";
+import {setActiveCousubid} from "../../../store/modules/user";
+import {ContentHeader, PageContainer} from "../../../pages/Public/theme/components";
+import HazardBarChart from "./HazardBarChart";
+import NumberOfHazardsMonthStackedBarGraph
+    from "../../../pages/Public/Hazards/new_components/NumberOfHazardsMonthStackedBarGraph";
+import CousubTotalLossTable from "../../../pages/Public/Hazards/components/CousubTotalLossTable";
+import HazardEventsMapController from "../../../pages/Public/Hazards/components/HazardEventsMapController";
 
 class HazardEventsTable extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state={}
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-       if ( prevProps.hazard !== this.props.hazard){
-           this.fetchFalcorDeps()
-       }
-    }
 
     fetchFalcorDeps() {
         let hazard = this.props.hazard ?
             [this.props.hazard] :
             this.props.hazards && this.props.hazards.length > 0 ?
                 this.props.hazards : null;
-        if (!hazard) return Promise.resolve()
-        this.setState({hazards: hazard})
+
         return this.props.falcor.get(['riskIndex', 'hazards'])
                 .then(response => {
                     return hazard ? hazard : response.json.riskIndex.hazards;
                 })
             .then(hazardids => {
                 return this.props.falcor.get(
-                    ['riskIndex', 'meta', hazardids, ['id', 'name', 'description']],
                     [this.props.dataType, 'events', this.props.geoid, hazardids, 'top', 'property_damage']
                 )
                     .then(response => {
@@ -74,55 +69,33 @@ class HazardEventsTable extends React.Component {
             })
     }
 
-    processData() {
-        const { hazard, hazards, dataType, geoid, year } = this.props,
-            hazardids = hazard ? [hazard] : hazards && hazards.length > 0 ? hazards : [],
-            graphEventsByGeoid = this.props[dataType].events[geoid],
-            graphEventsById = this.props[dataType].events.byId,
-            data = [];
-        let event_ids = [];
-        hazardids.forEach(hazardid => {
-            const ids = this.props[this.props.dataType].events[this.props.geoid][hazardid].top.property_damage.value;
-            event_ids = event_ids.concat(ids);
-        })
-        event_ids.forEach(event_id => {
-            const {
-                hazardid,
-                property_damage,
-                event_narrative,
-                episode_narrative,
-                municipality,
-                county,
-                date
-            } = graphEventsById[event_id];
-            data.push({
-                "property damage": fnum(+property_damage),
-                'hazard': hazardid && this.props.riskIndex.meta[hazardid].name ? this.props.riskIndex.meta[hazardid].name.toUpperCase() : hazardid,
-                property_damage: +property_damage,
-                "municipality": municipality ? `${ municipality }, ${ county }` : county,
-                "date": new Date(date).toLocaleString(),
-                "narrative": event_narrative || episode_narrative
-            })
-        })
-        data.sort((a, b) => b.property_damage - a.property_damage);
-        return { data, columns: ['property damage', 'hazard', "municipality", "date", 'narrative'] };
-    }
-
     render() {
-        try {
-            return (
-                <TableBox { ...this.processData() }
-                          filterKey="narrative"
-                          pageSize={ 8 }
-                          expandColumns={ this.props.expandColumns }
-                          columnTypes={ { date: "date" } }/>
-            )
-        }
-        catch (e) {
-            return (
-                <div>Loading...</div>
-            )
-        }
+        let HazardName = this.props.hazard;
+
+        return (
+            <div className='col-md-12'>
+                <h4>Hazard Events</h4>
+                <strong>{EARLIEST_YEAR}-{LATEST_YEAR}</strong>
+                <h6>{HazardName} Events</h6>
+                <div>This map shows hazard events geographically between the years of 1996-2018. The size of the circles correspond to
+                    the dollar amount of event damage; a larger circle indicates more dollar damage. The circle is color coordinated with
+                    the associated hazard which can be found at the top of the page. Hovering over
+                    a circle will show exact amounts as recorded in the data. To filter this map click on the specific hazard above.
+                </div>
+                <HazardEventsMapController
+                    geoid={this.props.activeGeoid}
+                    geoLevel={this.props.geoLevel}
+                    dataType='severeWeather'
+                    hazards={this.props.hazards}
+                    hazard={this.props.hazard}
+                    zoomPadding={150}
+                    year={1999}
+                />
+                <i style={{color: '#afafaf'}}>Source: <a
+                    href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
+                    Storm Events Dataset</a></i>
+            </div>
+        )
     }
 }
 
@@ -135,14 +108,27 @@ HazardEventsTable.defaultProps = {
     hazards: []
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
+        geoGraph: state.graph.geo,
         router: state.router,
-        riskIndex: state.graph.riskIndex,
-        severeWeather: state.graph.severeWeather
+        activePlan: state.user.activePlan,
+        activeGeoid: state.user.activeGeoid,
+        activeCousubid: state.user.activeCousubid,
+        graph: state.graph,
+        contentGraph: get(state.graph, `content.byId`, {}),
+        formData: get(state.graph, [`forms`, 'filterRequirements'], null),
+        planId: state.user.activePlan,
+        geoid: state.user.activeCousubid && state.user.activeCousubid !== 'undefined' ?
+                state.user.activeCousubid :
+                state.user.activeGeoid ?
+                    state.user.activeGeoid :
+                    localStorage.getItem('geoId'),
+        riskIndexMeta: get(state.graph, `riskIndex.meta`, {})
+
     };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {setActiveCousubid};
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(HazardEventsTable));

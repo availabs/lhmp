@@ -2,17 +2,19 @@ module.exports = [
     {
         type: 'actions', // type is same as the route path for now
         sub_type: 'project',
-        list_attributes: ['action_description',
+        list_attributes: ['action_number',
             {'action_jurisdiction': {filter: 'true'}},
+            {'action_category': {filter: 'true'}},
             {'action_status_update': {filter: 'multi'}},
-            {'description_of_problem_being_mitigated': {filter: 'true'}},
+            {'action_description': {filter: 'true'}},
             {'action_name': {filter: 'true'}},
             {'associated_hazards': {filter: 'true'}},
+            'description_of_problem_being_mitigated',
             'sub_type'], // to list the attributes on the main page
         default_title: 'Action', // in the case when page_title is invalid
         page_title: 'action_name', // page title in edit and view
         sub_title: 'action_type', // sub title in edit and view
-        csv_download: ['action_point_of_contact', 'lead_agency_name_text', 'action_lead_agency_contact', 'is_agency_type', 'action_name', 'action_category', 'action_type', 'action_number', 'description_of_problem_being_mitigated', 'action_description', 'associated_hazards', 'metric_for_measurement', 'action_url', 'alternative_action_1', 'alternative_action_1_evaluation', 'alternative_action_2', 'alternative_action_2_evaluation', 'action_county', 'action_jurisdiction', 'action_location', 'location_point', 'site_photographs', 'is_proposed_project_located_in_sfha', 'is_project_structure_located_in_sfha', 'known_environmental_historic_preservation_protected_species_iss', 'property_names_or_hist_dist', 'ground_distributed_other_than_agriculture', 'indian_or_historic_artifacts_found_on_or_adjacent_project_area', 'building_50_years_or_older_within_or_near', 'is_shpo_survey', 'shpo_survey', 'estimated_cost_range', 'calculated_cost', 'secondary_funding_source_name', 'primary_or_potential_funding_sources_name', 'estimated_timeframe_for_action_implementation', 'engineering_required', 'is_final_engineering_design_completes', 'is_engineering_design_studies', 'is_engineering_design_requirements', 'bca', 'bca_to_bcr', 'bcr', 'level_of_protection', 'is_protects_repetitive_loss_property', 'is_protects_severe_repetitive_loss_property', 'is_crs', 'is_climate_adaptation', 'climate_smart_communities_action_type', 'relates_to_protects_critical_facility_infrastructure', 'relates_to_protects_community_lifeline_by_fema', 'relates_to_mitigation_sectors_by_fema', 'associated_mitigation_capability_2', 'priority_scoring_probability_of_acceptance_by_population', 'priority_scoring_funding_availability', 'priority_scoring_probability_of_matching_funds', 'priority_scoring_benefit_cost_review', 'priority_scoring_environmental_benefit', 'priority_score', 'plan_maintenance_date_of_status_report', 'plan_maintenance_progress_report'],
+        csv_download: ['action_point_of_contact', 'lead_agency_name_text', 'action_lead_agency_contact', 'is_agency_type', 'action_name', 'action_category', 'action_type', 'action_number', 'description_of_problem_being_mitigated', 'action_description', 'associated_hazards', 'metric_for_measurement', 'action_url', 'estimated_benefits', 'alternative_action_1', 'alternative_action_1_evaluation', 'alternative_action_2', 'alternative_action_2_evaluation', 'action_county', 'action_jurisdiction', 'action_location', 'location_point', 'site_photographs', 'is_proposed_project_located_in_sfha', 'is_project_structure_located_in_sfha', 'known_environmental_historic_preservation_protected_species_iss', 'property_names_or_hist_dist', 'ground_distributed_other_than_agriculture', 'indian_or_historic_artifacts_found_on_or_adjacent_project_area', 'building_50_years_or_older_within_or_near', 'is_shpo_survey', 'shpo_survey', 'estimated_cost_range', 'calculated_cost', 'secondary_funding_source_name', 'primary_or_potential_funding_sources_name', 'estimated_timeframe_for_action_implementation', 'engineering_required', 'is_final_engineering_design_completes', 'is_engineering_design_studies', 'is_engineering_design_requirements', 'bca', 'bca_to_bcr', 'bcr', 'level_of_protection', 'is_protects_repetitive_loss_property', 'is_protects_severe_repetitive_loss_property', 'is_crs', 'is_climate_adaptation', 'climate_smart_communities_action_type', 'relates_to_protects_critical_facility_infrastructure', 'relates_to_protects_community_lifeline_by_fema', 'relates_to_mitigation_sectors_by_fema', 'associated_mitigation_capability_2', 'priority_scoring_probability_of_acceptance_by_population', 'priority_scoring_funding_availability', 'priority_scoring_probability_of_matching_funds', 'priority_scoring_benefit_cost_review', 'priority_scoring_environmental_benefit', 'priority_score', 'plan_maintenance_date_of_status_report', 'plan_maintenance_progress_report', 'action_status_update'],
         // if wizard
         title: 'action_name',
         guidance: '/guidance/guidance-actions/view', // guidance view page. if not given, uses default: /guidance/guidanceKey/view
@@ -70,6 +72,7 @@ module.exports = [
                 edit_type: 'textarea',
                 display_type: 'text',
                 meta: 'false',
+                expandable: 'true',
                 section: '1'
             },
             associated_hazards: {
@@ -105,7 +108,6 @@ module.exports = [
                     ' etc., the extent of any analyses or studies performed (attach any reports or studies).',
                 edit_type: 'textarea',
                 display_type: 'text',
-                expandable: 'true',
                 meta: 'false',
                 section: '1'
             },
@@ -128,6 +130,17 @@ module.exports = [
                 meta: 'false',
                 section: '1',
                 list_attribute: 'true'
+            },
+            previous_plan_action: {
+                label: 'Is this action from the previous Hazard Mitigation Plan?',
+                sub_type: 'project',
+                prompt: 'All actions from the previous plan must be reviewed during the Hazard Mitigation Plan update. You can provide a status update in the last tab of this form.',
+                edit_type: 'radio',
+                edit_type_values: ['yes', 'no'],
+                display_type: 'text',
+                meta: 'false',
+                inline: 'true',
+                section: '1'
             },
             action_category: {
                 label: 'Action Category',
@@ -254,6 +267,16 @@ module.exports = [
                 display_type: 'text',
                 meta: 'false',
                 section: '1'
+            },
+            estimated_benefits: {
+                label: 'Estimated Benefits',
+                sub_type: 'project',
+                prompt: 'Describe the estimated benefits of implementing this action.',
+                edit_type: 'text',
+                display_type: 'text',
+                display_condition: '',
+                meta: 'false',
+                section: '1',
             },
             primary_or_potential_funding_sources_name: {
                 label: 'Potential primary funding sources',
@@ -408,6 +431,19 @@ module.exports = [
                 edit_type: 'file',
                 display_type: 'text',
                 meta: 'false',
+                section: '3'
+            },
+            relates_to_protects_critical_facility_infrastructure: {
+                label: 'Relates to/ Protects Critical Facility/ Infrastructure',
+                sub_type: 'project',
+                prompt: 'Is the action directly related to any critical facilities or infrastructure?' +
+                    ' Critical facilities include; utilities, emergency services, governmental structures,' +
+                    ' bridges, transportation corridors, etc.',
+                edit_type: 'radio',
+                edit_type_values: ['yes', 'no'],
+                display_type: 'text',
+                meta: 'false',
+                inline: 'true',
                 section: '3'
             },
             does_action_have_associated_zone: {
@@ -676,6 +712,46 @@ module.exports = [
                 meta: 'false',
                 section: '5'
             },
+            associated_goals: {
+                label: 'Associated Goals/Obejectives',
+                sub_type: 'project',
+                prompt: 'Provide the Goals/Objectives from this Hazard Mitigation Plan that this action supports.',
+                edit_type: 'text',
+                display_type: 'text',
+                meta: 'false',
+                section: '6',
+            },
+            relates_to_protects_community_lifeline_by_fema: {
+                label: 'Select the Community Lifelines(s) associated with this action:',
+                sub_type: 'project',
+                prompt: 'Categories include: Safety & Security, Food/Water/Sheltering, Health & Medical,' +
+                    'Energy, Communications, Transportation, and Hazardous Material.',
+                edit_type: 'dropdown_no_meta',
+                edit_type_values: ['Safety & Security', 'Food/Water/Sheltering', 'Health & Medical', 'Energy', 'Communications', 'Transportation', 'Hazardous Material'],
+                display_type: 'text',
+                meta: 'false',
+                section: '6'
+            },
+            relates_to_mitigation_sectors_by_fema: {
+                label: 'Select the FEMA designated Mitigation Sector(s) associated with this action: ',
+                sub_type: 'project',
+                prompt: 'Categories include: Emergency Management, Economic Development, Land Use Development, Housing, Health and Social Services, Infrastructure, Natural & Cultural Resources',
+                edit_type: 'dropdown_no_meta',
+                edit_type_values: ['Emergency Management', 'Economic Development', 'Land Use Development', 'Housing', 'Health and Social Services', 'Infrastructure', 'Natural & Cultural Resources'],
+                display_type: 'text',
+                meta: 'false',
+                section: '6'
+            },
+            associated_mitigation_capability_2: {
+                label: 'Select the Capability Type that this Action will be used and/or contribute to:',
+                sub_type: 'project',
+                prompt: 'Categories include: Planning & Regulatory, Administrative & Technical, Financial, Education & Outreach',
+                edit_type: 'dropdown_no_meta',
+                edit_type_values: ['Planning & Regulatory', 'Administrative & Technical', 'Financial', 'Education & Outreach'],
+                display_type: 'text',
+                meta: 'false',
+                section: '6'
+            },
             is_protects_repetitive_loss_property: {
                 label: 'Protects Repetitive Loss (RL) Property?',
                 sub_type: 'project',
@@ -741,50 +817,7 @@ module.exports = [
                 meta: 'false',
                 section: '6'
             },
-            relates_to_protects_critical_facility_infrastructure: {
-                label: 'Relates to/ Protects Critical Facility/ Infrastructure',
-                sub_type: 'project',
-                prompt: 'Is the action directly related to any critical facilities or infrastructure?' +
-                    ' Critical facilities include; utilities, emergency services, governmental structures,' +
-                    ' bridges, transportation corridors, etc.',
-                edit_type: 'radio',
-                edit_type_values: ['yes', 'no'],
-                display_type: 'text',
-                meta: 'false',
-                inline: 'true',
-                section: '6'
-            },
-            relates_to_protects_community_lifeline_by_fema: {
-                label: 'Select the Community Lifelines(s) associated with this action:',
-                sub_type: 'project',
-                prompt: 'Categories include: Safety & Security, Food/Water/Sheltering, Health & Medical,' +
-                    'Energy, Communications, Transportation, and Hazardous Material.',
-                edit_type: 'dropdown_no_meta',
-                edit_type_values: ['Safety & Security', 'Food/Water/Sheltering', 'Health & Medical', 'Energy', 'Communications', 'Transportation', 'Hazardous Material'],
-                display_type: 'text',
-                meta: 'false',
-                section: '6'
-            },
-            relates_to_mitigation_sectors_by_fema: {
-                label: 'Select the FEMA designated Mitigation Sector(s) associated with this action: ',
-                sub_type: 'project',
-                prompt: 'Categories include: Emergency Management, Economic Development, Land Use Development, Housing, Health and Social Services, Infrastructure, Natural & Cultural Resources',
-                edit_type: 'dropdown_no_meta',
-                edit_type_values: ['Emergency Management', 'Economic Development', 'Land Use Development', 'Housing', 'Health and Social Services', 'Infrastructure', 'Natural & Cultural Resources'],
-                display_type: 'text',
-                meta: 'false',
-                section: '6'
-            },
-            associated_mitigation_capability_2: {
-                label: 'Select the Capability Type that this Action will be used and/or contribute to:',
-                sub_type: 'project',
-                prompt: 'Categories include: Planning & Regulatory, Administrative & Technical, Financial, Education & Outreach',
-                edit_type: 'dropdown_no_meta',
-                edit_type_values: ['Planning & Regulatory', 'Administrative & Technical', 'Financial', 'Education & Outreach'],
-                display_type: 'text',
-                meta: 'false',
-                section: '6'
-            },
+            
             // associated_mitigation_capability: {
             //     label:'Select the Capability Type that this Action will be used and/or contribute to:',
             //     sub_type:'project',

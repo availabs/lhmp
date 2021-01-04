@@ -18,8 +18,10 @@ import {
 } 
 from 'pages/Public/theme/components'
 import {Link} from "react-router-dom";
+import functions from "../../auth/Plan/functions";
+import get from "lodash.get";
 
-const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, pureElement, ...rest }) => {
+const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, showLocation, pureElement, geoGraph, ...rest }) => {
     if(element.title === 'County Description') {
         console.log('element county desc', element)
     }
@@ -27,9 +29,19 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
         (
             <React.Fragment>
                 <div>
-                    {showTitle ? element.title : null}
-                    {showEdit ? <span style={{float: 'right'}}>
-                    <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                        {showTitle ? <span className='text-bright'>Element: {
+                            element.title
+                                .replace('::activeGeo', functions.formatName(get(geoGraph, [get(user, `activeCousubid`, ''), 'name']), get(user, `activeCousubid`, '')))
+                                .replace('::haz', 'All Hazards')
+                        } </span> : null}
+                        {showLocation ? <i className='text-muted'> Location: {element.pageName}</i> : null}
+                    {showEdit ?
+                        <span style={{float: 'right'}}>
+                            <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link>
+                        </span> : null}
+                </div>
+                <div>
+                    {element.description ? <i className='text-muted'>{element.description}</i> : null}
                 </div>
                 <GraphFactory
                     graph={{type: element.type + 'Viewer'}}
@@ -49,7 +61,7 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
             </React.Fragment>
         ):
         (
-            <Element name={element.title}>
+            <Element name={element.title.replace('::activeGeo', functions.formatName(get(geoGraph, [get(user, `activeCousubid`, ''), 'name']), get(user, `activeCousubid`, ''))).replace('::haz', 'All Hazards')}>
                 <SectionBox>
                     {['right'].includes(element.align) && element.callout ?
                         <SectionBoxSidebar >
@@ -66,9 +78,15 @@ const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEd
                         : React.fragment
                     }
                     <SectionBoxMain>
-                        {showTitle ? <ContentHeader>{element.title}</ContentHeader> : null}
-                        {showEdit ? <span style={{float: 'right'}}>
+                        <div>
+                            {showTitle ? <ContentHeader>{element.title.replace('::activeGeo', functions.formatName(get(geoGraph, [get(user, `activeCousubid`, ''), 'name']), get(user, `activeCousubid`, ''))).replace('::haz', 'All Hazards')}</ContentHeader> : null}
+                            {showLocation ? <i className='text-muted'> Location: {element.pageName}</i> : null}
+                            {showEdit ? <span style={{float: 'right'}}>
                             <Link className='btn btn-outline-primary btn-sm' to={`${element.url}/${element.requirement}`}>Edit</Link></span> : null}
+                        </div>
+                        <div>
+                            {element.description ? <i className='text-muted'>{element.description}</i> : null}
+                        </div>
                         <GraphFactory
                             graph={{type: element.type + 'Viewer'}}
                             user={user}

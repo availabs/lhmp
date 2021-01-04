@@ -1,7 +1,7 @@
 export const colors = {
-    'municipalFalse' : 'gray',
+    'Does not Apply' : 'gray',
     'Started' : '#f7f714',
-    'Ready For Review': '#1f90f2',
+    'Ready for review': '#1f90f2',
     'Requirement not met': '#f2351f',
     'Requirement met': '#0fd95c',
 }
@@ -9,7 +9,7 @@ let config = {
     elements: [
         {
             element: 'A1',
-            requirements_from_software: `Req-A-1A, Req-A-1D, Req-A-1C`,
+            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, Req-A-1E, Req-A-1F, Req-A-1G, Req-A-1H`,
             objective: 'Does the Plan document the planning process, including how it was prepared and who was involved in ' +
                 'the process for each jurisdiction? 44 CFR 201.6(c)(1)',
             intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve ' +
@@ -45,7 +45,7 @@ let config = {
         },
         {
             element: 'A2',
-            requirements_from_software: `Req-A-2, Req-A-2A`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-2B, Req-A-1F`,
             objective: 'Does the Plan document an opportunity for neighboring communities, local and regional agencies ' +
                 'involved in hazard mitigation activities, agencies that have the authority to regulate development as ' +
                 'well as other interests to be involved in the planning process? 44 CFR 201.6(b)(2)',
@@ -89,7 +89,7 @@ let config = {
         },
         {
             element: 'A3',
-            requirements_from_software: `Req-A-3A`,
+            requirements_from_software: `Req-A-3A, Req-A-2`,
             objective: 'Does the Plan document how the public was involved in the planning process during the drafting ' +
                 'stage? 44 CFR 201.6(b)(1) and 201.6(c)(1)',
             intent: 'To ensure citizens understand what the community is doing on their behalf, and to provide a chance ' +
@@ -105,8 +105,8 @@ let config = {
                 'b. The opportunity for participation must occur during the plan\n' +
                 'development, which is prior to the comment period on the final\n' +
                 'plan and prior to the plan approval / adoption.',
-            municipal: 'false',
-            county: 'true'
+            municipal: false,
+            county: true
         },
         {
             element: 'A4',
@@ -146,7 +146,7 @@ let config = {
         },
         {
             element: 'A6',
-            requirements_from_software: `Req-A-6, Req-A-6A`,
+            requirements_from_software: `Req-A-6, Req-A-6A, Req-A-1E`,
             objective: 'Is there a description of the method and schedule for keeping the plan current (monitoring, ' +
                 'evaluating and updating the mitigation plan within a 5‐year cycle)? 44 CFR 201.6(c)(4)(i)',
             intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation. This ' +
@@ -168,7 +168,14 @@ let config = {
         },
         {
             element: 'B1',
-            requirements_from_software: 'Req-B-3B-1B, req-B1-hazard-overview, req-B1-other-hazards, req-B1-riverine, req-B1-hurricane, req-B1-tornado, req-B1-landslide',
+            requirements_from_software:
+                'req-B1-, req-B1--local-impact, req-B1-local-haz-concern-table,' +
+                'req-B1-riverine, req-B1-riverine-local-impact, Req-B-3B-2, Req-B-3B-6, Req-S-3A, Req-S-3B, req-B1-hurricane, req-B1-hurricane-local-impact, req-B1-tornado, req-B1-tornado-local-impact,' +
+                'req-B1-landslide, req-B1-landslide-local-impact, req-B1-wind, req-B1-wind-local-impact, req-B1-wildfire, req-B1-wildfire-local-impact,' +
+                'req-B1-tsunami, req-B1-tsunami-local-impact, req-B1-lightning, req-B1-lightning-local-impact, req-B1-icestorm, req-B1-icestorm-local-impact,'+ 
+                'req-B1-coastal, req-B1-coastal-local-impact, req-B1-heatwave, req-B1-heatwave-local-impact, req-B1-hail, req-B1-hail-local-impact,' +
+                'req-B1-earthquake, req-B1-earthquake-local-impact, req-B1-drought, req-B1-drought-local-impact,  req-B1-avalanche, req-B1-avalanche-local-impact,' +
+                'req-B1-coldwave, req-B1-coldwave-local-impact, req-B1-winterweat, req-B1-winterweat-local-impact, req-B1-volcano, req-B1-volcano-local-impact,',          
             objective: 'Does the Plan include a description of the type, location, and extent of all natural hazards ' +
                 'that can affect each jurisdiction? 44 CFR 201.6(c)(2)(i) and 44 CFR 201.6(c)(2)(iii)',
             intent: 'To understand the potential and chronic hazards affecting the planning area in order to identify ' +
@@ -212,7 +219,7 @@ let config = {
         },
         {
             element: 'B2',
-            requirements_from_software: ``,
+            requirements_from_software: `req-B1-, req-B1--local-impact, req-B1-hazard-events-table, req-B1-local-haz-concern-table`,
             objective: 'Does the Plan include information on previous occurrences of hazard events and on the probability ' +
                 'of future hazard events for each jurisdiction? 44 CFR 201.6(c)(2)(i)',
             intent: 'To understand potential impacts to the community based on information on the hazard events that have ' +
@@ -236,7 +243,9 @@ let config = {
         },
         {
             element: 'B3',
-            requirements_from_software: `Req-B-3A, Req-B-3B, Req-B-3B-1, Req-B-3B-2, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3B-6`,
+            requirements_from_software: `Req-B-3B, req-B1-local-haz-concern-table, Req-B-3B-1, Req-B-3B-2, Req-NYS-F-2, Req-NYS-F-3, Req-B-3B-3, Req-B-3B-4, Req-B-3B-5, Req-B-3A, Req-B-3B-6, Req-B-3B-8, Req-B-4A-1, req-B1-riverine-local-impact,
+                req-B1-hurricane-local-impact, req-B1-tornado-local-impact, req-B1-landslide-local-impact, req-B1-wildfire-local-impact, req-B1-tsunami-local-impact, req-B1-lightning-local-impact,
+                req-B1-icestorm-local-impact, req-B1-coastal-local-impact, req-B1-heatwave-local-impact, req-B1-hail-local-impact, req-B1-earthquake-local-impact, req-B1-drought-local-impact, req-B1-avalanche-local-impact, req-B1-coldwave-local-impact, req-B1-winterweat-local-impact, req-B1-volcano-local-impact,`,
             objective: 'Is there a description of each identified hazard’s impact on the community as well as an overall ' +
                 'summary of the community’s vulnerability for each jurisdiction? 44 CFR 201.6(c)(2)(ii)',
             intent: 'For each jurisdiction to consider their community as a whole and analyze the potential impacts of ' +
@@ -270,7 +279,7 @@ let config = {
         },
         {
             element: 'B4',
-            requirements_from_software: `Req-B-4, Req-B-4A, Req-B-4B`,
+            requirements_from_software: `Req-B-4, Req-B-4A, Req-B-4B, Req-B-B-4C`,
             objective: 'Does the Plan address NFIP insured structures within each jurisdiction that have been repetitively ' +
                 'damaged by floods? 44 CFR 201.6(c)(2)(ii)',
             intent: 'To inform hazard mitigation actions for properties that have suffered repetitive damage due to ' +
@@ -302,13 +311,14 @@ let config = {
         },
         {
             element: 'C1',
-            requirements_from_software: `Req-C-6, Req-C-1A, Req-C-1B-1, Req-C-1B-1B`,
+            requirements_from_software: `Req-C-6, Req-C-1A, Req-C-1B-1B, Req-A-4C`,
             objective: 'Does the plan document each jurisdiction’s existing authorities, policies, programs and resources, ' +
                 'and its ability to expand on and improve these existing policies and programs? 44 CFR 201.6(c)(3)',
             intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions, ' +
                 'through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local capability ' +
                 'varies widely.',
-            element_requirements: 'a. The plan must describe each jurisdiction’s existing authorities,\n' +
+            element_requirements: 'Does the plan document each jurisdiction’s existing authorities, policies, programs and resources and its ability to expand on and improve these existing policies and programs? (Requirement §201.6(c)(3))'+
+                'a. The plan must describe each jurisdiction’s existing authorities,\n' +
                 'policies, programs and resources available to accomplish hazard\n' +
                 'mitigation.\n' +
                 'Examples include, but are not limited to: staff involved in local\n' +
@@ -321,7 +331,7 @@ let config = {
         },
         {
             element: 'C2',
-            requirements_from_software: `Req-C-2A`,
+            requirements_from_software: `Req-C-2A, Req-C-2B, Req-B-4B, Req-B-4E, Req-B-4, Req-B-4A, Req-B-B-4C`,
             objective: 'Does the Plan address each jurisdiction’s participation in the NFIP and continued compliance with ' +
                 'NFIP requirements, as appropriate? 44 CFR 201.6(c)(3)(ii)',
             intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA ' +
@@ -406,7 +416,7 @@ let config = {
         },
         {
             element: 'C5',
-            requirements_from_software: `Req-C-5A`,
+            requirements_from_software: `Req-C-5A, Req-C-4`,
             objective: 'Does the Plan contain an action plan that  describes how the actions identified will be prioritized ' +
                 '(including cost benefit review), implemented, and administered by each jurisdiction? 44 CFR 201.6(c)(3)(iii) ' +
                 'and 44 CFR (c)(3)(iv)',
@@ -433,7 +443,7 @@ let config = {
         },
         {
             element: 'C6',
-            requirements_from_software: `Req-C-6, Req-C-6A`,
+            requirements_from_software: `Req-C-6, Req-C-6A, Req-C-1B-1B, R-C-3, Req-A-6`,
             objective: 'Does the Plan describe a process by which local governments will integrate the requirements of ' +
                 'the mitigation plan into other planning mechanisms, such as comprehensive or capital improvement plans, ' +
                 'when appropriate? 44 CFR 201.6(c)(4)(ii)',
@@ -539,8 +549,7 @@ let config = {
                 'adoption of the measure,” with an official signature.\n' +
                 'If adopted after FEMA review, adoption must take place within\n' +
                 'one calendar year of receipt of FEMA’s “Approval Pending\n' +
-                'Adoption.” See Section 5, Plan Review Procedure for more\n' +
-                'information on “Approvable Pending Adoption.”',
+                'Adoption.”',
             municipal: '',
             county: ''
         },
@@ -565,7 +574,7 @@ let config = {
         },
         {
             element: 'F1',
-            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-1C, Req-A-3A`,
+            requirements_from_software: `Req-A-2, Req-A-2A, Req-A-3A`,
             objective: 'Does the plan document how stakeholders were invited to participate at each phase of the planning ' +
                 'process and provide a summary of feedback?',
             intent: 'Plans developed with the participation of the widest range of organizations and stakeholders personally ' +
@@ -589,7 +598,7 @@ let config = {
         },
         {
             element: 'F3',
-            requirements_from_software: `Req-NYS-F-3A, Req-NYS-F-3B-1, Req-NYS-F-3B`,
+            requirements_from_software: `Req-NYS-F-4B, Req-NYS-F-3A, Req-NYS-F-3B-1`,
             objective: 'Do jurisdictions containing an SFHA identify:\n' +
                 'a. potential sites for the placement of temporary housing units for residents displaced by disaster; and\n' +
                 'b. potential sites within the jurisdiction suitable for relocating houses out of the floodplain, ' +
@@ -602,7 +611,7 @@ let config = {
         },
         {
             element: 'F4',
-            requirements_from_software: `Req-NYS-F-4A, Req-NYS-F-4A-1, Req-NYS-F-4B-2, Req-NYS-F-4B`,
+            requirements_from_software: `Req-NYS-F-4B, Req-NYS-F-4A, Req-NYS-F-4A-1, Req-NYS-F-4B-2`,
             objective: 'Do jurisdictions identify:\n' +
                 'a. routes and procedures to evacuate citizens prior to and during an event; and\n' +
                 'b. shelters for evacuated citizens, to include provisions for a range of medical needs, accommodation ' +
@@ -615,7 +624,7 @@ let config = {
         },
         {
             element: 'F5',
-            requirements_from_software: `Req-D-1F`,
+            requirements_from_software: `Req-D-1F, Req-D-1G`,
             objective: 'Do jurisdictions identify mitigation projects completed since the approval of the previous ' +
                 'mitigation plan (or within the last five years)?',
             intent: 'Past mitigation actions provide a context for the jurisdiction’s projects, and can help to evaluate ' +
@@ -626,7 +635,7 @@ let config = {
         },
         {
             element: 'F6',
-            requirements_from_software: `Req-NYS-F-6`,
+            requirements_from_software: `Req-A-1G`,
             objective: 'Does the plan include an annex for every jurisdiction within the County’s boundaries?',
             intent: 'Jurisdictional annexes provide a unique, stand-alone guide to mitigation planning for each jurisdiction.',
             element_requirements: '',
@@ -656,7 +665,7 @@ let config = {
         },
         {
             element: 'F9',
-            requirements_from_software: `Req-NYS-F-9`,
+            requirements_from_software: `req-B1-, req-B1--local-impact`,
             objective: 'Does the plan assess how climate change may affect vulnerability to hazards, propose actions to ' +
                 'address this, and discuss sea level rise (if applicable)?',
             intent: 'Acknowledging and planning for climate change protects residents, avoids or reduces damage to property ' +
@@ -667,7 +676,7 @@ let config = {
         },
         {
             element: 'F10',
-            requirements_from_software: `Req-NYS-F-10`,
+            requirements_from_software: `Req-A-2`,
             objective: 'Was the draft plan posted for public comment?',
             intent: '',
             element_requirements: '',

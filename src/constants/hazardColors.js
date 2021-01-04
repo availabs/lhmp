@@ -21,6 +21,281 @@ const D3_CATEGORY20 = [
     "#9edae5",
     "#F1B0A7"
 ];
+
+const D3_CATEGORY20B = [
+    // blues
+    '#393b79',
+    '#5254a4',
+    '#6b6ecf',
+    '#9c9ede',
+    // green
+    '#637939',
+    '#8ca252',
+    '#b5cf6b',
+    '#cedb9c',
+    // yellows
+    '#8c6d31',
+    '#bd9e39',
+    '#e7ba52',
+    '#e7cb94',
+    // reds
+    '#843c39',
+    '#ad494a',
+    '#d6616b',
+    '#e7969c',
+    // purple
+    '#7b4173',
+    '#a55194',
+    '#ce6dbd',
+    '#de9ed6',
+
+]
+
+const D3_CATEGORY20B_RANGE = [
+    [
+        '#f5f5f8', 
+        '#ebebf2', 
+        '#cecede', 
+        '#b0b1c9', 
+        '#7476a1', 
+        '#393b79', 
+        '#33356d', 
+        '#2b2c5b', 
+        '#222349', 
+        '#1c1d3b'
+    ],
+    [
+        '#f6f6fa', 
+        '#eeeef6', 
+        '#d4d4e8', 
+        '#babbdb', 
+        '#8687bf', 
+        '#5254a4', 
+        '#4a4c94', 
+        '#3e3f7b', 
+        '#313262', 
+        '#282950'
+    ],
+    [
+        '#f8f8fd', 
+        '#f0f1fa', 
+        '#dadbf3', 
+        '#c4c5ec', 
+        '#979add', 
+        '#6b6ecf', 
+        '#6063ba', 
+        '#50539b', 
+        '#40427c', 
+        '#343665'
+    ],
+    [
+        '#fafafd', 
+        '#f5f5fc', 
+        '#e6e7f7', 
+        '#d7d8f2', 
+        '#babbe8', 
+        '#9c9ede', 
+        '#8c8ec8', 
+        '#7577a7', 
+        '#5e5f85', 
+        '#4c4d6d'
+    ],
+    [
+        '#f7f8f5', 
+        '#eff2eb', 
+        '#d8dece', 
+        '#c1c9b0', 
+        '#92a174', 
+        '#637939', 
+        '#596d33', 
+        '#4a5b2b', 
+        '#3b4922', 
+        '#313b1c'
+    ],
+    [
+        '#f9faf6', 
+        '#f4f6ee', 
+        '#e2e8d4', 
+        '#d1daba', 
+        '#afbe86', 
+        '#8ca252', 
+        '#7e924a', 
+        '#697a3e', 
+        '#546131', 
+        '#454f28'
+    ],
+    [
+        '#fbfdf8', 
+        '#f8faf0', 
+        '#edf3da', 
+        '#e1ecc4', 
+        '#cbdd97', 
+        '#b5cf6b', 
+        '#a3ba60', 
+        '#889b50', 
+        '#6d7c40', 
+        '#596534'
+    ],
+    [
+        '#fdfdfa', 
+        '#fafbf5', 
+        '#f3f6e6', 
+        '#ebf1d7', 
+        '#dde6ba', 
+        '#cedb9c', 
+        '#b9c58c', 
+        '#9ba475', 
+        '#7c835e', 
+        '#656b4c'
+    ],
+    [
+        '#f9f8f5', 
+        '#f4f0ea', 
+        '#e2dbcc', 
+        '#d1c5ad', 
+        '#af996f', 
+        '#8c6d31', 
+        '#7e622c', 
+        '#695225', 
+        '#54411d', 
+        '#453518'
+    ],
+    [
+        '#fcfaf5', 
+        '#f8f5eb', 
+        '#efe7ce', 
+        '#e5d8b0', 
+        '#d1bb74', 
+        '#bd9e39', 
+        '#aa8e33', 
+        '#8e772b', 
+        '#715f22', 
+        '#5d4d1c'
+    ],
+    [
+        '#fefcf6', 
+        '#fdf8ee', 
+        '#f9eed4', 
+        '#f5e3ba', 
+        '#eecf86', 
+        '#e7ba52', 
+        '#d0a74a', 
+        '#ad8c3e', 
+        '#8b7031', 
+        '#715b28'
+    ],
+    [
+        '#fefcfa', 
+        '#fdfaf4', 
+        '#f9f2e4', 
+        '#f5ead4', 
+        '#eedbb4', 
+        '#e7cb94', 
+        '#d0b785', 
+        '#ad986f', 
+        '#8b7a59', 
+        '#716349'
+    ],
+    [
+        '#f9f5f5', 
+        '#f3eceb', 
+        '#e0cece', 
+        '#ceb1b0', 
+        '#a97774', 
+        '#843c39', 
+        '#773633', 
+        '#632d2b', 
+        '#4f2422', 
+        '#411d1c'
+    ],
+    [
+        '#fbf6f6', 
+        '#f7eded', 
+        '#ebd2d2', 
+        '#deb6b7', 
+        '#c68080', 
+        '#ad494a', 
+        '#9c4243', 
+        '#823738', 
+        '#682c2c', 
+        '#552424'
+    ],
+    [
+        '#fdf7f8', 
+        '#fbeff0', 
+        '#f5d8da', 
+        '#efc0c4', 
+        '#e29097', 
+        '#d6616b', 
+        '#c15760', 
+        '#a14950', 
+        '#803a40', 
+        '#693034'
+    ],
+    [
+        '#fefafa', 
+        '#fdf5f5', 
+        '#f9e5e6', 
+        '#f5d5d7', 
+        '#eeb6ba', 
+        '#e7969c', 
+        '#d0878c', 
+        '#ad7175', 
+        '#8b5a5e', 
+        '#714a4c'
+    ],
+    [
+        '#f8f6f8', 
+        '#f2ecf1', 
+        '#ded0dc', 
+        '#cab3c7', 
+        '#a37a9d', 
+        '#7b4173', 
+        '#6f3b68', 
+        '#5c3156', 
+        '#4a2745', 
+        '#3c2038'
+    ],
+    [
+        '#fbf6fa', 
+        '#f6eef4', 
+        '#e9d4e4', 
+        '#dbb9d4', 
+        '#c085b4', 
+        '#a55194', 
+        '#954985', 
+        '#7c3d6f', 
+        '#633159', 
+        '#512849'
+    ],
+    [
+        '#fdf8fc', 
+        '#faf0f8', 
+        '#f3dbef', 
+        '#ebc5e5', 
+        '#dd99d1', 
+        '#ce6dbd', 
+        '#b962aa', 
+        '#9b528e', 
+        '#7c4171', 
+        '#65355d'
+    ],
+    [
+        '#fdfafd', 
+        '#fcf5fb', 
+        '#f7e7f5', 
+        '#f2d8ef', 
+        '#e8bbe2', 
+        '#de9ed6', 
+        '#c88ec1', 
+        '#a777a1', 
+        '#855f80', 
+        '#6d4d69'
+    ]
+]
+
+
+
 const D3_CATEGORY20_RANGE = [
     [
         "#219bde",
@@ -170,21 +445,66 @@ const D3_CATEGORY20_RANGE = [
         "#58160E",
     ]
 ];
+
+const hazardcolors_new = {
+    'wind': D3_CATEGORY20B[5],
+    'wind_range': D3_CATEGORY20B_RANGE[5],
+    'wildfire': D3_CATEGORY20B[15],
+    'wildfire_range': D3_CATEGORY20B_RANGE[15],
+    'tsunami': D3_CATEGORY20B[2],
+    'tsunami_range': D3_CATEGORY20B_RANGE[2],
+    'tornado': D3_CATEGORY20B[18],
+    'tornado_range': D3_CATEGORY20B_RANGE[18],
+    'riverine': D3_CATEGORY20B[1],
+    'riverine_range': D3_CATEGORY20B_RANGE[1],
+    'lightning': D3_CATEGORY20B[10],
+    'lightning_range': D3_CATEGORY20B_RANGE[10],
+    'landslide': D3_CATEGORY20B[9],
+    'landslide_range': D3_CATEGORY20B_RANGE[9],
+    'icestorm': D3_CATEGORY20B[19],
+    'icestorm_range': D3_CATEGORY20B_RANGE[19],
+    'hurricane': D3_CATEGORY20B[16],
+    'hurricane_range': D3_CATEGORY20B_RANGE[16],
+    'heatwave': D3_CATEGORY20B[13],
+    'heatwave_range': D3_CATEGORY20B_RANGE[13],
+    'hail': D3_CATEGORY20B[7],
+    'hail_range': D3_CATEGORY20B_RANGE[7],
+    'earthquake': D3_CATEGORY20B[8],
+    'earthquake_range': D3_CATEGORY20B_RANGE[8],
+    'drought': D3_CATEGORY20B[13],
+    'drought_range': D3_CATEGORY20B_RANGE[14],
+    'avalanche': D3_CATEGORY20B[14],
+    'avalanche_range': D3_CATEGORY20B_RANGE[13],
+    'coldwave': D3_CATEGORY20B[4],
+    'coldwave_range': D3_CATEGORY20B_RANGE[4],
+    'winterweat': D3_CATEGORY20B[15],
+    'winterweat_range': D3_CATEGORY20B_RANGE[15],
+    'volcano': D3_CATEGORY20B[12],
+    'volcano_range': D3_CATEGORY20B_RANGE[12],
+    'coastal': D3_CATEGORY20B[0],
+    'coastal_range': D3_CATEGORY20B_RANGE[0],
+    'all': D3_CATEGORY20B[20],
+    'all_range': D3_CATEGORY20B_RANGE[20]
+};
+
+
+
+
 const hazardcolors = {
     'wind': D3_CATEGORY20[4],
     'wind_range': D3_CATEGORY20_RANGE[4],
-    'wildfire': D3_CATEGORY20[1],
-    'wildfire_range': D3_CATEGORY20_RANGE[1],
+    'wildfire': D3_CATEGORY20B[14],
+    'wildfire_range': D3_CATEGORY20B_RANGE[14],
     'tsunami': D3_CATEGORY20[2],
     'tsunami_range': D3_CATEGORY20_RANGE[2],
-    'tornado': D3_CATEGORY20[3],
-    'tornado_range': D3_CATEGORY20_RANGE[3],
+    'tornado': D3_CATEGORY20B[18],
+    'tornado_range': D3_CATEGORY20B_RANGE[18],
     'riverine': D3_CATEGORY20[19],
     'riverine_range': D3_CATEGORY20_RANGE[19],
-    'lightning': D3_CATEGORY20[5],
-    'lightning_range': D3_CATEGORY20_RANGE[5],
-    'landslide': D3_CATEGORY20[6],
-    'landslide_range': D3_CATEGORY20_RANGE[6],
+    'lightning': D3_CATEGORY20B[10],
+    'lightning_range': D3_CATEGORY20B_RANGE[10],
+    'landslide': D3_CATEGORY20B[9],
+    'landslide_range': D3_CATEGORY20B_RANGE[9],
     'icestorm': D3_CATEGORY20[7],
     'icestorm_range': D3_CATEGORY20_RANGE[7],
     'hurricane': D3_CATEGORY20[8],
@@ -195,8 +515,8 @@ const hazardcolors = {
     'hail_range': D3_CATEGORY20_RANGE[0],
     'earthquake': D3_CATEGORY20[11],
     'earthquake_range': D3_CATEGORY20_RANGE[11],
-    'drought': D3_CATEGORY20[12],
-    'drought_range': D3_CATEGORY20_RANGE[12],
+    'drought': D3_CATEGORY20B[15],
+    'drought_range': D3_CATEGORY20B_RANGE[15],
     'avalanche': D3_CATEGORY20[13],
     'avalanche_range': D3_CATEGORY20_RANGE[13],
     'coldwave': D3_CATEGORY20[14],
@@ -205,8 +525,8 @@ const hazardcolors = {
     'winterweat_range': D3_CATEGORY20_RANGE[15],
     'volcano': D3_CATEGORY20[16],
     'volcano_range': D3_CATEGORY20_RANGE[16],
-    'coastal': D3_CATEGORY20[17],
-    'coastal_range': D3_CATEGORY20_RANGE[17],
+    'coastal': D3_CATEGORY20B[1],
+    'coastal_range': D3_CATEGORY20B_RANGE[1],
     'all': D3_CATEGORY20[20],
     'all_range': D3_CATEGORY20_RANGE[20]
 };

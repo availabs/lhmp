@@ -1,0 +1,22 @@
+@media print{
+    @page {
+        bleed: 6mm;
+        size: auto;
+        @bottom-right-corner {
+            content: counter(page);
+        }
+        @bottom-center {
+            content: string(title)
+        }
+    }
+    .pdfContent{
+        color: #000;
+    }
+    .pdfHeader{
+        break-before: page;
+        break-after: avoid;
+        color: red;
+        string-set: title content(text)
+    }
+
+}

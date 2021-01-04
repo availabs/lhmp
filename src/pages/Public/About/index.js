@@ -53,11 +53,24 @@ class About extends React.Component {
             requirement :
             requirement + '-' + this.props.user.activePlan + '-' + `${county ? this.props.user.activeGeoid : this.props.user.activeCousubid}`
 
-    fetchFalcorDeps(){
+    async fetchFalcorDeps(){
         if (!this.props.activeCousubid || this.props.activeCousubid === 'undefined' || !this.props.user.activePlan) return Promise.resolve();
         let contentId = this.getCurrentImageKey(this.state.imageReq);
         let contentIdCounty = this.getCurrentImageKey(this.state.imageReq, true);
         let allRequirements = [];
+
+        // get reqs to filter by jurisdictions
+        let formType = 'filterRequirements',
+            formAttributes = ['municipality', 'hiddenRequirements']
+
+        let response = await this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'length'])
+        let length = get(response, ['json', 'forms', formType, 'byPlanId', this.props.activePlan, 'length'], 0);
+        if (length > 0) {
+            await this.props.falcor.get(['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
+                from: 0,
+                to: length - 1
+            }], ...formAttributes])
+        }
 
         Object.keys(config)
             .filter(section => config[section].filter(item => !item.onlyAdmin).length > 0)
@@ -90,8 +103,35 @@ class About extends React.Component {
             this.fetchFalcorDeps()
         }
     }
+
+    getReqsToFilter(){
+        let formType = 'filterRequirements'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {});
+        let reqToFilter;
+
+        if(id){
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data){
+                reqToFilter =
+                    Object.keys(data)
+                        .reduce((a,g) => {
+                            let tmpReqs = get(data[g], `value.attributes`, {})
+                            Object.keys(tmpReqs)
+                                .filter(tr => tr === this.props.activeCousubid && tmpReqs[tr])
+                                .forEach(tr => a.push(...tmpReqs[tr].slice(2,-2).split(',').filter(r => r!== "")))
+                            return a
+                        }, [])
+            }
+        }
+        return reqToFilter
+    }
     render() {
         let emptyBody = ['<p></p>', ''];
+        let reqToFilter = this.getReqsToFilter();
         let updatedConfig =
             Object.keys(config)
                 .reduce((aS,section) => {
@@ -102,8 +142,9 @@ class About extends React.Component {
                                                         [this.getCurrentKey(requirement.requirement), 'body', 'value'],
                                                         null)
                                         let shouldHide =
-                                            this.props.activeCousubid.length > 5 && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty :
-                                                requirement.hideIfNull ? !(tmpBody && !emptyBody.includes(tmpBody.trim())) : false
+                                            reqToFilter.includes(requirement.requirement) ||
+                                            (this.props.activeCousubid.length > 5  && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty :
+                                                requirement.hideIfNull ? !(tmpBody && !emptyBody.includes(tmpBody.trim())) : false)
                                         aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
                                         return aR
                                     }, [])
@@ -129,6 +170,7 @@ class About extends React.Component {
                                             showHeader={false}
                                             pureElement={true}
                                             autoLoad={true}
+                                            showCMSFlagNotesPublic={true}
                                         />
                                     </StatementText>
                                 </div>
@@ -180,10 +222,12 @@ const mapStateToProps = (state,ownProps) => {
     return {
         geoGraph: state.graph.geo,
         router: state.router,
+        activePlan: state.user.activePlan,
         activeGeoid: state.user.activeGeoid,
         activeCousubid: state.user.activeCousubid,
         graph: state.graph,
-        contentGraph: get(state.graph, `content.byId`, {})
+        contentGraph: get(state.graph, `content.byId`, {}),
+        formData: get(state.graph, [`forms`, 'filterRequirements'], null)
     };
 };
 

@@ -39,7 +39,7 @@ class PlanningTeam extends Component {
     }
     isMatch(matchee, matcher) {
         matchee = matchee && typeof matchee === "string" && matchee.includes('[') ?
-            matchee.replace('[', '').replace(']', '').split(',') : matchee;
+            matchee.slice(1,-1).split(',') : matchee;
         return (!matchee || !matcher) ? false :
             typeof matchee === 'string' ?
                 matchee.toString().toLowerCase() === matcher.toString().toLowerCase() :
@@ -81,7 +81,9 @@ class PlanningTeam extends Component {
                                                 this.isMatch(response[f].attributes.contact_municipality, this.props.activeCousubid) :
                                                 get(this.props, `activeCousubid`, '').length === 5 &&
                                                 response[f].attributes.contact_county && response[f].attributes.contact_county !== '[]' &&
-                                                (!response[f].attributes.contact_municipality || response[f].attributes.contact_municipality === '[]') ?
+                                                (!response[f].attributes.contact_municipality || response[f].attributes.contact_municipality === '[]') ||
+                                                this.isMatch(response[f].attributes.contact_municipality, 'Countywide')
+                                                    ?
                                                     this.isMatch(response[f].attributes.contact_county, this.props.activeGeoid) : false
                                         )
                                 }

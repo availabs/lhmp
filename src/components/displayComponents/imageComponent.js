@@ -4,7 +4,7 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import get from 'lodash.get'
 import {sendSystemMessage} from 'store/modules/messages';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import './contentEditor.css'
+import './contentEditor/contentEditor.css'
 import styled from "styled-components";
 import ImageEditor from 'components/AvlForms/editComponents/imageComponent/index.js'
 const COLS = ['content_id', 'attributes', 'body', 'created_at', 'updated_at'];

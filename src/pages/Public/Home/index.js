@@ -138,13 +138,14 @@ let sideMenuConfig = {
                                             <ElementFactory
                                                 element={
                                                     {
-                                                        title: 'Capabilities Table',
+                                                        title: 'Capabilities',
                                                         requirement: 'Req-C-1A',
                                                         type: 'formTable',
                                                         fontSize: '0.70em',
                                                         height: '600px',
                                                         align: 'full',
                                                         config: {
+                                                            description: 'Capabilities are the tools and resources used by a community to minimize hazard impacts. Capabilities are categorized as: Planning and Regulatory, Administrative and Technical, Education and Outreach, and Financial assets. The information displayed in the table below includes the selected jurisdiction’s hazard mitigation capabilities. When the county is selected, the table includes capabilities for all jurisdictions in the plan, otherwise the table filters to the selected jurisdiction.', 
                                                             type: 'capabilities',
                                                             //filters:[{column:'capability_category',value:'planning and regulatory'}],
                                                             columns : [
@@ -173,12 +174,12 @@ let sideMenuConfig = {
                                                                     filter: 'multi'
                                                                 },
 
-                                                                {
+                                                              /*  {
                                                                     Header: 'adopting authority',
                                                                     accessor: 'adopting_authority',
                                                                     sort: true,
                                                                     filter: 'default'
-                                                                },
+                                                                },*/
                                                                 {
                                                                     Header: 'responsible authority',
                                                                     accessor: 'responsible_authority',
@@ -188,15 +189,31 @@ let sideMenuConfig = {
                                                                 {
                                                                     Header: 'Link',
                                                                     accessor: 'upload',
-                                                                    width: 50
+                                                                    width: 50,
+                                                                    expandable: 'true',
+                                                                    expandableHeader: true
                                                                 },
                                                                 {
                                                                     Header: 'jurisdiction_utilization',
                                                                     accessor: 'jurisdiction_utilization',
                                                                     width: 50,
-                                                                    expandable: 'true'
+                                                                    expandable: 'true',
+                                                                    expandableHeader: true
                                                                 },
-
+                                                                {
+                                                                    Header: 'capability_description',
+                                                                    accessor: 'capability_description',
+                                                                    width: 50,
+                                                                    expandable: 'true',
+                                                                    expandableHeader: true
+                                                                },
+                                                                {
+                                                                    Header: 'viewLink',
+                                                                    accessor: 'viewLink',
+                                                                    width: 50,
+                                                                    expandable: 'true',
+                                                                    expandableHeader: true
+                                                                },
                                                             ]
                                                         },
                                                         prompt: 'Document each jurisdiction’s existing authorities, policies, programs and resources and its ability' +
@@ -207,10 +224,12 @@ let sideMenuConfig = {
                                                         intent: 'To ensure that each jurisdiction evaluates its capabilities to accomplish hazard mitigation actions,' +
                                                             ' through existing mechanisms. This is especially useful for multi‐jurisdictional plans where local' +
                                                             ' capability varies widely.',
+                                                        viewLink: true,
+                                                        flex: false,
                                                         activeGeoFilter: 'true',
                                                         defaultSortCol: 'adopting_authority',
                                                         // defaultSortOrder: 'desc',
-                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'adopting authority', 'responsible authority', 'Link', 'jurisdiction_utilization'],
+                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'Link', 'responsible authority', 'jurisdiction_utilization', 'capability_description', 'viewLink'],
                                                         minHeight: '80vh',
                                                         icon: 'os-icon-tasks-checked'
                                                     }

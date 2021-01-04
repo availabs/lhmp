@@ -3,7 +3,6 @@ import TextComponent from "./TextComponent";
 import CommentComponent from "./CommentComponent"
 import imageViewer from "./imageViewer";
 import AvlFormsJoin from '../editComponents/AvlFormsJoin'
-
 const NA = ({ type, state, routes }) =>
 {
     return (

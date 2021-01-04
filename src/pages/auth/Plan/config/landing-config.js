@@ -44,7 +44,7 @@ let config = {
         ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
         ///*2-non-delete*/ hideIfNull: true 
     }],
-/*    'Roles': [{
+    'Roles': [{
         title: 'Roles',
         requirement: `landing-roles`,
         type: 'formTable',
@@ -74,7 +74,7 @@ let config = {
         callout: '',
         icon: 'os-icon-arrow-right7'
 
-    }],*/
+    }],
     'Strategy Text': [{
         title: 'Strategy Text',
         requirement: `landing-strategytext`,

@@ -1,5 +1,5 @@
 import React from 'react'
-import contentEditor from "./contentEditor";
+import ContentEditor from "./contentEditor/contentEditor";
 import contentViewer from "./contentViewer";
 import rolesTableViewer from "./jurisdictionRepresentatives/rolesTableViewer";
 import rolesTableEditor from "./rolesTableEditor";
@@ -23,7 +23,13 @@ import developementZoneFilteredMap from "./developementZoneFilteredMap/";
 import sociallyVulnerableDemographicsMapViewer from './sociallyVulnerableDemographicsMap/index'
 import openSpaceTable from './openSpaceTable'
 import ProblemStatementTableViewer from "./problemStatementTableViewer";
-
+import localHazardsOfConcernTable from "./localHazardsOfConcernTable";
+import HazardEventsTable from './HazardEventsTable'
+import HazardHeroStatsViewer from "./hazardComponents/HazardHeroStatsViewer";
+import HazardCharts from "./hazardComponents/HazardCharts";
+import HazardLossByMunicipality from "./hazardComponents/HazardLossByMunicipality";
+import PresidentialDisasterDeclarations from "./hazardComponents/PresidentialDisasterDeclarations";
+import HazardEventsPublicMap from "./hazardComponents/HazardEventsPublicMap";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -43,6 +49,7 @@ const InventoryTableEditor = (rest) => <InventoryTableViewer public={false} {...
 const NfipStatisticsEditor = (rest) => <NfipStatisticsViewer public={false} {...rest}/>
 const problemStatementTableEditor = (rest) => <ProblemStatementTableViewer edit={true} {...rest}/>
 const shelterListTableEditor = (rest) => <ShelterListTableViewer edit={true} {...rest}/>
+const contentEditor = (rest) => <ContentEditor imgUploadUrl={  'https://graph.availabs.org/img/new'} {...rest} />
 export default {
     NA,
     NE,
@@ -82,5 +89,19 @@ export default {
     openSpaceTableEditor: openSpaceTable,
     problemStatementTableViewer: ProblemStatementTableViewer,
     problemStatementTableEditor,
+    localHazardsOfConcernTableViewer: localHazardsOfConcernTable,
+    localHazardsOfConcernTableEditor: localHazardsOfConcernTable,
+    HazardEventsTableViewer: HazardEventsTable,
+    HazardEventsTableEditor: HazardEventsTable,
+    HazardHeroStatsViewer,
+    HazardHeroStatsEditor: HazardHeroStatsViewer,
+    HazardChartsViewer: HazardCharts,
+    HazardChartsEditor: HazardCharts,
+    HazardLossByMunicipalityViewer: HazardLossByMunicipality,
+    HazardLossByMunicipalityEditor: HazardLossByMunicipality,
+    PresidentialDisasterDeclarationsViewer: PresidentialDisasterDeclarations,
+    PresidentialDisasterDeclarationsEditor: PresidentialDisasterDeclarations,
+    HazardEventsPublicMapViewer: HazardEventsPublicMap,
+    HazardEventsPublicMapEditor: HazardEventsPublicMap
 }
 

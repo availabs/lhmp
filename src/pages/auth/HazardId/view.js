@@ -57,5 +57,24 @@ export default [
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(hazardidFormsView))
+    },
+    {
+        path: `/hazardid/view/:id`,
+        exact: true,
+        name: 'Hazard ID',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'Hazard ID', path: '/hazardid/' },
+            { param: 'id', path: '/hazardid/view/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(hazardidFormsView))
     }
 ]

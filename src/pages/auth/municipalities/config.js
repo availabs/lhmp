@@ -1,7 +1,7 @@
 module.exports = [
     {
         type:'municipalities', // type is same as the route path for now
-        list_attributes:['community_name','initial_fhbm_date','initial_firm_date', 'is_csc', 'csc_level', 'crs_member', 'crs_entry_date','status'],
+        list_attributes:['community_name','initial_fhbm_date','initial_firm_date', 'cid','nfip_administrator_name', 'nfip_administrator_name', 'nfip_standing','community_assistance_visit','roles' ],
         csv_download: ['county', 'community_name', 'cid','initial_fhbm_date','initial_firm_date','current_map_date','regular_emergency_program_date','is_tribal','fips','duns','is_csc','csc_level','crs_member','crs_community_number','crs_entry_date','current_effective_date','current_class','discount_sfha','discount_non_sfha','status','nfip_standing','community_assistance_visit','community_assistance_call','current_nfip_ordinance','nfip_ordinance_adoption','nfip_administrator_name'],
         default_title: 'Municipality', // in the case when page_title is invalid
         page_title: 'community_name', // page title in edit and view
@@ -236,7 +236,20 @@ module.exports = [
                 sub_type:'',
                 edit_type:'text',
                 display_type:'text',
-            }    
+            },
+            // roles:{
+            //     label:'Name/Role of NFIP Administrator',
+            //     sub_type:'',
+            //     prompt:'',
+            //     edit_type:'AvlFormsJoin',
+            //     display_type:'AvlFormsJoin',
+            //     parentConfig: 'participation',
+            //     targetConfig: 'roles',
+            //     targetKey: 'contact_name',
+            //     hidden:'false',
+            //     meta:'false',
+            //     section:'',
+            // },   
         }
     }
 ];

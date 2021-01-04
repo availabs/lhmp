@@ -1,6 +1,7 @@
 import React from 'react';
 import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import config from 'pages/auth/Roles/roles_forms/config.js'
+import participationTableSubConfig from "./participationTableSubConfig";
 import { connect } from 'react-redux';
 import { reduxFalcor } from 'utils/redux-falcor'
 import get from "lodash.get";
@@ -18,6 +19,7 @@ class RolesFormsView extends React.Component{
                 <Element>
                     <AvlFormsViewData
                         json = {config}
+                        subJson = {participationTableSubConfig}
                         id = {[this.props.match.params.id]}
                     />
                 </Element>
@@ -54,6 +56,25 @@ export default [
             scheme: 'color-scheme-light',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsView))
+    },
+    {
+        path: `/roles/view/:id/p`,
+        exact: true,
+        name: 'Roles',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'roles', path: '/roles/' },
+            { param: 'id', path: '/roles/view/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(RolesFormsView))

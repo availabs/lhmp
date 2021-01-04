@@ -17,6 +17,7 @@ import AvlMap from "../../../../components/AvlMap";
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
 import Element from "../../../../components/light-admin/containers/Element";
 
+import zoneConfig from 'pages/auth/Zones/config.js'
 var _ = require('lodash')
 const IconPolygon = ({layer}) => <span className='fa fa-2x fa-connectdevelop'/>;
 let result_polygon = {}
@@ -268,7 +269,9 @@ class ShowNewZoneModal extends React.Component{
     }
 
     render(){
-        let geoid = this.props.activeGeoid
+        let geoid = this.props.activeGeoid,
+            zoneMetaTypes = get(zoneConfig, [0,'attributes', 'zone_type', 'meta_filter', 'value'], null) ||  this.props.formsZonesMeta
+        zoneMetaTypes = zoneMetaTypes.filter(zmt => !['Select All', 'Select None'].includes(zmt))
         return(
         <ElementBox>
             <div className="form-group">
@@ -287,8 +290,8 @@ class ShowNewZoneModal extends React.Component{
                             <select className="form-control justify-content-sm-end" id='zone_type' onChange={this.handleChange} value={this.state.zone_type}>
                                 <option className="form-control" key={0} value={''}>--No Type Selected--</option>
                                 {
-                                    this.props.formsZonesMeta.map((meta,i) =>{
-                                        return(<option  className="form-control" key={i+1} value={meta.type}>{meta.type}</option>)
+                                   zoneMetaTypes.map((meta,i) =>{
+                                        return(<option  className="form-control" key={i+1} value={meta.type || meta}>{meta.type || meta}</option>)
                                     })
                                 }
                             </select>
@@ -317,9 +320,9 @@ class ShowNewZoneModal extends React.Component{
                                 geom['crs'] = {"type": "name", "properties": {"name": "EPSG:4326"}};
                                 attributes['geom'] = geom
                                 attributes['bbox'] = zone_boundary
-                                attributes['name'] = name || 'None'
+                                attributes['name'] = typeof name === "string" ? name.replaceAll('\'', '\'\'') : name  || 'None'
                                 attributes['zone_type'] = this.state.zone_type || 'None'
-                                attributes['comment'] = this.state.comment || 'None'
+                                attributes['comment'] = typeof this.state.comment === "string" ? this.state.comment.replaceAll('\'', '\'\'') : this.state.comment  || 'None'
                                 attributes['geojson'] = result_polygon
                                 attributes['geoid'] = geoid
                                 args.push('zones',plan_id,attributes);

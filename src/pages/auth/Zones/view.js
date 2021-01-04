@@ -57,5 +57,24 @@ export default [
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ZonesFormsView))
+    },
+    {
+        path: `/zones/view/:id`,
+        exact: true,
+        name: 'Zones',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'zones', path: '/zones/' },
+            { param: 'id', path: '/zones/view/' }
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ZonesFormsView))
     }
 ]

@@ -5,7 +5,7 @@ import { reduxFalcor } from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
 import {sendSystemMessage} from 'store/modules/messages';
 import ViewConfig from 'pages/auth/Participation/view_config.js'
-
+import rolesTableSubConfig from "./rolesTableSubConfig";
 class ParticipationFormsView extends React.Component{
     constructor(props){
         super(props);
@@ -37,6 +37,7 @@ class ParticipationFormsView extends React.Component{
                 <Element>
                     <AvlFormsViewData
                         json = {config}
+                        subJson = {rolesTableSubConfig}
                         id = {[this.props.match.params.id]}
                     />
 
@@ -74,6 +75,26 @@ export default [
             scheme: 'color-scheme-light',
             position: 'menu-position-left',
             layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationFormsView))
+    },
+    {
+        path: `/participation/view/:sub_type/:id/p`,
+        exact: true,
+        name: 'Actions',
+        auth: false,
+        mainNav: false,
+        breadcrumbs: [
+            { name: 'participation', path: '/participation/' },
+            { param: 'id', path: '/participation/view/:sub_type' },
+            { param: 'sub_type',path:'/participation/view/'}
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-dark',
+            position: 'menu-position-top',
+            layout: 'menu-layout-full',
             style: 'color-style-default'
         },
         component: connect(mapStateToProps,mapDispatchToProps)(reduxFalcor(ParticipationFormsView))

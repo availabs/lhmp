@@ -2,12 +2,13 @@ module.exports = [
     {
         type:'capabilities', // type is same as the route path for now
         list_attributes:[
-            'county',
+            // 'county',
             {'municipality' : {filter:'multi'}},
             {'capability_type': {filter:'true'}} ,
             {'capability_category': {filter:'true'}},
             'capability_name',
-            'jurisdiction_utilization'
+            'responsible_authority',
+            'jurisdiction_utilization', 'capability_description'
             ],
         csv_download: ['capability_category', 'capability_type', 'capability_name','regulatory_name','municipality','capability_description','adoption_date','development_update','jurisdiction_utilization','mitigation_contribution','adopting_authority','responsible_authority','support_authority','affiliated_agency','link_url','upload'],
         default_title: 'Capability', // in the case when page_title is invalid
@@ -107,6 +108,7 @@ module.exports = [
                 display_type:'text',
                 meta:'false',
                 hidden:'false',
+                expandable:'true',
                 section:''
             },
             lifelines :{

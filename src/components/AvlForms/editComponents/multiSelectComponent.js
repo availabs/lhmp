@@ -21,6 +21,8 @@ class MultiSelectComponent extends React.PureComponent {
         }else if(this.props.state[this.props.depend_on] !== undefined && this.props.area === undefined
             && this.props.state[this.props.depend_on] !== 'None'){
             data = data.filter(m => this.props.state[this.props.depend_on].includes(m.category)).map(m => m.type)
+        }else if(this.props.depend_on && this.props.state[this.props.depend_on] === undefined && this.props.area === undefined){
+            data = []
         }else if(this.props.state[this.props.depend_on] !== undefined && this.props.area ==='true'
             && this.props.state[this.props.depend_on] !== 'None'){
             data = data

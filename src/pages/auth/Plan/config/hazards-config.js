@@ -1,3 +1,5 @@
+import get from "lodash.get";
+
 let HAZARD_META  = {
         'wind':{id:'wind', name:'Wind', description: '', sheldus: "Wind", zones: [], icon: 'os-icon-edit-1'},
         'wildfire':{id:'wildfire', name:'Wildfire', description: '', sheldus: "Wildfire", zones: [], icon: 'os-icon-edit-1'},
@@ -25,105 +27,264 @@ let HAZARD_META  = {
         // sealevel: {id: 'Sea Level', name: 'Sea Level'},
 
     }
-let HazardConfig = [];
-
-Object.keys(HAZARD_META).map(key => {
-	HazardConfig.push({
-        title: `${HAZARD_META[key].name} Image`,
-        requirement: `req-B1-${key}-image`,
-        type: 'image',
+let HazardConfig = [
+    {
+        title: ``,
+        requirement: `hazard-hero-stat`,
+        type: 'HazardHeroStats',
+        additionalProps: true,
+        showTitle: false,
         prompt: '',
         intent: '',
         callout: '',
-        label:'Image', // Which you would like to see on the form
+        label:'', // Which you would like to see on the form
         height: 500,
         width: 900,
         border: 1,
-        onlyAdmin: true,
-        // hideNav: true // hides key from public nav. Displays on page.
-        /*2-non-county*/ pullCounty: true,
-        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        ///*2-non-delete*/ hideIfNull: true 
-    },{
-        title: HAZARD_META[key].name,
+    },
+    {
+        title: ``,
+        requirement: `hazard-charts`,
+        type: 'HazardCharts',
+        additionalProps: true,
+        filterByHaz: true,
+        showTitle: false,
+        prompt: '',
+        intent: '',
+        callout: '',
+        label:'', // Which you would like to see on the form
+        height: 500,
+        width: 900,
+        border: 1,
+    },
+];
+
+Object.keys(HAZARD_META).map(key => {
+	HazardConfig.push({
+        title: `${HAZARD_META[key].name} Characteristics`,
         requirement: `req-B1-${key}`,
+            filterByHaz: true,
         type: 'content',
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
         // hideNav: true // hides key from public nav. Displays on page.
-        /*2-non-county*/ pullCounty: true,
-        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+         /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
         ///*2-non-delete*/ hideIfNull: true 
-    },
+    },{
+            title: ``,
+            requirement: `req-B1-${key}-image`,
+            filterByHaz: true,
+            type: 'image',
+            prompt: '',
+            intent: '',
+            callout: '',
+            label:'Image', // Which you would like to see on the form
+            height: 500,
+            width: 900,
+            border: 1,
+            // hideNav: true // hides key from public nav. Displays on page.
+            // 2-non-county pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-delete*/ hideIfNull: true
+        },
         {
-            title: `${HAZARD_META[key].name} Local Impact`,
+            title: `::activeGeo - Local Impacts - ${HAZARD_META[key].name}`,
             requirement: `req-B1-${key}-local-impact`,
+            filterByHaz: true,
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            pullCounty: true
+            // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            pullCounty: true,
+            hideCounty: false,
+            hideJurisdictionAnnex: false
         })
 })
 
 HazardConfig.push({
-        title: `All Hazards Image`,
-        requirement: `req-B1--image`,
-        type: 'image',
-        prompt: '',
-        intent: '',
-        callout: '',
-        label:'Image', // Which you would like to see on the form
-        height: 400,
-        width: 500,
-        border: 1,
-        onlyAdmin: true,
-        // hideNav: true // hides key from public nav. Displays on page.
-        /*2-non-county*/ pullCounty: true,
-        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        ///*2-non-delete*/ hideIfNull: true
-    },{
-        title: 'All Hazards',
+        title: 'All Hazards Characteristics',
         requirement: `req-B1-`,
+        filterByHaz: true,
         type: 'content',
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
         // hideNav: true // hides key from public nav. Displays on page.
         /*2-non-county*/ pullCounty: true,
         ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
         ///*2-non-delete*/ hideIfNull: true
     },
     {
-        title: `All Hazards Local Impact`,
+        title: ``,
+        requirement: `req-B1--image`,
+        filterByHaz: true,
+        type: 'image',
+        prompt: '',
+        intent: '',
+        // callout: '',
+        label:'Image', // Which you would like to see on the form
+        height: 400,
+        width: 500,
+        border: 1,
+        // onlyAdmin: true,
+        // hideNav: true // hides key from public nav. Displays on page.
+        /*2-non-county*/ pullCounty: true,
+        ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+        ///*2-non-delete*/ hideIfNull: true
+    },
+    {
+        title: `::activeGeo - Local Impacts - ::haz`,
         requirement: `req-B1--local-impact`,
+        filterByHaz: true,
         type: 'content',
         prompt: 'Talk about local context for hazard of concern for your area',
         intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-        callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+        // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
         pullCounty: true
     })
 
 const config =  {
 	'Local Hazards' : [
+        ...HazardConfig,
         {
             title: 'Hazard Overview',
             requirement: `req-B1-hazard-overview`,
+            filterByHaz: true,
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+            // callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
         },
-
-		...HazardConfig,
         {
             title: 'Other Hazards',
             requirement: `req-B1-other-hazards`,
+            filterByHaz: true,
             type: 'content',
             prompt: 'Talk about local context for hazard of concern for your area',
             intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
-            callout: 'Highlight locally specific hazards which have an enhanced profile in the community'
+        },
+        {
+            title: 'Other Hazards Local Impact',
+            requirement: `req-B1-other-hazards-local-impact`,
+            filterByHaz: true,
+            type: 'content',
+            prompt: 'Talk about local context for hazard of concern for your area',
+            intent: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            // callout: 'Highlight locally specific hazards which have an enhanced profile in the community',
+            hideIfNull: true
+        },
+        {
+            title: '::activeGeo - Local Hazards of Concern Table - ::haz',
+            requirement: `req-B1-local-haz-concern-table`,
+            type: 'localHazardsOfConcernTable',
+            hideGeoProp: true,
+            config: {
+                // description: 'This table identifies hazard events specific to each jurisdiction with a primary focus on occurrence, severity and impact. This information was obtained directly from jurisdictional representatives during community-specific interviews.',
+                title: '',
+                //requirement: 'Req-C-1A',
+                type: 'formTable',
+                //fontSize: '0.70em',
+                height: '600px',
+                align: 'full',
+                config: {
+                    type: 'hazardid',
+                    columns : [
+                        {
+                            Header: 'COMMUNITY_NAME', // make it lower case
+                            accessor: 'community_name',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        {
+                            Header: 'HAZARD_CONCERN',
+                            accessor: 'hazard_concern',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        {
+                            Header: 'PREVIOUS_OCCURRENCE',
+                            accessor: 'previous_occurrence',
+                            sort: true,
+                            filter: 'multi'
+                        },
+                        {
+                            Header: 'FUTURE_OCCURRENCE',
+                            accessor: 'future_occurrence',
+                            sort: true,
+                            filter: 'multi'
+                        },
+
+                        {
+                            Header: 'LOSS_LIFE_PROPERTY',
+                            accessor: 'loss_life_property',
+                            sort: true,
+                            filter: 'default'
+                        },
+                        // {
+                        //     Header: 'EXTENT_DESCRIPTION',
+                        //     accessor: 'extent_description',
+                        //     sort: true,
+                        //     filter: 'default'
+                        // },
+                        {
+                            Header: 'LOCATION_DESCRIPTION',
+                            accessor: 'location_description',
+                            width: 50
+                        },
+                    ]
+                },
+                prompt: '',
+                intent: '',
+                activeGeoFilter: 'true',
+                defaultSortCol: 'COMMUNITY_NAME',
+                // defaultSortOrder: 'desc',
+                colOrder: ['COMMUNITY_NAME', 'HAZARD_CONCERN', 'PREVIOUS_OCCURRENCE', 'FUTURE_OCCURRENCE', 'LOSS_LIFE_PROPERTY', 'LOCATION_DESCRIPTION'],
+                minHeight: '80vh',
+                icon: 'os-icon-tasks-checked',
+                flex: 'false'
+            },
+            prompt: '',
+            intent: '',
+            callout: ''
+        },
+
+        {
+            title: 'Events with Highest Reported Loss in Dollars',
+            requirement: `req-B1-hazard-events-table`,
+            type: 'HazardEventsTable',
+            prompt: '',
+            intent: '',
+            callout: ''
+        },
+
+        {
+            title: '',
+            requirement: `hazard-loss-municipality`,
+            type: 'HazardLossByMunicipality',
+            showTitle: false,
+            prompt: '',
+            intent: '',
+            callout: ''
+        },
+        {
+            title: '',
+            requirement: `presidential-disaster-declarations`,
+            type: 'PresidentialDisasterDeclarations',
+            showTitle: false,
+            prompt: '',
+            intent: '',
+            callout: ''
+        },
+        {
+            title: '',
+            requirement: `hazard-events-map`,
+            type: 'HazardEventsPublicMap',
+            showTitle: false,
+            prompt: '',
+            intent: '',
+            callout: ''
         },
 	]
 }

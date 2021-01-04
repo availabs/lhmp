@@ -18,6 +18,7 @@ import {EARLIEST_YEAR, LATEST_YEAR} from "./components/yearsOfSevereWeatherData"
 import ElementFactory, {RenderConfig}  from 'pages/Public/theme/ElementFactory'
 
 import SideMenu from 'pages/Public/theme/SideMenu'
+import HazardSideMenu from './new_components/HazardSideMenu'
 import Hazard from './new_components/Hazard'
 import HazardHeroStats from './new_components/HazardHeroStats'
 
@@ -48,7 +49,7 @@ const StickySelect = styled.div`
    select {
    
    height: 5vh;
-   width: 100%;
+   width: 90%;
    z-index:100;
    
    }
@@ -136,34 +137,8 @@ class Hazards extends React.Component {
         }
     }
 
-    stickyHazards(){
-        return this.state.hazards && this.state.hazards.length > 0 ?
-            (
-                <StickySelect>
-                    <select
-                        style={{right:10}}
-                        className="ae-side-menu"
-                        id='hazard'
-                        data-error="Please select county"
-                        onChange={(e) => {
-                            if (e.target.value !== 'none'){
-                                e.target.value === 'all' ?
-                                    this.setState({hazard: undefined}) :
-                                    this.setState({hazard: e.target.value})
-                            }
-                        }}
-                        value={this.state.hazard}
-                    >
-                        <option key={0} value={'none'}>--Select Hazard--</option>
-                        <option key={1} value={'all'}> All Hazards </option>
-                        {this.state.hazards.map((h,h_i) => <option key={h_i+2} value={h}>{h}</option>)}
-                    </select>
-                </StickySelect>
-            ) : null
-    }
-
     changeHazard(e, a) {
-        console.log('haz changed', e, a)
+        console.log('haz changed', e.target.value, a)
         this.setState({hazard:e.target.value, firstLoad: false})
     }
     render() {
@@ -172,16 +147,19 @@ class Hazards extends React.Component {
         }
         return (
             <PageContainer>
-                {/*
-                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '220px', height: '100%'}}>
-                    {this.stickyHazards()}
-                    <SideMenu config={hazardConfig}/>
+                <div style={{position: 'fixed', left: 0, top: 0, paddingTop: 20,width: '230px', height: '100%'}}>
+                   
+                    <HazardSideMenu 
+                        config={hazardConfig}
+                        geoid={this.props.activeGeoid}
+                        changeHazard={this.changeHazard}
+                        {...this.state}
+                    />
                 </div>
-                */}
                 <div >
-                    <ContentContainer>
+                    <ContentContainer style={{maxWidth:900}}>
                         <section>
-                            
+                          {this.state.hazard}  
                         </section>
                         <section>
                             <SectionHeader>
@@ -191,14 +169,15 @@ class Hazards extends React.Component {
                                 geoid={this.props.activeGeoid}
                                 changeHazard={this.changeHazard}
                             />
-                            <Hazard 
+                           <Hazard 
                                 geoid={this.props.geoid}
                                 activeGeoid={this.props.activeGeoid}
                                 hazard={this.state.hazard}
-                                geoLevel={/*this.state.geoLevel*/ 'counties'}
+                                geoLevel={'counties'} 
                                 hazards={this.state.hazards}
                                 riskIndexMeta={this.props.riskIndexMeta}
                             />
+                        {/*this.state.geoLevel*/ }
                         </section>
                     </ContentContainer>
                 </div>
@@ -229,11 +208,11 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {authGeoid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/hazards',
+    path: '/hazards2',
     exact: true,
     name: 'Hazards',
     auth: false,
-    mainNav: true,
+    mainNav: false,
     breadcrumbs: [
         { name: 'Hazards', path: '/hazards' }],
      menuSettings: {
