@@ -152,7 +152,6 @@ class inventoryTableViewer extends Component {
                                         data[attribute].slice(1, -1).split(',') :
                                         data[attribute]
 
-                                console.log('test 123', data[attribute],get(data, `[${attribute}]`, []))
                                 data[attribute] =
                                     typeof data[attribute] === "string" ?
                                         geo[data[attribute]] ?

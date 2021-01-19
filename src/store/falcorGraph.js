@@ -45,7 +45,7 @@ export const falcorGraph = (function() {
     },
     cache: storedGraph || {}
   })
-  //.batch();
+  .batch();
   return model;
 })();
 
