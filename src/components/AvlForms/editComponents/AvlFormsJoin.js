@@ -141,11 +141,17 @@ class TextComponent extends React.PureComponent{
 
     renderDropdown() {
         let zones_list = this.zoneDropDown();
+        let tmpVal =
+            typeof this.props.state[this.props.title] === 'string' &&
+            this.props.state[this.props.title].indexOf('[') === 0 &&
+            this.props.state[this.props.title].indexOf(']') === this.props.state[this.props.title].length - 1 ?
+                this.props.state[this.props.title].slice(1,-1).split(',') :
+                this.props.state[this.props.title]
         return (
             <SearchableDropDown
                 data={zones_list}
                 placeholder={this.props.label}
-                value={zones_list.filter(f => f.value === this.props.state[this.props.title])[0]}
+                value={zones_list.filter(f => typeof tmpVal === "string" ? f.value === tmpVal : tmpVal.includes(f.value))[0]}
                 hideValue={false}
                 onChange={(value) => {
                     this.setState({zone_id:value})
@@ -156,13 +162,19 @@ class TextComponent extends React.PureComponent{
     }
 
     renderElement() {
-        let zones_list = this.zoneDropDown().map(f => ({value: f.value, name: f.label}));
+        let zones_list = this.zoneDropDown().map(f => ({value: f.value, name: f.label})).filter(f => f.name);
+        let tmpVal =
+            typeof this.props.state[this.props.title] === 'string' &&
+            this.props.state[this.props.title].indexOf('[') === 0 &&
+            this.props.state[this.props.title].indexOf(']') === this.props.state[this.props.title].length - 1 ?
+                this.props.state[this.props.title].slice(1,-1).split(',') :
+                this.props.state[this.props.title]
+
         return (
             <MultiSelectFilter
                 filter={{
                     domain: zones_list || [],
-                    value: this.props.state[this.props.title] && typeof this.props.state[this.props.title] === "object" ?
-                            this.props.state[this.props.title].filter(f => f && f !== '') : []
+                    value: tmpVal && typeof tmpVal === "object" ? tmpVal.filter(f => f && f !== '') : tmpVal
                 }}
                 setFilter={(e) => {
                     this.props.handleChange(e, this.props.title, zones_list);

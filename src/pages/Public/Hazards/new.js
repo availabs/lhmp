@@ -208,11 +208,11 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = {authGeoid};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/hazards',
+    path: '/hazards2',
     exact: true,
     name: 'Hazards',
     auth: false,
-    mainNav: true,
+    mainNav: false,
     breadcrumbs: [
         { name: 'Hazards', path: '/hazards' }],
      menuSettings: {

@@ -193,7 +193,16 @@ class AvlFormsNewData extends React.Component{
     afterSubmitEdit(newId, attributes){
         return attributes.reduce((a,c) => {
             return a.then(resA => {
-                return get(this.state, [c], []).reduce((a1,c1) => {
+                let tmpVal =
+                typeof get(this.state, [c], []) === 'string' &&
+                get(this.state, [c], []).indexOf('[') === 0 &&
+                get(this.state, [c], []).indexOf(']') === get(this.state, [c], []).length - 1 ?
+                    get(this.state, [c], []).slice(1,-1).split(',') :
+                    get(this.state, [c], [])
+                tmpVal = typeof tmpVal === "string" ? [tmpVal] : tmpVal
+
+                console.log('tmpVal', tmpVal)
+                return tmpVal.reduce((a1,c1) => {
                     return a1.then(resA1 => {
                         return this.props.falcor.get(['forms', 'byId',c1,'attributes',this.props.config[0].attributes[c].parentConfig])
                             .then(originalData => {

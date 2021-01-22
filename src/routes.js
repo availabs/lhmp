@@ -7,6 +7,7 @@ import About from './pages/Public/About/'
 import PlanningProcess from './pages/Public/PlanningProcess/'
 import Hazards from './pages/Public/Hazards/'
 import Hazards2 from './pages/Public/Hazards/new'
+import HazardsConfig from './pages/Public/Hazards/indexConfig'
 import Risk from './pages/Public/RiskAssessmentAndVulnerability/'
 import Strategies from './pages/Public/Strategies/'
 // import PublicPlan from './pages/PublicPlan'
@@ -51,6 +52,7 @@ import ReviewRequirement from 'pages/auth/Plan/ReviewRequirement'
 
 
 import AssetsSearch from 'pages/auth/Assets/indexSearch'
+import AssetsStateAssets from 'pages/auth/Assets/indexStateAssets'
 import AssetsView from "./pages/auth/Assets/components/AssetsView";
 import AssetsEdit from "./pages/auth/Assets/components/AssetsEdit"
 import AssetsListByTypeByHazard from "./pages/auth/Assets/components/AssetsListByTypeByHazard";
@@ -128,6 +130,7 @@ const routes = [
     ...ReviewTools,
     ...ReviewRequirement,
     ...AssetsSearch,
+    ...AssetsStateAssets,
     ...AssetsView,
     ...AssetsEdit,
     ...AssetsListByTypeByHazard,
@@ -148,6 +151,7 @@ const routes = [
     ...PlanningProcess,
     ...Hazards,
     ...Hazards2,
+    ...HazardsConfig,
     ...Risk,
     ...Strategies,
     ...About,

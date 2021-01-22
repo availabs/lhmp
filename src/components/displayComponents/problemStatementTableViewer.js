@@ -142,7 +142,7 @@ class inventoryTableViewer extends Component {
                     let data = {};
                     formAttributes.forEach(attribute => {
                         if (graph[item].value && graph[item].value.attributes) {
-                            if (this.state.form_ids && this.state.form_ids.includes(item)) {
+                            if (this.state.form_ids && this.state.form_ids.includes(item) ) {
                                 data['id'] = item;
 
                                 data[attribute] = get(graph[item], ['value', 'attributes', attribute], null);
@@ -158,7 +158,7 @@ class inventoryTableViewer extends Component {
                                             geo[data[attribute]].name || '' :
                                             data[attribute] :
                                         data[attribute] && typeof data[attribute] === "object" ?
-                                            data[attribute].map(d => geo[d] ? geo[d].name || '' : d) :
+                                            get(data, `[${attribute}]`, []).map(d => geo[d] ? geo[d].name || '' : d) :
                                             data[attribute]
 
                                 data[attribute] = data[attribute] && typeof data[attribute] === 'object' ? data[attribute].join(',') : data[attribute];

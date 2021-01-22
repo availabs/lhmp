@@ -117,8 +117,8 @@ module.exports = [
                 label:'Narrative',
                 sub_type:'meeting',
                 prompt:'',
-                edit_type:'textarea',
-                display_type:'text',
+                edit_type:'contentEditor',
+                display_type:'contentViewer',
                 meta:'false',
                 section:''
             },

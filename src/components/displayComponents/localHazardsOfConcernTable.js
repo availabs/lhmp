@@ -16,6 +16,12 @@ var _ = require('lodash')
 
 class FormTableViewer extends React.Component{
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.activeCousubid !== this.props.activeCousubid){
+            this.forceUpdate()
+        }
+    }
+
     render(){
         return (
             <PageContainer>
@@ -44,8 +50,8 @@ class FormTableViewer extends React.Component{
 const mapStateToProps = (state,ownProps) => {
     return {
         activePlan: state.user.activePlan,
-        activeGeoid: ownProps.geoId ? ownProps.geoId : state.user.activeGeoid,
-        activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
+        activeGeoid: ownProps.geoidPrime && ownProps.geoidPrime !== 'undefined' ? ownProps.geoidPrime : ownProps.geoId ? ownProps.geoId : state.user.activeGeoid,
+        activeCousubid: ownProps.geoidPrime && ownProps.geoidPrime !== 'undefined' ? ownProps.geoidPrime : ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),
         geoData: get(state.graph, ['geo'], {}),

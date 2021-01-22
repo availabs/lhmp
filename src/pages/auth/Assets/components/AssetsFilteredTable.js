@@ -36,15 +36,21 @@ class AssetsFilteredTable extends Component {
         let ids = this.props.groupBy === 'ownerType' ? BuildingByOwnerTypeConfig.map(f => f.value) :
             this.props.groupBy === 'propType' ? propTypes :
                 this.props.groupBy === 'jurisdiction' ? [] :
+                this.props.groupBy === 'state' ? this.props.filterData :
                     [];
-        return this.props.falcor.get(
-            ['geo', this.props.geoid, ['name']],
-            ["geo", this.props.geoid, 'cousubs'],
-            ['building', 'byGeoid', this.props.geoid, 'critical', 'types', 'all'],
-            ['parcel', 'meta', 'critical_infra'],
-            ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'sum', ['count','replacement_value']],
-            ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all']
-        )
+
+        let reqs = this.props.groupBy === 'state' ?
+            [['geo', this.props.geoid, ['name']],
+                ["geo", this.props.geoid, 'cousubs'],
+                ['building', 'byGeoid', this.props.geoid, 'critical', 'types', 'all'],
+                ['parcel', 'meta', 'critical_infra'],] :
+            [ ['geo', this.props.geoid, ['name']],
+                ["geo", this.props.geoid, 'cousubs'],
+                ['building', 'byGeoid', this.props.geoid, 'critical', 'types', 'all'],
+                ['parcel', 'meta', 'critical_infra'],
+                ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'sum', ['count','replacement_value']],
+                ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids, 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all']]
+        return this.props.falcor.get(...reqs)
             .then(response => {
                 //console.log('response',response)
                 //let allGeo = [this.props.geoid,...get(this.props.falcor.getCache(), `geo.${this.props.geoid}.counties.municipalities.value`, [])];
@@ -64,6 +70,12 @@ class AssetsFilteredTable extends Component {
                             ['geo', allGeo , ['name']],
                             ['building', 'byGeoid', this.props.geoid, this.props.groupBy, ids.filter(f => f), 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all'],
                             ['building', 'byGeoid', this.props.geoid, this.props.groupBy + 'Grouped', ids.filter(f => f), 'sum', ['count','replacement_value']]) :
+             this.props.groupBy === 'state' ?
+                        this.props.falcor.get(
+                            ['geo', allGeo , ['name']],
+                            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all'],
+                            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'sum', ['count','replacement_value']]
+                        ) :
                         this.props.falcor.get(['geo', allGeo , ['name']]);
             })
     }
@@ -75,9 +87,9 @@ class AssetsFilteredTable extends Component {
         riskZoneIdsAllValuesTotal = {};
         let digitsToMatch = this.props.groupBy === 'propType' ? 1 : this.props.groupBy === 'critical' ? 2 : 0;
         let moduloBy = this.props.groupBy === 'propType' ? 100 : this.props.groupBy === 'critical' ? 1000 : 1;
-        let primeColName = this.props.groupBy.split('T').join(' T');
-        let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/${this.props.groupBy}/`;
-        let linkTrail = `/geo/${this.props.geoid}`
+        let primeColName = this.props.groupBy === 'state' ? 'Jurisdictions' : this.props.groupBy.split('T').join(' T');
+        let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/${this.props.groupBy === 'state' ? 'ownerType/2' : `${this.props.groupBy}/`}`;
+        let linkTrail = this.props.groupBy === 'state' ? `` : `/geo/${this.props.geoid}`
         let graph = this.props.groupBy === 'critical' ?
             Object.keys(get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy + 'Grouped'}`, {}))
                 .reduce( (a,c) => {
@@ -88,8 +100,9 @@ class AssetsFilteredTable extends Component {
                     return a;
                 }, {})
             :
+            this.props.groupBy === 'state' ?
+                this.props.buildingStatewideData :
             get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy}`, null);
-            //console.log('check graph', graph)
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
@@ -276,7 +289,88 @@ class AssetsFilteredTable extends Component {
                                 link: linkBase + item
                             })
                         }
-                    }else{
+                    }else if(this.props.groupBy === 'state') {
+                        let riskZoneIdsAllValues = {}
+                        Object.keys(get(graph, `${item}.owner_type.2.byRiskScenario`, {}))
+                            .forEach(scenarioId => {
+                                if (get(graph, `${item}.owner_type.2.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
+                                    if(this.props.riskZoneId && this.props.riskZoneId.length > 0){
+                                        get(graph, `${item}.owner_type.2.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                            .filter(item => this.props.riskZoneId && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
+                                            .forEach(riskZoneIdData =>{
+                                                scenarioToRiskZoneMapping[scenarioId] ?
+                                                    scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
+                                                    scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
+
+                                                if(!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                    if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
+                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+                                                    }
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                        count: parseInt(riskZoneIdData.count) || 0,
+                                                        value: parseInt(riskZoneIdData.sum) || 0
+                                                    };
+                                                }
+                                            })
+                                    }else{
+                                        get(graph, `${item}.owner_type.2.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                            .forEach(riskZoneIdData => {
+                                                scenarioToRiskZoneMapping[scenarioId] ?
+                                                    scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
+                                                    scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
+
+                                                if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                    if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $` )
+                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+
+                                                    }
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                        count: parseInt(riskZoneIdData.count) || 0,
+                                                        value: parseInt(riskZoneIdData.sum) || 0
+                                                    };
+                                                }else{
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
+                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
+                                                }
+
+                                            })
+                                    }
+
+                                }
+
+                            })
+
+                        BuildingTypeData.push({
+                            [primeColName]: this.props.groupBy === 'jurisdiction' || this.props.groupBy === 'state' ?
+                                functions.formatName(get(this.props.geoidData, `${item}.name`, 'N/A'), item) :
+                                this.props.groupBy === 'critical' ?
+                                    item :
+                                    get(config.filter(f => f.value === item).pop(), `name`, null),
+                            'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0)),
+                            'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0)),
+                            ...Object.keys(riskZoneIdsAllValues)
+                                .reduce((a, riskZone) => {
+                                    a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
+                                    a[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
+
+                                    riskZoneIdsAllValuesTotal[riskZone + ' #'] ?
+                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] += parseInt(riskZoneIdsAllValues[riskZone].count) || 0 :
+                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
+
+                                    riskZoneIdsAllValuesTotal[riskZone + ' $'] ?
+                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] += parseInt(riskZoneIdsAllValues[riskZone].value) || 0 :
+                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
+
+                                    return a
+                                }, {}),
+                            link: linkBase + `/geo/${item}`
+                        });
+
+                        totalBuildings += parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0));
+                        totalBuildingsValue += parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0));
+                    } else{
                         // get risk zone data
                         let riskZoneIdsAllValues = {}
                         Object.keys(get(graph, `${item}.byRiskScenario`, {}))
@@ -377,6 +471,8 @@ class AssetsFilteredTable extends Component {
                     linkBase + get(this.props.geoidData, `${this.props.geoid}.cousubs.value`, []).join('-') :
                     this.props.groupBy === 'critical' ?
                         linkBase + get(this.props.falcor.getCache(), `building.byGeoid.${this.props.geoid}.critical.types.all.value`, []).join('-') :
+                        this.props.groupBy === 'state' ?
+                            linkBase :
                         linkBase + config.map(f => f.value).join('-')
             })
         }
@@ -421,7 +517,13 @@ class AssetsFilteredTable extends Component {
                         if(name.includes('$')) {
                              a['formatValue'] = fnum
                         }
-                        a['link'] = (d) => d + `/scenario/${scenarioId}/riskzone/${riskZone}` + linkTrail;
+                        a['link'] = (d) => {
+                            return this.props.groupBy === 'state' ?
+                                d.split('/geo')[1] ?
+                                d.split('/geo')[0] + `/scenario/${scenarioId}/riskzone/${riskZone}` + '/geo' + d.split('/geo')[1] :
+                                d.split('/geo')[0] + `/scenario/${scenarioId}/riskzone/${riskZone}` :
+                                d + `/scenario/${scenarioId}/riskzone/${riskZone}` + linkTrail
+                        }
                         a['linkOnClick'] = this.props.linkOnClick;
                         return a
                     }),
@@ -464,6 +566,7 @@ const mapStateToProps = state => ({
     activeCousubid: state.user.activeCousubid,
     geoidData: get(state.graph, 'geo'),
     buildingData : get(state.graph,'building.byGeoid'),
+    buildingStatewideData : get(state.graph,['building', 'statewide', 'byGeoid']),
     parcelMeta : get(state.graph,'parcel.meta'),
 });
 

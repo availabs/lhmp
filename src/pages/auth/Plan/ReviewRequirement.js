@@ -369,6 +369,7 @@ class ReviewRequirement extends React.Component {
                                     }
                                     }
                                     user={{...this.props.user, activeCousubid: this.props.match.params.geo}}
+                                    geoGraph={this.props.geoGraph}
                                     showTitle={true}
                                     showLocation={true}
                                     // showCMSFlagNotes={true}
