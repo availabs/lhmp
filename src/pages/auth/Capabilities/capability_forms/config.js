@@ -6,7 +6,7 @@ module.exports = [
             {'municipality' : {filter:'multi'}},
             {'capability_type': {filter:'true'}} ,
             {'capability_category': {filter:'true'}},
-            'capability_name',
+            {'capability_name':{filter:'true'}},
             'responsible_authority',
             'jurisdiction_utilization', 'capability_description'
             ],
