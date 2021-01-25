@@ -151,17 +151,19 @@ class inventoryTableViewer extends Component {
                                     data[attribute].includes('[') ?
                                         data[attribute].slice(1, -1).split(',') :
                                         data[attribute]
-
+                                if(data[attribute] && typeof data[attribute] === "object" && Object.keys(data[attribute])[0] === '$type'){
+                                    data[attribute] = null
+                                }
                                 data[attribute] =
                                     typeof data[attribute] === "string" ?
                                         geo[data[attribute]] ?
                                             geo[data[attribute]].name || '' :
                                             data[attribute] :
-                                        data[attribute] && typeof data[attribute] === "object" ?
+                                        data[attribute] && typeof data[attribute] === "object" && data[attribute].length ?
                                             get(data, `[${attribute}]`, []).map(d => geo[d] ? geo[d].name || '' : d) :
                                             data[attribute]
 
-                                data[attribute] = data[attribute] && typeof data[attribute] === 'object' ? data[attribute].join(',') : data[attribute];
+                                data[attribute] = data[attribute] && typeof data[attribute] === 'object' && data[attribute].length ? data[attribute].join(',') : data[attribute];
 
                                 ['view', 'edit']
                                     .filter(f => this.props[f + 'Button'] === true || this.props[f + 'Button'] === undefined)
