@@ -24,16 +24,20 @@ class inventoryTableViewer extends Component {
         };
     }
 
-    fetchFalcorDeps() {
+    fetchFalcorDeps(geoid) {
         return this.props.falcor.get(
-            ['parcel', 'byGeoid', this.state.geoid, ATTRIBUTES]
+            ['parcel', 'byGeoid', geoid ? geoid : this.state.geoid, ATTRIBUTES]
         )
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.activeGeoid !== nextProps.activeGeoid || this.props.activeCousubid !== nextProps.activeCousubid
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
             this.setState({geoid: this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid})
-            this.fetchFalcorDeps()
+            this.fetchFalcorDeps(this.props.activeCousubid !== "undefined" ? this.props.activeCousubid : this.props.activeGeoid)
         }
     }
 
@@ -104,8 +108,8 @@ class inventoryTableViewer extends Component {
 
         data =
             Object.keys(data)
-                .map(d => data[d]);
-        data = data.sort((a, b) =>
+                .map(d => data[d])
+                .sort((a, b) =>
                     this.props.defaultSortCol ?
                         (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
                         a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
@@ -138,7 +142,8 @@ class inventoryTableViewer extends Component {
         return (
             data && columns ?
                 <TableSelector
-                    {...this.processData()}
+                    data={data}
+                    columns={columns}
                     flex={this.props.flex ? this.props.flex : false}
                     height={this.props.height ? this.props.height : ''}
                     width={this.props.width ? this.props.width : '100%'}

@@ -76,7 +76,6 @@ class NfipTable extends React.Component {
             .forEach(geoid => {
             const graph = this.props.nfip.losses.byGeoid[geoid].allTime,
                 name = this.props.allGeo[geoid];
-            console.log('g?', this.props.nfip.losses.byGeoid)
             if(graph.total_losses > 0 || true){
                 data.push({
                     [label]: functions.formatName(name, geoid),

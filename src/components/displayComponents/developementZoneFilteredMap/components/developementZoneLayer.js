@@ -88,7 +88,6 @@ class ShowZoneLayer extends MapLayer{
                     if (get(this.zoneId, `length`, null)){
                         this.zoneId.forEach(zid => {
                             let attributes = get(response,['json','forms','byId',zid,'attributes'],{})
-                            console.log('??', attributes)
 
                             geojson.features.push({
                                 type : "Feature",
@@ -96,18 +95,20 @@ class ShowZoneLayer extends MapLayer{
                                 geometry: get(attributes, `geojson.coordinates`, null) ? attributes.geojson : attributes.geojson
                             })
                             try {
-                                new mapboxgl.Marker({
-                                    draggable: false
-                                })
-                                    .setLngLat(turfCentroid(geojson.features.slice(-1).pop().geometry).geometry.coordinates)
-                                    .addTo(map)
-                                     .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
-                                        '<div>'
-                                        + '<b>'+ 'Name: ' +'</b>'+ attributes.name + '<br>'
-                                        + '<b>'+ 'Comment: ' +'</b>'+ attributes.comment +
-                                        '</div>'
-                                     ))
-
+                                let coords = geojson.features.slice(-1).pop().geometry
+                                if (coords){
+                                    new mapboxgl.Marker({
+                                        draggable: false
+                                    })
+                                        .setLngLat(turfCentroid(coords).geometry.coordinates)
+                                        .addTo(map)
+                                        .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(
+                                            '<div>'
+                                            + '<b>'+ 'Name: ' +'</b>'+ attributes.name + '<br>'
+                                            + '<b>'+ 'Comment: ' +'</b>'+ attributes.comment +
+                                            '</div>'
+                                        ))
+                                }
                             }catch (e){
                                 console.warn(e)
                             }
