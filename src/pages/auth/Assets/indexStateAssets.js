@@ -112,10 +112,19 @@ class AssetsBySearch extends React.Component {
             ['plan',[this.props.activePlan],'scenarios']
         )
             .then(response => {
-                this.setState({scenarioIds:
-                        get(response, `json.plan.${this.props.activePlan}.scenarios`, [])
-                            .filter(f => f.name.includes('DFIRM'))
-                            .map(f => f.id)})
+                if(get(response, `json.plan.${this.props.activePlan}.scenarios`, [])){
+                    this.setState({scenarioIds:
+                            get(response, `json.plan.${this.props.activePlan}.scenarios`, [])
+                                .filter(f => f.name.includes('DFIRM'))
+                                .map(f => f.id)})
+                }else if (this.props.activeGeoid.length === 2){
+                    this.setState({scenarioIds: 
+                    [   '3','4','9','10','38','12','14','15','16','40','18','19','41','43','22','44',
+                        '23','24','25','26','46','28','29','47','30','49','31','52','20','27','17','33','34','13','32',
+                        '42','36','35','53','54','55','56']
+
+                    })
+                }
 
                 return this.props.falcor.get(
                     ['geo',
@@ -155,7 +164,9 @@ class AssetsBySearch extends React.Component {
                                     {
                                         this.state.geoid ?
                                             <AssetsFilteredTable
-                                                geoid={Object.keys(get(this.props, `allGeo`, {})).filter(geo => geo.length === 10)}
+                                                geoid={Object.keys(get(this.props, `allGeo`, {}))
+                                                    .filter(geo => this.props.activeGeoid.length === 5 && geo.length === 10 ||
+                                                        this.props.activeGeoid.length === 2 && geo.length === 5)}
                                                 groupBy={'state'}
                                                 filterData={{'owner_type': [2]}}
                                                 scenarioId={this.state.scenarioIds}
