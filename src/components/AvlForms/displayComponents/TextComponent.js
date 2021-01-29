@@ -6,6 +6,7 @@ import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
 import ImageViewer from "./imageViewer";
 import AvlFormsJoin from '../editComponents/AvlFormsJoin'
 import listNewComp from 'components/AvlForms/editComponents/formTypeToConfig.js'
+import ContentViewer from "./contentViewer";
 import config from "../../../pages/auth/Plan/config/guidance-config";
 import {Link} from "react-router-dom";
 
@@ -63,6 +64,22 @@ class TextComponent extends React.PureComponent {
                                             id={value}
                                             key={i}
                                             {...data[d]}
+                                        />
+                                        )
+                            )
+                        })
+                }
+                {
+                    Object.keys(data).filter(d => d !== 'type')
+                        .filter(d => data[d].section === section.id && data[d].displayType === 'contentViewer')
+                        .map(d => {
+                            showTable = false;
+                            return (
+                                get(data, `[${d}].value`, '').split(',')
+                                    .map((value,i) =>
+                                        <ContentViewer
+                                            state={{[data[d].label]: value}}
+                                            title={data[d].label}
                                         />
                                         )
                             )
@@ -201,6 +218,11 @@ class TextComponent extends React.PureComponent {
                                                                                         {...data[d]}
                                                                                     />
                                                                                 ) :
+                                                                            data[d].displayType === 'contentViewer' ?
+                                                                                <ContentViewer
+                                                                                    state={{[data[d].label]: data[d].value}}
+                                                                                    title={data[d].label}
+                                                                                /> :
                                                                         (data[d].value || 'None')
                                                                 }
                                                             </td>

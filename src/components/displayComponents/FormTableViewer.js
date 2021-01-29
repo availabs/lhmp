@@ -13,6 +13,7 @@ import {match} from "fuzzy";
 import functions from "../../pages/auth/Plan/functions";
 import DisplayComps from 'components/AvlForms/displayComponents'
 import AvlFormsViewData from "../AvlForms/displayComponents/viewData";
+import ContentViewer from "../AvlForms/displayComponents/contentViewer";
 
 var _ = require('lodash')
 
@@ -147,6 +148,14 @@ class FormTableViewer extends React.Component{
                         },Promise.resolve())
                         a[c] = a[c].map(newC => get(this.props.falcor.getCache(), [ 'forms', 'byId', newC, 'value', 'attributes', configSettings.formAttribute]) )
                             .filter(newC => newC)
+                    }
+
+                    if (configSettings && configSettings.displayType === 'contentViewer'){
+                        a[c] =
+                            <ContentViewer
+                                state={{[c]: this.props.formData[d.value[2]].value.attributes[c]}}
+                                title={c}
+                            />
                     }
 
                     a[c] = typeof a[c] !== "object" ? a[c] : a[c] && a[c].length ? a[c].join(',') : a[c]

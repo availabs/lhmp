@@ -561,6 +561,7 @@ const config =  {
         			{
         				Header: 'Narrative',
         				accessor: 'narrative',
+						displayType: 'contentViewer',
         				width: 300,
 						filter: 'default',
 						expandable: 'true',
