@@ -177,6 +177,25 @@ class AssetsBySearch extends React.Component {
                                             : ''
                                     }
                                 </div>
+
+                                <div className='element-box'>
+                                    <h4>Buildings by Agency</h4>
+                                    {
+                                        this.state.geoid ?
+                                            <AssetsFilteredTable
+                                                geoid={Object.keys(get(this.props, `allGeo`, {}))
+                                                    .filter(geo => this.props.activeGeoid.length === 5 && geo.length === 10 ||
+                                                        this.props.activeGeoid.length === 2 && geo.length === 5)}
+                                                groupBy={'agency'}
+                                                filterData={{'owner_type': [2]}}
+                                                scenarioId={this.state.scenarioIds}
+                                                height={'fit-content'}
+                                                width={'100%'}
+                                                tableClass={`table table-sm table-lightborder table-hover`}
+                                            />
+                                            : ''
+                                    }
+                                </div>
                             </div>
 
                         </div>
