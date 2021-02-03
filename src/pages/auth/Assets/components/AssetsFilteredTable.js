@@ -90,7 +90,7 @@ class AssetsFilteredTable extends Component {
         let moduloBy = this.props.groupBy === 'propType' ? 100 : this.props.groupBy === 'critical' ? 1000 : 1;
         let primeColName = this.props.groupBy === 'state' ? 'Jurisdictions' : this.props.groupBy.split('T').join(' T');
         let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/${this.props.groupBy === 'state' ? 'ownerType/2' : `${this.props.groupBy}/`}`;
-        let linkTrail = this.props.groupBy === 'state' ? `` : `/geo/${this.props.geoid}`
+        let linkTrail = this.props.groupBy === 'state' || this.props.groupBy === 'agency' ? `` : `/geo/${this.props.geoid}`
         let graph = this.props.groupBy === 'critical' ?
             Object.keys(get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy + 'Grouped'}`, {}))
                 .reduce( (a,c) => {
@@ -374,7 +374,6 @@ class AssetsFilteredTable extends Component {
                         totalBuildings += parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0));
                         totalBuildingsValue += parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0));
                     } else if(this.props.groupBy === 'agency') {
-
                         //Object.keys(get(graph, `${item}.agency`, {}))
                         BuildingByAgency
                             .forEach(agency => {
@@ -433,6 +432,7 @@ class AssetsFilteredTable extends Component {
                                 if(BuildingTypeData.filter(tmpD => tmpD[primeColName] === agency).length === 0){
                                     BuildingTypeData.push({
                                         [primeColName]: agency,
+                                        geosCounted: [item],
                                         'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0)),
                                         'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0)),
                                         ...Object.keys(riskZoneIdsAllValues)
@@ -449,7 +449,7 @@ class AssetsFilteredTable extends Component {
                                                     riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
                                                 return a
                                             }, {}),
-                                        link: linkBase + `${agency}/geo/${item}`
+                                        link: linkBase + `${agency}`
                                     });
 
                                     totalBuildings += parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0));
@@ -462,8 +462,11 @@ class AssetsFilteredTable extends Component {
                                         Object.assign(tmpRecord,
                                             {
                                                 [primeColName]: agency,
-                                                'TOTAL $ REPLACEMENT VALUE': tmpRecord['TOTAL $ REPLACEMENT VALUE'] + parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0)),
-                                                'TOTAL # BUILDING TYPE' : tmpRecord['TOTAL # BUILDING TYPE'] + parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0)),
+                                                'TOTAL $ REPLACEMENT VALUE':
+                                                    tmpRecord['TOTAL $ REPLACEMENT VALUE'] + tmpRecord.geosCounted.includes(item) ? 0 : parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0)),
+                                                'TOTAL # BUILDING TYPE' :
+                                                    tmpRecord['TOTAL # BUILDING TYPE'] + tmpRecord.geosCounted.includes(item) ? 0 : parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0)),
+                                                geosCounted: [...tmpRecord.geosCounted, item],
                                                 ...Object.keys(riskZoneIdsAllValues)
                                                     .reduce((a, riskZone) => {
                                                         a[riskZone + ' #'] = (get(tmpRecord, [riskZone + ' #'], 0) + (parseInt(riskZoneIdsAllValues[riskZone].count) || 0)) || 0;
@@ -477,15 +480,12 @@ class AssetsFilteredTable extends Component {
                                                             riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
                                                         return a
                                                     }, {}),
-                                                link: linkBase + `${agency}/geo/${item}`
+                                                link: linkBase + `${agency}`
                                             });
 
                                     BuildingTypeData = [tmpRecord, ...BuildingTypeData.filter(btd => btd[primeColName] !== agency)]
                                     // BuildingTypeData.splice(tmpIndex,1, tmpRecord)
                                     // BuildingTypeData.push(tmpRecord)
-
-                                    totalBuildings += parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0));
-                                    totalBuildingsValue += parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0));
                                 }
                             })
                     } else{
@@ -591,7 +591,9 @@ class AssetsFilteredTable extends Component {
                         linkBase + get(this.props.falcor.getCache(), `building.byGeoid.${this.props.geoid}.critical.types.all.value`, []).join('-') :
                         this.props.groupBy === 'state' ?
                             linkBase :
-                        linkBase + config.map(f => f.value).join('-')
+                            this.props.groupBy === 'agency' ?
+                                linkBase + BuildingByAgency.join('-') :
+                                linkBase + config.map(f => f.value).join('-')
             })
         }
         return {data:
