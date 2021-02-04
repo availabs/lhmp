@@ -70,9 +70,11 @@ export class StateAssetsLayer extends MapLayer {
                     Object.values(
                         get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'byIndex'], {})
                     )
-                        .map(v => v.value[2]);
-                this.buildingIds = buildingIds
-                return falcorGraph.get(['building', 'geom', 'byBuildingId', buildingIds || [], 'centroid'])
+                        .map(v => get(v, ['value',2], null))
+                        .filter(v => v);
+                this.buildingIds = buildingIds || [];
+                if (!buildingIds.length) return Promise.resolve();
+                return falcorGraph.get(['building', 'geom', 'byBuildingId', buildingIds, 'centroid'])
             })
         })
     }
