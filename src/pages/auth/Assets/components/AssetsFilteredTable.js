@@ -38,7 +38,7 @@ class AssetsFilteredTable extends Component {
             this.props.groupBy === 'propType' ? propTypes :
                 this.props.groupBy === 'jurisdiction' ? [] :
                 this.props.groupBy === 'state' ? this.props.filterData :
-                this.props.groupBy === 'agency' ? BuildingByAgency :
+                this.props.groupBy === 'agency' ? BuildingByAgency.map(bba => bba.name) :
                     [];
 
         let reqs = this.props.groupBy === 'state' ?
@@ -375,7 +375,7 @@ class AssetsFilteredTable extends Component {
                         totalBuildingsValue += parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0));
                     } else if(this.props.groupBy === 'agency') {
                         //Object.keys(get(graph, `${item}.agency`, {}))
-                        BuildingByAgency
+                        BuildingByAgency.map(bba => bba.name)
                             .forEach(agency => {
                                 let riskZoneIdsAllValues = {}
                                 Object.keys(get(graph, `${item}.agency.${agency}.byRiskScenario`, {}))
@@ -479,7 +479,7 @@ class AssetsFilteredTable extends Component {
                                                             riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
                                                         return a
                                                     }, {}),
-                                                link: linkBase + `${agency}`
+                                                link: linkBase + `${BuildingByAgency.filter(bba => bba.name === agency)[0].value}`
                                             });
 
                                     BuildingTypeData = [tmpRecord, ...BuildingTypeData.filter(btd => btd[primeColName] !== agency)]
@@ -594,7 +594,7 @@ class AssetsFilteredTable extends Component {
                         this.props.groupBy === 'state' ?
                             linkBase :
                             this.props.groupBy === 'agency' ?
-                                linkBase + BuildingByAgency.join('-') :
+                                linkBase + BuildingByAgency.map(bba => bba.value).join('-') :
                                 linkBase + config.map(f => f.value).join('-')
             })
         }

@@ -5,18 +5,19 @@ import get from 'lodash.get'
 import _ from 'lodash'
 import {falcorGraph} from "store/falcorGraph"
 import {unregister} from "../../../../components/AvlMap/ReduxMiddleware";
+import BuildingByAgency from 'pages/auth/Assets/components/BuildingsByAgencyConfig'
 
 const IDENTITY = i => i;
 
 const ATTRIBUTES =
-    ['address_line_1', 'address_line_2', 'city', 'state', 'zip_code', 'building_value', 'tot_building_payment', 'tot_contents_payment', 'losses', 'total_paid', 'average_pay', 'geom']
+    [  'building_id',  'address', 'prop_class', 'owner_type', 'replacement_value', 'agency' ]
 const ADDRESS_ATTR = ['address_line_1', 'address_line_2', 'city', 'state', 'zip_code']
 let eventsGeo = {
     type: "FeatureCollection",
     features: []
 };
 
-export class NfipLayer extends MapLayer {
+export class StateAssetsLayer extends MapLayer {
     onRemove(map) {
         unregister(this);
     }
@@ -53,14 +54,41 @@ export class NfipLayer extends MapLayer {
 
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
 
+        let agencyList = BuildingByAgency.map(bba => bba.name);
         return falcorGraph.get(
-            ['nfip', 'byGeoid', store.getState().user.activeGeoid, ATTRIBUTES]
-        )
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList , 'length']
+        ).then(res => {
+            let length = get(res, ['json', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0] , 'length'])
+            return falcorGraph.get(
+                ['building', 'byGeoid',
+                    store.getState().user.activeGeoid,
+                    'agency',
+                    agencyList,
+                    'byIndex', {from: 0, to: length - 1}, ATTRIBUTES]
+            ).then(finalRes => {
+                let buildingIds =
+                    Object.values(
+                        get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'byIndex'], {})
+                    )
+                        .map(v => v.value[2]);
+                this.buildingIds = buildingIds
+                return falcorGraph.get(['building', 'geom', 'byBuildingId', buildingIds || [], 'centroid'])
+            })
+        })
     }
 
     receiveData(map, data) {
+        if (!this.buildingIds) return Promise.resolve();
+
         let rawGraph = falcorGraph.getCache(),
-            graph = get(rawGraph, ['nfip', 'byGeoid', store.getState().user.activeGeoid, 'value'], null)
+            graph =
+                this.buildingIds
+                    .map(buildingId => ({
+                        buildingId,
+                        geom: get(rawGraph, ['building', 'geom', 'byBuildingId', buildingId, 'centroid', 'value'],
+                        null)
+    }))
+                    .filter(f => f.geom);
 
         let geojson = {
             "type": "FeatureCollection",
@@ -68,37 +96,48 @@ export class NfipLayer extends MapLayer {
         };
 
         if (!graph || !graph.length) return Promise.resolve();
+
         graph
-            .forEach((nfipEntry, nfipEntryI) => {
+            .forEach((building, buildingI) => {
                 geojson.features.push({
                     "type": "Feature",
                     "properties": {
-                        id: nfipEntryI,
-                        color: '#1100ff',
-                        address:
-                            ADDRESS_ATTR.map((aa) => get(nfipEntry, [aa], null)).filter(aa => aa).join(', '),
-                        ...ATTRIBUTES
-                            .filter(key => ![...ADDRESS_ATTR, 'geom'].includes(key))
-                            .reduce((a, ck) => {
-                                a[ck] = nfipEntry[ck]
-                                return a
-                            }, {})
+                        id: buildingI,
+                        color: '#11ff39',
+                        ...get(rawGraph, ['building', 'byId', building.buildingId]),
                     },
-                    "geometry": JSON.parse(get(nfipEntry, `geom`, {}))
+                    "geometry": get(building, `geom`, {})
                 })
             });
-        console.log('???', geojson)
-        if (map.getSource('nfip')) {
-            map.removeLayer('nfip-layer');
-            map.removeSource('nfip');
-        } else {
-            map.addSource('nfip', {
+
+        console.log('geojson?', geojson)
+        if (map.getSource('agency')) {
+            map.removeLayer('agency-layer');
+            map.removeSource('agency');
+
+            map.addSource('agency', {
                 type: 'geojson',
                 data: geojson
             });
             map.addLayer({
-                'id': 'nfip-layer',
-                'source': 'nfip',
+                'id': 'agency-layer',
+                'source': 'agency',
+                'type': 'circle',
+                'paint': {
+                    'circle-color': ["get", 'color'],
+                    'circle-opacity': 0.5,
+                    'circle-radius': 5,
+                }
+            })
+
+        } else {
+            map.addSource('agency', {
+                type: 'geojson',
+                data: geojson
+            });
+            map.addLayer({
+                'id': 'agency-layer',
+                'source': 'agency',
                 'type': 'circle',
                 'paint': {
                     'circle-color': ["get", 'color'],
@@ -107,6 +146,8 @@ export class NfipLayer extends MapLayer {
                 }
             })
         }
+
+        console.log('layer?', map.getLayer('agency-layer'))
     }
 
     toggleVisibilityOn() {
@@ -150,7 +191,7 @@ export class NfipLayer extends MapLayer {
                 if (tracts && tracts.value) {
                     this.tracts = tracts.value;
                     // show tracts
-                    this.map.setFilter('tracts-layer-nfip', ['all', ['in', 'geoid', ...tracts.value]]);
+                    this.map.setFilter('tracts-layer-agency', ['all', ['in', 'geoid', ...tracts.value]]);
                 }
 
                 // show cousubs or counties
@@ -158,7 +199,7 @@ export class NfipLayer extends MapLayer {
                     `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}`,
                     null);
                 if (countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0) {
-                    this.map.setFilter('tracts-layer-line-nfip', ['all', ['in', 'geoid', ...countiesOrCousubs.value]])
+                    this.map.setFilter('tracts-layer-line-agency', ['all', ['in', 'geoid', ...countiesOrCousubs.value]])
                 }
 
                 // get data and paint map
@@ -172,14 +213,14 @@ export class NfipLayer extends MapLayer {
         this.layers.forEach(layer => {
             this.map.setLayoutProperty(layer.id, 'visibility', "none");
         })
-        if (this.map.getSource('nfip')) {
-            this.map.removeLayer('nfip-layer');
-            this.map.removeSource('nfip');
+        if (this.map.getSource('agency')) {
+            this.map.removeLayer('agency-layer');
+            this.map.removeSource('agency');
         }
     }
 }
 
-export const NfipOptions = (options = {}) => {
+export const StateAssetsOptions = (options = {}) => {
 // const tractLayer = new TractLayer("Assets Layer",
     return {
         name: 'Assets',
@@ -209,7 +250,7 @@ export const NfipOptions = (options = {}) => {
         ],
         layers: [
             {
-                'id': 'tracts-layer-nfip',
+                'id': 'tracts-layer-agency',
                 'source': 'tracts',
                 'source-layer': 'tracts',
                 'type': 'fill',
@@ -219,7 +260,7 @@ export const NfipOptions = (options = {}) => {
                 }
             },
             {
-                'id': 'tracts-layer-line-nfip',
+                'id': 'tracts-layer-line-agency',
                 'source': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                 'source-layer': get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
                 'type': 'fill',
@@ -234,7 +275,7 @@ export const NfipOptions = (options = {}) => {
         geoFilter: [],
 
         popover: {
-            layers: ['nfip-layer'],
+            layers: ['agency-layer'],
             dataFunc: function (topFeature, features) {
                 const {id} = topFeature.properties;
                 let result = [];
