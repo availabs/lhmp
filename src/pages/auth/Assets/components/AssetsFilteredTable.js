@@ -428,7 +428,6 @@ class AssetsFilteredTable extends Component {
                                         }
 
                                     })
-
                                 if(BuildingTypeData.filter(tmpD => tmpD[primeColName] === agency).length === 0){
                                     BuildingTypeData.push({
                                         [primeColName]: agency,
@@ -463,9 +462,9 @@ class AssetsFilteredTable extends Component {
                                             {
                                                 [primeColName]: agency,
                                                 'TOTAL $ REPLACEMENT VALUE':
-                                                    tmpRecord['TOTAL $ REPLACEMENT VALUE'] + tmpRecord.geosCounted.includes(item) ? 0 : parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0)),
+                                                    tmpRecord['TOTAL $ REPLACEMENT VALUE'] + /*tmpRecord.geosCounted.includes(item) ? 0 :*/ parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0)),
                                                 'TOTAL # BUILDING TYPE' :
-                                                    tmpRecord['TOTAL # BUILDING TYPE'] + tmpRecord.geosCounted.includes(item) ? 0 : parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0)),
+                                                    tmpRecord['TOTAL # BUILDING TYPE'] + /*tmpRecord.geosCounted.includes(item) ? 0 :*/ parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0)),
                                                 geosCounted: [...tmpRecord.geosCounted, item],
                                                 ...Object.keys(riskZoneIdsAllValues)
                                                     .reduce((a, riskZone) => {
@@ -486,6 +485,9 @@ class AssetsFilteredTable extends Component {
                                     BuildingTypeData = [tmpRecord, ...BuildingTypeData.filter(btd => btd[primeColName] !== agency)]
                                     // BuildingTypeData.splice(tmpIndex,1, tmpRecord)
                                     // BuildingTypeData.push(tmpRecord)
+
+                                    totalBuildings += parseInt(get(graph, `${item}.agency.${agency}.sum.count.value`, 0));
+                                    totalBuildingsValue += parseInt(get(graph, `${item}.agency.${agency}.sum.replacement_value.value`, 0));
                                 }
                             })
                     } else{
