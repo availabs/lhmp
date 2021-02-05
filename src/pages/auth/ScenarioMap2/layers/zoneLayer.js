@@ -21,6 +21,7 @@ const IDENTITY = i => i;
 
 export class ZoneLayer extends MapLayer{
     onAdd(map) {
+        //localStorage.removeItem("zone")
         register(this, 'USER::SET_CENTROIDS', ["centroids"]);
         super.onAdd(map);
         if(store.getState().user.activeGeoid){

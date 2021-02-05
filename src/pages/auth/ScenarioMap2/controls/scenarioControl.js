@@ -35,6 +35,7 @@ class ScenarioControl extends React.Component {
         if(this.state.scenario_id){
             return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
                 .then(response =>{
+                    console.log('response',response)
                     return response
                 })
         }
@@ -44,16 +45,31 @@ class ScenarioControl extends React.Component {
     componentDidMount(){
         this.fetchFalcorDeps()
             .then(response =>{
+
                 let graph = response.json.plan[this.props.activePlan].scenarios
+                console.log(graph)
                 if(graph){
-                    graph.forEach(item =>{
-                        if(item.name.includes('HAZUS')){
-                            this.setState({
-                                scenario_id : item.id
-                            })
-                            this.props.setActiveRiskScenarioId([item])
-                        }
-                    })
+                    let newGraph = graph.filter(d => d.name.includes('HAZUS'))
+                    if (newGraph.length > 0){
+                        graph.forEach(item =>{
+                            if(item.name.includes('HAZUS')){
+                                this.setState({
+                                    scenario_id : item.id
+                                })
+                                this.props.setActiveRiskScenarioId([item])
+                            }
+                        })
+                    }else{
+                        graph.forEach(item =>{
+                            if(item.name.includes('DFIRM')){
+                                this.setState({
+                                    scenario_id : item.id
+                                })
+                                this.props.setActiveRiskScenarioId([item])
+                            }
+                        })
+                    }
+
 
                 }
             })

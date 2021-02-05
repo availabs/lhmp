@@ -20,6 +20,7 @@ class geoApi {
                     .then(response => response.json())
                     .then(geoResponse => {
                         this.data[geoid] = geoResponse;
+
                         resolve(geoResponse);
                     })
             }
