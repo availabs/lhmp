@@ -25,6 +25,8 @@ database_config.py
 
 /src/store/config.js
 
+#memoize cahe
+/data_cache
 
 #data tasks
 /tasks/atlas/build

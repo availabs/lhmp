@@ -16,6 +16,7 @@ import {CriticalInfrastructureLayer, CriticalInfrastructureOptions} from "./crit
 import {EvacuationRoutesLayer, EvacuationRoutesOptions} from "./evacuationLayer";
 import {VulnerableDemographicsLayer, VulnerableDemographicsOptions} from "./vulnerableDemographicsLayer";
 import {NfipLayer, NfipOptions} from "./nfipLayer";
+import {StateAssetsLayer, StateAssetsOptions} from "./stateAssetsLayer";
 import {getColorRange} from "constants/color-ranges";
 
 var _ = require('lodash')
@@ -27,7 +28,7 @@ const COLORS = getColorRange(12, "Set3");
 let UNIQUE = 0;
 const getUniqueId = () => `unique-id-${++UNIQUE}`
 let culvertsLayer, landUseLayer, commentMapLayer, evacuationRoutesLayer, vulnerableDemographicsLayer, hazardEventsLayer,
-    criticalInfrastructureLayer, nfipLayer = {}
+    criticalInfrastructureLayer, nfipLayer, stateAssetsLayer = {}
 const DynamicScenarioLayerFactory = (callingLayer, ...args) => {
     return new ScenarioLayer('scenario', ScenarioOptions())
 
@@ -76,6 +77,10 @@ const DynamicNfipLayerFactory = (callingLayer, ...args) => {
     return new NfipLayer('nfip', NfipOptions())
 }
 
+const DynamicStateAssetsLayerFactory = (callingLayer, ...args) => {
+    return new StateAssetsLayer('stateAssets', StateAssetsOptions())
+}
+
 
 export class ControlLayers extends MapLayer {
     onAdd(map) {
@@ -91,7 +96,7 @@ export class ControlLayers extends MapLayer {
                     map.resize();
                     map.fitBounds(bbox);
                     if (this.landUseLayer && this.commentMapLayer && this.culvertsLayer && this.evacuationRoutesLayer && this.vulnerableDemographicsLayer && this.hazardEventsLayer && this.criticalInfrastructureLayer
-                    && this.nfipLayer) {
+                    && this.nfipLayer && this.stateAssetsLayer) {
                         this.landUseLayer.toggleVisibilityOff()
                         this.commentMapLayer.toggleVisibilityOff()
                         this.culvertsLayer.toggleVisibilityOff()
@@ -100,6 +105,7 @@ export class ControlLayers extends MapLayer {
                         this.hazardEventsLayer.toggleVisibilityOff()
                         this.criticalInfrastructureLayer.toggleVisibilityOff()
                         this.nfipLayer.toggleVisibilityOff()
+                        this.stateAssetsLayer.toggleVisibilityOff()
                     }
                 })
         }
@@ -329,6 +335,13 @@ export class ControlLayers extends MapLayer {
                                                     nfipLayer = hel
                                                     this.nfipLayer = hel
                                                 })
+                                                this.doAction([
+                                                    "addDynamicLayer",
+                                                    DynamicStateAssetsLayerFactory
+                                                ]).then(hel => {
+                                                    stateAssetsLayer = hel
+                                                    this.stateAssetsLayer = hel
+                                                })
                                             })
                                         })
                                     })
@@ -393,6 +406,11 @@ export class ControlLayers extends MapLayer {
                 nfipLayer.toggleVisibilityOn()
             }
         }
+        if (layerName.includes("stateAssets")) {
+            if (Object.keys(stateAssetsLayer).length > 0) {
+                stateAssetsLayer.toggleVisibilityOn()
+            }
+        }
         if (layerName.includes("jurisdiction")) {
             this.jurisdictonLayer.toggleVisibilityOn()
         }
@@ -445,6 +463,11 @@ export class ControlLayers extends MapLayer {
         if (layerName.includes("nfip")) {
             if (Object.keys(nfipLayer).length > 0) {
                 nfipLayer.toggleVisibilityOff()
+            }
+        }
+        if (layerName.includes("stateAssets")) {
+            if (Object.keys(stateAssetsLayer).length > 0) {
+                stateAssetsLayer.toggleVisibilityOff()
             }
         }
         if (layerName.includes('jurisdiction')) {

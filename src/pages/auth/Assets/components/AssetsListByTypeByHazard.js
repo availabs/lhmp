@@ -10,6 +10,8 @@ import owner_config from 'pages/auth/Assets/components/BuildingByOwnerTypeConfig
 import ElementBox from "../../../../components/light-admin/containers/ElementBox";
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import BuildingByOwnerTypeConfig from "./BuildingByOwnerTypeConfig";
+import BuildingByAgency from 'pages/auth/Assets/components/BuildingsByAgencyConfig'
+
 const ATTRIBUTES = [
     'address',
     'prop_class',
@@ -94,8 +96,11 @@ class AssetsListByTypeByHazard extends React.Component {
 
     componentDidMount() {
         let data = [];
-        let types = this.props.match.params.typeIds.toString()
-
+        let types = this.props.match.params.type === 'agency' ?
+            this.props.match.params.typeIds.includes('-') ?
+                this.props.match.params.typeIds.split('-').map(agency => BuildingByAgency.filter(bba => bba.value === parseInt(agency))[0].name):
+                BuildingByAgency.filter(bba => bba.value === parseInt(this.props.match.params.typeIds))[0].name
+            : this.props.match.params.typeIds.toString()
         if (this.props.buildings) { // if building ids are given
             return  this.zonesData()
         }
@@ -193,6 +198,7 @@ class AssetsListByTypeByHazard extends React.Component {
 
                 ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
+                    types = this.props.match.params.type === 'agency' && typeof types === 'object' && types.length > 1 ? types[0] : types
                     let meta = response.json.building.meta;
                     //console.log('res', response.json.building.byGeoid[this.state.geoid][this.props.match.params.type][types].byIndex)
                     let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
@@ -221,7 +227,11 @@ class AssetsListByTypeByHazard extends React.Component {
 
     onPageChange(from, to) {
         let data = [];
-        let types = this.props.match.params.typeIds.toString()
+        let types = this.props.match.params.type === 'agency' ?
+            this.props.match.params.typeIds.includes('-') ?
+                this.props.match.params.typeIds.split('-').map(agency => BuildingByAgency.filter(bba => bba.value === parseInt(agency))[0].name):
+                BuildingByAgency.filter(bba => bba.value === parseInt(this.props.match.params.typeIds))[0].name
+            : this.props.match.params.typeIds.toString()
 
         if (this.props.buildings) { // if building ids are given
             return this.zonesData(from, to)
@@ -358,6 +368,8 @@ class AssetsListByTypeByHazard extends React.Component {
             }
         } else if (this.props.match.params.type === 'critical') {
             property_type = 'Critical Infrastructure'
+        }else if (this.props.match.params.type === 'agency') {
+            property_type = 'Agency'
         }
         return (
             <div>
@@ -373,7 +385,9 @@ class AssetsListByTypeByHazard extends React.Component {
                                             || !get(this.props, `match.params.typeIds`, '').toString().split('-')
                                                 .includes(type.toString().slice(0,1) + '00'))
                                         .map(type =>
-                                            get(BuildingByLandUseConfig.filter(f => f.value === type.toString()), `[0].name`, type)
+                                            this.props.match.params.type === 'agency' ?
+                                                get(BuildingByAgency.filter(f => f.value === parseInt(type)), `[0].name`, type):
+                                                get(BuildingByLandUseConfig.filter(f => f.value === type.toString()), `[0].name`, type)
                                         ).join(', ')
                                 }
                                 {hazard_risk ? ' and ' + ' ' + hazard_risk : null}

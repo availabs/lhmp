@@ -9,6 +9,7 @@ import {sendSystemMessage} from 'store/modules/messages';
 import TableSelector from "components/light-admin/tables/tableSelector"
 import config from 'pages/auth/Plan/config/guidance-config'
 import functions from "../../../pages/auth/Plan/functions";
+import ContentViewer from "./contentViewer";
 
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
@@ -246,6 +247,14 @@ class AvlFormsListTable extends React.Component {
                                 }
                             }
 
+                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer'){
+                                data[attribute] =
+                                    <ContentViewer
+                                        state={{[attribute]: graph[item].value.attributes[attribute]}}
+                                        title={attribute}
+                                    />
+                            }
+
                         }
                     });
                     //console.log('data',data)
@@ -317,6 +326,13 @@ class AvlFormsListTable extends React.Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
+                            }
+                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer'){
+                                data[attribute] =
+                                    <ContentViewer
+                                        state={{[attribute]: graph[item].value.attributes[attribute]}}
+                                        title={attribute}
+                                    />
                             }
                         }
                     })
