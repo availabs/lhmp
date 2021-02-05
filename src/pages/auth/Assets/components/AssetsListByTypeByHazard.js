@@ -141,7 +141,7 @@ class AssetsListByTypeByHazard extends React.Component {
                     this.setState({data: data, loading: false});
                 })
         } else if (this.props.match.params.scenarioIds) {
-            if(this.props.match.params.type === 'jurisdiction'  && typeof types === 'object'){
+            if(['agency', 'jurisdiction'].includes(this.props.match.params.type)  && typeof types === 'object'){
                 types = types.join('-');
             }
             this.setState({
@@ -278,7 +278,7 @@ class AssetsListByTypeByHazard extends React.Component {
 
                 })
         } else if (this.props.match.params.scenarioIds) {
-            if(this.props.match.params.type === 'jurisdiction' && typeof types === 'object'){
+            if(['agency', 'jurisdiction'].includes(this.props.match.params.type) && typeof types === 'object'){
                 types = types.join('-');
             }
             this.setState({
