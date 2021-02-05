@@ -140,6 +140,7 @@ export class ScenarioLayer extends MapLayer{
         let buildingIds = [];
         let activeRiskZoneId = this.activeRiskZoneId === '' && this.activeRiskZoneId !== null ? 1 : this.activeRiskZoneId
         let geoid = store.getState().user.activeGeoid
+        console.log('active',this.activeRiskZoneId)
         if(activeRiskZoneId && activeRiskZoneId !== '' && geoid) {
             return falcorGraph.get(['building','byGeoid',geoid,'byRiskZones',activeRiskZoneId,'data'])
                 .then(response =>{
