@@ -446,7 +446,7 @@ class AssetsView extends React.Component{
             return(
                 <div>
                     <Element>
-                        <h4>Services Info</h4>
+                        <h4>Utilities Info</h4>
                         <div className="table-responsive">
                             <table className="table table lightBorder">
                                 <thead>

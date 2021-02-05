@@ -100,7 +100,9 @@ class AssetsListByTypeByHazard extends React.Component {
             this.props.match.params.typeIds.includes('-') ?
                 this.props.match.params.typeIds.split('-').map(agency => BuildingByAgency.filter(bba => bba.value === parseInt(agency))[0].name):
                 BuildingByAgency.filter(bba => bba.value === parseInt(this.props.match.params.typeIds))[0].name
-            : this.props.match.params.typeIds.toString()
+            : ['jurisdiction'/*, 'critical'*/].includes(this.props.match.params.type) && this.props.match.params.typeIds.includes('-') ?
+                this.props.match.params.typeIds.split('-') :
+                this.props.match.params.typeIds.toString()
         if (this.props.buildings) { // if building ids are given
             return  this.zonesData()
         }
@@ -139,6 +141,9 @@ class AssetsListByTypeByHazard extends React.Component {
                     this.setState({data: data, loading: false});
                 })
         } else if (this.props.match.params.scenarioIds) {
+            if(this.props.match.params.type === 'jurisdiction'  && typeof types === 'object'){
+                types = types.join('-');
+            }
             this.setState({
                 loading: true
             });
@@ -187,22 +192,22 @@ class AssetsListByTypeByHazard extends React.Component {
             this.setState({
                 loading: true
             });
-            let type = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type;
+            let typeIndex = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type,
+                typeLen = this.props.match.params.type;
             return this.props.falcor.get(
                 ['building', 'byGeoid',
                     this.state.geoid,
-                    type,
+                    typeIndex,
                     types,
                     'byIndex', {from: 0, to: 50}, ATTRIBUTES],
-                ['building', 'byGeoid', this.state.geoid, type, types, 'length'],
+                ['building', 'byGeoid', this.state.geoid, typeLen, types, 'length'],
 
                 ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
-                    types = this.props.match.params.type === 'agency' && typeof types === 'object' && types.length > 1 ? types[0] : types
+                    types = typeof types === 'object' && types.length > 1 ? types[0] : types
                     let meta = response.json.building.meta;
-                    //console.log('res', response.json.building.byGeoid[this.state.geoid][this.props.match.params.type][types].byIndex)
-                    let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
-                    length = get(response, `json.building.byGeoid.${this.state.geoid}.${type}.${types}.length`, lengthDefault);
+                    let graph = response.json.building.byGeoid[this.state.geoid][typeIndex][types].byIndex;
+                    length = get(response, `json.building.byGeoid.${this.state.geoid}.${typeLen}.${types}.length`, lengthDefault);
                     Object.keys(graph).forEach(item => {
                         if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({
@@ -231,7 +236,9 @@ class AssetsListByTypeByHazard extends React.Component {
             this.props.match.params.typeIds.includes('-') ?
                 this.props.match.params.typeIds.split('-').map(agency => BuildingByAgency.filter(bba => bba.value === parseInt(agency))[0].name):
                 BuildingByAgency.filter(bba => bba.value === parseInt(this.props.match.params.typeIds))[0].name
-            : this.props.match.params.typeIds.toString()
+            : ['jurisdiction'/*, 'critical'*/].includes(this.props.match.params.type) && this.props.match.params.typeIds.includes('-') ?
+                this.props.match.params.typeIds.split('-') :
+                this.props.match.params.typeIds.toString()
 
         if (this.props.buildings) { // if building ids are given
             return this.zonesData(from, to)
@@ -271,6 +278,9 @@ class AssetsListByTypeByHazard extends React.Component {
 
                 })
         } else if (this.props.match.params.scenarioIds) {
+            if(this.props.match.params.type === 'jurisdiction' && typeof types === 'object'){
+                types = types.join('-');
+            }
             this.setState({
                 loading: true
             });
@@ -321,6 +331,7 @@ class AssetsListByTypeByHazard extends React.Component {
                     'byIndex', {from: from, to: to}, ATTRIBUTES],
                 ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
                 .then(response => {
+                    types = typeof types === 'object' && types.length > 1 ? types[0] : types
                     let meta = response.json.building.meta;
                     let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
                     Object.keys(graph).forEach(item => {

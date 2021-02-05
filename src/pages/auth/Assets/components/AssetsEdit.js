@@ -864,7 +864,7 @@ class AssetsEdit extends React.Component {
             {
                 title: (<span>
                     <span style={{fontSize: '0.7em'}}>Step 4</span>
-                    <br/><span style={{fontSize: '0.9em'}}>Services Info</span></span>),
+                    <br/><span style={{fontSize: '0.9em'}}>Utilities Info</span></span>),
                 content: (<div className="row">
                     <div className="col-sm-12">
                         <div className="form-group"><label htmlFor>Heat Type</label>
