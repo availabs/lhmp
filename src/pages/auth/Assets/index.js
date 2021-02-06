@@ -9,6 +9,7 @@ import get from "lodash.get";
 import styled from 'styled-components'
 import {header} from "./components/header"
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
+import CriticalMeta from 'pages/auth/Assets/components/criticalFacilityMeta'
 import BuildingByHazardRiskPieChart from "./components/BuildingByHazardRiskPieChart";
 import BuildingByHazardRiskTable from "./components/BuildingByHazardRiskTable";
 import AssetsFilteredTable from "./components/AssetsFilteredTable";
@@ -47,6 +48,10 @@ class AssetsByTypeIndex extends React.Component {
                 domain: BuildingByLandUseConfig.filter((config) => parseInt(config.value) % 100 === 0 ? config : ''),
                 value: []
             },
+            criticalFilter: {
+                domain: Object.keys(CriticalMeta).filter((config) => parseInt(config) % 100 === 0 ).map(config => ({value: config, name: CriticalMeta[config]})),
+                value: []
+            },
             height: '2565px'
 
         };
@@ -66,10 +71,10 @@ class AssetsByTypeIndex extends React.Component {
         this.setState({...this.state, [e.target.id]: e.target.value});
     };
 
-    handleMultiSelectFilterChange(e) {
-        let newFilter = this.state.filter;
-        newFilter.value = e;
-        this.setState({filter: newFilter})
+    handleMultiSelectFilterChange(type, value) {
+        let newFilter = this.state[type];
+        newFilter.value = value;
+        this.setState({[type]: newFilter})
     }
 
     fetchFalcorDeps() {
@@ -103,7 +108,18 @@ class AssetsByTypeIndex extends React.Component {
                 {JSON.stringify(this.state.filter.value)}
                 <MultiSelectFilter
                     filter = {this.state.filter}
-                    setFilter = {this.handleMultiSelectFilterChange}
+                    setFilter = {this.handleMultiSelectFilterChange.bind(this,'filter')}
+                />
+            </div>
+        )
+    }
+
+    renderCriticalMenu(){
+        return (
+            <div>
+                <MultiSelectFilter
+                    filter = {this.state.criticalFilter}
+                    setFilter = {this.handleMultiSelectFilterChange.bind(this, 'criticalFilter')}
                 />
             </div>
         )
@@ -143,6 +159,26 @@ class AssetsByTypeIndex extends React.Component {
                                                 geoid={[this.state.geoid]}
                                                 groupBy={'propType'}
                                                 groupByFilter={this.state.filter.value}
+                                                scenarioId={this.state.scenarioIds}
+                                                height={'fit-content'}
+                                                width={'100%'}
+                                                tableClass={`table table-sm table-lightborder table-hover`}
+                                            />
+                                            : ''
+                                    }
+                                </div>
+                            </div>
+
+                            <div className='element-wrapper'>
+                                <div className='element-box'>
+                                    {this.renderCriticalMenu()}
+                                    <h4>Critical Infrastructure</h4>
+                                    {
+                                        this.state.geoid ?
+                                            <AssetsFilteredTable
+                                                geoid={[this.state.geoid]}
+                                                groupBy={'critical'}
+                                                groupByFilter={this.state.criticalFilter.value}
                                                 scenarioId={this.state.scenarioIds}
                                                 height={'fit-content'}
                                                 width={'100%'}

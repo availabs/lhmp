@@ -55,7 +55,7 @@ const TABS = [
             "nbr_bedrooms",
             "first_floor_elevation"
         ] },
-    { name: "Services",
+    { name: "Utilities",
         props: [
             "heat_type"
         ] },
