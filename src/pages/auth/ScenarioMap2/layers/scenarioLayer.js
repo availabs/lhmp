@@ -224,7 +224,8 @@ export class ScenarioLayer extends MapLayer{
             buildingRadius = {},
             buildingColors = {};
 
-        if(graph){
+        if(graph && graph.length > 0){
+
             graph.forEach(item => {
                 if(parseFloat(item['hazard_loss_dollars']) > 0 && parseFloat(item['hazard_loss_dollars']) <= 15000){
                     buildingColors[item.building_id] = "#fcffff"
