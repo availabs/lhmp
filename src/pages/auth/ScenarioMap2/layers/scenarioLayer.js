@@ -140,7 +140,7 @@ export class ScenarioLayer extends MapLayer{
         let buildingIds = [];
         let activeRiskZoneId = this.activeRiskZoneId === '' && this.activeRiskZoneId !== null ? 1 : this.activeRiskZoneId
         let geoid = store.getState().user.activeGeoid
-        console.log('active',this.activeRiskZoneId)
+
         if(activeRiskZoneId && activeRiskZoneId !== '' && geoid) {
             return falcorGraph.get(['building','byGeoid',geoid,'byRiskZones',activeRiskZoneId,'data'])
                 .then(response =>{
@@ -224,7 +224,8 @@ export class ScenarioLayer extends MapLayer{
             buildingRadius = {},
             buildingColors = {};
 
-        if(graph){
+        if(graph && graph.length > 0){
+
             graph.forEach(item => {
                 if(parseFloat(item['hazard_loss_dollars']) > 0 && parseFloat(item['hazard_loss_dollars']) <= 15000){
                     buildingColors[item.building_id] = "#fcffff"

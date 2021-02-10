@@ -35,7 +35,6 @@ class ScenarioControl extends React.Component {
         if(this.state.scenario_id){
             return this.props.falcor.get(['plan',[this.props.activePlan],'scenarios'])
                 .then(response =>{
-                    console.log('response',response)
                     return response
                 })
         }
@@ -47,7 +46,7 @@ class ScenarioControl extends React.Component {
             .then(response =>{
 
                 let graph = response.json.plan[this.props.activePlan].scenarios
-                console.log(graph)
+
                 if(graph){
                     let newGraph = graph.filter(d => d.name.includes('HAZUS'))
                     if (newGraph.length > 0){
