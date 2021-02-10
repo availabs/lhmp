@@ -7,15 +7,13 @@ import {falcorGraph} from "store/falcorGraph"
 import {unregister} from "../../../../components/AvlMap/ReduxMiddleware";
 import BuildingByAgency from 'pages/auth/Assets/components/BuildingsByAgencyConfig'
 
-const IDENTITY = i => i;
-
 const ATTRIBUTES =
-    [  'building_id',  'address', 'prop_class', 'owner_type', 'replacement_value', 'agency' ]
-const ADDRESS_ATTR = ['address_line_1', 'address_line_2', 'city', 'state', 'zip_code']
-let eventsGeo = {
-    type: "FeatureCollection",
-    features: []
-};
+    ['building_id', 'address', 'prop_class', 'owner_type', 'replacement_value', 'agency', 'flood_zone']
+const floodZones = {
+    '100 Year': ['AE', 'A', 'AH', 'VE', 'AO'],
+    '500 Year': ['X'],
+    none: [null]
+}
 
 export class StateAssetsLayer extends MapLayer {
     onRemove(map) {
@@ -43,6 +41,16 @@ export class StateAssetsLayer extends MapLayer {
 
     }
 
+    setAgencyFilter(geos) {
+        this.agencyFilter = geos;
+        this.fetchData().then(data => this.receiveData(this.map, data))
+    }
+
+    setFloodPlainFilter(floodType) {
+        this.floodPlainFilter = get(floodZones, [floodType], null);
+        this.fetchData().then(data => this.receiveData(this.map, data))
+    }
+
     fetchData(graph) {
         if (this.tracts && this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
 
@@ -54,11 +62,14 @@ export class StateAssetsLayer extends MapLayer {
 
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
 
-        let agencyList = BuildingByAgency.map(bba => bba.name);
+        let agencyList = BuildingByAgency
+            .map(bba => bba.name)
+            .filter(agency => this.agencyFilter.length ? this.agencyFilter.includes(agency) : true)
+
         return falcorGraph.get(
-            ['building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList , 'length']
+            ['building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList, 'length']
         ).then(res => {
-            let length = get(res, ['json', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0] , 'length'])
+            let length = get(res, ['json', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'length'])
             return falcorGraph.get(
                 ['building', 'byGeoid',
                     store.getState().user.activeGeoid,
@@ -66,13 +77,15 @@ export class StateAssetsLayer extends MapLayer {
                     agencyList,
                     'byIndex', {from: 0, to: length - 1}, ATTRIBUTES]
             ).then(finalRes => {
+
                 let buildingIds =
                     Object.values(
                         get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'byIndex'], {})
                     )
-                        .map(v => get(v, ['value',2], null))
+                        .map(v => get(v, ['value', 2], null))
                         .filter(v => v);
                 this.buildingIds = buildingIds || [];
+
                 if (!buildingIds.length) return Promise.resolve();
                 return falcorGraph.get(['building', 'geom', 'byBuildingId', buildingIds, 'centroid'])
             })
@@ -88,8 +101,8 @@ export class StateAssetsLayer extends MapLayer {
                     .map(buildingId => ({
                         buildingId,
                         geom: get(rawGraph, ['building', 'geom', 'byBuildingId', buildingId, 'centroid', 'value'],
-                        null)
-    }))
+                            null)
+                    }))
                     .filter(f => f.geom);
 
         let geojson = {
@@ -101,18 +114,23 @@ export class StateAssetsLayer extends MapLayer {
 
         graph
             .forEach((building, buildingI) => {
-                geojson.features.push({
-                    "type": "Feature",
-                    "properties": {
-                        id: buildingI,
-                        color: '#11ff39',
-                        ...get(rawGraph, ['building', 'byId', building.buildingId]),
-                    },
-                    "geometry": get(building, `geom`, {})
-                })
+                if (
+                    ((this.agencyFilter.length && this.agencyFilter.includes(get(rawGraph, ['building', 'byId', building.buildingId, 'agency']))) || !this.agencyFilter.length) &&
+                    ((this.floodPlainFilter && this.floodPlainFilter.length && this.floodPlainFilter.includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone']))) || !this.floodPlainFilter)
+                )
+
+                    geojson.features.push({
+                        "type": "Feature",
+                        "properties": {
+                            id: buildingI,
+                            color: '#11ff39',
+                            ...get(rawGraph, ['building', 'byId', building.buildingId]),
+                            flood_zone: Object.keys(floodZones).filter(floodZone => floodZones[floodZone].includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone'])))[0]
+                        },
+                        "geometry": get(building, `geom`, {})
+                    })
             });
 
-        console.log('geojson?', geojson)
         if (map.getSource('agency')) {
             map.removeLayer('agency-layer');
             map.removeSource('agency');
@@ -148,8 +166,6 @@ export class StateAssetsLayer extends MapLayer {
                 }
             })
         }
-
-        console.log('layer?', map.getLayer('agency-layer'))
     }
 
     toggleVisibilityOn() {
@@ -274,7 +290,7 @@ export const StateAssetsOptions = (options = {}) => {
         ],
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
         markers: [],
-        geoFilter: [],
+        agencyFilter: [],
 
         popover: {
             layers: ['agency-layer'],

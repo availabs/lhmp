@@ -5,28 +5,76 @@ import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import {setActiveHazard, setActiveYear} from 'store/modules/hazardEvents'
-import criticalInfrastructureByCode from 'pages/auth/ScenarioMap2/components/criticalInfrastructureByCode'
-import functions from "../../Plan/functions";
-
+import BuildingsByAgencyConfig from 'pages/auth/Assets/components/BuildingsByAgencyConfig'
+import styled from 'styled-components'
+import SearchableDropDown from "../../../../components/filters/searchableDropDown";
+import FloodPlainTable from "../components/floodPlainTable";
 var _ = require("lodash")
 
+const DIV = styled.div`
+    *{
+        background-color: #efefef;
+    }
+`
 class NfipControl extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            agencyFilter: {
+                domain: BuildingsByAgencyConfig.map(config => ({value: config, name: BuildingsByAgencyConfig[config]})),
+                value: []
+            },
+            floodZones: [
+                {value: null, label: '--Select Flood plain--'},
+                {value: 'none', label: 'None'},
+                {value: '100 Year', label: '100 Year'},
+                {value: '500 Year', label: '500 Year'},
+            ],
+            floodZone: null,
+            selectedAgency: []
         }
+
+        this.handleChange = this.handleChange.bind(this)
     }
 
 
     handleChange(e) {
+
     };
 
     render() {
         return (
             <React.Fragment>
-                <div className='row' style={{marginRight: 0}}>
-                </div>
+                <h6>Agency : </h6>
+                <MultiSelectFilter
+                    filter={{
+                        domain: BuildingsByAgencyConfig,
+                        value: this.state.selectedAgency
+                    }}
+                    setFilter={(e) => {
+                        this.props.layer.layer.stateAssetsLayer.setAgencyFilter(e.map(e1 => BuildingsByAgencyConfig.filter(bba => bba.value === e1)[0].name))
+                        this.setState({selectedAgency: [...e]})
+                    }}
+                    placeHolder={'Select Agency'}
+                />
+
+                <h6>Flood plain :</h6>
+                <SearchableDropDown
+                    data={this.state.floodZones}
+                    placeholder={'Select Flood plain'}
+                    id = "floodZone"
+                    onChange={e =>{
+                        this.props.layer.layer.stateAssetsLayer.setFloodPlainFilter(e)
+                        this.setState({'floodZone': e});
+                    }}
+                    value={this.state.floodZones.filter(fz => fz.value === this.state.floodZone)[0]}
+                />
+
+                <FloodPlainTable
+                    scenarioId={localStorage.getItem("scenario_id")}
+                    agencyFilter={this.state.selectedAgency.map(e1 => BuildingsByAgencyConfig.filter(bba => bba.value === e1)[0].name)}
+                />
             </React.Fragment>
 
         )
