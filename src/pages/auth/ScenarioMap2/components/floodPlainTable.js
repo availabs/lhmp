@@ -157,14 +157,15 @@ class floodPlainTable extends React.Component {
                             return (
                                 <tr key={i}>
                                     <td>
-                                        <a href={"#"}
+                                        {/*<a href={"#"}
                                            id={d.zone_geoid}
                                            name={d.zone_name}
                                            onClick={e => this.setState({
                                                showZoneModal: true,
                                            })}>
                                             {d}
-                                        </a>
+                                        </a>*/}
+                                        {d}
                                         {this.state.showZoneModal &&
                                         this.state.flood_zone === d
                                             ?
