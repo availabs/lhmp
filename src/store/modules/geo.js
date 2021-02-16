@@ -48,7 +48,8 @@ export const getGeoMerge = (geoid = 36, geoType = 'counties') => {
 };
 
 export const getAllGeo = (parentGeo) => {
-    return (dispatch) => {
+    return async (dispatch) => {
+        if (!parentGeo) return;
         let childGeo = parentGeo.length === 2 ? 'counties' : 'municipalities';
 
         falcorGraph.get(["geo", parentGeo, childGeo])

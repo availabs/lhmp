@@ -22,6 +22,8 @@ var _ = require('lodash')
 class FormTableViewer extends React.Component{
     
     fetchFalcorDeps(){
+        if (!this.props.activeGeoid || !this.props.activePlan) return Promise.resolve();
+
         let formType = this.props.config.type
         // get columns to display
         let formAttributes = this.props.config.columns.map(d => d.accessor);

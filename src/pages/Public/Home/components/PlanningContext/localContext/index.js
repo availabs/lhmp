@@ -38,10 +38,12 @@ class LocalContext extends Component {
 
     componentWillMount() {
         const {activeGeoid} = this.props;
-        this.props.getChildGeo(activeGeoid.slice(0, 2), 'counties');
-        this.props.getGeoMesh(activeGeoid.slice(0, 2), 'counties');
-        this.props.getGeoMerge(activeGeoid.slice(0, 2), 'counties');
-        this.props.getChildGeo(activeGeoid.slice(0, 2), 'cousubs');
+        if(activeGeoid){
+            this.props.getChildGeo(activeGeoid.slice(0, 2), 'counties');
+            this.props.getGeoMesh(activeGeoid.slice(0, 2), 'counties');
+            this.props.getGeoMerge(activeGeoid.slice(0, 2), 'counties');
+            this.props.getChildGeo(activeGeoid.slice(0, 2), 'cousubs');
+        }
     }
     componentDidMount() {
         Viewport().register(this, this.setState);
@@ -49,6 +51,7 @@ class LocalContext extends Component {
 
     componentWillReceiveProps(newProps) {
         const {activeGeoid, geoLevel, hazard} = newProps;
+        if (! activeGeoid) return;
         let geojson = null,
             counties = null,
             activeCounty = null;

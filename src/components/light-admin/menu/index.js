@@ -5,7 +5,7 @@ import {GeoDropdown} from 'pages/auth/Plan/functions'
 import {AvatarUser, AvatarUserMobile, LoginMenu, LoginMenuMobile, Logo} from './TopMenu'
 import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
-import {setActiveCousubid} from 'store/modules/user'
+import {setActiveCousubid, setActiveGeoid, setActivePlan} from 'store/modules/user'
 import {getAllGeo} from 'store/modules/geo'
 import get from 'lodash.get'
 import styled from "styled-components";
@@ -34,8 +34,15 @@ class Menu extends Component {
                 )
             })
     }*/
+
+    componentDidUpdate(prevProps, prevState) {
+        if(!_.isEqual(prevProps.allGeo, this.props.allGeo) || prevProps.activeGeoid !==this.props.activeGeoid || prevProps.activePlan !== this.props.activePlan || this.props.activeCousubid !== prevProps.activeCousubid){
+            this.props.getAllGeo(this.props.activeGeoid)
+        }
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
-        return !_.isEqual(nextProps.allGeo, this.props.allGeo)
+        return !_.isEqual(nextProps.allGeo, this.props.allGeo) || nextProps.activeGeoid !==this.props.activeGeoid || nextProps.activePlan !== this.props.activePlan || this.props.activeCousubid !== nextProps.activeCousubid
     }
     render() {
         if (this.props.menuSettings.hide) return null;
@@ -172,5 +179,5 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = {setActiveCousubid, getAllGeo};
+const mapDispatchToProps = {setActiveGeoid, setActiveCousubid, setActivePlan, getAllGeo};
 export default connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Menu))

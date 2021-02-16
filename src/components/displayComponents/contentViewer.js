@@ -266,13 +266,13 @@ class ContentViewer extends Component {
                         this.props.requirement.slice(-7) === 'callout' ? this.renderCallout() : null
                     }
                     {
-                        !this.props.hideCounty || this.props.activeCousubid.length === 5 ?
+                        !this.props.hideCounty || get(this.props.activeCousubid, ['length'], 0) === 5 ?
                             <CONTENTDIV>
                                 {this.renderContent(true)}
                             </CONTENTDIV> : null
                     }
                     {
-                        !this.props.hideJurisdictionAnnex && this.props.activeCousubid.length > 5 && this.state.contentFromDB ?
+                        !this.props.hideJurisdictionAnnex && get(this.props.activeCousubid, ['length'], 0) > 5 && this.state.contentFromDB ?
                             <ElementBox style={{backgroundColor: 'aliceblue'}}>
                                 <ANNEX_DIV> {functions.formatName(get(this.props.allGeo, [this.props.user.activeCousubid]), this.props.user.activeCousubid)} Jurisdictional Annex</ANNEX_DIV>
                                 {this.renderContent()}
