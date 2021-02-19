@@ -272,7 +272,7 @@ const renderReqNav = function(allRequirenments, pageIndex){
 }
 
 const renderElement = function(element, section, index, user) {
-
+    element = Object.assign(element, {title: element.title.replace('::activeGeo -', '')})
     return (
         <div
              style={{
