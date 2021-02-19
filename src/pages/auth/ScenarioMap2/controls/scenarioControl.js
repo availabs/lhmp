@@ -48,10 +48,10 @@ class ScenarioControl extends React.Component {
                 let graph = response.json.plan[this.props.activePlan].scenarios
 
                 if(graph){
-                    let newGraph = graph.filter(d => d.name.includes('HAZUS'))
+                    let newGraph = graph.filter(d => d.name.includes('DFIRM'))
                     if (newGraph.length > 0){
                         graph.forEach(item =>{
-                            if(item.name.includes('HAZUS')){
+                            if(item.name.includes('DFIRM')){
                                 this.setState({
                                     scenario_id : item.id
                                 })
@@ -60,7 +60,7 @@ class ScenarioControl extends React.Component {
                         })
                     }else{
                         graph.forEach(item =>{
-                            if(item.name.includes('DFIRM')){
+                            if(item.name.includes('HAZUS')){
                                 this.setState({
                                     scenario_id : item.id
                                 })
