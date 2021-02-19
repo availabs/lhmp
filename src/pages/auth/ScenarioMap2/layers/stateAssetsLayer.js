@@ -123,7 +123,7 @@ export class StateAssetsLayer extends MapLayer {
                         "type": "Feature",
                         "properties": {
                             id: buildingI,
-                            color: '#11ff39',
+                            color: '#f3aa33',
                             ...get(rawGraph, ['building', 'byId', building.buildingId]),
                             flood_zone: Object.keys(floodZones).filter(floodZone => floodZones[floodZone].includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone'])))[0]
                         },
@@ -147,6 +147,8 @@ export class StateAssetsLayer extends MapLayer {
                     'circle-color': ["get", 'color'],
                     'circle-opacity': 0.5,
                     'circle-radius': 5,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#ccc'
                 }
             })
 
@@ -163,6 +165,8 @@ export class StateAssetsLayer extends MapLayer {
                     'circle-color': ["get", 'color'],
                     'circle-opacity': 0.5,
                     'circle-radius': 5,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#ccc'
                 }
             })
         }
