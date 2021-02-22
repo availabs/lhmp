@@ -131,7 +131,7 @@ class AssetsFilteredTable extends Component {
                 })
                 .forEach((item,i) =>{
                     if (this.props.groupBy === 'propType' || this.props.groupBy === 'critical'){
-                        if (parseInt(item) % moduloBy === 0 || this.props.groupBy === 'agency' ){
+                        if (parseInt(item) % moduloBy === 0){
                             //sum subcategories
                             let tmpSumCount = 0, tmpSumReplacementValue = 0, subCats = [], riskZoneIdsAllValues = {},assetsFilteredByRiskZoneId = []
 
@@ -345,34 +345,33 @@ class AssetsFilteredTable extends Component {
 
                             })
 
-                        BuildingTypeData.push({
-                            [primeColName]: this.props.groupBy === 'jurisdiction' || this.props.groupBy === 'state' ?
-                                functions.formatName(get(this.props.geoidData, `${item}.name`, 'N/A'), item) :
-                                this.props.groupBy === 'critical' ?
-                                    item :
-                                    get(config.filter(f => f.value === item).pop(), `name`, null),
-                            'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0)),
-                            'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0)),
-                            ...Object.keys(riskZoneIdsAllValues)
-                                .reduce((a, riskZone) => {
-                                    a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
-                                    a[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
+                        if(parseInt(get(graph, `${item}.owner_type.2.sum.count.value`))){
+                            BuildingTypeData.push({
+                                [primeColName]:
+                                    functions.formatName(get(this.props.geoidData, `${item}.name`, 'N/A'), item),
+                                'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0)),
+                                'TOTAL # BUILDING TYPE' : parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0)),
+                                ...Object.keys(riskZoneIdsAllValues)
+                                    .reduce((a, riskZone) => {
+                                        a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
+                                        a[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
 
-                                    riskZoneIdsAllValuesTotal[riskZone + ' #'] ?
-                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] += parseInt(riskZoneIdsAllValues[riskZone].count) || 0 :
-                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
+                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] ?
+                                            riskZoneIdsAllValuesTotal[riskZone + ' #'] += parseInt(riskZoneIdsAllValues[riskZone].count) || 0 :
+                                            riskZoneIdsAllValuesTotal[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
 
-                                    riskZoneIdsAllValuesTotal[riskZone + ' $'] ?
-                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] += parseInt(riskZoneIdsAllValues[riskZone].value) || 0 :
-                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
+                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] ?
+                                            riskZoneIdsAllValuesTotal[riskZone + ' $'] += parseInt(riskZoneIdsAllValues[riskZone].value) || 0 :
+                                            riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
 
-                                    return a
-                                }, {}),
-                            link: linkBase + `/geo/${item}`
-                        });
+                                        return a
+                                    }, {}),
+                                link: linkBase + `/geo/${item}`
+                            });
 
-                        totalBuildings += parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0));
-                        totalBuildingsValue += parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0));
+                            totalBuildings += parseInt(get(graph, `${item}.owner_type.2.sum.count.value`, 0));
+                            totalBuildingsValue += parseInt(get(graph, `${item}.owner_type.2.sum.replacement_value.value`, 0));
+                        }
                     } else if(this.props.groupBy === 'agency') {
                         //Object.keys(get(graph, `${item}.agency`, {}))
                         BuildingByAgency.map(bba => bba.name)

@@ -85,10 +85,14 @@ class AssetsByTypeIndex extends React.Component {
             ['plan',[this.props.activePlan],'scenarios']
         )
             .then(response => {
-                this.setState({scenarioIds:
-                        get(response, `json.plan.${this.props.activePlan}.scenarios`, [])
-                            .filter(f => f.name.includes('DFIRM'))
-                            .map(f => f.id)})
+                let scenarioIds = get(response, `json.plan.${this.props.activePlan}.scenarios`, [])
+
+                if (scenarioIds){
+                    this.setState({scenarioIds:
+                            scenarioIds
+                                .filter(f => f.name.includes('DFIRM'))
+                                .map(f => f.id)})
+                }
 
                 return this.props.falcor.get(
                     ['geo',
