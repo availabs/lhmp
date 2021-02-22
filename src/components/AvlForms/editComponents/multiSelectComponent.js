@@ -40,6 +40,8 @@ class MultiSelectComponent extends React.PureComponent {
         //console.log('data after conditions', data, this.props)data = data[0] && data[0].category ? _.uniqBy(data,'category').map(m => m.category) : data
         let finalValue = this.props.state[this.props.title] ? this.props.state[this.props.title] : this.props.defaultValue ? this.props.defaultValue : [];
         data = this.props.defaultValue ? [...this.props.defaultValue, ...data] : data
+        finalValue = finalValue && typeof finalValue === 'string' && finalValue.includes('[') ?
+            finalValue.slice(1,-1).split(',') : finalValue
         return (
             <div className="col-sm-12" onClick={this.props.onClick ? this.props.onClick : () => {
             }}>

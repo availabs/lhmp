@@ -697,6 +697,9 @@ class AvlFormsNewData extends React.Component{
     }
 
     renderHeaderText(header){
+        header = header && typeof header === 'string' && header.indexOf('[') === 0 && header.indexOf(']') === header.length - 1 ?
+            header.slice(1,-1).split(',') : header
+
         return (
             this.props.geoData[header] ?
                 get(this.props.geoData, `${header}.name`, '') :
