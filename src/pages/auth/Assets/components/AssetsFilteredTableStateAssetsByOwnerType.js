@@ -43,14 +43,34 @@ class AssetsFilteredTable extends Component {
                             ...acc,
                             ...Object.values(this.props.filterData)[0]
                                 .reduce((a,ownerType) => [...a, ...get(response, ['json', 'building', 'statewide', 'byGeoid', geoid, 'owner_type', ownerType, 'ownerName', 'list'])], [])
-                        ] ,[]);
+                        ] ,[]).filter(f => f);
                 if (ownerNames && ownerNames.length){
                     let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.geoid}.cousubs.value`, []);
-                    return this.props.falcor.get(
-                        ['geo', allGeo, ['name']],
-                        ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'byOwnerName', ownerNames, 'all'],
-                        ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', ownerNames, 'sum', ['count', 'replacement_value']]
-                    );
+
+                    if (this.props.activeGeoid.length === 2){
+                        let iChunk = 20,
+                            jChunk = 20
+                        reqs = []
+
+                        for (let j = 0; j < ownerNames.length; j += jChunk){
+                            reqs.push(
+                                ['building', 'statewide', 'byGeoid', this.props.geoid[0]/* 36001 fetches data for '36' */, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'byOwnerName', ownerNames.slice(j, j+jChunk), 'all'],
+
+                            )
+                            for (let i = 0; i < this.props.geoid.length; i += iChunk){
+                            reqs.push(
+                                ['building', 'statewide', 'byGeoid', this.props.geoid.slice(i, i+iChunk), 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', ownerNames.slice(j, j+jChunk), 'sum', ['count', 'replacement_value']]
+                            )
+                        }
+                    }
+
+                    }else{
+                        reqs = [
+                            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'byOwnerName', ownerNames, 'all'],
+                            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', ownerNames, 'sum', ['count', 'replacement_value']]
+                        ]
+                    }
+                    return this.props.falcor.get(...reqs);
                 }
 
                 return Promise.resolve();
@@ -72,7 +92,7 @@ class AssetsFilteredTable extends Component {
                 ...Object.values(this.props.filterData)[0]
                     .reduce((a, ownerType) => [...a, ...get(this.props.buildingStatewideData, [geoid, 'owner_type', ownerType, 'ownerName', 'list', 'value'], [])], [])
             ] ,[])
-        ownerNames = _.unionBy(ownerNames)
+        ownerNames = _.uniqBy(ownerNames)
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
