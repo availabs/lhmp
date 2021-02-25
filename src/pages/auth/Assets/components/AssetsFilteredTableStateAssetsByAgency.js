@@ -31,30 +31,10 @@ class AssetsFilteredTable extends Component {
 
     fetchFalcorDeps() {
 
-        let reqs = [['geo', this.props.geoid, ['name']],
-            ["geo", this.props.geoid, 'cousubs'],
-            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'ownerName', 'list']
-        ]
-        return this.props.falcor.get(...reqs)
-            .then(response => {
-                let ownerNames =
-                    this.props.geoid
-                        .reduce((acc, geoid) => [
-                            ...acc,
-                            ...Object.values(this.props.filterData)[0]
-                                .reduce((a,ownerType) => [...a, ...get(response, ['json', 'building', 'statewide', 'byGeoid', geoid, 'owner_type', ownerType, 'ownerName', 'list'])], [])
-                        ] ,[]);
-                if (ownerNames && ownerNames.length){
-                    let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.geoid}.cousubs.value`, []);
-                    return this.props.falcor.get(
-                        ['geo', allGeo, ['name']],
-                        ['building', 'statewide', 'byGeoid', this.props.geoid, 'agency', 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all'],
-                        ['building', 'statewide', 'byGeoid', this.props.geoid, 'agency', 'sum', ['count', 'replacement_value']]
-                    );
-                }
-
-                return Promise.resolve();
-            })
+        return this.props.falcor.get(
+            ['building', 'statewide', 'byGeoid', this.props.geoid, 'agency', 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'all'],
+            ['building', 'statewide', 'byGeoid', this.props.geoid, 'agency', 'sum', ['count', 'replacement_value']]
+        );
     }
 
     buildingTable() {
@@ -66,13 +46,7 @@ class AssetsFilteredTable extends Component {
         let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/ownerType/2`;
         let linkTrail = ``
         let graph = this.props.buildingStatewideData;
-        let ownerNames = this.props.geoid
-            .reduce((acc, geoid) => [
-                ...acc,
-                ...Object.values(this.props.filterData)[0]
-                    .reduce((a, ownerType) => [...a, ...get(this.props.buildingStatewideData, [geoid, 'owner_type', ownerType, 'ownerName', 'list', 'value'], [])], [])
-            ] ,[])
-        ownerNames = _.unionBy(ownerNames)
+
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};

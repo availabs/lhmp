@@ -31,8 +31,7 @@ class AssetsFilteredTable extends Component {
 
     fetchFalcorDeps() {
 
-        let reqs = [['geo', this.props.geoid, ['name']],
-            ["geo", this.props.geoid, 'cousubs'],
+        let reqs = [
             ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'ownerName', 'list']
         ]
         return this.props.falcor.get(...reqs)
@@ -45,7 +44,6 @@ class AssetsFilteredTable extends Component {
                                 .reduce((a,ownerType) => [...a, ...get(response, ['json', 'building', 'statewide', 'byGeoid', geoid, 'owner_type', ownerType, 'ownerName', 'list'])], [])
                         ] ,[]).filter(f => f);
                 if (ownerNames && ownerNames.length){
-                    let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.geoid}.cousubs.value`, []);
 
                     if (this.props.activeGeoid.length === 2){
                         let iChunk = 20,
