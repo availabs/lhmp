@@ -76,6 +76,15 @@ class NfipTable extends React.Component {
             .forEach(geoid => {
             const graph = this.props.nfip.losses.byGeoid[geoid].allTime,
                 name = this.props.allGeo[geoid];
+            let total = {
+                [label]: 'Total',
+                "total claims": 0,
+                "paid claims": 0,
+                "total payments": 0,
+                'repetitive loss': 0,
+                'severe repetitive loss': 0,
+                '# of policies': 0,
+            }
             if(graph.total_losses > 0 || true){
                 data.push({
                     [label]: functions.formatName(name, geoid),
@@ -88,7 +97,16 @@ class NfipTable extends React.Component {
                     'severe repetitive loss': +graph.severe_repetitive_loss,
                     '# of policies': +graph.number_policies,
                 })
+                    total["total claims"] += graph.total_losses
+                    total["paid claims"] += (+graph.total_losses - +graph.cwop_losses)
+                    total["total payments"] += graph.total_payments
+                    total['repetitive loss'] += +graph.repetitive_loss
+                    total['severe repetitive loss'] += +graph.severe_repetitive_loss
+                    total['# of policies'] += +graph.number_policies
+                
             }
+            
+            data.push(total)
         })
 
         return {
