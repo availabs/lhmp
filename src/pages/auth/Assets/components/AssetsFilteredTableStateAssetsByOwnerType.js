@@ -46,8 +46,8 @@ class AssetsFilteredTable extends Component {
                 if (ownerNames && ownerNames.length){
 
                     if (this.props.activeGeoid.length === 2){
-                        let iChunk = 20,
-                            jChunk = 20
+                        let iChunk = 100,
+                            jChunk = 200
                         reqs = []
 
                         for (let j = 0; j < ownerNames.length; j += jChunk){
@@ -68,7 +68,9 @@ class AssetsFilteredTable extends Component {
                             ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', ownerNames, 'sum', ['count', 'replacement_value']]
                         ]
                     }
-                    return this.props.falcor.get(...reqs);
+                    console.log('reqs', reqs)
+                    return reqs.reduce((a,c) => a.then(() => this.props.falcor.get(c)), Promise.resolve())
+                        .then(d => console.log('d',d))
                 }
 
                 return Promise.resolve();
