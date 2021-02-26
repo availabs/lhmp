@@ -204,6 +204,12 @@ export const JurisdictionOptions =  (options = {}) => {
                     'type': "vector",
                     'url': 'mapbox://am3081.6u9e7oi9'
                 },
+            },
+            { id: "states",
+                source: {
+                    'type': "vector",
+                    'url': 'mapbox://am3081.1fysv9an'
+                },
             }
         ],
         layers: [
@@ -244,6 +250,19 @@ export const JurisdictionOptions =  (options = {}) => {
                     'line-width': 4
                 },
                 filter : ['in','geoid','']
+
+            },
+            {
+                'id': 'jurisdiction_states',
+                'source': 'states',
+                'source-layer': 'us_states',
+                'type': 'line',
+                'paint': {
+                    'line-color': '#F31616',
+                    'line-opacity': 0.5,
+                    'line-width': 4
+                },
+                filter : ['in','STATEFP',store.getState().user.activeGeoid.length === 2 ? store.getState().user.activeGeoid : '']
 
             },
         ],

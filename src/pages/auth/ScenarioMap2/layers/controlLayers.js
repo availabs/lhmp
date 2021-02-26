@@ -243,6 +243,7 @@ export class ControlLayers extends MapLayer {
 
 
     visibilityToggleModeOff(source, layerName) {
+        layerName = layerName ? layerName : []
         //console.log('in visibility toggle mode off',source,layerName)
         if (layerName.includes('_27') || layerName.includes('_26')) {
             if (source && (layerName.includes("_26") || layerName.includes("_27"))) {
@@ -271,76 +272,99 @@ export class ControlLayers extends MapLayer {
 
 
     loadLayers() {
-        this.doAction([
-            "addDynamicLayer",
-            DynamicScenarioLayerFactory
-        ]).then(sl => {
-            this.scenarioLayer = sl
+        if(store.getState().user.activeGeoid.length === 2){
             this.doAction([
                 "addDynamicLayer",
-                DynamicJurisdictionLayerFactory
-            ]).then(jl => {
-                this.jurisdictonLayer = jl
+                DynamicScenarioLayerFactory
+            ]).then(sl => {
+                this.scenarioLayer = sl
                 this.doAction([
                     "addDynamicLayer",
-                    DynamicZoneLayerFactory
-                ]).then(zl => {
-                    this.zoneLayer = zl
+                    DynamicJurisdictionLayerFactory
+                ]).then(jl => {
+                    this.jurisdictonLayer = jl
                     this.doAction([
                         "addDynamicLayer",
-                        DynamicCulvertsLayerFactory
-                    ]).then(cl => {
-                        culvertsLayer = cl
-                        this.culvertsLayer = cl
+                        DynamicStateAssetsLayerFactory
+                    ]).then(hel => {
+                        stateAssetsLayer = hel
+                        this.stateAssetsLayer = hel
+                    })
+                })
+            })
+        }else{
+            this.doAction([
+                "addDynamicLayer",
+                DynamicScenarioLayerFactory
+            ]).then(sl => {
+                this.scenarioLayer = sl
+                this.doAction([
+                    "addDynamicLayer",
+                    DynamicJurisdictionLayerFactory
+                ]).then(jl => {
+                    this.jurisdictonLayer = jl
                         this.doAction([
                             "addDynamicLayer",
-                            DynamicLandUseLayerFactory
-                        ]).then(ll => {
-                            landUseLayer = ll
-                            this.landUseLayer = ll
+                            DynamicZoneLayerFactory
+                        ]).then(zl => {
+                            this.zoneLayer = zl
                             this.doAction([
                                 "addDynamicLayer",
-                                DynamicCommentMapLayerFactory
-                            ]).then(cml => {
-                                commentMapLayer = cml
-                                this.commentMapLayer = cml
+                                DynamicCulvertsLayerFactory
+                            ]).then(cl => {
+                                culvertsLayer = cl
+                                this.culvertsLayer = cl
                                 this.doAction([
                                     "addDynamicLayer",
-                                    DynamicEvacuationRoutesLayerFactory
-                                ]).then(erl => {
-                                    evacuationRoutesLayer = erl
-                                    this.evacuationRoutesLayer = erl
+                                    DynamicLandUseLayerFactory
+                                ]).then(ll => {
+                                    landUseLayer = ll
+                                    this.landUseLayer = ll
                                     this.doAction([
                                         "addDynamicLayer",
-                                        DynamicVulnerableDemographicsLayerFactory
-                                    ]).then(vdl => {
-                                        vulnerableDemographicsLayer = vdl
-                                        this.vulnerableDemographicsLayer = vdl
+                                        DynamicCommentMapLayerFactory
+                                    ]).then(cml => {
+                                        commentMapLayer = cml
+                                        this.commentMapLayer = cml
                                         this.doAction([
                                             "addDynamicLayer",
-                                            DynamicHazardEventsLayerFactory
-                                        ]).then(hel => {
-                                            hazardEventsLayer = hel
-                                            this.hazardEventsLayer = hel
+                                            DynamicEvacuationRoutesLayerFactory
+                                        ]).then(erl => {
+                                            evacuationRoutesLayer = erl
+                                            this.evacuationRoutesLayer = erl
                                             this.doAction([
                                                 "addDynamicLayer",
-                                                DynamicCriticalInfrastructureLayerFactory
-                                            ]).then(hel => {
-                                                criticalInfrastructureLayer = hel
-                                                this.criticalInfrastructureLayer = hel
+                                                DynamicVulnerableDemographicsLayerFactory
+                                            ]).then(vdl => {
+                                                vulnerableDemographicsLayer = vdl
+                                                this.vulnerableDemographicsLayer = vdl
                                                 this.doAction([
                                                     "addDynamicLayer",
-                                                    DynamicNfipLayerFactory
+                                                    DynamicHazardEventsLayerFactory
                                                 ]).then(hel => {
-                                                    nfipLayer = hel
-                                                    this.nfipLayer = hel
-                                                })
-                                                this.doAction([
-                                                    "addDynamicLayer",
-                                                    DynamicStateAssetsLayerFactory
-                                                ]).then(hel => {
-                                                    stateAssetsLayer = hel
-                                                    this.stateAssetsLayer = hel
+                                                    hazardEventsLayer = hel
+                                                    this.hazardEventsLayer = hel
+                                                    this.doAction([
+                                                        "addDynamicLayer",
+                                                        DynamicCriticalInfrastructureLayerFactory
+                                                    ]).then(hel => {
+                                                        criticalInfrastructureLayer = hel
+                                                        this.criticalInfrastructureLayer = hel
+                                                        this.doAction([
+                                                            "addDynamicLayer",
+                                                            DynamicNfipLayerFactory
+                                                        ]).then(hel => {
+                                                            nfipLayer = hel
+                                                            this.nfipLayer = hel
+                                                        })
+                                                        this.doAction([
+                                                            "addDynamicLayer",
+                                                            DynamicStateAssetsLayerFactory
+                                                        ]).then(hel => {
+                                                            stateAssetsLayer = hel
+                                                            this.stateAssetsLayer = hel
+                                                        })
+                                                    })
                                                 })
                                             })
                                         })
@@ -348,133 +372,158 @@ export class ControlLayers extends MapLayer {
                                 })
                             })
                         })
-                    })
                 })
             })
-        })
-
+        }
     }
 
     mainLayerToggleVisibilityOn(layerName, selected) {
         //console.log('in on',layerName)
-        if (layerName.includes('scenario')) {
-            this.scenarioLayer.toggleVisibilityOn()
-        }
-        if (layerName.includes('zone')) {
-            this.zoneLayer.toggleVisibilityOn()
-        }
-        if (layerName.includes('landUse')) {
-            if (Object.keys(landUseLayer).length > 0) {
-                landUseLayer.toggleVisibilityOn()
+        if(store.getState().user.activeGeoid.length === 2){
+            if (layerName.includes('scenario')) {
+                this.scenarioLayer.toggleVisibilityOn()
             }
-        }
-        if (layerName.includes("commentMap")) {
-            if (Object.keys(commentMapLayer).length > 0) {
-                commentMapLayer.toggleVisibilityOn()
-            }
-        }
-        if (layerName.includes("culverts")) {
-            if (Object.keys(culvertsLayer).length > 0) {
-                culvertsLayer.toggleVisibilityOn()
-            }
-        }
-        if (layerName.includes("evacuationRoutes")) {
-            if (Object.keys(evacuationRoutesLayer).length > 0) {
-                evacuationRoutesLayer.toggleVisibilityOn()
-            }
-        }
-        if (layerName.includes("vulnerableDemographics")) {
-            if (Object.keys(vulnerableDemographicsLayer).length > 0) {
-                vulnerableDemographicsLayer.toggleVisibilityOn()
-            }
-        }
-        if (layerName.includes("hazardEvents")) {
-            if (Object.keys(hazardEventsLayer).length > 0) {
-                hazardEventsLayer.toggleVisibilityOn()
-                if (this.map.getLayer('events-layer')){
-                    this.map.moveLayer('events-layer','buildings-layer')
+            if (layerName.includes("stateAssets")) {
+                if (Object.keys(stateAssetsLayer).length > 0) {
+                    stateAssetsLayer.toggleVisibilityOn()
                 }
             }
-        }
-        if (layerName.includes("criticalInfrastructure")) {
-            if (Object.keys(criticalInfrastructureLayer).length > 0) {
-                criticalInfrastructureLayer.toggleVisibilityOn()
+            if (layerName.includes("jurisdiction")) {
+                this.jurisdictonLayer.toggleVisibilityOn()
+            }
+        }else{
+            if (layerName.includes('scenario')) {
+                this.scenarioLayer.toggleVisibilityOn()
+            }
+            if (layerName.includes('zone')) {
+                this.zoneLayer.toggleVisibilityOn()
+            }
+            if (layerName.includes('landUse')) {
+                if (Object.keys(landUseLayer).length > 0) {
+                    landUseLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("commentMap")) {
+                if (Object.keys(commentMapLayer).length > 0) {
+                    commentMapLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("culverts")) {
+                if (Object.keys(culvertsLayer).length > 0) {
+                    culvertsLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("evacuationRoutes")) {
+                if (Object.keys(evacuationRoutesLayer).length > 0) {
+                    evacuationRoutesLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("vulnerableDemographics")) {
+                if (Object.keys(vulnerableDemographicsLayer).length > 0) {
+                    vulnerableDemographicsLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("hazardEvents")) {
+                if (Object.keys(hazardEventsLayer).length > 0) {
+                    hazardEventsLayer.toggleVisibilityOn()
+                    if (this.map.getLayer('events-layer')){
+                        this.map.moveLayer('events-layer','buildings-layer')
+                    }
+                }
+            }
+            if (layerName.includes("criticalInfrastructure")) {
+                if (Object.keys(criticalInfrastructureLayer).length > 0) {
+                    criticalInfrastructureLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("nfip")) {
+                if (Object.keys(nfipLayer).length > 0) {
+                    nfipLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("stateAssets")) {
+                if (Object.keys(stateAssetsLayer).length > 0) {
+                    stateAssetsLayer.toggleVisibilityOn()
+                }
+            }
+            if (layerName.includes("jurisdiction")) {
+                this.jurisdictonLayer.toggleVisibilityOn()
             }
         }
-        if (layerName.includes("nfip")) {
-            if (Object.keys(nfipLayer).length > 0) {
-                nfipLayer.toggleVisibilityOn()
-            }
-        }
-        if (layerName.includes("stateAssets")) {
-            if (Object.keys(stateAssetsLayer).length > 0) {
-                stateAssetsLayer.toggleVisibilityOn()
-            }
-        }
-        if (layerName.includes("jurisdiction")) {
-            this.jurisdictonLayer.toggleVisibilityOn()
-        }
-
     }
 
     mainLayerToggleVisibilityOff(layerName) {
         //console.log('in off',layerName)
-        if (layerName.includes('scenario')) {
-            this.scenarioLayer.toggleVisibilityOff()
-        }
-        if (layerName.includes('zone')) {
-            this.zoneLayer.toggleVisibilityOff()
-        }
-        if (layerName.includes("commentMap")) {
-            if (Object.keys(commentMapLayer).length > 0) {
-                commentMapLayer.toggleVisibilityOff()
+        if(store.getState().user.activeGeoid.length === 2){
+            if (layerName.includes('scenario')) {
+                this.scenarioLayer.toggleVisibilityOff()
             }
-        }
-        if (layerName.includes("culverts")) {
-            if (Object.keys(culvertsLayer).length > 0) {
-                culvertsLayer.toggleVisibilityOff()
+            if (layerName.includes("stateAssets")) {
+                if (Object.keys(stateAssetsLayer).length > 0) {
+                    stateAssetsLayer.toggleVisibilityOff()
+                }
             }
-        }
-        if (layerName.includes('landUse')) {
-            if (Object.keys(landUseLayer).length > 0) {
-                landUseLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes("evacuationRoutes")) {
-            if (Object.keys(evacuationRoutesLayer).length > 0) {
-                evacuationRoutesLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes("vulnerableDemographics")) {
-            if (Object.keys(vulnerableDemographicsLayer).length > 0) {
-                vulnerableDemographicsLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes("hazardEvents")) {
-            if (Object.keys(hazardEventsLayer).length > 0) {
-                hazardEventsLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes("criticalInfrastructure")) {
-            if (Object.keys(criticalInfrastructureLayer).length > 0) {
-                criticalInfrastructureLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes("nfip")) {
-            if (Object.keys(nfipLayer).length > 0) {
-                nfipLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes("stateAssets")) {
-            if (Object.keys(stateAssetsLayer).length > 0) {
-                stateAssetsLayer.toggleVisibilityOff()
-            }
-        }
-        if (layerName.includes('jurisdiction')) {
-            this.jurisdictonLayer.toggleVisibilityOff()
+            if (layerName.includes('jurisdiction')) {
+                this.jurisdictonLayer.toggleVisibilityOff()
 
-        }
+            }
+        }else{
+            if (layerName.includes('scenario')) {
+                this.scenarioLayer.toggleVisibilityOff()
+            }
+            if (layerName.includes('zone')) {
+                this.zoneLayer.toggleVisibilityOff()
+            }
+            if (layerName.includes("commentMap")) {
+                if (Object.keys(commentMapLayer).length > 0) {
+                    commentMapLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("culverts")) {
+                if (Object.keys(culvertsLayer).length > 0) {
+                    culvertsLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes('landUse')) {
+                if (Object.keys(landUseLayer).length > 0) {
+                    landUseLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("evacuationRoutes")) {
+                if (Object.keys(evacuationRoutesLayer).length > 0) {
+                    evacuationRoutesLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("vulnerableDemographics")) {
+                if (Object.keys(vulnerableDemographicsLayer).length > 0) {
+                    vulnerableDemographicsLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("hazardEvents")) {
+                if (Object.keys(hazardEventsLayer).length > 0) {
+                    hazardEventsLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("criticalInfrastructure")) {
+                if (Object.keys(criticalInfrastructureLayer).length > 0) {
+                    criticalInfrastructureLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("nfip")) {
+                if (Object.keys(nfipLayer).length > 0) {
+                    nfipLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes("stateAssets")) {
+                if (Object.keys(stateAssetsLayer).length > 0) {
+                    stateAssetsLayer.toggleVisibilityOff()
+                }
+            }
+            if (layerName.includes('jurisdiction')) {
+                this.jurisdictonLayer.toggleVisibilityOff()
 
+            }
+        }
     }
 
 
