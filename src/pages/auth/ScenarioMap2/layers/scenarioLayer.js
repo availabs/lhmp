@@ -103,7 +103,7 @@ export class ScenarioLayer extends MapLayer{
                 });
                 //check for the legend
                 this.selection = features.map(d => d.properties.id);
-                if(this.selection.length > 0 && this.fetchData){
+                if(this.selection.length > 0){
                     this.fetchData().then(data => this.receiveData(map, data))
                 }
 
@@ -180,7 +180,8 @@ export class ScenarioLayer extends MapLayer{
                     }
 
                 })
-        }
+        } 
+        return []
 
 
     }
