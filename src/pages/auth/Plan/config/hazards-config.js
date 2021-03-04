@@ -59,7 +59,9 @@ let HazardConfig = [
     },
 ];
 
-Object.keys(HAZARD_META).map(key => {
+Object.keys(HAZARD_META)
+    .sort()
+    .map(key => {
 	HazardConfig.push({
         title: `${HAZARD_META[key].name} Characteristics`,
         requirement: `req-B1-${key}`,
