@@ -6,7 +6,6 @@ import {connect} from "react-redux";
 import {reduxFalcor} from 'utils/redux-falcor'
 
 import {fnum} from "utils/sheldusUtils"
-import functions from 'pages/auth/Plan/functions'
 import TableSelector from "components/light-admin/tables/tableSelector"
 
 
@@ -18,7 +17,8 @@ class AssetsFilteredTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ownerNames: []
+            ownerNames: [],
+            loadingDone: false
         }
     }
 
@@ -30,54 +30,54 @@ class AssetsFilteredTable extends Component {
     }
 
     fetchFalcorDeps() {
-
-        let reqs = [
-            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'ownerName', 'list']
-        ]
-        return this.props.falcor.get(...reqs)
-            .then(response => {
-                let ownerNames =
-                    this.props.geoid
-                        .reduce((acc, geoid) => [
-                            ...acc,
-                            ...Object.values(this.props.filterData)[0]
-                                .reduce((a,ownerType) => [...a, ...get(response, ['json', 'building', 'statewide', 'byGeoid', geoid, 'owner_type', ownerType, 'ownerName', 'list'])], [])
-                        ] ,[]).filter(f => f);
-                if (ownerNames && ownerNames.length){
-
-                    if (this.props.activeGeoid.length === 2){
-                        let iChunk = 100,
-                            jChunk = 200
-                        reqs = []
-
-                        for (let j = 0; j < ownerNames.length; j += jChunk){
-                            reqs.push(
-                                ['building', 'statewide', 'byGeoid', this.props.geoid[0]/* 36001 fetches data for '36' */, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'byOwnerName', ownerNames.slice(j, j+jChunk), 'all'],
-
-                            )
-                            for (let i = 0; i < this.props.geoid.length; i += iChunk){
-                            reqs.push(
-                                ['building', 'statewide', 'byGeoid', this.props.geoid.slice(i, i+iChunk), 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', ownerNames.slice(j, j+jChunk), 'sum', ['count', 'replacement_value']]
-                            )
-                        }
-                    }
-
-                    }else{
-                        reqs = [
-                            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'byOwnerName', ownerNames, 'all'],
-                            ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', ownerNames, 'sum', ['count', 'replacement_value']]
-                        ]
-                    }
-                    console.log('reqs', reqs)
-                    return reqs.reduce((a,c) => a.then(() => this.props.falcor.get(c)), Promise.resolve())
-                        .then(d => console.log('d',d))
-                }
-
-                return Promise.resolve();
-            })
+           let  reqs = [
+                ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byRiskScenario', this.props.scenarioId, 'byRiskZone', 'byOwnerName', 'all'],
+                ['building', 'statewide', 'byGeoid', this.props.geoid, 'owner_type', Object.values(this.props.filterData)[0], 'byOwnerName', 'all']
+            ]
+        return reqs.reduce((a,c) => a.then(() => this.props.falcor.get(c)), Promise.resolve())
     }
 
     buildingTable() {
+            let cache = this.props.falcor.getCache()
+            let allData =
+                this.props.geoid
+                    .reduce((aGeoid, cGeoid) => {
+                        let list = get(cache, ['building', 'statewide', 'byGeoid', cGeoid, 'owner_type', '2', 'byOwnerName', 'all', 'value'], [])
+                        if(list){
+                            list.forEach(l => {
+                                if(!aGeoid[l.primary_owner]){
+                                    aGeoid[l.primary_owner] = {}
+                                }
+                                aGeoid[l.primary_owner]['sum'] = parseInt(l.count) + (get(aGeoid, [l.primary_owner, 'sum'], 0))
+                                aGeoid[l.primary_owner]['replacement_value'] = parseInt(l.replacement_value) + (get(aGeoid, [l.primary_owner, 'replacement_value'], 0))
+                            })
+                        }
+                        return aGeoid
+                    }, {})
+
+            this.props.geoid
+                .reduce((aGeoid, cGeoid) => {
+                    let scenarios = get(cache, ['building', 'statewide', 'byGeoid', cGeoid, 'owner_type', '2', 'byRiskScenario'], {})
+                    Object.keys(scenarios)
+                        .forEach(scenario => {
+                            let list = get(scenarios, [scenario, 'byRiskZone', 'byOwnerName', 'all', 'value']);
+
+                            if(list){
+                                list.forEach(l => {
+                                    if(!aGeoid[l.primary_owner]){
+                                        aGeoid[l.primary_owner] = {}
+                                    }
+                                    if(!aGeoid[l.primary_owner][l.name]){
+                                        aGeoid[l.primary_owner][l.name] = {}
+                                    }
+                                    aGeoid[l.primary_owner][l.name]['sum'] = parseInt(l.count) + (get(aGeoid, [l.primary_owner, l.name, 'sum'], 0))
+                                    aGeoid[l.primary_owner][l.name]['replacement_value'] = parseInt(l.sum) + (get(aGeoid, [l.primary_owner, l.name, 'replacement_value'], 0))
+                                })
+                            }
+                        })
+                    return aGeoid
+                }, allData)
+
         let BuildingTypeData = [];
         totalBuildings = 0;
         totalBuildingsValue = 0;
@@ -85,145 +85,52 @@ class AssetsFilteredTable extends Component {
         let primeColName = 'Owner Name';
         let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/ownerType/2`;
         let linkTrail = ``
-        let graph = this.props.buildingStatewideData;
-        let ownerNames = this.props.geoid
-            .reduce((acc, geoid) => [
-                ...acc,
-                ...Object.values(this.props.filterData)[0]
-                    .reduce((a, ownerType) => [...a, ...get(this.props.buildingStatewideData, [geoid, 'owner_type', ownerType, 'ownerName', 'list', 'value'], [])], [])
-            ] ,[])
-        ownerNames = _.uniqBy(ownerNames)
+        let graph = allData;
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
         if (graph && Object.keys(graph).length) {
-            graph = Object.keys(graph)
-                .reduce((a, c) => {
-                    if (!c.toString().includes('-')) { //removing any data fetched from assetsList file
-                        a[c] = graph[c]
-                    }
-                    return a
-                }, {})
-
-            ownerNames.forEach((ownerName, oni) => {
                 Object.keys(graph)
-                    .forEach((geoId, i) => {
-
+                    .forEach((ownerName, i) => {
                         let riskZoneIdsAllValues = {}
-                        Object.keys(get(graph, `${geoId}.owner_type.2.byRiskScenario`, {}))
-                            .forEach(scenarioId => {
-                                if (get(graph, `${geoId}.owner_type.2.byRiskScenario.${scenarioId}.byRiskZone.byOwnerName.${ownerName}.all.value`, null)) {
-                                    if (this.props.riskZoneId && this.props.riskZoneId.length > 0) {
-                                        get(graph, `${geoId}.owner_type.2.byRiskScenario.${scenarioId}.byRiskZone.byOwnerName.${ownerName}.all.value`, [])
-                                            .filter(item => this.props.riskZoneId && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
-                                            .forEach(riskZoneIdData => {
-                                                scenarioToRiskZoneMapping[scenarioId] ?
-                                                    scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
-                                                    scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
-
-                                                if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]) {
-                                                    if (!riskZoneColNames.includes(`${riskZoneIdData.name} #`)) {
-                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
-                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
-                                                    }
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
-                                                        count: parseInt(riskZoneIdData.count) || 0,
-                                                        value: parseInt(riskZoneIdData.sum) || 0
-                                                    };
-                                                }
-                                            })
-                                    } else {
-                                        get(graph, `${geoId}.owner_type.2.byRiskScenario.${scenarioId}.byRiskZone.byOwnerName.${ownerName}.all.value`, [])
-                                            .forEach(riskZoneIdData => {
-                                                scenarioToRiskZoneMapping[scenarioId] ?
-                                                    scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
-                                                    scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
-
-                                                if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]) {
-                                                    if (!riskZoneColNames.includes(`${riskZoneIdData.name} #`)) {
-                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
-                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
-
-                                                    }
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
-                                                        count: parseInt(riskZoneIdData.count) || 0,
-                                                        value: parseInt(riskZoneIdData.sum) || 0
-                                                    };
-                                                } else {
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
-                                                }
-
-                                            })
+                        Object.keys(get(graph, [ownerName], {}))
+                            .filter(key => !['sum', 'replacement_value'].includes(key))
+                            .forEach(floodZoneName => {
+                                if (get(graph, [ownerName, floodZoneName], null)) {
+                                    if (!riskZoneColNames.includes(`${floodZoneName} #`)) {
+                                        riskZoneColNames.push(`${floodZoneName} #`, `${floodZoneName} $`)
                                     }
-
+                                    riskZoneIdsAllValues[`${floodZoneName}`] = {
+                                        count: parseInt(get(graph, [ownerName, floodZoneName, 'sum'], {})),
+                                        value: parseInt(get(graph, [ownerName, floodZoneName, 'replacement_value'], {}))
+                                    };
                                 }
-
                             })
 
-                        if(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.count.value`)){
-                            if(BuildingTypeData.filter(tmpD => tmpD[primeColName] === ownerName).length === 0){
-                                BuildingTypeData.push({
-                                    [primeColName]: ownerName,
-                                    'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.replacement_value.value`, 0)),
-                                    'TOTAL # BUILDING TYPE': parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.count.value`, 0)),
-                                    geosCounted: [ownerName],
-                                    ...Object.keys(riskZoneIdsAllValues)
-                                        .reduce((a, riskZone) => {
-                                            a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
-                                            a[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
+                        BuildingTypeData.push({
+                            [primeColName]: ownerName,
+                            'TOTAL $ REPLACEMENT VALUE': parseInt(get(graph, [ownerName, `replacement_value`], 0)),
+                            'TOTAL # BUILDING TYPE': parseInt(get(graph, [ownerName, `sum`], 0)),
+                            ...Object.keys(riskZoneIdsAllValues)
+                                .reduce((a, riskZone) => {
+                                    a[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
+                                    a[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
 
-                                            riskZoneIdsAllValuesTotal[riskZone + ' #'] ?
-                                                riskZoneIdsAllValuesTotal[riskZone + ' #'] += parseInt(riskZoneIdsAllValues[riskZone].count) || 0 :
-                                                riskZoneIdsAllValuesTotal[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
+                                    riskZoneIdsAllValuesTotal[riskZone + ' #'] ?
+                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] += parseInt(riskZoneIdsAllValues[riskZone].count) || 0 :
+                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
 
-                                            riskZoneIdsAllValuesTotal[riskZone + ' $'] ?
-                                                riskZoneIdsAllValuesTotal[riskZone + ' $'] += parseInt(riskZoneIdsAllValues[riskZone].value) || 0 :
-                                                riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
+                                    riskZoneIdsAllValuesTotal[riskZone + ' $'] ?
+                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] += parseInt(riskZoneIdsAllValues[riskZone].value) || 0 :
+                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
 
-                                            return a
-                                        }, {}),
-                                    link: linkBase + `/geo/${geoId}`
-                                });
+                                    return a
+                                }, {}),
+                            link: linkBase + `/geo/${encodeURI(ownerName)}`
+                        });
 
-                                totalBuildings += parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.count.value`, 0));
-                                totalBuildingsValue += parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.replacement_value.value`, 0));
-                            }else{
-                                let tmpRecord = BuildingTypeData.filter(btd => btd[primeColName] === ownerName)[0];
-
-                                tmpRecord =
-                                    Object.assign(tmpRecord,
-                                        {
-                                            [primeColName]: ownerName,
-                                            'TOTAL $ REPLACEMENT VALUE':
-                                                tmpRecord['TOTAL $ REPLACEMENT VALUE'] + /*tmpRecord.geosCounted.includes(item) ? 0 :*/ parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.replacement_value.value`, 0)),
-                                            'TOTAL # BUILDING TYPE' :
-                                                tmpRecord['TOTAL # BUILDING TYPE'] + /*tmpRecord.geosCounted.includes(item) ? 0 :*/ parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.count.value`, 0)),
-                                            geosCounted: [...tmpRecord.geosCounted, geoId],
-                                            ...Object.keys(riskZoneIdsAllValues)
-                                                .reduce((a, riskZone) => {
-                                                    a[riskZone + ' #'] = (get(tmpRecord, [riskZone + ' #'], 0) + (parseInt(riskZoneIdsAllValues[riskZone].count) || 0)) || 0;
-                                                    a[riskZone + ' $'] = (get(tmpRecord, [riskZone + ' $'], 0) + (parseInt(riskZoneIdsAllValues[riskZone].value) || 0)) || 0;
-                                                    riskZoneIdsAllValuesTotal[riskZone + ' #'] ?
-                                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] += parseInt(riskZoneIdsAllValues[riskZone].count) || 0 :
-                                                        riskZoneIdsAllValuesTotal[riskZone + ' #'] = parseInt(riskZoneIdsAllValues[riskZone].count) || 0;
-
-                                                    riskZoneIdsAllValuesTotal[riskZone + ' $'] ?
-                                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] += parseInt(riskZoneIdsAllValues[riskZone].value) || 0 :
-                                                        riskZoneIdsAllValuesTotal[riskZone + ' $'] = parseInt(riskZoneIdsAllValues[riskZone].value) || 0;
-                                                    return a
-                                                }, {}),
-                                            link: linkBase
-                                        });
-
-                                BuildingTypeData = [tmpRecord, ...BuildingTypeData.filter(btd => btd[primeColName] !== ownerName)]
-
-                                totalBuildings += parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.count.value`, 0));
-                                totalBuildingsValue += parseInt(get(graph, `${geoId}.owner_type.2.byOwnerName.${ownerName}.sum.replacement_value.value`, 0));
-                            }
-                        }
-
-                    });
+                        totalBuildings += parseInt(get(graph, [ownerName, `sum`], 0));
+                        totalBuildingsValue += parseInt(get(graph, [ownerName, `replacement_value`], 0));
             })
             BuildingTypeData.push({
                 [primeColName]: 'TOTAL',
@@ -299,7 +206,7 @@ class AssetsFilteredTable extends Component {
 
 
     render() {
-        return (
+        return !this.state.loadingDone && false? 'Loading...' :(
             <div style={{
                 width: this.props.width ? this.props.width : '',
                 height: this.props.height ? this.props.height : ''

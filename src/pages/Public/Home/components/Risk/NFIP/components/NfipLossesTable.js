@@ -67,24 +67,24 @@ class NfipTable extends React.Component {
     processData() {
         const { geoid, geoLevel } = this.props,
             label = geoLevel === 'counties' ? 'county' : 'Jurisdiction',
-            geoids = Object.keys(this.props.allGeo).filter(geo => geo.length === 10),
-            data = [];
+            geoids = Object.keys(this.props.allGeo).filter(geo => geo.length === 10);
+        let data = [];
         let geoToFilter = this.getGeoToFilter(this.props.formData);
-
+        let total = {
+            [label]: 'Total',
+            "total claims": 0,
+            "paid claims": 0,
+            "total payments": 0,
+            'repetitive loss': 0,
+            'severe repetitive loss': 0,
+            '# of policies': 0,
+        }
         geoids
             .filter(geoid => !geoToFilter.includes(geoid))
             .forEach(geoid => {
             const graph = this.props.nfip.losses.byGeoid[geoid].allTime,
                 name = this.props.allGeo[geoid];
-            let total = {
-                [label]: 'Total',
-                "total claims": 0,
-                "paid claims": 0,
-                "total payments": 0,
-                'repetitive loss': 0,
-                'severe repetitive loss': 0,
-                '# of policies': 0,
-            }
+
             if(graph.total_losses > 0 || true){
                 data.push({
                     [label]: functions.formatName(name, geoid),
@@ -106,17 +106,19 @@ class NfipTable extends React.Component {
                 
             }
             
-            data.push(total)
         })
 
+        data = data.sort((a, b) =>
+            this.props.defaultSortCol ?
+                (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
+                a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
+                b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
+                b['total payments'] - b['total payments']
+        )
+        data.push(total)
+
         return {
-            data: data.sort((a, b) =>
-                this.props.defaultSortCol ?
-                    (this.props.defaultSortOrder === 'desc' ? -1 : 1)*(typeof a[this.props.defaultSortCol] === "string" ?
-                        a[this.props.defaultSortCol].localeCompare(b[this.props.defaultSortCol]) :
-                        b[this.props.defaultSortCol] - a[this.props.defaultSortCol]) :
-                    b['total payments'] - b['total payments']
-                    ),
+            data: data,
             columns: [ 
                 {
                     Header: label, 

@@ -173,7 +173,7 @@ class AssetsBySearch extends React.Component {
                                     }
                                 </div>
 
-                                <div className='element-box'>
+                                <div className='element-box' style={{maxHeight: '500px', overflow: 'auto'}}>
                                     <h4>State Buildings - by Owner Name</h4>
                                     {
                                         this.state.geoid ?
@@ -183,7 +183,7 @@ class AssetsBySearch extends React.Component {
                                                         this.props.activeGeoid.length === 2 && geo.length === 5)}
                                                 defaultSortCol={'Owner Name'}
                                                 groupBy={'state'}
-                                                filterData={{'owner_type': [2]}}
+                                                filterData={{'owner_type': ['2']}}
                                                 scenarioId={this.state.scenarioIds}
                                                 height={'fit-content'}
                                                 width={'100%'}
