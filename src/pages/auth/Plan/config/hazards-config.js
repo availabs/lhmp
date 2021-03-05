@@ -59,7 +59,7 @@ let HazardConfig = [
     },
 ];
 
-Object.keys(HAZARD_META).map(key => {
+Object.keys(HAZARD_META).sort().map(key => {
 	HazardConfig.push({
         title: `${HAZARD_META[key].name} Characteristics`,
         requirement: `req-B1-${key}`,
@@ -269,7 +269,7 @@ const config =  {
             callout: ''
         },
         {
-            title: '',
+            title: 'Presidential Disaster Declarations',
             requirement: `presidential-disaster-declarations`,
             type: 'PresidentialDisasterDeclarations',
             showTitle: false,

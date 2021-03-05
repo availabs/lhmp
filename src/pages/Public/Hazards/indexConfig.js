@@ -300,7 +300,7 @@ export default [{
     component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(Hazards))
 }, {
     icon: 'os-icon-pencil-2',
-    path: '/hazardsConfig/:geoid',
+    path: '/hazards/:geoid',
     exact: true,
     name: 'Hazards 2',
     auth: false,
