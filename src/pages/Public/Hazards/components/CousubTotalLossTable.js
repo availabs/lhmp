@@ -99,7 +99,7 @@ class CousubTotalLossTable extends React.Component {
             return (
                 <TableBox { ...pData }
                           pageSize={ this.props.geoid && this.props.geoid.length > 2 ? pData.data.length : 10}
-                          links = {linksToPass}
+                          // links = {linksToPass}
                 />
             )
         }

@@ -34,6 +34,7 @@ class inventoryTableViewer extends Component {
     }
 
     fetchFalcorDeps() {
+        if (! this.props.activePlan) return Promise.resolve()
         let formType = ProjectConfig.map(d => d.type)
         let formAttributes = Object.keys(get(ProjectConfig, `[0].attributes`, {}))
         let ids = [];

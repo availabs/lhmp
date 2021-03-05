@@ -60,7 +60,7 @@ class SideMenu extends React.Component {
                                                                 <div className={`os-icon ${item.icon}`}></div>
                                                             </div>
                                                         ) : ''}
-                                                        <span>{item.title}</span>
+                                                        <span>{item.title.replace('::activeGeo -', '')}</span>
                                                     </Link2>
                                                 :
                                                     <Link activeClass='selected' to={baseURL + item.title} spy={true} offset={-50} >
@@ -69,7 +69,7 @@ class SideMenu extends React.Component {
                                                                 <div className={`os-icon ${item.icon}`}></div>
                                                             </div>
                                                         ) : ''}
-                                                        <span>{item.title}</span>
+                                                        <span>{item.title.replace('::activeGeo -', '')}</span>
                                                     </Link>}
                                             </li>
                                         )

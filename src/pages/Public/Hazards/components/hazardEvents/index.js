@@ -70,7 +70,7 @@ class HazardLoss extends Component {
                                     showXlabel={false}
                                     lossType={'num_events'}
                                     geoid={this.props.activeGeoid}
-                                    geoLevel={this.setGeoLevel(this.props.activeGeoid.length)}
+                                    geoLevel={this.setGeoLevel(get(this.props.activeGeoid, ['length'], 0))}
                                     dataType='severeWeather'
                                     colorScale={getColorScale([1, 2])}
                                     hazards={this.props.hazards}

@@ -10,7 +10,7 @@ import TableSelector from "components/light-admin/tables/tableSelector"
 import config from 'pages/auth/Plan/config/guidance-config'
 import functions from "../../../pages/auth/Plan/functions";
 import ContentViewer from "./contentViewer";
-
+import AvlFormsJoin from "../editComponents/AvlFormsJoin";
 const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
     "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
     "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
@@ -247,11 +247,33 @@ class AvlFormsListTable extends React.Component {
                                 }
                             }
 
-                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer'){
+                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer' && graph[item].value.attributes[attribute]){
                                 data[attribute] =
                                     <ContentViewer
                                         state={{[attribute]: graph[item].value.attributes[attribute]}}
                                         title={attribute}
+                                    />
+                            }
+
+                            if(this.props.config[0].attributes[attribute].display_type === 'AvlFormsJoin' && get(graph[item], ['value', 'attributes', attribute])){
+                                let displayType = get(this.props.config[0].attributes[attribute], `display_type`, null),
+                                    formType = get(this.props.config[0].attributes[attribute], `form_type`, null),
+                                    parentConfig = get(this.props.config[0].attributes[attribute], `parentConfig`, null),
+                                    targetConfig = get(this.props.config[0].attributes[attribute], `targetConfig`, null),
+                                    targetKey = get(this.props.config[0].attributes[attribute], `targetKey`, null)
+                                let tmpData = get(graph[item], ['value', 'attributes', attribute], '')
+                                tmpData = tmpData && typeof tmpData === 'string' && tmpData.indexOf('[') === 0 && tmpData.indexOf(']') === tmpData.length - 1 ?
+                                    tmpData.slice(1,-1).split(',') : tmpData;
+
+                                data[attribute] =
+                                    <AvlFormsJoin
+                                        displayType={displayType}
+                                        formType={formType}
+                                        parentConfig={parentConfig}
+                                        targetConfig={targetConfig}
+                                        targetKey={targetKey}
+                                        id={tmpData}
+                                        {...get(graph, `${item}.value.attributes[${attribute}]`, {})}
                                     />
                             }
 
@@ -327,11 +349,33 @@ class AvlFormsListTable extends React.Component {
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
                             }
-                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer'){
+                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer' && graph[item].value.attributes[attribute]){
                                 data[attribute] =
                                     <ContentViewer
                                         state={{[attribute]: graph[item].value.attributes[attribute]}}
                                         title={attribute}
+                                    />
+                            }
+
+                            if(this.props.config[0].attributes[attribute].display_type === 'AvlFormsJoin' && get(graph[item], ['value', 'attributes', attribute])){
+                                let displayType = get(this.props.config[0].attributes[attribute], `display_type`, null),
+                                    formType = get(this.props.config[0].attributes[attribute], `form_type`, null),
+                                    parentConfig = get(this.props.config[0].attributes[attribute], `parentConfig`, null),
+                                    targetConfig = get(this.props.config[0].attributes[attribute], `targetConfig`, null),
+                                    targetKey = get(this.props.config[0].attributes[attribute], `targetKey`, null)
+                                let tmpData = get(graph[item], ['value', 'attributes', attribute], '')
+                                tmpData = tmpData && typeof tmpData === 'string' && tmpData.indexOf('[') === 0 && tmpData.indexOf(']') === tmpData.length - 1 ?
+                                    tmpData.slice(1,-1).split(',') : tmpData;
+
+                                data[attribute] =
+                                    <AvlFormsJoin
+                                        displayType={displayType}
+                                        formType={formType}
+                                        parentConfig={parentConfig}
+                                        targetConfig={targetConfig}
+                                        targetKey={targetKey}
+                                        id={tmpData}
+                                        {...get(graph, `${item}.value.attributes[${attribute}]`, {})}
                                     />
                             }
                         }

@@ -374,6 +374,7 @@ class AssetsTable extends React.Component {
                             filterData = {true}
                             tableData = {this.state.data}
                             columns = {columns}
+                            showControls={ this.props.showControls }
                         />
                     </div>
                 </div>

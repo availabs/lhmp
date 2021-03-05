@@ -3,22 +3,17 @@ import { Link } from 'react-router-dom'
 
 import { reduxFalcor } from 'utils/redux-falcor'
 import Element from 'components/light-admin/containers/Element'
-import ElementBox from 'components/light-admin/containers/ElementBox'
 import {connect} from "react-redux";
 import {authProjects, setActiveCousubid} from "../../../store/modules/user";
 import get from "lodash.get";
-import {GeoDropdown} from 'pages/auth/Plan/functions'
-
-import styled from 'styled-components'
-import {asyncContainer, Typeahead} from 'react-bootstrap-typeahead';
-//import 'react-bootstrap-typeahead/css/Typeahead.css';
-import AssetsTable from 'pages/auth/Assets/components/AssetsTable'
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig.js'
 import MultiSelectFilter from 'components/filters/multi-select-filter.js'
 import {header} from "./components/header";
 import AssetsFilteredTable from "./components/AssetsFilteredTable";
+import AssetsFilteredTableStateAssetsByOwnerType from "./components/AssetsFilteredTableStateAssetsByOwnerType";
+import AssetsFilteredTableStateAssetsByAgency from "./components/AssetsFilteredTableStateAssetsByAgency";
 
-const AsyncTypeahead = asyncContainer(Typeahead);
+
 const buildingOwnerType = [
     {
         'id':'1',
@@ -118,7 +113,7 @@ class AssetsBySearch extends React.Component {
                                 .filter(f => f.name.includes('DFIRM'))
                                 .map(f => f.id)})
                 }else if (this.props.activeGeoid.length === 2){
-                    this.setState({scenarioIds: 
+                    this.setState({scenarioIds:
                     [   '3','4','9','10','38','12','14','15','16','40','18','19','41','43','22','44',
                         '23','24','25','26','46','28','29','47','30','49','31','52','20','27','17','33','34','13','32',
                         '42','36','35','53','54','55','56']
@@ -168,6 +163,45 @@ class AssetsBySearch extends React.Component {
                                                     .filter(geo => this.props.activeGeoid.length === 5 && geo.length === 10 ||
                                                         this.props.activeGeoid.length === 2 && geo.length === 5)}
                                                 groupBy={'state'}
+                                                filterData={{'owner_type': [2]}}
+                                                scenarioId={this.state.scenarioIds}
+                                                height={'fit-content'}
+                                                width={'100%'}
+                                                tableClass={`table table-sm table-lightborder table-hover`}
+                                            />
+                                            : ''
+                                    }
+                                </div>
+
+                                <div className='element-box' style={{maxHeight: '500px', overflow: 'auto'}}>
+                                    <h4>State Buildings - by Owner Name</h4>
+                                    {
+                                        this.state.geoid ?
+                                            <AssetsFilteredTableStateAssetsByOwnerType
+                                                geoid={Object.keys(get(this.props, `allGeo`, {}))
+                                                    .filter(geo => this.props.activeGeoid.length === 5 && geo.length === 10 ||
+                                                        this.props.activeGeoid.length === 2 && geo.length === 5)}
+                                                defaultSortCol={'Owner Name'}
+                                                groupBy={'state'}
+                                                filterData={{'owner_type': ['2']}}
+                                                scenarioId={this.state.scenarioIds}
+                                                height={'fit-content'}
+                                                width={'100%'}
+                                                tableClass={`table table-sm table-lightborder table-hover`}
+                                            />
+                                            : ''
+                                    }
+                                </div>
+
+                                <div className='element-box'>
+                                    <h4>Buildings by Agency</h4>
+                                    {
+                                        this.state.geoid ?
+                                            <AssetsFilteredTableStateAssetsByAgency
+                                                geoid={Object.keys(get(this.props, `allGeo`, {}))
+                                                    .filter(geo => this.props.activeGeoid.length === 5 && geo.length === 10 ||
+                                                        this.props.activeGeoid.length === 2 && geo.length === 5)}
+                                                groupBy={'agency'}
                                                 filterData={{'owner_type': [2]}}
                                                 scenarioId={this.state.scenarioIds}
                                                 height={'fit-content'}

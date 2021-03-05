@@ -97,7 +97,7 @@ export class ScenarioLayer extends MapLayer{
         if(store.getState().user.activeGeoid){
             let activeGeoid = store.getState().user.activeGeoid
             let graph = '';
-            this.map.on('zoomstart',()=>{
+            this.map.on('zoomstart',() => {
                 const features =  map.querySourceFeatures('nys_buildings_avail', {
                     sourceLayer: 'nys_buildings_osm_ms_parcelid_pk',
                 });
@@ -180,7 +180,8 @@ export class ScenarioLayer extends MapLayer{
                     }
 
                 })
-        }
+        } 
+        return []
 
 
     }
@@ -457,7 +458,8 @@ export const ScenarioOptions =  (options = {}) => {
                                 ["Expected Annual Flood Loss",['hazard_loss_dollars']]
 
                             ];
-                        scenario_graph.value.forEach(building =>{
+
+                        get(scenario_graph, 'value', []).forEach(building =>{
                             if(building.building_id.toString() === id.toString()){
                                 data = attributes.reduce((a, [name, key, format = IDENTITY]) => {
                                     const data = get(building, key, false);

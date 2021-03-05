@@ -22,18 +22,32 @@ ${props => props.theme.panelDropdownScrollBar};
 class GD extends Component {
     constructor(props) {
         super(props);
+        // getAllGeo(props.activeGeoid)
         this.state={
             geoToFilter: []
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(this.state.geoToFilter !== prevState.geoToFilter){
+        if(this.state.geoToFilter !== prevState.geoToFilter ||
+            this.props.activeGeoid !== prevProps.activeGeoid ||
+            this.props.activeCousubid !== prevProps.activeCousubid ||
+            this.props.activePlan !== prevProps.activePlan || !_.isEqual(this.props.allGeo, prevProps.allGeo)){
             this.forceUpdate()
         }
     }
 
+    // shouldComponentUpdate(nextProps, nextState): boolean {
+    //     return this.state.geoToFilter !== nextState.geoToFilter ||
+    //         this.props.activeGeoid !== nextProps.activeGeoid ||
+    //         this.props.activeCousubid !== nextProps.activeCousubid ||
+    //         nextProps.activePlan !== this.props.activePlan ||
+    //         !_.isEqual(this.props.allGeo, nextProps.allGeo)
+    // }
+
     fetchFalcorDeps(){
+        if (! this.props.activePlan) return Promise.resolve();
+
         let formType = 'filterJurisdictions',
             formAttributes = ['county', 'municipality']
         return this.props.falcor.get(
@@ -106,7 +120,7 @@ class GD extends Component {
                 />
 
             </div>
-        ) : <div></div>
+        ) : <div>Loading...</div>
     }
 }
 const mapStateToProps = (state, ownProps) => {
@@ -227,7 +241,7 @@ export const ToggleVisibility = connect(mapStateToPropsTV, mapDispatchToPropsTV)
 
 
 const formatName = function(name= 'no name', geoid){
-    if(typeof name !== "string") return ''
+    if(typeof name !== "string" || !geoid) return ''
     if (name.toLowerCase() === 'countywide') return name
     let jurisdiction =
             geoid.length === 2 ? 'State' :
@@ -258,7 +272,7 @@ const renderReqNav = function(allRequirenments, pageIndex){
 }
 
 const renderElement = function(element, section, index, user) {
-
+    element = Object.assign(element, {title: element.title.replace('::activeGeo -', '')})
     return (
         <div
              style={{

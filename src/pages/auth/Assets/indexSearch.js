@@ -226,6 +226,7 @@ class AssetsBySearch extends React.Component {
                                          filters={[this.state.filter.value]}
                                          risk={[this.state.risk]}
                                          num_results = {[10]}
+                                         showControls={false}
                             />
                         </div>
                     </div>

@@ -43,6 +43,8 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
         if (!geoid) geoid = this.props.geoid;
         if (!geoLevel) geoLevel = this.props.geoLevel;
         if (!dataType) dataType = this.props.dataType;
+
+        if (!geoid){ return Promise.resolve()}
         //const { geoLevel, dataType, geoid } = this.state;
 
         return this.props.falcor.get(
@@ -93,9 +95,9 @@ class NumberOfHazardsStackedBarGraph extends React.Component {
         const {data, keys} = this.processData(),
             format = d3format.format(this.props.format);
 
-        if (!data.length && this.props.geoid.length === 5) {
+        if (!data.length && get(this.props.geoid, ['length']) === 5) {
             return <div>Loading...</div>;
-        } else if (this.props.geoid.length > 5) {
+        } else if (get(this.props.geoid, ['length']) > 5) {
             return null;
         }
         return (

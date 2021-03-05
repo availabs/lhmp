@@ -64,10 +64,10 @@ class MainControls extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeMode: ['scenario','jurisdiction'],
+            activeMode: props.activeGeoid.length === 2 ? ['stateAssets'] : ['scenario','jurisdiction'],
             modeOff:'',
             layerSelected:'',
-            showLayers : ['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents', 'criticalInfrastructure', 'nfip', 'stateAssets'],
+            showLayers : props.activeGeoid.length === 2 ? ['stateAssets'] : ['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents', 'criticalInfrastructure', 'nfip', 'stateAssets'],
             selected : true
         }
 

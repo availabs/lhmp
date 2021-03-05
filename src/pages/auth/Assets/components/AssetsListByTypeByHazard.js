@@ -430,6 +430,7 @@ class AssetsListByTypeByHazard extends React.Component {
                                             this.state.columns
                                     }
                                     isPublic={this.props.match.url.split('/')[1] === 'risk'}
+                                    showControls={false}
                                 />
                             </div>
                         </div>

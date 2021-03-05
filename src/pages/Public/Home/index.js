@@ -342,7 +342,7 @@ class Public extends React.Component {
                     aS[section] = sideMenuConfig[section]
                         .reduce((aR, requirement) => {
 
-                            let shouldHide = this.props.activeCousubid.length > 5 && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty : false
+                            let shouldHide = this.props.activeCousubid && this.props.activeCousubid.length > 5 && requirement.showOnlyOnCounty ? requirement.showOnlyOnCounty : false
                             aR.push({...requirement, onlyAdmin: requirement.onlyAdmin || shouldHide})
                             return aR
                         }, [])
@@ -356,10 +356,10 @@ class Public extends React.Component {
                 <div style={{marginLeft: 220}}>
                     {
                         Object.keys(updatedConfig)
-                            .filter(section => this.props.activeCousubid.length > 5 ? updatedConfig[section].filter(item => !item.showOnlyOnCounty).length > 0 : true)
+                            .filter(section => this.props.activeCousubid && this.props.activeCousubid.length > 5 ? updatedConfig[section].filter(item => !item.showOnlyOnCounty).length > 0 : true)
                             .map(section => {
                             return updatedConfig[section]
-                                .filter(f => this.props.activeCousubid.length > 5 ? !f.showOnlyOnCounty : true)
+                                .filter(f => this.props.activeCousubid && this.props.activeCousubid.length > 5 ? !f.showOnlyOnCounty : true)
                                 .map(item=>{
                                 let Comp = item.component
                                 return (

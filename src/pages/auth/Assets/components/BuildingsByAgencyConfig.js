@@ -15,5 +15,6 @@ module.exports = [
     {value: 14, name: "Off of Parks, Rec & Hstrc Pres"},
     {value: 15, name: "Division of State Police"},
     {value: 16, name: "Department of Labor"},
-    {value: 17, name: "Department of Transportation"}
+    {value: 17, name: "Department of Transportation"},
+    /*{value: 18, name: "No Data"}*/
 ]
