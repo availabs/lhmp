@@ -51,6 +51,7 @@ class JurisdictionControl extends React.Component{
         return this.props.falcor.get(['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'length'])
             .then(response =>{
                 let length = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'length'],0)
+
                 this.props.falcor.get(['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']])
                     .then(response =>{
                         let graph = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'byIndex'],{})
@@ -79,16 +80,23 @@ class JurisdictionControl extends React.Component{
         if(this.props.zonesList){
             let jurisdiction_list  = []
             let graph = this.state.jurisdiction_data
+            let allGeos = Object.keys(this.props.allGeo).map(d => d)
+
             if(Object.keys(graph).length >0){
-                Object.keys(graph).forEach(item =>{
-                    jurisdiction_list.push({
-                        'label': graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
-                        'value': graph[item] ? graph[item].id : '',
-                        'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
-                        'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
-                        'geojson' : graph[item].attributes ? graph[item].attributes.geojson : ''
-                    })
+                Object.keys(graph).filter(d => d!== '$__path').forEach(item =>{
+
+                    if (allGeos.includes(graph[item].attributes.geoid)){
+                        jurisdiction_list.push({
+                            'label': graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
+                            'value': graph[item] ? graph[item].id : '',
+                            'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
+                            'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
+                            'geojson' : graph[item].attributes ? graph[item].attributes.geojson : ''
+                        })
+                    }
+
                 })
+
                 return jurisdiction_list
             }
         }
@@ -161,6 +169,7 @@ class JurisdictionControl extends React.Component{
 
 
     render(){
+
         let zones_list = this.jurisdictionDropDown();
         //localStorage.removeItem("jurisdiction")
         if(zones_list && zones_list.length > 0){
@@ -220,6 +229,7 @@ const mapStateToProps = state => (
         isAuthenticated: !!state.user.authed,
         attempts: state.user.attempts,
         zonesList : get(state.graph,['forms','byId'],{}),
+        allGeo: state.geo.allGeos,
         assetsData : get(state.graph,['building','byGeoid'],{})
     });
 

@@ -43,7 +43,7 @@ module.exports = [
                 meta: 'true',
                 //hidden:'false',
                 section: '',
-                //field_required:"required",
+                field_required:"required",
             },
             municipality:{
                 label:'Jurisdiction',
