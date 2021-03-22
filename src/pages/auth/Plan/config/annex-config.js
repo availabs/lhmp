@@ -38,6 +38,18 @@ const config = {
             ///*2-non-delete*/ hideIfNull: true
         },
         {
+            title: 'Public Participation Survey',
+            requirement: 'Req-S-5H',
+            type: 'content',
+            prompt:'',
+            intent: '',
+            icon: 'os-icon-folder',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true
+        },
+        {
             title: 'Public Comment',
             requirement: 'Req-S-5F',
             type: 'content',

@@ -59,6 +59,7 @@ let HazardConfig = [
     },
 ];
 
+
 Object.keys(HAZARD_META)
     .sort()
     .map(key => {
@@ -271,7 +272,7 @@ const config =  {
             callout: ''
         },
         {
-            title: '',
+            title: 'Presidential Disaster Declarations',
             requirement: `presidential-disaster-declarations`,
             type: 'PresidentialDisasterDeclarations',
             showTitle: false,
