@@ -198,7 +198,7 @@ class AvlFormsListTable extends React.Component {
                                 } else {
                                     let getAttribute =get(graph, `${item}.value.attributes[${attribute}]`, null)
                                     //console.log(getAttribute, typeof getAttribute)
-                                    if (getAttribute && typeof getAttribute === 'object' && 
+                                    if (getAttribute && typeof getAttribute === 'object' &&
                                         Object.keys(getAttribute).length === 1 && 
                                         Object.keys(getAttribute)[0] === '$type'
                                     ){
@@ -245,36 +245,35 @@ class AvlFormsListTable extends React.Component {
                                         <button id={item} className="btn btn-sm btn-outline-danger"
                                                 onClick={this.deleteItem}> Delete </button>
                                 }
-                            }
+                                if(this.props.config[0].attributes[attribute].display_type === 'contentViewer' && graph[item].value.attributes[attribute]){
+                                    data[attribute] =
+                                        <ContentViewer
+                                            state={{[attribute]: graph[item].value.attributes[attribute]}}
+                                            title={attribute}
+                                        />
+                                }
 
-                            if(this.props.config[0].attributes[attribute].display_type === 'contentViewer' && graph[item].value.attributes[attribute]){
-                                data[attribute] =
-                                    <ContentViewer
-                                        state={{[attribute]: graph[item].value.attributes[attribute]}}
-                                        title={attribute}
-                                    />
-                            }
+                                if(this.props.config[0].attributes[attribute].display_type === 'AvlFormsJoin' && get(graph[item], ['value', 'attributes', attribute])){
+                                    let displayType = get(this.props.config[0].attributes[attribute], `display_type`, null),
+                                        formType = get(this.props.config[0].attributes[attribute], `form_type`, null),
+                                        parentConfig = get(this.props.config[0].attributes[attribute], `parentConfig`, null),
+                                        targetConfig = get(this.props.config[0].attributes[attribute], `targetConfig`, null),
+                                        targetKey = get(this.props.config[0].attributes[attribute], `targetKey`, null)
+                                    let tmpData = get(graph[item], ['value', 'attributes', attribute], '')
+                                    tmpData = tmpData && typeof tmpData === 'string' && tmpData.indexOf('[') === 0 && tmpData.indexOf(']') === tmpData.length - 1 ?
+                                        tmpData.slice(1,-1).split(',') : tmpData;
 
-                            if(this.props.config[0].attributes[attribute].display_type === 'AvlFormsJoin' && get(graph[item], ['value', 'attributes', attribute])){
-                                let displayType = get(this.props.config[0].attributes[attribute], `display_type`, null),
-                                    formType = get(this.props.config[0].attributes[attribute], `form_type`, null),
-                                    parentConfig = get(this.props.config[0].attributes[attribute], `parentConfig`, null),
-                                    targetConfig = get(this.props.config[0].attributes[attribute], `targetConfig`, null),
-                                    targetKey = get(this.props.config[0].attributes[attribute], `targetKey`, null)
-                                let tmpData = get(graph[item], ['value', 'attributes', attribute], '')
-                                tmpData = tmpData && typeof tmpData === 'string' && tmpData.indexOf('[') === 0 && tmpData.indexOf(']') === tmpData.length - 1 ?
-                                    tmpData.slice(1,-1).split(',') : tmpData;
-
-                                data[attribute] =
-                                    <AvlFormsJoin
-                                        displayType={displayType}
-                                        formType={formType}
-                                        parentConfig={parentConfig}
-                                        targetConfig={targetConfig}
-                                        targetKey={targetKey}
-                                        id={tmpData}
-                                        {...get(graph, `${item}.value.attributes[${attribute}]`, {})}
-                                    />
+                                    data[attribute] =
+                                        <AvlFormsJoin
+                                            displayType={displayType}
+                                            formType={formType}
+                                            parentConfig={parentConfig}
+                                            targetConfig={targetConfig}
+                                            targetKey={targetKey}
+                                            id={tmpData}
+                                            {...get(graph, `${item}.value.attributes[${attribute}]`, {})}
+                                        />
+                                }
                             }
 
                         }
@@ -565,10 +564,10 @@ class AvlFormsListTable extends React.Component {
         let listAttributes = Object.keys(get(this.props.config, `[0].attributes`, {}))
         let {listViewData, geoMetaFilterColumns} = this.formsListTable();
         listViewData = listViewData.filter(value => Object.keys(value).length !== 0)
-        let formType = this.props.config.map(d => d.type);
+
         if (listViewData && listViewData.length > 0) {
             if (!_.isEqual(Object.keys(...listViewData).sort(), listAttributes.sort())) {
-                formAttributes = Object.keys(...listViewData).filter(d => !['id', 'view', 'edit', 'delete'].includes(d))
+                formAttributes = _.uniqBy(listViewData.reduce((a,c) => [...a, ...Object.keys(c)] ,[])) // Object.keys(...listViewData).filter(d => !['id', 'view', 'edit', 'delete'].includes(d))
             } else {
                 formAttributes = listAttributes
             }
