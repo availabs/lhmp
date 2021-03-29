@@ -11,6 +11,7 @@ import BuildingByOwnerTypeConfig from "pages/auth/Assets/components/BuildingByOw
 import BuildingByLandUseConfig from 'pages/auth/Assets/components/BuildingByLandUseConfig'
 import BuildingByAgency from 'pages/auth/Assets/components/BuildingsByAgencyConfig'
 import TableSelector from "components/light-admin/tables/tableSelector"
+import criticalFacilityMeta from "./criticalFacilityMeta";
 
 
 let totalBuildings = 0;
@@ -56,8 +57,7 @@ class AssetsFilteredTable extends Component {
             .then(response => {
                 //let allGeo = [this.props.geoid,...get(this.props.falcor.getCache(), `geo.${this.props.geoid}.counties.municipalities.value`, [])];
                 if(this.props.groupBy === 'critical') {
-                    ids =  get(this.props.falcor.getCache(), `parcel.meta.critical_infra.value`, []).map(f => f.value);
-                    //console.log('critical ids', ids)
+                    ids =  Object.keys(criticalFacilityMeta) // get(this.props.falcor.getCache(), `parcel.meta.critical_infra.value`, []).map(f => f.value);
                     // ids =  get(this.props.falcor.getCache(), `building.byGeoid.${this.props.geoid}.critical.types.all.value`, []);
                 }
                 let allGeo = get(this.props.falcor.getCache(), `geo.${this.props.geoid}.cousubs.value`, []);
@@ -87,7 +87,7 @@ class AssetsFilteredTable extends Component {
         totalBuildingsValue = 0;
         riskZoneIdsAllValuesTotal = {};
         let digitsToMatch = this.props.groupBy === 'propType' ? 1 : this.props.groupBy === 'critical' ? 2 : 0;
-        let moduloBy = this.props.groupBy === 'propType' ? 100 : this.props.groupBy === 'critical' ? 1000 : 1;
+        let moduloBy = this.props.groupBy === 'propType' ? 100 : this.props.groupBy === 'critical' ? 100 : 1;
         let primeColName = this.props.groupBy === 'state' ? 'Jurisdictions' : this.props.groupBy.split('T').join(' T');
         let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/${this.props.groupBy === 'state' ? 'ownerType/2' : `${this.props.groupBy}/`}`;
         let linkTrail = this.props.groupBy === 'state' || this.props.groupBy === 'agency' ? `` : `/geo/${this.props.geoid}`
@@ -106,6 +106,7 @@ class AssetsFilteredTable extends Component {
                 this.props.groupBy === 'agency' ?
                     this.props.buildingData :
             get(this.props.buildingData, `${this.props.geoid}.${this.props.groupBy}`, null);
+
         let riskZoneColNames = [];
         let scenarioToRiskZoneMapping = {};
         let riskZoneToNameMapping = {};
@@ -660,7 +661,7 @@ class AssetsFilteredTable extends Component {
                         this.props.groupBy === 'ownerType' ?
                             BuildingByOwnerTypeConfig :
                             this.props.groupBy === 'propType' ?
-                                BuildingByLandUseConfig : get(this.props.parcelMeta, 'critical_infra.value', []))}
+                                BuildingByLandUseConfig : _.keys(criticalFacilityMeta).map(key => ({value: key, name: criticalFacilityMeta[key]})))}
                     flex={this.props.flex ? this.props.flex : false}
                     height={this.props.height ? this.props.height : ''}
                     width={this.props.width ? this.props.width : ''}
