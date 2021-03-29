@@ -8,7 +8,7 @@ import withRouter from "react-router/es/withRouter";
 // Constants
 // ------------------------------------
 const PROJECT_HOST = window.location.hostname.split('.').length > 1?
-    window.location.hostname.split('.')[1].toLowerCase() + ':3000' :'mitigateny.org'
+    window.location.hostname.split('.')[1].toLowerCase() + '.org' :'mitigateny.org'
 let SUBDOMAIN = 'www'
 const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
