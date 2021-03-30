@@ -30,9 +30,9 @@ class inventoryTableViewer extends Component {
         )
     }
 
-    shouldComponentUpdate(nextProps) {
-        return this.props.activeGeoid !== nextProps.activeGeoid || this.props.activeCousubid !== nextProps.activeCousubid
-    }
+    // shouldComponentUpdate(nextProps) {
+    //     return this.props.activeGeoid !== nextProps.activeGeoid || this.props.activeCousubid !== nextProps.activeCousubid
+    // }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.activeCousubid !== this.props.activeCousubid || prevState.geoid !== this.state.geoid) {
@@ -158,7 +158,7 @@ const mapStateToProps = (state, ownProps) => {
         activeGeoid: state.user.activeGeoid,
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         graph: state.graph,
-        parcelData: get(state.graph, `parcel.byGeoid.${state.user.activeCousubid}`),
+        parcelData: get(state.graph, `parcel.byGeoid.${ownProps.geoId ? ownProps.geoId : state.user.activeCousubid !== "undefined" ? state.user.activeCousubid : state.user.activeGeoid}`),
     }
 };
 const mapDispatchToProps = ({authProjects});
