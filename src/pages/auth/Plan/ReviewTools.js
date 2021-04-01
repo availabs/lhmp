@@ -37,35 +37,37 @@ class PlanReview extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (!_.isEqual(this.state.contentData, prevState.contentData)) {
+        if (!_.isEqual(this.state, prevState)) {
             this.forceUpdate()
         }
     }
-    getReqsToFilter(geo){
+
+    getReqsToFilter(geo) {
         let formType = 'filterRequirements'
         let graph = get(this.props.falcor.getCache(), [`forms`], null);
         let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {});
         let reqToFilter;
 
-        if(id){
+        if (id) {
             id = Object.keys(id)
                 .map(i => get(id[i], ['value', 2], null))
                 .filter(i => i)
             let data = id.map(i => get(graph, ['byId', i], {}))
-            if (data){
+            if (data) {
                 reqToFilter =
                     Object.keys(data)
-                        .reduce((a,g) => {
+                        .reduce((a, g) => {
                             let tmpReqs = get(data[g], `value.attributes`, {})
                             Object.keys(tmpReqs)
                                 .filter(tr => tr === geo && tmpReqs[tr])
-                                .forEach(tr => a.push(...tmpReqs[tr].slice(2,-2).split(',').filter(r => r!== "")))
+                                .forEach(tr => a.push(...tmpReqs[tr].slice(2, -2).split(',').filter(r => r !== "")))
                             return a
                         }, [])
             }
         }
         return reqToFilter
     }
+
     async fetchFalcorDeps() {
         if (!this.props.activeGeoid) return Promise.resolve();
 
@@ -93,9 +95,9 @@ class PlanReview extends React.Component {
                 if (length > 0) {
                     return this.props.falcor.get(
                         ['forms', formType, 'byPlanId', this.props.activePlan, 'byIndex', [{
-                        from: 0,
-                        to: length - 1
-                    }], ...formAttributes],
+                            from: 0,
+                            to: length - 1
+                        }], ...formAttributes],
                         ['geo',
                             [this.props.activeGeoid, ...get(this.props.geoGraph, `${this.props.activeGeoid}.municipalities.value`, [])],
                             ['name']])
@@ -120,36 +122,29 @@ class PlanReview extends React.Component {
                         .map(r => r.trim())))
                 let contentIds = []
                 allGeos.map(geo => allReq.map(req => contentIds.push(req + '-' + this.props.activePlan + '-' + geo)));
-                return this.props.falcor.get(
-                    ['content', 'byId', contentIds, ['content_id', 'attributes']]
-                ).then(r => this.setState({
-                    contentData:
-                        Object.keys(r.json.content.byId)
-                            .filter(k => r.json.content.byId[k] && k !== '$__path')
-                            .reduce((a, c) => {
-                                a[c] = r.json.content.byId[c];
-                                return a;
-                            }, {})
-                }))
+                return _.chunk(contentIds, 5000)
+                    .reduce((a, c) =>
+                        a.then(() => this.props.falcor.get(['content', 'byId', c, ['content_id', 'attributes']])), Promise.resolve())
             })
     }
-    getGeoToFilter(){
+
+    getGeoToFilter() {
         let formType = 'filterJurisdictions'
         let graph = get(this.props.falcor.getCache(), [`forms`], null);
         let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {})
-        if(id){
+        if (id) {
             id = Object.keys(id)
                 .map(i => get(id[i], ['value', 2], null))
                 .filter(i => i)
             let data = id.map(i => get(graph, ['byId', i], {}))
-            if (data){
+            if (data) {
                 let geoToFilter =
                     Object.keys(data)
-                        .reduce((a,g) => {
+                        .reduce((a, g) => {
                             let tmpGeos = get(data[g], `value.attributes.municipality`, null)
                             tmpGeos = tmpGeos && typeof tmpGeos === "string" && tmpGeos.includes('[') ?
-                                tmpGeos.slice(1,-1).split(',') : tmpGeos
-                            if(tmpGeos) a.push(...tmpGeos)
+                                tmpGeos.slice(1, -1).split(',') : tmpGeos
+                            if (tmpGeos) a.push(...tmpGeos)
                             return a;
                         }, [])
                 return geoToFilter;
@@ -158,9 +153,19 @@ class PlanReview extends React.Component {
 
         return []
     }
+
     processTable(allowedGeos) {
+        let cache = this.props.falcor.getCache();
+        if (!get(cache, ['content', 'byId'])) return null
+        let contentData = Object.keys(cache.content.byId)
+            .filter(k => cache.content.byId[k] && k !== '$__path')
+            .reduce((a, c) => {
+                a[c] = cache.content.byId[c];
+                return a;
+            }, {})
+
         let reqToFilter =
-            allowedGeos.reduce((a,c) => {
+            allowedGeos.reduce((a, c) => {
                 a[c] = this.getReqsToFilter(c);
                 return a;
             }, {})
@@ -182,64 +187,64 @@ class PlanReview extends React.Component {
                                 <td style={{width: 'max-content'}}>{functions.formatName(get(this.props.geoGraph, `${geo}.name`, 'N/A'), geo)}</td>
                                 {
                                     config.elements.map(element => {
-                                        let allPullCountyStatus = {
-                                            total_req: 0,
-                                            total_pullCounty: 0,
-                                            pulledFromCounty: 0
-                                        };
-                                        let allStatus =
-                                            element.requirements_from_software.split(',')
-                                                .map(r => r.trim())
-                                                .filter(r => r.length)
-                                                // .filter(r =>
-                                                //     get(megaConfig.filter(mc =>  mc.requirement === r),
-                                                //     `[0].type`, null) === 'content')
-                                                .map(r => {
-                                                    allPullCountyStatus.total_req += 1;
+                                            let allPullCountyStatus = {
+                                                total_req: 0,
+                                                total_pullCounty: 0,
+                                                pulledFromCounty: 0
+                                            };
+                                            let allStatus =
+                                                element.requirements_from_software.split(',')
+                                                    .map(r => r.trim())
+                                                    .filter(r => r.length)
+                                                    // .filter(r =>
+                                                    //     get(megaConfig.filter(mc =>  mc.requirement === r),
+                                                    //     `[0].type`, null) === 'content')
+                                                    .map(r => {
+                                                        allPullCountyStatus.total_req += 1;
 
-                                                    // if a req is hidden for this geo, show it as ready to review
-                                                    if (reqToFilter && reqToFilter[geo].includes(r)){
-                                                        return "Ready for review"
-                                                    }
-                                                    if(
-                                                        get(megaConfig.filter(mc =>  mc.requirement === r),
-                                                            `[0].type`, null) === 'content'
-                                                    ){
-                                                        // for content, check status
-                                                        let tmpPullCounty =
-                                                            get(megaConfig.filter(mc => {
-                                                                return mc.requirement === r
-                                                            }), [0, 'pullCounty'], false);
-                                                        let tmpStatus = get(this.state.contentData, `${r}-${this.props.activePlan}-${geo}.attributes.status`, '');
+                                                        // if a req is hidden for this geo, show it as ready to review
+                                                        if (reqToFilter && reqToFilter[geo].includes(r)) {
+                                                            return "Ready for review"
+                                                        }
+                                                        if (
+                                                            get(megaConfig.filter(mc => mc.requirement === r),
+                                                                `[0].type`, null) === 'content'
+                                                        ) {
+                                                            // for content, check status
+                                                            let tmpPullCounty =
+                                                                get(megaConfig.filter(mc => {
+                                                                    return mc.requirement === r
+                                                                }), [0, 'pullCounty'], false);
+                                                            let tmpStatus = get(contentData, `${r}-${this.props.activePlan}-${geo}.attributes.value.status`, '');
+                                                            allPullCountyStatus.total_pullCounty += tmpPullCounty ? 1 : 0;
+                                                            allPullCountyStatus.pulledFromCounty += tmpPullCounty && !(tmpStatus && tmpStatus.length) ? 1 : 0;
 
-                                                        allPullCountyStatus.total_pullCounty += tmpPullCounty ? 1 : 0;
-                                                        allPullCountyStatus.pulledFromCounty += tmpPullCounty && !(tmpStatus && tmpStatus.length) ? 1 : 0;
+                                                            return tmpPullCounty && !(tmpStatus && tmpStatus.length) ?
+                                                                get(contentData, `${r}-${this.props.activePlan}-${this.props.activeGeoid}.attributes.value.status`, '') :
+                                                                tmpStatus
+                                                        } else {
+                                                            // for non-content, return "Ready for review"
+                                                            return "Ready for review"
+                                                        }
+                                                    })
 
-                                                        return tmpPullCounty && !(tmpStatus && tmpStatus.length) ?
-                                                            get(this.state.contentData, `${r}-${this.props.activePlan}-${this.props.activeGeoid}.attributes.status`, '') :
-                                                            tmpStatus
-                                                    }else{
-                                                        // for non-content, return "Ready for review"
-                                                        return "Ready for review"
-                                                    }
-                                                })
-                                        let elementStatus = get(this.state.contentData, `${element.element}-${this.props.activePlan}-${geo}.attributes.status`, '')
+                                            let elementStatus = get(contentData, `${element.element}-${this.props.activePlan}-${geo}.attributes.value.status`, '')
 
                                             return <td
                                                 style={{
                                                     backgroundColor:
                                                         geo.length > 5 && element.municipal === 'false' ? colors["Does not Apply"] :
                                                             elementStatus === "Requirement not met" ? colors["Requirement not met"] :
-                                                            elementStatus === "Requirement met" ? colors["Requirement met"] :
-                                                        allStatus.includes('Started') ? colors.Started :
-                                                            allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready for review"] :
-                                                            // allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
-                                                            // allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
-                                                                'none',
+                                                                elementStatus === "Requirement met" ? colors["Requirement met"] :
+                                                                    allStatus.includes('Started') ? colors.Started :
+                                                                        allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready for review"] :
+                                                                            // allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
+                                                                            // allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
+                                                                            'none',
                                                     opacity:
-                                                        // allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
+                                                    // allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
                                                         allPullCountyStatus.total_pullCounty === allPullCountyStatus.pulledFromCounty &&
-                                                            element.municipal !== 'false' ? 0.5 : 1
+                                                        element.municipal !== 'false' ? 0.5 : 1
                                                 }}
                                                 onClick={() =>
                                                     geo.length > 5 && element.municipal === 'false' ?
@@ -277,7 +282,12 @@ class PlanReview extends React.Component {
                                         <React.Fragment>
                                             <td
                                                 style={{width: '15px', height: '15px', paddingLeft: '10px'}}>
-                                                <div style={{backgroundColor: colors[status], width: '15px', height: '15px', paddingLeft: '10px'}}> </div>
+                                                <div style={{
+                                                    backgroundColor: colors[status],
+                                                    width: '15px',
+                                                    height: '15px',
+                                                    paddingLeft: '10px'
+                                                }}></div>
                                             </td>
                                             <td style={{paddingLeft: '5px', paddingRight: '10px'}}>
                                                 <small className='text-muted'>{status}</small>
@@ -300,7 +310,12 @@ class PlanReview extends React.Component {
                             <React.Fragment>
                                 <td
                                     style={{width: '15px', height: '15px', paddingLeft: '10px'}}>
-                                    <div style={{backgroundColor: colors[status], width: '15px', height: '15px', paddingLeft: '10px'}}> </div>
+                                    <div style={{
+                                        backgroundColor: colors[status],
+                                        width: '15px',
+                                        height: '15px',
+                                        paddingLeft: '10px'
+                                    }}></div>
                                 </td>
                                 <td style={{paddingLeft: '5px', paddingRight: '10px'}}>
                                     <small className='text-muted'>{status}</small>
