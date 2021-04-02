@@ -18,6 +18,8 @@ import ElementBox from "../../../../components/light-admin/containers/ElementBox
 import Element from "../../../../components/light-admin/containers/Element";
 
 import zoneConfig from 'pages/auth/Zones/config.js'
+import functions from "../../Plan/functions";
+import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 var _ = require('lodash')
 const IconPolygon = ({layer}) => <span className='fa fa-2x fa-connectdevelop'/>;
 let result_polygon = {}
@@ -41,7 +43,6 @@ export class AddNewZoneLayer extends MapLayer{
 
 
     toggleCreationMode(mode, map) {
-        console.log('creation mode', mode)
         this.creationMode = mode;
         if (mode === 'polygon')
         {
@@ -257,7 +258,6 @@ class ShowNewZoneModal extends React.Component{
     }
 
     handleChange(e) {
-        console.log('---',e.target.id,e.target.value,this.state);
         this.setState({ ...this.state, [e.target.id]: e.target.value });
     };
 
@@ -268,14 +268,53 @@ class ShowNewZoneModal extends React.Component{
             })
     }
 
+    jurisdictionDropDown(){
+        if(this.props.allGeo){
+            let geo_list  = []
+            let graph = this.props.allGeo
+            if(Object.keys(graph).length >0){
+                Object.keys(graph).filter(d => d !== '$__path' && d.length > 5).forEach(item =>{
+                    if(graph[item]){
+                        geo_list.push({
+                            'label': functions.formatName(graph[item], item),
+                            'value': item//? graph[item].id : '',
+                        })
+                    }
+                })
+                return geo_list
+            }
+        }
+    }
+
     render(){
         let geoid = this.props.activeGeoid,
             zoneMetaTypes = get(zoneConfig, [0,'attributes', 'zone_type', 'meta_filter', 'value'], null) ||  this.props.formsZonesMeta
-        zoneMetaTypes = zoneMetaTypes.filter(zmt => !['Select All', 'Select None'].includes(zmt))
+        zoneMetaTypes = zoneMetaTypes.filter(zmt => !['Select All', 'Select None'].includes(zmt));
+        let jurisdiction_list = this.jurisdictionDropDown();
+
         return(
         <ElementBox>
             <div className="form-group">
                 <div className="col-sm-12">
+                    <div className="col-sm-12">
+                        <div className="form-group"><h6>Municipality</h6>
+                            {
+                                jurisdiction_list && jurisdiction_list.length ?
+                                    <SearchableDropDown
+                                        id={'action_jurisdiction'}
+                                        className="form-control justify-content-sm-end"
+                                        data={jurisdiction_list}
+                                        placeholder={'Select a Municipality'}
+                                        value={jurisdiction_list.filter(f => f.value === this.state.action_jurisdiction)[0]}
+                                        hideValue={false}
+                                        onChange={(value) => {
+                                            this.setState({action_jurisdiction:value})
+                                        }}
+                                    /> : null
+                            }
+                        </div>
+                    </div>
+
                     <div className="col-sm-12">
                         <div className="form-group"><h6>Name Your Zone</h6>
                             <input id='new_zone_name' className="form-control"
@@ -297,6 +336,7 @@ class ShowNewZoneModal extends React.Component{
                             </select>
                         </div>
                     </div>
+
                     <div className="col-sm-12">
                         <div className="form-group"><h6>Comment</h6>
                             <input id='comment' className="form-control"
@@ -311,7 +351,7 @@ class ShowNewZoneModal extends React.Component{
                             className="mr-2 mb-2 btn btn-primary btn-sm"
                             type="button"
                             onClick = {(e) =>{
-                                e.persist()
+                                e.persist();
                                 let args = [];
                                 let attributes = {}
                                 let plan_id = this.props.activePlan
@@ -322,6 +362,8 @@ class ShowNewZoneModal extends React.Component{
                                 attributes['bbox'] = zone_boundary
                                 attributes['name'] = typeof name === "string" ? name.replaceAll('\'', '\'\'') : name  || 'None'
                                 attributes['zone_type'] = this.state.zone_type || 'None'
+                                attributes['action_county'] = '[' + this.props.activeGeoid.toString() + ']'
+                                attributes['action_jurisdiction'] = '[' + this.state.action_jurisdiction.toString() + ']' || "[]"
                                 attributes['comment'] = typeof this.state.comment === "string" ? this.state.comment.replaceAll('\'', '\'\'') : this.state.comment  || 'None'
                                 attributes['geojson'] = result_polygon
                                 attributes['geoid'] = geoid
@@ -403,7 +445,8 @@ class ShowNewZoneModal extends React.Component{
 const mapStateToProps = (state, { id }) => ({
     activeGeoid:state.user.activeGeoid,
     activePlan : state.user.activePlan,
-    formsZonesMeta : get(state.graph,['forms','zones','meta','value'],[])
+    formsZonesMeta : get(state.graph,['forms','zones','meta','value'],[]),
+    allGeo: state.geo.allGeos
 });
 const mapDispatchToProps = {};
 const NewZoneModal = connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(ShowNewZoneModal))
