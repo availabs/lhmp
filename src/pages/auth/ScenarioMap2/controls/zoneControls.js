@@ -36,7 +36,7 @@ class ZoneControl extends React.Component{
     componentDidUpdate(oldProps,oldState) {
         if (oldProps.activeMode.length !== this.props.activeMode.length) {
             if (localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0) {
-                this.noSelectedZones()
+                // this.noSelectedZones()
             } else{
                 this.fetchFalcorDeps()
                 this.selectedZones()
@@ -177,7 +177,8 @@ class ZoneControl extends React.Component{
                     geoid: zone.geoid || '',
                     geom: zone.geom || '',
                     name: zone.name || 'None',
-                    bbox: zone.bbox || ''
+                    bbox: zone.bbox || '',
+                    type: zone.type || 'No Type Data'
                 })
             })
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id')
@@ -235,7 +236,8 @@ class ZoneControl extends React.Component{
                                                             geom: zone.geom,
                                                             name:zone.label,
                                                             geojson: zone.geojson,
-                                                            bbox: zone.bbox
+                                                            bbox: zone.bbox,
+                                                            type: zone.zone_type
                                                         });
                                                     }
                                                 })
