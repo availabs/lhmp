@@ -88,6 +88,8 @@ class MainControls extends React.Component {
             this.props.layer.mainLayerToggleVisibilityOn(["scenario"])
             this.props.layer.mainLayerToggleVisibilityOn(["jurisdiction"])
 
+        if(_.isEqual(this.state.activeMode, ['stateAssets']) ){
+            this.props.layer.mainLayerToggleVisibilityOn(["stateAssets"])
         }
         //landuse is active only when needed and zoomes in
         if(_.isEqual(this.state.showLayers,['landUse','commentMap','culverts','zone','evacuationRoutes','vulnerableDemographics', 'hazardEvents', 'criticalInfrastructure', 'nfip', 'stateAssets'])){

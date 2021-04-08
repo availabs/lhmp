@@ -29,8 +29,8 @@ export class StateAssetsLayer extends MapLayer {
             .then(response => {
                 let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                map.resize();
-                map.fitBounds(bbox);
+                // map.resize();
+                // map.fitBounds(bbox);
                 this.layers.forEach(layer => {
                     map.setLayoutProperty(layer.id, 'visibility', "none");
                 })
@@ -78,19 +78,21 @@ export class StateAssetsLayer extends MapLayer {
             let length = get(res, ['json', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'length']),
                 lengthOT = get(res, ['json', 'building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2', 'length']);
             console.log('len', length)
-            let reqs = []
+            let reqs = [],
+                chunk = 1300;
+
             // building.byGeoid[{keys:geoids}].ownerType[{keys:ownerTypes}].byIndex[{integers:indices}]
-            if (length > 200){
-                for(let i = 0; i < length; i+=200){
+            if (length > 200) {
+                for (let i = 0; i < length; i += chunk) {
                     reqs.push(
                         ['building', 'byGeoid',
                             store.getState().user.activeGeoid,
                             'agency',
                             agencyList,
-                            'byIndex', {from: i, to: i + 199}, ATTRIBUTES]
+                            'byIndex', {from: i, to: i + chunk - 1}, ATTRIBUTES]
                     )
                 }
-            }else{
+            } else {
                 reqs.push(['building', 'byGeoid',
                     store.getState().user.activeGeoid,
                     'agency',
@@ -98,41 +100,47 @@ export class StateAssetsLayer extends MapLayer {
                     'byIndex', {from: 0, to: length - 1}, ATTRIBUTES])
             }
 
-            if (lengthOT > 200){
-                for(let i = 0; i < lengthOT; i+=200){
+            if (lengthOT > chunk) {
+                for (let i = 0; i < lengthOT; i += chunk) {
                     reqs.push(
-                        ['building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2',  'byIndex', {from: i, to: i + 199}, ATTRIBUTES]
+                        ['building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2', 'byIndex', {
+                            from: i,
+                            to: i + chunk - 1
+                        }, ATTRIBUTES]
                     )
                 }
-            }else{
-                reqs.push(['building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2',  'byIndex', {from: 0, to: lengthOT - 1}, ATTRIBUTES])
+            } else {
+                reqs.push(['building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2', 'byIndex', {
+                    from: 0,
+                    to: lengthOT - 1
+                }, ATTRIBUTES])
             }
 
-            return reqs.reduce((a,c) => a.then(() => falcorGraph.get(c)), Promise.resolve()).then(finalRes => {
-                let onlyAgency = Object.values(
-                    get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'byIndex'], {})
-                ).map(v => get(v, ['value', 2], null))
-                        .filter(v => v),
-                    onlyOnwerType = Object.values(
-                        get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2',  'byIndex'], {})
-                    ).map(v => get(v, ['value', 2], null))
-                        .filter(v => v),
+            return reqs.reduce((a, c) => {
+                return a.then(() => falcorGraph.get(c))
+            }, Promise.resolve())
+                .then(finalRes => {
+                    let onlyAgency = Object.values(
+                        get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'byIndex'], {})
+                        ).map(v => get(v, ['value', 2], null)).filter(v => v),
+                        onlyOnwerType = Object.values(
+                            get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2', 'byIndex'], {})
+                        ).map(v => get(v, ['value', 2], null)).filter(v => v),
 
-                buildingIds = this.viewModeFilter === 'Only Agency' ? onlyAgency :
-                    this.viewModeFilter === 'Only Owner type' ? onlyOnwerType :
-                        this.viewModeFilter === 'Both' ? _.intersection(onlyAgency, onlyOnwerType) : []
-
-                this.buildingIds = buildingIds || [];
-                this.AgencyAndOwnerType = _.intersection(onlyAgency, onlyOnwerType)
-                if (!buildingIds.length) return Promise.resolve();
-                return falcorGraph.get(['building', 'geom', 'byBuildingId', buildingIds, 'centroid']).then(() => this.loading = false)
-            })
+                        buildingIds = this.viewModeFilter === 'Only Agency' ? onlyAgency :
+                            this.viewModeFilter === 'Only Owner type' ? onlyOnwerType :
+                                this.viewModeFilter === 'Both' ? _.intersection(onlyAgency, onlyOnwerType) : _.intersection(onlyAgency, onlyOnwerType)
+                    this.buildingIds = buildingIds || [];
+                    this.AgencyAndOwnerType = _.intersection(onlyAgency, onlyOnwerType)
+                    this.loading = false
+                    if (!buildingIds.length) return Promise.resolve();
+                    return falcorGraph.get(['building', 'geom', 'byBuildingId', buildingIds, 'centroid'])
+                })
         })
     }
 
     receiveData(map, data) {
         if (!this.buildingIds) return Promise.resolve();
-
         let rawGraph = falcorGraph.getCache(),
             graph =
                 this.buildingIds
@@ -147,26 +155,25 @@ export class StateAssetsLayer extends MapLayer {
             "type": "FeatureCollection",
             "features": []
         };
-
         if (!graph || !graph.length) return Promise.resolve();
-
         graph
-            .forEach((building, buildingI) => {
-                if (
-                    ((this.agencyFilter.length && this.agencyFilter.includes(get(rawGraph, ['building', 'byId', building.buildingId, 'agency']))) || !this.agencyFilter.length) &&
-                    ((this.floodPlainFilter && this.floodPlainFilter.length && this.floodPlainFilter.includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone']))) || !this.floodPlainFilter)
+            .filter(building =>
+                (
+                    (!this.agencyFilter.length || (this.agencyFilter.length && this.agencyFilter.includes(get(rawGraph, ['building', 'byId', building.buildingId, 'agency'])))) &&
+                    (!this.floodPlainFilter.length || (this.floodPlainFilter && this.floodPlainFilter.length && this.floodPlainFilter.includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone']))))
                 )
-
-                    geojson.features.push({
-                        "type": "Feature",
-                        "properties": {
-                            id: buildingI,
-                            color: this.AgencyAndOwnerType.includes(building.buildingId) ? '#f50707' : '#f3aa33',
-                            ...get(rawGraph, ['building', 'byId', building.buildingId]),
-                            flood_zone: Object.keys(floodZones).filter(floodZone => floodZones[floodZone].includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone'])))[0]
-                        },
-                        "geometry": get(building, `geom`, {})
-                    })
+            )
+            .forEach((building, buildingI) => {
+                geojson.features.push({
+                    "type": "Feature",
+                    "properties": {
+                        id: buildingI,
+                        color: this.AgencyAndOwnerType.includes(building.buildingId) ? '#f50707' : '#f3aa33',
+                        ...get(rawGraph, ['building', 'byId', building.buildingId]),
+                        flood_zone: Object.keys(floodZones).filter(floodZone => floodZones[floodZone].includes(get(rawGraph, ['building', 'byId', building.buildingId, 'flood_zone'])))[0]
+                    },
+                    "geometry": get(building, `geom`, {})
+                })
             });
 
         if (map.getSource('agency')) {
@@ -239,11 +246,11 @@ export class StateAssetsLayer extends MapLayer {
             .then(data => {
                 // set map bounds
                 let graph = falcorGraph.getCache();
-                let initalBbox =
-                    get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
-                        .slice(4, -1).split(",");
-                let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                this.map.resize();
+                // let initalBbox =
+                //     get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
+                //         .slice(4, -1).split(",");
+                //let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
+                //this.map.resize();
                 // this.map.fitBounds(bbox);
 
                 // get tracts
@@ -265,7 +272,8 @@ export class StateAssetsLayer extends MapLayer {
                 }
 
                 // get data and paint map
-                return this.fetchData(graph).then(data => this.receiveData(this.map, data)).then(() => this.loading = false)
+                this.loading = false
+                // return this.fetchData(graph).then(data => this.receiveData(this.map, data)).then(() => this.loading = false)
             })
 
     }
@@ -337,6 +345,7 @@ export const StateAssetsOptions = (options = {}) => {
         displayFeatures: get(store.getState(), `user.activeGeoid.length`, null) === 2 ? 'counties' : 'cousubs',
         markers: [],
         agencyFilter: [],
+        floodPlainFilter: [],
         viewModeFilter: 'Both',
         popover: {
             layers: ['agency-layer'],
