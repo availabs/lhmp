@@ -87,6 +87,7 @@ class MainControls extends React.Component {
             //console.log('in first if')
             this.props.layer.mainLayerToggleVisibilityOn(["scenario"])
             this.props.layer.mainLayerToggleVisibilityOn(["jurisdiction"])
+        }
 
         if(_.isEqual(this.state.activeMode, ['stateAssets']) ){
             this.props.layer.mainLayerToggleVisibilityOn(["stateAssets"])
