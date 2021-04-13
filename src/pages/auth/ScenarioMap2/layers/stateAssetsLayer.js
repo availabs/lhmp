@@ -79,7 +79,7 @@ export class StateAssetsLayer extends MapLayer {
                 lengthOT = get(res, ['json', 'building', 'byGeoid', store.getState().user.activeGeoid, 'ownerType', '2', 'length']);
             console.log('len', length)
             let reqs = [],
-                chunk = 1300;
+                chunk = 2000;
 
             // building.byGeoid[{keys:geoids}].ownerType[{keys:ownerTypes}].byIndex[{integers:indices}]
             if (length > 200) {
@@ -116,10 +116,12 @@ export class StateAssetsLayer extends MapLayer {
                 }, ATTRIBUTES])
             }
 
+            console.time('getting data')
             return reqs.reduce((a, c) => {
                 return a.then(() => falcorGraph.get(c))
             }, Promise.resolve())
                 .then(finalRes => {
+                    console.timeEnd('getting data')
                     let onlyAgency = Object.values(
                         get(store.getState(), ['graph', 'building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList[0], 'byIndex'], {})
                         ).map(v => get(v, ['value', 2], null)).filter(v => v),

@@ -120,7 +120,7 @@ class TractLayer extends MapLayer {
     fetchData(graph) {
         // console.log('in ffd: analysis');
         if (!graph) graph = falcorGraph.getCache();
-        if (!this.filters.hazard.value || this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve({route: []});
+        if (!this.filters.hazard.value || get(this, 'tracts.length', 0) < 2 || !store.getState().user.activeGeoid) return Promise.resolve({route: []});
         let countiesOrCousubs = get(graph,
             `geo.${store.getState().user.activeGeoid}.${this.displayFeatures}]`,
             null);
