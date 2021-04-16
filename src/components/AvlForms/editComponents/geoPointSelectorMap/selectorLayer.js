@@ -21,7 +21,6 @@ class SelectorLayer extends MapLayer {
 
     onPropsChange(oldProps, newProps) {
         if (!_.isEqual(newProps.value, oldProps.value)) {
-            console.log('updating..', newProps.value)
             this.locations = newProps.value;
             this.paintMarkers();
             this.fetchData().then(data => this.receiveData(this.map, data))
@@ -72,7 +71,7 @@ class SelectorLayer extends MapLayer {
         for (let i = 0; i < geos.value.length; i += 50) {
             requests.push(geos.value.slice(i, i + 50));
         }
-        // console.log('reqs', requests, graph, geos)
+
         return requests.reduce((a, c) =>
                 a.then(() => falcorGraph.get(
                     ['nfip', 'losses', 'byGeoid', c, 'allTime', 'total_payments'],
@@ -85,8 +84,6 @@ class SelectorLayer extends MapLayer {
     }
 
     paintMarkers() {
-        console.log('locations', this.locations)
-
         this.markers.map(m => m.remove())
         this.markers = this.locations.map((p, i) => {
             p = {lng: p.lng, lat: p.lat}
@@ -202,8 +199,6 @@ const selectorLayer = new SelectorLayer("Local Context Layer", {
         layers: ["ebr"],
         dataFunc: function (features, a, location) {
             if (!features.length) return;
-            console.log('click', features, {...location}, this.locations)
-
             this.locations = [...(this.locations || []), {...location}];
             this.paintMarkers();
             this.map && this.render(this.map);

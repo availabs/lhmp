@@ -1,4 +1,5 @@
 import React from "react"
+import EditorBidiService from 'draft-js/lib/EditorBidiService';
 
 import { EditorState, AtomicBlockUtils, Modifier, SelectionState } from 'draft-js';
 
@@ -67,7 +68,12 @@ export default (options = {}) => {
       return EditorState.forceSelection(
         EditorState.set(
           newEditorState,
-          { currentContent }
+          { currentContent ,
+            directionMap:EditorBidiService.getDirectionMap(
+                contentState,
+                editorState.getDirectionMap(),
+            )
+          }
         ),
         new SelectionState({ anchorKey, focusKey: anchorKey })
       )

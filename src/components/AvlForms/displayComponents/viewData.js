@@ -120,7 +120,8 @@ class AvlFormsViewData extends React.Component{
                         formType = get(config[0][d], `form_type`, null),
                         parentConfig = get(config[0][d], `parentConfig`, null),
                         targetConfig = get(config[0][d], `targetConfig`, null),
-                        targetKey = get(config[0][d], `targetKey`, null);
+                        targetKey = get(config[0][d], `targetKey`, null),
+                        display_location_in_table = get(config[0][d], `display_location_in_table`, null);
 
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value && !this.isJsonString(value) ? value.toString() : value;
@@ -165,7 +166,8 @@ class AvlFormsViewData extends React.Component{
                                 formType,
                                 parentConfig,
                                 targetConfig,
-                                targetKey
+                                targetKey,
+                                display_location_in_table
                             })
                         }
                         else{
@@ -179,7 +181,8 @@ class AvlFormsViewData extends React.Component{
                                     formType,
                                     parentConfig,
                                     targetConfig,
-                                    targetKey
+                                    targetKey,
+                                    display_location_in_table
                                 })
                             }
 
@@ -196,7 +199,8 @@ class AvlFormsViewData extends React.Component{
                                     formType = get(config[0][d], `form_type`, null),
                                     parentConfig = get(config[0][d], `parentConfig`, null),
                                     targetConfig = get(config[0][d], `targetConfig`, null),
-                                    targetKey = get(config[0][d], `targetKey`, null);
+                                    targetKey = get(config[0][d], `targetKey`, null),
+                                    display_location_in_table = get(config[0][d], `display_location_in_table`, null);
 
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
@@ -213,7 +217,8 @@ class AvlFormsViewData extends React.Component{
                                                     formType,
                                                     parentConfig,
                                                     targetConfig,
-                                                    targetKey
+                                                    targetKey,
+                                                    display_location_in_table
                                                 })
                                             }else{
                                                 data.push({
@@ -225,7 +230,8 @@ class AvlFormsViewData extends React.Component{
                                                     formType,
                                                     parentConfig,
                                                     targetConfig,
-                                                    targetKey
+                                                    targetKey,
+                                                    display_location_in_table
                                                 })
                                             }
                                         }else{
@@ -253,7 +259,8 @@ class AvlFormsViewData extends React.Component{
                                                             formType,
                                                             parentConfig,
                                                             targetConfig,
-                                                            targetKey
+                                                            targetKey,
+                                                            display_location_in_table
                                                         })
                                                     }
                                                 }

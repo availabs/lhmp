@@ -13,15 +13,16 @@ class geoPointSelectorMap extends React.PureComponent {
 
     }
 
-    renderResults() {
-        return JSON.stringify(this.state)
+    isJson(text) {
+        try {
+            JSON.parse(text);
+            return true;
+        }catch (e){
+            return false;
+        }
     }
 
     renderMap(id = 'tmpid') {
-        console.log('??', this.props.state[this.props.title])
-        if (this.props.state[this.props.title]) {
-            console.log('???', JSON.parse(this.props.state[this.props.title]))
-        }
         return (
             <div>
                 <button className="mr-2 mb-2 btn btn-sm btn-outline-info btn-rounded" type="button"
@@ -67,7 +68,6 @@ class geoPointSelectorMap extends React.PureComponent {
                                     layerProps={{
                                         [selectorLayer.name]: {
                                             onChange: (e) => {
-                                                console.log('changing..', JSON.stringify(e.map((l, lI) => ({[lI]: l})).reduce((a, c) => ({...a, ...c}), {})))
                                                 this.props.handleChange(
                                                     {
                                                         target: {
@@ -76,7 +76,7 @@ class geoPointSelectorMap extends React.PureComponent {
                                                         }
                                                     })
                                             },
-                                            value: this.props.state[this.props.title] ? Object.values(JSON.parse(this.props.state[this.props.title])) : []
+                                            value: this.isJson(this.props.state[this.props.title]) ? Object.values(JSON.parse(this.props.state[this.props.title])) : []
                                         }
                                     }}
                                 />

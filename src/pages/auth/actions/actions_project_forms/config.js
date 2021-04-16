@@ -418,7 +418,7 @@ module.exports = [
                 label: 'Location Point',
                 sub_type: 'project',
                 prompt: ' Provide the exact location(s) where the action takes place. Multiple points may be selected.',
-                edit_type: 'text',
+                edit_type: 'geoPointSelectorMap',
                 display_type: 'text',
                 meta: 'false',
                 section: '3'
@@ -817,7 +817,7 @@ module.exports = [
                 meta: 'false',
                 section: '6'
             },
-            
+
             // associated_mitigation_capability: {
             //     label:'Select the Capability Type that this Action will be used and/or contribute to:',
             //     sub_type:'project',
@@ -876,7 +876,7 @@ module.exports = [
             //     display_type:'text',
             //     meta:'false',
             //     section:'5'
-            // },           
+            // },
             // is_community_have_comprehensive_plan:{
             //     label:'Does the community have a comprehensive plan?',
             //     sub_type:'project',
@@ -1012,6 +1012,7 @@ module.exports = [
                 edit_type: 'form_array',
                 form_type: 'actions_status_update',
                 display_type: 'form_view',
+                display_location_in_table: 'false',
                 add_text: 'Status Update',
                 column_map: {
                     'action_name': 'action_name'

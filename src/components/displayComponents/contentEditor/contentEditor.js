@@ -132,11 +132,11 @@ class ContentEditor extends Component {
             if (contentRes.json.content.byId[contentId]) {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 this.setState({'currentKey': contentId});
-
                 let content = contentRes.json.content.byId[contentId].body;
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
 
                 if (content) {
+                    console.log('??', JSON.parse(content))
                     let editorState = this.isJsonString(content) ? EditorState.createWithContent(convertFromRaw(JSON.parse(content))) : content;
                     this.setState({'editorState': editorState, status: status, statusFromDb: status})
                 }
@@ -211,7 +211,23 @@ class ContentEditor extends Component {
 
         this.props.uploadImage(file)
             .then(({ filename, url }) => {
+                // const newES = addImage(url, getEditorState());
+                const editorState = this.state.editorState;
+                const content = editorState.getCurrentContent();
+                const contentWithEntity = content.createEntity("IMAGE", "MUTABLE", {
+                            src: url
+                        });
+                const newEditorState = EditorState.push(
+                            editorState,
+                            contentWithEntity,
+                            "create-entity"
+                        );
+                const entityKey = contentWithEntity.getLastCreatedEntityKey();
+
                 this.onEditorStateChange(addImage(url, getEditorState()));
+                // this.onEditorStateChange(newCS);
+
+
                 // this.handleChange(addImage(getEditorState(), url));
             });
         return "handled";
