@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState, useEffect} from "react"
 import store from "store"
 import MapLayer from "components/AvlMap/MapLayer"
 import get from 'lodash.get'
@@ -7,7 +7,8 @@ import {falcorGraph} from "store/falcorGraph"
 import {unregister} from "../../../../components/AvlMap/ReduxMiddleware";
 import mapboxgl from "mapbox-gl";
 import * as turf from '@turf/turf'
-
+import AvlFormsViewData from 'components/AvlForms/displayComponents/viewData';
+import actionsViewConfig from 'pages/auth/actions/actions_project_forms/config.js'
 export class ActionsLayer extends MapLayer {
     isJson(text) {
         try {
@@ -439,6 +440,51 @@ export const ActionsOptions = (options = {}) => {
                 ]
             },
         },
+        onClick: {
+            layers: ['actions-layer'],
+            dataFunc: function (feature, fetures) {
+                let props = {
+                    json: actionsViewConfig,
+                    id: feature.map(f => f.properties.id),
+                    isVisible: true
+                };
+
+                this.modals.action.show
+                    ? this.doAction(["updateModal", "action", props])
+                    : this.doAction(["toggleModal", "action", props]);
+            }
+        },
+        modals: {
+            action: {
+                comp: ViewAction,
+                show: false,
+                onClose: function() {
+                    this.map && this.render(this.map);
+                }
+            }
+        },
 
     }
+}
+
+const ViewAction = function(props){
+    let [activeId, setActiveId] = useState(props.id[0]);
+    useEffect(() => {return () => {}});
+
+    const nextButton = <button className='col-sm-3 mr-2 mb-2 btn btn-outline-primary btn-rounded' onClick={() => setActiveId(props.id[(props.id.findIndex(i => i === activeId) % props.id.length + 1) % props.id.length])}> next </button>,
+        previousButton = props.id[0] === activeId ? null :
+            <button className='col-sm-3 mr-2 mb-2 btn btn-outline-primary btn-rounded' onClick={() => setActiveId(props.id[props.id.findIndex(i => i === activeId) - 1])}> prev </button>;
+
+    return (
+        <div id='actionsView' style={{overflow: 'auto'}}>
+            {props.id.length > 1 ?
+                <div id='actionButtons' className='row'>
+                    <div className='col-sm-6'>
+                        {nextButton} {previousButton}
+                    </div>
+                </div>
+                : null}
+            <AvlFormsViewData {...{...props, id: activeId}}/>
+        </div>
+    )
 }

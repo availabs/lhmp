@@ -25,6 +25,12 @@ class AvlFormsViewData extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if(!_.isEqual(this.props.id, prevProps.id)){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps() {
         let id = []
         if (this.props.id[0].includes("[")) {
