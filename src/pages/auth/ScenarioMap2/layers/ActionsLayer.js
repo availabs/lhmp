@@ -446,7 +446,7 @@ export const ActionsOptions = (options = {}) => {
                 let props = {
                     json: actionsViewConfig,
                     id: feature.map(f => f.properties.id),
-                    isVisible: true
+                    autoLoad: true
                 };
 
                 this.modals.action.show
@@ -480,7 +480,7 @@ const ViewAction = function(props){
             {props.id.length > 1 ?
                 <div id='actionButtons' className='row'>
                     <div className='col-sm-6'>
-                        {nextButton} {previousButton}
+                        {nextButton} <span className="col-sm-2 info"> {`${props.id.findIndex(i => i === activeId) + 1 } / ${props.id.length}`} </span>  {previousButton}
                     </div>
                 </div>
                 : null}

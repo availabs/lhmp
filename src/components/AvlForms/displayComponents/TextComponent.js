@@ -32,6 +32,7 @@ class TextComponent extends React.PureComponent {
                                                 json = {listNewComp[data[d].formType]}
                                                 id = {[value]}
                                                 showHeader={false}
+                                                autoLoad={this.props.autoLoad}
                                                 key={i}
                                             />
                                         )

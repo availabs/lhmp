@@ -297,6 +297,7 @@ class AvlFormsViewData extends React.Component{
                     data={data}
                     config={this.props.config}
                     isVisible = {true}
+                    autoLoad={this.props.autoLoad}
                     showHeader={this.props.showHeader}
                 >
                 </GraphFactory>
