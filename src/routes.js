@@ -17,7 +17,7 @@ import ScenarioMap2 from 'pages/auth/ScenarioMap2/index'
 import CommentMap from 'pages/auth/CommentMap/index'
 //import TestAvlMap from 'pages/auth/testAvlMap/index'
 import Home from 'pages/auth/Home';
-import Forms from 'pages/auth/Forms/'
+import Forms from 'pages/auth/AvlFormsIndex/'
 // -- Actions
 import ActionsFormIndex from 'pages/auth/actions/forms_index'
 import ActionsFormView from 'pages/auth/actions/view'
@@ -26,6 +26,9 @@ import ActionsStatusUpdateForms from 'pages/auth/actions/actions_statusupdate_fo
 import FilterJurisdictions from 'pages/auth/FilterJurisdictions/'
 import FilterJurisdictionsNew from 'pages/auth/FilterJurisdictions/filterJurisdictions/new'
 import FilterJurisdictionsView from 'pages/auth/FilterJurisdictions/filterJurisdictions/view'
+import Files from 'pages/auth/Files/index'
+import FilesNew from 'pages/auth/Files/new'
+import FilesView from 'pages/auth/Files/view'
 
 import PlanIndex from 'components/plan/' // plans list
 import Plans from 'pages/auth/plans/view'
@@ -144,6 +147,9 @@ const routes = [
     ...RolesFormsList,
     ...RolesFormView,
     ...RolesFormNew,
+    ...Files,
+    ...FilesNew,
+    ...FilesView,
     ...MunicipalitiesFormsList,
     ...MunicipalitiesFormView,
     ...MunicipalitiesFormNew,

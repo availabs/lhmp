@@ -129,7 +129,9 @@ class TextComponent extends React.PureComponent {
                                                         ['form_view', 'imageViewer', 'AvlFormsJoin', 'contentViewer'].includes(data[d].displayType) &&
                                                             data[d].display_location_in_table !== 'false' ?
                                                             <td style={TDStyle}>{specialDataTypes()}</td> :
-                                                            <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                                            data[d].displayType === 'url' ?
+                                                                <td style={TDStyle}><a href={data[d].value || '#'}>{ data[d].value || 'None' }</a></td> :
+                                                                <td style={TDStyle}>{data[d].value || 'None'}</td>
                                                     }
                                                 </tr>
                                             )
@@ -250,7 +252,9 @@ class TextComponent extends React.PureComponent {
                                                                                     state={{[data[d].label]: data[d].value}}
                                                                                     title={data[d].label}
                                                                                 /> :
-                                                                        (data[d].value || 'None')
+                                                                                data[d].displayType === 'url' ?
+                                                                                    <a href={data[d].value || '#'}>{ data[d].value || 'None' }</a>  :
+                                                                                    (data[d].value || 'None')
                                                                 }
                                                             </td>
                                                         </tr>
