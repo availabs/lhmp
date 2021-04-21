@@ -54,7 +54,7 @@
     "leaflet": "^1.6.0",
     "linkify-it": "^3.0.2",
     "loader-runner": "^3.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.pick": "^4.4.0",
