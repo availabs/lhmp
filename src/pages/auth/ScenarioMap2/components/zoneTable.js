@@ -161,38 +161,42 @@ class ZoneTable extends React.Component {
                     <tbody>
                     { this.state.data.length > 0 ? this.state.data.map((d,i) =>{
                             return (
-                                <tr key ={i}>
-                                    <td>
-                                        <a href={"#"}
-                                           id={d.zone_geoid}
-                                           name={d.zone_name}
-                                           onClick={e => this.setState({
-                                               showZoneModal: true,
-                                               zone_id: d.zone_id,
-                                               geoid : e.target.id,
-                                               name: e.target.name,
-                                               geom : d.zone_name === e.target.name ? d.zone_geom : ''
-                                           })}>
-                                            {d.zone_name}
-                                        </a>
-                                        {
-                                            this.state.showZoneModal &&
-                                            this.state.zone_id === d.zone_id &&
-                                            this.state.geoid === d.zone_geoid &&
-                                            this.state.name === d.zone_name
-                                            ? this.showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this), this.props.layer) : null}
-                                    </td>
-                                    <td>{d.num_buildings}</td>
-                                    <td>{d.replacement_value}</td>
-                                    {this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null
-                                        :
-                                        <React.Fragment>
-                                            <td>{d.count_buildings_scenarios}</td>
-                                            <td>{d.sum_buildings_value}</td>
-                                        </React.Fragment>
-                                    }
-                                    {this.props.noShowBoundary.showTownBoundary(localStorage.getItem("zone"),this.state.data)}
-                                    <td>
+                                <React.Fragment>
+                                    <tr key ={`${i} name`} style={{overflow: 'hidden'}}>
+                                        <td colSpan="7">
+                                            <a href={"#"}
+                                               id={d.zone_geoid}
+                                               name={d.zone_name}
+                                               onClick={e => this.setState({
+                                                   showZoneModal: true,
+                                                   zone_id: d.zone_id,
+                                                   geoid : e.target.id,
+                                                   name: e.target.name,
+                                                   geom : d.zone_name === e.target.name ? d.zone_geom : ''
+                                               })}>
+                                                {d.zone_name}
+                                            </a>
+                                            {
+                                                this.state.showZoneModal &&
+                                                this.state.zone_id === d.zone_id &&
+                                                this.state.geoid === d.zone_geoid &&
+                                                this.state.name === d.zone_name
+                                                    ? this.showZoneModal(this.state.zone_id,this.state.geoid,this.state.name,this.props.activeScenarioId,this.props.activeRiskZoneId,this.state.geom,this.setState.bind(this), this.props.layer) : null}
+                                        </td>
+                                    </tr>
+                                    <tr key ={i}>
+                                        <td>{d.type || 'No Type Data'}</td>
+                                        <td>{d.num_buildings}</td>
+                                        <td>{d.replacement_value}</td>
+                                        {this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null
+                                            :
+                                            <React.Fragment>
+                                                <td>{d.count_buildings_scenarios}</td>
+                                                <td>{d.sum_buildings_value}</td>
+                                            </React.Fragment>
+                                        }
+                                        {this.props.noShowBoundary.showTownBoundary(localStorage.getItem("zone"),this.state.data)}
+                                        <td>
                                         <span className='fa fa-search'
                                               id = {d.zone_id}
                                               onClick={(e) => {
@@ -218,10 +222,11 @@ class ZoneTable extends React.Component {
                                                 <span aria-hidden="true"
                                                       id = {d.zone_id}
                                                 >×</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </React.Fragment>
                             )
                     }):
                         <tr>

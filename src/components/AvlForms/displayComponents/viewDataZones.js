@@ -28,11 +28,12 @@ class AvlFormsViewDataZones extends React.Component {
             .then(response => {
                 let graph = response.json.forms.byId[this.props.id].attributes;
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item => {
-                    let value = graph[item];
-                    if (value && value.toString().substring(0, 2) === '36' && counties.includes(value)) {
+                    let value = typeof JSON.parse(graph[item]) === "object" ? JSON.parse(graph[item]) : [graph[item]];
+
+                    if (value && counties.includes(value)) {
                         county = value
                     }
-                    if (value && value.toString().substring(0, 5) === county && value.length === 10) {
+                    if (value && value.reduce((a,c) => a && Object.keys(this.props.allGeo || {}).includes(c) ,true)) {
                         cousub = value
                     }
 
@@ -124,7 +125,7 @@ class AvlFormsViewDataZones extends React.Component {
                             }
 
                         }
-                    } /*else {
+                    }/* else {
                         config_attributes[0].filter(item => item !== d).forEach(ca => {
                             if (!config[0][ca].hidden || config[0][ca].hidden !== 'true') {
                                 let section = get(config[0][ca], `section`, null),
@@ -195,6 +196,7 @@ const mapStateToProps = (state, ownProps) => {
         config: ownProps.json,
         formsViewData: get(state.graph, ['forms', 'byId'], {}),
         geoData: get(state.graph, ['geo'], {}),
+        allGeo: state.geo.allGeo,
         id: ownProps.id
     }
 };

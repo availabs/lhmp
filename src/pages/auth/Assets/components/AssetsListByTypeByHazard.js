@@ -21,7 +21,7 @@ const ATTRIBUTES = [
 let length = 5276890;
 let lengthDefault = 5276890;
 const owner_types = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '-999']
-
+//todo: Building list numbers are going to be down because of the many to many relation of buildings and agencies
 class AssetsListByTypeByHazard extends React.Component {
     constructor(props) {
         super(props);

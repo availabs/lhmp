@@ -50,7 +50,7 @@ class NFIP extends Component {
                 <div className='row'>
                     <div className='col-lg-6'>
                         <VerticalAlign>
-                                <div className='row'>
+                               {/* <div className='row'>
                                     <div className="col-sm-6">
                                         <StatBox 
                                             title={`Number NFIP Claims`}
@@ -66,7 +66,7 @@ class NFIP extends Component {
                                                
                                     </div>
 
-                                </div>
+                                </div>*/}
                                 <div  >
                                     <NfipLossesTable
                                         title={ "NFIP Losses by Jurisdiction" }

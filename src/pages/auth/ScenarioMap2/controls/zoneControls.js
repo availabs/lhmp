@@ -11,6 +11,7 @@ import {falcorGraph} from "../../../../store/falcorGraph";
 import SearchableDropDown from "../../../../components/filters/searchableDropDown";
 import ZoneTable from "../components/zoneTable"
 import functions from "../../Plan/functions";
+import zoneConfig from "../../Zones/config";
 var _ = require("lodash")
 class ZoneControl extends React.Component{
     constructor(props){
@@ -35,7 +36,7 @@ class ZoneControl extends React.Component{
     componentDidUpdate(oldProps,oldState) {
         if (oldProps.activeMode.length !== this.props.activeMode.length) {
             if (localStorage.getItem("zone") === null || JSON.parse("[" + localStorage.getItem("zone") + "]")[0].length === 0) {
-                this.noSelectedZones()
+                // this.noSelectedZones()
             } else{
                 this.fetchFalcorDeps()
                 this.selectedZones()
@@ -50,20 +51,18 @@ class ZoneControl extends React.Component{
 
     fetchFalcorDeps(){
         return this.props.falcor.get(
-            ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'])
+            ['forms',['zones', 'jurisdictions'],'byPlanId',this.props.activePlan,'length'], ['forms','zones','meta'])
             .then(response =>{
 
                 let length = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],1) === null ?
                     1 :  get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0)
-                let jurisdictionsLength = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'length'],0);
+                let jurisdictionsLength = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'length'],0);
                 // if (length <= 1 || jurisdictionsLength <= 0) return Promise.resolve();
-
                 this.props.falcor.get(
                     ['forms',['zones'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],['name','geom','building']],
                     ['forms',['jurisdictions'],'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:jurisdictionsLength-1}],['name','geom','building']]
                 )
                     .then(response =>{
-                        console.log('response',response)
                         let graph = get(response,['json','forms','zones','byPlanId',this.props.activePlan,'byIndex'],{})
                         let jurisdiction_data = get(response,['json','forms','jurisdictions','byPlanId',this.props.activePlan,'byIndex'],{})
                         let ids = [], jurisdictionIds = [];
@@ -101,10 +100,12 @@ class ZoneControl extends React.Component{
         if(this.props.zonesList){
             let current_jurisdiction = Object.values(get(this.state, ['jurisdiction_data'], {}))
                 .filter(f => f)
-                .filter(f => f & f.id && f.id === this.state.jurisdiction).pop()
-            current_jurisdiction = get(current_jurisdiction, ['attributes', 'geojson'], null);
+                .filter(f => get(f, ['id'], null) === this.state.jurisdiction)[0]
+            current_jurisdiction = get(current_jurisdiction, ['attributes', 'geojson'], null) ||
+                get(current_jurisdiction, ['attributes', 'st_asgeojson'], null)
             let zones_list  = []
             let graph = this.state.zones_data
+
             if(Object.keys(graph).length >0){
                 Object.keys(graph)
                     .filter(d => {
@@ -115,19 +116,14 @@ class ZoneControl extends React.Component{
                                        type: "Polygon",
                                        coordinates : get(JSON.parse(current_jurisdiction), ['coordinates', 0])
                                    },
-                                   get(graph, [d, 'attributes', 'geojson'], '')
-                               ) /*||
-                                   turfCrosses(
-                                       {
-                                           type: "Polygon",
-                                           coordinates : get(JSON.parse(current_jurisdiction), ['coordinates', 0])
-                                       },
-                                       get(graph, [d, 'attributes', 'geojson'], '')
-                                   )*/
+                                   get(graph, [d, 'attributes', 'geojson'], null) ||
+                                   get(graph, [d, 'attributes', 'st_asgeojson'], null)
+                               )
                            )
                         }
                         return  d !== '$__path'
                     })
+                    .filter(d =>  !this.state.zone_type || this.state.zone_type === graph[d].attributes.zone_type)
                     .forEach(item =>{
                         if(graph[item] /*&& this.state.zone_ids.includes(graph[item].id)*/){
                         zones_list.push({
@@ -147,11 +143,14 @@ class ZoneControl extends React.Component{
 
     jurisdictionDropDown(){
         if(this.props.jurisdiction_data){
-            let zones_list  = []
+            let zones_list  = [{
+                'label': '',
+                'value': '',
+            }]
             let graph = this.state.jurisdiction_data
             if(Object.keys(graph).length >0){
                 Object.keys(graph).filter(d => d !== '$__path').forEach(item =>{
-                    if(graph[item] && this.state.jurisdictionIds.includes(graph[item].id)){
+                    if(graph[item] /*&& this.state.jurisdictionIds.includes(graph[item].id)*/){
                         zones_list.push({
                             'label': graph[item].attributes ? functions.formatName(graph[item].attributes.name, graph[item].attributes.geoid) : 'None',
                             'value': graph[item] ? graph[item].id : '',
@@ -178,7 +177,8 @@ class ZoneControl extends React.Component{
                     geoid: zone.geoid || '',
                     geom: zone.geom || '',
                     name: zone.name || 'None',
-                    bbox: zone.bbox || ''
+                    bbox: zone.bbox || '',
+                    type: zone.type || 'No Type Data'
                 })
             })
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id')
@@ -199,7 +199,11 @@ class ZoneControl extends React.Component{
         let zones_list = this.zoneDropDown();
         let jurisdictions_list = this.jurisdictionDropDown()
         let zones = JSON.parse(localStorage.getItem('zone')) || []
-
+        let zoneMetaTypes = get(zoneConfig, [0,'attributes', 'zone_type', 'meta_filter', 'value'], null) ||  this.props.formsZonesMeta
+        zoneMetaTypes =
+            zoneMetaTypes
+                .filter(zmt => !['Select All', 'Select None'].includes(zmt))
+                .map(zmt => ({label: zmt.type || zmt, value: zmt.type || zmt}));
             return (
                 <div>
                     <div style={{marginTop: '-30px', display: 'flex', justifyContent: 'flex-end'}}>
@@ -213,45 +217,69 @@ class ZoneControl extends React.Component{
                         >Add New Zone</button>
                     </div>
                     <div style={{display:'table-row'}}>
-                        {
-                            jurisdictions_list && jurisdictions_list.length ?
+                        <div className="col-sm-12">
+                            <div className="form-group"><h6>Zone list</h6>
+                                {zones_list && zones_list.length ?
+                                    <div style={{paddingTop: '5px'}}>
+                                        <SearchableDropDown
+                                            data={zones_list}
+                                            placeholder={'Select a Zone'}
+                                            value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
+                                            hideValue={false}
+                                            onChange={(value) => {
+                                                this.setState({zone_id:value})
+                                                zones_list.forEach(zone =>{
+                                                    if(zone.value === value){
+                                                        zones.push({
+                                                            zone_id:value,
+                                                            geoid:zone.geoid || null,
+                                                            geom: zone.geom,
+                                                            name:zone.label,
+                                                            geojson: zone.geojson,
+                                                            bbox: zone.bbox,
+                                                            type: zone.zone_type
+                                                        });
+                                                    }
+                                                })
+                                                localStorage.setItem('zone', JSON.stringify(zones));
+                                                this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
+                                                this.selectedZones()
+                                            }}
+                                        />
+                                    </div> : null}
+                            </div>
+                        </div>
+
+                        <div className="col-sm-12">
+                            <div className="form-group"><h6>Filter by Jurisdiction</h6>
+                                {
+                                    jurisdictions_list && jurisdictions_list.length ?
+                                        <SearchableDropDown
+                                            data={jurisdictions_list}
+                                            placeholder={'Select a Municipality'}
+                                            value={jurisdictions_list.filter(f => f.value === this.state.jurisdiction)[0]}
+                                            hideValue={false}
+                                            onChange={(value) => {
+                                                this.setState({jurisdiction:value})
+                                            }}
+                                        /> : null
+                                }
+                            </div>
+                        </div>
+
+                        <div className="col-sm-12">
+                            <div className="form-group"><h6>Filter by Type</h6>
                                 <SearchableDropDown
-                                    data={jurisdictions_list}
-                                    placeholder={'Select a Municipality'}
-                                    value={jurisdictions_list.filter(f => f.value === this.state.jurisdiction)[0]}
+                                    data={zoneMetaTypes}
+                                    placeholder={'Select Type'}
+                                    value={zoneMetaTypes.filter(f => f.value === this.state.zone_type)[0]}
                                     hideValue={false}
                                     onChange={(value) => {
-                                        this.setState({jurisdiction:value})
-                                    }}
-                                /> : null
-                        }
-                        {zones_list && zones_list.length ?
-                            <div style={{paddingTop: '5px'}}>
-                                <SearchableDropDown
-                                    data={zones_list}
-                                    placeholder={'Select a Type'}
-                                    value={zones_list.filter(f => f.value === this.state.zone_id)[0]}
-                                    hideValue={false}
-                                    onChange={(value) => {
-                                        this.setState({zone_id:value})
-                                        zones_list.forEach(zone =>{
-                                            if(zone.value === value){
-                                                zones.push({
-                                                    zone_id:value,
-                                                    geoid:zone.geoid || null,
-                                                    geom: zone.geom,
-                                                    name:zone.label,
-                                                    geojson: zone.geojson,
-                                                    bbox: zone.bbox
-                                                });
-                                            }
-                                        })
-                                        localStorage.setItem('zone', JSON.stringify(zones));
-                                        this.props.layer.layer.zoneLayer.showTownBoundary(localStorage.getItem("zone"))
-                                        this.selectedZones()
+                                        this.setState({zone_type:value})
                                     }}
                                 />
-                            </div> : null}
+                            </div>
+                        </div>
 
                     </div>
                     <div>
@@ -272,7 +300,8 @@ const mapStateToProps = state => (
         attempts: state.user.attempts,
         zonesList : get(state.graph,['forms','byId'],{}),
         jurisdiction_data: get(state.graph, ['forms',['jurisdictions'],'byPlanId',state.user.activePlan,'byIndex'], {}),
-        assetsData : get(state.graph,['building','byGeoid'],{})
+        formsZonesMeta : get(state.graph,['forms','zones','meta','value'],[]),
+        assetsData : get(state.graph,['building','byGeoid'],{}),
     });
 
 const mapDispatchToProps = {

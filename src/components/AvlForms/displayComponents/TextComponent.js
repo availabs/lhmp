@@ -14,77 +14,94 @@ const TDStyle = {wordBreak: 'break-word', width: '50%'};
 
 class TextComponent extends React.PureComponent {
     renderSection(section, data) {
+        const specialDataTypes = (location) => {
+            return (
+                <React.Fragment>
+                    {
+                        Object.keys(data).filter(d => d !== 'type')
+                            .filter(d => data[d].section === section.id && data[d].displayType === 'form_view' &&
+                                ((location === 'outside_table' && data[d].display_location_in_table === 'false') ||
+                                location !== 'outside_table')
+                            )
+                            .map(d => {
+                                // showTable = false;
+                                return (
+                                    get(data, `[${d}].value`, '').split(',')
+                                        .map((value,i) =>
+                                            <AvlFormsViewData
+                                                json = {listNewComp[data[d].formType]}
+                                                id = {[value]}
+                                                showHeader={false}
+                                                autoLoad={this.props.autoLoad}
+                                                key={i}
+                                            />
+                                        )
+                                )
+                            })
+                    }
+                    {
+                        Object.keys(data).filter(d => d !== 'type')
+                            .filter(d => data[d].section === section.id && data[d].displayType === 'imageViewer'  &&
+                                ((location === 'outside_table' && data[d].display_location_in_table === 'false') ||
+                                    location !== 'outside_table'))
+                            .map(d => {
+                                // showTable = false;
+                                return (
+                                    get(data, `[${d}].value`, '').split(',')
+                                        .map((value,i) =>
+                                            <ImageViewer
+                                                image={value}
+                                                key={i}
+                                            />
+                                        )
+                                )
+                            })
+                    }
+                    {
+                        Object.keys(data).filter(d => d !== 'type')
+                            .filter(d => data[d].section === section.id && data[d].displayType === 'AvlFormsJoin'  &&
+                                ((location === 'outside_table' && data[d].display_location_in_table === 'false') ||
+                                    location !== 'outside_table'))
+                            .map(d => {
+                                // showTable = false;
+                                return (
+                                    get(data, `[${d}].value`, '').split(',')
+                                        .map((value,i) =>
+                                            <AvlFormsJoin
+                                                id={value}
+                                                key={i}
+                                                {...data[d]}
+                                            />
+                                        )
+                                )
+                            })
+                    }
+                    {
+                        Object.keys(data).filter(d => d !== 'type')
+                            .filter(d => data[d].section === section.id && data[d].displayType === 'contentViewer'  &&
+                                ((location === 'outside_table' && data[d].display_location_in_table === 'false') ||
+                                    location !== 'outside_table'))
+                            .map(d => {
+                                // showTable = false;
+                                return (
+                                    get(data, `[${d}].value`, '').split(',')
+                                        .map((value,i) =>
+                                            <ContentViewer
+                                                state={{[data[d].label]: value}}
+                                                title={data[d].label}
+                                            />
+                                        )
+                                )
+                            })
+                    }
+                </React.Fragment>
+            )
+        }
         let showTable = true;
         return (
             <Element>
                 <h4>{section.sub_title}</h4>
-                {
-                    Object.keys(data).filter(d => d !== 'type')
-                        .filter(d => data[d].section === section.id && data[d].displayType === 'form_view')
-                        .map(d => {
-                            showTable = false;
-                            return (
-                                get(data, `[${d}].value`, '').split(',')
-                                    .map((value,i) =>
-                                        <AvlFormsViewData
-                                            json = {listNewComp[data[d].formType]}
-                                            id = {[value]}
-                                            showHeader={false}
-                                            key={i}
-                                        />
-                                        )
-                            )
-                        })
-                }
-                {
-                    Object.keys(data).filter(d => d !== 'type')
-                        .filter(d => data[d].section === section.id && data[d].displayType === 'imageViewer')
-                        .map(d => {
-                            showTable = false;
-                            return (
-                                get(data, `[${d}].value`, '').split(',')
-                                    .map((value,i) =>
-                                        <ImageViewer
-                                            image={value}
-                                            key={i}
-                                        />
-                                        )
-                            )
-                        })
-                }
-                {
-                    Object.keys(data).filter(d => d !== 'type')
-                        .filter(d => data[d].section === section.id && data[d].displayType === 'AvlFormsJoin')
-                        .map(d => {
-                            showTable = false;
-                            return (
-                                get(data, `[${d}].value`, '').split(',')
-                                    .map((value,i) =>
-                                        <AvlFormsJoin
-                                            id={value}
-                                            key={i}
-                                            {...data[d]}
-                                        />
-                                        )
-                            )
-                        })
-                }
-                {
-                    Object.keys(data).filter(d => d !== 'type')
-                        .filter(d => data[d].section === section.id && data[d].displayType === 'contentViewer')
-                        .map(d => {
-                            showTable = false;
-                            return (
-                                get(data, `[${d}].value`, '').split(',')
-                                    .map((value,i) =>
-                                        <ContentViewer
-                                            state={{[data[d].label]: value}}
-                                            title={data[d].label}
-                                        />
-                                        )
-                            )
-                        })
-                }
+                {specialDataTypes('outside_table')}
                 {
                     showTable ? (
                         <div className='table-responsive'>
@@ -98,12 +115,24 @@ class TextComponent extends React.PureComponent {
                                 <tbody>
                                 {
                                     Object.keys(data).filter(d => d !== 'type')
-                                        .filter(d => data[d].section === section.id && data[d].displayType !== 'form_view')
+                                        .filter(d => data[d].section === section.id
+                                            && !(
+                                                ['form_view', 'imageViewer', 'AvlFormsJoin', 'contentViewer'].includes(data[d].displayType) &&
+                                                data[d].display_location_in_table === 'false'
+                                            )
+                                        )
                                         .map((d,i) => {
                                             return (
                                                 <tr key={i}>
                                                     <td style={TDStyle}>{`${data[d].label}`} :</td>
-                                                    <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                                    {
+                                                        ['form_view', 'imageViewer', 'AvlFormsJoin', 'contentViewer'].includes(data[d].displayType) &&
+                                                            data[d].display_location_in_table !== 'false' ?
+                                                            <td style={TDStyle}>{specialDataTypes()}</td> :
+                                                            data[d].displayType === 'url' ?
+                                                                <td style={TDStyle}><a href={data[d].value || '#'}>{ data[d].value || 'None' }</a></td> :
+                                                                <td style={TDStyle}>{data[d].value || 'None'}</td>
+                                                    }
                                                 </tr>
                                             )
                                         })
@@ -223,7 +252,9 @@ class TextComponent extends React.PureComponent {
                                                                                     state={{[data[d].label]: data[d].value}}
                                                                                     title={data[d].label}
                                                                                 /> :
-                                                                        (data[d].value || 'None')
+                                                                                data[d].displayType === 'url' ?
+                                                                                    <a href={data[d].value || '#'}>{ data[d].value || 'None' }</a>  :
+                                                                                    (data[d].value || 'None')
                                                                 }
                                                             </td>
                                                         </tr>

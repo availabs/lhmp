@@ -25,6 +25,12 @@ class AvlFormsViewData extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if(!_.isEqual(this.props.id, prevProps.id)){
+            this.fetchFalcorDeps()
+        }
+    }
+
     fetchFalcorDeps() {
         let id = []
         if (this.props.id[0].includes("[")) {
@@ -120,7 +126,8 @@ class AvlFormsViewData extends React.Component{
                         formType = get(config[0][d], `form_type`, null),
                         parentConfig = get(config[0][d], `parentConfig`, null),
                         targetConfig = get(config[0][d], `targetConfig`, null),
-                        targetKey = get(config[0][d], `targetKey`, null);
+                        targetKey = get(config[0][d], `targetKey`, null),
+                        display_location_in_table = get(config[0][d], `display_location_in_table`, null);
 
                     let value = get(graph, `[${item}].attributes[${d}]`, null)
                     value = value && !this.isJsonString(value) ? value.toString() : value;
@@ -165,7 +172,8 @@ class AvlFormsViewData extends React.Component{
                                 formType,
                                 parentConfig,
                                 targetConfig,
-                                targetKey
+                                targetKey,
+                                display_location_in_table
                             })
                         }
                         else{
@@ -179,7 +187,8 @@ class AvlFormsViewData extends React.Component{
                                     formType,
                                     parentConfig,
                                     targetConfig,
-                                    targetKey
+                                    targetKey,
+                                    display_location_in_table
                                 })
                             }
 
@@ -196,7 +205,8 @@ class AvlFormsViewData extends React.Component{
                                     formType = get(config[0][d], `form_type`, null),
                                     parentConfig = get(config[0][d], `parentConfig`, null),
                                     targetConfig = get(config[0][d], `targetConfig`, null),
-                                    targetKey = get(config[0][d], `targetKey`, null);
+                                    targetKey = get(config[0][d], `targetKey`, null),
+                                    display_location_in_table = get(config[0][d], `display_location_in_table`, null);
 
                                 if(renamed_column){
                                     Object.keys(renamed_column).forEach(rc =>{
@@ -213,7 +223,8 @@ class AvlFormsViewData extends React.Component{
                                                     formType,
                                                     parentConfig,
                                                     targetConfig,
-                                                    targetKey
+                                                    targetKey,
+                                                    display_location_in_table
                                                 })
                                             }else{
                                                 data.push({
@@ -225,7 +236,8 @@ class AvlFormsViewData extends React.Component{
                                                     formType,
                                                     parentConfig,
                                                     targetConfig,
-                                                    targetKey
+                                                    targetKey,
+                                                    display_location_in_table
                                                 })
                                             }
                                         }else{
@@ -253,7 +265,8 @@ class AvlFormsViewData extends React.Component{
                                                             formType,
                                                             parentConfig,
                                                             targetConfig,
-                                                            targetKey
+                                                            targetKey,
+                                                            display_location_in_table
                                                         })
                                                     }
                                                 }
@@ -284,6 +297,7 @@ class AvlFormsViewData extends React.Component{
                     data={data}
                     config={this.props.config}
                     isVisible = {true}
+                    autoLoad={this.props.autoLoad}
                     showHeader={this.props.showHeader}
                 >
                 </GraphFactory>

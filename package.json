@@ -5,7 +5,13 @@
   "dependencies": {
     "@atlaskit/button": "^13.3.7",
     "@availabs/avl-components": "^1.0.22",
+    "@draft-js-plugins/alignment": "^4.1.0",
+    "@draft-js-plugins/drag-n-drop": "^4.2.0",
+    "@draft-js-plugins/drag-n-drop-upload": "^4.1.0",
     "@draft-js-plugins/editor": "^4.0.0-beta4",
+    "@draft-js-plugins/focus": "^4.1.1",
+    "@draft-js-plugins/image": "^4.1.1",
+    "@draft-js-plugins/resizeable": "^4.1.0",
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/geojson-extent": "^0.3.2",
     "@mapbox/mapbox-gl-draw": "^1.1.2",

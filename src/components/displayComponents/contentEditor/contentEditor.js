@@ -2,8 +2,20 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import get from 'lodash.get'
-import Editor from '@draft-js-plugins/editor';
-import { RichUtils } from 'draft-js';
+import Editor, { composeDecorators } from '@draft-js-plugins/editor';
+import createImagePlugin from '@draft-js-plugins/image';
+
+import createAlignmentPlugin from '@draft-js-plugins/alignment';
+
+import createFocusPlugin from '@draft-js-plugins/focus';
+
+import createResizeablePlugin from '@draft-js-plugins/resizeable';
+
+import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
+
+import createDragNDropUploadPlugin from '@draft-js-plugins/drag-n-drop-upload';
+
+import { RichUtils, AtomicBlockUtils} from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
     ContentState,
@@ -72,25 +84,63 @@ const toolbarPlugin = makeToolbarPlugin(),
 const positionablePlugin = makePositionablePlugin(),
     resizablePlugin = makeResizablePlugin();
 
-const imagePlugin = makeImagePlugin({
-        wrappers: [
-            positionablePlugin.wrapper,
-            resizablePlugin.wrapper
-        ]
-    }),
-    { addImage } = imagePlugin;
+// const imagePlugin =
+//         makeImagePlugin({
+//         wrappers: [
+//             positionablePlugin.wrapper,
+//             resizablePlugin.wrapper
+//         ]
+//     }),
+//     { addImage } = imagePlugin;
+const focusPlugin = createFocusPlugin();
+const resizeablePlugin = createResizeablePlugin();
+const blockDndPlugin = createBlockDndPlugin();
+const alignmentPlugin = createAlignmentPlugin();
+const { AlignmentTool } = alignmentPlugin;
+
+const decorator = composeDecorators(
+    resizeablePlugin.decorator,
+    alignmentPlugin.decorator,
+    focusPlugin.decorator,
+    blockDndPlugin.decorator
+);
+
+const imagePlugin = createImagePlugin({ decorator });
+
+const dragNDropFileUploadPlugin = createDragNDropUploadPlugin({
+    handleUpload: (editorState, base64) => {
+        const contentState = editorState.getCurrentContent();
+        const contentStateWithEntity = contentState.createEntity(
+            'image',
+            'IMMUTABLE',
+            { src: base64 },
+        );
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        const newEditorState = EditorState.set(
+            editorState,
+            { currentContent: contentStateWithEntity },
+        );
+        return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ');
+    },
+    addImage: imagePlugin.addImage,
+});
 
 const plugins = [
-    buttonPlugin,
-    toolbarPlugin,
+    dragNDropFileUploadPlugin,
+    blockDndPlugin,
+    focusPlugin,
+    alignmentPlugin,
+    resizeablePlugin,
     imagePlugin,
-    addLinkPlugin,
-    makeSuperSubScriptPlugin(),
-
     positionablePlugin,
     resizablePlugin,
 
-    makeStuffPlugin()
+    buttonPlugin,
+    toolbarPlugin,
+    addLinkPlugin,
+    makeSuperSubScriptPlugin(),
+
+    makeStuffPlugin(),
 ];
 
 class ContentEditor extends Component {
@@ -108,7 +158,7 @@ class ContentEditor extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.loadEditor = this.loadEditor.bind(this)
         this.getCurrentKey = this.getCurrentKey.bind(this)
-        this.handleDroppedFiles = this.handleDroppedFiles.bind(this)
+        // this.handleDroppedFiles = this.handleDroppedFiles.bind(this)
 
     }
     getCurrentKey = () =>
@@ -132,7 +182,6 @@ class ContentEditor extends Component {
             if (contentRes.json.content.byId[contentId]) {
                 this.setState({contentFromDB: contentRes.json.content.byId[contentId].body})
                 this.setState({'currentKey': contentId});
-
                 let content = contentRes.json.content.byId[contentId].body;
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
 
@@ -200,22 +249,38 @@ class ContentEditor extends Component {
         }
     }
 
-    handleDroppedFiles(selection, files, { getEditorState }) {
-        if (this.props.disabled || !files.length) return "not-handled";
-
-        const file = files[0];
-
-        if (!/^image[/]/.test(file.type)) {
-            return "not-handled";
-        }
-
-        this.props.uploadImage(file)
-            .then(({ filename, url }) => {
-                this.onEditorStateChange(addImage(url, getEditorState()));
-                // this.handleChange(addImage(getEditorState(), url));
-            });
-        return "handled";
-    }
+    // handleDroppedFiles(selection, files, { getEditorState }) {
+    //     if (this.props.disabled || !files.length) return "not-handled";
+    //
+    //     const file = files[0];
+    //
+    //     if (!/^image[/]/.test(file.type)) {
+    //         return "not-handled";
+    //     }
+    //
+    //     this.props.uploadImage(file)
+    //         .then(({ filename, url }) => {
+    //             // const newES = addImage(url, getEditorState());
+    //             // const editorState = this.state.editorState;
+    //             // const content = editorState.getCurrentContent();
+    //             // const contentWithEntity = content.createEntity("IMAGE", "MUTABLE", {
+    //             //             src: url
+    //             //         });
+    //             // const newEditorState = EditorState.push(
+    //             //             editorState,
+    //             //             contentWithEntity,
+    //             //             "create-entity"
+    //             //         );
+    //             // const entityKey = contentWithEntity.getLastCreatedEntityKey();
+    //
+    //             this.onEditorStateChange(addImage(url, getEditorState()));
+    //             // this.onEditorStateChange(newCS);
+    //
+    //
+    //             // this.handleChange(addImage(getEditorState(), url));
+    //         });
+    //     return "handled";
+    // }
     onChange = editorState => {
         this.setState({
             editorState
@@ -258,7 +323,7 @@ class ContentEditor extends Component {
                     <Editor
                         spellCheck={true}
                         editorState={editorState}
-                        handleDroppedFiles={ this.handleDroppedFiles }
+                        // handleDroppedFiles={ this.handleDroppedFiles }
                         plugins={ plugins }
                         toolbarClassName="toolbar"
                         wrapperClassName="wrapper"

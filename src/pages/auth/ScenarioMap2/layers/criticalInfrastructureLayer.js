@@ -122,8 +122,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
             .then(response =>{
                 let initalBbox = response.json.geo[activeGeoid]['boundingBox'].slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                map.resize();
-                map.fitBounds(bbox);
+                // map.resize();
+                // map.fitBounds(bbox);
                 this.layers.forEach(layer => {
                     map.setLayoutProperty(layer.id, 'visibility',"none");
                 })
@@ -307,8 +307,8 @@ export class CriticalInfrastructureLayer extends MapLayer{
                     get(graph, `geo.${store.getState().user.activeGeoid}.boundingBox.value`, null)
                         .slice(4, -1).split(",");
                 let bbox = initalBbox ? [initalBbox[0].split(" "), initalBbox[1].split(" ")] : null;
-                this.map.resize();
-                this.map.fitBounds(bbox);
+                // this.map.resize();
+                // this.map.fitBounds(bbox);
 
                 // get tracts
                 let tracts = get(graph,

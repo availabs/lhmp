@@ -15,6 +15,7 @@ import ImageEditor from "./imageComponent/index"
 import AvlFormsJoin from './AvlFormsJoin'
 import CheckboxComponent from './checkboxComponent'
 import ContentEditor from "./contentEditor/contentEditor";
+import geoPointSelectorMap from "./geoPointSelectorMap/geoPointSelectorMap";
 const NA = ({ type, state, routes }) =>
 {
     return (
@@ -56,6 +57,7 @@ export default {
     form_array: FormArrayComponent,
     imageEditor: ImageEditor,
     AvlFormsJoin: (rest) => <AvlFormsJoin editView={true} {...rest}/>,
-    checkbox: CheckboxComponent
+    checkbox: CheckboxComponent,
+    geoPointSelectorMap
 }
 
