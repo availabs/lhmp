@@ -281,22 +281,16 @@ export class ControlLayers extends MapLayer {
         if(store.getState().user.activeGeoid.length === 2){
             this.doAction([
                 "addDynamicLayer",
-                DynamicScenarioLayerFactory
-            ]).then(sl => {
-                this.scenarioLayer = sl
+                DynamicJurisdictionLayerFactory
+            ]).then(jl => {
+                this.jurisdictonLayer = jl
                 this.doAction([
                     "addDynamicLayer",
-                    DynamicJurisdictionLayerFactory
-                ]).then(jl => {
-                    this.jurisdictonLayer = jl
-                    this.doAction([
-                        "addDynamicLayer",
-                        DynamicStateAssetsLayerFactory
-                    ]).then(hel => {
-                        stateAssetsLayer = hel
-                        this.stateAssetsLayer = hel
+                    DynamicStateAssetsLayerFactory
+                ]).then(hel => {
+                    stateAssetsLayer = hel
+                    this.stateAssetsLayer = hel
 
-                    })
                 })
             })
         }else{
@@ -394,9 +388,9 @@ export class ControlLayers extends MapLayer {
     mainLayerToggleVisibilityOn(layerName, selected) {
         //console.log('in on',layerName)
         if(store.getState().user.activeGeoid.length === 2){
-            if (layerName.includes('scenario')) {
-                this.scenarioLayer.toggleVisibilityOn()
-            }
+            // if (layerName.includes('scenario')) {
+            //     this.scenarioLayer.toggleVisibilityOn()
+            // }
             if (layerName.includes("stateAssets")) {
                 if (Object.keys(stateAssetsLayer).length > 0) {
                     stateAssetsLayer.toggleVisibilityOn()
@@ -474,9 +468,9 @@ export class ControlLayers extends MapLayer {
     mainLayerToggleVisibilityOff(layerName) {
         //console.log('in off',layerName)
         if(store.getState().user.activeGeoid.length === 2){
-            if (layerName.includes('scenario')) {
-                this.scenarioLayer.toggleVisibilityOff()
-            }
+            // if (layerName.includes('scenario')) {
+            //     this.scenarioLayer.toggleVisibilityOff()
+            // }
             if (layerName.includes("stateAssets")) {
                 if (Object.keys(stateAssetsLayer).length > 0) {
                     stateAssetsLayer.toggleVisibilityOff()
