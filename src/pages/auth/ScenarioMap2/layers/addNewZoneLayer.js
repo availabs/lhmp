@@ -363,7 +363,7 @@ class ShowNewZoneModal extends React.Component{
                                 attributes['name'] = typeof name === "string" ? name.replaceAll('\'', '\'\'') : name  || 'None'
                                 attributes['zone_type'] = this.state.zone_type || 'None'
                                 attributes['action_county'] = '[' + this.props.activeGeoid.toString() + ']'
-                                attributes['action_jurisdiction'] = '[' + this.state.action_jurisdiction.toString() + ']' || "[]"
+                                attributes['action_jurisdiction'] = this.state.action_jurisdiction ? '[' + this.state.action_jurisdiction.toString() + ']' : "[]"
                                 attributes['comment'] = typeof this.state.comment === "string" ? this.state.comment.replaceAll('\'', '\'\'') : this.state.comment  || 'None'
                                 attributes['geojson'] = result_polygon
                                 attributes['geoid'] = geoid

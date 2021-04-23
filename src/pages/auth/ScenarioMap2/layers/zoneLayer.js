@@ -136,7 +136,7 @@ export class ZoneLayer extends MapLayer{
         }
         let activeGeoid = store.getState().user.activeGeoid
         zones.forEach(zone =>{
-            if(zone.geoid === activeGeoid && !zone.name.includes("County")){
+            if(zone.geoid === activeGeoid/* && !zone.name.includes("County")*/){
                 if(zone.geojson){
                     if(zone.geojson.geometry){
                         geojson.features.push({
