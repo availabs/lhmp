@@ -154,7 +154,7 @@ class AssetsBySearch extends React.Component {
                         <div className="col-12">
 
                             <div className='element-wrapper'>
-                                <div className='element-box'>
+                                {/*<div className='element-box'>
                                     <h4>State Buildings</h4>
                                     {
                                         this.state.geoid ?
@@ -192,7 +192,7 @@ class AssetsBySearch extends React.Component {
                                             : ''
                                     }
                                 </div>
-
+*/}
                                 <div className='element-box'>
                                     <h4>Buildings by Agency</h4>
                                     {
