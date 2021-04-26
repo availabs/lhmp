@@ -24,7 +24,6 @@ class AssetsFilteredTable extends Component {
 
     componentDidUpdate(prevProps) {
         if (!_.isEqual(prevProps.groupByFilter, this.props.groupByFilter) || prevProps.geoid !== this.props.geoid) {
-            //console.log('updating', prevProps.groupByFilter, this.props.groupByFilter)
             return this.fetchFalcorDeps();
         }
     }
@@ -43,7 +42,7 @@ class AssetsFilteredTable extends Component {
         totalBuildingsValue = 0;
         riskZoneIdsAllValuesTotal = {};
         let primeColName = 'Owner Name';
-        let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/ownerType/2`;
+        let linkBase = `${this.props.public ? '/risk' : ``}/assets/list/ownerType/2/statewide`;
         let linkTrail = ``
         let graph = this.props.buildingStatewideData;
 
