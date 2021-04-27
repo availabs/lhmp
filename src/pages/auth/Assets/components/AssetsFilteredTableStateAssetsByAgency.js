@@ -113,7 +113,6 @@ class AssetsFilteredTable extends Component {
                                     return a
                                 }, {}),
                             link: linkBase + `/geo/${geoId}` + `/metaData/${metaData}`,
-                            randomData: 'data'
                         });
 
                         totalBuildings += parseInt(get(graph, `${geoId}.agency.sum.count.value`, 0));
