@@ -69,14 +69,15 @@ class AssetsFilteredTable extends Component {
                                     .filter(item => !(this.props.riskZoneId && this.props.riskZoneId.length) ||
                                         this.props.riskZoneId && this.props.riskZoneId.length && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
                                     .forEach(riskZoneIdData =>{
+                                        scenarioToRiskZoneMapping[scenarioId] = _.uniqBy([...get(scenarioToRiskZoneMapping, [scenarioId], []), riskZoneIdData.risk_zone_id])
 
-                                        scenarioToRiskZoneMapping[scenarioId] = [...get(scenarioToRiskZoneMapping, [scenarioId], []), riskZoneIdData.risk_zone_id]
+                                        riskZoneToNameMapping[riskZoneIdData.name] = _.uniqBy([...get(riskZoneToNameMapping, [riskZoneIdData.name], []), riskZoneIdData.risk_zone_id])
 
                                         if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
                                             if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
                                                 riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $` )
-                                                riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
                                             }
+
                                             riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
                                                 count: parseInt(riskZoneIdData.count) || 0,
                                                 value: parseInt(riskZoneIdData.sum) || 0,
@@ -132,7 +133,7 @@ class AssetsFilteredTable extends Component {
                         return a
                     }, {}),
 
-                link: linkBase
+                link: linkBase + '/totalRow'
             })
         }
         return {
@@ -154,7 +155,7 @@ class AssetsFilteredTable extends Component {
                     Header: 'TOTAL # BUILDING TYPE',
                     accessor: 'TOTAL # BUILDING TYPE',
                     sort: true,
-                    link: (d) => d.split('/metaData')[0] + linkTrail, // functional
+                    link: (d) => d.replace('/totalRow', '').split('/metaData')[0] + linkTrail, // functional
                     linkOnClick: this.props.linkOnClick
                 },
                 this.props.public ? null : {
@@ -162,7 +163,7 @@ class AssetsFilteredTable extends Component {
                     accessor: 'TOTAL $ REPLACEMENT VALUE',
                     sort: true,
                     formatValue: fnum,
-                    link: (d) => d.split('/metaData')[0] + linkTrail, // takes what is in data
+                    link: (d) => d.replace('/totalRow', '').split('/metaData')[0] + linkTrail, // takes what is in data
                     linkOnClick: this.props.linkOnClick
                 },
                 ...riskZoneColNames
@@ -183,9 +184,8 @@ class AssetsFilteredTable extends Component {
                         {
                             let metaData = d.split('/metaData/')[1];
                             let riskZone = riskZoneToNameMapping[name.slice(0, name.length - 2)];
-                            let scenarioId = Object.keys(scenarioToRiskZoneMapping).filter(f => scenarioToRiskZoneMapping[f].includes(riskZone))[0];
-
-                            if(metaData && metaData !== '/'){
+                            let scenarioId = Object.keys(scenarioToRiskZoneMapping).filter(f => scenarioToRiskZoneMapping[f].includes(riskZone[0]))[0];
+                            if(metaData && metaData !== '/' && !d.includes('/totalRow')){
                                 metaData = metaData.split('/').filter(str => str.includes(name.split('%')[0]))[0]
                                 if(metaData){
                                     metaData = metaData.split('-')
@@ -199,6 +199,11 @@ class AssetsFilteredTable extends Component {
                                 }
                             }
 
+                            if(d.includes('/totalRow') && this.props.activeGeoid.length === 2){
+                                scenarioId = 'all';
+                                riskZone = riskZone.join('-');
+                            }
+                            d = d.replace('/totalRow', '');
                             d = d.split('/metaData')[0]
                             return d.split('/geo')[1] ?
                                 d.split('/geo')[0] + `/scenario/${scenarioId}/riskzone/${riskZone}` + '/geo' + d.split('/geo')[1] :

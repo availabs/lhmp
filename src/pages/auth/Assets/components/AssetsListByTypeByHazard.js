@@ -173,7 +173,6 @@ class AssetsListByTypeByHazard extends React.Component {
                     if(this.props.match.url.includes('/statewide')){
                         length = get(response, ['json', 'building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
                             this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length']);
-
                         let list = await this.props.falcor.get(['building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
                             this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {from: 0, to: length - 1}, ATTRIBUTES])
                         graph = get(list, ['json', 'building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
@@ -339,7 +338,8 @@ class AssetsListByTypeByHazard extends React.Component {
                     let graph;
 
                     if (this.props.match.url.includes('/statewide')){
-                        graph = get(response, ['json', 'building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byIndex'])
+                        graph = get(response, ['json', 'building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byRiskScenario',
+                            this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex'])
                     }else{
                         graph = get(response,
                             `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
