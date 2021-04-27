@@ -496,50 +496,28 @@ class AssetsFilteredTable extends Component {
                         Object.keys(get(graph, `${item}.byRiskScenario`, {}))
                             .forEach(scenarioId => {
                                 if (get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, null)){
-                                    if(this.props.riskZoneId && this.props.riskZoneId.length > 0){
-                                        get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
-                                            .filter(item => this.props.riskZoneId && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
-                                            .forEach(riskZoneIdData =>{
-                                                scenarioToRiskZoneMapping[scenarioId] ?
-                                                    scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
-                                                    scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
+                                    get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
+                                        .filter(item => !(this.props.riskZoneId && this.props.riskZoneId.length) ||
+                                            this.props.riskZoneId && this.props.riskZoneId.length && this.props.riskZoneId.map(d => d.toString()).includes(item.risk_zone_id))
+                                        .forEach(riskZoneIdData =>{
+                                            scenarioToRiskZoneMapping[scenarioId] = [...get(scenarioToRiskZoneMapping, [scenarioId], []), riskZoneIdData.risk_zone_id]
 
-                                                if(!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
-                                                    if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
-                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $`)
-                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
-                                                    }
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
-                                                        count: parseInt(riskZoneIdData.count) || 0,
-                                                        value: parseInt(riskZoneIdData.sum) || 0
-                                                    };
+                                            if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
+                                                if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
+                                                    riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $` )
+                                                    riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
+
                                                 }
-                                            })
-                                    }else{
-                                        get(graph, `${item}.byRiskScenario.${scenarioId}.byRiskZone.all.value`, [])
-                                            .forEach(riskZoneIdData => {
-                                                scenarioToRiskZoneMapping[scenarioId] ?
-                                                    scenarioToRiskZoneMapping[scenarioId].push(riskZoneIdData.risk_zone_id) :
-                                                    scenarioToRiskZoneMapping[scenarioId] = [riskZoneIdData.risk_zone_id];
-
-                                                if (!riskZoneIdsAllValues[`${riskZoneIdData.name}`]){
-                                                    if(!riskZoneColNames.includes(`${riskZoneIdData.name} #`)){
-                                                        riskZoneColNames.push(`${riskZoneIdData.name} #`, `${riskZoneIdData.name} $` )
-                                                        riskZoneToNameMapping[riskZoneIdData.name] = riskZoneIdData.risk_zone_id;
-
-                                                    }
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
-                                                        count: parseInt(riskZoneIdData.count) || 0,
-                                                        value: parseInt(riskZoneIdData.sum) || 0
-                                                    };
-                                                }else{
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
-                                                    riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
-                                                }
-
-                                            })
-                                    }
-
+                                                riskZoneIdsAllValues[`${riskZoneIdData.name}`] = {
+                                                    count: parseInt(riskZoneIdData.count) || 0,
+                                                    value: parseInt(riskZoneIdData.sum) || 0,
+                                                    scenarioId, riskZoneId : riskZoneIdData.risk_zone_id
+                                                };
+                                            }else{
+                                                riskZoneIdsAllValues[`${riskZoneIdData.name}`].count += parseInt(riskZoneIdData.count) || 0;
+                                                riskZoneIdsAllValues[`${riskZoneIdData.name}`].value += parseInt(riskZoneIdData.sum) || 0;
+                                            }
+                                        })
                                 }
 
                             })
