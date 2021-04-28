@@ -335,8 +335,8 @@ const config = {
             intent: 'To evaluate and demonstrate progress made in the past five years in achieving goals and implementing actions and to to provide a context for the jurisdictions’ projects, act as a source of ideas for mitigation projects and evaluate the accuracy of assumptions and engineering solutions to inform future projects, and to support future mitigation planning and its coordination with other planning, zoning and environmental procedures within the jurisdiction.',
             icon: 'os-icon-tasks-checked',
             // hideNav: true // hides key from public nav. Displays on page.
-            ///*2-non-county*/ pullCounty: true,
-            /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            /*2-non-county*/ pullCounty: true,
+            //*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
             ///*2-non-delete*/ hideIfNull: true 
         },
         {
