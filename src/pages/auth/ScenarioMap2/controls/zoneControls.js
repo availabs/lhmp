@@ -123,6 +123,7 @@ class ZoneControl extends React.Component{
                         }
                         return  d !== '$__path'
                     })
+                    .filter(d => graph[d].attributes.zone_type)
                     .filter(d =>  !this.state.zone_type || this.state.zone_type === graph[d].attributes.zone_type)
                     .forEach(item =>{
                         if(graph[item] /*&& this.state.zone_ids.includes(graph[item].id)*/){
@@ -132,7 +133,8 @@ class ZoneControl extends React.Component{
                             'geoid': graph[item].attributes ? graph[item].attributes.geoid : '',
                             'geom' : graph[item].attributes ? graph[item].attributes.geom : '',
                             'geojson' : graph[item].attributes.geojson ? graph[item].attributes.geojson : '',
-                            'bbox':graph[item].attributes.bbox ? graph[item].attributes.bbox : ''
+                            'bbox':graph[item].attributes.bbox ? graph[item].attributes.bbox : '',
+                            'type':graph[item].attributes.zone_type ? graph[item].attributes.zone_type : '',
                         })
                     }
                 })
@@ -178,7 +180,7 @@ class ZoneControl extends React.Component{
                     geom: zone.geom || '',
                     name: zone.name || 'None',
                     bbox: zone.bbox || '',
-                    type: zone.type || 'No Type Data'
+                    type: zone.type || 'No Type Data 1'
                 })
             })
             selectedZonesData = _.uniqBy(selectedZonesData.filter(d => d.geoid !== null || d.geom !== "[]"),'zone_id')
@@ -189,6 +191,7 @@ class ZoneControl extends React.Component{
                     zones = {_.uniqBy(selectedZonesData,'zone_id')}
                     scenario_id={scenario_id}
                     noShowBoundary = {this.props.layer.layer.zoneLayer}
+                    removeZone ={() => this.forceUpdate()}
                     layer = {this.props.layer.layer.zoneLayer}
                 />
             )
@@ -237,7 +240,7 @@ class ZoneControl extends React.Component{
                                                             name:zone.label,
                                                             geojson: zone.geojson,
                                                             bbox: zone.bbox,
-                                                            type: zone.zone_type
+                                                            type: zone.type
                                                         });
                                                     }
                                                 })

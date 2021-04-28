@@ -88,7 +88,13 @@ class ZoneTable extends React.Component {
             this.fetchFalcorDeps()
         }
     }
-
+    parseJson(string) {
+        try{
+            if (JSON.parse(string)) return JSON.parse(string);
+        }catch (e){
+            return string;
+        }
+    }
     fetchFalcorDeps(){
         if(this.props.zones){
             let data = []
@@ -116,6 +122,7 @@ class ZoneTable extends React.Component {
                                     zone_id : item.zone_id,
                                     zone_name : item.name || '',
                                     geom:item.geom ||'',
+                                    type: this.parseJson(item.type),
                                     num_buildings : zone_buildings_data.num_buildings ? fmt(get(zone_buildings_data,['num_buildings','value'],'0')) :0,
                                     replacement_value : zone_buildings_data.replacement_value ? fnum(get(zone_buildings_data,['replacement_value','value'],'0')) : 0,
                                     count_buildings_scenarios:graph_scenario_new_zone.length > 0 ? fmt(graph_scenario_new_zone.reduce((a,c) => c.risk_zone_id === this.props.activeRiskZoneId.toString() ? parseInt(c['count']) || 0 : a,0)) : 0,
@@ -136,13 +143,15 @@ class ZoneTable extends React.Component {
     }
     removeZone(e){
         let zones = JSON.parse("[" + localStorage.getItem("zone") + "]")[0] || [];
+        localStorage.removeItem('zone');
         zones = zones.filter(d => d.zone_id !== e.target.id)
         localStorage.setItem('zone', JSON.stringify(zones))
-        let data = this.state.data
-        this.setState({
-            data : data.filter(d => d.zone_id.toString() !== e.target.id)
-        })
-        this.props.noShowBoundary.showTownBoundary(localStorage.getItem("zone"),e.target.id)
+
+        let data = this.state.data.filter(d => d.zone_id.toString() !== e.target.id)
+
+        this.setState({ data })
+        this.props.removeZone();
+        this.props.noShowBoundary.showTownBoundary(JSON.stringify(zones),e.target.id)
     }
 
     render(){
@@ -212,6 +221,7 @@ class ZoneTable extends React.Component {
                                                 className="close"
                                                 data-dismiss="alert"
                                                 type="button"
+                                                id = {d.zone_id}
                                                 onClick={(e) =>{
                                                     this.removeZone(e)
                                                     this.setState({
