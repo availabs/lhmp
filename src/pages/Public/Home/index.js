@@ -284,6 +284,7 @@ let sideMenuConfig = {
                                                         requirement: 'Req-C-4',
                                                         type: 'actionsFilteredListTable',
                                                         filterBy: ['Proposed-HMP'],
+                                                        filterCol: ['action_status_update'],
                                                         align: 'full',
                                                         prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
                                                             ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
