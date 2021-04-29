@@ -45,7 +45,7 @@ class NfipControl extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({viewMode: 'Both'})
+        this.setState({viewMode: 'Agency'})
     }
 
     handleChange(e) {
@@ -55,7 +55,7 @@ class NfipControl extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <h6> View: </h6>
+                {/*<h6> View: </h6>
                 <SearchableDropDown
                     data={this.state.viewModes}
                     placeholder={'Select View Mode'}
@@ -65,7 +65,7 @@ class NfipControl extends React.Component {
                         this.setState({'viewMode': e});
                     }}
                     value={this.state.viewModes.filter(fz => fz.value === this.state.viewMode)[0]}
-                />
+                />*/}
 
                 <h6>Agency : </h6>
                 <MultiSelectFilter
@@ -92,10 +92,11 @@ class NfipControl extends React.Component {
                     value={this.state.floodZones.filter(fz => fz.value === this.state.floodZone)[0]}
                 />
 
-                {this.props.activeGeoid.length === 2 ? '' : <FloodPlainTable
+                <FloodPlainTable
                     scenarioId={localStorage.getItem("scenario_id")}
                     agencyFilter={this.state.selectedAgency.map(e1 => BuildingsByAgencyConfig.filter(bba => bba.value === e1)[0].name)}
-                />}
+                />
+
             </React.Fragment>
 
         )
