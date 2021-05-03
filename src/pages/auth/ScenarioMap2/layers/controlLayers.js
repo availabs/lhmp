@@ -121,12 +121,12 @@ export class ControlLayers extends MapLayer {
     visibilityToggleModeOn(source, layerName) {
         //console.log('in visibility toggle mode on',source,layerName)
         let activePlan = store.getState().user.activePlan;
-        let opacity = 0
-        if(activePlan === '10' || activePlan === '56'){
-            opacity = 1
-        }else{
-            opacity = 0.3
-        }
+        let opacity = 0.3
+        // if(activePlan === '10' || activePlan === '56'){
+        //     opacity = 0.3
+        // }else{
+        //     opacity = 0.3
+        // }
         if (layerName.includes('_27') || layerName.includes('_26')) {
             if (this.map.getSource('andes_riverine')) {
                 this.map.removeLayer('andes_riverine_layer');
@@ -217,7 +217,7 @@ export class ControlLayers extends MapLayer {
                     },
 
                 })
-                this.map.moveLayer('buildings-layer', 'riverine_layer')
+               this.map.moveLayer('buildings-layer', 'riverine_layer')
             }
             if (source && layerName.includes("dfirm")) {
                 if (this.map.getSource('dfirm')) {
