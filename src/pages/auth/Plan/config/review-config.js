@@ -1,5 +1,5 @@
 export const colors = {
-    'Does not Apply' : 'gray',
+    'No jurisdiction-specific narrative' : 'gray',
     'Started' : '#f7f714',
     'Ready for review': '#1f90f2',
     'Requirement not met': '#f2351f',
@@ -105,7 +105,7 @@ let config = {
                 'b. The opportunity for participation must occur during the plan\n' +
                 'development, which is prior to the comment period on the final\n' +
                 'plan and prior to the plan approval / adoption.',
-            municipal: false,
+            municipal: true,
             county: true
         },
         {
@@ -123,7 +123,7 @@ let config = {
                 'b. The plan must document how relevant information was incorporated into the mitigation plan. ' +
                 'Incorporate means to reference or include information from other\n' +
                 'existing sources to form the content of the mitigation plan.',
-            municipal: 'false',
+            municipal: 'true',
             county: 'true'
         },
         {
@@ -141,7 +141,7 @@ let config = {
                 'presentations on the plan’s progress to elected officials, schools or\n' +
                 'other community groups, annual questionnaires or surveys, public\n' +
                 'meetings, postings on social media and interactive websites.',
-            municipal: 'false',
+            municipal: 'true',
             county: 'true'
         },
         {
@@ -214,7 +214,7 @@ let config = {
                 'Scale, flood depth grids) and/or other hazard factors, such as\n' +
                 'duration and speed of onset. Extent is not the same as impacts,\n' +
                 'which are described in sub‐element B3.',
-            municipal: 'false',
+            municipal: 'true',
             county: 'true'
         },
         {
