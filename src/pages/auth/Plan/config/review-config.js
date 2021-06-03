@@ -163,7 +163,7 @@ let config = {
                 'once every five years.\n' +
                 'd. The plan must include the title of the individual or name of the\n' +
                 'department/ agency responsible for leading each of these efforts.',
-            municipal: 'false',
+            municipal: 'true',
             county: 'true'
         },
         {
