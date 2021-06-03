@@ -6989,7 +6989,7 @@
   "resolved" "https://registry.npmjs.org/draft-js-plugins-utils/-/draft-js-plugins-utils-2.0.2.tgz"
   "version" "2.0.2"
 
-"draft-js@^0.10.1 || ^0.11.0", "draft-js@^0.11.0", "draft-js@^0.11.7":
+"draft-js@^0.11.7":
   "integrity" "sha512-ne7yFfN4sEL82QPQEn80xnADR8/Q6ALVworbC5UOSzOvjffmYfFsr3xSZtxbIirti14R7Y33EZC5rivpLgIbsg=="
   "resolved" "https://registry.npmjs.org/draft-js/-/draft-js-0.11.7.tgz"
   "version" "0.11.7"
@@ -14797,7 +14797,7 @@
     "strip-ansi" "6.0.0"
     "text-table" "0.2.0"
 
-"react-dom@^15.5.0 || ^16.0.0 || ^17.0.0", "react-dom@^16.12.0", "react-dom@^16.2.0", "react-dom@^16.3.0 || ^17.0.0":
+"react-dom@^16.12.0", "react-dom@^16.2.0":
   "integrity" "sha512-LMxFfAGrcS3kETtQaCkTKjMiifahaMySFDn71fZUNpPHZQEzmk/GiAeIT8JSOrHB23fnuCOMruL2a8NYlw+8Gw=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-16.12.0.tgz"
   "version" "16.12.0"
@@ -15261,7 +15261,7 @@
     "prop-types" "^15.5.8"
     "react-motion" "^0.5.2"
 
-"react@^15.5.0 || ^16.0.0 || ^17.0.0", "react@^16.12.0", "react@^16.2.0", "react@^16.3.0 || ^17.0.0":
+"react@^16.12.0", "react@^16.2.0":
   "integrity" "sha512-fglqy3k5E+81pA8s+7K0/T3DBCF0ZDOher1elBFzF7O6arXJgzyu/FW+COxFvAWXJoJN9KIZbT2LXlukwphYTA=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.12.0.tgz"
   "version" "16.12.0"

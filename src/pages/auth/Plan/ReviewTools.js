@@ -233,18 +233,19 @@ class PlanReview extends React.Component {
                                             return <td
                                                 style={{
                                                     backgroundColor:
-                                                        geo.length > 5 && element.municipal === 'false' ? colors["Does not Apply"] :
+                                                        // geo.length > 5 && element.municipal === 'false' ? colors["Does not Apply"] :
                                                             elementStatus === "Requirement not met" ? colors["Requirement not met"] :
                                                                 elementStatus === "Requirement met" ? colors["Requirement met"] :
                                                                     allStatus.includes('Started') ? colors.Started :
+                                                                        allPullCountyStatus.total_pullCounty === allPullCountyStatus.pulledFromCounty ? colors["No jurisdiction-specific narrative"] :
                                                                         allStatus.length && allStatus.filter(s => s !== "Ready for review").length === 0 ? colors["Ready for review"] :
                                                                             // allStatus.length && allStatus.filter(s => s !== "Requirement not met").length === 0 ? colors["Requirement not met"] :
                                                                             // allStatus.length && allStatus.filter(s => s !== "Requirement met").length === 0 ? colors["Requirement met"] :
                                                                             'none',
-                                                    opacity:
-                                                    // allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
-                                                        allPullCountyStatus.total_pullCounty === allPullCountyStatus.pulledFromCounty &&
-                                                        element.municipal !== 'false' ? 0.5 : 1
+                                                    // opacity:
+                                                    // // allPullCountyStatus.total_req === allPullCountyStatus.total_pullCounty &&
+                                                    //     allPullCountyStatus.total_pullCounty === allPullCountyStatus.pulledFromCounty &&
+                                                    //     element.municipal !== 'false' ? 0.5 : 1
                                                 }}
                                                 onClick={() =>
                                                     geo.length > 5 && element.municipal === 'false' ?

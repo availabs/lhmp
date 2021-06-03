@@ -105,8 +105,8 @@ let config = {
                 'b. The opportunity for participation must occur during the plan\n' +
                 'development, which is prior to the comment period on the final\n' +
                 'plan and prior to the plan approval / adoption.',
-            municipal: true,
-            county: true
+            municipal: 'false',
+            county: 'true'
         },
         {
             element: 'A4',
@@ -123,7 +123,7 @@ let config = {
                 'b. The plan must document how relevant information was incorporated into the mitigation plan. ' +
                 'Incorporate means to reference or include information from other\n' +
                 'existing sources to form the content of the mitigation plan.',
-            municipal: 'true',
+            municipal: 'false',
             county: 'true'
         },
         {
@@ -141,7 +141,7 @@ let config = {
                 'presentations on the plan’s progress to elected officials, schools or\n' +
                 'other community groups, annual questionnaires or surveys, public\n' +
                 'meetings, postings on social media and interactive websites.',
-            municipal: 'true',
+            municipal: 'false',
             county: 'true'
         },
         {
@@ -163,7 +163,7 @@ let config = {
                 'once every five years.\n' +
                 'd. The plan must include the title of the individual or name of the\n' +
                 'department/ agency responsible for leading each of these efforts.',
-            municipal: 'true',
+            municipal: 'false',
             county: 'true'
         },
         {
@@ -214,7 +214,7 @@ let config = {
                 'Scale, flood depth grids) and/or other hazard factors, such as\n' +
                 'duration and speed of onset. Extent is not the same as impacts,\n' +
                 'which are described in sub‐element B3.',
-            municipal: 'true',
+            municipal: 'false',
             county: 'true'
         },
         {
