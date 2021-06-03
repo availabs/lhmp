@@ -2,6 +2,7 @@ module.exports = [
     {
         type: 'zones', // type is same as the route path for now
         list_attributes: [
+            {'action_county': {filter: 'multi'}},
             {'action_jurisdiction': {filter: 'multi'}},
             {'name': {filter: 'true'}},
             {'zone_type': {filter: 'multi'}},
