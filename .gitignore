@@ -30,3 +30,15 @@ database_config.py
 
 #data tasks
 /tasks/atlas/build
+tasks/**/*.ndjson
+tasks/**/*.csv
+tasks/**/*.json
+tasks/**/*.geojson
+tasks/**/database_config.py
+tasks/lodes_data/database_config.py
+tasks/risk_zone_loss_calculations/dfirm/database_config.py
+tasks/risk_zone_loss_calculations/riverine/database_config.py
+tasks/risk_zone_loss_calculations/conversions_postgresql_shp_geojson/database_config.py
+config/postgres.env
+tasks/risk_zone_loss_calculations/conversions_postgresql_shp_geojson/dfirm_NY_data
+tasks/risk_zone_loss_calculations/conversions_postgresql_shp_geojson/mbtiles
