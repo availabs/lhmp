@@ -37,7 +37,7 @@ export class ActionsLayer extends MapLayer {
                 this.layers.forEach(layer => {
                     map.setLayoutProperty(layer.id, 'visibility', "none");
                 })
-                this.fetchData().then(data => this.receiveData(this.map, data))
+                this.fetchData()//.then(data => this.receiveData(this.map, data))
 
             })
 
@@ -364,6 +364,8 @@ export class ActionsLayer extends MapLayer {
             this.map.setLayoutProperty(layer.id, 'visibility', "none");
         })
         if (this.map.getSource('actions')) {
+            this.map.removeLayer('clusters');
+            this.map.removeLayer('cluster-count');
             this.map.removeLayer('actions-layer');
             this.map.removeSource('actions');
         }

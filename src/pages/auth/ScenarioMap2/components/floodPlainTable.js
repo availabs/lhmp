@@ -6,19 +6,17 @@ import {reduxFalcor} from 'utils/redux-falcor'
 import FloodPlainModalData from "./floodPlainModalData";
 import BuildingByAgency from "../../Assets/components/BuildingsByAgencyConfig";
 import {falcorGraph} from "../../../../store/falcorGraph";
-import store from "../../../../store";
+import store from "store";
 import * as d3 from "d3";
 
 var _ = require("lodash")
 var format =  d3.format("~s")
 const fmt = (d) => d < 1000 ? d : format(d)
 
-const ATTRIBUTES =
-    ['building_id', 'address', 'prop_class', 'owner_type', 'replacement_value', 'agency', 'flood_zone']
 const floodZones = {
-    '100 Year': ['AE', 'A', 'AH', 'VE', 'AO'],
-    '500 Year': ['X'],
-    none: [null]
+    'Annual 1%': {color: '#ff0031', name: '100 Year'},
+    'Annual 0.2%': { color: '#005eff', name: '500 Year'},
+    none: {values: [null], color: '#242323', name: 'None'}
 }
 
 class floodPlainTable extends React.Component {
@@ -58,123 +56,69 @@ class floodPlainTable extends React.Component {
     }
 
     async fetchFalcorDeps() {
-        let agencyList = BuildingByAgency
-            .map(bba => bba.name)
-            .filter(agency => this.props.agencyFilter.length ? this.props.agencyFilter.includes(agency) : true)
-
-        let scenario_id = this.props.activeScenarioId.map(d => d.id),
-            riskZone_id = this.props.activeRiskZoneId;
-
-        let length = await falcorGraph.get(['building', 'byGeoid', store.getState().user.activeGeoid, 'agency', agencyList, 'length']);
-        length = get(length, ['json', 'building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList[0], 'length'])
-
-        if (length) {
-            let reqs = [];
-
-            if (length > 200){
-                for(let i = 0; i < length; i+=200){
-                    reqs.push(
-                        ['building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList,
-                            'byIndex', {from: i, to: i + 199}, ATTRIBUTES]
-                    )
-                }
-            }else{
-                reqs.push(['building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList,
-                    'byIndex', {from: 0, to: length - 1}, ATTRIBUTES])
-            }
-
-            return reqs.reduce((a,c) => a.then(() => falcorGraph.get(c)), Promise.resolve())
-                .then(async (buildingCounts) => {
-                    buildingCounts = Object.keys(get(buildingCounts, ['json', 'building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList[0], 'byIndex'], {}))
-                        .filter(v => v !== '$__path')
-                        .map(v => get(buildingCounts, ['json', 'building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList[0], 'byIndex', v], null))
-                        .filter(v => ((this.props.agencyFilter.length && this.props.agencyFilter.includes(get(v, ['agency']))) || !this.props.agencyFilter.length))
-                        .reduce((a, c) => {
-                            let zone = Object.keys(floodZones).find(floodZone => floodZones[floodZone].includes(c.flood_zone))
-                            a[zone].total.sum += 1;
-                            a[zone].total.replacement_value += parseInt(c.replacement_value);
-                            return a;
-
-                        }, {
-                            '100 Year': {
-                                'total': {'sum': 0, 'replacement_value': 0},
-                                'hazus': {'sum': 0, 'replacement_value': 0}
-                            },
-                            '500 Year': {
-                                'total': {'sum': 0, 'replacement_value': 0},
-                                'hazus': {'sum': 0, 'replacement_value': 0}
-                            },
-                            'none': {'total': {'sum': 0, 'replacement_value': 0}, 'hazus': {'sum': 0, 'replacement_value': 0}},
-                        })
-
-                    let scenarioDataLength = await this.props.falcor.get(
-                        ['building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList.join('-'), 'byRiskScenario', scenario_id, 'byRiskZone', riskZone_id, 'length']
-                    )
-                    scenarioDataLength = get(scenarioDataLength, ['json', 'building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList.join('-'), 'byRiskScenario', scenario_id, 'byRiskZone', riskZone_id, 'length'], 0)
-
-                    if (scenarioDataLength){
-                        let reqs = [];
-                        if(scenarioDataLength > 200){
-                            for(let i = 0; i < scenarioDataLength; i+=200){
-                                reqs.push(
-                                    ['building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList.join('-'), 'byRiskScenario', scenario_id, 'byRiskZone', riskZone_id,  'byIndex', {
-                                        from: 0,
-                                        to: {from: i, to: i + 199}
-                                    }, [ 'building_id', 'flood_zone', 'replacement_value']]
-                                )
-                            }
-                        }else {
-                            reqs.push(['building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList.join('-'), 'byRiskScenario', scenario_id, 'byRiskZone', riskZone_id,  'byIndex', {
-                                from: 0,
-                                to: scenarioDataLength - 1
-                            }, [ 'building_id', 'flood_zone', 'replacement_value']])
-                        }
-
-                        await reqs.reduce((a,c) => a.then(() => falcorGraph.get(c)), Promise.resolve())
-                            .then(scenarioDataList => {
-                                scenarioDataList = get(scenarioDataList, ['json', 'building', 'byGeoid', this.props.activeGeoid, 'agency', agencyList.join('-'), 'byRiskScenario', scenario_id, 'byRiskZone', riskZone_id, 'byIndex'], {})
-
-                                Object.keys(scenarioDataList)
-                                    .filter(f => f !== '$__path')
-                                    .forEach(index => {
-
-                                        let zone = Object.keys(floodZones).find(floodZone => scenarioDataList[index] && floodZones[floodZone].includes(scenarioDataList[index].flood_zone))
-                                        buildingCounts[zone].hazus.sum += 1;
-                                        buildingCounts[zone].hazus.replacement_value += parseInt(scenarioDataList[index].replacement_value);
-
-                                    })
-                            })
-                    }
-                    this.setState({buildingCounts})
-                })
-
-
+        let scenario_id = this.props.activeScenarioId.map(d => d.id);
+        if(this.props.activeGeoid.length === 2){
+            scenario_id = ['3','4','9','10','38','12','14','15','16','40','18','19','41','43','22','44',
+                '23','24','25','26','46','28','29','47','30','49','31','52','20','27','17','33','34','13','32',
+                '42','36','35','53','54','55','56'];
         }
 
-        return Promise.resolve();
+        let reqs = [
+            ['building', 'statewide', 'byGeoid', this.props.activeGeoid, 'agency', 'sum', ['count', 'replacement_value']],
+           ['building', 'statewide', 'byGeoid', this.props.activeGeoid, 'agency', 'byRiskScenario', scenario_id, 'byRiskZone', 'all']
+        ]
+            return reqs.reduce((a,c) => a.then(() => falcorGraph.get(c)), Promise.resolve())
+                .then(buildingCounts => {
+                    let graph = store.getState();
+                    graph = get(graph, ['graph', 'building', 'statewide', 'byGeoid', this.props.activeGeoid, 'agency']);
+
+                    let data = {
+                        'Annual 1%': {'sum': 0, 'replacement_value': 0},
+                        'Annual 0.2%': {'sum': 0, 'replacement_value': 0},
+                        'none': {'sum': 0, 'replacement_value': 0}
+                    };
+
+                    Object.keys(get(graph, ['byRiskScenario'], {}))
+                        .filter(key => key !== 'sum')
+                        .forEach(scenarioId => {
+                            let tmpData = get(graph, ['byRiskScenario', scenarioId, 'byRiskZone', 'all', 'value'], []);
+                            tmpData
+                                .filter(d => d)
+                                .forEach(d => {
+                                data[d.name].sum = get(data, [d.name, 'sum'], 0) + (parseInt(d.count) || 0);
+                                data[d.name].replacement_value = get(data, [d.name, 'replacement_value'], 0) + (parseInt(d.sum) || 0);
+                            })
+                        })
+
+                    data['none'].sum = get(graph, ['sum', 'count', 'value'], 0) - data["Annual 1%"].sum - data["Annual 0.2%"].sum;
+                    data['none'].replacement_value = get(graph, ['sum', 'replacement_value', 'value'], 0) - data["Annual 1%"].replacement_value - data["Annual 0.2%"].replacement_value;
+                    this.setState({data})
+                })
     }
 
     render() {
-        let buildingCounts = get(this.state, ['buildingCounts'], {});
+        let buildingCounts = get(this.state, ['data'], {});
         return (
             <div style={{'overflowX': 'auto'}}>
                 <table className='table table-sm table-hover'>
                     <thead>
                     <tr>
                         <th/>
-                        <th colSpan="2" style={{textIndent: '15px'}}>Total</th>
-                        <th colSpan="2"
-                            style={{textIndent: '5px'}}>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : this.props.activeScenarioId.map(d => d.name.includes('HAZUS') ? 'HAZUS' : 'DFIRM')}</th>
+                        <th/>
+                        <th colSpan="3" style={{textIndent: '15px'}}>Total</th>
+                        {/*<th colSpan="2"*/}
+                        {/*    style={{textIndent: '5px'}}>{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null : this.props.activeScenarioId.map(d => d.name.includes('HAZUS') ? 'HAZUS' : 'DFIRM')}</th>*/}
                     </tr>
                     <tr>
+                        <th/>
                         <th>Zone</th>
                         <th>#</th>
                         <th>$</th>
-                        {this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null :
+                        {/*{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null :
                             <React.Fragment>
                                 <th>#</th>
                                 <th>$</th>
-                            </React.Fragment>}
+                            </React.Fragment>}*/}
                     </tr>
                     </thead>
                     <tbody>
@@ -182,6 +126,7 @@ class floodPlainTable extends React.Component {
                         Object.keys(buildingCounts).map((d, i) => {
                             return (
                                 <tr key={i}>
+                                    <td><i className='fa fa-circle' style={{color: floodZones[d].color}}/></td>
                                     <td>
                                         {/*<a href={"#"}
                                            id={d.zone_geoid}
@@ -191,21 +136,21 @@ class floodPlainTable extends React.Component {
                                            })}>
                                             {d}
                                         </a>*/}
-                                        {d}
+                                        {floodZones[d].name}
                                         {this.state.showZoneModal &&
                                         this.state.flood_zone === d
                                             ?
                                             this.showZoneModal(d, this.props.activeScenarioId, this.props.activeRiskZoneId, this.props.layer) : null}
                                     </td>
-                                    <td>{fmt(buildingCounts[d].total.sum)}</td>
-                                    <td>{fmt(buildingCounts[d].total.replacement_value)}</td>
-                                    {this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null
+                                    <td>{fmt(buildingCounts[d].sum)}</td>
+                                    <td>{fmt(buildingCounts[d].replacement_value)}</td>
+                                    {/*{this.props.offRiskZoneId.length !== 0 && !this.props.offRiskZoneId.includes("scenario") ? null
                                         :
                                         <React.Fragment>
                                             <td>{fmt(buildingCounts[d].hazus.sum)}</td>
                                             <td>{fmt(buildingCounts[d].hazus.replacement_value)}</td>
                                         </React.Fragment>
-                                    }
+                                    }*/}
                                 </tr>
                             )
                         }) :

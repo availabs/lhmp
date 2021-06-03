@@ -26,7 +26,7 @@ class AssetsListByTypeByHazard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            geoid: this.props.match.params.geoid ? this.props.match.params.geoid : this.props.activeGeoid,
+            geoid: props.match.params.geoid ? props.match.params.geoid : props.activeGeoid,
             data: [],
             loading: false,
             columns: ATTRIBUTES
@@ -147,27 +147,45 @@ class AssetsListByTypeByHazard extends React.Component {
             this.setState({
                 loading: true
             });
-            return this.props.falcor.get(
-                ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
-                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
-                    from: 0,
-                    to: 50
-                }, ATTRIBUTES],
-                ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
-                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length'],
-                ['building', 'meta', ['owner_type', 'prop_class'], 'name']
-            )
-                .then(response => {
+            let reqs = [ ['building', 'meta', ['owner_type', 'prop_class'], 'name']]
+            if (this.props.match.url.includes('/statewide')) {
+                reqs.push(
+                    ['building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
+                        this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length']
+                )
+            }else{
+                reqs.push(
+                    ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
+                        'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
+                        from: 0,
+                        to: 50
+                    }, ATTRIBUTES],
+                    ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
+                        'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length'],
+                )
+            }
+            return this.props.falcor.get(...reqs)
+                .then(async response => {
+                    let graph;
                     let meta = response.json.building.meta;
                     let riskZones = this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds.toString() : 'all';
 
-                    let graph = get(response,
-                        `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
-                        null);
+                    if(this.props.match.url.includes('/statewide')){
+                        length = get(response, ['json', 'building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
+                            this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'length']);
+                        let list = await this.props.falcor.get(['building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
+                            this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {from: 0, to: length - 1}, ATTRIBUTES])
+                        graph = get(list, ['json', 'building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
+                            this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex'])
+                    }else{
+                        graph = get(response,
+                            `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
+                            null);
+                        length = get(response,
+                            `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.length`,
+                            lengthDefault);
+                    }
 
-                    length = get(response,
-                        `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.length`,
-                        lengthDefault);
                     if (!graph) return Promise.resolve()
                     Object.keys(graph).forEach(item => {
                         if (graph[item] && graph[item]['$__path']) {
@@ -194,20 +212,33 @@ class AssetsListByTypeByHazard extends React.Component {
             });
             let typeIndex = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type,
                 typeLen = this.props.match.params.type;
-            return this.props.falcor.get(
-                ['building', 'byGeoid',
+
+            let reqs = [['building', 'meta', ['owner_type', 'prop_class'], 'name']];
+            this.props.match.url.includes('/statewide') ?
+                reqs.push(['building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'sum', ['count', 'replacement_value']],) :
+                reqs.push(
+                    ['building', 'byGeoid', this.state.geoid, typeLen, types, 'length'],
+                    ['building', 'byGeoid',
                     this.state.geoid,
                     typeIndex,
                     types,
-                    'byIndex', {from: 0, to: 50}, ATTRIBUTES],
-                ['building', 'byGeoid', this.state.geoid, typeLen, types, 'length'],
-
-                ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
-                .then(response => {
+                    'byIndex', {from: 0, to: 50}, ATTRIBUTES]);
+            return this.props.falcor.get(...reqs)
+                .then(async response => {
+                    let graph;
                     types = typeof types === 'object' && types.length > 1 ? types[0] : types
                     let meta = response.json.building.meta;
-                    let graph = response.json.building.byGeoid[this.state.geoid][typeIndex][types].byIndex;
-                    length = get(response, `json.building.byGeoid.${this.state.geoid}.${typeLen}.${types}.length`, lengthDefault);
+
+                    if (this.props.match.url.includes('/statewide')){
+                        length = get(response, ['json', 'building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'sum', 'count'])
+                        let reqs = ['building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byIndex', {from: 0, to: length - 1}, ATTRIBUTES]
+                        let list = await this.props.falcor.get(reqs)
+                        graph = get(list, ['json', 'building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byIndex'])
+                    }else{
+                        graph = response.json.building.byGeoid[this.state.geoid][typeIndex][types].byIndex;
+                        length = get(response, `json.building.byGeoid.${this.state.geoid}.${typeLen}.${types}.length`, lengthDefault);
+                    }
+
                     Object.keys(graph).forEach(item => {
                         if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({
@@ -284,20 +315,37 @@ class AssetsListByTypeByHazard extends React.Component {
             this.setState({
                 loading: true
             });
-            return this.props.falcor.get(
-                ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
-                    'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
-                    from: from,
-                    to: to
-                }, ATTRIBUTES],
-                ['building', 'meta', ['owner_type', 'prop_class'], 'name']
-            )
-                .then(response => {
+
+            let reqs = [['building', 'meta', ['owner_type', 'prop_class'], 'name']]
+            if (this.props.match.url.includes('/statewide')) {
+                reqs.push(['building', 'statewide', 'byGeoid',this.state.geoid, 'agency', 'byRiskScenario',
+                    this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {from: from, to: to}, ATTRIBUTES])
+            }else{
+                reqs.push(
+                    ['building', 'byGeoid', this.state.geoid, this.props.match.params.type, types, 'byRiskScenario', this.props.match.params.scenarioIds,
+                        'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex', {
+                        from: from,
+                        to: to
+                    }, ATTRIBUTES]
+                )
+            }
+
+            return this.props.falcor.get(...reqs)
+                .then(async response => {
                     let meta = response.json.building.meta;
                     let riskZones = this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds.toString() : 'all';
-                    let graph = get(response,
-                        `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
-                        null);
+
+                    let graph;
+
+                    if (this.props.match.url.includes('/statewide')){
+                        graph = get(response, ['json', 'building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byRiskScenario',
+                            this.props.match.params.scenarioIds, 'byRiskZone', this.props.match.params.riskzoneIds ? this.props.match.params.riskzoneIds : 'all', 'byIndex'])
+                    }else{
+                        graph = get(response,
+                            `json.building.byGeoid.${this.state.geoid}.${this.props.match.params.type}.${types}.byRiskScenario.${this.props.match.params.scenarioIds}.byRiskZone.${riskZones}.byIndex`,
+                            null);
+                    }
+                    if (!graph) return Promise.resolve()
                     Object.keys(graph).forEach(item => {
                         if (graph[item] && graph[item]['$__path']) {
                             data.push({
@@ -323,17 +371,28 @@ class AssetsListByTypeByHazard extends React.Component {
             })
             let type = this.props.match.params.type === 'critical' ? 'criticalGrouped' : this.props.match.params.type;
 
-            return this.props.falcor.get(
-                ['building', 'byGeoid',
-                    this.state.geoid,
-                    type,
-                    types,
-                    'byIndex', {from: from, to: to}, ATTRIBUTES],
-                ['building', 'meta', ['owner_type', 'prop_class'], 'name'])
-                .then(response => {
+            let reqs = [['building', 'meta', ['owner_type', 'prop_class'], 'name']];
+            this.props.match.url.includes('/statewide') ?
+                reqs.push(['building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byIndex', {from: from, to: to}, ATTRIBUTES]) :
+                reqs.push(
+                    ['building', 'byGeoid',
+                        this.state.geoid,
+                        type,
+                        types,
+                        'byIndex', {from: from, to: to}, ATTRIBUTES]);
+
+            return this.props.falcor.get(...reqs)
+                .then(async response => {
+                    let graph;
                     types = typeof types === 'object' && types.length > 1 ? types[0] : types
                     let meta = response.json.building.meta;
-                    let graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
+
+                    if (this.props.match.url.includes('/statewide')){
+                        graph = get(response, ['json', 'building', 'statewide', 'byGeoid', this.state.geoid, 'agency', 'byIndex'])
+                    }else{
+                        graph = response.json.building.byGeoid[this.state.geoid][type][types].byIndex;
+                    }
+
                     Object.keys(graph).forEach(item => {
                         if (get(graph, `${item}.$__path`, null) !== null) {
                             data.push({
@@ -486,6 +545,27 @@ let authRoutes = [
         component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
     },
     {
+        icon: 'os-icon',
+        path: '/assets/list/:type/:typeIds/statewide',
+        exact: true,
+        mainNav: false,
+        breadcrumbs: [
+            {name: 'Assets', path: '/assets/'},
+            {name: 'type', path: '/assets/list/:type'},
+            {name: 'typeIds', path: '/assets/list/:type/:typeIds'}
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        name: 'Asset List',
+        auth: true,
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
+    },
+    {
         path: '/assets/list/:type/:typeIds/hazard/:hazardIds',
         name: 'Asset List',
         mainNav: false,
@@ -541,6 +621,28 @@ let authRoutes = [
             {name: 'typeIds', path: '/assets/list/:type/:typeIds'},
             {name: 'scenarioIds', path: '/assets/list/:type/:typeIds/scenario/:scenarioIds'},
             {name: 'riskzoneIds', path: '/assets/list/:type/:typeIds/scenario/:scenarioIds/riskZone/:riskzoneIds'}
+        ],
+        menuSettings: {
+            image: 'none',
+            scheme: 'color-scheme-light',
+            position: 'menu-position-left',
+            layout: 'menu-layout-compact',
+            style: 'color-style-default'
+        },
+        component: connect(mapStateToProps, mapDispatchToProps)(reduxFalcor(AssetsListByTypeByHazard))
+    },
+    {
+        path: '/assets/list/:type/:typeIds/statewide/scenario/:scenarioIds/riskZone/:riskzoneIds',
+        name: 'Asset List',
+        mainNav: false,
+        auth: true,
+        exact: true,
+        breadcrumbs: [
+            {name: 'Assets', path: '/assets/'},
+            {name: 'type', path: '/assets/list/:type'},
+            {name: 'typeIds', path: '/assets/list/:type/:typeIds'},
+            {name: 'scenarioIds', path: '/assets/list/:type/:typeIds/statewide/scenario/:scenarioIds'},
+            {name: 'riskzoneIds', path: '/assets/list/:type/:typeIds/statewide/scenario/:scenarioIds/riskZone/:riskzoneIds'}
         ],
         menuSettings: {
             image: 'none',

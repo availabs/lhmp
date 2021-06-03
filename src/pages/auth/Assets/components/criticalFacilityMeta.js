@@ -173,7 +173,7 @@ const meta = {
     74020: 'Federal Emergency Mgmt Agency',
     81030: 'Launch Pad',
     74022: 'Fire Equipment Manufacturer',
-    73000: 'Education Facility',
+    73000: 'Education Facility', //todo: enter details for 73003, 73005, 73006, 73007
     73002: 'School',
     73004: 'College / University',
     74030: 'Immigration and Naturalization Service',

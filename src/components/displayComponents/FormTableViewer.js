@@ -39,17 +39,13 @@ class FormTableViewer extends React.Component{
         }
 
         return this.props.falcor.get(
-            ['forms',formType,'byPlanId',this.props.activePlan,'length'],
-            ["geo", this.props.activeGeoid, 'municipalities']
+            ['forms',formType,'byPlanId',this.props.activePlan,'length']
         )
             .then(response =>{
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
                 if(length > 0){
                     return this.props.falcor.get(
-                        ['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes],
-                        ['geo',
-                            [this.props.activeGeoid, ...get(this.props.geoData, `${this.props.activeGeoid}.municipalities.value`, [])],
-                            ['name']]
+                        ['forms',formType,'byPlanId',this.props.activePlan,'byIndex',[{from:0,to:length-1}],...formAttributes]
                     )
                 }
             })
@@ -136,8 +132,8 @@ class FormTableViewer extends React.Component{
                     a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split(',') : a[c]
 
                     if(['cousub', 'municipality', 'contact_municipality', 'county', 'contact_county', 'community_name'].includes(c)){
-                        a[c] = typeof a[c] === 'string' ? functions.formatName(get(this.props.geoData, [a[c], 'name'], a[c]), a[c]) :
-                            a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC, 'name'], subC), subC)) : a[c]
+                        a[c] = typeof a[c] === 'string' ? functions.formatName(get(this.props.geoData, [a[c]], a[c]), a[c]) :
+                            a[c] ? a[c].map(subC => functions.formatName(get(this.props.geoData, [subC], subC), subC)) : a[c]
                     }
 
                     if (configSettings && configSettings.displayType === 'AvlFormsJoin'){
@@ -234,7 +230,7 @@ const mapStateToProps = (state,ownProps) => {
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),
-        geoData: get(state.graph, ['geo'], {}),
+        geoData: get(state.geo, ['allGeos'], {}),
         graph : state.graph
 
     }
