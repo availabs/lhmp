@@ -1,5 +1,5 @@
 export const colors = {
-    'No jurisdiction-specific narrative' : 'gray',
+    'No jurisdiction-specific narrative' : '#99ccff',
     'Started' : '#f7f714',
     'Ready for review': '#1f90f2',
     'Requirement not met': '#f2351f',
