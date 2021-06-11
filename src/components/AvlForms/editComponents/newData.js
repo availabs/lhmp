@@ -343,12 +343,27 @@ class AvlFormsNewData extends React.Component{
     cousubDropDown(event){
         let county = typeof event.target.value === "object" ? event.target.value : [event.target.value];
         if(county && county !== 'None'){
-            return this.props.falcor.get(['geo',county,'municipalities'])
+            return this.props.falcor.get(['geo',county,'municipalities'], ['forms', 'filterJurisdictions', 'byPlanId', this.props.activePlan, 'length'])
                 .then(response =>{
                     let cousubs = [];
+                    let length = get(response, ['json', 'forms', 'filterJurisdictions', 'byPlanId', this.props.activePlan, 'length'], 0);
+                    let reqs = []
+
                     county.map(c => cousubs.push(...get(response, `json.geo[${c}].municipalities`, []).filter(f => f)));
+
+                    if (length > 0) {
+                        reqs.push(['forms', 'filterJurisdictions', 'byPlanId', this.props.activePlan, 'byIndex', [{
+                            from: 0,
+                            to: length - 1
+                        }], ['county', 'municipality']])
+                    }
+
                     if (cousubs){
-                        this.props.falcor.get(['geo',cousubs,['name']])
+                        reqs.push(['geo',cousubs,['name']])
+                    }
+
+                    if(reqs.length){
+                        this.props.falcor.get(...reqs)
                             .then(response =>{
                                 return response
                             })
@@ -359,12 +374,40 @@ class AvlFormsNewData extends React.Component{
         }
     }
 
+    getGeoToFilter() {
+        let formType = 'filterJurisdictions'
+        let graph = get(this.props.falcor.getCache(), [`forms`], null);
+        let id = get(graph, [formType, 'byPlanId', this.props.activePlan, 'byIndex'], {})
+        if (id) {
+            id = Object.keys(id)
+                .map(i => get(id[i], ['value', 2], null))
+                .filter(i => i)
+            let data = id.map(i => get(graph, ['byId', i], {}))
+            if (data) {
+                let geoToFilter =
+                    Object.keys(data)
+                        .reduce((a, g) => {
+                            let tmpGeos = get(data[g], `value.attributes.municipality`, null)
+                            tmpGeos = tmpGeos && typeof tmpGeos === "string" && tmpGeos.includes('[') ?
+                                tmpGeos.slice(1, -1).split(',') : tmpGeos
+                            if (tmpGeos) a.push(...tmpGeos)
+                            return a;
+                        }, [])
+                return geoToFilter;
+            }
+        }
+
+        return []
+    }
+
     geoData(){
         let countyData = [];
         let cousubsData = [];
         let graph = this.props.geoData;
         let countyAttrs = Object.keys(this.state).filter(f => f.includes('county'))
         let filterOn = this.state[countyAttrs.pop()]
+        let geoToFilter = this.getGeoToFilter();
+
         if(graph){
             // let graph = this.props.geoData;
             Object.keys(graph).forEach(item =>{
@@ -380,7 +423,7 @@ class AvlFormsNewData extends React.Component{
                 .forEach(item =>{
 
                     get(graph, `${item}.municipalities.value`, [])
-                        .filter(cousub => get(graph, `${cousub}.name`, null))
+                        .filter(cousub => get(graph, `${cousub}.name`, null) && !geoToFilter.includes(cousub))
                         .forEach(cousub => {
                         cousubsData.push({
                             value : cousub,
