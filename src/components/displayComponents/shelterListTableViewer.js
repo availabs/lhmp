@@ -11,6 +11,7 @@ ${props => props.theme.panelDropdownScrollBar};
 `;
 const ATTRIBUTES = [
     'shelter_id',
+    'address',
     'shelter_name',
     'evacuation_capacity',
     'post_impact_capacity',
