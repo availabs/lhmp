@@ -544,8 +544,11 @@ export const CriticalInfrastructureOptions =  (options = {}) => {
                                     .map(k => [k.split('_').join(' '), get(topFeature, `properties.${k}`, null)])];
                         }else{
                             buildingRes = get(buildingRes, ['json', 'building', 'byId', id], null)
-
-                            return [
+                            return topFeature.properties.type === 'shelter' ?
+                                Object.keys(topFeature.properties)
+                                    .filter(k => !['color', 'location'].includes(k))
+                                    .map(k => [k, topFeature.properties[k]]) :
+                            [
                                 ...data,
                                 [null, buildingRes.address],
                                 ["Owner Type", getOwnerTypeName(falcorGraph.getCache(), buildingRes.owner_type)],
