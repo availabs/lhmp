@@ -623,13 +623,13 @@ const config = {
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
             defaultSortCol: 'evacuation_capacity',
             // defaultSortOrder: 'desc',
-            colOrder: ['shelter_name', 'address', 'evacuation_capacity', 'post_impact_capacity', 'ada_compliant', 'wheelchair_accessible', 'generator_onsite', 'self_suffienct_electricty',],
+            colOrder: ['shelter_name', 'evacuation_capacity', 'post_impact_capacity', 'ada_compliant', 'wheelchair_accessible', 'generator_onsite', 'self_suffienct_electricty',],
             minHeight: '80vh',
             icon: 'os-icon-share-2',
             hideNav: true
         },
     ],
-     
+
      'Process Assessment' : [
         {
             title: 'Strengths',
