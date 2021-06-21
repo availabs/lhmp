@@ -8,6 +8,7 @@ module.exports = [
             {'action_status_update': {filter: 'multi'}},
             {'action_description': {filter: 'true'}},
             {'action_name': {filter: 'true'}},
+            {'previous_plan_action': {filter: 'true'}},
             {'associated_hazards': {filter: 'true'}},
             'description_of_problem_being_mitigated',
             'sub_type'], // to list the attributes on the main page

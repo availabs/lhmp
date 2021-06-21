@@ -254,7 +254,7 @@ span.loginMenu {
     visibility: hidden;
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.3s ease;
+    transition: all 0.125s ease;
     border-radius: $global-border-radius;
     .avatar-w {
       border-color: #fff;

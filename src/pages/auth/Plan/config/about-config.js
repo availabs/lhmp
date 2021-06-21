@@ -142,7 +142,7 @@ const config =  {
 			align: 'full',
 			config: {
 				type:'roles',
-				description: 'The table below lists all of the agencies, representatives, and their respective roles held during the planning process and development of this Hazard Mitigation Plan.',
+				description: 'The table below lists the participants from each jurisdiction that identified as the "Mitigation Representative" for their jurisdiction as part of the planning process and development of this Hazard Mitigation Plan.',
 				filters:[{column:'is_hazard_mitigation_representative',value:'yes'}],
         		columns : [
 					{
