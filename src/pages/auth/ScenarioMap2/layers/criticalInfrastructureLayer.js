@@ -134,7 +134,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
 
     }
 
-    fetchData(graph) {
+    async fetchData(graph) {
         if (this.tracts && this.tracts.length < 2 || !store.getState().user.activeGeoid) return Promise.resolve();
         if (!store.getState().user.activeGeoid) return Promise.resolve();
         if (!graph) graph = falcorGraph.getCache();
@@ -146,6 +146,18 @@ export class CriticalInfrastructureLayer extends MapLayer{
             null);
         if (!(countiesOrCousubs && countiesOrCousubs.value && countiesOrCousubs.value.length > 0)) return Promise.resolve();
         let owner_types = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '-999'] // ['3', '4', '5', '6', '7']
+
+        let shelters = await falcorGraph.get(['shelters', 'byGeoId', store.getState().user.activeGeoid, 'length'])
+        shelters = await falcorGraph.get(['shelters', 'byGeoId', store.getState().user.activeGeoid, 'byIndex',
+            {from: 0, to: get(shelters, `json.shelters.byGeoId.${store.getState().user.activeGeoid}.length`, 0)},['shelter_id',
+            'shelter_name',
+            'evacuation_capacity',
+            'post_impact_capacity',
+            'ada_compliant',
+            'wheelchair_accessible',
+            'generator_onsite',
+            'self_suffienct_electricty', 'location']])
+
         return falcorGraph.get(
             ['building', 'byGeoid', store.getState().user.activeGeoid, 'flood_zone',
                 ['all'], 'owner_type', owner_types, 'critical', ['true']], //, ["id",  "owner_type", "critical", "flood_zone"]
@@ -177,6 +189,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
         let rawGraph = falcorGraph.getCache(),
             graph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.flood_zone.all.owner_type`, null),
             shelterGraph = get(rawGraph, `building.byGeoid.${store.getState().user.activeGeoid}.shelter.value`, []),
+            shelterGraphTmp = get(rawGraph, `shelters.byId`, []),
             centroidGraph = get(rawGraph, `building.geom.byBuildingId`, null),
             critical = [],
             buildingColors = {};
@@ -218,25 +231,36 @@ export class CriticalInfrastructureLayer extends MapLayer{
 
             });
 
-        shelterGraph
+        Object.keys(shelterGraphTmp)
             .forEach(shelter => {
-                buildingColors[shelter.building_id] = '#ffffff';
+                buildingColors[shelter] = '#ffffff';
                 geojson.features.push({
                     "type": "Feature",
-                    "properties":{id:shelter.building_id, color:'#ffffff', type: 'shelter',
-                    ...Object.keys(get(rawGraph, ['building', 'byId', shelter.building_id], {}))
-                        .filter(k => get(rawGraph, ['building', 'byId', shelter.building_id, k], null))
-                        .reduce((a,k) => {
-                            a[k] = get(rawGraph, ['building', 'byId', shelter.building_id, k], null);
-                            a[k] = k === 'geoid' ? get(rawGraph, `geo.${a[k].slice(0,5)}.name`, '') :
-                                k === 'cousub_geoid' ? get(rawGraph, `geo.${a[k]}.name`, '') : a[k]
-
-                            return a;
-                        }, {})
+                    "properties":{id:shelter, color:'#ffffff', type: 'shelter',
+                        ...shelterGraphTmp[shelter]
                     },
-                    "geometry": {...get(centroidGraph, `${shelter.building_id}.centroid.value`, null)}
+                    "geometry": JSON.parse(shelterGraphTmp[shelter].location)
                 })
             });
+        // shelterGraph
+        //     .forEach(shelter => {
+        //         buildingColors[shelter.building_id] = '#ffffff';
+        //         geojson.features.push({
+        //             "type": "Feature",
+        //             "properties":{id:shelter.building_id, color:'#ffffff', type: 'shelter',
+        //             ...Object.keys(get(rawGraph, ['building', 'byId', shelter.building_id], {}))
+        //                 .filter(k => get(rawGraph, ['building', 'byId', shelter.building_id, k], null))
+        //                 .reduce((a,k) => {
+        //                     a[k] = get(rawGraph, ['building', 'byId', shelter.building_id, k], null);
+        //                     a[k] = k === 'geoid' ? get(rawGraph, `geo.${a[k].slice(0,5)}.name`, '') :
+        //                         k === 'cousub_geoid' ? get(rawGraph, `geo.${a[k]}.name`, '') : a[k]
+        //
+        //                     return a;
+        //                 }, {})
+        //             },
+        //             "geometry": {...get(centroidGraph, `${shelter.building_id}.centroid.value`, null)}
+        //         })
+        //     });
         this.markers.forEach(m => m.remove())
         geojson.features.forEach(marker => {
             // add icon
