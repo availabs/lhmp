@@ -211,7 +211,7 @@ export class CriticalInfrastructureLayer extends MapLayer{
                         buildingColors[buildingId] = '#fbff00';
                         geojson.features.push({
                             "type": "Feature",
-                            "properties":{id:buildingId, color:'#fbff00', critical: criticalFacilityMeta[criticalCode]},
+                            "properties":{id:buildingId, color:'#fbff00', critical: criticalFacilityMeta[criticalCode], type: 'critical'},
                             "geometry": {...get(centroidGraph, `${buildingId}.centroid.value`, null)}
                         })
                     });
