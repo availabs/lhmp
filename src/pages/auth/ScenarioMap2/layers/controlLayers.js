@@ -122,11 +122,9 @@ export class ControlLayers extends MapLayer {
         //console.log('in visibility toggle mode on',source,layerName)
         let activePlan = store.getState().user.activePlan;
         let opacity = 0.3
-        // if(activePlan === '10' || activePlan === '56'){
-        //     opacity = 0.3
-        // }else{
-        //     opacity = 0.3
-        // }
+        if(layerName.includes('500')){
+            opacity = 0.2
+        }
         if (layerName.includes('_27') || layerName.includes('_26')) {
             if (this.map.getSource('andes_riverine')) {
                 this.map.removeLayer('andes_riverine_layer');
@@ -167,7 +165,7 @@ export class ControlLayers extends MapLayer {
                         83,
                         "hsl(211, 83%, 31%)"
                     ],
-                    'fill-opacity': 0.3
+                    'fill-opacity': opacity
                 },
 
             })
@@ -236,7 +234,7 @@ export class ControlLayers extends MapLayer {
                     'minzoom': 8,
                     'paint': {
                         'fill-color': "hsl(211, 83%, 31%)",
-                        'fill-opacity': 0.3
+                        'fill-opacity': opacity
                     },
 
                 })
