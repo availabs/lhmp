@@ -55,7 +55,7 @@ const DefaultLayout = ({component: Component, ...rest}) => {
                 (
                     <Redirect
                         to={{
-                            pathname: rest.userAuthLevel === 0  ? "/" : "/admin", //default pages
+                            pathname: rest.userAuthLevel === 0  ? "/" : "/", //default pages
                             state: {from: rest.router.location}
                         }}
                     />
@@ -76,7 +76,7 @@ function checkAuth(props) {
     if(authLevel <= props.userAuthLevel && props.userAuthLevel > 5 ){
         return true // user has auth and is admin so don't check plan
     }
-    let activePlan = get(props, 'user.activePlan','xxx')
+    let activePlan = props.user.activePlan || 'xxx'
     let authedPlans = get(props, 'user.authedPlans',[])
     if(authedPlans.includes(activePlan.toString())) {
         // if user is authed for this plan

@@ -12,6 +12,8 @@ class Logo extends Component {
 
 class AvatarUser extends Component {
     render() {
+        let activePlan = this.props.user.activePlan || 'xxx'
+        let authedPlans = this.props.user.authedPlans || []
         //console.log('TopMenu', this.props.user)
         return (
             <div className="logged-user-w avatar-inline">
@@ -53,8 +55,8 @@ class AvatarUser extends Component {
                         </div>
                         <ul>
                             {
-                                (this.props.user.authedPlans && this.props.user.authedPlans.length > 1) ||
-                                (this.props.user.authed && this.props.user.authedPlans.indexOf(this.props.activePlan) === -1)?
+                                (this.props.user.authLevel >= 1 && 
+                                authedPlans.includes(activePlan) || this.props.user.authLevel >= 5) ?
                                     <li>
                                         <Link to='/plans'>
                                             <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Plans </span>
@@ -78,13 +80,14 @@ class AvatarUser extends Component {
                                     </React.Fragment>
                                  : null
                             }
-                            {this.props.user.authLevel >= 1 ? // check for current plan and not in general
-                                    <li>
-                                        <Link to='/admin'>
-                                            <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Admin </span>
-                                        </Link>
-                                    </li>
-                                 : null
+                            {(this.props.user.authLevel >= 1 && 
+                              authedPlans.includes(activePlan) || this.props.user.authLevel >= 5) ? // check for current plan and not in general
+                                <li>
+                                    <Link to='/admin'>
+                                        <i className="pre-icon os-icon os-icon-pencil-2"></i> <span> Admin </span>
+                                    </Link>
+                                </li>
+                                : null
                             }
                             {this.props.user.authLevel === 10 ?
                                 <li>
@@ -108,6 +111,9 @@ class AvatarUser extends Component {
 class AvatarUserMobile extends Component {
     render() {
         //console.log('TopMenu', this.props.user)
+        let activePlan = this.props.user.activePlan || 'xxx'
+        let authedPlans = this.props.user.authedPlans || []
+
         return (
             <li className='has-sub-menu'>
 
@@ -176,7 +182,8 @@ class AvatarUserMobile extends Component {
                                 </React.Fragment>
                                 : null
                             }
-                            {this.props.user.authLevel >= 1 ? // check for current plan and not in general
+                            {(this.props.user.authLevel >= 1 && 
+                              authedPlans.includes(activePlan) || this.props.user.authLevel >= 5) ? // check for current plan and not in general
                                 <li>
                                     <Link to='/admin'>
                                         Admin
