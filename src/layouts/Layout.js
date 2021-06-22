@@ -6,6 +6,7 @@ import BreadcrumbBar from 'components/light-admin/breadcrumb-bar'
 import ContentContainer from 'components/light-admin/containers/ContentContainer'
 import LoadingPage from "components/loading/loadingPage"
 import CSS_CONFIG from 'pages/auth/css-config'
+import get from 'lodash.get'
 
 
 const DefaultLayout = ({component: Component, ...rest}) => {
@@ -36,70 +37,57 @@ const DefaultLayout = ({component: Component, ...rest}) => {
     }
     //console.log('rest: contentStyle', contentStyle)
     // console.log('rest: contentStyle', contentStyle)
-    return checkAuth(rest) ?
-        (
-            <Redirect
-                to={{
-                    pathname: "/login", // if not authed
-                    state: {from: rest.router.location}
-                }}
-            />
-        )
-        : (
-            checkAuthPlan(rest) ?
+    return (
+            checkAuth(rest) ?
+                (   // if authed
+                    <Route {...rest} render={matchProps => (
+                        <div className="layout-w" style={{minHeight: '100vh'}}>
+                            <Menu {...rest} />
+                            <div style={contentStyle}>
+                                <BreadcrumbBar layout={rest.breadcrumbs} match={rest.computedMatch}/>
+                                <ContentContainer>
+                                    <Component {...matchProps} {...rest}/>
+                                </ContentContainer>
+                            </div>
+                        </div>
+                    )}/>
+                ) :
                 (
                     <Redirect
                         to={{
-                            pathname: "/" , //default pages
+                            pathname: rest.userAuthLevel === 0  ? "/" : "/admin", //default pages
                             state: {from: rest.router.location}
                         }}
                     />
                 )
-                : (
-                    checkAuthPage(rest) ?
-                        (
-                            <Redirect
-                                to={{
-                                    pathname: rest.userAuthLevel === 0  ? "/" : "/admin", //default pages
-                                    state: {from: rest.router.location}
-                                }}
-                            />
-                        ) : (   // if authed
-                            <Route {...rest} render={matchProps => (
-                                <div className="layout-w" style={{minHeight: '100vh'}}>
-                                    <Menu {...rest} />
-                                    <div style={contentStyle}>
-                                        <BreadcrumbBar layout={rest.breadcrumbs} match={rest.computedMatch}/>
-                                        <ContentContainer>
-                                            <Component {...matchProps} {...rest}/>
-                                        </ContentContainer>
-                                    </div>
-                                </div>
-                            )}/>)
-                )
-        )
+                
+    )
 
 };
 
+
 function checkAuth(props) {
-    //console.log('checkAuth', (props.auth && !props.authed), props)
-    // console.log('checkAuth', (props.auth && !props.authed), props)
+    if(!props.auth && !props.authLevel) {
+        return true // page doesn't require auth
+    }
+    // the page is authed to default authLevel to 1
+    let authLevel = props.authLevel !== undefined ? props.authLevel : 1;
+    
+    if(authLevel <= props.userAuthLevel && props.userAuthLevel > 5 ){
+        return true // user has auth and is admin so don't check plan
+    }
+    let activePlan = get(props, 'user.activePlan','xxx')
+    let authedPlans = get(props, 'user.authedPlans',[])
+    if(authedPlans.includes(activePlan.toString())) {
+        // if user is authed for this plan
+        if(authLevel <= props.userAuthLevel){
+            // the user auth is <= authLevel (which defaults to 1)
+            return true
+        }
+    }
+    return false
 
-    return (props.auth && !props.authed)
 }
 
-function checkAuthPage(props) {
-    let authlevel = props.authLevel !== undefined ? props.authLevel : 1;
-    //console.log('checkAuthPage', (props.auth && !(props.authed && props.userAuthLevel >= authlevel)), props)
-    return (props.auth && !(props.authed && props.userAuthLevel >= authlevel))
-
-}
-
-function checkAuthPlan(props) {
-    //console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
-    // console.log('checkAuthPlan', props.auth , props.user.activePlan , props);
-    return ['Plans', 'Home'].includes(props.name) ? false :
-    (props.auth && props.user.activePlan && !(props.user.activePlan && props.user.authedPlans.includes(props.user.activePlan.toString())))
-}
 
 export default DefaultLayout

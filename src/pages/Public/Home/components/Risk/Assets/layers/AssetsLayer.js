@@ -152,7 +152,7 @@ class TractLayer extends MapLayer {
         Object.keys(graph)
             .forEach(owner_type => {
                 let allBuildings = get(graph[owner_type], `critical`);
-                console.log('??', allBuildings)
+                //console.log('??', allBuildings)
                 /*if (owner_type === '3') {
                     [...allBuildings.true.value.map(f => f.id), ...allBuildings.false.value.map(f => f.id)]
                         .forEach(buildingId => {
