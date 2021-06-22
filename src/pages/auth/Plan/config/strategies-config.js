@@ -31,7 +31,7 @@ const config = {
             type: 'content',
             prompt: 'Provide an overview of the Strategy Development Process.  Briefly describe the process by which your community used existing resources and risk assessments to identify problem statements.' +
                     'Then, describe how your community developed strategies to solve for those problems and how they were documented. Who was involved? Did you conduct site visits? Did you attend a Mitigation Strategy Workshop? Etc.',
-            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +  
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +
                     'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
                     'Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction that are based on the community’s risk and  vulnerabilities, as well as community priorities.',
             icon: 'os-icon-globe',
@@ -47,7 +47,7 @@ const config = {
             type: 'content',
             prompt: 'Provide an overview of the Strategy Development Process.  Briefly describe the process by which your community used existing resources and risk assessments to identify problem statements.' +
                     'Then, describe how your community developed strategies to solve for those problems and how they were documented. Who was involved? Did you conduct site visits? Did you attend a Mitigation Strategy Workshop? Etc.',
-            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +  
+            intent: 'To ensure the hazard mitigation actions are based on the identified hazard vulnerabilities, are within the capability of each jurisdiction, and reduce or avoid future losses.' +
                     'This is the heart of the mitigation plan, and is essential to leading communities to reduce their risk.  Communities, not FEMA, “own” the hazard mitigation actions in the strategy.' +
                     'Each jurisdiction participating in the plan must have mitigation actions specific to that jurisdiction that are based on the community’s risk and  vulnerabilities, as well as community priorities.',
             icon: 'os-icon-globe',
@@ -58,8 +58,8 @@ const config = {
          },
     ],
     Objectives: [
-        
-         {   
+
+         {
             title: 'Goals & Objectives',
             requirement: 'Req-C-3-A',
             type: 'content',
@@ -94,7 +94,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete hideIfNull: true 
+            ///*2-non-delete hideIfNull: true
         },
     ],
 
@@ -114,7 +114,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Capabilities Table',
@@ -125,7 +125,7 @@ const config = {
             align: 'full',
             config: {
                 type: 'capabilities',
-                description: 'Capabilities are the tools and resources used by a community to minimize hazard impacts. Capabilities are categorized as: Planning and Regulatory, Administrative and Technical, Education and Outreach, and Financial assets. The information displayed in the table below includes the selected jurisdiction’s hazard mitigation capabilities. When the county is selected, the table includes capabilities for all jurisdictions in the plan, otherwise the table filters to the selected jurisdiction.', 
+                description: 'Capabilities are the tools and resources used by a community to minimize hazard impacts. Capabilities are categorized as: Planning and Regulatory, Administrative and Technical, Education and Outreach, and Financial assets. The information displayed in the table below includes the selected jurisdiction’s hazard mitigation capabilities. When the county is selected, the table includes capabilities for all jurisdictions in the plan, otherwise the table filters to the selected jurisdiction.',
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {
@@ -221,7 +221,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Capacity To Address Risk',
@@ -233,7 +233,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             ///*2-non-county*/ pullCounty: true,
             /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Capacity Assessment Table',
@@ -245,7 +245,7 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     /*2-non-county*/ pullCounty: true,
         //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
+        //     ///*2-non-delete*/ hideIfNull: true
         // },
         // {
         //     title: '',
@@ -265,7 +265,7 @@ const config = {
         //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
         //     ///*2-non-delete*/ hideIfNull: true
         // },
-        
+
         {
             title: 'Environmental and Historic Preservation',
             requirement: 'Req-B-3A',
@@ -275,10 +275,10 @@ const config = {
             icon: 'os-icon-home',
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
     ],
-    
+
         Implementation: [
         {
             title: 'Statement',
@@ -295,7 +295,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Actions',
@@ -311,7 +311,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             // /*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Proposed Actions',
@@ -382,7 +382,6 @@ const config = {
             minHeight: '80vh',
             icon: 'os-icon-activity',
             hideNav: true,
-
         },  
                 {
             title: 'Prioritization Criteria',
@@ -414,7 +413,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'NFIP Compliance Table',
@@ -426,7 +425,7 @@ const config = {
             align: 'full',
             config: {
                 type: 'municipalities',
-                description: 'The information in the table below was compiled for MitigateNY using the Community Status Book Report provided by FEMA which includes map dates and Community Identification (CID) numbers for communities participating in the national flood program, NYSDEC Community Assistance Visits (CAVs), and jurisdictional input from the Hazard Mitigation Plan interview process.', 
+                description: 'The information in the table below was compiled for MitigateNY using the Community Status Book Report provided by FEMA which includes map dates and Community Identification (CID) numbers for communities participating in the national flood program, NYSDEC Community Assistance Visits (CAVs), and jurisdictional input from the Hazard Mitigation Plan interview process.',
                 //filters:[{column:'capability_category',value:'planning and regulatory'}],
                 columns : [
                     {
@@ -509,7 +508,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true         
+            ///*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title:'Resources',
@@ -523,7 +522,7 @@ const config = {
         //      // hideNav: true // hides key from public nav. Displays on page.
         //     ///*2-non-county*/ pullCounty: true,
         //     ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true  
+        //     ///*2-non-delete*/ hideIfNull: true
         // },
     ],
      
@@ -541,7 +540,7 @@ const config = {
         // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true         
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Temporary Housing and Relocation',
@@ -553,7 +552,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         // {
         //     title: 'Relocation Zones',
@@ -565,8 +564,8 @@ const config = {
         //     // hideNav: true // hides key from public nav. Displays on page.
         //     /*2-non-county*/ pullCounty: true,
         //     ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-        //     ///*2-non-delete*/ hideIfNull: true 
-            
+        //     ///*2-non-delete*/ hideIfNull: true
+
         // },
         {
             title: 'Relocation Zone Map',
@@ -589,8 +588,8 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
-        },    
+            ///*2-non-delete*/ hideIfNull: true
+        },
         {
             title: 'Evacuation Routes',
             requirement: 'Req-NYS-F-4A',
@@ -599,7 +598,7 @@ const config = {
             prompt: '',
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
             icon: 'os-icon-alert-octagon',
-            hideNav: true 
+            hideNav: true
         },
         {
             title: 'Shelters',
@@ -611,7 +610,7 @@ const config = {
             // hideNav: true // hides key from public nav. Displays on page.
             /*2-non-county*/ pullCounty: true,
             ///*2-non-not-provided*/ nullMessage: `<i>Content coming soon.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true 
+            ///*2-non-delete*/ hideIfNull: true
         },
         {
             title: 'Shelter Table',
@@ -623,7 +622,7 @@ const config = {
             intent: 'Evacuation and sheltering measures must be in place and available for public awareness to protect residents and mitigate risk, stress and personal hardships during hazard events.',
             defaultSortCol: 'evacuation_capacity',
             // defaultSortOrder: 'desc',
-            colOrder: ['shelter_name', 'evacuation_capacity', 'post_impact_capacity', 'ada_compliant', 'wheelchair_accessible', 'generator_onsite', 'self_suffienct_electricty',],
+            colOrder: ['shelter_name', 'address', 'evacuation_capacity', 'post_impact_capacity', 'ada_compliant', 'wheelchair_accessible', 'generator_onsite', 'self_suffienct_electricty',],
             minHeight: '80vh',
             icon: 'os-icon-share-2',
             hideNav: true
