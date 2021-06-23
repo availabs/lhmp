@@ -22,9 +22,9 @@ import functions from "../../auth/Plan/functions";
 import get from "lodash.get";
 
 const  ElementFactory =  ({ element: element, user: user, showTitle=true, showEdit, showHeader, showLocation, pureElement, geoGraph, ...rest }) => {
-    if(element.title === 'County Description') {
-        console.log('element county desc', element)
-    }
+    // if(element.title === 'County Description') {
+    //     console.log('element county desc', element)
+    // }
     return pureElement ?
         (
             <React.Fragment>

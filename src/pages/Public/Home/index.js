@@ -194,13 +194,6 @@ let sideMenuConfig = {
                                                                     expandableHeader: true
                                                                 },
                                                                 {
-                                                                    Header: 'jurisdiction_utilization',
-                                                                    accessor: 'jurisdiction_utilization',
-                                                                    width: 50,
-                                                                    expandable: 'true',
-                                                                    expandableHeader: true
-                                                                },
-                                                                {
                                                                     Header: 'capability_description',
                                                                     accessor: 'capability_description',
                                                                     width: 50,
@@ -229,7 +222,7 @@ let sideMenuConfig = {
                                                         activeGeoFilter: 'true',
                                                         defaultSortCol: 'adopting_authority',
                                                         // defaultSortOrder: 'desc',
-                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'Link', 'responsible authority', 'jurisdiction_utilization', 'capability_description', 'viewLink'],
+                                                        colOrder: ['Jurisdiction','Name', 'category', 'type', 'Link', 'responsible authority', 'capability_description', 'viewLink'],
                                                         minHeight: '80vh',
                                                         icon: 'os-icon-tasks-checked'
                                                     }

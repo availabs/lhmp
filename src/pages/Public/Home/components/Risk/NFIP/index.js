@@ -43,7 +43,7 @@ class NFIP extends Component {
                     <div className='row'>
                         <div className='col-12' style={{textAlign:'center'}}>
                             <ContentHeader>
-                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} NFIP Claims
+                                {get(this.props.graph, `geo[${parseInt(this.props.activeCousubid)}].name`, '')} National Flood Insurance Program (NFIP) Claims
                             </ContentHeader>
                         </div>
                     </div>

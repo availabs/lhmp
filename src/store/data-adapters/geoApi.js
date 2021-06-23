@@ -13,7 +13,7 @@ class geoApi {
                 resolve(this.data[geoid]);
             }
             else {
-                console.log('what?', `${HOST}geo/${geoid}.json`)
+                //console.log('what?', `${HOST}geo/${geoid}.json`)
                 fetch(`${HOST}geo/${geoid}.json`, {
                     headers: { 'Content-Type': 'text/csv' }
                 })

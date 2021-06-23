@@ -348,32 +348,12 @@ const config = {
 
         },
         {
-            title: 'Prioritization Criteria',
-            requirement: 'Req-C-5A',
-            type: 'content',
-            prompt: 'Describe the criteria used for prioritizing implementation of the actions.' +
-                ' a. The plan must demonstrate when prioritizing hazard mitigation actions that the local jurisdictions' +
-                ' considered the benefits that would result from the hazard mitigation actions versus the cost of those' +
-                ' actions.  The requirement is met as long as the economic considerations are summarized in the plan as' +
-                ' part of the community’s analysis.  A complete benefit‐cost analysis is not required.  Qualitative benefits' +
-                ' (for example, quality of life, natural and beneficial values, or other “benefits”) can also be included' +
-                ' in how actions will be prioritized.',
-            intent: 'To identify how the plan will directly lead to implementation of the hazard mitigation actions.' +
-                '  As opportunities arise for actions or projects to be  implemented, the responsible entity will be able' +
-                ' to take action towards completion of the activities.',
-            icon: 'os-icon-edit-1',
-            // hideNav: true // hides key from public nav. Displays on page.
-            /*2-non-county*/ pullCounty: true,
-            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
-            ///*2-non-delete*/ hideIfNull: true
-        },
-        {
             title: 'Additional Actions Inventory',
             requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
             description: 'The table below includes additional identified actions that are inventoried for further development in the future. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
             filterCol: ['action_status_update'],
-            filterBy: ['Proposed-New','Proposed-Carryover'],
+            filterBy: ['Proposed-New','Proposed-Carryover', 'Carryover-In-Development', 'New-In-Development'],
             align: 'full',
             prompt: 'Action form to be designed later. The plan must include a mitigation strategy that 1) analyzes actions' +
                 ' and/or projects that the jurisdiction considered to reduce the impacts of hazards identified in the risk' +
@@ -402,8 +382,27 @@ const config = {
             minHeight: '80vh',
             icon: 'os-icon-activity',
             hideNav: true,
-
-        },
+        },  
+                {
+            title: 'Prioritization Criteria',
+            requirement: 'Req-C-5A',
+            type: 'content',
+            prompt: 'Describe the criteria used for prioritizing implementation of the actions.' +
+                ' a. The plan must demonstrate when prioritizing hazard mitigation actions that the local jurisdictions' +
+                ' considered the benefits that would result from the hazard mitigation actions versus the cost of those' +
+                ' actions.  The requirement is met as long as the economic considerations are summarized in the plan as' +
+                ' part of the community’s analysis.  A complete benefit‐cost analysis is not required.  Qualitative benefits' +
+                ' (for example, quality of life, natural and beneficial values, or other “benefits”) can also be included' +
+                ' in how actions will be prioritized.',
+            intent: 'To identify how the plan will directly lead to implementation of the hazard mitigation actions.' +
+                '  As opportunities arise for actions or projects to be  implemented, the responsible entity will be able' +
+                ' to take action towards completion of the activities.',
+            icon: 'os-icon-edit-1',
+            // hideNav: true // hides key from public nav. Displays on page.
+            /*2-non-county*/ pullCounty: true,
+            ///*2-non-not-provided*/ nullMessage: `<i>Jurisdiction info not provided.</i>`, // Other possible styles:  `<h1>No Data</h1>`, No data
+            ///*2-non-delete*/ hideIfNull: true    
+        },  
         {
             title: 'NFIP Continued Compliance & Repetitive Loss Strategy',
             requirement:'Req-C-2A',

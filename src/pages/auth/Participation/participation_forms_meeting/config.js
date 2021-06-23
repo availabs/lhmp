@@ -1,7 +1,9 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['title','start_date','narrative', 'roles'],
+        list_attributes : ['title','start_date','narrative', 'roles', 'milestones'],
+        csv_download: ['title', 'contact_county', 'contact_municipality', 'sub_type', 'owner_type', 
+        'meeting_format', 'start_date', 'hours', 'invite_method', 'narrative', 'minutes', 'milestones', 'roles'],
         sections:[],
         attributes:{
             title:{
