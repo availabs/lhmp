@@ -90,7 +90,7 @@ class Plans extends React.Component {
                                  {
                                      Object.keys(this.props.plansList).length > 0 ?
                                      Object.values(this.props.plansList)
-                                         .filter(plan => plan.id && this.props.authedPlans.includes(plan.id.value))
+                                         .filter(plan => (plan.id && (this.props.authedPlans.includes(plan.id.value) || this.props.userAuthLevel === 10)))
                                          .map((plan,i) =>{
                                              let newLocation = window.location.host.split('.')
                                              newLocation.length > 1
@@ -142,7 +142,8 @@ const mapStateToProps = state => ({
     authedPlans: state.user.authedPlans,
     attempts: state.user.attempts, // so componentWillReceiveProps will get called.
     plansList: get(state.graph, 'plans.county.byId',{}),
-    token: state.user.token || null
+    token: state.user.token || null,
+    userAuthLevel: state.user.authLevel
 });
 
 const mapDispatchToProps = {

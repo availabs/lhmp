@@ -346,8 +346,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {};
 export default [{
     icon: 'os-icon-pencil-2',
-    path: '/plan_review/',
-    exact: true,
+    path: '/plan_review',
+    exact: false,
     name: 'Plan Review',
     auth: true,
     authLevel: 5,
