@@ -538,7 +538,7 @@ class AssetsFilteredTable extends Component {
                     link: (d) => d.replace('/totalRow', '').split('/metaData')[0] + linkTrail, // functional
                     linkOnClick: this.props.linkOnClick
                 },
-                this.props.public ? null : {
+                /*this.props.public ? null : */{
                     Header: 'TOTAL $ REPLACEMENT VALUE',
                     accessor: 'TOTAL $ REPLACEMENT VALUE',
                     sort: true,
