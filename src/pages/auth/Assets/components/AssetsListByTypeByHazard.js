@@ -479,13 +479,13 @@ class AssetsListByTypeByHazard extends React.Component {
                                     filterData={true}
                                     tableData={this.props.match.url.split('/')[1] === 'risk' ?
                                         this.state.data.map(f => {
-                                            delete f.replacement_value;
+                                            // delete f.replacement_value;
                                             return f
                                         }) :
                                         this.state.data}
                                     columns={
                                         this.props.match.url.split('/')[1] === 'risk' ?
-                                            this.state.columns.filter(f => f !== 'replacement_value') :
+                                            this.state.columns/*.filter(f => f !== 'replacement_value')*/ :
                                             this.state.columns
                                     }
                                     isPublic={this.props.match.url.split('/')[1] === 'risk'}
