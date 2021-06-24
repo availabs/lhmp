@@ -181,14 +181,14 @@ class AvlFormsNewDataWizard extends React.Component{
         let args = [];
         let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
-            let attributes = Object.keys(this.state)
+            let attributes = Object.keys(this.state).filter(a => a !== 'loading')
             let action_status_update = []
-            Object.keys(this.state).forEach(attribute =>{
+            attributes.forEach(attribute =>{
                 if(attribute === 'action_status_update'){
                     action_status_update = this.state[attribute]
                 }
             })
-            let edit_attributes = Object.keys(this.state).reduce((a,c) =>{
+            let edit_attributes = attributes.reduce((a,c) =>{
                 if(this.state[c]){
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
@@ -229,7 +229,7 @@ class AvlFormsNewDataWizard extends React.Component{
                     }
                 })
             })
-            Object.keys(this.state).forEach(item =>{
+            Object.keys(this.state).filter(a => a !== 'loading').forEach(item =>{
                 if(sub_type.length > 0){
                     attributes['sub_type'] = sub_type;
                     attributes[item] = this.state[item] || ''
@@ -807,7 +807,7 @@ class AvlFormsNewDataWizard extends React.Component{
                             : null}
                     </h4>}
                 <Element>
-                    <Wizard steps={sections} submit={this.onSubmit} submitOnAll={this.props.config[0].submitOnAll === 'true'}/>
+                    <Wizard steps={sections} submit={this.onSubmit} submitOnAll={this.props.config[0].submitOnAll === 'true'} loading={this.state.loading}/>
                 </Element>
             </div>
         )
