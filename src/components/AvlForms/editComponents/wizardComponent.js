@@ -96,8 +96,9 @@ class Wizard extends Component {
             let endStep = this.props.steps.length
             if(currentStep === endStep-1 || this.props.submitOnAll){
                 return(
-                    buttonActive ? <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.props.submit}> Submit</button>
-                        : <button className="btn btn-primary step-trigger-btn" href={'#'} disabled> Submit</button>
+                    !buttonActive || this.props.loading ?
+                        <button className="btn btn-primary step-trigger-btn" href={'#'} disabled> Submit</button> :
+                        <button className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.props.submit}> Submit</button>
                 )
             }
             return null

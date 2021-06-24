@@ -12,6 +12,9 @@ class FileComponent extends React.PureComponent{
         this._onError = this._onError.bind(this)
     }
     _onProgress(prog) {
+        if(prog < 5 || prog === 100){
+            this.props.handleChange({target: {id: 'loading', value: prog !== 100}})
+        }
         this.setState({
             progress: prog
         })
@@ -25,11 +28,12 @@ class FileComponent extends React.PureComponent{
     }
 
     _onFinish(data) {
+        this.props.handleChange({target: {id: this.props.title, value: data.publicUrl}})
+
         this.setState({
             currentFile: data.publicUrl,
             progress: null
         })
-        this.props.handleChange({target: {id: this.props.title, value: data.publicUrl}})
     }
     render() {
         if(this.props.display_condition !== '' && this.props.display_condition){
@@ -41,7 +45,7 @@ class FileComponent extends React.PureComponent{
                         </label><span style={{'float': 'right'}}>{this.props.prompt !== '' ? this.props.prompt(this.props.title) : ''}</span>
                         <ReactS3Uploader
                             signingUrl='img/upload/'
-                            accept='image/*'
+                            // accept='image/*'
                             onProgress={this._onProgress}
                             onError={this._onError}
                             onFinish={this._onFinish}
@@ -62,7 +66,7 @@ class FileComponent extends React.PureComponent{
                         <div className='form-control'>
                             <ReactS3Uploader
                                 signingUrl='img/upload/'
-                                accept='image/*'
+                                // accept='image/*'
                                 onProgress={this._onProgress}
                                 onError={this._onError}
                                 onFinish={this._onFinish}

@@ -60,8 +60,8 @@ class AvlFormsNewData extends React.Component{
             })
     }
 
-    handleChange(e){
-        this.setState({ ...this.state, [e.target.id]: e.target.value });
+    async handleChange(e){
+        await this.setState({ ...this.state, [e.target.id]: e.target.value });
     }
     isJsonString(str) {
         try {
@@ -246,14 +246,15 @@ class AvlFormsNewData extends React.Component{
                 .filter(attribute => this.props.config[0].attributes[attribute].edit_type === 'AvlFormsJoin')
         let type = this.props.config.map(d => d.type);
         if(this.props.id[0]){
-            let attributes = Object.keys(this.state)
+            let attributes = Object.keys(this.state).filter(a => a !== 'loading')
             let action_status_update = []
-            Object.keys(this.state).forEach(attribute =>{
+            attributes
+                .forEach(attribute =>{
                 if(attribute === 'action_status_update'){
                     action_status_update = this.state[attribute]
                 }
             })
-            let edit_attributes = Object.keys(this.state).reduce((a,c) =>{
+            let edit_attributes = attributes.reduce((a,c) =>{
                 if(this.state[c]){
                     if(typeof this.state[c] === "object"){
                         a[c] = '['+this.state[c].toString()+']'
@@ -307,7 +308,7 @@ class AvlFormsNewData extends React.Component{
                     }
                 })
             })
-            Object.keys(this.state).forEach(item =>{
+            Object.keys(this.state).filter(a => a !== 'loading').forEach(item =>{
                 if(sub_type.length > 0){
                     if(sub_type === 'time'){
                         attributes['sub_type'] = sub_type
@@ -813,7 +814,7 @@ class AvlFormsNewData extends React.Component{
                                             if(d.formType[0] === 'roles'){
                                                 return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit} disabled={!AvlFormsNewData.validateForm(this.state, this.props.config[0])}> Submit</button>)
                                             }else{
-                                                return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} onClick={this.onSubmit}> Submit</button>)
+                                                return (<button key = {i} className="btn btn-primary step-trigger-btn" href ={'#'} disabled={this.state.loading} onClick={this.onSubmit}> Submit</button>)
                                             }
                                         }
 
