@@ -1,7 +1,13 @@
 module.exports = [
     {
         type:'participation',
-        list_attributes : ['title','start_date','narrative', 'roles', 'milestones'],
+        list_attributes : [
+            {'title':{filter:'true'}},
+            {'start_date':{filter:'true'}},
+            {'narrative':{filter:'true'}}, 
+            {'roles':{filter:'true'}}, 
+            {'milestones':{filter:'true'}}
+        ],
         csv_download: ['title', 'contact_county', 'contact_municipality', 'sub_type', 'owner_type', 
         'meeting_format', 'start_date', 'hours', 'invite_method', 'narrative', 'minutes', 'milestones', 'roles'],
         sections:[],
