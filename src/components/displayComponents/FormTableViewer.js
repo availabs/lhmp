@@ -176,8 +176,10 @@ class FormTableViewer extends React.Component{
 
         // filter data is there are filters
         // can we move this to the server? seems tricky
+        console.log('data?', tableData)
         if(this.props.config.filters && tableData) {
             this.props.config.filters.forEach(f => {
+                console.log('filter?', f, tableData)
                 tableData = tableData
                     .filter(d => d[f.column])
                     .filter(d => this.isMatch(f.value, d[f.column], this.props.config.matchSubString))

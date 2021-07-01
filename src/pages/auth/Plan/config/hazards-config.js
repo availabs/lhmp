@@ -236,7 +236,8 @@ const config =  {
                             accessor: 'location_description',
                             width: 50
                         },
-                    ]
+                    ],
+                    matchSubstring: true
                 },
                 prompt: '',
                 intent: '',

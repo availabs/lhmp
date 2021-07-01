@@ -23,6 +23,7 @@ class FormTableViewer extends React.Component{
     }
 
     render(){
+        console.log('haz?', this.props)
         return (
             <PageContainer>
                 <HeaderContainer>
@@ -35,6 +36,7 @@ class FormTableViewer extends React.Component{
                                             this.props.config
                                         }
                                         geoId={this.props.activeCousubid}
+                                        filter={[{'hazard_concern': this.props.hazard}]}
                                         autoLoad={true}
                                     />
                                 </div>
