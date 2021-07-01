@@ -123,7 +123,7 @@ export class ControlLayers extends MapLayer {
         let activePlan = store.getState().user.activePlan;
         let opacity = 0.3
         if(layerName.includes('500')){
-            opacity = 0.2
+            opacity = 0.1
         }
         if (layerName.includes('_27') || layerName.includes('_26')) {
             if (this.map.getSource('andes_riverine')) {
@@ -171,6 +171,7 @@ export class ControlLayers extends MapLayer {
             })
             this.map.moveLayer('buildings-layer', 'andes_riverine_layer')
         } else {
+            console.log('l?',layerName)
             if (source && layerName.includes("riverine")) {
                 if (this.map.getSource('riverine')) {
                     this.map.removeLayer('riverine_layer');
