@@ -425,6 +425,17 @@ module.exports = [
                 meta: 'false',
                 section: '3'
             },
+          zones: {
+                label: 'Does the project have an associated map zone from the scenario tools? If yes please select',
+                sub_type: 'project',
+                prompt: '',
+                edit_type: 'AvlFormsJoin',
+                display_type: 'AvlFormsJoin',
+                parentConfig: 'actions', // this is the attribute name by which the data will be stored in target config
+                targetConfig: 'zones',
+                meta: 'false',
+                section: '3'
+            },
             site_photographs: {
                 label: 'Site Photographs (If applicable)',
                 sub_type: 'project',
@@ -446,29 +457,6 @@ module.exports = [
                 display_type: 'text',
                 meta: 'false',
                 inline: 'true',
-                section: '3'
-            },
-            does_action_have_associated_zone: {
-                label: 'Does the project have an associated map zone from the scenario tools?',
-                sub_type: 'project',
-                prompt: 'if yes, select zone',
-                edit_type: 'radio',
-                edit_type_values: ['yes', 'no'],
-                display_type: 'text',
-                meta: 'false',
-                inline: 'true',
-                section: '3'
-            },
-            zones: {
-                label: 'Zones',
-                sub_type: 'project',
-                prompt: '',
-                edit_type: 'AvlFormsJoin',
-                display_type: 'AvlFormsJoin',
-                parentConfig: 'actions', // this is the attribute name by which the data will be stored in target config
-                targetConfig: 'zones',
-                display_condition: {attribute: 'does_action_have_associated_zone', check: ['yes', 'true', true]},
-                meta: 'false',
                 section: '3'
             },
             is_project_structure_located_in_sfha: {

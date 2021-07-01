@@ -9,7 +9,7 @@ let config = {
     elements: [
         {
             element: 'A1',
-            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, Req-A-1E, Req-A-1F, Req-A-1G, Req-A-1H`,
+            requirements_from_software: `Req-A-1A, Req-A-1B, Req-A-1D, Req-A-1G, Req-A-1E, Req-A-1F, Req-A-1H`,
             objective: 'Does the Plan document the planning process, including how it was prepared and who was involved in ' +
                 'the process for each jurisdiction? 44 CFR 201.6(c)(1)',
             intent: 'To inform the public and other readers about the overall approach to the plan’s development and serve ' +
@@ -331,7 +331,7 @@ let config = {
         },
         {
             element: 'C2',
-            requirements_from_software: `Req-C-2A, Req-C-2B, Req-B-4B, Req-B-4E, Req-B-4, Req-B-4A, Req-B-B-4C`,
+            requirements_from_software: `Req-C-2A, Req-C-2B, Req-B-4B, Req-B-4, Req-B-4A, Req-B-B-4C`,
             objective: 'Does the Plan address each jurisdiction’s participation in the NFIP and continued compliance with ' +
                 'NFIP requirements, as appropriate? 44 CFR 201.6(c)(3)(ii)',
             intent: 'To demonstrate flood hazard mitigation efforts by the community through NFIP activities. Where FEMA ' +

@@ -459,12 +459,12 @@ const config = {
                           sort: true,
                           filter: 'default'
                       },*/
-                    {
-                        Header: 'NFIP Standing',
-                        accessor: 'nfip_standing',
-                        sort: true,
-                        filter: 'default'
-                    },
+                    // {
+                    //     Header: 'NFIP Standing',
+                    //     accessor: 'nfip_standing',
+                    //     sort: true,
+                    //     filter: 'default'
+                    // },
                     {
                         Header: 'CAV Date',
                         accessor: 'community_assistance_visit',
@@ -472,7 +472,7 @@ const config = {
                         // expandableHeader: true
                     },
                     {
-                        Header: 'NFIP Administrator',
+                        Header: 'Floodplain Administrator (FPA)',
                         accessor: 'nfip_administrator_name',
                         // expandable: 'true',
                         // expandableHeader: true
@@ -492,7 +492,7 @@ const config = {
             activeGeoFilter: 'true',
             defaultSortCol: 'community_name',
             // defaultSortOrder: 'desc',
-            colOrder: ['Jurisdiction', 'CID Number','Initial Flood Insurance Rate Map','Current Effective FIRM','NFIP Standing','CAV Date','NFIP Administrator','viewLink'],
+            colOrder: ['Jurisdiction', 'CID Number','Initial Flood Insurance Rate Map','Current Effective FIRM','CAV Date','Floodplain Administrator (FPA)','viewLink'],
             minHeight: '80vh',
             icon: 'os-icon-tasks-checked'
         },
