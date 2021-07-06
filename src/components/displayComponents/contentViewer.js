@@ -120,7 +120,11 @@ class ContentViewer extends Component {
             let contentBody = get(contentRes, ['json', 'content', 'byId', contentId,'body'], null);
             let countyContentBody = get(contentRes, ['json', 'content', 'byId', countyContentId,'body'], null);
             // countyContentBody = convertFromRaw(JSON.parse(countyContentBody))
-            if (contentBody && !emptyBody.includes(contentBody.trim())) {
+            if (contentBody && !emptyBody.includes(contentBody.trim()) &&
+                get(this.isJsonString(contentBody) ? JSON.parse(contentBody) : contentBody, ['blocks'], [])
+                    .filter(b => !emptyBody.includes(b.text)).length
+            ) {
+
                 let status = get(contentRes.json.content.byId[contentId], `attributes.status`, '');
                 this.setState(
                     {'currentKey': contentId,
