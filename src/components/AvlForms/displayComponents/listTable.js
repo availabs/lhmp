@@ -174,7 +174,7 @@ class AvlFormsListTable extends React.Component {
                                     if (graph[item].value.attributes[attribute].includes("[")) {
                                         data[attribute] = graph[item].value.attributes[attribute].slice(1,-1).split(',')
                                             .map(geoData => {
-                                                if (this.props.geoData[geoData]){
+                                                if (get(this.props.config, `[0].attributes.${attribute}.edit_type`, '') !== 'form_array' && this.props.geoData[geoData]){
                                                     let tmpVal = functions.formatName(this.props.geoData[geoData].name, geoData) || '';
 
                                                     // geoMetaFilterColumns.push(attribute)
@@ -186,7 +186,7 @@ class AvlFormsListTable extends React.Component {
                                                 }
                                             }).join(', ');
                                     } else {
-                                        if (geo[graph[item].value.attributes[attribute]]){
+                                        if (get(this.props.config, `[0].attributes.${attribute}.edit_type`, '') !== 'form_array' && geo[graph[item].value.attributes[attribute]]){
                                             let tmpVal = functions.formatName(geo[graph[item].value.attributes[attribute]].name, graph[item].value.attributes[attribute]) || ''
                                             geoMetaFilterColumns[attribute] =
                                                 geoMetaFilterColumns[attribute] ? [...geoMetaFilterColumns[attribute], tmpVal] : [tmpVal]
@@ -308,7 +308,7 @@ class AvlFormsListTable extends React.Component {
                                     if (graph[item].value.attributes[attribute].includes("[")) {
                                         data[attribute] = graph[item].value.attributes[attribute].slice(1,-1).split(',')
                                             .map(geoData => {
-                                                if (this.props.geoData[geoData]){
+                                                if (get(this.props.config, `[0].attributes.${attribute}.edit_type`, '') !== 'form_array' && this.props.geoData[geoData]){
                                                     let tmpVal = functions.formatName(this.props.geoData[geoData].name, geoData) || '';
                                                     // geoMetaFilterColumns.push(attribute)
                                                     geoMetaFilterColumns[attribute] =
