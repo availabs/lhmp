@@ -78,7 +78,6 @@ class HazardEventsTable extends React.Component {
                 <h6>{HazardName} Loss by Month</h6>
                 <div>This table displays the total damage amount in dollars and number
                     of fatalities for all recorded hazards between the years of 1996-2018.
-                    Viewers can access individual jurisdiction-specific statistics by clicking on the jurisdiction name.
                     In New York State, Villages are included within Town boundaries. Villages are not included in this table so as to not double count hazard loss statistics.
                 </div>
                 <CousubTotalLossTable
