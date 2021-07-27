@@ -112,8 +112,8 @@ class HazardEventsTable extends React.Component {
                     <PageContainer style={{paddingTop:20}}>The following charts, as well as the visualizations above, display storm events from the<i style={{color: '#afafaf'}}><a
                         href="https://www.ncdc.noaa.gov/stormevents/" target="_blank"> NOAA NCEI
                         Storm Events Dataset</a></i>.
-                        The Storm Events Database contains the records used to create the official NOAA Storm Data publication. The The NOAA NCEI storm events database contains data dating back to January 1950, as entered by NOAA's National Weather Service (NWS).
-                        The NCEI Storm Events data provides information about the the occurrence and magnitude of severe or unusual weather
+                        The Storm Events Database contains the records used to create the official NOAA Storm Data publication. The NOAA NCEI storm events database contains data dating back to January 1950, as entered by NOAA's National Weather Service (NWS).
+                        The NCEI Storm Events data provides information about the occurrence and magnitude of severe or unusual weather
                         events and other significant meteorological events. The Storm Events data documents the following event types:
                         <li>The occurrence of storms and other significant weather phenomena having sufficient intensity to cause loss of life, injuries, significant property damage, and/or disruption to commerce;</li>
                         <li>Rare, unusual, weather phenomena that generate media attention, such as snow flurries in South Florida or the San Diego coastal area; and</li>
