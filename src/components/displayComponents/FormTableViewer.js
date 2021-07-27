@@ -110,7 +110,7 @@ class FormTableViewer extends React.Component{
                                 this.props.formData[d.value[2]].value.attributes.county ||
                                 this.props.formData[d.value[2]].value.attributes.contact_county ||
                                 this.props.formData[d.value[2]].value.attributes.community_name,
-                                this.props.activeGeoid) || true /*doesn't filter for active geoid to allow other counties to show up */: true
+                                this.props.activeGeoid) ||  get(this.props.config, ['type']) === 'roles' /*doesn't filter for active geoid to allow other counties to show up */: true
                 }
             )
             .map(d => {
