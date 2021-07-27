@@ -471,7 +471,7 @@ const config =  {
 			//align: 'full',
 			prompt: 'Identify who represented each jurisdiction.',
 			intent: 'Document the planning process, including how it was prepared and who was involved in the process for each jurisdiction?',
-			activeGeoFilter: 'false',
+			activeGeoFilter: 'true',
 			defaultSortCol: 'contact_agency',
 			// defaultSortOrder: 'desc',
 			viewLink: 'true',

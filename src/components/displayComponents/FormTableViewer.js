@@ -104,12 +104,13 @@ class FormTableViewer extends React.Component{
                                 this.props.formData[d.value[2]].value.attributes.municipality ||
                                 this.props.formData[d.value[2]].value.attributes.contact_municipality ||
                                 this.props.formData[d.value[2]].value.attributes.community_name,
-                                this.props.activeCousubid) :
+                                this.props.activeCousubid)
+                            :
                             this.isMatch(
                                 this.props.formData[d.value[2]].value.attributes.county ||
                                 this.props.formData[d.value[2]].value.attributes.contact_county ||
                                 this.props.formData[d.value[2]].value.attributes.community_name,
-                                this.props.activeGeoid) : true
+                                this.props.activeGeoid) || true /*doesn't filter for active geoid to allow other counties to show up */: true
                 }
             )
             .map(d => {
@@ -136,7 +137,7 @@ class FormTableViewer extends React.Component{
                         return a;
                     }
                     a[c] = this.props.formData[d.value[2]].value.attributes[c];
-                    if((!a[c] || get(a, [c], '').toLowerCase() === 'countywide') && configSettings && configSettings.SecondaryAccessor){
+                    if((!a[c] || ['Countywide', 'countywide'].includes(a[c])) && configSettings && configSettings.SecondaryAccessor){
                         a[c] = this.props.formData[d.value[2]].value.attributes[configSettings.SecondaryAccessor]
                     }
 
