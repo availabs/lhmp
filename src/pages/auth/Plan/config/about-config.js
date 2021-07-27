@@ -426,6 +426,7 @@ const config =  {
 					{
 						Header: 'Jurisdiction',
 						accessor: 'contact_municipality',
+						SecondaryAccessor: 'contact_county',
 						sort: true,
 						filter: 'default'
 					},

@@ -26,7 +26,7 @@ class FormTableViewer extends React.Component{
 
         let formType = this.props.config.type
         // get columns to display
-        let formAttributes = this.props.config.columns.map(d => d.accessor);
+        let formAttributes = this.props.config.columns.reduce((acc, d) => d.SecondaryAccessor ? [...acc, d.accessor, d.SecondaryAccessor] : [...acc, d.accessor], []);
 
         // get columns to filter if not displayed
         if(this.props.config.filters){
@@ -89,7 +89,6 @@ class FormTableViewer extends React.Component{
     }
     render(){
         // process data from
-        let falcorCache = this.props.falcor.getCache()
         let tableData = Object.values(this.props.tableList)
             .filter(d => {
                     return this.props.activeGeoFilter === 'true' ?
@@ -108,9 +107,13 @@ class FormTableViewer extends React.Component{
                 }
             )
             .map(d => {
-            return [...Object.keys(this.props.formData[d.value[2]].value.attributes), 'viewLink', 'id']
+            return [
+                // ...Object.keys(this.props.formData[d.value[2]].value.attributes),
+                ...this.props.config.columns.map(d => d.accessor),
+                'viewLink', 'id']
                 .reduce((a,c) => {
-                    let configSettings = get(this.props.config, ['columns'], []).filter(cc => cc.accessor === c)[0]
+                    let configSettings = get(this.props.config, ['columns'], []).filter(cc => cc.accessor === c)[0];
+
                     if(c === 'id'){
                         a[c] = d.value[2];
                         return a;
@@ -126,8 +129,10 @@ class FormTableViewer extends React.Component{
                             </a>
                         return a;
                     }
-
-                    a[c] = this.props.formData[d.value[2]].value.attributes[c]
+                    a[c] = this.props.formData[d.value[2]].value.attributes[c];
+                    if((!a[c] || get(a, [c], '').toLowerCase() === 'countywide') && configSettings && configSettings.SecondaryAccessor){
+                        a[c] = this.props.formData[d.value[2]].value.attributes[configSettings.SecondaryAccessor]
+                    }
 
                     a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split(',') : a[c]
 
@@ -176,10 +181,8 @@ class FormTableViewer extends React.Component{
 
         // filter data is there are filters
         // can we move this to the server? seems tricky
-        console.log('data?', tableData)
         if(this.props.config.filters && tableData) {
             this.props.config.filters.forEach(f => {
-                console.log('filter?', f, tableData)
                 tableData = tableData
                     .filter(d => d[f.column])
                     .filter(d => this.isMatch(f.value, d[f.column], this.props.config.matchSubString))
