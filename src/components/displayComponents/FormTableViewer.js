@@ -15,8 +15,13 @@ import DisplayComps from 'components/AvlForms/displayComponents'
 import AvlFormsViewData from "../AvlForms/displayComponents/viewData";
 import ContentViewer from "../AvlForms/displayComponents/contentViewer";
 
-var _ = require('lodash')
+const _ = require('lodash')
 
+const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
+    "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
+    "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
+    "36083", "36099", "36081", "36037", "36117", "36063", "36047", "36015", "36121", "36061", "36021", "36013", "36033", "36017",
+    "36067", "36035", "36087", "36051", "36025", "36071", "36093", "36005"];
 
 
 class FormTableViewer extends React.Component{
@@ -39,7 +44,8 @@ class FormTableViewer extends React.Component{
         }
 
         return this.props.falcor.get(
-            ['forms',formType,'byPlanId',this.props.activePlan,'length']
+            ['geo', counties, 'name'],
+            ['forms',formType,'byPlanId',this.props.activePlan,'length'],
         )
             .then(response =>{
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
@@ -235,7 +241,15 @@ const mapStateToProps = (state,ownProps) => {
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),
-        geoData: get(state.geo, ['allGeos'], {}),
+        geoData: {
+            ...get(state.geo, ['allGeos'], {}),
+            ...Object.keys(get(state, ['graph', 'geo'], {}))
+                .filter(curr => curr !== 'allGeos')
+                .reduce((acc, curr) => {
+                    acc[curr] = get(state, ['graph', 'geo', curr, 'name']);
+                    return acc;
+            }, {}),
+        },
         graph : state.graph
 
     }
