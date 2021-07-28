@@ -146,7 +146,7 @@ let config = {
         },
         {
             element: 'A6',
-            requirements_from_software: `Req-A-6, Req-A-6A, Req-A-1E`,
+            requirements_from_software: `Req-A-5, Req-A-6, Req-A-6A, Req-A-1E`,
             objective: 'Is there a description of the method and schedule for keeping the plan current (monitoring, ' +
                 'evaluating and updating the mitigation plan within a 5‐year cycle)? 44 CFR 201.6(c)(4)(i)',
             intent: 'To establish a process for jurisdictions to track the progress of the plan’s implementation. This ' +
