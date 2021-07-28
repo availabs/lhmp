@@ -15,8 +15,13 @@ import DisplayComps from 'components/AvlForms/displayComponents'
 import AvlFormsViewData from "../AvlForms/displayComponents/viewData";
 import ContentViewer from "../AvlForms/displayComponents/contentViewer";
 
-var _ = require('lodash')
+const _ = require('lodash')
 
+const counties = ["36101", "36003", "36091", "36075", "36111", "36097", "36089", "36031", "36103", "36041", "36027", "36077",
+    "36109", "36001", "36011", "36039", "36043", "36113", "36045", "36019", "36059", "36053", "36115", "36119", "36049", "36069",
+    "36023", "36085", "36029", "36079", "36057", "36105", "36073", "36065", "36009", "36123", "36107", "36055", "36095", "36007",
+    "36083", "36099", "36081", "36037", "36117", "36063", "36047", "36015", "36121", "36061", "36021", "36013", "36033", "36017",
+    "36067", "36035", "36087", "36051", "36025", "36071", "36093", "36005"];
 
 
 class FormTableViewer extends React.Component{
@@ -26,7 +31,7 @@ class FormTableViewer extends React.Component{
 
         let formType = this.props.config.type
         // get columns to display
-        let formAttributes = this.props.config.columns.map(d => d.accessor);
+        let formAttributes = this.props.config.columns.reduce((acc, d) => d.SecondaryAccessor ? [...acc, d.accessor, d.SecondaryAccessor] : [...acc, d.accessor], []);
 
         // get columns to filter if not displayed
         if(this.props.config.filters){
@@ -39,7 +44,8 @@ class FormTableViewer extends React.Component{
         }
 
         return this.props.falcor.get(
-            ['forms',formType,'byPlanId',this.props.activePlan,'length']
+            ['geo', counties, 'name'],
+            ['forms',formType,'byPlanId',this.props.activePlan,'length'],
         )
             .then(response =>{
                 let length = response.json.forms[formType].byPlanId[this.props.activePlan].length;
@@ -89,7 +95,6 @@ class FormTableViewer extends React.Component{
     }
     render(){
         // process data from
-        let falcorCache = this.props.falcor.getCache()
         let tableData = Object.values(this.props.tableList)
             .filter(d => {
                     return this.props.activeGeoFilter === 'true' ?
@@ -99,18 +104,23 @@ class FormTableViewer extends React.Component{
                                 this.props.formData[d.value[2]].value.attributes.municipality ||
                                 this.props.formData[d.value[2]].value.attributes.contact_municipality ||
                                 this.props.formData[d.value[2]].value.attributes.community_name,
-                                this.props.activeCousubid) :
+                                this.props.activeCousubid)
+                            :
                             this.isMatch(
                                 this.props.formData[d.value[2]].value.attributes.county ||
                                 this.props.formData[d.value[2]].value.attributes.contact_county ||
                                 this.props.formData[d.value[2]].value.attributes.community_name,
-                                this.props.activeGeoid) : true
+                                this.props.activeGeoid) ||  get(this.props.config, ['type']) === 'roles' /*doesn't filter for active geoid to allow other counties to show up */: true
                 }
             )
             .map(d => {
-            return [...Object.keys(this.props.formData[d.value[2]].value.attributes), 'viewLink', 'id']
+            return [
+                // ...Object.keys(this.props.formData[d.value[2]].value.attributes),
+                ...this.props.config.columns.map(d => d.accessor),
+                'viewLink', 'id']
                 .reduce((a,c) => {
-                    let configSettings = get(this.props.config, ['columns'], []).filter(cc => cc.accessor === c)[0]
+                    let configSettings = get(this.props.config, ['columns'], []).filter(cc => cc.accessor === c)[0];
+
                     if(c === 'id'){
                         a[c] = d.value[2];
                         return a;
@@ -126,8 +136,10 @@ class FormTableViewer extends React.Component{
                             </a>
                         return a;
                     }
-
-                    a[c] = this.props.formData[d.value[2]].value.attributes[c]
+                    a[c] = this.props.formData[d.value[2]].value.attributes[c];
+                    if((!a[c] || ['Countywide', 'countywide'].includes(a[c])) && configSettings && configSettings.SecondaryAccessor){
+                        a[c] = this.props.formData[d.value[2]].value.attributes[configSettings.SecondaryAccessor]
+                    }
 
                     a[c] = a[c] && typeof a[c] === "string" && a[c].includes('[') ? a[c].slice(1,-1).split(',') : a[c]
 
@@ -176,10 +188,8 @@ class FormTableViewer extends React.Component{
 
         // filter data is there are filters
         // can we move this to the server? seems tricky
-        console.log('data?', tableData)
         if(this.props.config.filters && tableData) {
             this.props.config.filters.forEach(f => {
-                console.log('filter?', f, tableData)
                 tableData = tableData
                     .filter(d => d[f.column])
                     .filter(d => this.isMatch(f.value, d[f.column], this.props.config.matchSubString))
@@ -232,7 +242,15 @@ const mapStateToProps = (state,ownProps) => {
         activeCousubid: ownProps.geoId ? ownProps.geoId : state.user.activeCousubid,
         tableList : get(state.graph,`forms.${ownProps.config.type}.byPlanId.${state.user.activePlan}.byIndex`,{}),
         formData : get(state.graph,`forms.byId`,{}),
-        geoData: get(state.geo, ['allGeos'], {}),
+        geoData: {
+            ...get(state.geo, ['allGeos'], {}),
+            ...Object.keys(get(state, ['graph', 'geo'], {}))
+                .filter(curr => curr !== 'allGeos')
+                .reduce((acc, curr) => {
+                    acc[curr] = get(state, ['graph', 'geo', curr, 'name']);
+                    return acc;
+            }, {}),
+        },
         graph : state.graph
 
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {reduxFalcor} from 'utils/redux-falcor'
 import {fnum} from "utils/sheldusUtils"
-
+import functions from 'pages/auth/Plan/functions'
 import get from "lodash.get";
 import TableSelector from 'components/light-admin/tables/tableSelector'
 
@@ -48,7 +48,7 @@ class NfipTable extends React.Component {
                 name = this.props.geoGraph[geoid].name;
 
             data.push({
-                [label]: this.formatName(name, geoid),
+                [label]: functions.formatName(name, geoid),
                 'Total #': get(graph, `critical.all.sum.count.value`, null),
                 'Total Replacement $': get(graph, `critical.all.sum.replacement_value.value`, null),
                 'Flood 100 #': get(graph, `critical.all.flood_100.sum.count.value`, null),
@@ -131,20 +131,6 @@ class NfipTable extends React.Component {
                 return a;
             }, [])
         }
-    }
-
-    formatName(name, geoid) {
-        let jurisdiction = geoid.length === 2 ? 'State' :
-            geoid.length === 5 ? 'County' :
-                geoid.length === 10 ? 'Town' :
-                    geoid.length === 11 ? 'Tract' : '';
-        if (name && name.toLowerCase().includes(jurisdiction.toLowerCase())) {
-            name = name.replace(jurisdiction.toLowerCase(), ' (' + jurisdiction + ')')
-        } else {
-            name += ' (' + jurisdiction + ')';
-        }
-
-        return name
     }
 
 // //
