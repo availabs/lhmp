@@ -185,6 +185,11 @@ const config =  {
                         width: 50,
                         expandable: 'true',
                     },
+					{
+						Header: 'is_hazard_mitigation_representative',
+						accessor: 'is_hazard_mitigation_representative',
+						width: 50,
+					},
         		]
         
 			},
