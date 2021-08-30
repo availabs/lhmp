@@ -9,7 +9,8 @@ import withRouter from "react-router/es/withRouter";
 // ------------------------------------
 const PROJECT_HOST = window.location.hostname.split('.').length > 1?
     window.location.hostname.split('.')[1].toLowerCase() + '.org' :'mitigateny.org'
-let SUBDOMAIN = 'www'
+let SUBDOMAIN = window.location.hostname.split('.').length > 1?
+    window.location.hostname.split('.')[0].toLowerCase() : 'www'
 const DEFAULT_GROUP = 'Hazard Mitigation General'
 const USER_LOGIN = 'USER::USER_LOGIN';
 const USER_LOGOUT = 'USER::USER_LOGOUT';
@@ -360,7 +361,7 @@ export const resetPassword = ({ email }) => dispatch => {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email , project_name: AUTH_PROJECT_NAME})
+    body: JSON.stringify({ email , project_name: AUTH_PROJECT_NAME, host: 'http://' + SUBDOMAIN + '.' + PROJECT_HOST, url: '/password/set'})
   })
     .then(res => res.json())
     .then(res => {
