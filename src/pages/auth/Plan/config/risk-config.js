@@ -421,7 +421,7 @@ const config = {
             'At the top, a total number of NFIP Claims and the Total Payments for those claims is displayed. '+ 
             'The table shows the total amount of NFIP claims, how many claims were paid, the total amount paid, number of repetitive/severe repetitive loss properties, and number of NFIP policies for '+ 
             'each Town in the County. Addtionally, due to the structure of the NFIP data there were complicatons in associating the repetitive loss and severe repetitive loss '+ 
-            'properties with landuse types (e.g., residential/commercial) in this table. RL/SRL property-type information is provided above and is available to NFIP Adminstrators via the MitigateNY administrative access portal for use in their NFIP compliance code enforcement practices.',
+            'properties with landuse types (e.g., residential/commercial) in this table.',
             prompt: '',
             intent: 'The plan must describe the types (residential, commercial, institutional, etc.) and estimate the' +
                 ' numbers of repetitive loss properties located in identified flood hazard areas.',
