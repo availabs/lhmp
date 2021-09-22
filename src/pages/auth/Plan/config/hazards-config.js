@@ -191,6 +191,18 @@ const config =  {
             onlyFor: 'riverine'
         },
         {
+            title: 'Critical Facilities Table',
+            requirement: 'Req-NYS-F-3',
+            type: 'criticalFacilitiesTable',
+            description:'Clicking on each number will navigate to a new page with a list view of that category’s  structures containing their addresses, property classes, and the owner types. These lists can be downloaded as spreadsheets using the “Download CSV” button in the top right of the new window.',
+            prompt: '',
+            intent: '',
+            defaultSortCol: 'critical',
+            icon: 'os-icon-loader',
+            hideNav: true,
+            onlyFor: 'riverine'
+        },
+        {
             title: '::activeGeo - Local Hazards of Concern Table - ::haz',
             requirement: `req-B1-local-haz-concern-table`,
             type: 'localHazardsOfConcernTable',

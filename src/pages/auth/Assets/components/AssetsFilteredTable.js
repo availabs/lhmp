@@ -549,6 +549,7 @@ class AssetsFilteredTable extends Component {
                 ...riskZoneColNames
                     .map((name) => {
                         if (name.includes('$') && this.props.public && this.props.hideFloodValue) {return null}
+                        if (name.includes('#') && this.props.public && this.props.hideFloodCount) {return null}
                         let a = {};
 
                         a['Header'] = name;

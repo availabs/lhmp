@@ -174,7 +174,9 @@ const config = {
             hideNav: true,
             //align: '',
             intent: 'Overview of loss by asset type by scenario',
-            icon: 'os-icon-alert-circle'
+            icon: 'os-icon-alert-circle',
+            hideFloodValue: true,
+            hideFloodCount: true
         },
 
         {
@@ -217,7 +219,9 @@ const config = {
             intent: '',
             defaultSortCol: 'critical',
             icon: 'os-icon-loader',
-            hideNav: true
+            hideNav: true,
+            hideFloodValue: true,
+            hideFloodCount: true
         },
         {
             title: 'Natural Environment',
