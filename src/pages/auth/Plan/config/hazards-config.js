@@ -179,6 +179,18 @@ const config =  {
             hideIfNull: true
         },
         {
+            title: 'Built Environment Table',
+            requirement: 'Req-B-3B-2',
+            type: 'inventoryTable',
+            description:'The table below lists the inventory of structures for the Towns in the county and how many are located within the 100 and 500 year flood plains. In New York State, Villages are included within Town boundaries. Villages are not included in this table so as to not double count buildings. Clicking on each number will navigate to a new page with a list view of that category’s  structures containing their addresses, property classes, and the owner types. These lists can be downloaded as spreadsheets using the “Download CSV” button in the top right of the new window.',
+            hideNav: true,
+            //align: '',
+            intent: 'Overview of loss by asset type by scenario',
+            icon: 'os-icon-alert-circle',
+            // activeGeoFilter: 'true',
+            onlyFor: 'riverine'
+        },
+        {
             title: '::activeGeo - Local Hazards of Concern Table - ::haz',
             requirement: `req-B1-local-haz-concern-table`,
             type: 'localHazardsOfConcernTable',
