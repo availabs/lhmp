@@ -182,7 +182,7 @@ class inventoryTableViewer extends Component {
                                     data[attribute].includes('[') ?
                                         data[attribute].slice(1, -1).split(',') :
                                         data[attribute]
-
+                                data[attribute] = _.isEqual({$type: "atom"}, data[attribute]) ? null : data[attribute]
                                 data[attribute] =
                                     typeof data[attribute] === "string" ?
                                         geo[data[attribute]] ?

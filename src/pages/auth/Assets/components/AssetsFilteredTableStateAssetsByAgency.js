@@ -217,16 +217,19 @@ class AssetsFilteredTable extends Component {
 
 
     render() {
+        const {data, columns} = this.buildingTable()
         return (
             <div style={{
                 width: this.props.width ? this.props.width : '',
                 height: this.props.height ? this.props.height : ''
             }}>
                 <TableSelector
-                    {...this.buildingTable()}
+                    data={data}
+                    columns={columns}
                     flex={this.props.flex ? this.props.flex : false}
                     height={this.props.height ? this.props.height : ''}
                     width={this.props.width ? this.props.width : ''}
+                    csvDownload={columns.map(c => c.Header)}
                     tableClass={this.props.tableClass ? this.props.tableClass : null}
                 />
             </div>

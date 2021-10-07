@@ -43,7 +43,8 @@ class criticalFacilitiesTableViewer extends Component {
                     width={'100%'}
                     tableClass={`table table-sm table-lightborder table-hover`}
                     public={this.props.public === true ? true : false}
-                    hideFloodValue={false}
+                    hideFloodValue={this.props.hideFloodValue}
+                    hideFloodCount={this.props.hideFloodCount}
                     defaultSortCol={this.props.defaultSortCol}
                 />
             </div>

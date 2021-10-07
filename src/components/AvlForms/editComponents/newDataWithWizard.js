@@ -485,7 +485,7 @@ class AvlFormsNewDataWizard extends React.Component{
                         let graph = this.props.meta_data;
                         if(graph && item.attributes[attribute] && item.attributes[attribute].metaSource !== 'meta_file'){
                             if(graph[item.attributes[attribute].meta_filter.filter_key]){
-                                graph[item.attributes[attribute].meta_filter.filter_key].meta.value.forEach(d =>{
+                                get(graph[item.attributes[attribute].meta_filter.filter_key], `meta.value`, []).forEach(d =>{
                                     filter_data.push(d)
                                 })
                             }

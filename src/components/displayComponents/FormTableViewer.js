@@ -151,6 +151,7 @@ class FormTableViewer extends React.Component{
                     if (configSettings && configSettings.displayType === 'AvlFormsJoin'){
 
                         if(typeof a[c] === "string") { a[c] = [a[c]]}
+                        if(!a[c]) a[c] = []; // getting undefined for some meetings (no roles assigned)
                         a[c].reduce((acc,newC) => {
                             return acc.then((resAcc) => {
                                 return this.props.falcor.get(['forms', 'byId', newC])

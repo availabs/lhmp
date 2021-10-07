@@ -223,7 +223,7 @@ class Hazards extends React.Component {
                                     .map(section => {
                                         return (
                                             updatedConfig[section]
-                                                .filter(item => !item.onlyAdmin)
+                                                .filter(item => !item.onlyAdmin && (!item.onlyFor || item.onlyFor === this.state.hazard))
                                                 .map(requirement => {
                                                     return (
                                                         <ElementFactory
