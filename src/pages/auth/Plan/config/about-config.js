@@ -416,7 +416,7 @@ const config =  {
 		{
 			title: 'Planning Participants',
 			requirement: 'Req-A-1F',
-			hideNav: true,
+			//hideNav: true,
 			type: 'formTable',
 			fontSize: '0.70em',
 			height: '600px',
