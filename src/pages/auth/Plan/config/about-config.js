@@ -414,14 +414,14 @@ const config =  {
             ///*2-non-delete*/ hideIfNull: true
 		},
 		{
-			title: 'Jurisdictional Participants',
+			title: 'Planning Participants',
 			requirement: 'Req-A-1F',
 			hideNav: true,
 			type: 'formTable',
 			fontSize: '0.70em',
 			height: '600px',
 			align: 'full',
-			description: 'The table below lists ALL participants from each jurisdiction', 
+			description: 'The table below list all planning participants.', 
 			config: {
 				type:'roles',
         		description: '',
