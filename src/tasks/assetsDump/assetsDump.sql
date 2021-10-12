@@ -302,7 +302,8 @@ with criticalMeta(key, name) as (
                      -- county meta
                      ebr.geoid, county.namelsad,
 
-                     establishments, owner_type, parcel_id, ebr.name, type, place_geoid, user_property_class, emergency_generator, agency, ebrg.footprint
+                     establishments, owner_type, parcel_id, ebr.name, type, place_geoid, user_property_class, emergency_generator, agency,
+                     st_astext(st_setsrid(ebrg.footprint, 4326)) geom
                  FROM irvs.enhanced_building_risk ebr
                           join (select building_id, footprint from irvs.enhanced_building_risk_geom) ebrg
                                on ebr.building_id = ebrg.building_id
