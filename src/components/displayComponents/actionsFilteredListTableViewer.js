@@ -142,6 +142,15 @@ class inventoryTableViewer extends Component {
                 matchee.map(m => m.toString()).includes(matcher.toString())
     }
     filterByGeo(d, graph){
+        if ( this.props.activeCousubid.length === 5 &&
+            !(get(graph[d], `value.attributes.cousub`) ||
+            get(graph[d], `value.attributes.municipality`) ||
+            get(graph[d], `value.attributes.contact_municipality`) ||
+            get(graph[d], `value.attributes.action_jurisdiction`))
+
+        ){
+            return true //countywide
+        }
         return this.props.activeGeoFilter === 'true' ?
             this.props.activeCousubid && this.props.activeCousubid.length > 5 ?
                 this.isMatch(
@@ -168,7 +177,9 @@ class inventoryTableViewer extends Component {
         if (graph) {
             if (combine_list_attributes[0] === undefined) {
                 Object.keys(graph)
-                    .filter(d => this.filterByGeo(d, graph))
+                    .filter(d => {
+                        return this.filterByGeo(d, graph)
+                    })
                     .forEach(item => {
                     let data = {};
                     formAttributes.forEach(attribute => {
@@ -195,6 +206,8 @@ class inventoryTableViewer extends Component {
                                 if (attribute === 'action_status_update' && data[attribute]) {
                                     data[attribute] = data[attribute].slice(-1).pop()
                                     data[attribute] = get(this.props, ['formsListData', data[attribute], 'value', 'attributes', 'status'], data[attribute])
+                                }else if(['cousub', 'municipality', 'contact_municipality', 'action_jurisdiction'].includes(attribute) && !data[attribute]){
+                                    data[attribute] = 'Countywide'
                                 }
 
                                 data[attribute] = data[attribute] && typeof data[attribute] === 'object' ? data[attribute].join(',') : data[attribute];
