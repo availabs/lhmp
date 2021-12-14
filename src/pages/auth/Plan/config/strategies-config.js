@@ -315,7 +315,7 @@ const config = {
         },
         {
             title: 'Proposed Actions',
-            requirement: 'Req-C-new',
+            requirement: 'Req-C-4',
             type: 'actionsFilteredListTable',
             description: 'The table below includes the Mitigation Actions that were identified during the strategy development process by the jurisdictional representatives. The jurisdictions completed the DHSES Action worksheet as part of the strategy development process for select prioritized actions listed below. The actions prioritized for the Plan update are labeled with the status ‘Proposed - HMP’. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
             filterCol: ['action_status_update'],
@@ -349,7 +349,7 @@ const config = {
         },
         {
             title: 'Additional Actions Inventory',
-            requirement: 'Req-C-4',
+            requirement: 'Req-C-new',
             type: 'actionsFilteredListTable',
             description: 'The table below includes additional identified actions that are inventoried for further development in the future. In order to view the action status update, description, and problem being mitigated; click the row being reviewed and a drop down will appear. Additionally, you can click on the arrow underneath ‘viewLink’ to view the action in depth.',
             filterCol: ['action_status_update'],
