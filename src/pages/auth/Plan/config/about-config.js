@@ -649,10 +649,10 @@ const config =  {
         			// 	Header: 'Name',
         			// 	accessor: 'capability_name'
         			// },
-        			// {
-        			// 	Header: 'capability type',
-        			// 	accessor: 'capability_type'
-        			// },
+        			{
+        				Header: 'capability type',
+        				accessor: 'capability_type'
+        			},
 
         			{
         				Header: 'Municipality',
