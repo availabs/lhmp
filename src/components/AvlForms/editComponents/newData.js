@@ -296,7 +296,7 @@ class AvlFormsNewData extends React.Component{
             let user_email = this.props.userEmail;
             let owner_ids = []
             // to find role ids for the logged in user to be inserted in participation time
-            Object.keys(this.props.forms_roles_data).forEach(d =>{
+            Object.keys(this.props.forms_roles_data || {}).forEach(d =>{
                 if(this.props.forms_roles_data[d].value && this.props.forms_roles_data[d].value.attributes.contact_email === user_email){
                     owner_ids.push(this.props.forms_roles_data[d].value.id)
                 }
