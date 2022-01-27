@@ -137,8 +137,8 @@ class CensusStatBox extends React.Component {
     static defaultProps = {
         censusKeys: [],
         geoids: [],
-        years: [2017],
-        year:'2017',
+        years: [2019],
+        year:'2019',
         compareYear: null,
         maximumFractionDigits: 0,
         divisorKeys: [],

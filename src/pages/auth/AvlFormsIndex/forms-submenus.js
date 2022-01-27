@@ -5,6 +5,7 @@ import Roles from '../Roles/roles_forms/index'
 import Zones from '../Zones/index'
 import HazardId from '../HazardId/index'
 import Files from '../Files/index'
+import FilterJurisdictions from "../FilterJurisdictions";
 
 let submenu = [
     Actions[0],
@@ -14,6 +15,7 @@ let submenu = [
     Zones[0],
     HazardId[0],
     Files[0],
+    FilterJurisdictions[0]
 ]
 export default [
     submenu.map(f => {
