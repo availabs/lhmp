@@ -123,7 +123,7 @@ class ZoneControl extends React.Component{
                         }
                         return  d !== '$__path'
                     })
-                    .filter(d => graph[d].attributes.zone_type)
+                    .filter(d => graph[d] && graph[d].attributes.zone_type)
                     .filter(d =>  !this.state.zone_type || this.state.zone_type === graph[d].attributes.zone_type)
                     .forEach(item =>{
                         if(graph[item] /*&& this.state.zone_ids.includes(graph[item].id)*/){
