@@ -109,7 +109,7 @@ class VulnerableDemographicsLayer extends MapLayer {
                 this.tracts = get(response, ['json', 'geo', activeGeoid, "tracts"])
                 this.blockGroups = get(response, ['json', 'geo', activeGeoid, "blockgroup"])
                 falcorGraph.get(["geo", [...this.tracts, ...this.blockGroups], ["name"]],
-                    ["acs", [...this.tracts, ...this.blockGroups], '2017', this.census_keys])
+                    ["acs", [...this.tracts, ...this.blockGroups], '2019', this.census_keys])
                     .then(response => {
                         return response
                     })
@@ -123,7 +123,7 @@ class VulnerableDemographicsLayer extends MapLayer {
         // tracts
         const valueMapTracts = this.tracts.reduce((a, c) => {
             let value = this.censusKey.reduce((aa, cc) => {
-                const v = get(graph, ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2019', cc], -666666666);
                 if (v !== -666666666) {
                     aa += v;
                 }
@@ -131,7 +131,7 @@ class VulnerableDemographicsLayer extends MapLayer {
                 return aa;
             }, 0);
             const divisor = this.divisorKey.reduce((aa, cc) => {
-                const v = get(graph, ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2019', cc], -666666666);
                 if (v != -666666666) {
                     aa += v;
                 }
@@ -169,14 +169,14 @@ class VulnerableDemographicsLayer extends MapLayer {
         //blockGroups
         const valueMapBlockGroup = this.blockGroups.reduce((a, c) => {
             let value = this.censusKey.reduce((aa, cc) => {
-                const v = get(graph, ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2019', cc], -666666666);
                 if (v !== -666666666) {
                     aa += v;
                 }
                 return aa;
             }, 0);
             const divisor = this.divisorKey.reduce((aa, cc) => {
-                const v = get(graph, ["acs", c, '2017', cc], -666666666);
+                const v = get(graph, ["acs", c, '2019', cc], -666666666);
                 if (v != -666666666) {
                     aa += v;
                 }
